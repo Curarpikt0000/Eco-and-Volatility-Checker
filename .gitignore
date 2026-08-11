@@ -1,0 +1,11 @@
+scratch/
+**/scratch/
+.env
+*.env
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store
+*.log
+data/snapshots/
