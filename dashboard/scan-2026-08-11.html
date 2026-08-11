@@ -33,6 +33,16 @@
   #update-time { font-size: 12px; color: var(--muted); }
   .container { max-width: 1280px; margin: 0 auto; padding: 22px 28px 60px; }
   .section-title { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin: 26px 0 12px; }
+  /* 编号章节标题(6部分) */
+  .part-title { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; color: var(--text); margin: 30px 0 14px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }
+  .part-num { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--dust-blue); color: #fff; font-size: 14px; font-weight: 800; flex-shrink: 0; }
+  /* 综合结论卡片 */
+  .concl-card { border-radius: 12px; padding: 16px 18px; border: 1px solid var(--border); }
+  .cc-short { background: var(--sage-bg); border-color: var(--sage); }
+  .cc-mid { background: var(--mustard-bg); border-color: var(--mustard); }
+  .cc-long { background: var(--clay-bg); border-color: var(--clay); }
+  .cc-head { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .cc-body { font-size: 13px; line-height: 1.7; color: var(--text); }
 
   /* 综合信号 banner */
   .verdict { border-radius: 14px; padding: 18px 22px; margin-bottom: 20px; display: flex; align-items: center; gap: 20px; }
@@ -94,6 +104,10 @@
   table.trig th { text-align: left; color: var(--muted); font-size: 11px; text-transform: uppercase; padding: 8px 10px; border-bottom: 2px solid var(--border); }
   table.trig td { padding: 9px 10px; border-bottom: 1px solid var(--border); }
   .tr-state { text-align: center; font-weight: 700; }
+  .tr-badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; }
+  .trb-hit { background: var(--clay); color: #fff; }
+  .trb-near { background: var(--mustard); color: #4a463f; }
+  .trb-no { background: var(--card2); color: var(--muted); }
   tr.tr-hit  { background: var(--clay-bg); }
   tr.tr-near { background: var(--mustard-bg); }
 
@@ -116,7 +130,7 @@
 <body>
 <header>
   <h1>宏观风险扫描 · <span>Eco &amp; Volatility Checker</span></h1>
-  <span id="update-time">数据日期 2026-08-11 · 生成 2026-08-11 21:50 JST</span>
+  <span id="update-time">数据日期 2026-08-11 · 生成 2026-08-11 21:59 JST</span>
 </header>
 <div class="container">
 
@@ -132,53 +146,13 @@
     </div>
   </div>
 
-  <!-- 警报统计 + 雷达图 -->
-  <div class="grid-2">
-    <div class="card">
-      <div class="section-title" style="margin-top:0">警报统计速览</div>
-      <div class="grid-3"><div class="stat-card sc-short"><div class="sc-label">🟢 短期 (天-周)</div><div class="sc-num">4 / 5</div><div class="sc-sub">未警报</div></div><div class="stat-card sc-mid"><div class="sc-label">🟡 中期 (周-月)</div><div class="sc-num">1 / 7</div><div class="sc-sub">未警报</div></div><div class="stat-card sc-long"><div class="sc-label">🔴 长期 (月-年)</div><div class="sc-num">2 / 5</div><div class="sc-sub">未警报</div></div></div>
-      <div class="section-title">风险雷达 (越大越危险 0-100)</div>
-      <div id="radar-wrap">
-        <div class="radar-cell"><div class="radar-sub">🟢 短期</div><div class="radar-box"><canvas id="rShort"></canvas></div></div>
-        <div class="radar-cell"><div class="radar-sub">🟡 中期</div><div class="radar-box"><canvas id="rMid"></canvas></div></div>
-        <div class="radar-cell"><div class="radar-sub">🔴 长期</div><div class="radar-box"><canvas id="rLong"></canvas></div></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="section-title" style="margin-top:0">今日最需关注</div>
-      <div class="focus-box"><b>BofA Bull&Bear > 8.0</b>：9.7</div>
-      <div class="section-title">金银 COT (commercial 持仓)</div>
-      <div style="display:grid;grid-template-columns:1fr;gap:12px"><div class="cot-card">
-              <div class="cot-head">🥇 黄金 <span class="cot-date">COT 2026-08-04</span> <span class="cot-surge ">正常</span></div>
-              <div class="cot-grid">
-                <div><span class="cl">Commercial 净持仓</span><span class="cv">-226,491</span></div>
-                <div><span class="cl">周环比 ↓</span><span class="cv">-14,182</span></div>
-                <div><span class="cl">Comm 多头</span><span class="cv">71,832</span></div>
-                <div><span class="cl">Comm 空头</span><span class="cv">298,323</span></div>
-                <div><span class="cl">未平仓 (OI)</span><span class="cv">371,551</span></div>
-                <div><span class="cl">大户投机净</span><span class="cv">197,634</span></div>
-              </div>
-            </div><div class="cot-card">
-              <div class="cot-head">🥈 白银 <span class="cot-date">COT 2026-08-04</span> <span class="cot-surge ">正常</span></div>
-              <div class="cot-grid">
-                <div><span class="cl">Commercial 净持仓</span><span class="cv">-40,422</span></div>
-                <div><span class="cl">周环比 ↓</span><span class="cv">-1,613</span></div>
-                <div><span class="cl">Comm 多头</span><span class="cv">33,118</span></div>
-                <div><span class="cl">Comm 空头</span><span class="cv">73,540</span></div>
-                <div><span class="cl">未平仓 (OI)</span><span class="cv">111,999</span></div>
-                <div><span class="cl">大户投机净</span><span class="cv">22,280</span></div>
-              </div>
-            </div></div>
-    </div>
-  </div>
-
-  <!-- 仪表盘表格 -->
-  <div class="section-title">仪表盘 · 17 项指标</div>
+  <!-- ═══ 第一部分：仪表盘表格 ═══ -->
+  <div class="part-title"><span class="part-num">1</span>仪表盘 · 17 项指标（短 → 中 → 长）</div>
   <div class="card">
     <table class="gauge">
       <thead><tr><th>指标</th><th>当前值</th><th>资料日期</th><th>警戒/触发</th><th>信号</th></tr></thead>
       <tbody>
-        <tr class="group-head"><td colspan="5">🟢 短期指标 (天-周)</td></tr>
+        <tr class="group-head"><td colspan="5">🟢 短期指标 (天-周，判断过热回调)</td></tr>
         <tr>
               <td class="ind-name">VIX 波动率指数<span class="ind-en">CBOE VIX</span></td>
               <td class="ind-val">14.9 </td>
@@ -210,11 +184,11 @@
               <td class="ind-thr">90/100</td>
               <td class="ind-sig sig-n"><span class="dot dot-n"></span></td>
             </tr>
-        <tr class="group-head"><td colspan="5">🟡 中期指标 (周-月)</td></tr>
+        <tr class="group-head"><td colspan="5">🟡 中期指标 (周-月，判断趋势转折)</td></tr>
         <tr>
               <td class="ind-name">FINRA 保证金负债<span class="ind-en">FINRA Margin Debt</span></td>
               <td class="ind-val">1502.1 </td>
-              <td class="ind-date">2026-06-30</td>
+              <td class="ind-date">2026-08-11</td>
               <td class="ind-thr">—</td>
               <td class="ind-sig sig-n"><span class="dot dot-n"></span></td>
             </tr><tr>
@@ -254,7 +228,7 @@
               <td class="ind-thr">—</td>
               <td class="ind-sig sig-n"><span class="dot dot-n"></span></td>
             </tr>
-        <tr class="group-head"><td colspan="5">🔴 长期指标 (月-年)</td></tr>
+        <tr class="group-head"><td colspan="5">🔴 长期指标 (月-年，判断结构性周期顶)</td></tr>
         <tr>
               <td class="ind-name">巴菲特指标<span class="ind-en">Buffett Indicator</span></td>
               <td class="ind-val">219.0% </td>
@@ -290,18 +264,77 @@
     </table>
   </div>
 
-  <!-- 卖出触发追踪 -->
-  <div class="section-title">卖出触发状态追踪 (同时 ≥3 项 = 开始分批卖出)</div>
+  <!-- ═══ 第二部分：警报统计速览 + 雷达图 ═══ -->
+  <div class="part-title"><span class="part-num">2</span>警报统计速览</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="grid-3"><div class="stat-card sc-short"><div class="sc-label">🟢 短期 (天-周)</div><div class="sc-num">4 / 5</div><div class="sc-sub">未警报</div></div><div class="stat-card sc-mid"><div class="sc-label">🟡 中期 (周-月)</div><div class="sc-num">1 / 7</div><div class="sc-sub">未警报</div></div><div class="stat-card sc-long"><div class="sc-label">🔴 长期 (月-年)</div><div class="sc-num">2 / 5</div><div class="sc-sub">未警报</div></div></div>
+      <div class="section-title">风险雷达 (越大越危险 0-100)</div>
+      <div id="radar-wrap">
+        <div class="radar-cell"><div class="radar-sub">🟢 短期</div><div class="radar-box"><canvas id="rShort"></canvas></div></div>
+        <div class="radar-cell"><div class="radar-sub">🟡 中期</div><div class="radar-box"><canvas id="rMid"></canvas></div></div>
+        <div class="radar-cell"><div class="radar-sub">🔴 长期</div><div class="radar-box"><canvas id="rLong"></canvas></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title" style="margin-top:0">金银 COT · commercial 持仓</div>
+      <div style="display:grid;grid-template-columns:1fr;gap:12px"><div class="cot-card">
+              <div class="cot-head">🥇 黄金 <span class="cot-date">COT 2026-08-04</span> <span class="cot-surge ">正常</span></div>
+              <div class="cot-grid">
+                <div><span class="cl">Commercial 净持仓</span><span class="cv">-226,491</span></div>
+                <div><span class="cl">周环比 ↓</span><span class="cv">-14,182</span></div>
+                <div><span class="cl">Comm 多头</span><span class="cv">71,832</span></div>
+                <div><span class="cl">Comm 空头</span><span class="cv">298,323</span></div>
+                <div><span class="cl">未平仓 (OI)</span><span class="cv">371,551</span></div>
+                <div><span class="cl">大户投机净</span><span class="cv">197,634</span></div>
+              </div>
+            </div><div class="cot-card">
+              <div class="cot-head">🥈 白银 <span class="cot-date">COT 2026-08-04</span> <span class="cot-surge ">正常</span></div>
+              <div class="cot-grid">
+                <div><span class="cl">Commercial 净持仓</span><span class="cv">-40,422</span></div>
+                <div><span class="cl">周环比 ↓</span><span class="cv">-1,613</span></div>
+                <div><span class="cl">Comm 多头</span><span class="cv">33,118</span></div>
+                <div><span class="cl">Comm 空头</span><span class="cv">73,540</span></div>
+                <div><span class="cl">未平仓 (OI)</span><span class="cv">111,999</span></div>
+                <div><span class="cl">大户投机净</span><span class="cv">22,280</span></div>
+              </div>
+            </div></div>
+    </div>
+  </div>
+
+  <!-- ═══ 第三部分：逐条解读 ═══ -->
+  <div class="part-title"><span class="part-num">3</span>逐条简短解读</div>
+  <div class="card"><h4 class="interp-group">🟢 短期 (天-周)</h4><div class="interp-item"><span class="ii-sig">🟢</span><b>VIX 波动率指数</b> <span class="ii-val">14.9</span><p>VIX<13 = 自满区；>25 = 恐慌/系统性压力。阈值静态，不随市场结构调整。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>CNN 恐惧与贪婪指数</b> <span class="ii-val">65.0</span><p>>75 极度贪婪 = 过热，从高位(>75)回落到<50 是卖出触发信号之一。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>AAII 散户多空差</b> <span class="ii-val">-12.0%</span><p>多空差(Bull%-Bear%)>30% = 散户极度乐观(反向信号)。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>CBOE 权益 Put/Call 比</b> <span class="ii-val">0.61</span><p>越低越自满(买权多)。<0.45 = 极度乐观，回调风险高。</p></div><div class="interp-item"><span class="ii-sig">⚪</span><b>NAAIM 主动部位指数</b> <span class="ii-val">—</span><p>主动经理股票敞口。>100% = 加杠杆满仓，过热。</p></div><h4 class="interp-group">🟡 中期 (周-月)</h4><div class="interp-item"><span class="ii-sig">⚪</span><b>FINRA 保证金负债</b> <span class="ii-val">1502.1</span><p>月度。关注年增率 + 月增方向。连续3个月下降 = 卖出触发信号之一。</p></div><div class="interp-item"><span class="ii-sig">🔴</span><b>保证金负债 / GDP</b> <span class="ii-val">4.63%</span><p>派生：margin_debt / 名义GDP(FRED GDP)。历史高位 >3% 预示杠杆过高。</p></div><div class="interp-item"><span class="ii-sig">⚪</span><b>Renaissance IPO 发行量</b> <span class="ii-val">99.0</span><p>当季数量+募资总额。IPO 井喷 = 市场情绪顶部特征。</p></div><div class="interp-item"><span class="ii-sig">🟡</span><b>内部人买卖比</b> <span class="ii-val">0.25</span><p>内部人越卖越少买 = 看空。<0.17 = 卖出触发信号之一。</p></div><div class="interp-item"><span class="ii-sig">🔴</span><b>美银牛熊指标</b> <span class="ii-val">9.7</span><p>无固定源，web_search 每周搜。>8.0 = 极度贪婪(卖出信号)，<2 = 极度恐慌(买入)。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>高收益债利差</b> <span class="ii-val">2.7%</span><p>信用利差扩张 = 风险偏好收缩。>4.5% = 信用市场警报(卖出信号之一)。</p></div><div class="interp-item"><span class="ii-sig">⚪</span><b>NYSE 腾落线背离</b> <span class="ii-val">无背离</span><p>S&P创新高但A/D不创新高 = 顶背离(卖出信号之一)。web_search 判断。</p></div><h4 class="interp-group">🔴 长期 (月-年)</h4><div class="interp-item"><span class="ii-sig">🔴</span><b>巴菲特指标</b> <span class="ii-val">219.0%</span><p>总市值/GDP。>150% 显著高估，>180% 极端泡沫区。允许周/月度数据。</p></div><div class="interp-item"><span class="ii-sig">🔴</span><b>席勒 CAPE (PE10)</b> <span class="ii-val">42.37</span><p>周期调整市盈率。>30 历史高估，>35 接近2000/2021级泡沫。允许月度。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>10Y-2Y 收益率曲线</b> <span class="ii-val">0.47%</span><p>倒挂(<0)历史预示衰退；由倒挂转正(bull steepening)常是衰退临近信号。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>Conference Board 领先指数</b> <span class="ii-val">-0.3</span><p>领先经济指数。6个月变化率 <-4% 历史强烈预示衰退。允许月度。</p></div><div class="interp-item"><span class="ii-sig">🟡</span><b>AAII 家庭股票配置</b> <span class="ii-val">70.38%</span><p>家庭股票仓位%。历史 >70% 是仓位极值(2000年峰值区)，反向信号。</p></div></div>
+
+  <!-- ═══ 第四部分：短中长期综合结论 ═══ -->
+  <div class="part-title"><span class="part-num">4</span>短中长期综合结论</div>
+  <div class="grid-3">
+    <div class="concl-card cc-short">
+      <div class="cc-head">🟢 短期（1-3 个月）</div>
+      <div class="cc-body">Fear&Greed 65.0 偏贪婪但未极端，短期持有为主，不追高，留意情绪见顶。</div>
+    </div>
+    <div class="concl-card cc-mid">
+      <div class="cc-head">🟡 中期（3-12 个月）</div>
+      <div class="cc-body">BofA 牛熊 9.7 极度贪婪(反向看空)，中期趋势临近顶部，逐步获利了结成长股。</div>
+    </div>
+    <div class="concl-card cc-long">
+      <div class="cc-head">🔴 长期（1-3 年+）</div>
+      <div class="cc-body">巴菲特指标 219.0% 处极端泡沫区、CAPE 42.37 接近历史泡沫峰值——长期估值结构性偏高，组合应逐步再平衡：降低美股权重、增配现金/防御/非美资产，为均值回归做准备。</div>
+    </div>
+  </div>
+
+  <!-- ═══ 第五部分：卖出触发状态追踪 ═══ -->
+  <div class="part-title"><span class="part-num">5</span>卖出触发状态追踪（同时 ≥3 项 = 开始分批卖出）</div>
   <div class="card">
     <table class="trig">
       <thead><tr><th>触发条件</th><th>阈值</th><th>今日状态</th><th>达成</th></tr></thead>
-      <tbody><tr class="tr-no"><td>VIX 突破并站稳 > 25</td><td>> 25</td><td>14.9</td><td class="tr-state">❌</td></tr><tr class="tr-no"><td>Margin Debt 连续 3 个月下降</td><td>连续3月</td><td>近3月方向 0/3 降</td><td class="tr-state">❌</td></tr><tr class="tr-no"><td>HY Spread 扩张 > 4.5%</td><td>> 4.5%</td><td>2.7%</td><td class="tr-state">❌</td></tr><tr class="tr-no"><td>Fear&Greed 从>75回落<50</td><td>>75→<50</td><td>65.0</td><td class="tr-state">❌</td></tr><tr class="tr-no"><td>A/D Line 顶背离</td><td>背离</td><td>广度确认(无背离)</td><td class="tr-state">❌</td></tr><tr class="tr-hit"><td>BofA Bull&Bear > 8.0</td><td>> 8.0</td><td>9.7</td><td class="tr-state">✅</td></tr><tr class="tr-no"><td>Insider Buy/Sell < 0.17</td><td>< 0.17</td><td>0.25</td><td class="tr-state">❌</td></tr></tbody>
+      <tbody><tr class="tr-no"><td>VIX 突破并站稳 > 25</td><td>> 25</td><td>14.9</td><td class="tr-state"><span class="tr-badge trb-no">未触发</span></td></tr><tr class="tr-no"><td>Margin Debt 连续 3 个月下降</td><td>连续3月</td><td>近3月方向 0/3 降</td><td class="tr-state"><span class="tr-badge trb-no">未触发</span></td></tr><tr class="tr-no"><td>HY Spread 扩张 > 4.5%</td><td>> 4.5%</td><td>2.7%</td><td class="tr-state"><span class="tr-badge trb-no">未触发</span></td></tr><tr class="tr-no"><td>Fear&Greed 从>75回落<50</td><td>>75→<50</td><td>65.0</td><td class="tr-state"><span class="tr-badge trb-no">未触发</span></td></tr><tr class="tr-no"><td>A/D Line 顶背离</td><td>背离</td><td>广度确认(无背离)</td><td class="tr-state"><span class="tr-badge trb-no">未触发</span></td></tr><tr class="tr-hit"><td>BofA Bull&Bear > 8.0</td><td>> 8.0</td><td>9.7</td><td class="tr-state"><span class="tr-badge trb-hit">已触发</span></td></tr><tr class="tr-no"><td>Insider Buy/Sell < 0.17</td><td>< 0.17</td><td>0.25</td><td class="tr-state"><span class="tr-badge trb-no">未触发</span></td></tr></tbody>
     </table>
   </div>
 
-  <!-- 逐条解读 -->
-  <div class="section-title">逐条解读</div>
-  <div class="card"><h4 class="interp-group">🟢 短期 (天-周)</h4><div class="interp-item"><span class="ii-sig">🟢</span><b>VIX 波动率指数</b> <span class="ii-val">14.9</span><p>VIX<13 = 自满区；>25 = 恐慌/系统性压力。阈值静态，不随市场结构调整。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>CNN 恐惧与贪婪指数</b> <span class="ii-val">65.0</span><p>>75 极度贪婪 = 过热，从高位(>75)回落到<50 是卖出触发信号之一。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>AAII 散户多空差</b> <span class="ii-val">-12.0%</span><p>多空差(Bull%-Bear%)>30% = 散户极度乐观(反向信号)。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>CBOE 权益 Put/Call 比</b> <span class="ii-val">0.61</span><p>越低越自满(买权多)。<0.45 = 极度乐观，回调风险高。</p></div><div class="interp-item"><span class="ii-sig">⚪</span><b>NAAIM 主动部位指数</b> <span class="ii-val">—</span><p>主动经理股票敞口。>100% = 加杠杆满仓，过热。</p></div><h4 class="interp-group">🟡 中期 (周-月)</h4><div class="interp-item"><span class="ii-sig">⚪</span><b>FINRA 保证金负债</b> <span class="ii-val">1502.1</span><p>月度。关注年增率 + 月增方向。连续3个月下降 = 卖出触发信号之一。</p></div><div class="interp-item"><span class="ii-sig">🔴</span><b>保证金负债 / GDP</b> <span class="ii-val">4.63%</span><p>派生：margin_debt / 名义GDP(FRED GDP)。历史高位 >3% 预示杠杆过高。</p></div><div class="interp-item"><span class="ii-sig">⚪</span><b>Renaissance IPO 发行量</b> <span class="ii-val">99.0</span><p>当季数量+募资总额。IPO 井喷 = 市场情绪顶部特征。</p></div><div class="interp-item"><span class="ii-sig">🟡</span><b>内部人买卖比</b> <span class="ii-val">0.25</span><p>内部人越卖越少买 = 看空。<0.17 = 卖出触发信号之一。</p></div><div class="interp-item"><span class="ii-sig">🔴</span><b>美银牛熊指标</b> <span class="ii-val">9.7</span><p>无固定源，web_search 每周搜。>8.0 = 极度贪婪(卖出信号)，<2 = 极度恐慌(买入)。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>高收益债利差</b> <span class="ii-val">2.7%</span><p>信用利差扩张 = 风险偏好收缩。>4.5% = 信用市场警报(卖出信号之一)。</p></div><div class="interp-item"><span class="ii-sig">⚪</span><b>NYSE 腾落线背离</b> <span class="ii-val">无背离</span><p>S&P创新高但A/D不创新高 = 顶背离(卖出信号之一)。web_search 判断。</p></div><h4 class="interp-group">🔴 长期 (月-年)</h4><div class="interp-item"><span class="ii-sig">🔴</span><b>巴菲特指标</b> <span class="ii-val">219.0%</span><p>总市值/GDP。>150% 显著高估，>180% 极端泡沫区。允许周/月度数据。</p></div><div class="interp-item"><span class="ii-sig">🔴</span><b>席勒 CAPE (PE10)</b> <span class="ii-val">42.37</span><p>周期调整市盈率。>30 历史高估，>35 接近2000/2021级泡沫。允许月度。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>10Y-2Y 收益率曲线</b> <span class="ii-val">0.47%</span><p>倒挂(<0)历史预示衰退；由倒挂转正(bull steepening)常是衰退临近信号。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>Conference Board 领先指数</b> <span class="ii-val">-0.3</span><p>领先经济指数。6个月变化率 <-4% 历史强烈预示衰退。允许月度。</p></div><div class="interp-item"><span class="ii-sig">🟡</span><b>AAII 家庭股票配置</b> <span class="ii-val">70.38%</span><p>家庭股票仓位%。历史 >70% 是仓位极值(2000年峰值区)，反向信号。</p></div></div>
+  <!-- ═══ 第六部分：今日最需关注的一条信号 ═══ -->
+  <div class="part-title"><span class="part-num">6</span>今日最需关注的一条信号</div>
+  <div class="focus-box"><b>BofA Bull&Bear > 8.0</b>：9.7</div>
 
   <div class="footnote">
     数据源：FRED (VIX/HY/收益率曲线) · CNN F&amp;G · CBOE · AAII · GuruFocus · Conference Board · Renaissance · currentmarketvaluation · multpl · CFTC COT (金银 commercial)。<br>

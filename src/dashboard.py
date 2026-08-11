@@ -50,14 +50,17 @@ def fmt_val(ind, r):
     return f"{v}"
 
 
-def generate(snap, checks, hit, gstats, overall, ai_reads=None):
+def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 逐条解读文本}(agent 生成，可选)。
+    ai_conclusions: {"short":..,"mid":..,"long":..} 短中长综合结论(agent 生成，可选)。
     返回 HTML 文件路径。"""
     results = snap["results"]
     cot = snap.get("cot", {})
     date_str = snap["date"]
     ai_reads = ai_reads or {}
+    # 综合结论：优先用 agent 生成，否则用规则兜底
+    ai_conclusions = ai_conclusions or _rule_conclusions(results, checks, hit, cot)
 
     # ── 雷达图数据 ──
     radar = {}
@@ -110,9 +113,10 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None):
     # ── 卖出触发表 ──
     def trigger_rows():
         rows = ""
+        label = {"✅": "已触发", "⚠️": "接近", "❌": "未触发"}
         for cond, thr, desc, st in checks:
             cls = {"✅": "hit", "⚠️": "near", "❌": "no"}.get(st, "no")
-            rows += f'<tr class="tr-{cls}"><td>{cond}</td><td>{thr}</td><td>{desc}</td><td class="tr-state">{st}</td></tr>'
+            rows += f'<tr class="tr-{cls}"><td>{cond}</td><td>{thr}</td><td>{desc}</td><td class="tr-state"><span class="tr-badge trb-{cls}">{label.get(st, st)}</span></td></tr>'
         return rows
 
     # ── COT 卡片 ──
@@ -153,6 +157,9 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None):
         radar_json=json.dumps(radar, ensure_ascii=False),
         interp=interp_block(), trigger_rows=trigger_rows(), cot_cards=cot_cards(),
         focus=_focus_text(checks, results, cot),
+        concl_short=ai_conclusions.get("short", ""),
+        concl_mid=ai_conclusions.get("mid", ""),
+        concl_long=ai_conclusions.get("long", ""),
     )
     path = os.path.join(OUT_DIR, "index.html")
     open(path, "w", encoding="utf-8").write(html)
@@ -163,6 +170,49 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None):
 
 def _sig_cls(lt):
     return {"🟢": "g", "🟡": "y", "🔴": "r", "⚪": "n"}.get(lt, "n")
+
+
+def _rule_conclusions(results, checks, hit, cot):
+    """规则兜底的短中长综合结论(agent 未生成时用)。返回 {short,mid,long}。"""
+    def gv(k):
+        return results.get(k, {}).get("value")
+
+    # 短期(1-3月): 看 VIX/Fear&Greed/put_call
+    vix, fg = gv("vix"), gv("fear_greed")
+    if vix is not None and vix > 25:
+        short = "VIX 已破 25 恐慌区，短期避险；可考虑买入保险(put/VIX call)对冲。"
+    elif fg is not None and fg > 75:
+        short = f"Fear&Greed {fg} 处极度贪婪区，短期过热，建议减仓 10-15% 锁定利润、暂缓追高。"
+    elif fg is not None and fg > 60:
+        short = f"Fear&Greed {fg} 偏贪婪但未极端，短期持有为主，不追高，留意情绪见顶。"
+    else:
+        short = "短期情绪与波动率处正常区间，无需减仓或买保险，维持现有仓位。"
+
+    # 中期(3-12月): 看 HY spread/margin/BofA/insider
+    hy, bb = gv("hy_oas"), gv("bofa_bull_bear")
+    mid_parts = []
+    if hy is not None and hy > 4.5:
+        mid_parts.append("HY 利差破 4.5%，信用市场转向，减配高收益债/高杠杆板块")
+    if bb is not None and bb > 8:
+        mid_parts.append(f"BofA 牛熊 {bb} 极度贪婪(反向看空)，中期趋势临近顶部，逐步获利了结成长股")
+    if not mid_parts:
+        mid = "中期趋势未见转折信号，信用利差平稳，维持配置；关注杠杆与情绪拐点。"
+    else:
+        mid = "；".join(mid_parts) + "。"
+
+    # 长期(1-3年+): 看 Buffett/CAPE/收益率曲线/LEI
+    buf, cape, yc = gv("buffett"), gv("cape"), gv("yield_curve")
+    long_parts = []
+    if buf is not None and buf > 180:
+        long_parts.append(f"巴菲特指标 {buf}% 处极端泡沫区")
+    if cape is not None and cape > 35:
+        long_parts.append(f"CAPE {cape} 接近历史泡沫峰值")
+    if long_parts:
+        long = "、".join(long_parts) + "——长期估值结构性偏高，组合应逐步再平衡：降低美股权重、增配现金/防御/非美资产，为均值回归做准备。"
+    else:
+        long = "长期估值虽高但未达极端，维持核心配置，定期再平衡。"
+
+    return {"short": short, "mid": mid, "long": long}
 
 
 def _focus_text(checks, results, cot):
@@ -217,6 +267,16 @@ _TEMPLATE = r"""<!DOCTYPE html>
   #update-time {{ font-size: 12px; color: var(--muted); }}
   .container {{ max-width: 1280px; margin: 0 auto; padding: 22px 28px 60px; }}
   .section-title {{ font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin: 26px 0 12px; }}
+  /* 编号章节标题(6部分) */
+  .part-title {{ display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; color: var(--text); margin: 30px 0 14px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }}
+  .part-num {{ display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--dust-blue); color: #fff; font-size: 14px; font-weight: 800; flex-shrink: 0; }}
+  /* 综合结论卡片 */
+  .concl-card {{ border-radius: 12px; padding: 16px 18px; border: 1px solid var(--border); }}
+  .cc-short {{ background: var(--sage-bg); border-color: var(--sage); }}
+  .cc-mid {{ background: var(--mustard-bg); border-color: var(--mustard); }}
+  .cc-long {{ background: var(--clay-bg); border-color: var(--clay); }}
+  .cc-head {{ font-size: 14px; font-weight: 700; margin-bottom: 8px; }}
+  .cc-body {{ font-size: 13px; line-height: 1.7; color: var(--text); }}
 
   /* 综合信号 banner */
   .verdict {{ border-radius: 14px; padding: 18px 22px; margin-bottom: 20px; display: flex; align-items: center; gap: 20px; }}
@@ -278,6 +338,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   table.trig th {{ text-align: left; color: var(--muted); font-size: 11px; text-transform: uppercase; padding: 8px 10px; border-bottom: 2px solid var(--border); }}
   table.trig td {{ padding: 9px 10px; border-bottom: 1px solid var(--border); }}
   .tr-state {{ text-align: center; font-weight: 700; }}
+  .tr-badge {{ display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; }}
+  .trb-hit {{ background: var(--clay); color: #fff; }}
+  .trb-near {{ background: var(--mustard); color: #4a463f; }}
+  .trb-no {{ background: var(--card2); color: var(--muted); }}
   tr.tr-hit  {{ background: var(--clay-bg); }}
   tr.tr-near {{ background: var(--mustard-bg); }}
 
@@ -316,10 +380,26 @@ _TEMPLATE = r"""<!DOCTYPE html>
     </div>
   </div>
 
-  <!-- 警报统计 + 雷达图 -->
+  <!-- ═══ 第一部分：仪表盘表格 ═══ -->
+  <div class="part-title"><span class="part-num">1</span>仪表盘 · 17 项指标（短 → 中 → 长）</div>
+  <div class="card">
+    <table class="gauge">
+      <thead><tr><th>指标</th><th>当前值</th><th>资料日期</th><th>警戒/触发</th><th>信号</th></tr></thead>
+      <tbody>
+        <tr class="group-head"><td colspan="5">🟢 短期指标 (天-周，判断过热回调)</td></tr>
+        {rows_short}
+        <tr class="group-head"><td colspan="5">🟡 中期指标 (周-月，判断趋势转折)</td></tr>
+        {rows_mid}
+        <tr class="group-head"><td colspan="5">🔴 长期指标 (月-年，判断结构性周期顶)</td></tr>
+        {rows_long}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══ 第二部分：警报统计速览 + 雷达图 ═══ -->
+  <div class="part-title"><span class="part-num">2</span>警报统计速览</div>
   <div class="grid-2">
     <div class="card">
-      <div class="section-title" style="margin-top:0">警报统计速览</div>
       <div class="grid-3">{stat_short}{stat_mid}{stat_long}</div>
       <div class="section-title">风险雷达 (越大越危险 0-100)</div>
       <div id="radar-wrap">
@@ -329,31 +409,34 @@ _TEMPLATE = r"""<!DOCTYPE html>
       </div>
     </div>
     <div class="card">
-      <div class="section-title" style="margin-top:0">今日最需关注</div>
-      <div class="focus-box">{focus}</div>
-      <div class="section-title">金银 COT (commercial 持仓)</div>
+      <div class="section-title" style="margin-top:0">金银 COT · commercial 持仓</div>
       <div style="display:grid;grid-template-columns:1fr;gap:12px">{cot_cards}</div>
     </div>
   </div>
 
-  <!-- 仪表盘表格 -->
-  <div class="section-title">仪表盘 · 17 项指标</div>
-  <div class="card">
-    <table class="gauge">
-      <thead><tr><th>指标</th><th>当前值</th><th>资料日期</th><th>警戒/触发</th><th>信号</th></tr></thead>
-      <tbody>
-        <tr class="group-head"><td colspan="5">🟢 短期指标 (天-周)</td></tr>
-        {rows_short}
-        <tr class="group-head"><td colspan="5">🟡 中期指标 (周-月)</td></tr>
-        {rows_mid}
-        <tr class="group-head"><td colspan="5">🔴 长期指标 (月-年)</td></tr>
-        {rows_long}
-      </tbody>
-    </table>
+  <!-- ═══ 第三部分：逐条解读 ═══ -->
+  <div class="part-title"><span class="part-num">3</span>逐条简短解读</div>
+  <div class="card">{interp}</div>
+
+  <!-- ═══ 第四部分：短中长期综合结论 ═══ -->
+  <div class="part-title"><span class="part-num">4</span>短中长期综合结论</div>
+  <div class="grid-3">
+    <div class="concl-card cc-short">
+      <div class="cc-head">🟢 短期（1-3 个月）</div>
+      <div class="cc-body">{concl_short}</div>
+    </div>
+    <div class="concl-card cc-mid">
+      <div class="cc-head">🟡 中期（3-12 个月）</div>
+      <div class="cc-body">{concl_mid}</div>
+    </div>
+    <div class="concl-card cc-long">
+      <div class="cc-head">🔴 长期（1-3 年+）</div>
+      <div class="cc-body">{concl_long}</div>
+    </div>
   </div>
 
-  <!-- 卖出触发追踪 -->
-  <div class="section-title">卖出触发状态追踪 (同时 ≥3 项 = 开始分批卖出)</div>
+  <!-- ═══ 第五部分：卖出触发状态追踪 ═══ -->
+  <div class="part-title"><span class="part-num">5</span>卖出触发状态追踪（同时 ≥3 项 = 开始分批卖出）</div>
   <div class="card">
     <table class="trig">
       <thead><tr><th>触发条件</th><th>阈值</th><th>今日状态</th><th>达成</th></tr></thead>
@@ -361,9 +444,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
     </table>
   </div>
 
-  <!-- 逐条解读 -->
-  <div class="section-title">逐条解读</div>
-  <div class="card">{interp}</div>
+  <!-- ═══ 第六部分：今日最需关注的一条信号 ═══ -->
+  <div class="part-title"><span class="part-num">6</span>今日最需关注的一条信号</div>
+  <div class="focus-box">{focus}</div>
 
   <div class="footnote">
     数据源：FRED (VIX/HY/收益率曲线) · CNN F&amp;G · CBOE · AAII · GuruFocus · Conference Board · Renaissance · currentmarketvaluation · multpl · CFTC COT (金银 commercial)。<br>
