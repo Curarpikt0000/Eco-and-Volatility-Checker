@@ -44,10 +44,22 @@ Notion 3 时序 DB → 莫兰迪配色 dashboard（雷达图 + 仪表盘 + 6 部
 - **纪律**：绝不编数字，取不到标 status；阈值静态不随情绪调；写后读回验证。
 
 ## Cron (JST，避开 08:00/09:00/:00/:30 拥挤时段)
-- eco-vol-01 每日 08:30 抓数+dashboard(agent 模式,先 web_extract 补难源)
-- eco-vol-02 每日 08:40 Telegram 简报(高信噪比)
-- eco-vol-03 周一 08:20 增强版 4 指标
+- eco-vol-01 每日 08:30 抓数+AI解读+dashboard+**push公开GitHub**+Telegram report(agent 模式,deliver=origin)
 - eco-vol-selfheal 每小时 :20 自愈 watchdog(no_agent)
+
+## 发布 (2026-08 改：公开 GitHub Pages，不用 Uber vibe)
+- **宏观指标是公开信息** → 存公开个人 repo `Curarpikt0000/Eco-and-Volatility-Checker`(main)
+- dashboard 公开地址: https://curarpikt0000.github.io/Eco-and-Volatility-Checker/ (GitHub Pages 从 docs/ 托管)
+- dashboard.py 同时输出 dashboard/index.html + docs/index.html
+- 数据快照(公开宏观数据)进 git；.env 绝不进
+- 旧 Uber vibe app(eco-volatility-checker)已设 private 下线
+
+## dashboard 结构 (6部分 + 交易员屏卡片)
+- 第1部分：17指标卡片网格(交易员屏)——每卡: 大号等宽值 + 红绿黄灯 + threshold说明 + 近2周mini折线(SVG) + "如何看"注解(HOW_TO_READ)
+- 第2部分：警报统计3卡片 + 三雷达图 + 金银COT
+- 第3部分：逐条解读  第4部分：短中长综合结论(3彩卡,AI生成或规则兜底)
+- 第5部分：卖出触发追踪(文字色标签)  第6部分：今日焦点
+- 折线数据：日频快照(backfill_daily 回填近30天 + 每日cron追加)；周快照给一年趋势
 
 ## 红线
 - 密钥只进 `.env`，绝不硬编码/进 git/回显
