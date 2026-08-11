@@ -163,14 +163,86 @@ def fetch_put_call():
 
 # ─────────── FINRA Margin Debt (月度) ───────────
 def fetch_margin_debt():
+    """FINRA 月度保证金负债(十亿$)。真实表格: 'Jun-26 | 1,502,072 | ...'(百万$)。
+    Jina 失败 → 回退本地 margin_debt_history.json 最新值。"""
     t = jina_get("https://www.finra.org/rules-guidance/key-topics/margin-accounts/margin-statistics")
     if t:
-        m = re.search(r"(?:Debit Balances(?:\s+in\s+(?:Customers'?\s+)?(?:Securities\s+)?Margin Accounts)?)[^\d]{0,60}([\d,]{6,})", t)
+        m = re.search(r"([A-Z][a-z]{2}-\d{2})\s*\|\s*([\d,]{7,})", t)
         if m:
-            val_m = _num(m.group(1))
-            if val_m and val_m > 100000:  # 百万级，应 >100000(即>1000亿)
-                return {"value": round(val_m / 1000, 1), "as_of": None, "status": "ok"}
+            month, valm = m.group(1), _num(m.group(2))
+            if valm and valm > 100000:
+                return {"value": round(valm / 1000, 1), "as_of": _finra_month(month),
+                        "status": "ok"}
+    # 回退历史文件
+    import os, json
+    hp = os.path.join(os.path.dirname(__file__), "..", "..", "data", "margin_debt_history.json")
+    if os.path.exists(hp):
+        try:
+            h = json.load(open(hp)).get("margin_debt", [])
+            if h:
+                d, v = h[-1]
+                return {"value": v, "as_of": d, "status": "ok"}
+        except Exception:
+            pass
     return {"value": None, "as_of": None, "status": "未找到"}
+
+
+def fetch_margin_debt_history():
+    """从 FINRA 官方 xlsx 拉全部月度历史(供 backfill)。返回 [(YYYY-MM-DD, 十亿$),...] 升序。"""
+    import io, datetime
+    try:
+        import requests
+        from fetchers.util import HEADERS
+        r = requests.get("https://www.finra.org/sites/default/files/2021-03/margin-statistics.xlsx",
+                         headers=HEADERS, timeout=40)
+        if r.status_code != 200 or len(r.content) < 1000:
+            return []
+        import pandas as pd
+        df = pd.read_excel(io.BytesIO(r.content))
+        out = []
+        for _, row in df.iterrows():
+            # 第1列月份, 找 Debit 列
+            cells = list(row.values)
+            month = str(cells[0])
+            # debit 通常第2列
+            for c in cells[1:]:
+                try:
+                    v = float(str(c).replace(",", ""))
+                    if v > 100000:  # 百万级
+                        d = _parse_finra_any(month)
+                        if d:
+                            out.append((d, round(v / 1000, 1)))
+                        break
+                except Exception:
+                    continue
+        out.sort()
+        return out
+    except Exception:
+        return []
+
+
+def _finra_month(s):
+    """'Jun-26' -> '2026-06-30'(月末)。"""
+    import datetime, calendar
+    try:
+        dt = datetime.datetime.strptime(s, "%b-%y")
+        last = calendar.monthrange(dt.year, dt.month)[1]
+        return f"{dt.year}-{dt.month:02d}-{last:02d}"
+    except Exception:
+        return None
+
+
+def _parse_finra_any(s):
+    import datetime, calendar
+    s = str(s).strip()
+    for fmt in ("%b-%y", "%Y-%m-%d %H:%M:%S", "%Y-%m-%d", "%b-%Y", "%B %Y"):
+        try:
+            dt = datetime.datetime.strptime(s.split(" ")[0] if fmt.startswith("%Y") else s, fmt)
+            last = calendar.monthrange(dt.year, dt.month)[1]
+            return f"{dt.year}-{dt.month:02d}-{last:02d}"
+        except Exception:
+            continue
+    return None
 
 
 # ─────────── Renaissance IPO count ───────────
