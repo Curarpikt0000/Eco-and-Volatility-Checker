@@ -1,0 +1,109 @@
+{
+  "date": "2026-07-15",
+  "results": {
+    "vix": {
+      "key": "vix",
+      "value": 15.67,
+      "as_of": "2026-07-15",
+      "status": "ok"
+    },
+    "fear_greed": {
+      "key": "fear_greed",
+      "value": 41.1,
+      "as_of": "2026-07-15",
+      "status": "ok"
+    },
+    "aaii_bull_bear": {
+      "key": "aaii_bull_bear",
+      "value": -1.0,
+      "as_of": "2026-07-15",
+      "status": "ok"
+    },
+    "put_call": {
+      "key": "put_call",
+      "value": 0.61,
+      "as_of": "2026-07-15",
+      "status": "ok"
+    },
+    "naaim": {
+      "key": "naaim",
+      "value": null,
+      "as_of": null,
+      "status": "无历史"
+    },
+    "margin_debt": {
+      "key": "margin_debt",
+      "value": 1502.1,
+      "as_of": "2026-07-15",
+      "status": "ok"
+    },
+    "margin_gdp": {
+      "key": "margin_gdp",
+      "value": 4.63,
+      "as_of": "2026-07-15",
+      "status": "ok"
+    },
+    "ipo_count": {
+      "key": "ipo_count",
+      "value": null,
+      "as_of": null,
+      "status": "无历史"
+    },
+    "insider": {
+      "key": "insider",
+      "value": 0.25,
+      "as_of": "2026-07-15",
+      "status": "ok"
+    },
+    "bofa_bull_bear": {
+      "key": "bofa_bull_bear",
+      "value": 9.7,
+      "as_of": "2026-07-15",
+      "status": "ok"
+    },
+    "hy_oas": {
+      "key": "hy_oas",
+      "value": 2.71,
+      "as_of": "2026-07-15",
+      "status": "ok"
+    },
+    "ad_line": {
+      "key": "ad_line",
+      "value": false,
+      "as_of": "2026-07-15",
+      "status": "ok"
+    },
+    "buffett": {
+      "key": "buffett",
+      "value": null,
+      "as_of": null,
+      "status": "无历史"
+    },
+    "cape": {
+      "key": "cape",
+      "value": null,
+      "as_of": null,
+      "status": "无历史"
+    },
+    "yield_curve": {
+      "key": "yield_curve",
+      "value": 0.42,
+      "as_of": "2026-07-15",
+      "status": "ok"
+    },
+    "lei": {
+      "key": "lei",
+      "value": -0.3,
+      "as_of": "2026-07-15",
+      "status": "ok"
+    },
+    "aaii_alloc": {
+      "key": "aaii_alloc",
+      "value": 70.38,
+      "as_of": "2026-07-15",
+      "status": "ok"
+    }
+  },
+  "cot": {},
+  "generated_at": "daily-backfill"
+}

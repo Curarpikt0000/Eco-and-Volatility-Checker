@@ -12,7 +12,31 @@ import config as c
 import signals
 
 OUT_DIR = os.path.join(os.path.dirname(__file__), "..", "dashboard")
+SNAP_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "snapshots")
 os.makedirs(OUT_DIR, exist_ok=True)
+
+
+# 每个指标"如何看"——交易员视角的一句话解读法
+HOW_TO_READ = {
+    "vix": "恐慌温度计。<13 市场自满(危险)，20-25 转紧张，>25 恐慌抛售。飙升=避险信号。",
+    "fear_greed": "情绪钟摆。>75 极度贪婪(该减)，<25 极度恐惧(可贪)。从高位回落是顶部确认。",
+    "aaii_bull_bear": "散户情绪。多空差 >30% = 散户太乐观(反向看空)，<-30% = 过度悲观(反向看多)。",
+    "put_call": "对冲需求。越低=越少人买保险=越自满。<0.45 极度乐观(危险)，高=恐慌(可能见底)。",
+    "naaim": "主动经理仓位。>100% 加杠杆满仓(过热)，<20% 空仓避险。极值是反向信号。",
+    "margin_debt": "借钱炒股总量。持续攀升=杠杆堆积；连续 3 月下降=去杠杆开始(历史顶部信号)。",
+    "margin_gdp": "杠杆占经济比重。>3% 历史偏高，>3.5% 极端。回落往往伴随市场调整。",
+    "ipo_count": "发行热度。IPO 井喷=市场情绪顶部特征(供给放量套现)。骤降=风险偏好收缩。",
+    "insider": "内部人用脚投票。<0.17 内部人只卖不买(看空)，>1 大举买入(看多)。最聪明的钱。",
+    "bofa_bull_bear": "华尔街情绪综合指标。>8 极度贪婪(卖出信号)，<2 极度恐慌(买入信号)。",
+    "hy_oas": "信用市场压力。利差扩张=风险偏好收缩、违约担忧上升。>4.5% 信用警报。",
+    "ad_line": "市场广度。S&P 创新高但腾落线不创新高=顶背离(少数股撑指数，危险)。同步创新高=健康。",
+    "buffett": "总市值/GDP。巴菲特最爱的估值尺。>150% 显著高估，>180% 极端泡沫区。",
+    "cape": "10年周期市盈率。>30 历史高估，>35 逼近 2000/2021 泡沫峰值。均值回归压力大。",
+    "yield_curve": "10Y-2Y 利差。倒挂(<0)历史预示衰退；由倒挂转正常是衰退临近的最后信号。",
+    "lei": "领先经济指数。6个月变化率 <-4% 强烈预示衰退。领先实体经济约 7 个月。",
+    "aaii_alloc": "家庭股票仓位。>70% 是历史仓位极值(2000年峰值区)，反向看空信号。",
+}
+
 
 
 def risk_score(ind, value):
@@ -50,6 +74,75 @@ def fmt_val(ind, r):
     return f"{v}"
 
 
+def load_history(snap_dir, key, days=21):
+    """从周快照读某指标最近 N 天历史。返回 [(date, value),...] 升序。"""
+    import glob
+    out = []
+    for f in sorted(glob.glob(os.path.join(snap_dir, "*.json"))):
+        try:
+            d = json.load(open(f))
+            v = d.get("results", {}).get(key, {}).get("value")
+            if v is not None and not isinstance(v, bool):
+                out.append((os.path.basename(f)[:-5], float(v)))
+        except Exception:
+            continue
+    return out[-days:] if out else out
+
+
+def sparkline_svg(points, direction="high_bad", w=140, h=36):
+    """生成 mini 折线 SVG。points: [(date,val),...]。莫兰迪色。"""
+    vals = [v for _, v in points]
+    if len(vals) < 2:
+        return '<span class="spark-na">数据不足</span>'
+    lo, hi = min(vals), max(vals)
+    rng = (hi - lo) or 1
+    pad = 3
+    n = len(vals)
+    pts = []
+    for i, v in enumerate(vals):
+        x = pad + i * (w - 2 * pad) / (n - 1)
+        y = h - pad - (v - lo) / rng * (h - 2 * pad)
+        pts.append(f"{x:.1f},{y:.1f}")
+    # 趋势颜色：最后 vs 前值
+    rising = vals[-1] > vals[0]
+    bad = (rising if direction == "high_bad" else not rising)
+    color = "#c08a7d" if bad else "#9aab97"  # 陶土红=变差 / 鼠尾草绿=变好
+    dot_x, dot_y = pts[-1].split(",")
+    fill = "rgba(192,138,125,0.10)" if bad else "rgba(154,171,151,0.12)"
+    area = f"{pad},{h-pad} " + " ".join(pts) + f" {w-pad},{h-pad}"
+    return (f'<svg viewBox="0 0 {w} {h}" class="spark" preserveAspectRatio="none">'
+            f'<polygon points="{area}" fill="{fill}" stroke="none"/>'
+            f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" stroke-width="2.2" stroke-linejoin="round"/>'
+            f'<circle cx="{dot_x}" cy="{dot_y}" r="2.8" fill="{color}"/></svg>')
+
+
+def trend_arrow(points, direction="high_bad"):
+    """返回 (箭头符号, css类)。基于最近 2 周首尾比较。"""
+    vals = [v for _, v in points]
+    if len(vals) < 2:
+        return "→", "flat"
+    delta = vals[-1] - vals[0]
+    if abs(delta) < 1e-9:
+        return "→", "flat"
+    rising = delta > 0
+    bad = (rising if direction == "high_bad" else not rising)
+    arrow = "↑" if rising else "↓"
+    return arrow, ("bad" if bad else "good")
+
+
+def threshold_text(ind):
+    """人类可读的红绿黄灯阈值说明。"""
+    warn, trig, d = ind.get("warn"), ind.get("trigger"), ind.get("direction")
+    if warn is None or trig is None:
+        return "无数值阈值（定性判断）"
+    u = ind.get("unit", "")
+    us = "%" if u == "%" else ""
+    if d == "high_bad":
+        return f"🟢<{warn}{us} · 🟡{warn}–{trig}{us} · 🔴≥{trig}{us}"
+    else:  # low_bad
+        return f"🟢>{warn}{us} · 🟡{trig}–{warn}{us} · 🔴≤{trig}{us}"
+
+
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 逐条解读文本}(agent 生成，可选)。
@@ -73,7 +166,39 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
                 scores.append(round(rs, 1))
         radar[g] = {"labels": labels, "scores": scores}
 
-    # ── 仪表盘表格行 ──
+    # ── 指标卡片网格(交易员屏风格：值+灯+threshold+2周折线+趋势+如何看) ──
+    def metric_cards(g):
+        html = ""
+        for ind in c.indicators_by_group(g):
+            key = ind["key"]
+            r = results.get(key, {})
+            lt = signals.light(ind, r.get("value"))
+            cls = _sig_cls(lt)
+            hist = load_history(SNAP_DIR, key, days=14)
+            spark = sparkline_svg(hist, ind.get("direction", "high_bad"))
+            arrow, acls = trend_arrow(hist, ind.get("direction", "high_bad"))
+            st = r.get("status", "")
+            st_badge = "" if st == "ok" else f'<span class="stwarn">{st}</span>'
+            how = HOW_TO_READ.get(key, ind.get("note", ""))
+            # 2周变化
+            chg = ""
+            if len(hist) >= 2:
+                d0, d1 = hist[0][1], hist[-1][1]
+                diff = d1 - d0
+                chg = f'<span class="chg chg-{acls}">{arrow} {"+" if diff>=0 else ""}{round(diff,2)}</span>'
+            html += f"""<div class="mcard mcard-{cls}">
+              <div class="mc-top">
+                <div class="mc-name">{ind['name_zh']}<span class="mc-en">{ind['name_en']}</span></div>
+                <span class="mc-dot dot-{cls}"></span>
+              </div>
+              <div class="mc-val">{fmt_val(ind, r)} {chg}{st_badge}</div>
+              <div class="mc-thr">{threshold_text(ind)}</div>
+              <div class="mc-spark">{spark}<span class="mc-spark-lbl">近2周</span></div>
+              <div class="mc-how"><b>如何看：</b>{how}</div>
+            </div>"""
+        return html
+
+    # ── 仪表盘表格行(保留,备用) ──
     def table_rows(g):
         rows = ""
         for ind in c.indicators_by_group(g):
@@ -154,6 +279,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         sell_verdict=("⚠️ 已达分批卖出阈值 (≥3)" if hit >= c.SELL_START_THRESHOLD else "未达分批卖出阈值 (需 ≥3)"),
         stat_short=stat_card("short"), stat_mid=stat_card("mid"), stat_long=stat_card("long"),
         rows_short=table_rows("short"), rows_mid=table_rows("mid"), rows_long=table_rows("long"),
+        cards_short=metric_cards("short"), cards_mid=metric_cards("mid"), cards_long=metric_cards("long"),
         radar_json=json.dumps(radar, ensure_ascii=False),
         interp=interp_block(), trigger_rows=trigger_rows(), cot_cards=cot_cards(),
         focus=_focus_text(checks, results, cot),
@@ -165,6 +291,10 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
     open(path, "w", encoding="utf-8").write(html)
     # 也存一份带日期的历史
     open(os.path.join(OUT_DIR, f"scan-{date_str}.html"), "w", encoding="utf-8").write(html)
+    # 同步输出到 docs/ 供 GitHub Pages 托管
+    docs_dir = os.path.join(os.path.dirname(__file__), "..", "docs")
+    os.makedirs(docs_dir, exist_ok=True)
+    open(os.path.join(docs_dir, "index.html"), "w", encoding="utf-8").write(html)
     return path
 
 
@@ -272,6 +402,37 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .part-num {{ display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--dust-blue); color: #fff; font-size: 14px; font-weight: 800; flex-shrink: 0; }}
   /* 综合结论卡片 */
   .concl-card {{ border-radius: 12px; padding: 16px 18px; border: 1px solid var(--border); }}
+  /* ── 指标卡片网格(交易员屏) ── */
+  .grp-label {{ font-size: 12px; font-weight: 700; letter-spacing: .5px; margin: 16px 0 10px; padding: 5px 12px; border-radius: 6px; display: inline-block; }}
+  .grp-short {{ background: var(--sage-bg); color: #5c6b58; }}
+  .grp-mid {{ background: var(--mustard-bg); color: #7a6a3e; }}
+  .grp-long {{ background: var(--clay-bg); color: #8a5648; }}
+  .mcard-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 12px; margin-bottom: 8px; }}
+  .mcard {{ background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 13px; border-left: 4px solid var(--muted); }}
+  .mcard-g {{ border-left-color: var(--sage); }}
+  .mcard-y {{ border-left-color: var(--mustard); }}
+  .mcard-r {{ border-left-color: var(--clay); }}
+  .mcard-n {{ border-left-color: var(--border); opacity: .8; }}
+  .mc-top {{ display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; }}
+  .mc-name {{ font-size: 13px; font-weight: 700; line-height: 1.25; }}
+  .mc-en {{ display: block; font-size: 9px; color: var(--muted); font-weight: 400; }}
+  .mc-dot {{ width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }}
+  .mc-val {{ font-family: "SF Mono", "Menlo", "Consolas", monospace; font-size: 24px; font-weight: 700; margin: 6px 0 2px; letter-spacing: -.5px; }}
+  .chg {{ font-size: 12px; font-weight: 700; font-family: "SF Mono", monospace; margin-left: 4px; }}
+  .chg-bad {{ color: var(--clay); }}
+  .chg-good {{ color: var(--sage); }}
+  .chg-flat {{ color: var(--muted); }}
+  .mc-thr {{ font-size: 10.5px; color: var(--muted); margin-bottom: 6px; line-height: 1.4; }}
+  .mc-spark {{ display: flex; align-items: center; gap: 6px; height: 38px; margin-bottom: 6px; }}
+  .spark {{ width: 140px; height: 36px; }}
+  .spark-na {{ font-size: 10px; color: var(--muted); font-style: italic; }}
+  .mc-spark-lbl {{ font-size: 9px; color: var(--muted); }}
+  .mc-how {{ font-size: 10.5px; color: var(--text); line-height: 1.5; background: var(--card2); border-radius: 6px; padding: 6px 8px; }}
+  .mc-how b {{ color: var(--dust-blue); }}
+  .dot-g {{ background: var(--sage); }}
+  .dot-y {{ background: var(--mustard); }}
+  .dot-r {{ background: var(--clay); }}
+  .dot-n {{ background: var(--muted); opacity: .4; }}
   .cc-short {{ background: var(--sage-bg); border-color: var(--sage); }}
   .cc-mid {{ background: var(--mustard-bg); border-color: var(--mustard); }}
   .cc-long {{ background: var(--clay-bg); border-color: var(--clay); }}
@@ -380,21 +541,14 @@ _TEMPLATE = r"""<!DOCTYPE html>
     </div>
   </div>
 
-  <!-- ═══ 第一部分：仪表盘表格 ═══ -->
-  <div class="part-title"><span class="part-num">1</span>仪表盘 · 17 项指标（短 → 中 → 长）</div>
-  <div class="card">
-    <table class="gauge">
-      <thead><tr><th>指标</th><th>当前值</th><th>资料日期</th><th>警戒/触发</th><th>信号</th></tr></thead>
-      <tbody>
-        <tr class="group-head"><td colspan="5">🟢 短期指标 (天-周，判断过热回调)</td></tr>
-        {rows_short}
-        <tr class="group-head"><td colspan="5">🟡 中期指标 (周-月，判断趋势转折)</td></tr>
-        {rows_mid}
-        <tr class="group-head"><td colspan="5">🔴 长期指标 (月-年，判断结构性周期顶)</td></tr>
-        {rows_long}
-      </tbody>
-    </table>
-  </div>
+  <!-- ═══ 第一部分：指标卡片(短/中/长分区，每卡带2周折线+threshold+如何看) ═══ -->
+  <div class="part-title"><span class="part-num">1</span>指标卡片 · 17 项（短 → 中 → 长）</div>
+  <div class="grp-label grp-short">🟢 短期指标 · 天-周 · 判断过热回调</div>
+  <div class="mcard-grid">{cards_short}</div>
+  <div class="grp-label grp-mid">🟡 中期指标 · 周-月 · 判断趋势转折</div>
+  <div class="mcard-grid">{cards_mid}</div>
+  <div class="grp-label grp-long">🔴 长期指标 · 月-年 · 判断结构性周期顶</div>
+  <div class="mcard-grid">{cards_long}</div>
 
   <!-- ═══ 第二部分：警报统计速览 + 雷达图 ═══ -->
   <div class="part-title"><span class="part-num">2</span>警报统计速览</div>

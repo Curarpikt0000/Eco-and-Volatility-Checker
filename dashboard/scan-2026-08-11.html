@@ -38,6 +38,37 @@
   .part-num { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--dust-blue); color: #fff; font-size: 14px; font-weight: 800; flex-shrink: 0; }
   /* 综合结论卡片 */
   .concl-card { border-radius: 12px; padding: 16px 18px; border: 1px solid var(--border); }
+  /* ── 指标卡片网格(交易员屏) ── */
+  .grp-label { font-size: 12px; font-weight: 700; letter-spacing: .5px; margin: 16px 0 10px; padding: 5px 12px; border-radius: 6px; display: inline-block; }
+  .grp-short { background: var(--sage-bg); color: #5c6b58; }
+  .grp-mid { background: var(--mustard-bg); color: #7a6a3e; }
+  .grp-long { background: var(--clay-bg); color: #8a5648; }
+  .mcard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 12px; margin-bottom: 8px; }
+  .mcard { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 13px; border-left: 4px solid var(--muted); }
+  .mcard-g { border-left-color: var(--sage); }
+  .mcard-y { border-left-color: var(--mustard); }
+  .mcard-r { border-left-color: var(--clay); }
+  .mcard-n { border-left-color: var(--border); opacity: .8; }
+  .mc-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; }
+  .mc-name { font-size: 13px; font-weight: 700; line-height: 1.25; }
+  .mc-en { display: block; font-size: 9px; color: var(--muted); font-weight: 400; }
+  .mc-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+  .mc-val { font-family: "SF Mono", "Menlo", "Consolas", monospace; font-size: 24px; font-weight: 700; margin: 6px 0 2px; letter-spacing: -.5px; }
+  .chg { font-size: 12px; font-weight: 700; font-family: "SF Mono", monospace; margin-left: 4px; }
+  .chg-bad { color: var(--clay); }
+  .chg-good { color: var(--sage); }
+  .chg-flat { color: var(--muted); }
+  .mc-thr { font-size: 10.5px; color: var(--muted); margin-bottom: 6px; line-height: 1.4; }
+  .mc-spark { display: flex; align-items: center; gap: 6px; height: 38px; margin-bottom: 6px; }
+  .spark { width: 140px; height: 36px; }
+  .spark-na { font-size: 10px; color: var(--muted); font-style: italic; }
+  .mc-spark-lbl { font-size: 9px; color: var(--muted); }
+  .mc-how { font-size: 10.5px; color: var(--text); line-height: 1.5; background: var(--card2); border-radius: 6px; padding: 6px 8px; }
+  .mc-how b { color: var(--dust-blue); }
+  .dot-g { background: var(--sage); }
+  .dot-y { background: var(--mustard); }
+  .dot-r { background: var(--clay); }
+  .dot-n { background: var(--muted); opacity: .4; }
   .cc-short { background: var(--sage-bg); border-color: var(--sage); }
   .cc-mid { background: var(--mustard-bg); border-color: var(--mustard); }
   .cc-long { background: var(--clay-bg); border-color: var(--clay); }
@@ -130,7 +161,7 @@
 <body>
 <header>
   <h1>宏观风险扫描 · <span>Eco &amp; Volatility Checker</span></h1>
-  <span id="update-time">数据日期 2026-08-11 · 生成 2026-08-11 21:59 JST</span>
+  <span id="update-time">数据日期 2026-08-11 · 生成 2026-08-11 22:22 JST</span>
 </header>
 <div class="container">
 
@@ -146,123 +177,167 @@
     </div>
   </div>
 
-  <!-- ═══ 第一部分：仪表盘表格 ═══ -->
-  <div class="part-title"><span class="part-num">1</span>仪表盘 · 17 项指标（短 → 中 → 长）</div>
-  <div class="card">
-    <table class="gauge">
-      <thead><tr><th>指标</th><th>当前值</th><th>资料日期</th><th>警戒/触发</th><th>信号</th></tr></thead>
-      <tbody>
-        <tr class="group-head"><td colspan="5">🟢 短期指标 (天-周，判断过热回调)</td></tr>
-        <tr>
-              <td class="ind-name">VIX 波动率指数<span class="ind-en">CBOE VIX</span></td>
-              <td class="ind-val">14.9 </td>
-              <td class="ind-date">2026-08-07</td>
-              <td class="ind-thr">20/25</td>
-              <td class="ind-sig sig-g"><span class="dot dot-g"></span></td>
-            </tr><tr>
-              <td class="ind-name">CNN 恐惧与贪婪指数<span class="ind-en">CNN Fear & Greed</span></td>
-              <td class="ind-val">65.0 </td>
-              <td class="ind-date">2026-08-11</td>
-              <td class="ind-thr">75/80</td>
-              <td class="ind-sig sig-g"><span class="dot dot-g"></span></td>
-            </tr><tr>
-              <td class="ind-name">AAII 散户多空差<span class="ind-en">AAII Bull-Bear Spread</span></td>
-              <td class="ind-val">-12.0% </td>
-              <td class="ind-date">2026-07-30</td>
-              <td class="ind-thr">20/30</td>
-              <td class="ind-sig sig-g"><span class="dot dot-g"></span></td>
-            </tr><tr>
-              <td class="ind-name">CBOE 权益 Put/Call 比<span class="ind-en">CBOE Equity Put/Call</span></td>
-              <td class="ind-val">0.61 </td>
-              <td class="ind-date">2026-08-08</td>
-              <td class="ind-thr">0.55/0.45</td>
-              <td class="ind-sig sig-g"><span class="dot dot-g"></span></td>
-            </tr><tr>
-              <td class="ind-name">NAAIM 主动部位指数<span class="ind-en">NAAIM Exposure</span></td>
-              <td class="ind-val">— <span class="stwarn">数据源已转付费停更(2026-08-01)</span></td>
-              <td class="ind-date">—</td>
-              <td class="ind-thr">90/100</td>
-              <td class="ind-sig sig-n"><span class="dot dot-n"></span></td>
-            </tr>
-        <tr class="group-head"><td colspan="5">🟡 中期指标 (周-月，判断趋势转折)</td></tr>
-        <tr>
-              <td class="ind-name">FINRA 保证金负债<span class="ind-en">FINRA Margin Debt</span></td>
-              <td class="ind-val">1502.1 </td>
-              <td class="ind-date">2026-08-11</td>
-              <td class="ind-thr">—</td>
-              <td class="ind-sig sig-n"><span class="dot dot-n"></span></td>
-            </tr><tr>
-              <td class="ind-name">保证金负债 / GDP<span class="ind-en">Margin Debt / GDP</span></td>
-              <td class="ind-val">4.63% </td>
-              <td class="ind-date">2026-08-11</td>
-              <td class="ind-thr">3.0/3.5</td>
-              <td class="ind-sig sig-r"><span class="dot dot-r"></span></td>
-            </tr><tr>
-              <td class="ind-name">Renaissance IPO 发行量<span class="ind-en">Renaissance IPO Count</span></td>
-              <td class="ind-val">99.0 </td>
-              <td class="ind-date">—</td>
-              <td class="ind-thr">—</td>
-              <td class="ind-sig sig-n"><span class="dot dot-n"></span></td>
-            </tr><tr>
-              <td class="ind-name">内部人买卖比<span class="ind-en">Insider Buy/Sell Ratio</span></td>
-              <td class="ind-val">0.25 </td>
-              <td class="ind-date">2026-08-01</td>
-              <td class="ind-thr">0.25/0.17</td>
-              <td class="ind-sig sig-y"><span class="dot dot-y"></span></td>
-            </tr><tr>
-              <td class="ind-name">美银牛熊指标<span class="ind-en">BofA Bull & Bear</span></td>
-              <td class="ind-val">9.7 </td>
-              <td class="ind-date">2026-08-07</td>
-              <td class="ind-thr">7.0/8.0</td>
-              <td class="ind-sig sig-r"><span class="dot dot-r"></span></td>
-            </tr><tr>
-              <td class="ind-name">高收益债利差<span class="ind-en">ICE BofA HY OAS</span></td>
-              <td class="ind-val">2.7% </td>
-              <td class="ind-date">2026-08-07</td>
-              <td class="ind-thr">4.0/4.5</td>
-              <td class="ind-sig sig-g"><span class="dot dot-g"></span></td>
-            </tr><tr>
-              <td class="ind-name">NYSE 腾落线背离<span class="ind-en">NYSE A/D Line Divergence</span></td>
-              <td class="ind-val">无背离 </td>
-              <td class="ind-date">2026-08-10</td>
-              <td class="ind-thr">—</td>
-              <td class="ind-sig sig-n"><span class="dot dot-n"></span></td>
-            </tr>
-        <tr class="group-head"><td colspan="5">🔴 长期指标 (月-年，判断结构性周期顶)</td></tr>
-        <tr>
-              <td class="ind-name">巴菲特指标<span class="ind-en">Buffett Indicator</span></td>
-              <td class="ind-val">219.0% </td>
-              <td class="ind-date">2026-03-31</td>
-              <td class="ind-thr">150/180</td>
-              <td class="ind-sig sig-r"><span class="dot dot-r"></span></td>
-            </tr><tr>
-              <td class="ind-name">席勒 CAPE (PE10)<span class="ind-en">Shiller CAPE</span></td>
-              <td class="ind-val">42.37 </td>
-              <td class="ind-date">—</td>
-              <td class="ind-thr">30/35</td>
-              <td class="ind-sig sig-r"><span class="dot dot-r"></span></td>
-            </tr><tr>
-              <td class="ind-name">10Y-2Y 收益率曲线<span class="ind-en">10Y-2Y Yield Curve</span></td>
-              <td class="ind-val">0.47% </td>
-              <td class="ind-date">2026-08-10</td>
-              <td class="ind-thr">0.2/0.0</td>
-              <td class="ind-sig sig-g"><span class="dot dot-g"></span></td>
-            </tr><tr>
-              <td class="ind-name">Conference Board 领先指数<span class="ind-en">Conference Board LEI</span></td>
-              <td class="ind-val">-0.3 </td>
-              <td class="ind-date">2026-06-30</td>
-              <td class="ind-thr">-2.0/-4.0</td>
-              <td class="ind-sig sig-g"><span class="dot dot-g"></span></td>
-            </tr><tr>
-              <td class="ind-name">AAII 家庭股票配置<span class="ind-en">AAII Stock Allocation</span></td>
-              <td class="ind-val">70.38% </td>
-              <td class="ind-date">2026-07-31</td>
-              <td class="ind-thr">68/71</td>
-              <td class="ind-sig sig-y"><span class="dot dot-y"></span></td>
-            </tr>
-      </tbody>
-    </table>
-  </div>
+  <!-- ═══ 第一部分：指标卡片(短/中/长分区，每卡带2周折线+threshold+如何看) ═══ -->
+  <div class="part-title"><span class="part-num">1</span>指标卡片 · 17 项（短 → 中 → 长）</div>
+  <div class="grp-label grp-short">🟢 短期指标 · 天-周 · 判断过热回调</div>
+  <div class="mcard-grid"><div class="mcard mcard-g">
+              <div class="mc-top">
+                <div class="mc-name">VIX 波动率指数<span class="mc-en">CBOE VIX</span></div>
+                <span class="mc-dot dot-g"></span>
+              </div>
+              <div class="mc-val">14.9 <span class="chg chg-good">↓ -3.8</span></div>
+              <div class="mc-thr">🟢<20 · 🟡20–25 · 🔴≥25</div>
+              <div class="mc-spark"><svg viewBox="0 0 140 36" class="spark" preserveAspectRatio="none"><polygon points="3,33 3.0,13.2 13.3,13.8 23.6,13.4 33.9,15.8 44.2,3.0 54.5,21.6 64.8,27.3 75.2,28.0 85.5,24.7 95.8,28.3 106.1,31.7 116.4,33.0 126.7,33.0 137.0,33.0 137,33" fill="rgba(154,171,151,0.12)" stroke="none"/><polyline points="3.0,13.2 13.3,13.8 23.6,13.4 33.9,15.8 44.2,3.0 54.5,21.6 64.8,27.3 75.2,28.0 85.5,24.7 95.8,28.3 106.1,31.7 116.4,33.0 126.7,33.0 137.0,33.0" fill="none" stroke="#9aab97" stroke-width="2.2" stroke-linejoin="round"/><circle cx="137.0" cy="33.0" r="2.8" fill="#9aab97"/></svg><span class="mc-spark-lbl">近2周</span></div>
+              <div class="mc-how"><b>如何看：</b>恐慌温度计。<13 市场自满(危险)，20-25 转紧张，>25 恐慌抛售。飙升=避险信号。</div>
+            </div><div class="mcard mcard-g">
+              <div class="mc-top">
+                <div class="mc-name">CNN 恐惧与贪婪指数<span class="mc-en">CNN Fear & Greed</span></div>
+                <span class="mc-dot dot-g"></span>
+              </div>
+              <div class="mc-val">65.0 <span class="chg chg-bad">↑ +26.1</span></div>
+              <div class="mc-thr">🟢<75 · 🟡75–80 · 🔴≥80</div>
+              <div class="mc-spark"><svg viewBox="0 0 140 36" class="spark" preserveAspectRatio="none"><polygon points="3,33 3.0,28.8 13.3,26.5 23.6,30.1 33.9,29.8 44.2,33.0 54.5,27.1 64.8,22.6 75.2,17.2 85.5,8.0 95.8,8.1 106.1,9.0 116.4,3.6 126.7,3.0 137.0,3.0 137,33" fill="rgba(192,138,125,0.10)" stroke="none"/><polyline points="3.0,28.8 13.3,26.5 23.6,30.1 33.9,29.8 44.2,33.0 54.5,27.1 64.8,22.6 75.2,17.2 85.5,8.0 95.8,8.1 106.1,9.0 116.4,3.6 126.7,3.0 137.0,3.0" fill="none" stroke="#c08a7d" stroke-width="2.2" stroke-linejoin="round"/><circle cx="137.0" cy="3.0" r="2.8" fill="#c08a7d"/></svg><span class="mc-spark-lbl">近2周</span></div>
+              <div class="mc-how"><b>如何看：</b>情绪钟摆。>75 极度贪婪(该减)，<25 极度恐惧(可贪)。从高位回落是顶部确认。</div>
+            </div><div class="mcard mcard-g">
+              <div class="mc-top">
+                <div class="mc-name">AAII 散户多空差<span class="mc-en">AAII Bull-Bear Spread</span></div>
+                <span class="mc-dot dot-g"></span>
+              </div>
+              <div class="mc-val">-1.0% <span class="chg chg-flat">→ +0.0</span></div>
+              <div class="mc-thr">🟢<20% · 🟡20–30% · 🔴≥30%</div>
+              <div class="mc-spark"><svg viewBox="0 0 140 36" class="spark" preserveAspectRatio="none"><polygon points="3,33 3.0,33.0 13.3,33.0 23.6,33.0 33.9,33.0 44.2,33.0 54.5,33.0 64.8,33.0 75.2,33.0 85.5,33.0 95.8,33.0 106.1,33.0 116.4,33.0 126.7,33.0 137.0,33.0 137,33" fill="rgba(154,171,151,0.12)" stroke="none"/><polyline points="3.0,33.0 13.3,33.0 23.6,33.0 33.9,33.0 44.2,33.0 54.5,33.0 64.8,33.0 75.2,33.0 85.5,33.0 95.8,33.0 106.1,33.0 116.4,33.0 126.7,33.0 137.0,33.0" fill="none" stroke="#9aab97" stroke-width="2.2" stroke-linejoin="round"/><circle cx="137.0" cy="33.0" r="2.8" fill="#9aab97"/></svg><span class="mc-spark-lbl">近2周</span></div>
+              <div class="mc-how"><b>如何看：</b>散户情绪。多空差 >30% = 散户太乐观(反向看空)，<-30% = 过度悲观(反向看多)。</div>
+            </div><div class="mcard mcard-g">
+              <div class="mc-top">
+                <div class="mc-name">CBOE 权益 Put/Call 比<span class="mc-en">CBOE Equity Put/Call</span></div>
+                <span class="mc-dot dot-g"></span>
+              </div>
+              <div class="mc-val">0.61 <span class="chg chg-flat">→ +0.0</span></div>
+              <div class="mc-thr">🟢>0.55 · 🟡0.45–0.55 · 🔴≤0.45</div>
+              <div class="mc-spark"><svg viewBox="0 0 140 36" class="spark" preserveAspectRatio="none"><polygon points="3,33 3.0,33.0 13.3,33.0 23.6,33.0 33.9,33.0 44.2,33.0 54.5,33.0 64.8,33.0 75.2,33.0 85.5,33.0 95.8,33.0 106.1,33.0 116.4,33.0 126.7,33.0 137.0,33.0 137,33" fill="rgba(192,138,125,0.10)" stroke="none"/><polyline points="3.0,33.0 13.3,33.0 23.6,33.0 33.9,33.0 44.2,33.0 54.5,33.0 64.8,33.0 75.2,33.0 85.5,33.0 95.8,33.0 106.1,33.0 116.4,33.0 126.7,33.0 137.0,33.0" fill="none" stroke="#c08a7d" stroke-width="2.2" stroke-linejoin="round"/><circle cx="137.0" cy="33.0" r="2.8" fill="#c08a7d"/></svg><span class="mc-spark-lbl">近2周</span></div>
+              <div class="mc-how"><b>如何看：</b>对冲需求。越低=越少人买保险=越自满。<0.45 极度乐观(危险)，高=恐慌(可能见底)。</div>
+            </div><div class="mcard mcard-n">
+              <div class="mc-top">
+                <div class="mc-name">NAAIM 主动部位指数<span class="mc-en">NAAIM Exposure</span></div>
+                <span class="mc-dot dot-n"></span>
+              </div>
+              <div class="mc-val">— <span class="stwarn">数据源已转付费停更(2026-08-01)</span></div>
+              <div class="mc-thr">🟢<90% · 🟡90–100% · 🔴≥100%</div>
+              <div class="mc-spark"><span class="spark-na">数据不足</span><span class="mc-spark-lbl">近2周</span></div>
+              <div class="mc-how"><b>如何看：</b>主动经理仓位。>100% 加杠杆满仓(过热)，<20% 空仓避险。极值是反向信号。</div>
+            </div></div>
+  <div class="grp-label grp-mid">🟡 中期指标 · 周-月 · 判断趋势转折</div>
+  <div class="mcard-grid"><div class="mcard mcard-n">
+              <div class="mc-top">
+                <div class="mc-name">FINRA 保证金负债<span class="mc-en">FINRA Margin Debt</span></div>
+                <span class="mc-dot dot-n"></span>
+              </div>
+              <div class="mc-val">1502.1 <span class="chg chg-flat">→ +0.0</span></div>
+              <div class="mc-thr">无数值阈值（定性判断）</div>
+              <div class="mc-spark"><svg viewBox="0 0 140 36" class="spark" preserveAspectRatio="none"><polygon points="3,33 3.0,33.0 13.3,33.0 23.6,33.0 33.9,33.0 44.2,33.0 54.5,33.0 64.8,33.0 75.2,33.0 85.5,33.0 95.8,33.0 106.1,33.0 116.4,33.0 126.7,33.0 137.0,33.0 137,33" fill="rgba(154,171,151,0.12)" stroke="none"/><polyline points="3.0,33.0 13.3,33.0 23.6,33.0 33.9,33.0 44.2,33.0 54.5,33.0 64.8,33.0 75.2,33.0 85.5,33.0 95.8,33.0 106.1,33.0 116.4,33.0 126.7,33.0 137.0,33.0" fill="none" stroke="#9aab97" stroke-width="2.2" stroke-linejoin="round"/><circle cx="137.0" cy="33.0" r="2.8" fill="#9aab97"/></svg><span class="mc-spark-lbl">近2周</span></div>
+              <div class="mc-how"><b>如何看：</b>借钱炒股总量。持续攀升=杠杆堆积；连续 3 月下降=去杠杆开始(历史顶部信号)。</div>
+            </div><div class="mcard mcard-r">
+              <div class="mc-top">
+                <div class="mc-name">保证金负债 / GDP<span class="mc-en">Margin Debt / GDP</span></div>
+                <span class="mc-dot dot-r"></span>
+              </div>
+              <div class="mc-val">4.63% <span class="chg chg-flat">→ +0.0</span></div>
+              <div class="mc-thr">🟢<3.0% · 🟡3.0–3.5% · 🔴≥3.5%</div>
+              <div class="mc-spark"><svg viewBox="0 0 140 36" class="spark" preserveAspectRatio="none"><polygon points="3,33 3.0,33.0 13.3,33.0 23.6,33.0 33.9,33.0 44.2,33.0 54.5,33.0 64.8,33.0 75.2,33.0 85.5,33.0 95.8,33.0 106.1,33.0 116.4,33.0 126.7,33.0 137.0,33.0 137,33" fill="rgba(154,171,151,0.12)" stroke="none"/><polyline points="3.0,33.0 13.3,33.0 23.6,33.0 33.9,33.0 44.2,33.0 54.5,33.0 64.8,33.0 75.2,33.0 85.5,33.0 95.8,33.0 106.1,33.0 116.4,33.0 126.7,33.0 137.0,33.0" fill="none" stroke="#9aab97" stroke-width="2.2" stroke-linejoin="round"/><circle cx="137.0" cy="33.0" r="2.8" fill="#9aab97"/></svg><span class="mc-spark-lbl">近2周</span></div>
+              <div class="mc-how"><b>如何看：</b>杠杆占经济比重。>3% 历史偏高，>3.5% 极端。回落往往伴随市场调整。</div>
+            </div><div class="mcard mcard-n">
+              <div class="mc-top">
+                <div class="mc-name">Renaissance IPO 发行量<span class="mc-en">Renaissance IPO Count</span></div>
+                <span class="mc-dot dot-n"></span>
+              </div>
+              <div class="mc-val">99.0 </div>
+              <div class="mc-thr">无数值阈值（定性判断）</div>
+              <div class="mc-spark"><span class="spark-na">数据不足</span><span class="mc-spark-lbl">近2周</span></div>
+              <div class="mc-how"><b>如何看：</b>发行热度。IPO 井喷=市场情绪顶部特征(供给放量套现)。骤降=风险偏好收缩。</div>
+            </div><div class="mcard mcard-y">
+              <div class="mc-top">
+                <div class="mc-name">内部人买卖比<span class="mc-en">Insider Buy/Sell Ratio</span></div>
+                <span class="mc-dot dot-y"></span>
+              </div>
+              <div class="mc-val">0.25 <span class="chg chg-flat">→ +0.0</span></div>
+              <div class="mc-thr">🟢>0.25 · 🟡0.17–0.25 · 🔴≤0.17</div>
+              <div class="mc-spark"><svg viewBox="0 0 140 36" class="spark" preserveAspectRatio="none"><polygon points="3,33 3.0,33.0 13.3,33.0 23.6,33.0 33.9,33.0 44.2,33.0 54.5,33.0 64.8,33.0 75.2,33.0 85.5,33.0 95.8,33.0 106.1,33.0 116.4,33.0 126.7,33.0 137.0,33.0 137,33" fill="rgba(192,138,125,0.10)" stroke="none"/><polyline points="3.0,33.0 13.3,33.0 23.6,33.0 33.9,33.0 44.2,33.0 54.5,33.0 64.8,33.0 75.2,33.0 85.5,33.0 95.8,33.0 106.1,33.0 116.4,33.0 126.7,33.0 137.0,33.0" fill="none" stroke="#c08a7d" stroke-width="2.2" stroke-linejoin="round"/><circle cx="137.0" cy="33.0" r="2.8" fill="#c08a7d"/></svg><span class="mc-spark-lbl">近2周</span></div>
+              <div class="mc-how"><b>如何看：</b>内部人用脚投票。<0.17 内部人只卖不买(看空)，>1 大举买入(看多)。最聪明的钱。</div>
+            </div><div class="mcard mcard-r">
+              <div class="mc-top">
+                <div class="mc-name">美银牛熊指标<span class="mc-en">BofA Bull & Bear</span></div>
+                <span class="mc-dot dot-r"></span>
+              </div>
+              <div class="mc-val">9.7 <span class="chg chg-flat">→ +0.0</span></div>
+              <div class="mc-thr">🟢<7.0 · 🟡7.0–8.0 · 🔴≥8.0</div>
+              <div class="mc-spark"><svg viewBox="0 0 140 36" class="spark" preserveAspectRatio="none"><polygon points="3,33 3.0,33.0 13.3,33.0 23.6,33.0 33.9,33.0 44.2,33.0 54.5,33.0 64.8,33.0 75.2,33.0 85.5,33.0 95.8,33.0 106.1,33.0 116.4,33.0 126.7,33.0 137.0,33.0 137,33" fill="rgba(154,171,151,0.12)" stroke="none"/><polyline points="3.0,33.0 13.3,33.0 23.6,33.0 33.9,33.0 44.2,33.0 54.5,33.0 64.8,33.0 75.2,33.0 85.5,33.0 95.8,33.0 106.1,33.0 116.4,33.0 126.7,33.0 137.0,33.0" fill="none" stroke="#9aab97" stroke-width="2.2" stroke-linejoin="round"/><circle cx="137.0" cy="33.0" r="2.8" fill="#9aab97"/></svg><span class="mc-spark-lbl">近2周</span></div>
+              <div class="mc-how"><b>如何看：</b>华尔街情绪综合指标。>8 极度贪婪(卖出信号)，<2 极度恐慌(买入信号)。</div>
+            </div><div class="mcard mcard-g">
+              <div class="mc-top">
+                <div class="mc-name">高收益债利差<span class="mc-en">ICE BofA HY OAS</span></div>
+                <span class="mc-dot dot-g"></span>
+              </div>
+              <div class="mc-val">2.7% <span class="chg chg-good">↓ -0.07</span></div>
+              <div class="mc-thr">🟢<4.0% · 🟡4.0–4.5% · 🔴≥4.5%</div>
+              <div class="mc-spark"><svg viewBox="0 0 140 36" class="spark" preserveAspectRatio="none"><polygon points="3,33 3.0,20.6 13.3,17.1 23.6,13.6 33.9,8.3 44.2,3.0 54.5,8.3 64.8,6.5 75.2,18.9 85.5,27.7 95.8,24.2 106.1,31.2 116.4,33.0 126.7,33.0 137.0,33.0 137,33" fill="rgba(154,171,151,0.12)" stroke="none"/><polyline points="3.0,20.6 13.3,17.1 23.6,13.6 33.9,8.3 44.2,3.0 54.5,8.3 64.8,6.5 75.2,18.9 85.5,27.7 95.8,24.2 106.1,31.2 116.4,33.0 126.7,33.0 137.0,33.0" fill="none" stroke="#9aab97" stroke-width="2.2" stroke-linejoin="round"/><circle cx="137.0" cy="33.0" r="2.8" fill="#9aab97"/></svg><span class="mc-spark-lbl">近2周</span></div>
+              <div class="mc-how"><b>如何看：</b>信用市场压力。利差扩张=风险偏好收缩、违约担忧上升。>4.5% 信用警报。</div>
+            </div><div class="mcard mcard-n">
+              <div class="mc-top">
+                <div class="mc-name">NYSE 腾落线背离<span class="mc-en">NYSE A/D Line Divergence</span></div>
+                <span class="mc-dot dot-n"></span>
+              </div>
+              <div class="mc-val">无背离 </div>
+              <div class="mc-thr">无数值阈值（定性判断）</div>
+              <div class="mc-spark"><span class="spark-na">数据不足</span><span class="mc-spark-lbl">近2周</span></div>
+              <div class="mc-how"><b>如何看：</b>市场广度。S&P 创新高但腾落线不创新高=顶背离(少数股撑指数，危险)。同步创新高=健康。</div>
+            </div></div>
+  <div class="grp-label grp-long">🔴 长期指标 · 月-年 · 判断结构性周期顶</div>
+  <div class="mcard-grid"><div class="mcard mcard-r">
+              <div class="mc-top">
+                <div class="mc-name">巴菲特指标<span class="mc-en">Buffett Indicator</span></div>
+                <span class="mc-dot dot-r"></span>
+              </div>
+              <div class="mc-val">219.0% </div>
+              <div class="mc-thr">🟢<150% · 🟡150–180% · 🔴≥180%</div>
+              <div class="mc-spark"><span class="spark-na">数据不足</span><span class="mc-spark-lbl">近2周</span></div>
+              <div class="mc-how"><b>如何看：</b>总市值/GDP。巴菲特最爱的估值尺。>150% 显著高估，>180% 极端泡沫区。</div>
+            </div><div class="mcard mcard-r">
+              <div class="mc-top">
+                <div class="mc-name">席勒 CAPE (PE10)<span class="mc-en">Shiller CAPE</span></div>
+                <span class="mc-dot dot-r"></span>
+              </div>
+              <div class="mc-val">42.37 </div>
+              <div class="mc-thr">🟢<30 · 🟡30–35 · 🔴≥35</div>
+              <div class="mc-spark"><span class="spark-na">数据不足</span><span class="mc-spark-lbl">近2周</span></div>
+              <div class="mc-how"><b>如何看：</b>10年周期市盈率。>30 历史高估，>35 逼近 2000/2021 泡沫峰值。均值回归压力大。</div>
+            </div><div class="mcard mcard-g">
+              <div class="mc-top">
+                <div class="mc-name">10Y-2Y 收益率曲线<span class="mc-en">10Y-2Y Yield Curve</span></div>
+                <span class="mc-dot dot-g"></span>
+              </div>
+              <div class="mc-val">0.47% <span class="chg chg-good">↑ +0.13</span></div>
+              <div class="mc-thr">🟢>0.2% · 🟡0.0–0.2% · 🔴≤0.0%</div>
+              <div class="mc-spark"><svg viewBox="0 0 140 36" class="spark" preserveAspectRatio="none"><polygon points="3,33 3.0,33.0 13.3,28.4 23.6,33.0 33.9,30.7 44.2,7.6 54.5,7.6 64.8,3.0 75.2,7.6 85.5,12.2 95.8,7.6 106.1,9.9 116.4,5.3 126.7,3.0 137.0,3.0 137,33" fill="rgba(154,171,151,0.12)" stroke="none"/><polyline points="3.0,33.0 13.3,28.4 23.6,33.0 33.9,30.7 44.2,7.6 54.5,7.6 64.8,3.0 75.2,7.6 85.5,12.2 95.8,7.6 106.1,9.9 116.4,5.3 126.7,3.0 137.0,3.0" fill="none" stroke="#9aab97" stroke-width="2.2" stroke-linejoin="round"/><circle cx="137.0" cy="3.0" r="2.8" fill="#9aab97"/></svg><span class="mc-spark-lbl">近2周</span></div>
+              <div class="mc-how"><b>如何看：</b>10Y-2Y 利差。倒挂(<0)历史预示衰退；由倒挂转正常是衰退临近的最后信号。</div>
+            </div><div class="mcard mcard-g">
+              <div class="mc-top">
+                <div class="mc-name">Conference Board 领先指数<span class="mc-en">Conference Board LEI</span></div>
+                <span class="mc-dot dot-g"></span>
+              </div>
+              <div class="mc-val">-0.3 <span class="chg chg-flat">→ +0.0</span></div>
+              <div class="mc-thr">🟢>-2.0 · 🟡-4.0–-2.0 · 🔴≤-4.0</div>
+              <div class="mc-spark"><svg viewBox="0 0 140 36" class="spark" preserveAspectRatio="none"><polygon points="3,33 3.0,33.0 13.3,33.0 23.6,33.0 33.9,33.0 44.2,33.0 54.5,33.0 64.8,33.0 75.2,33.0 85.5,33.0 95.8,33.0 106.1,33.0 116.4,33.0 126.7,33.0 137.0,33.0 137,33" fill="rgba(192,138,125,0.10)" stroke="none"/><polyline points="3.0,33.0 13.3,33.0 23.6,33.0 33.9,33.0 44.2,33.0 54.5,33.0 64.8,33.0 75.2,33.0 85.5,33.0 95.8,33.0 106.1,33.0 116.4,33.0 126.7,33.0 137.0,33.0" fill="none" stroke="#c08a7d" stroke-width="2.2" stroke-linejoin="round"/><circle cx="137.0" cy="33.0" r="2.8" fill="#c08a7d"/></svg><span class="mc-spark-lbl">近2周</span></div>
+              <div class="mc-how"><b>如何看：</b>领先经济指数。6个月变化率 <-4% 强烈预示衰退。领先实体经济约 7 个月。</div>
+            </div><div class="mcard mcard-y">
+              <div class="mc-top">
+                <div class="mc-name">AAII 家庭股票配置<span class="mc-en">AAII Stock Allocation</span></div>
+                <span class="mc-dot dot-y"></span>
+              </div>
+              <div class="mc-val">70.38% <span class="chg chg-flat">→ +0.0</span></div>
+              <div class="mc-thr">🟢<68% · 🟡68–71% · 🔴≥71%</div>
+              <div class="mc-spark"><svg viewBox="0 0 140 36" class="spark" preserveAspectRatio="none"><polygon points="3,33 3.0,33.0 13.3,33.0 23.6,33.0 33.9,33.0 44.2,33.0 54.5,33.0 64.8,33.0 75.2,33.0 85.5,33.0 95.8,33.0 106.1,33.0 116.4,33.0 126.7,33.0 137.0,33.0 137,33" fill="rgba(154,171,151,0.12)" stroke="none"/><polyline points="3.0,33.0 13.3,33.0 23.6,33.0 33.9,33.0 44.2,33.0 54.5,33.0 64.8,33.0 75.2,33.0 85.5,33.0 95.8,33.0 106.1,33.0 116.4,33.0 126.7,33.0 137.0,33.0" fill="none" stroke="#9aab97" stroke-width="2.2" stroke-linejoin="round"/><circle cx="137.0" cy="33.0" r="2.8" fill="#9aab97"/></svg><span class="mc-spark-lbl">近2周</span></div>
+              <div class="mc-how"><b>如何看：</b>家庭股票仓位。>70% 是历史仓位极值(2000年峰值区)，反向看空信号。</div>
+            </div></div>
 
   <!-- ═══ 第二部分：警报统计速览 + 雷达图 ═══ -->
   <div class="part-title"><span class="part-num">2</span>警报统计速览</div>
@@ -304,7 +379,7 @@
 
   <!-- ═══ 第三部分：逐条解读 ═══ -->
   <div class="part-title"><span class="part-num">3</span>逐条简短解读</div>
-  <div class="card"><h4 class="interp-group">🟢 短期 (天-周)</h4><div class="interp-item"><span class="ii-sig">🟢</span><b>VIX 波动率指数</b> <span class="ii-val">14.9</span><p>VIX<13 = 自满区；>25 = 恐慌/系统性压力。阈值静态，不随市场结构调整。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>CNN 恐惧与贪婪指数</b> <span class="ii-val">65.0</span><p>>75 极度贪婪 = 过热，从高位(>75)回落到<50 是卖出触发信号之一。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>AAII 散户多空差</b> <span class="ii-val">-12.0%</span><p>多空差(Bull%-Bear%)>30% = 散户极度乐观(反向信号)。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>CBOE 权益 Put/Call 比</b> <span class="ii-val">0.61</span><p>越低越自满(买权多)。<0.45 = 极度乐观，回调风险高。</p></div><div class="interp-item"><span class="ii-sig">⚪</span><b>NAAIM 主动部位指数</b> <span class="ii-val">—</span><p>主动经理股票敞口。>100% = 加杠杆满仓，过热。</p></div><h4 class="interp-group">🟡 中期 (周-月)</h4><div class="interp-item"><span class="ii-sig">⚪</span><b>FINRA 保证金负债</b> <span class="ii-val">1502.1</span><p>月度。关注年增率 + 月增方向。连续3个月下降 = 卖出触发信号之一。</p></div><div class="interp-item"><span class="ii-sig">🔴</span><b>保证金负债 / GDP</b> <span class="ii-val">4.63%</span><p>派生：margin_debt / 名义GDP(FRED GDP)。历史高位 >3% 预示杠杆过高。</p></div><div class="interp-item"><span class="ii-sig">⚪</span><b>Renaissance IPO 发行量</b> <span class="ii-val">99.0</span><p>当季数量+募资总额。IPO 井喷 = 市场情绪顶部特征。</p></div><div class="interp-item"><span class="ii-sig">🟡</span><b>内部人买卖比</b> <span class="ii-val">0.25</span><p>内部人越卖越少买 = 看空。<0.17 = 卖出触发信号之一。</p></div><div class="interp-item"><span class="ii-sig">🔴</span><b>美银牛熊指标</b> <span class="ii-val">9.7</span><p>无固定源，web_search 每周搜。>8.0 = 极度贪婪(卖出信号)，<2 = 极度恐慌(买入)。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>高收益债利差</b> <span class="ii-val">2.7%</span><p>信用利差扩张 = 风险偏好收缩。>4.5% = 信用市场警报(卖出信号之一)。</p></div><div class="interp-item"><span class="ii-sig">⚪</span><b>NYSE 腾落线背离</b> <span class="ii-val">无背离</span><p>S&P创新高但A/D不创新高 = 顶背离(卖出信号之一)。web_search 判断。</p></div><h4 class="interp-group">🔴 长期 (月-年)</h4><div class="interp-item"><span class="ii-sig">🔴</span><b>巴菲特指标</b> <span class="ii-val">219.0%</span><p>总市值/GDP。>150% 显著高估，>180% 极端泡沫区。允许周/月度数据。</p></div><div class="interp-item"><span class="ii-sig">🔴</span><b>席勒 CAPE (PE10)</b> <span class="ii-val">42.37</span><p>周期调整市盈率。>30 历史高估，>35 接近2000/2021级泡沫。允许月度。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>10Y-2Y 收益率曲线</b> <span class="ii-val">0.47%</span><p>倒挂(<0)历史预示衰退；由倒挂转正(bull steepening)常是衰退临近信号。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>Conference Board 领先指数</b> <span class="ii-val">-0.3</span><p>领先经济指数。6个月变化率 <-4% 历史强烈预示衰退。允许月度。</p></div><div class="interp-item"><span class="ii-sig">🟡</span><b>AAII 家庭股票配置</b> <span class="ii-val">70.38%</span><p>家庭股票仓位%。历史 >70% 是仓位极值(2000年峰值区)，反向信号。</p></div></div>
+  <div class="card"><h4 class="interp-group">🟢 短期 (天-周)</h4><div class="interp-item"><span class="ii-sig">🟢</span><b>VIX 波动率指数</b> <span class="ii-val">14.9</span><p>VIX<13 = 自满区；>25 = 恐慌/系统性压力。阈值静态，不随市场结构调整。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>CNN 恐惧与贪婪指数</b> <span class="ii-val">65.0</span><p>>75 极度贪婪 = 过热，从高位(>75)回落到<50 是卖出触发信号之一。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>AAII 散户多空差</b> <span class="ii-val">-1.0%</span><p>多空差(Bull%-Bear%)>30% = 散户极度乐观(反向信号)。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>CBOE 权益 Put/Call 比</b> <span class="ii-val">0.61</span><p>越低越自满(买权多)。<0.45 = 极度乐观，回调风险高。</p></div><div class="interp-item"><span class="ii-sig">⚪</span><b>NAAIM 主动部位指数</b> <span class="ii-val">—</span><p>主动经理股票敞口。>100% = 加杠杆满仓，过热。</p></div><h4 class="interp-group">🟡 中期 (周-月)</h4><div class="interp-item"><span class="ii-sig">⚪</span><b>FINRA 保证金负债</b> <span class="ii-val">1502.1</span><p>月度。关注年增率 + 月增方向。连续3个月下降 = 卖出触发信号之一。</p></div><div class="interp-item"><span class="ii-sig">🔴</span><b>保证金负债 / GDP</b> <span class="ii-val">4.63%</span><p>派生：margin_debt / 名义GDP(FRED GDP)。历史高位 >3% 预示杠杆过高。</p></div><div class="interp-item"><span class="ii-sig">⚪</span><b>Renaissance IPO 发行量</b> <span class="ii-val">99.0</span><p>当季数量+募资总额。IPO 井喷 = 市场情绪顶部特征。</p></div><div class="interp-item"><span class="ii-sig">🟡</span><b>内部人买卖比</b> <span class="ii-val">0.25</span><p>内部人越卖越少买 = 看空。<0.17 = 卖出触发信号之一。</p></div><div class="interp-item"><span class="ii-sig">🔴</span><b>美银牛熊指标</b> <span class="ii-val">9.7</span><p>无固定源，web_search 每周搜。>8.0 = 极度贪婪(卖出信号)，<2 = 极度恐慌(买入)。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>高收益债利差</b> <span class="ii-val">2.7%</span><p>信用利差扩张 = 风险偏好收缩。>4.5% = 信用市场警报(卖出信号之一)。</p></div><div class="interp-item"><span class="ii-sig">⚪</span><b>NYSE 腾落线背离</b> <span class="ii-val">无背离</span><p>S&P创新高但A/D不创新高 = 顶背离(卖出信号之一)。web_search 判断。</p></div><h4 class="interp-group">🔴 长期 (月-年)</h4><div class="interp-item"><span class="ii-sig">🔴</span><b>巴菲特指标</b> <span class="ii-val">219.0%</span><p>总市值/GDP。>150% 显著高估，>180% 极端泡沫区。允许周/月度数据。</p></div><div class="interp-item"><span class="ii-sig">🔴</span><b>席勒 CAPE (PE10)</b> <span class="ii-val">42.37</span><p>周期调整市盈率。>30 历史高估，>35 接近2000/2021级泡沫。允许月度。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>10Y-2Y 收益率曲线</b> <span class="ii-val">0.47%</span><p>倒挂(<0)历史预示衰退；由倒挂转正(bull steepening)常是衰退临近信号。</p></div><div class="interp-item"><span class="ii-sig">🟢</span><b>Conference Board 领先指数</b> <span class="ii-val">-0.3</span><p>领先经济指数。6个月变化率 <-4% 历史强烈预示衰退。允许月度。</p></div><div class="interp-item"><span class="ii-sig">🟡</span><b>AAII 家庭股票配置</b> <span class="ii-val">70.38%</span><p>家庭股票仓位%。历史 >70% 是仓位极值(2000年峰值区)，反向信号。</p></div></div>
 
   <!-- ═══ 第四部分：短中长期综合结论 ═══ -->
   <div class="part-title"><span class="part-num">4</span>短中长期综合结论</div>
