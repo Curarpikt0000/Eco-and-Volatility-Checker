@@ -91,14 +91,26 @@ def parse_info_table(cik, accession):
             shares = 0
         rows.append((issuer, value, shares))
     # ── 单位自适应: 新版 13F 填美元全额, 部分旧式 filer 仍填千美元 ──
-    # 判据: 若多数持仓的隐含股价(value/shares) < $1, 说明 value 是千美元 → ×1000。
-    per_share = [r[1] / r[2] for r in rows if r[2] > 0 and r[1] > 0]
+    # 判据: 用隐含股价(value/shares)中位数。双阈值带避免边界误判:
+    #   中位数 <0.5 → 极可能千美元(×1000); >5 → 美元(不缩放); 0.5~5 灰区 → 保守不缩放(标记存疑)。
+    # 排除期权(PUT/CALL,shares口径不同)后再算; 样本<5 不做自适应(不可靠)。
+    ps_rows = [r for r in rows if r[2] > 0 and r[1] > 0
+               and "PUT" not in r[0] and "CALL" not in r[0]]
+    per_share = sorted(r[1] / r[2] for r in ps_rows)
     scale = 1
-    if per_share:
-        per_share.sort()
-        median_ps = per_share[len(per_share) // 2]
-        if median_ps < 1.0:  # 隐含股价 <$1 → value 是千美元
+    unit_flag = "usd"
+    if len(per_share) >= 5:
+        n = len(per_share)
+        median_ps = (per_share[n // 2] if n % 2 else (per_share[n // 2 - 1] + per_share[n // 2]) / 2)
+        if median_ps < 0.5:
             scale = 1000
+            unit_flag = "thousands"
+        elif median_ps > 5:
+            scale = 1
+            unit_flag = "usd"
+        else:
+            scale = 1  # 灰区: 保守按美元, 不放大
+            unit_flag = "ambiguous"
     for issuer, value, shares in rows:
         if issuer not in agg:
             agg[issuer] = {"shares": 0, "value": 0}
@@ -149,22 +161,28 @@ def fetch_one(inst):
     except Exception as e:
         return {**inst, "status": f"解析失败:{type(e).__name__}"}
     prev = {}
+    prev_ok = True
     if len(filings) > 1:
         time.sleep(0.25)
         try:
             prev = parse_info_table(inst["cik"], filings[1][1])
+            if not prev:
+                prev_ok = False  # 解析成功但空表 → 变动不可信
         except Exception:
             prev = {}
+            prev_ok = False  # ★上期解析失败 ≠ 全新建, 是"变动未知"(诚实)
+    else:
+        prev_ok = False  # 无上期可比
     changes = diff_holdings(cur, prev)
     total_val = sum(v["value"] for v in cur.values())
     return {
-        **inst, "sec_name": name, "status": "ok",
+        **inst, "sec_name": name, "status": "ok", "prev_ok": prev_ok,
         "report_date": cur_f[2] or cur_f[0], "filing_date": cur_f[0],
         "prev_report_date": (filings[1][2] or filings[1][0]) if len(filings) > 1 else None,
         "total_value": total_val, "n_positions": len(cur),
-        "top_holdings": changes[:12],  # TOP12 + 变动
-        "new_buys": [c for c in changes if c["action"] == "🆕新建"][:6],
-        "exits": [c for c in changes if c["action"] == "❌清仓"][:6],
+        "top_holdings": changes[:12],  # TOP12 + 变动(prev_ok=False 时变动仅供参考)
+        "new_buys": [c for c in changes if c["action"] == "🆕新建"][:6] if prev_ok else [],
+        "exits": [c for c in changes if c["action"] == "❌清仓"][:6] if prev_ok else [],
     }
 
 
@@ -247,16 +265,26 @@ def backfill_2025(institutions=None, write_notion=True):
             if not rd.startswith("2025"):
                 continue  # 2024Q4 仅作基准, 不单独写行
             cur = parsed[rd]
-            prev = parsed[rds[i - 1]] if i > 0 else {}
+            prev_rd = rds[i - 1] if i > 0 else None
+            # ★只在 prev 真正是紧邻季度(相差 75-105 天)时算变动, 避免季度缺失时错配基准
+            adjacent = False
+            if prev_rd:
+                try:
+                    import datetime as _dt
+                    gap = (_dt.date.fromisoformat(rd) - _dt.date.fromisoformat(prev_rd)).days
+                    adjacent = 75 <= gap <= 105
+                except Exception:
+                    adjacent = False
+            prev = parsed[prev_rd] if adjacent else {}
             changes = diff_holdings(cur, prev)
             total_val = sum(v["value"] for v in cur.values())
             row = {
-                **inst, "sec_name": name, "status": "ok",
-                "report_date": rd, "prev_report_date": rds[i - 1] if i > 0 else None,
+                **inst, "sec_name": name, "status": "ok", "prev_ok": adjacent,
+                "report_date": rd, "prev_report_date": prev_rd if adjacent else (f"{prev_rd}(非紧邻季,未计变动)" if prev_rd else None),
                 "total_value": total_val, "n_positions": len(cur),
                 "top_holdings": changes[:12],
-                "new_buys": [x for x in changes if x["action"] == "🆕新建"][:6],
-                "exits": [x for x in changes if x["action"] == "❌清仓"][:6],
+                "new_buys": [x for x in changes if x["action"] == "🆕新建"][:6] if adjacent else [],
+                "exits": [x for x in changes if x["action"] == "❌清仓"][:6] if adjacent else [],
             }
             all_rows.append(row)
             if db:
@@ -268,11 +296,16 @@ def backfill_2025(institutions=None, write_notion=True):
                     "上期": nw.prop_text(row["prev_report_date"] or "无上期"),
                     "总市值_B": nw.prop_num(round(total_val / 1e9, 2)),
                     "持仓数": nw.prop_num(len(cur)),
-                    "TOP持仓与变动": nw.prop_text(_fmt_holdings_text(row["top_holdings"])),
-                    "新建仓": nw.prop_text(_fmt_holdings_text(row["new_buys"]) or "无"),
-                    "清仓": nw.prop_text(_fmt_holdings_text(row["exits"], with_val=False) or "无"),
                     "数据源": nw.prop_select("SEC 13F"),
                 }
+                if adjacent:
+                    props["TOP持仓与变动"] = nw.prop_text(_fmt_holdings_text(row["top_holdings"]))
+                    props["新建仓"] = nw.prop_text(_fmt_holdings_text(row["new_buys"]) or "无")
+                    props["清仓"] = nw.prop_text(_fmt_holdings_text(row["exits"], with_val=False) or "无")
+                else:
+                    plain = [{"issuer": h["issuer"], "action": "持有", "value": h.get("value"), "pct": None}
+                             for h in row["top_holdings"]]
+                    props["TOP持仓与变动"] = nw.prop_text(_fmt_holdings_text(plain) + "\n(注:无紧邻上季,未计变动)")
                 if nw.upsert(db, title, props, title_field="机构-期"):
                     total_written += 1
         print(f"  {inst['fund']}: 2025 写 {sum(1 for r in rds if r.startswith('2025'))} 期", flush=True)
@@ -309,6 +342,7 @@ def write_to_notion(data=None):
         if r.get("status") != "ok":
             continue
         title = f"{r['fund']} {r['report_date']}"
+        # 当期真值(总市值/持仓数)总是可写
         props = {
             "KOL": nw.prop_text(r.get("kol", "")),
             "基金": nw.prop_text(r.get("fund", "")),
@@ -316,11 +350,18 @@ def write_to_notion(data=None):
             "上期": nw.prop_text(r.get("prev_report_date") or "无上期"),
             "总市值_B": nw.prop_num(round(r.get("total_value", 0) / 1e9, 2)),
             "持仓数": nw.prop_num(r.get("n_positions", 0)),
-            "TOP持仓与变动": nw.prop_text(_fmt_holdings_text(r.get("top_holdings", []))),
-            "新建仓": nw.prop_text(_fmt_holdings_text(r.get("new_buys", [])) or "无"),
-            "清仓": nw.prop_text(_fmt_holdings_text(r.get("exits", []), with_val=False) or "无"),
             "数据源": nw.prop_select("SEC 13F"),
         }
+        # ★变动字段只在 prev_ok(上期可比)时写; 否则不写(不用退化的"全新建"覆盖已有正确变动)
+        if r.get("prev_ok", True):
+            props["TOP持仓与变动"] = nw.prop_text(_fmt_holdings_text(r.get("top_holdings", [])))
+            props["新建仓"] = nw.prop_text(_fmt_holdings_text(r.get("new_buys", [])) or "无")
+            props["清仓"] = nw.prop_text(_fmt_holdings_text(r.get("exits", []), with_val=False) or "无")
+        else:
+            # 无可比上期: 只写持仓列表(不带变动语义), 变动列留给下次有上期时填
+            plain = [{"issuer": h["issuer"], "action": "持有", "value": h.get("value"), "pct": None}
+                     for h in r.get("top_holdings", [])]
+            props["TOP持仓与变动"] = nw.prop_text(_fmt_holdings_text(plain) + "\n(注:无可比上期,未计变动)")
         if nw.upsert(db, title, props, title_field="机构-期"):
             written += 1
     print(f"[13F] Notion 写入 {written} 机构行")

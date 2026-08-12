@@ -62,14 +62,36 @@ def query_by_title(db_id, title_value, title_field="Date"):
     return None
 
 
-def upsert(db_id, title_value, props, title_field="Date"):
+def _is_empty_prop(p):
+    """判断一个 property 值是否为空(不应覆盖已有真值)。"""
+    if not isinstance(p, dict):
+        return False
+    if "number" in p:
+        return p["number"] is None
+    if "select" in p:
+        return p["select"] is None
+    if "date" in p:
+        return p["date"] is None
+    if "rich_text" in p:
+        return len(p["rich_text"]) == 0
+    return False
+
+
+def upsert(db_id, title_value, props, title_field="Date", skip_none=True):
     """幂等 upsert：存在则 patch，否则 create。返回 page_id 或 None。
-    title_field: title 属性名(默认 Date, 持仓 DB 用 机构-期)。"""
+    title_field: title 属性名(默认 Date, 持仓 DB 用 机构-期)。
+    skip_none: PATCH 已有行时剔除空值字段(number=None/select=None/rich_text=[]),
+      避免用"抓不到"覆盖 Notion 里已有的真值(BofA=9.7 类回归的根因防护)。新建行不剔除。"""
     props = dict(props)
     props[title_field] = prop_title(title_value)
     pid = query_by_title(db_id, title_value, title_field)
     if pid:
-        st, body = _req("PATCH", f"/pages/{pid}", {"properties": props})
+        patch_props = props
+        if skip_none:
+            # 剔除空值字段(但 title 永远保留)，不覆盖已有真值
+            patch_props = {k: v for k, v in props.items()
+                           if k == title_field or not _is_empty_prop(v)}
+        st, body = _req("PATCH", f"/pages/{pid}", {"properties": patch_props})
     else:
         st, body = _req("POST", "/pages",
                         {"parent": {"database_id": db_id}, "properties": props})

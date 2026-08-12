@@ -4,19 +4,26 @@
     "vix": {
       "key": "vix",
       "value": 15.46,
-      "as_of": "2026-08-12",
+      "as_of": "2026-08-10",
       "status": "ok"
     },
     "fear_greed": {
-      "key": "fear_greed",
       "value": 60.7,
       "as_of": "2026-08-12",
-      "status": "ok"
+      "status": "ok",
+      "extra": {
+        "rating": "greed"
+      },
+      "key": "fear_greed"
     },
     "aaii_bull_bear": {
-      "value": -1.0,
-      "as_of": "2026-08-06",
+      "value": 0.0,
+      "as_of": "Count '25",
       "status": "ok",
+      "extra": {
+        "bull": 52.0,
+        "bear": 52.0
+      },
       "key": "aaii_bull_bear"
     },
     "put_call": {
@@ -26,34 +33,37 @@
       "key": "put_call"
     },
     "naaim": {
-      "key": "naaim",
       "value": null,
       "as_of": null,
-      "status": "未找到"
+      "status": "数据源已转付费停更(2026-08-01)",
+      "key": "naaim"
     },
     "margin_debt": {
-      "key": "margin_debt",
-      "value": null,
-      "as_of": null,
-      "status": "未找到"
+      "value": 1502.1,
+      "as_of": "2026-06-30",
+      "status": "ok",
+      "key": "margin_debt"
     },
     "margin_gdp": {
       "key": "margin_gdp",
-      "value": null,
-      "as_of": null,
-      "status": "未找到"
+      "value": 4.63,
+      "as_of": "2026-08-12",
+      "status": "ok"
     },
     "ipo_count": {
-      "key": "ipo_count",
-      "value": null,
+      "value": 99.0,
       "as_of": null,
-      "status": "未找到"
+      "status": "ok",
+      "extra": {
+        "proceeds_bil": 145.3
+      },
+      "key": "ipo_count"
     },
     "insider": {
-      "key": "insider",
-      "value": null,
-      "as_of": null,
-      "status": "未找到"
+      "value": 0.25,
+      "as_of": "2026-08-01",
+      "status": "ok",
+      "key": "insider"
     },
     "bofa_bull_bear": {
       "value": 9.7,
@@ -64,7 +74,7 @@
     "hy_oas": {
       "key": "hy_oas",
       "value": 2.7,
-      "as_of": "2026-08-12",
+      "as_of": "2026-08-10",
       "status": "ok"
     },
     "ad_line": {
@@ -74,34 +84,34 @@
       "key": "ad_line"
     },
     "buffett": {
-      "key": "buffett",
-      "value": null,
-      "as_of": null,
-      "status": "未找到"
+      "value": 219.0,
+      "as_of": "2026-03-31",
+      "status": "ok",
+      "key": "buffett"
     },
     "cape": {
-      "key": "cape",
-      "value": null,
+      "value": 42.24,
       "as_of": null,
-      "status": "未找到"
+      "status": "ok",
+      "key": "cape"
     },
     "yield_curve": {
       "key": "yield_curve",
       "value": 0.48,
-      "as_of": "2026-08-12",
+      "as_of": "2026-08-11",
       "status": "ok"
     },
     "lei": {
-      "key": "lei",
-      "value": null,
-      "as_of": null,
-      "status": "未找到"
+      "value": -0.3,
+      "as_of": "2026-06-30",
+      "status": "ok",
+      "key": "lei"
     },
     "aaii_alloc": {
-      "key": "aaii_alloc",
-      "value": null,
-      "as_of": null,
-      "status": "未找到"
+      "value": 70.38,
+      "as_of": "2026-07-31",
+      "status": "ok",
+      "key": "aaii_alloc"
     }
   },
   "cot": {
@@ -136,5 +146,5 @@
       "comm_surge": false
     }
   },
-  "generated_at": "backfill-daily"
+  "generated_at": "2026-08-12T05:11:46.808708"
 }

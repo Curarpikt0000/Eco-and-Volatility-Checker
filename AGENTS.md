@@ -43,6 +43,9 @@ Notion 3 时序 DB → 莫兰迪配色 dashboard（雷达图 + 仪表盘 + 6 部
 - **金银 COT 用 CFTC 官方 Socrata API**(publicreporting.cftc.gov)，非 barchart(反爬/付费)，同源但更稳可 backfill。COMEX 主力合约精确匹配 `GOLD/SILVER - COMMODITY EXCHANGE INC.`(排除 MICRO)。
 - **纪律**：绝不编数字，取不到标 status；阈值静态不随情绪调；写后读回验证。
 - ★**web_search 后端故障判定**：web_search 偶发整体返回空(success:true 但 data.web:[])，泛主题查询(如"gold price outlook 2026")也空=后端挂了/限流，非"人名检索限制"、更非"数据不存在"。诊断法:测一个必有结果的泛 query,若也空即确诊后端故障。此时 KOL 全量抓取会全"未找到"(诚实但无效),绝不据此下结论,等后端恢复 cron 每日 11:00 自动重跑填真值。
+- ★★**幂等 upsert 空值覆盖真值(BofA 类回归的系统级根因)**：notion_writer.upsert 是 PATCH 全量 props。若某源当天抓不到→prop_num(None) 生成 {"number":None}→PATCH 会把 Notion 已有真值清空。修复=upsert 默认 skip_none=True:PATCH 已有行时剔除空值字段(number=None/select=None/rich_text=[]),不覆盖已有真值(title 永远保留;新建行不剔除)。同理 backfill_daily 重跑覆盖 overrides 真值→results_for_day 对 search 源近日(±7天)读 overrides 兜底。**任何"重跑/每日写入"逻辑都要检查:抓不到时是覆盖成空还是保留旧真值?**
+- ★**13F 变动真实性**:①prev(上期)解析失败≠全新建,是"变动未知"→fetch_one 打 prev_ok=False,write_to_notion 遇 False 跳过变动字段不覆盖。②backfill_2025 变动基准必须是紧邻季度(report_date 相差75-105天),否则季度缺失会错配基准→标注"非紧邻季,未计变动"。③单位自适应用双阈值带(隐含股价中位数<0.5判千美元×1000/>5判美元/灰区保守不放大)+排期权+样本≥5才自适应。
+- ★遗留待跟进(冷review发现,非阻塞):P1-3 external_data 网络失败静默返空→下游混淆"API故障"vs"数据不存在"(可加 error 标记区分);P2-1 backfill report 触发计数字段无回填标记(仅FRED/COT口径偏低,dashboard折线会当真历史);P3-1 _clear_page_blocks 只删前100块;P3-3 _latest_row 按title字符串排序取最新(依赖零填充ISO,格式漂移会错)。
 
 ## Cron (JST)
 - eco-vol-01-daily-scan-report 每日 **11:00**(工作日)：抓数+KOL独立抓取+流动性+AI分析→写Notion 3DB+每日报告page内部+dashboard+GitHub副本+push→Telegram详细日报(6部分+分领域分析+KOL转向+流动性)。11点是为等 KOL/Economic Dashboard 的09:00数据跑完
