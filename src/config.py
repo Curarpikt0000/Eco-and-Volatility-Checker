@@ -88,6 +88,12 @@ INDICATORS = [
      "unit": "%", "direction": "low_bad", "warn": 4.5, "trigger": 4.0,
      "note": "全球基金经理现金占比(BofA月度调查)。替代已停更的NAAIM主动仓位。现金<4%=满仓贪婪/过热(反向卖出信号),>5%=避险恐慌(反向买入)。"},
 
+    {"key": "sofr_iorb", "name_zh": "SOFR − IORB 利差", "name_en": "SOFR minus IORB Spread",
+     "group": "short", "source": "derived", "unit": "bps", "direction": "high_bad",
+     "warn": 7, "trigger": 17,
+     "status_labels": {"green": "正常", "yellow": "心绞痛", "red": "心肌梗塞"},
+     "note": "货币市场压力核心指标。SOFR(担保隔夜融资利率)冲破IORB(准备金利率)=回购市场承压/准备金稀缺。≤0=正常🟢；7-17bps=心绞痛🟡(流动性趋紧)；>17bps=心肌梗塞🔴(钱荒,如2019年9月回购危机)。派生:(SOFR-IORB)×100 bps。"},
+
     # ═══════════ 🟡 中期指标 (周-月级别，判断趋势转折) ═══════════
     {"key": "margin_debt", "name_zh": "FINRA 保证金负债", "name_en": "FINRA Margin Debt",
      "group": "mid", "source": "web", "url": "https://www.finra.org/rules-guidance/key-topics/margin-accounts/margin-statistics",

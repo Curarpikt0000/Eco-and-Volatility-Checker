@@ -35,6 +35,7 @@ HOW_TO_READ = {
     "yield_curve": "10Y-2Y 利差。倒挂(<0)历史预示衰退；由倒挂转正常是衰退临近的最后信号。",
     "lei": "领先经济指数。6个月变化率 <-4% 强烈预示衰退。领先实体经济约 7 个月。",
     "aaii_alloc": "家庭股票仓位。>70% 是历史仓位极值(2000年峰值区)，反向看空信号。",
+    "sofr_iorb": "货币市场压力计。SOFR(隔夜回购利率)−IORB(准备金利率)。≤0 正常🟢；7–17bps 心绞痛🟡(准备金趋紧)；>17bps 心肌梗塞🔴(钱荒/回购危机,如2019年9月)。是美联储缩表触底、流动性拐点的最灵敏信号。",
 }
 
 
@@ -190,6 +191,14 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
             arrow, acls = trend_arrow(hist, ind.get("direction", "high_bad"))
             st = r.get("status", "")
             st_badge = "" if st == "ok" else f'<span class="stwarn">{st}</span>'
+            # 自定义状态标签(如 SOFR-IORB: 正常/心绞痛/心肌梗塞)
+            slabels = ind.get("status_labels")
+            slabel_html = ""
+            if slabels and r.get("value") is not None:
+                _lmap = {"g": "green", "y": "yellow", "r": "red"}
+                _txt = slabels.get(_lmap.get(cls, ""), "")
+                if _txt:
+                    slabel_html = f'<span class="mc-slabel mc-slabel-{cls}">{_txt}</span>'
             how = HOW_TO_READ.get(key, ind.get("note", ""))
             note = daily_notes.get(key, "")  # 当日一句话短评
             note_html = f'<div class="mc-note">📌 {note}</div>' if note else ""
@@ -204,7 +213,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
                 <div class="mc-name">{ind['name_zh']}<span class="mc-en">{ind['name_en']}</span></div>
                 <span class="mc-dot dot-{cls}"></span>
               </div>
-              <div class="mc-val">{fmt_val(ind, r)} {chg}{st_badge}</div>
+              <div class="mc-val">{fmt_val(ind, r)} {chg}{st_badge}{slabel_html}</div>
               <div class="mc-thr">{threshold_text(ind)}</div>
               <div class="mc-spark">{spark}<span class="mc-spark-lbl">近4周</span></div>
               {note_html}
@@ -886,6 +895,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .dot-r {{ background: var(--clay); box-shadow: 0 0 0 3px var(--clay-bg); }}
   .dot-n {{ background: var(--muted); opacity: .4; }}
   .stwarn {{ font-size: 10px; color: var(--clay); background: var(--clay-bg); padding: 1px 5px; border-radius: 4px; }}
+  .mc-slabel {{ font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px; margin-left: 4px; }}
+  .mc-slabel-g {{ color: #3f5a3f; background: rgba(154,171,151,.30); }}
+  .mc-slabel-y {{ color: #8a6a2a; background: rgba(212,178,110,.32); }}
+  .mc-slabel-r {{ color: #fff; background: var(--clay); }}
 
   /* 逐条解读 */
   .interp-group {{ font-size: 13px; color: var(--dust-blue); margin: 16px 0 8px; font-weight: 700; }}
@@ -942,7 +955,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   </div>
 
   <!-- ═══ 第一部分：指标卡片(短/中/长分区，每卡带2周折线+threshold+如何看) ═══ -->
-  <div class="part-title"><span class="part-num">1</span>指标卡片 · 17 项（短 → 中 → 长）</div>
+  <div class="part-title"><span class="part-num">1</span>指标卡片 · 18 项（短 → 中 → 长）</div>
   <div class="grp-label grp-short">🟢 短期指标 · 天-周 · 判断过热回调</div>
   <div class="mcard-grid">{cards_short}</div>
   <div class="grp-label grp-mid">🟡 中期指标 · 周-月 · 判断趋势转折</div>

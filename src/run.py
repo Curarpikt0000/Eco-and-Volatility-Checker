@@ -38,7 +38,7 @@ def load_manual_overrides():
 
 
 def fetch_all():
-    """抓 17 指标，返回 {key: {value, as_of, status, extra}}。"""
+    """抓 18 指标，返回 {key: {value, as_of, status, extra}}。"""
     results = {}
     overrides = load_manual_overrides()
     for ind in c.INDICATORS:
@@ -66,6 +66,25 @@ def fetch_all():
         time.sleep(0.5)
 
     # ── 派生指标 ──
+    # sofr_iorb = (SOFR - IORB) * 100 bps (货币市场压力)
+    try:
+        sofr_v, sofr_d = fred.fetch_fred_latest("SOFR")
+        iorb_v, iorb_d = fred.fetch_fred_latest("IORB")
+        if sofr_v is not None and iorb_v is not None:
+            spread_bps = round((sofr_v - iorb_v) * 100, 1)
+            results["sofr_iorb"] = {
+                "key": "sofr_iorb", "value": spread_bps,
+                "as_of": max(str(sofr_d), str(iorb_d)), "status": "ok",
+                "extra": {"sofr": sofr_v, "iorb": iorb_v,
+                          "sofr_as_of": str(sofr_d), "iorb_as_of": str(iorb_d)},
+            }
+        else:
+            results["sofr_iorb"] = {"key": "sofr_iorb", "value": None,
+                                    "as_of": None, "status": "SOFR/IORB取数失败"}
+    except Exception as e:
+        results["sofr_iorb"] = {"key": "sofr_iorb", "value": None,
+                                "as_of": None, "status": f"错误:{e}"}
+
     # margin_gdp = margin_debt / 名义GDP * 100
     md = results.get("margin_debt", {}).get("value")
     if md is not None:

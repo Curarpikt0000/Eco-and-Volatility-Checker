@@ -8,7 +8,7 @@
       "status": "ok"
     },
     "fear_greed": {
-      "value": 60.6,
+      "value": 60.9,
       "as_of": "2026-08-12",
       "status": "ok",
       "extra": {
@@ -35,8 +35,20 @@
     "bofa_fms_cash": {
       "value": null,
       "as_of": null,
-      "status": "待agent搜索",
+      "status": "待cron每月web_search填(BofA Global Fund Manager Survey cash level)",
       "key": "bofa_fms_cash"
+    },
+    "sofr_iorb": {
+      "key": "sofr_iorb",
+      "value": -2.0,
+      "as_of": "2026-08-12",
+      "status": "ok",
+      "extra": {
+        "sofr": 3.63,
+        "iorb": 3.65,
+        "sofr_as_of": "2026-08-10",
+        "iorb_as_of": "2026-08-12"
+      }
     },
     "margin_debt": {
       "value": 1502.1,
@@ -51,7 +63,7 @@
       "status": "ok"
     },
     "ipo_count": {
-      "value": 225.0,
+      "value": 226.0,
       "as_of": "2026-YTD",
       "status": "ok",
       "extra": {
@@ -159,5 +171,5 @@
       "comm_surge": false
     }
   },
-  "generated_at": "2026-08-12T07:20:44.951217"
+  "generated_at": "2026-08-12T10:06:39.669771"
 }
