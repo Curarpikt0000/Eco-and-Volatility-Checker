@@ -8,7 +8,7 @@
       "status": "ok"
     },
     "fear_greed": {
-      "value": 60.7,
+      "value": 60.6,
       "as_of": "2026-08-12",
       "status": "ok",
       "extra": {
@@ -32,11 +32,11 @@
       "status": "ok",
       "key": "put_call"
     },
-    "naaim": {
+    "bofa_fms_cash": {
       "value": null,
       "as_of": null,
-      "status": "数据源已转付费停更(2026-08-01)",
-      "key": "naaim"
+      "status": "待agent搜索",
+      "key": "bofa_fms_cash"
     },
     "margin_debt": {
       "value": 1502.1,
@@ -159,5 +159,5 @@
       "comm_surge": false
     }
   },
-  "generated_at": "2026-08-12T05:57:17.653419"
+  "generated_at": "2026-08-12T07:20:44.951217"
 }

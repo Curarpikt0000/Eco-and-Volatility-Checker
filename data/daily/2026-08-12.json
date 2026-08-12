@@ -1,0 +1,4932 @@
+{
+  "date": "2026-08-12",
+  "overall": "🟡 警戒",
+  "hit": 1,
+  "results": {
+    "vix": {
+      "key": "vix",
+      "value": 15.46,
+      "as_of": "2026-08-10",
+      "status": "ok"
+    },
+    "fear_greed": {
+      "value": 60.6,
+      "as_of": "2026-08-12",
+      "status": "ok",
+      "extra": {
+        "rating": "greed"
+      },
+      "key": "fear_greed"
+    },
+    "aaii_bull_bear": {
+      "value": 0.0,
+      "as_of": "Count '25",
+      "status": "ok",
+      "extra": {
+        "bull": 52.0,
+        "bear": 52.0
+      },
+      "key": "aaii_bull_bear"
+    },
+    "put_call": {
+      "value": 0.61,
+      "as_of": "2026-08-12",
+      "status": "ok",
+      "key": "put_call"
+    },
+    "bofa_fms_cash": {
+      "value": null,
+      "as_of": null,
+      "status": "待agent搜索",
+      "key": "bofa_fms_cash"
+    },
+    "margin_debt": {
+      "value": 1502.1,
+      "as_of": "2026-06-30",
+      "status": "ok",
+      "key": "margin_debt"
+    },
+    "margin_gdp": {
+      "key": "margin_gdp",
+      "value": 4.63,
+      "as_of": "2026-08-12",
+      "status": "ok"
+    },
+    "ipo_count": {
+      "value": 225.0,
+      "as_of": "2026-YTD",
+      "status": "ok",
+      "extra": {
+        "source": "stockanalysis",
+        "year": 2026
+      },
+      "key": "ipo_count"
+    },
+    "insider": {
+      "value": 0.27,
+      "as_of": null,
+      "status": "ok",
+      "extra": {
+        "source": "openinsider",
+        "note": "近期榜前100笔口径,趋势用"
+      },
+      "key": "insider"
+    },
+    "bofa_bull_bear": {
+      "value": 9.7,
+      "as_of": "2026-08-07",
+      "status": "ok",
+      "key": "bofa_bull_bear"
+    },
+    "hy_oas": {
+      "key": "hy_oas",
+      "value": 2.7,
+      "as_of": "2026-08-10",
+      "status": "ok"
+    },
+    "ad_line": {
+      "value": false,
+      "as_of": "2026-08-11",
+      "status": "ok",
+      "key": "ad_line"
+    },
+    "buffett": {
+      "value": 214.0,
+      "as_of": "2026-01-01",
+      "status": "ok",
+      "extra": {
+        "source": "FRED Z.1"
+      },
+      "key": "buffett"
+    },
+    "cape": {
+      "value": 42.24,
+      "as_of": "2026-08-11",
+      "status": "ok",
+      "key": "cape"
+    },
+    "yield_curve": {
+      "key": "yield_curve",
+      "value": 0.48,
+      "as_of": "2026-08-11",
+      "status": "ok"
+    },
+    "lei": {
+      "value": 0.58,
+      "as_of": "2026-06-01",
+      "status": "ok",
+      "extra": {
+        "cli_index": 100.8,
+        "source": "FRED OECD CLI",
+        "note": "OECD综合领先指标6月变化(替Conference Board付费LEI)"
+      },
+      "key": "lei"
+    },
+    "aaii_alloc": {
+      "value": 70.38,
+      "as_of": null,
+      "status": "ok",
+      "key": "aaii_alloc"
+    }
+  },
+  "cot": {
+    "gold": {
+      "as_of": "2026-08-04",
+      "open_interest": 371551,
+      "comm_long": 71832,
+      "comm_short": 298323,
+      "comm_net": -226491,
+      "noncomm_long": 227013,
+      "noncomm_short": 29379,
+      "noncomm_net": 197634,
+      "metal": "gold",
+      "comm_net_wow": -14182,
+      "comm_long_wow": -3628,
+      "comm_short_wow": 10554,
+      "comm_surge": false
+    },
+    "silver": {
+      "as_of": "2026-08-04",
+      "open_interest": 111999,
+      "comm_long": 33118,
+      "comm_short": 73540,
+      "comm_net": -40422,
+      "noncomm_long": 36454,
+      "noncomm_short": 14174,
+      "noncomm_net": 22280,
+      "metal": "silver",
+      "comm_net_wow": -1613,
+      "comm_long_wow": 611,
+      "comm_short_wow": 2224,
+      "comm_surge": false
+    }
+  },
+  "group_stats": {
+    "short": [
+      4,
+      5
+    ],
+    "mid": [
+      2,
+      7
+    ],
+    "long": [
+      2,
+      5
+    ]
+  },
+  "triggers": [
+    [
+      "VIX 突破并站稳 > 25",
+      "> 25",
+      "15.46",
+      "❌"
+    ],
+    [
+      "Margin Debt 连续 3 个月下降",
+      "连续3月",
+      "近3月方向 0/3 降",
+      "❌"
+    ],
+    [
+      "HY Spread 扩张 > 4.5%",
+      "> 4.5%",
+      "2.7%",
+      "❌"
+    ],
+    [
+      "Fear&Greed 从>75回落<50",
+      ">75→<50",
+      "60.6",
+      "❌"
+    ],
+    [
+      "A/D Line 顶背离",
+      "背离",
+      "广度确认(无背离)",
+      "❌"
+    ],
+    [
+      "BofA Bull&Bear > 8.0",
+      "> 8.0",
+      "9.7",
+      "✅"
+    ],
+    [
+      "Insider Buy/Sell < 0.17",
+      "< 0.17",
+      "0.27",
+      "❌"
+    ]
+  ],
+  "ai_analysis": {
+    "reads": {
+      "vix": "VIX 15.46 处低波动区，市场无近端恐慌，但极低波动本身是晚周期自满信号，一旦事件冲击弹性大。",
+      "fear_greed": "CNN Fear&Greed 60.6 落在贪婪区但未极端，情绪偏热而非狂热，短期尚有空间。",
+      "aaii_bull_bear": "AAII 多空价差 ~0，散户情绪中性偏谨慎，与机构极度乐观形成背离。",
+      "put_call": "股票 Put/Call 0.61 偏低（看涨占优），对冲需求不足，反映风险偏好高企。",
+      "bofa_fms_cash": "BofA FMS 现金水位本期未取到（web_search 后端故障+源反爬），留空不编。",
+      "margin_debt": "融资余额 $1502B 创历史新高，杠杆持续加码，为回撤埋下放大器。",
+      "margin_gdp": "Margin Debt/GDP 4.63% 触红线，杠杆占经济比重达历史高位，结构性脆弱。",
+      "ipo_count": "IPO 数量 225 处活跃区，一级市场供给旺盛，晚周期风险偏好特征。",
+      "insider": "内部人买卖比 0.27，低于长期均值 0.39，公司内部人偏谨慎/净卖出。",
+      "bofa_bull_bear": "BofA Bull&Bear 9.7 突破 8.0 卖出线（2021 以来最极端），触发 1/7 硬卖出。",
+      "hy_oas": "高收益利差 2.7% 极窄，信用市场毫无压力，风险定价过度乐观。",
+      "ad_line": "A/D 广度暂无顶背离，上涨仍获多数个股确认，结构尚未破位。",
+      "buffett": "巴菲特指标 214% 深度高估区，总市值远超 GDP，长期回报预期被压缩。",
+      "cape": "Shiller CAPE 42.24 逼近历史极值（仅次于 2000/2021），估值极度拉伸。",
+      "yield_curve": "2s10s 利差 +0.48 正陡峭，短期衰退信号解除，收益率曲线不发警报。",
+      "lei": "LEI 6个月变化 -0.3%，负但趋稳（H1 降幅远小于 H2 2025），衰退非迫近。",
+      "aaii_alloc": "AAII 股票配置 70.38%，连续 74 个月高于 61.5% 历史均值，散户重仓股票。"
+    },
+    "notes": {
+      "vix": "低波动=自满，非安全；备好尾部对冲。",
+      "fear_greed": "贪婪但未极端，短期还有惯性。",
+      "aaii_bull_bear": "散户中性，与机构乐观背离。",
+      "put_call": "对冲太少，风险偏好过高。",
+      "bofa_fms_cash": "本期缺失，未编。",
+      "margin_debt": "杠杆新高，回撤放大器。",
+      "margin_gdp": "🔴 4.63% 触红线。",
+      "ipo_count": "一级供给旺，晚周期。",
+      "insider": "内部人偏卖，谨慎。",
+      "bofa_bull_bear": "🔴 9.7 触发卖出线。",
+      "hy_oas": "利差极窄，信用零压力。",
+      "ad_line": "广度尚确认，无破位。",
+      "buffett": "🔴 214% 深度高估。",
+      "cape": "🔴 42.24 逼近极值。",
+      "yield_curve": "正陡峭，衰退信号解除。",
+      "lei": "负但趋稳，非迫近。",
+      "aaii_alloc": "散户重仓 70%，74月高于均值。"
+    },
+    "conclusions": {
+      "short": "短期(4/5🟢)：波动率/情绪/信用面绿灯为主，VIX 15.46、HY 2.7%、股票 Put/Call 0.61 均无近端压力，市场可继续惯性上行。动作：维持核心仓位，但把低成本尾部对冲（VIX call / 保护性 put）补足——低波动正是买保险最便宜的时候，不追高、不加杠杆。",
+      "mid": "中期(2/7🟢)：估值与杠杆是主要拖累，Margin Debt/GDP 4.63%、Buffett 214%、CAPE 42.24 三项🔴，叠加 BofA Bull&Bear 9.7 触发。动作：开始分批降低高 Beta/高估值成长敞口 10-15%，把再平衡收益转向现金/短债与低估值/防御板块；不新增杠杆，逢强势反弹减仓而非追涨。",
+      "long": "长期(2/5🟢)：结构性周期顶特征齐备——极端估值+历史新高杠杆+情绪贪婪+内部人净卖出，但趋势尚未破位（A/D 无背离、收益率曲线正陡峭、LEI 趋稳）。动作：确立「择机减仓」框架而非「清仓」，卖出触发计数 1/7（<3，尚未到分批卖出阈值），继续逐日监控；一旦触发升至 ≥3（尤其 VIX 站上 25 或 A/D 顶背离出现），立即启动系统性分批减仓。"
+    },
+    "focus": "今日焦点：BofA Bull&Bear 9.7（2021 以来最极端，7 项卖出触发中唯一亮红）与 CAPE 42.24 / Buffett 214% / Margin Debt/GDP 4.63% 三红共振——市场处于「低波动率外壳 + 高估值高杠杆内核」的典型晚周期结构。触发仅 1/7 尚不足以系统性减仓，但估值与情绪极值要求即刻补齐尾部对冲并停止加杠杆。",
+    "sector_analysis": "【波动率与情绪】VIX 15.46 与股票 Put/Call 0.61 双双处低位，CNN Fear&Greed 60.6 位于贪婪区但未极端。表层平静掩盖内在自满：极低波动率与偏低的对冲需求意味着市场对尾部风险几乎无定价，一旦出现外生冲击，波动率的弹性上行空间极大。值得注意的背离是——散户情绪（AAII 多空价差约 0）中性偏谨慎，而机构情绪（BofA Bull&Bear 9.7）却极度乐观，这种「聪明钱狂热、散户观望」的组合在历史上多出现于阶段性顶部区域。本期无指标状态发生方向翻转，但情绪面整体偏热的定性未变。\n\n【杠杆与信用】这是本期最需警惕的领域。融资余额 $1502B 再创历史新高，Margin Debt/GDP 升至 4.63% 触及红线，说明市场杠杆占经济总量比重达到历史高位，构成回撤的放大器。与此同时高收益利差 HY OAS 仅 2.7%，处于极窄水平，信用市场对违约风险几乎零定价——这种「高杠杆 + 零信用溢价」的组合是典型的风险偏好过度状态，一旦信用面出现裂缝，去杠杆的连锁反应会异常剧烈。内部人买卖比 0.27 低于长期均值 0.39，公司内部人以卖为主，进一步印证「懂行的人在减持」。\n\n【估值与周期】估值三红共振：巴菲特指标 214%（总市值/GDP 深度高估）、Shiller CAPE 42.24（逼近 2000/2021 历史极值）、AAII 股票配置 70.38%（连续 74 个月高于 61.5% 历史均值）。三者共同刻画出一个极度拉伸的估值环境，长期预期回报被显著压缩。但周期端并未同步转向衰退：2s10s 收益率曲线 +0.48 正陡峭、LEI 6个月变化 -0.3% 虽负但趋稳（H1 降幅远小于 H2 2025），说明经济基本面尚未进入下行通道。这正是「贵而不弱」的晚周期典型画像——估值贵到极致，但趋势尚未破位。\n\n【贵金属 COT】黄金 commercial 净空 -226,491 手，周环比再增空 14,182 手（空头加码 10,554、多头减 3,628），未触发突增标记；白银 commercial 净空 -40,422 手，周环比小幅增空 1,613 手。商业套保盘（生产商/机构）继续增持净空头寸，是对金银价格上行的对冲加码，反映其对当前贵金属高位的谨慎，但增幅温和、未见极端反转信号。金银结构仍是「投机多头拥挤、商业空头对冲」的常态格局，短期无方向性突变。\n\n【KOL 情绪】本期 KOL 全量 80 位因 web_search 后端持续故障（多轮泛主题查询均返回空，确诊为后端限流/故障而非无结果）未能获取有效方向，79/80 标记为「未找到」，无有效转向可报。按纪律不据无效抓取下结论，待后端恢复后由 cron 自动重跑填真值。此项本期空缺，不影响其余 16 指标 + COT + 流动性 + 央行 + 13F 的真实结论。\n\n【央行流动性与资产负债表】流动性总灯🟡紧张。Fed 准备金 $2.993T 连续多日跌破 $3T 关口、ON RRP 归零级（$1.65B），流动性缓冲基本耗尽；本周 Q3 再融资拍卖启动（3Y/10Y/30Y 依次放量），供给放量叠加低准备金，长端存在抛压风险，US 10Y 已升至 4.72%（+7bp）。日债风险🔴：JGB 10Y 2.804% 持续突破 2.5% 红线，10Y-TONAR 利差 182.7bp 反映市场定价远超日银政策利率，YCC 退出风险高。三大央行资产负债表：Fed 总资产 $6748.6B（WoW +0.15%，国债+短债小幅扩张、FIMA 回购 -5%）；BoJ 总资产 644.3 兆¥（较上期 +0.77%，JGB 续增、政府存款激增 99.65%）；PBoC 7月总资产 483,807 亿¥（MoM 持平，数据待更新）。整体流动性面偏紧，是压制估值继续扩张的潜在约束。\n\n【机构持仓动向】本期 SEC EDGAR 13F 覆盖 18 家机构全部成功抓取，多数为 2026Q1（3-31）报告期（Q2 披露窗口尚未集中提交），Oxbow 已到 2026Q2（6-30）。由于绝大多数机构仍停留在 Q1 报告，本期无季度间的新增变动可展开——属 13F 季度披露的正常节奏（季报未换季则数据不变）。待各机构 Q2（截至 6-30）13F 陆续提交后，下一轮将出现有意义的调仓对比。Trump 公开披露（PFD）本期因 web_search 后端故障未能核实，不编入。"
+  },
+  "liquidity": {
+    "reserves_T": {
+      "value": 2.993,
+      "prev": 2.993,
+      "delta": 0.0
+    },
+    "on_rrp_B": {
+      "value": 1.25,
+      "prev": 0.975,
+      "delta": 0.28
+    },
+    "tga_B": {
+      "value": 907.3,
+      "prev": 907.3,
+      "delta": 0.0
+    },
+    "risk_notes": {
+      "AI短评": "JGB 10Y 2.804%🔴持续突破2.5%红线，10Y-TONAR利差182.7bp；Fed准备金$2.993T连续多日<$3T，ON RRP仅$0.975B归零级；US 10Y 4.65% 2s10s 46bp正利差。本周Q3再融资拍卖启动（今日3Y/$580亿，明日10Y/$420亿），供给放量+准备金低位叠加→警惕长端抛压。日债🔴，Fed流动性🟡，综合🟡紧张。",
+      "操作建议": "161226: 减仓 — JGB 10Y 2.804%持续>2.5%红线，10Y-TONAR 182.7bp反映市场定价远超日银政策利率，债券价格承压。Q3再融资周US长端供给可能带动全球利率上行。\n1542.T: 持有 — 日本银行股受益于利率上行净息差扩大，JGB 10Y>2.8%为银行盈利提供支撑。但日债波动极端，需设止损。\n1164.HK: 持有 — 中美利差维持宽幅，港股受益于日资溢出效应和南向资金。US再融资周若利率急升则需减仓避险。\n8306.T: 持有 — 三菱UFJ作为日本最大银行，利率上行直接利好净息差。JGB 10Y>2.8%环境下持有，但需关注日银政策转向风险。",
+      "关键变动": "• Fed准备金$2.993T连续第7个交易日<$3T关口，ON RRP $0.975B归零级——流动性缓冲已基本耗尽\n• JGB 10Y 2.804%维持🔴，10Y-TONAR利差182.7bp（日银0.75%政策利率远落后市场定价），YCC退出风险高\n• Q3再融资拍卖周今日启动：3Y $580亿→明日10Y $420亿→后日30Y $250亿，供给放量考验长端承接力"
+    },
+    "risk_lights": {
+      "风控总分": "🟡紧张",
+      "运行状态": "✅成功",
+      "日债风险": "🔴",
+      "美债风险": "🟡",
+      "基差套利风险": "🟢",
+      "Fed流动性风险": "🟡"
+    },
+    "yields": {
+      "10Y": {
+        "value": 4.72,
+        "delta": 0.07
+      },
+      "2Y": {
+        "value": 4.25,
+        "delta": 0.06
+      },
+      "30Y": {
+        "value": 5.25,
+        "delta": 0.06
+      }
+    }
+  },
+  "cb_balance": {
+    "US": {
+      "name": "美联储 Fed",
+      "flag": "🇺🇸",
+      "unit": "$B",
+      "period": "WoW",
+      "date": "2026-08-05",
+      "assets": [
+        {
+          "name": "美国国债 Treasuries",
+          "value": 4529.958,
+          "delta": 10.304,
+          "pct": 0.23
+        },
+        {
+          "name": "MBS 抵押债",
+          "value": 1930.855,
+          "delta": 0.0,
+          "pct": 0.0
+        },
+        {
+          "name": "短期国债 Bills",
+          "value": 524.877,
+          "delta": 10.358,
+          "pct": 2.01
+        },
+        {
+          "name": "FIMA 海外回购",
+          "value": 317.718,
+          "delta": -16.757,
+          "pct": -5.01
+        },
+        {
+          "name": "SRF 常备回购",
+          "value": 0.001,
+          "delta": 0.0,
+          "pct": 0.0
+        }
+      ],
+      "liabilities": [
+        {
+          "name": "准备金 Reserves",
+          "value": 2993.349,
+          "delta": 8.779,
+          "pct": 0.29
+        },
+        {
+          "name": "隔夜逆回购 ON RRP",
+          "value": 1.65,
+          "delta": -0.926,
+          "pct": -35.95
+        },
+        {
+          "name": "财政部账户 TGA",
+          "value": 907.324,
+          "delta": -3.452,
+          "pct": -0.38
+        },
+        {
+          "name": "流通货币 Currency",
+          "value": 2473.058,
+          "delta": 2.088,
+          "pct": 0.08
+        }
+      ],
+      "total_assets": {
+        "name": "总资产",
+        "value": 6748.567,
+        "delta": 10.377,
+        "pct": 0.15
+      },
+      "total_liab": null
+    },
+    "JP": {
+      "name": "日本央行 BoJ",
+      "flag": "🇯🇵",
+      "unit": "兆¥",
+      "period": "较上期",
+      "date": "2026-07-31",
+      "assets": [
+        {
+          "name": "日本国债 JGB",
+          "value": 519.382,
+          "delta": 1.157,
+          "pct": 0.22
+        },
+        {
+          "name": "公司债",
+          "value": 1.44,
+          "delta": -0.076,
+          "pct": -5.01
+        },
+        {
+          "name": "ETF",
+          "value": 37.01,
+          "delta": -0.014,
+          "pct": -0.04
+        },
+        {
+          "name": "J-REIT",
+          "value": 0.652,
+          "delta": 0.0,
+          "pct": 0.0
+        }
+      ],
+      "liabilities": [
+        {
+          "name": "银行券 Banknotes",
+          "value": 114.981,
+          "delta": -0.016,
+          "pct": -0.01
+        },
+        {
+          "name": "经常项目存款",
+          "value": 438.012,
+          "delta": 6.408,
+          "pct": 1.48
+        },
+        {
+          "name": "政府存款",
+          "value": 7.335,
+          "delta": 3.661,
+          "pct": 99.65
+        }
+      ],
+      "total_assets": {
+        "name": "总资产",
+        "value": 644.296,
+        "delta": 4.926,
+        "pct": 0.77
+      },
+      "total_liab": null
+    },
+    "CN": {
+      "name": "中国央行 PBoC",
+      "flag": "🇨🇳",
+      "unit": "亿¥",
+      "period": "MoM",
+      "date": "2026-07",
+      "assets": [
+        {
+          "name": "外汇占款",
+          "value": 216306.85,
+          "delta": 0.0,
+          "pct": 0.0
+        },
+        {
+          "name": "对政府债权",
+          "value": 22346.47,
+          "delta": 0.0,
+          "pct": 0.0
+        },
+        {
+          "name": "对其他存款性公司债权",
+          "value": 203265.26,
+          "delta": 0.0,
+          "pct": 0.0
+        }
+      ],
+      "liabilities": [
+        {
+          "name": "储备货币",
+          "value": 391223.72,
+          "delta": 0.0,
+          "pct": 0.0
+        },
+        {
+          "name": "货币发行",
+          "value": 151451.14,
+          "delta": 0.0,
+          "pct": 0.0
+        },
+        {
+          "name": "政府存款",
+          "value": 60155.26,
+          "delta": 0.0,
+          "pct": 0.0
+        }
+      ],
+      "total_assets": {
+        "name": "总资产",
+        "value": 483806.92,
+        "delta": 0.0,
+        "pct": 0.0
+      },
+      "total_liab": {
+        "name": "总负债",
+        "value": 483806.92,
+        "delta": 0.0,
+        "pct": 0.0
+      }
+    }
+  },
+  "holdings": {
+    "date": "2026-08-12",
+    "institutions": [
+      {
+        "kol": "Warren Buffett",
+        "fund": "Berkshire Hathaway",
+        "cik": "1067983",
+        "sec_name": "BERKSHIRE HATHAWAY INC",
+        "status": "ok",
+        "prev_ok": true,
+        "report_date": "2026-03-31",
+        "filing_date": "2026-05-15",
+        "prev_report_date": "2025-12-31",
+        "total_value": 263095703570,
+        "n_positions": 26,
+        "top_holdings": [
+          {
+            "issuer": "Apple Inc",
+            "value": 57843260493,
+            "shares": 227917808,
+            "prev_shares": 227917808,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "AAPL",
+            "cusip": "037833100"
+          },
+          {
+            "issuer": "American Express Co",
+            "value": 45859204536,
+            "shares": 151610700,
+            "prev_shares": 151610700,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "AXP",
+            "cusip": "025816109"
+          },
+          {
+            "issuer": "Coca Cola Co",
+            "value": 30420000000,
+            "shares": 400000000,
+            "prev_shares": 400000000,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "KO",
+            "cusip": "191216100"
+          },
+          {
+            "issuer": "Bank America Corp",
+            "value": 25039178044,
+            "shares": 513624165,
+            "prev_shares": 517295934,
+            "action": "▼减仓",
+            "pct": -0.7,
+            "ticker": "BAC",
+            "cusip": "060505104"
+          },
+          {
+            "issuer": "Chevron Corporation",
+            "value": 17457364606,
+            "shares": 84375856,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "CVX",
+            "cusip": "166764100"
+          },
+          {
+            "issuer": "Occidental Pete Corp",
+            "value": 17221193015,
+            "shares": 264941431,
+            "prev_shares": 264941431,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "OXY",
+            "cusip": "674599105"
+          },
+          {
+            "issuer": "Alphabet Inc",
+            "value": 16628526688,
+            "shares": 57835013,
+            "prev_shares": 17846142,
+            "action": "▲加仓",
+            "pct": 224.1,
+            "ticker": "GOOGL",
+            "cusip": "02079K107"
+          },
+          {
+            "issuer": "Chubb Ltd Switz",
+            "value": 11162836215,
+            "shares": 34249183,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "H1467J104"
+          },
+          {
+            "issuer": "Moodys Corp",
+            "value": 10762190653,
+            "shares": 24669778,
+            "prev_shares": 24669778,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "MCO",
+            "cusip": "615369105"
+          },
+          {
+            "issuer": "Kraft Heinz Co",
+            "value": 7323527057,
+            "shares": 325634818,
+            "prev_shares": 325634818,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "KHC?",
+            "cusip": "500754106"
+          },
+          {
+            "issuer": "Davita Inc",
+            "value": 4626158909,
+            "shares": 30100585,
+            "prev_shares": 31759065,
+            "action": "▼减仓",
+            "pct": -5.2,
+            "ticker": "",
+            "cusip": "23918K108"
+          },
+          {
+            "issuer": "Kroger Co",
+            "value": 3618000000,
+            "shares": 50000000,
+            "prev_shares": 50000000,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "",
+            "cusip": "501044101"
+          }
+        ],
+        "new_buys": [
+          {
+            "issuer": "Chevron Corporation",
+            "value": 17457364606,
+            "shares": 84375856,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "CVX",
+            "cusip": "166764100"
+          },
+          {
+            "issuer": "Chubb Ltd Switz",
+            "value": 11162836215,
+            "shares": 34249183,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "H1467J104"
+          },
+          {
+            "issuer": "Siriusxm Holdings Inc",
+            "value": 2880548260,
+            "shares": 124807117,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "829933100"
+          },
+          {
+            "issuer": "Delta Air Lines Inc",
+            "value": 2646532635,
+            "shares": 39809456,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "247361702"
+          },
+          {
+            "issuer": "New York Times Co Mtn Be",
+            "value": 1268219376,
+            "shares": 15146535,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "650111107"
+          },
+          {
+            "issuer": "Macys Inc",
+            "value": 54963842,
+            "shares": 3038355,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "55616P104"
+          }
+        ],
+        "exits": [
+          {
+            "issuer": "Jefferies Finl Group Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 433558,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "47233W109"
+          },
+          {
+            "issuer": "Sirius Xm Holdings Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 124807117,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "829933100"
+          },
+          {
+            "issuer": "Aon Plc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 3602995,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "G0403H108"
+          },
+          {
+            "issuer": "Liberty Latin America Ltd",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 3680685,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "G9001E102"
+          },
+          {
+            "issuer": "Charter Communications Inc N",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 1060882,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "16119P108"
+          },
+          {
+            "issuer": "New York Times Co",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 5065744,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "650111107"
+          }
+        ]
+      },
+      {
+        "kol": "Ray Dalio",
+        "fund": "Bridgewater Associates",
+        "cik": "1350694",
+        "sec_name": "Bridgewater Associates, LP",
+        "status": "ok",
+        "prev_ok": true,
+        "report_date": "2026-03-31",
+        "filing_date": "2026-05-15",
+        "prev_report_date": "2025-12-31",
+        "total_value": 22404547213,
+        "n_positions": 985,
+        "top_holdings": [
+          {
+            "issuer": "State Str Spdr S&P 500 Etf T",
+            "value": 2838644353,
+            "shares": 4364862,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "SPY",
+            "cusip": "78462F103"
+          },
+          {
+            "issuer": "Ishares Trust",
+            "value": 1991058090,
+            "shares": 5067905,
+            "prev_shares": 6849661,
+            "action": "▼减仓",
+            "pct": -26.0,
+            "ticker": "IVV/多",
+            "cusip": "464287200"
+          },
+          {
+            "issuer": "Amazon Com Inc",
+            "value": 914036840,
+            "shares": 4388711,
+            "prev_shares": 1948254,
+            "action": "▲加仓",
+            "pct": 125.3,
+            "ticker": "AMZN",
+            "cusip": "023135106"
+          },
+          {
+            "issuer": "Nvidia Corporation",
+            "value": 818459723,
+            "shares": 4693003,
+            "prev_shares": 3865205,
+            "action": "▲加仓",
+            "pct": 21.4,
+            "ticker": "NVDA",
+            "cusip": "67066G104"
+          },
+          {
+            "issuer": "Alphabet Inc",
+            "value": 685466529,
+            "shares": 2384676,
+            "prev_shares": 1590826,
+            "action": "▲加仓",
+            "pct": 49.9,
+            "ticker": "GOOGL",
+            "cusip": "02079K305"
+          },
+          {
+            "issuer": "Broadcom Inc",
+            "value": 568068464,
+            "shares": 1835380,
+            "prev_shares": 1165740,
+            "action": "▲加仓",
+            "pct": 57.4,
+            "ticker": "",
+            "cusip": "11135F101"
+          },
+          {
+            "issuer": "Micron Technology Inc",
+            "value": 498551839,
+            "shares": 1475704,
+            "prev_shares": 889640,
+            "action": "▲加仓",
+            "pct": 65.9,
+            "ticker": "",
+            "cusip": "595112103"
+          },
+          {
+            "issuer": "Ishares Inc",
+            "value": 409907307,
+            "shares": 4375869,
+            "prev_shares": 3562370,
+            "action": "▲加仓",
+            "pct": 22.8,
+            "ticker": "",
+            "cusip": "46434G103"
+          },
+          {
+            "issuer": "Microsoft Corp",
+            "value": 401626676,
+            "shares": 1084979,
+            "prev_shares": 984091,
+            "action": "▲加仓",
+            "pct": 10.3,
+            "ticker": "MSFT",
+            "cusip": "594918104"
+          },
+          {
+            "issuer": "Ge Vernova Inc",
+            "value": 379621591,
+            "shares": 434897,
+            "prev_shares": 665997,
+            "action": "▼减仓",
+            "pct": -34.7,
+            "ticker": "",
+            "cusip": "36828A101"
+          },
+          {
+            "issuer": "Taiwan Semiconductor Manufac",
+            "value": 363998848,
+            "shares": 1077079,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "874039100"
+          },
+          {
+            "issuer": "Lam Research Corp",
+            "value": 335708788,
+            "shares": 1571229,
+            "prev_shares": 3041661,
+            "action": "▼减仓",
+            "pct": -48.3,
+            "ticker": "",
+            "cusip": "512807306"
+          }
+        ],
+        "new_buys": [
+          {
+            "issuer": "State Str Spdr S&P 500 Etf T",
+            "value": 2838644353,
+            "shares": 4364862,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "SPY",
+            "cusip": "78462F103"
+          },
+          {
+            "issuer": "Taiwan Semiconductor Manufac",
+            "value": 363998848,
+            "shares": 1077079,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "874039100"
+          },
+          {
+            "issuer": "Asml Hldg Nv",
+            "value": 121775243,
+            "shares": 92196,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "N07059210"
+          },
+          {
+            "issuer": "Amphenol Corp",
+            "value": 109046115,
+            "shares": 863048,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "032095101"
+          },
+          {
+            "issuer": "Nucor Corp",
+            "value": 104593085,
+            "shares": 618528,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "670346105"
+          },
+          {
+            "issuer": "Paccar Inc",
+            "value": 89751816,
+            "shares": 777072,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "693718108"
+          }
+        ],
+        "exits": [
+          {
+            "issuer": "Amcor Plc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 661573,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "G0250X107"
+          },
+          {
+            "issuer": "Xcel Energy Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 18031,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "98389B100"
+          },
+          {
+            "issuer": "Magnite Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 145187,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "55955D100"
+          },
+          {
+            "issuer": "Comerica Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 235488,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "200340107"
+          },
+          {
+            "issuer": "Marriott Intl Inc New",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 6161,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "571903202"
+          },
+          {
+            "issuer": "Ptc Therapeutics Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 16229,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "69366J200"
+          }
+        ]
+      },
+      {
+        "kol": "Michael Burry",
+        "fund": "Scion Asset Mgmt",
+        "cik": "1649339",
+        "sec_name": "Scion Asset Management, LLC",
+        "status": "ok",
+        "prev_ok": true,
+        "report_date": "2025-09-30",
+        "filing_date": "2025-11-03",
+        "prev_report_date": "2025-06-30",
+        "total_value": 1381198076,
+        "n_positions": 8,
+        "top_holdings": [
+          {
+            "issuer": "Palantir Technologies Inc",
+            "value": 912100000,
+            "shares": 5000000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "69608A108"
+          },
+          {
+            "issuer": "Nvidia Corporation",
+            "value": 186580000,
+            "shares": 1000000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "NVDA",
+            "cusip": "67066G104"
+          },
+          {
+            "issuer": "Pfizer Inc",
+            "value": 152880000,
+            "shares": 6000000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "PFE",
+            "cusip": "717081103"
+          },
+          {
+            "issuer": "Halliburton Co",
+            "value": 61500000,
+            "shares": 2500000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "406216101"
+          },
+          {
+            "issuer": "Molina Healthcare Inc",
+            "value": 23920000,
+            "shares": 125000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "60855R100"
+          },
+          {
+            "issuer": "Lululemon Athletica Inc",
+            "value": 17793000,
+            "shares": 100000,
+            "prev_shares": 450000,
+            "action": "▼减仓",
+            "pct": -77.8,
+            "ticker": "",
+            "cusip": "550021109"
+          },
+          {
+            "issuer": "Slm Corp",
+            "value": 13287895,
+            "shares": 480054,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "78442P106"
+          },
+          {
+            "issuer": "Bruker Corp",
+            "value": 13137181,
+            "shares": 48334,
+            "prev_shares": 250000,
+            "action": "▼减仓",
+            "pct": -80.7,
+            "ticker": "",
+            "cusip": "116794207"
+          },
+          {
+            "issuer": "Lauder Estee Cos Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 650000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "518439104"
+          },
+          {
+            "issuer": "Alibaba Group Hldg Ltd",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 250000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "01609W102"
+          },
+          {
+            "issuer": "Jd.Com Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 1000000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "47215P106"
+          },
+          {
+            "issuer": "Mercadolibre Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 3000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "58733R102"
+          }
+        ],
+        "new_buys": [
+          {
+            "issuer": "Palantir Technologies Inc",
+            "value": 912100000,
+            "shares": 5000000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "69608A108"
+          },
+          {
+            "issuer": "Nvidia Corporation",
+            "value": 186580000,
+            "shares": 1000000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "NVDA",
+            "cusip": "67066G104"
+          },
+          {
+            "issuer": "Pfizer Inc",
+            "value": 152880000,
+            "shares": 6000000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "PFE",
+            "cusip": "717081103"
+          },
+          {
+            "issuer": "Halliburton Co",
+            "value": 61500000,
+            "shares": 2500000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "406216101"
+          },
+          {
+            "issuer": "Molina Healthcare Inc",
+            "value": 23920000,
+            "shares": 125000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "60855R100"
+          },
+          {
+            "issuer": "Slm Corp",
+            "value": 13287895,
+            "shares": 480054,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "78442P106"
+          }
+        ],
+        "exits": [
+          {
+            "issuer": "Lauder Estee Cos Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 650000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "518439104"
+          },
+          {
+            "issuer": "Alibaba Group Hldg Ltd",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 250000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "01609W102"
+          },
+          {
+            "issuer": "Jd.Com Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 1000000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "47215P106"
+          },
+          {
+            "issuer": "Mercadolibre Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 3000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "58733R102"
+          },
+          {
+            "issuer": "Meta Platforms Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 100000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "META",
+            "cusip": "30303M102"
+          },
+          {
+            "issuer": "Unitedhealth Group Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 370000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "91324P102"
+          }
+        ]
+      },
+      {
+        "kol": "George Soros",
+        "fund": "Soros Fund Mgmt",
+        "cik": "1029160",
+        "sec_name": "SOROS FUND MANAGEMENT LLC",
+        "status": "ok",
+        "prev_ok": true,
+        "report_date": "2026-03-31",
+        "filing_date": "2026-05-15",
+        "prev_report_date": "2025-12-31",
+        "total_value": 9119078018,
+        "n_positions": 243,
+        "top_holdings": [
+          {
+            "issuer": "State Str Spdr S&P 500 Etf T",
+            "value": 789122556,
+            "shares": 1213400,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "SPY",
+            "cusip": "78462F103"
+          },
+          {
+            "issuer": "Amazon Com Inc",
+            "value": 405249475,
+            "shares": 1945789,
+            "prev_shares": 2659572,
+            "action": "▼减仓",
+            "pct": -26.8,
+            "ticker": "AMZN",
+            "cusip": "023135106"
+          },
+          {
+            "issuer": "Select Sector Spdr Trust",
+            "value": 303744754,
+            "shares": 4960670,
+            "prev_shares": 3952070,
+            "action": "▲加仓",
+            "pct": 25.5,
+            "ticker": "",
+            "cusip": "81369Y605"
+          },
+          {
+            "issuer": "Taiwan Semiconductor Manufac",
+            "value": 303248618,
+            "shares": 897318,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "874039100"
+          },
+          {
+            "issuer": "Coreweave Inc",
+            "value": 254059766,
+            "shares": 3279460,
+            "prev_shares": 1720100,
+            "action": "▲加仓",
+            "pct": 90.7,
+            "ticker": "",
+            "cusip": "21873S108"
+          },
+          {
+            "issuer": "Spdr Series Trust",
+            "value": 218542486,
+            "shares": 1227168,
+            "prev_shares": 3523547,
+            "action": "▼减仓",
+            "pct": -65.2,
+            "ticker": "",
+            "cusip": "78464A474"
+          },
+          {
+            "issuer": "Global Pmts Inc",
+            "value": 218206755,
+            "shares": 247500000,
+            "prev_shares": 195500000,
+            "action": "▲加仓",
+            "pct": 26.6,
+            "ticker": "",
+            "cusip": "37940XAU6"
+          },
+          {
+            "issuer": "Electronic Arts Inc",
+            "value": 196896219,
+            "shares": 965793,
+            "prev_shares": 428402,
+            "action": "▲加仓",
+            "pct": 125.4,
+            "ticker": "",
+            "cusip": "285512109"
+          },
+          {
+            "issuer": "Bill Holdings Inc",
+            "value": 190657421,
+            "shares": 209785925,
+            "prev_shares": 90385000,
+            "action": "▲加仓",
+            "pct": 132.1,
+            "ticker": "",
+            "cusip": "090043AF7"
+          },
+          {
+            "issuer": "Nvidia Corporation",
+            "value": 187167126,
+            "shares": 1073206,
+            "prev_shares": 665676,
+            "action": "▲加仓",
+            "pct": 61.2,
+            "ticker": "NVDA",
+            "cusip": "67066G104"
+          },
+          {
+            "issuer": "Lumentum Hldgs Inc",
+            "value": 186796766,
+            "shares": 31628000,
+            "prev_shares": 15250000,
+            "action": "▲加仓",
+            "pct": 107.4,
+            "ticker": "",
+            "cusip": "55024UAD1"
+          },
+          {
+            "issuer": "Pg&E Corp",
+            "value": 181580349,
+            "shares": 175000000,
+            "prev_shares": 133500000,
+            "action": "▲加仓",
+            "pct": 31.1,
+            "ticker": "",
+            "cusip": "69331CAL2"
+          }
+        ],
+        "new_buys": [
+          {
+            "issuer": "State Str Spdr S&P 500 Etf T",
+            "value": 789122556,
+            "shares": 1213400,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "SPY",
+            "cusip": "78462F103"
+          },
+          {
+            "issuer": "Taiwan Semiconductor Manufac",
+            "value": 303248618,
+            "shares": 897318,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "874039100"
+          },
+          {
+            "issuer": "Linde Plc",
+            "value": 128860914,
+            "shares": 259926,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "G54950103"
+          },
+          {
+            "issuer": "Amicus Therapeutic",
+            "value": 83191070,
+            "shares": 5753186,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "03152W109"
+          },
+          {
+            "issuer": "H2O America",
+            "value": 72090586,
+            "shares": 1228747,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "784305104"
+          },
+          {
+            "issuer": "Penumbra Inc",
+            "value": 66801623,
+            "shares": 203434,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "70975L107"
+          }
+        ],
+        "exits": [
+          {
+            "issuer": "Karman Hldgs Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 9543,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "485924104"
+          },
+          {
+            "issuer": "Spotify Usa Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 194500000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "84921RAB6"
+          },
+          {
+            "issuer": "Comerica Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 748994,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "200340107"
+          },
+          {
+            "issuer": "Tripadvisor Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 520000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "896945201"
+          },
+          {
+            "issuer": "Cadence Bank",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 597348,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "12740C103"
+          },
+          {
+            "issuer": "Forge Global Holdings Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 198530,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "34629L202"
+          }
+        ]
+      },
+      {
+        "kol": "Cathie Wood",
+        "fund": "ARK Investment Mgmt",
+        "cik": "1697748",
+        "sec_name": "ARK Investment Management LLC",
+        "status": "ok",
+        "prev_ok": true,
+        "report_date": "2026-03-31",
+        "filing_date": "2026-05-12",
+        "prev_report_date": "2025-12-31",
+        "total_value": 12859485476,
+        "n_positions": 181,
+        "top_holdings": [
+          {
+            "issuer": "Tesla Inc",
+            "value": 1052546690,
+            "shares": 2831329,
+            "prev_shares": 2914492,
+            "action": "▼减仓",
+            "pct": -2.9,
+            "ticker": "TSLA",
+            "cusip": "88160R101"
+          },
+          {
+            "issuer": "Advanced Micro Devices Inc",
+            "value": 551875889,
+            "shares": 2712854,
+            "prev_shares": 2574779,
+            "action": "▲加仓",
+            "pct": 5.4,
+            "ticker": "AMD",
+            "cusip": "007903107"
+          },
+          {
+            "issuer": "Crispr Therapeutics Ag",
+            "value": 538189027,
+            "shares": 11313623,
+            "prev_shares": 10522057,
+            "action": "▲加仓",
+            "pct": 7.5,
+            "ticker": "",
+            "cusip": "H17182108"
+          },
+          {
+            "issuer": "Shopify Inc",
+            "value": 495553074,
+            "shares": 4177652,
+            "prev_shares": 3978898,
+            "action": "▲加仓",
+            "pct": 5.0,
+            "ticker": "",
+            "cusip": "82509L107"
+          },
+          {
+            "issuer": "Palantir Technologies Inc",
+            "value": 454913400,
+            "shares": 3109881,
+            "prev_shares": 3231901,
+            "action": "▼减仓",
+            "pct": -3.8,
+            "ticker": "",
+            "cusip": "69608A108"
+          },
+          {
+            "issuer": "Tempus Ai Inc",
+            "value": 434462230,
+            "shares": 9607745,
+            "prev_shares": 7557583,
+            "action": "▲加仓",
+            "pct": 27.1,
+            "ticker": "",
+            "cusip": "88023B103"
+          },
+          {
+            "issuer": "Circle Internet Group Inc",
+            "value": 430249668,
+            "shares": 4509482,
+            "prev_shares": 4141628,
+            "action": "▲加仓",
+            "pct": 8.9,
+            "ticker": "",
+            "cusip": "172573107"
+          },
+          {
+            "issuer": "Robinhood Markets Inc",
+            "value": 416012113,
+            "shares": 6003061,
+            "prev_shares": 4806211,
+            "action": "▲加仓",
+            "pct": 24.9,
+            "ticker": "",
+            "cusip": "770700102"
+          },
+          {
+            "issuer": "Coinbase Global Inc",
+            "value": 414329300,
+            "shares": 2372884,
+            "prev_shares": 2541928,
+            "action": "▼减仓",
+            "pct": -6.7,
+            "ticker": "",
+            "cusip": "19260Q107"
+          },
+          {
+            "issuer": "Teradyne Inc",
+            "value": 369128978,
+            "shares": 1245122,
+            "prev_shares": 2356256,
+            "action": "▼减仓",
+            "pct": -47.2,
+            "ticker": "",
+            "cusip": "880770102"
+          },
+          {
+            "issuer": "Roku Inc",
+            "value": 361486706,
+            "shares": 3820405,
+            "prev_shares": 5881738,
+            "action": "▼减仓",
+            "pct": -35.0,
+            "ticker": "",
+            "cusip": "77543R102"
+          },
+          {
+            "issuer": "Roblox Corp",
+            "value": 333483744,
+            "shares": 5896106,
+            "prev_shares": 4834337,
+            "action": "▲加仓",
+            "pct": 22.0,
+            "ticker": "",
+            "cusip": "771049103"
+          }
+        ],
+        "new_buys": [
+          {
+            "issuer": "Broadcom Inc",
+            "value": 126219107,
+            "shares": 407803,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "11135F101"
+          },
+          {
+            "issuer": "Everpure Inc",
+            "value": 25305489,
+            "shares": 428616,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "74624M102"
+          },
+          {
+            "issuer": "Canton Strategic Holdings Inc",
+            "value": 12082925,
+            "shares": 3695084,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "432705309"
+          },
+          {
+            "issuer": "Eli Lilly & Co",
+            "value": 11658637,
+            "shares": 12676,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "LLY",
+            "cusip": "532457108"
+          },
+          {
+            "issuer": "Biontech Se",
+            "value": 11365812,
+            "shares": 127878,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "09075V102"
+          },
+          {
+            "issuer": "Generate Biomedicines Inc",
+            "value": 6230105,
+            "shares": 498408,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "370920100"
+          }
+        ],
+        "exits": [
+          {
+            "issuer": "Ishares Russell 1000 Etf",
+            "value": 125,
+            "shares": 0,
+            "prev_shares": 38,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "IVV/多",
+            "cusip": "464287622"
+          },
+          {
+            "issuer": "Qualcomm Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 250168,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "QCOM",
+            "cusip": "747525103"
+          },
+          {
+            "issuer": "Paypal Holdings Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 151471,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "70450Y103"
+          },
+          {
+            "issuer": "Cyberark Software Ltd",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 4245,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "M2682V108"
+          },
+          {
+            "issuer": "Incyte Corp",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 136950,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "45337C102"
+          },
+          {
+            "issuer": "Standard Biotools Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 3066665,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "34385P108"
+          }
+        ]
+      },
+      {
+        "kol": "Bill Ackman",
+        "fund": "Pershing Square",
+        "cik": "1336528",
+        "sec_name": "Pershing Square Capital Management, L.P.",
+        "status": "ok",
+        "prev_ok": true,
+        "report_date": "2026-03-31",
+        "filing_date": "2026-05-15",
+        "prev_report_date": "2025-12-31",
+        "total_value": 13714299861,
+        "n_positions": 10,
+        "top_holdings": [
+          {
+            "issuer": "Brookfield Corp",
+            "value": 2415946008,
+            "shares": 59697208,
+            "prev_shares": 61403089,
+            "action": "▼减仓",
+            "pct": -2.8,
+            "ticker": "",
+            "cusip": "11271J107"
+          },
+          {
+            "issuer": "Amazon Com Inc",
+            "value": 2385104083,
+            "shares": 11451981,
+            "prev_shares": 9607824,
+            "action": "▲加仓",
+            "pct": 19.2,
+            "ticker": "AMZN",
+            "cusip": "023135106"
+          },
+          {
+            "issuer": "Uber Technologies Inc",
+            "value": 2154934398,
+            "shares": 29958771,
+            "prev_shares": 30207734,
+            "action": "▼减仓",
+            "pct": -0.8,
+            "ticker": "",
+            "cusip": "90353T100"
+          },
+          {
+            "issuer": "Microsoft Corp",
+            "value": 2092970053,
+            "shares": 5654078,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "MSFT",
+            "cusip": "594918104"
+          },
+          {
+            "issuer": "Restaurant Brands Intl Inc",
+            "value": 1673501194,
+            "shares": 22645483,
+            "prev_shares": 22866773,
+            "action": "▼减仓",
+            "pct": -1.0,
+            "ticker": "",
+            "cusip": "76131D103"
+          },
+          {
+            "issuer": "Meta Platforms Inc",
+            "value": 1522358404,
+            "shares": 2660861,
+            "prev_shares": 2673569,
+            "action": "▼减仓",
+            "pct": -0.5,
+            "ticker": "META",
+            "cusip": "30303M102"
+          },
+          {
+            "issuer": "Howard Hughes Holdings Inc",
+            "value": 1192581569,
+            "shares": 18852064,
+            "prev_shares": 18852064,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "",
+            "cusip": "44267T102"
+          },
+          {
+            "issuer": "Seaport Entmt Group Inc",
+            "value": 107910794,
+            "shares": 5023780,
+            "prev_shares": 5023780,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "",
+            "cusip": "812215200"
+          },
+          {
+            "issuer": "Alphabet Inc",
+            "value": 98731763,
+            "shares": 344102,
+            "prev_shares": 6842168,
+            "action": "▼减仓",
+            "pct": -95.0,
+            "ticker": "GOOGL",
+            "cusip": "02079K305"
+          },
+          {
+            "issuer": "Hertz Global Hldgs Inc",
+            "value": 70261595,
+            "shares": 15241127,
+            "prev_shares": 15241127,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "",
+            "cusip": "42806J700"
+          },
+          {
+            "issuer": "Hilton Worldwide Hldgs Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 3028664,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "43300A203"
+          }
+        ],
+        "new_buys": [
+          {
+            "issuer": "Microsoft Corp",
+            "value": 2092970053,
+            "shares": 5654078,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "MSFT",
+            "cusip": "594918104"
+          }
+        ],
+        "exits": [
+          {
+            "issuer": "Hilton Worldwide Hldgs Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 3028664,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "43300A203"
+          }
+        ]
+      },
+      {
+        "kol": "David Tepper",
+        "fund": "Appaloosa",
+        "cik": "1656456",
+        "sec_name": "Appaloosa LP",
+        "status": "ok",
+        "prev_ok": true,
+        "report_date": "2026-03-31",
+        "filing_date": "2026-05-15",
+        "prev_report_date": "2025-12-31",
+        "total_value": 5933477986,
+        "n_positions": 31,
+        "top_holdings": [
+          {
+            "issuer": "Amazon Com Inc",
+            "value": 899726400,
+            "shares": 4320000,
+            "prev_shares": 2179391,
+            "action": "▲加仓",
+            "pct": 98.2,
+            "ticker": "AMZN",
+            "cusip": "023135106"
+          },
+          {
+            "issuer": "Micron Technology Inc",
+            "value": 562503600,
+            "shares": 1665000,
+            "prev_shares": 1750000,
+            "action": "▼减仓",
+            "pct": -4.9,
+            "ticker": "",
+            "cusip": "595112103"
+          },
+          {
+            "issuer": "Alphabet Inc",
+            "value": 497042322,
+            "shares": 1732700,
+            "prev_shares": 1786931,
+            "action": "▼减仓",
+            "pct": -3.0,
+            "ticker": "GOOGL",
+            "cusip": "02079K107"
+          },
+          {
+            "issuer": "Uber Technologies Inc",
+            "value": 455512550,
+            "shares": 6332720,
+            "prev_shares": 1850000,
+            "action": "▲加仓",
+            "pct": 242.3,
+            "ticker": "",
+            "cusip": "90353T100"
+          },
+          {
+            "issuer": "Taiwan Semiconductor Manufac",
+            "value": 448628625,
+            "shares": 1327500,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "874039100"
+          },
+          {
+            "issuer": "Alibaba Group Hldg Ltd",
+            "value": 434718900,
+            "shares": 3465000,
+            "prev_shares": 5137931,
+            "action": "▼减仓",
+            "pct": -32.6,
+            "ticker": "",
+            "cusip": "01609W102"
+          },
+          {
+            "issuer": "Vistra Corp",
+            "value": 304017170,
+            "shares": 2022332,
+            "prev_shares": 945000,
+            "action": "▲加仓",
+            "pct": 114.0,
+            "ticker": "",
+            "cusip": "92840M102"
+          },
+          {
+            "issuer": "Ishares Inc",
+            "value": 295224000,
+            "shares": 2400000,
+            "prev_shares": 1875000,
+            "action": "▲加仓",
+            "pct": 28.0,
+            "ticker": "",
+            "cusip": "464286772"
+          },
+          {
+            "issuer": "Nvidia Corporation",
+            "value": 256629600,
+            "shares": 1471500,
+            "prev_shares": 1700000,
+            "action": "▼减仓",
+            "pct": -13.4,
+            "ticker": "NVDA",
+            "cusip": "67066G104"
+          },
+          {
+            "issuer": "Nrg Energy Inc",
+            "value": 253471354,
+            "shares": 1734442,
+            "prev_shares": 1640000,
+            "action": "▲加仓",
+            "pct": 5.8,
+            "ticker": "",
+            "cusip": "629377508"
+          },
+          {
+            "issuer": "Meta Platforms Inc",
+            "value": 249734745,
+            "shares": 436500,
+            "prev_shares": 600000,
+            "action": "▼减仓",
+            "pct": -27.3,
+            "ticker": "META",
+            "cusip": "30303M102"
+          },
+          {
+            "issuer": "Sandisk Corp",
+            "value": 178689375,
+            "shares": 281250,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "80004C200"
+          }
+        ],
+        "new_buys": [
+          {
+            "issuer": "Taiwan Semiconductor Manufac",
+            "value": 448628625,
+            "shares": 1327500,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "874039100"
+          },
+          {
+            "issuer": "Sandisk Corp",
+            "value": 178689375,
+            "shares": 281250,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "80004C200"
+          },
+          {
+            "issuer": "Asml Hldg Nv",
+            "value": 65381085,
+            "shares": 49500,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "N07059210"
+          },
+          {
+            "issuer": "Deutsche Bk Ag",
+            "value": 7671804,
+            "shares": 257616,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "D18190898"
+          }
+        ],
+        "exits": [
+          {
+            "issuer": "Mohawk Inds Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 675000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "608190104"
+          },
+          {
+            "issuer": "Ishares Trust",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 1087500,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "IVV/多",
+            "cusip": "464287184"
+          },
+          {
+            "issuer": "Deutsche Bank A G",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 3150000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "D18190898"
+          },
+          {
+            "issuer": "Goodyear Tire & Rubr Co",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 2500000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "382550101"
+          },
+          {
+            "issuer": "Taiwan Semiconductor Mfg Ltd",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 1130000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "874039100"
+          },
+          {
+            "issuer": "Delta Air Lines Inc Del",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 475000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "247361702"
+          }
+        ]
+      },
+      {
+        "kol": "Stanley Druckenmiller",
+        "fund": "Duquesne Family Office",
+        "cik": "1536411",
+        "sec_name": "Duquesne Family Office LLC",
+        "status": "ok",
+        "prev_ok": true,
+        "report_date": "2026-03-31",
+        "filing_date": "2026-05-15",
+        "prev_report_date": "2025-12-31",
+        "total_value": 3376828000,
+        "n_positions": 68,
+        "top_holdings": [
+          {
+            "issuer": "Natera Inc",
+            "value": 612691000,
+            "shares": 3063606,
+            "prev_shares": 2511357,
+            "action": "▲加仓",
+            "pct": 22.0,
+            "ticker": "",
+            "cusip": "632307104"
+          },
+          {
+            "issuer": "Ishares Inc",
+            "value": 294228000,
+            "shares": 7664170,
+            "prev_shares": 7780575,
+            "action": "▼减仓",
+            "pct": -1.5,
+            "ticker": "",
+            "cusip": "464286400"
+          },
+          {
+            "issuer": "Insmed Inc",
+            "value": 188717000,
+            "shares": 1154090,
+            "prev_shares": 1481752,
+            "action": "▼减仓",
+            "pct": -22.1,
+            "ticker": "",
+            "cusip": "457669307"
+          },
+          {
+            "issuer": "Taiwan Semiconductor Manufac",
+            "value": 167380000,
+            "shares": 495280,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "874039100"
+          },
+          {
+            "issuer": "Invesco Exchange Traded Fd T",
+            "value": 157566000,
+            "shares": 821000,
+            "prev_shares": 1173925,
+            "action": "▼减仓",
+            "pct": -30.1,
+            "ticker": "",
+            "cusip": "46137V357"
+          },
+          {
+            "issuer": "Ypf Sociedad Anonima",
+            "value": 149566000,
+            "shares": 3235962,
+            "prev_shares": 606990,
+            "action": "▲加仓",
+            "pct": 433.1,
+            "ticker": "",
+            "cusip": "984245100"
+          },
+          {
+            "issuer": "Bbb Foods Inc",
+            "value": 109972000,
+            "shares": 3109202,
+            "prev_shares": 2675152,
+            "action": "▲加仓",
+            "pct": 16.2,
+            "ticker": "",
+            "cusip": "G0896C103"
+          },
+          {
+            "issuer": "Alcoa Corp",
+            "value": 99057000,
+            "shares": 1493390,
+            "prev_shares": 1376050,
+            "action": "▲加仓",
+            "pct": 8.5,
+            "ticker": "",
+            "cusip": "013872106"
+          },
+          {
+            "issuer": "Newamsterdam Pharma Company",
+            "value": 98275000,
+            "shares": 3070146,
+            "prev_shares": 3070146,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "",
+            "cusip": "N62509109"
+          },
+          {
+            "issuer": "Sea Ltd",
+            "value": 91083000,
+            "shares": 1099905,
+            "prev_shares": 944120,
+            "action": "▲加仓",
+            "pct": 16.5,
+            "ticker": "",
+            "cusip": "81141R100"
+          },
+          {
+            "issuer": "Stmicroelectronics N V",
+            "value": 90275000,
+            "shares": 2612880,
+            "prev_shares": 773555,
+            "action": "▲加仓",
+            "pct": 237.8,
+            "ticker": "",
+            "cusip": "861012102"
+          },
+          {
+            "issuer": "Woodward Inc",
+            "value": 75648000,
+            "shares": 211355,
+            "prev_shares": 590930,
+            "action": "▼减仓",
+            "pct": -64.2,
+            "ticker": "",
+            "cusip": "980745103"
+          }
+        ],
+        "new_buys": [
+          {
+            "issuer": "Taiwan Semiconductor Manufac",
+            "value": 167380000,
+            "shares": 495280,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "874039100"
+          },
+          {
+            "issuer": "Broadcom Inc",
+            "value": 60650000,
+            "shares": 195955,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "11135F101"
+          },
+          {
+            "issuer": "State Str Spdr S&P 500 Etf T",
+            "value": 58531000,
+            "shares": 90000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "SPY",
+            "cusip": "78462F103"
+          },
+          {
+            "issuer": "Global X Fds",
+            "value": 36152000,
+            "shares": 387400,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "37950E259"
+          },
+          {
+            "issuer": "Caris Life Sciences Inc",
+            "value": 33873000,
+            "shares": 1894450,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "142152107"
+          },
+          {
+            "issuer": "Revolution Medicines Inc",
+            "value": 30717000,
+            "shares": 315860,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "76155X100"
+          }
+        ],
+        "exits": [
+          {
+            "issuer": "Zillow Group Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 192640,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "98954M200"
+          },
+          {
+            "issuer": "Spdr S&P 500 Etf Trust",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 90000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "SPY",
+            "cusip": "78462F103"
+          },
+          {
+            "issuer": "Doordash Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 35900,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "25809K105"
+          },
+          {
+            "issuer": "Select Sector Spdr Trust",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 5495600,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "81369Y605"
+          },
+          {
+            "issuer": "Docusign Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 1019085,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "256163106"
+          },
+          {
+            "issuer": "Progyny Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 295115,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "74340E103"
+          }
+        ]
+      },
+      {
+        "kol": "Ted Oakley",
+        "fund": "Oxbow Advisors",
+        "cik": "1564770",
+        "sec_name": "Oxbow Advisors, LLC",
+        "status": "ok",
+        "prev_ok": true,
+        "report_date": "2026-06-30",
+        "filing_date": "2026-08-07",
+        "prev_report_date": "2026-03-31",
+        "total_value": 1230704449,
+        "n_positions": 233,
+        "top_holdings": [
+          {
+            "issuer": "Vanguard Instl Index Fd",
+            "value": 187191378,
+            "shares": 2473459,
+            "prev_shares": 2285697,
+            "action": "▲加仓",
+            "pct": 8.2,
+            "ticker": "",
+            "cusip": "922040845"
+          },
+          {
+            "issuer": "Ishares Gold Trust",
+            "value": 58472867,
+            "shares": 774373,
+            "prev_shares": 680458,
+            "action": "▲加仓",
+            "pct": 13.8,
+            "ticker": "",
+            "cusip": "464285204"
+          },
+          {
+            "issuer": "Enterprise Prods Partners L",
+            "value": 50299784,
+            "shares": 1368329,
+            "prev_shares": 1364787,
+            "action": "▲加仓",
+            "pct": 0.3,
+            "ticker": "",
+            "cusip": "293792107"
+          },
+          {
+            "issuer": "Alphabet Inc",
+            "value": 33652886,
+            "shares": 95170,
+            "prev_shares": 94804,
+            "action": "▲加仓",
+            "pct": 0.4,
+            "ticker": "GOOGL",
+            "cusip": "02079K305"
+          },
+          {
+            "issuer": "Apple Inc",
+            "value": 30674619,
+            "shares": 106008,
+            "prev_shares": 103605,
+            "action": "▲加仓",
+            "pct": 2.3,
+            "ticker": "AAPL",
+            "cusip": "037833100"
+          },
+          {
+            "issuer": "Alps Etf Trust",
+            "value": 26426524,
+            "shares": 509673,
+            "prev_shares": 453356,
+            "action": "▲加仓",
+            "pct": 12.4,
+            "ticker": "",
+            "cusip": "00162Q452"
+          },
+          {
+            "issuer": "Mplx Lp",
+            "value": 24816563,
+            "shares": 440557,
+            "prev_shares": 434012,
+            "action": "▲加仓",
+            "pct": 1.5,
+            "ticker": "",
+            "cusip": "55336V100"
+          },
+          {
+            "issuer": "Microsoft Corp",
+            "value": 23329624,
+            "shares": 62543,
+            "prev_shares": 61575,
+            "action": "▲加仓",
+            "pct": 1.6,
+            "ticker": "MSFT",
+            "cusip": "594918104"
+          },
+          {
+            "issuer": "Boeing Co",
+            "value": 17651503,
+            "shares": 258480,
+            "prev_shares": 253144,
+            "action": "▲加仓",
+            "pct": 2.1,
+            "ticker": "",
+            "cusip": "097023105"
+          },
+          {
+            "issuer": "Ishares Trust",
+            "value": 16221055,
+            "shares": 200582,
+            "prev_shares": 181906,
+            "action": "▲加仓",
+            "pct": 10.3,
+            "ticker": "",
+            "cusip": "464288570"
+          },
+          {
+            "issuer": "Moodys Corp",
+            "value": 15910708,
+            "shares": 35129,
+            "prev_shares": 34555,
+            "action": "▲加仓",
+            "pct": 1.7,
+            "ticker": "MCO",
+            "cusip": "615369105"
+          },
+          {
+            "issuer": "Agnico Eagle Mines Ltd",
+            "value": 14887099,
+            "shares": 95965,
+            "prev_shares": 87269,
+            "action": "▲加仓",
+            "pct": 10.0,
+            "ticker": "",
+            "cusip": "008474108"
+          }
+        ],
+        "new_buys": [
+          {
+            "issuer": "Kimbell Rty Partners Lp",
+            "value": 5928066,
+            "shares": 407988,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "49435R102"
+          },
+          {
+            "issuer": "Noble Corp Plc",
+            "value": 4614501,
+            "shares": 123713,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "G65431127"
+          },
+          {
+            "issuer": "Idex Corp",
+            "value": 3837918,
+            "shares": 16911,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "45167R104"
+          },
+          {
+            "issuer": "Southern Copper Corp",
+            "value": 3601954,
+            "shares": 20670,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "84265V105"
+          },
+          {
+            "issuer": "Us Bancorp",
+            "value": 3477107,
+            "shares": 57568,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "USB",
+            "cusip": "902973304"
+          },
+          {
+            "issuer": "Energy Fuels Inc",
+            "value": 3466979,
+            "shares": 239102,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "292671708"
+          }
+        ],
+        "exits": [
+          {
+            "issuer": "Prosperity Bancshares Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 301825,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "743606105"
+          },
+          {
+            "issuer": "Gildan Activewear Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 115939,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "375916103"
+          },
+          {
+            "issuer": "Dominos Pizza Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 7506,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "25754A201"
+          },
+          {
+            "issuer": "Shell Plc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 2360,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "780259305"
+          },
+          {
+            "issuer": "Schwab Strategic Trust",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 40400,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "808524797"
+          },
+          {
+            "issuer": "Bp Plc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 4560,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "055622104"
+          }
+        ]
+      },
+      {
+        "kol": "Chase Coleman",
+        "fund": "Tiger Global",
+        "cik": "1167483",
+        "sector": "科技成长",
+        "sec_name": "TIGER GLOBAL MANAGEMENT LLC",
+        "status": "ok",
+        "prev_ok": true,
+        "report_date": "2026-03-31",
+        "filing_date": "2026-05-15",
+        "prev_report_date": "2025-12-31",
+        "total_value": 22845413829,
+        "n_positions": 53,
+        "top_holdings": [
+          {
+            "issuer": "Alphabet Inc",
+            "value": 3057165959,
+            "shares": 10631402,
+            "prev_shares": 10631402,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "GOOGL",
+            "cusip": "02079K305"
+          },
+          {
+            "issuer": "Nvidia Corporation",
+            "value": 2094849549,
+            "shares": 12011752,
+            "prev_shares": 11011752,
+            "action": "▲加仓",
+            "pct": 9.1,
+            "ticker": "NVDA",
+            "cusip": "67066G104"
+          },
+          {
+            "issuer": "Amazon Com Inc",
+            "value": 2082700000,
+            "shares": 10000000,
+            "prev_shares": 10011379,
+            "action": "▼减仓",
+            "pct": -0.1,
+            "ticker": "AMZN",
+            "cusip": "023135106"
+          },
+          {
+            "issuer": "Taiwan Semiconductor Manufac",
+            "value": 1880716758,
+            "shares": 5565074,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "874039100"
+          },
+          {
+            "issuer": "Meta Platforms Inc",
+            "value": 1766087500,
+            "shares": 3086864,
+            "prev_shares": 2750615,
+            "action": "▲加仓",
+            "pct": 12.2,
+            "ticker": "META",
+            "cusip": "30303M102"
+          },
+          {
+            "issuer": "Sea Ltd",
+            "value": 1276585296,
+            "shares": 15415835,
+            "prev_shares": 15415835,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "",
+            "cusip": "81141R100"
+          },
+          {
+            "issuer": "Broadcom Inc",
+            "value": 1109535781,
+            "shares": 3584814,
+            "prev_shares": 2875614,
+            "action": "▲加仓",
+            "pct": 24.7,
+            "ticker": "",
+            "cusip": "11135F101"
+          },
+          {
+            "issuer": "Microsoft Corp",
+            "value": 925425000,
+            "shares": 2500000,
+            "prev_shares": 5477747,
+            "action": "▼减仓",
+            "pct": -54.4,
+            "ticker": "MSFT",
+            "cusip": "594918104"
+          },
+          {
+            "issuer": "Ge Vernova Inc",
+            "value": 849326463,
+            "shares": 972994,
+            "prev_shares": 972994,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "",
+            "cusip": "36828A101"
+          },
+          {
+            "issuer": "Lam Research Corp",
+            "value": 833367797,
+            "shares": 3900439,
+            "prev_shares": 3900439,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "",
+            "cusip": "512807306"
+          },
+          {
+            "issuer": "Spotify Technology S A",
+            "value": 766526817,
+            "shares": 1580761,
+            "prev_shares": 1261461,
+            "action": "▲加仓",
+            "pct": 25.3,
+            "ticker": "",
+            "cusip": "L8681T102"
+          },
+          {
+            "issuer": "Coupang Inc",
+            "value": 653161284,
+            "shares": 34595407,
+            "prev_shares": 26267259,
+            "action": "▲加仓",
+            "pct": 31.7,
+            "ticker": "",
+            "cusip": "22266T109"
+          }
+        ],
+        "new_buys": [
+          {
+            "issuer": "Taiwan Semiconductor Manufac",
+            "value": 1880716758,
+            "shares": 5565074,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "874039100"
+          },
+          {
+            "issuer": "Netflix Inc.",
+            "value": 234509850,
+            "shares": 2439000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "NFLX",
+            "cusip": "64110L106"
+          },
+          {
+            "issuer": "Mercadolibre Inc",
+            "value": 233428074,
+            "shares": 135006,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "58733R102"
+          },
+          {
+            "issuer": "Lumentum Hldgs Inc",
+            "value": 96137568,
+            "shares": 136800,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "55024U109"
+          },
+          {
+            "issuer": "Equipmentshare Com Inc",
+            "value": 93287389,
+            "shares": 4579646,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "29445S100"
+          },
+          {
+            "issuer": "Intel Corp",
+            "value": 72315831,
+            "shares": 1638700,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "INTC",
+            "cusip": "458140100"
+          }
+        ],
+        "exits": [
+          {
+            "issuer": "Grab Holdings Limited",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 92923788,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "G4124C109"
+          },
+          {
+            "issuer": "Taiwan Semiconductor Mfg Ltd",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 3725474,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "874039100"
+          },
+          {
+            "issuer": "Flutter Entmt Plc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 4003542,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "G3643J108"
+          },
+          {
+            "issuer": "Hinge Health Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 1805751,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "433313103"
+          },
+          {
+            "issuer": "Veeva Sys Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 2420500,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "922475108"
+          },
+          {
+            "issuer": "Netflix Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 2439000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "NFLX",
+            "cusip": "64110L106"
+          }
+        ]
+      },
+      {
+        "kol": "Philippe Laffont",
+        "fund": "Coatue Management",
+        "cik": "1135730",
+        "sector": "科技成长",
+        "sec_name": "COATUE MANAGEMENT LLC",
+        "status": "ok",
+        "prev_ok": true,
+        "report_date": "2026-03-31",
+        "filing_date": "2026-05-15",
+        "prev_report_date": "2025-12-31",
+        "total_value": 29056031305,
+        "n_positions": 59,
+        "top_holdings": [
+          {
+            "issuer": "Taiwan Semiconductor Manufac",
+            "value": 3137374709,
+            "shares": 9283547,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "874039100"
+          },
+          {
+            "issuer": "Ge Vernova Inc",
+            "value": 2245411301,
+            "shares": 2572358,
+            "prev_shares": 3370174,
+            "action": "▼减仓",
+            "pct": -23.7,
+            "ticker": "",
+            "cusip": "36828A101"
+          },
+          {
+            "issuer": "Lam Research Corp",
+            "value": 2145895279,
+            "shares": 10043505,
+            "prev_shares": 9805565,
+            "action": "▲加仓",
+            "pct": 2.4,
+            "ticker": "",
+            "cusip": "512807306"
+          },
+          {
+            "issuer": "Applied Matls Inc",
+            "value": 1793782961,
+            "shares": 5248202,
+            "prev_shares": 5984332,
+            "action": "▼减仓",
+            "pct": -12.3,
+            "ticker": "",
+            "cusip": "038222105"
+          },
+          {
+            "issuer": "Broadcom Inc",
+            "value": 1703497233,
+            "shares": 5503852,
+            "prev_shares": 5510227,
+            "action": "▼减仓",
+            "pct": -0.1,
+            "ticker": "",
+            "cusip": "11135F101"
+          },
+          {
+            "issuer": "Eaton Corp Plc",
+            "value": 1698395280,
+            "shares": 4748498,
+            "prev_shares": 4721223,
+            "action": "▲加仓",
+            "pct": 0.6,
+            "ticker": "",
+            "cusip": "G29183103"
+          },
+          {
+            "issuer": "Amazon Com Inc",
+            "value": 1651740634,
+            "shares": 7930766,
+            "prev_shares": 9932265,
+            "action": "▼减仓",
+            "pct": -20.2,
+            "ticker": "AMZN",
+            "cusip": "023135106"
+          },
+          {
+            "issuer": "Meta Platforms Inc",
+            "value": 1608861600,
+            "shares": 2812056,
+            "prev_shares": 3781949,
+            "action": "▼减仓",
+            "pct": -25.6,
+            "ticker": "META",
+            "cusip": "30303M102"
+          },
+          {
+            "issuer": "Alphabet Inc",
+            "value": 1560471553,
+            "shares": 5429311,
+            "prev_shares": 8841972,
+            "action": "▼减仓",
+            "pct": -38.6,
+            "ticker": "GOOGL",
+            "cusip": "02079K305"
+          },
+          {
+            "issuer": "Constellation Energy Corp",
+            "value": 1293618644,
+            "shares": 4632475,
+            "prev_shares": 5907174,
+            "action": "▼减仓",
+            "pct": -21.6,
+            "ticker": "",
+            "cusip": "21037T109"
+          },
+          {
+            "issuer": "Nvidia Corporation",
+            "value": 1104234528,
+            "shares": 6331620,
+            "prev_shares": 9203338,
+            "action": "▼减仓",
+            "pct": -31.2,
+            "ticker": "NVDA",
+            "cusip": "67066G104"
+          },
+          {
+            "issuer": "Equinix Inc",
+            "value": 1069330093,
+            "shares": 1090886,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "29444U700"
+          }
+        ],
+        "new_buys": [
+          {
+            "issuer": "Taiwan Semiconductor Manufac",
+            "value": 3137374709,
+            "shares": 9283547,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "874039100"
+          },
+          {
+            "issuer": "Equinix Inc",
+            "value": 1069330093,
+            "shares": 1090886,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "29444U700"
+          },
+          {
+            "issuer": "Netflix Inc.",
+            "value": 662815794,
+            "shares": 6893560,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "NFLX",
+            "cusip": "64110L106"
+          },
+          {
+            "issuer": "Asml Hldg Nv",
+            "value": 655440753,
+            "shares": 496234,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "N07059210"
+          },
+          {
+            "issuer": "Visa Inc",
+            "value": 217235907,
+            "shares": 718753,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "V",
+            "cusip": "92826C839"
+          },
+          {
+            "issuer": "Qualcomm Inc",
+            "value": 178658039,
+            "shares": 1387312,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "QCOM",
+            "cusip": "747525103"
+          }
+        ],
+        "exits": [
+          {
+            "issuer": "Navan Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 599280,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "639193101"
+          },
+          {
+            "issuer": "Webull Corp",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 74334,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "G9572D103"
+          },
+          {
+            "issuer": "Chagee Hldgs Ltd",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 3174115,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "15743P104"
+          },
+          {
+            "issuer": "Oracle Corp",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 4440008,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "ORCL",
+            "cusip": "68389X105"
+          },
+          {
+            "issuer": "C H Robinson Worldwide Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 341024,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "12541W209"
+          },
+          {
+            "issuer": "Infosys Ltd",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 4574706,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "456788108"
+          }
+        ]
+      },
+      {
+        "kol": "Alex Sacerdote",
+        "fund": "Whale Rock Capital",
+        "cik": "1387322",
+        "sector": "科技成长",
+        "sec_name": "Whale Rock Capital Management LLC",
+        "status": "ok",
+        "prev_ok": true,
+        "report_date": "2026-03-31",
+        "filing_date": "2026-05-15",
+        "prev_report_date": "2025-12-31",
+        "total_value": 7742272930,
+        "n_positions": 35,
+        "top_holdings": [
+          {
+            "issuer": "Alphabet Inc",
+            "value": 768308847,
+            "shares": 2671821,
+            "prev_shares": 2100923,
+            "action": "▲加仓",
+            "pct": 27.2,
+            "ticker": "GOOGL",
+            "cusip": "02079K305"
+          },
+          {
+            "issuer": "Sandisk Corp",
+            "value": 508009605,
+            "shares": 799587,
+            "prev_shares": 1003566,
+            "action": "▼减仓",
+            "pct": -20.3,
+            "ticker": "",
+            "cusip": "80004C200"
+          },
+          {
+            "issuer": "Celestica Inc",
+            "value": 427646858,
+            "shares": 1518201,
+            "prev_shares": 1882391,
+            "action": "▼减仓",
+            "pct": -19.3,
+            "ticker": "",
+            "cusip": "15101Q207"
+          },
+          {
+            "issuer": "Amazon Com Inc",
+            "value": 378934561,
+            "shares": 1819439,
+            "prev_shares": 1857878,
+            "action": "▼减仓",
+            "pct": -2.1,
+            "ticker": "AMZN",
+            "cusip": "023135106"
+          },
+          {
+            "issuer": "Ttm Technologies Inc",
+            "value": 342388435,
+            "shares": 3514560,
+            "prev_shares": 4276320,
+            "action": "▼减仓",
+            "pct": -17.8,
+            "ticker": "",
+            "cusip": "87305R109"
+          },
+          {
+            "issuer": "Advanced Energy Inds",
+            "value": 329845764,
+            "shares": 1022112,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "007973100"
+          },
+          {
+            "issuer": "Fabrinet",
+            "value": 318787444,
+            "shares": 611266,
+            "prev_shares": 616047,
+            "action": "▼减仓",
+            "pct": -0.8,
+            "ticker": "",
+            "cusip": "G3323L100"
+          },
+          {
+            "issuer": "Corning Inc",
+            "value": 312380741,
+            "shares": 2297424,
+            "prev_shares": 2669780,
+            "action": "▼减仓",
+            "pct": -13.9,
+            "ticker": "",
+            "cusip": "219350105"
+          },
+          {
+            "issuer": "Mks Inc.",
+            "value": 300298242,
+            "shares": 1306724,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "55306N104"
+          },
+          {
+            "issuer": "Meta Platforms Inc",
+            "value": 293256102,
+            "shares": 512569,
+            "prev_shares": 469713,
+            "action": "▲加仓",
+            "pct": 9.1,
+            "ticker": "META",
+            "cusip": "30303M102"
+          },
+          {
+            "issuer": "Jfrog Ltd",
+            "value": 282508885,
+            "shares": 6019793,
+            "prev_shares": 5297812,
+            "action": "▲加仓",
+            "pct": 13.6,
+            "ticker": "",
+            "cusip": "M6191J100"
+          },
+          {
+            "issuer": "Taiwan Semiconductor Manufac",
+            "value": 276931438,
+            "shares": 819445,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "874039100"
+          }
+        ],
+        "new_buys": [
+          {
+            "issuer": "Advanced Energy Inds",
+            "value": 329845764,
+            "shares": 1022112,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "007973100"
+          },
+          {
+            "issuer": "Mks Inc.",
+            "value": 300298242,
+            "shares": 1306724,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "55306N104"
+          },
+          {
+            "issuer": "Taiwan Semiconductor Manufac",
+            "value": 276931438,
+            "shares": 819445,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "874039100"
+          },
+          {
+            "issuer": "Lam Research Corp",
+            "value": 204660000,
+            "shares": 957877,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "512807306"
+          },
+          {
+            "issuer": "Tower Semiconductor Ltd",
+            "value": 187191009,
+            "shares": 1066737,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "M87915274"
+          },
+          {
+            "issuer": "Viavi Solutions Inc",
+            "value": 115586499,
+            "shares": 3473152,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "925550105"
+          }
+        ],
+        "exits": [
+          {
+            "issuer": "Wealthfront Corp",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 1600000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "947002101"
+          },
+          {
+            "issuer": "Okta Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 434854,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "679295105"
+          },
+          {
+            "issuer": "Nu Hldgs Ltd",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 10755918,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "G6683N103"
+          },
+          {
+            "issuer": "Semtech Corp",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 3901469,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "816850101"
+          },
+          {
+            "issuer": "Mercadolibre Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 98175,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "58733R102"
+          },
+          {
+            "issuer": "Chime Finl Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 10572,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "16935C109"
+          }
+        ]
+      },
+      {
+        "kol": "Seth Klarman",
+        "fund": "Baupost Group",
+        "cik": "1061768",
+        "sector": "价值宏观",
+        "sec_name": "BAUPOST GROUP LLC/MA",
+        "status": "ok",
+        "prev_ok": true,
+        "report_date": "2026-03-31",
+        "filing_date": "2026-05-14",
+        "prev_report_date": "2025-12-31",
+        "total_value": 5115380000,
+        "n_positions": 22,
+        "top_holdings": [
+          {
+            "issuer": "Amazon Com Inc",
+            "value": 649543000,
+            "shares": 3118754,
+            "prev_shares": 2121391,
+            "action": "▲加仓",
+            "pct": 47.0,
+            "ticker": "AMZN",
+            "cusip": "023135106"
+          },
+          {
+            "issuer": "Restaurant Brands Intl Inc",
+            "value": 597208000,
+            "shares": 8080112,
+            "prev_shares": 8080112,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "",
+            "cusip": "76131D103"
+          },
+          {
+            "issuer": "Wesco Intl Inc",
+            "value": 393159000,
+            "shares": 1436881,
+            "prev_shares": 1418831,
+            "action": "▲加仓",
+            "pct": 1.3,
+            "ticker": "",
+            "cusip": "95082P105"
+          },
+          {
+            "issuer": "Union Pac Corp",
+            "value": 373876000,
+            "shares": 1540995,
+            "prev_shares": 1627254,
+            "action": "▼减仓",
+            "pct": -5.3,
+            "ticker": "",
+            "cusip": "907818108"
+          },
+          {
+            "issuer": "Elevance Health Inc Formerly",
+            "value": 373301000,
+            "shares": 1275154,
+            "prev_shares": 1269302,
+            "action": "▲加仓",
+            "pct": 0.5,
+            "ticker": "",
+            "cusip": "036752103"
+          },
+          {
+            "issuer": "Alphabet Inc",
+            "value": 338819000,
+            "shares": 1181131,
+            "prev_shares": 1087181,
+            "action": "▲加仓",
+            "pct": 8.6,
+            "ticker": "GOOGL",
+            "cusip": "02079K107"
+          },
+          {
+            "issuer": "Ferguson Enterprises Inc",
+            "value": 336457000,
+            "shares": 1442411,
+            "prev_shares": 1137035,
+            "action": "▲加仓",
+            "pct": 26.9,
+            "ticker": "",
+            "cusip": "31488V107"
+          },
+          {
+            "issuer": "Willis Towers Watson Plc Ltd",
+            "value": 259632000,
+            "shares": 893126,
+            "prev_shares": 1357601,
+            "action": "▼减仓",
+            "pct": -34.2,
+            "ticker": "",
+            "cusip": "G96629103"
+          },
+          {
+            "issuer": "Aon Plc",
+            "value": 248218000,
+            "shares": 769000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "G0403H108"
+          },
+          {
+            "issuer": "Visa Inc",
+            "value": 211978000,
+            "shares": 701355,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "V",
+            "cusip": "92826C839"
+          },
+          {
+            "issuer": "Teleflex Incorporated",
+            "value": 190778000,
+            "shares": 1595000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "879369106"
+          },
+          {
+            "issuer": "Eagle Matls Inc",
+            "value": 169134000,
+            "shares": 892763,
+            "prev_shares": 1185248,
+            "action": "▼减仓",
+            "pct": -24.7,
+            "ticker": "",
+            "cusip": "26969P108"
+          }
+        ],
+        "new_buys": [
+          {
+            "issuer": "Aon Plc",
+            "value": 248218000,
+            "shares": 769000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "G0403H108"
+          },
+          {
+            "issuer": "Visa Inc",
+            "value": 211978000,
+            "shares": 701355,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "V",
+            "cusip": "92826C839"
+          },
+          {
+            "issuer": "Teleflex Incorporated",
+            "value": 190778000,
+            "shares": 1595000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "879369106"
+          },
+          {
+            "issuer": "Norwegian Cruise Line Hldgs",
+            "value": 67881000,
+            "shares": 3630000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "G66721104"
+          },
+          {
+            "issuer": "Vaxcyte Inc",
+            "value": 46488000,
+            "shares": 800000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "92243G108"
+          },
+          {
+            "issuer": "Dnow Inc",
+            "value": 43174000,
+            "shares": 3625000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "67011P100"
+          }
+        ],
+        "exits": [
+          {
+            "issuer": "Crh Plc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 1072957,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "G25508105"
+          },
+          {
+            "issuer": "Tamboran Res Corp",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 257226,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "87507T101"
+          },
+          {
+            "issuer": "Fiserv Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 2200000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "337738108"
+          },
+          {
+            "issuer": "Dollar Gen Corp New",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 2062821,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "256677105"
+          },
+          {
+            "issuer": "Fidelity Natl Information Sv",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 4503801,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "31620M106"
+          }
+        ]
+      },
+      {
+        "kol": "Dan Loeb",
+        "fund": "Third Point",
+        "cik": "1040273",
+        "sector": "价值宏观",
+        "sec_name": "Third Point LLC",
+        "status": "ok",
+        "prev_ok": true,
+        "report_date": "2026-03-31",
+        "filing_date": "2026-05-15",
+        "prev_report_date": "2025-12-31",
+        "total_value": 2082795760,
+        "n_positions": 31,
+        "top_holdings": [
+          {
+            "issuer": "Amazon Com Inc",
+            "value": 404043800,
+            "shares": 1940000,
+            "prev_shares": 2165000,
+            "action": "▼减仓",
+            "pct": -10.4,
+            "ticker": "AMZN",
+            "cusip": "023135106"
+          },
+          {
+            "issuer": "Telephone & Data Sys Inc",
+            "value": 277860000,
+            "shares": 6600000,
+            "prev_shares": 6675000,
+            "action": "▼减仓",
+            "pct": -1.1,
+            "ticker": "",
+            "cusip": "879433829"
+          },
+          {
+            "issuer": "Crh Plc",
+            "value": 199728000,
+            "shares": 1900000,
+            "prev_shares": 2600000,
+            "action": "▼减仓",
+            "pct": -26.9,
+            "ticker": "",
+            "cusip": "G25508105"
+          },
+          {
+            "issuer": "Somnigroup International Inc",
+            "value": 167855244,
+            "shares": 2270769,
+            "prev_shares": 3400000,
+            "action": "▼减仓",
+            "pct": -33.2,
+            "ticker": "",
+            "cusip": "88023U101"
+          },
+          {
+            "issuer": "Carpenter Technology Corp",
+            "value": 122186500,
+            "shares": 310000,
+            "prev_shares": 785000,
+            "action": "▼减仓",
+            "pct": -60.5,
+            "ticker": "",
+            "cusip": "144285103"
+          },
+          {
+            "issuer": "Mastec Inc",
+            "value": 102956800,
+            "shares": 320000,
+            "prev_shares": 925000,
+            "action": "▼减仓",
+            "pct": -65.4,
+            "ticker": "",
+            "cusip": "576323109"
+          },
+          {
+            "issuer": "Danaher Corp Del",
+            "value": 99540000,
+            "shares": 525000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "235851102"
+          },
+          {
+            "issuer": "Taiwan Semiconductor Manufac",
+            "value": 92936250,
+            "shares": 275000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "874039100"
+          },
+          {
+            "issuer": "Api Group Corp",
+            "value": 82255600,
+            "shares": 2030000,
+            "prev_shares": 3000000,
+            "action": "▼减仓",
+            "pct": -32.3,
+            "ticker": "",
+            "cusip": "00187Y100"
+          },
+          {
+            "issuer": "Live Nation Entertainment In",
+            "value": 70917150,
+            "shares": 465000,
+            "prev_shares": 1725000,
+            "action": "▼减仓",
+            "pct": -73.0,
+            "ticker": "",
+            "cusip": "538034109"
+          },
+          {
+            "issuer": "Meta Platforms Inc",
+            "value": 51491700,
+            "shares": 90000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "META",
+            "cusip": "30303M102"
+          },
+          {
+            "issuer": "Alphabet Inc",
+            "value": 50323000,
+            "shares": 175000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "GOOGL",
+            "cusip": "02079K305"
+          }
+        ],
+        "new_buys": [
+          {
+            "issuer": "Danaher Corp Del",
+            "value": 99540000,
+            "shares": 525000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "235851102"
+          },
+          {
+            "issuer": "Taiwan Semiconductor Manufac",
+            "value": 92936250,
+            "shares": 275000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "874039100"
+          },
+          {
+            "issuer": "Meta Platforms Inc",
+            "value": 51491700,
+            "shares": 90000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "META",
+            "cusip": "30303M102"
+          },
+          {
+            "issuer": "Alphabet Inc",
+            "value": 50323000,
+            "shares": 175000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "GOOGL",
+            "cusip": "02079K305"
+          },
+          {
+            "issuer": "Spdr Gold Trust",
+            "value": 40877550,
+            "shares": 95000,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "78463V107"
+          },
+          {
+            "issuer": "Hut 8 Corp",
+            "value": 40791200,
+            "shares": 869563,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "44812J104"
+          }
+        ],
+        "exits": [
+          {
+            "issuer": "Kenvue Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 3250000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "49177J102"
+          },
+          {
+            "issuer": "Constellation Energy Corp",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 475000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "21037T109"
+          },
+          {
+            "issuer": "Vistra Corp",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 1005000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "92840M102"
+          },
+          {
+            "issuer": "Thermo Fisher Scientific Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 50000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "TMO",
+            "cusip": "883556102"
+          },
+          {
+            "issuer": "Taiwan Semiconductor Mfg Ltd",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 425000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "874039100"
+          },
+          {
+            "issuer": "Pg&E Corp",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 44440000,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "69331C108"
+          }
+        ]
+      },
+      {
+        "kol": "Carl Icahn",
+        "fund": "Icahn Enterprises",
+        "cik": "921669",
+        "sector": "价值宏观",
+        "sec_name": "ICAHN CARL C",
+        "status": "ok",
+        "prev_ok": true,
+        "report_date": "2026-03-31",
+        "filing_date": "2026-05-15",
+        "prev_report_date": "2025-12-31",
+        "total_value": 8553640766,
+        "n_positions": 12,
+        "top_holdings": [
+          {
+            "issuer": "Icahn Enterprises Lp",
+            "value": 4147974070,
+            "shares": 549400539,
+            "prev_shares": 549400539,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "",
+            "cusip": "451100101"
+          },
+          {
+            "issuer": "Cvr Energy Inc",
+            "value": 2395943093,
+            "shares": 71201875,
+            "prev_shares": 70418471,
+            "action": "▲加仓",
+            "pct": 1.1,
+            "ticker": "",
+            "cusip": "12662P108"
+          },
+          {
+            "issuer": "Cvr Partners, Lp",
+            "value": 527488588,
+            "shares": 4164274,
+            "prev_shares": 4164274,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "",
+            "cusip": "126633205"
+          },
+          {
+            "issuer": "Centuri Holdings, Inc.",
+            "value": 418755845,
+            "shares": 14336044,
+            "prev_shares": 14336044,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "",
+            "cusip": "155923105"
+          },
+          {
+            "issuer": "International Flavors And Fragrances Inc.",
+            "value": 310151250,
+            "shares": 4275000,
+            "prev_shares": 4275000,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "",
+            "cusip": "459506101"
+          },
+          {
+            "issuer": "Echostar Corporation",
+            "value": 164429732,
+            "shares": 1404542,
+            "prev_shares": 3354542,
+            "action": "▼减仓",
+            "pct": -58.1,
+            "ticker": "",
+            "cusip": "278768106"
+          },
+          {
+            "issuer": "American Electric Power Company",
+            "value": 157990724,
+            "shares": 1205300,
+            "prev_shares": 1205300,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "",
+            "cusip": "025537101"
+          },
+          {
+            "issuer": "Jetblue Airways Corp.",
+            "value": 148608069,
+            "shares": 33621735,
+            "prev_shares": 33621735,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "",
+            "cusip": "477143101"
+          },
+          {
+            "issuer": "Monro, Inc.",
+            "value": 81460311,
+            "shares": 5078573,
+            "prev_shares": 5078573,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "",
+            "cusip": "610236101"
+          },
+          {
+            "issuer": "Sandridge Energy, Inc.",
+            "value": 80697003,
+            "shares": 4947701,
+            "prev_shares": 4911564,
+            "action": "▲加仓",
+            "pct": 0.7,
+            "ticker": "",
+            "cusip": "80007P869"
+          },
+          {
+            "issuer": "Caesars Entertainment, Inc.",
+            "value": 64492081,
+            "shares": 2440109,
+            "prev_shares": 2440109,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "",
+            "cusip": "12769G100"
+          },
+          {
+            "issuer": "Bausch Plus Lomb Corp.",
+            "value": 55650000,
+            "shares": 3500000,
+            "prev_shares": 3500000,
+            "action": "→持平",
+            "pct": 0.0,
+            "ticker": "",
+            "cusip": "071705107"
+          }
+        ],
+        "new_buys": [],
+        "exits": [
+          {
+            "issuer": "Southwest Gas Holdings Inc.",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 6032604,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "844895102"
+          }
+        ]
+      },
+      {
+        "kol": "Jim Simons (RenTec)",
+        "fund": "Renaissance Technologies",
+        "cik": "1037389",
+        "sector": "量化多策略",
+        "sec_name": "RENAISSANCE TECHNOLOGIES LLC",
+        "status": "ok",
+        "prev_ok": true,
+        "report_date": "2026-03-31",
+        "filing_date": "2026-05-14",
+        "prev_report_date": "2025-12-31",
+        "total_value": 63929893013,
+        "n_positions": 2994,
+        "top_holdings": [
+          {
+            "issuer": "United Therapeutics Corp Del",
+            "value": 1059666527,
+            "shares": 1787019,
+            "prev_shares": 1909259,
+            "action": "▼减仓",
+            "pct": -6.4,
+            "ticker": "",
+            "cusip": "91307C102"
+          },
+          {
+            "issuer": "Palantir Technologies Inc",
+            "value": 1021901255,
+            "shares": 6985926,
+            "prev_shares": 8796727,
+            "action": "▼减仓",
+            "pct": -20.6,
+            "ticker": "",
+            "cusip": "69608A108"
+          },
+          {
+            "issuer": "Apple Inc",
+            "value": 780569445,
+            "shares": 3075638,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "AAPL",
+            "cusip": "037833100"
+          },
+          {
+            "issuer": "Kinross Gold Corp",
+            "value": 779676525,
+            "shares": 25546413,
+            "prev_shares": 24975313,
+            "action": "▲加仓",
+            "pct": 2.3,
+            "ticker": "",
+            "cusip": "496902404"
+          },
+          {
+            "issuer": "Micron Technology Inc",
+            "value": 730739401,
+            "shares": 2162986,
+            "prev_shares": 3011143,
+            "action": "▼减仓",
+            "pct": -28.2,
+            "ticker": "",
+            "cusip": "595112103"
+          },
+          {
+            "issuer": "Verisign Inc",
+            "value": 699915982,
+            "shares": 2818151,
+            "prev_shares": 2779351,
+            "action": "▲加仓",
+            "pct": 1.4,
+            "ticker": "",
+            "cusip": "92343E102"
+          },
+          {
+            "issuer": "Exelixis Inc",
+            "value": 588750730,
+            "shares": 13726993,
+            "prev_shares": 13914043,
+            "action": "▼减仓",
+            "pct": -1.3,
+            "ticker": "",
+            "cusip": "30161Q104"
+          },
+          {
+            "issuer": "Franco Nev Corp",
+            "value": 548183692,
+            "shares": 2218918,
+            "prev_shares": 2478118,
+            "action": "▼减仓",
+            "pct": -10.5,
+            "ticker": "",
+            "cusip": "351858105"
+          },
+          {
+            "issuer": "Sandisk Corp",
+            "value": 507997533,
+            "shares": 799568,
+            "prev_shares": 1209000,
+            "action": "▼减仓",
+            "pct": -33.9,
+            "ticker": "",
+            "cusip": "80004C200"
+          },
+          {
+            "issuer": "Nvidia Corporation",
+            "value": 440696066,
+            "shares": 2526948,
+            "prev_shares": 871420,
+            "action": "▲加仓",
+            "pct": 190.0,
+            "ticker": "NVDA",
+            "cusip": "67066G104"
+          },
+          {
+            "issuer": "Chevron Corporation",
+            "value": 416984243,
+            "shares": 2015396,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "CVX",
+            "cusip": "166764100"
+          },
+          {
+            "issuer": "Roblox Corp",
+            "value": 403054183,
+            "shares": 7126134,
+            "prev_shares": 6628509,
+            "action": "▲加仓",
+            "pct": 7.5,
+            "ticker": "",
+            "cusip": "771049103"
+          }
+        ],
+        "new_buys": [
+          {
+            "issuer": "Apple Inc",
+            "value": 780569445,
+            "shares": 3075638,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "AAPL",
+            "cusip": "037833100"
+          },
+          {
+            "issuer": "Chevron Corporation",
+            "value": 416984243,
+            "shares": 2015396,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "CVX",
+            "cusip": "166764100"
+          },
+          {
+            "issuer": "Petroleo Brasileiro S A",
+            "value": 245405775,
+            "shares": 12270900,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "71654V101"
+          },
+          {
+            "issuer": "New York Times Co Mtn Be",
+            "value": 230774951,
+            "shares": 2756180,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "650111107"
+          },
+          {
+            "issuer": "Alamos Gold Inc",
+            "value": 227400338,
+            "shares": 5118171,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "011532108"
+          },
+          {
+            "issuer": "Everpure Inc",
+            "value": 221980599,
+            "shares": 3759834,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "74624M102"
+          }
+        ],
+        "exits": [
+          {
+            "issuer": "Home Depot Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 171600,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "HD",
+            "cusip": "437076102"
+          },
+          {
+            "issuer": "Capital Group Core Equity Et",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 46700,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "14020V108"
+          },
+          {
+            "issuer": "Old Second Bancorp Inc Ill",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 86325,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "680277100"
+          },
+          {
+            "issuer": "Bakkt Holdings Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 562100,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "05759B305"
+          },
+          {
+            "issuer": "Domo Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 386980,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "257554105"
+          },
+          {
+            "issuer": "New York Times Co",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 2290580,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "650111107"
+          }
+        ]
+      },
+      {
+        "kol": "Ken Griffin",
+        "fund": "Citadel Advisors",
+        "cik": "1423053",
+        "sector": "量化多策略",
+        "sec_name": "CITADEL ADVISORS LLC",
+        "status": "ok",
+        "prev_ok": true,
+        "report_date": "2026-03-31",
+        "filing_date": "2026-05-15",
+        "prev_report_date": "2025-12-31",
+        "total_value": 618473172395,
+        "n_positions": 4584,
+        "top_holdings": [
+          {
+            "issuer": "State Str Spdr S&P 500 Etf T",
+            "value": 41989836181,
+            "shares": 64565975,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "SPY",
+            "cusip": "78462F103"
+          },
+          {
+            "issuer": "Invesco Qqq Trust",
+            "value": 31844154182,
+            "shares": 55171964,
+            "prev_shares": 59067322,
+            "action": "▼减仓",
+            "pct": -6.6,
+            "ticker": "QQQ",
+            "cusip": "46090E103"
+          },
+          {
+            "issuer": "Ishares Trust",
+            "value": 28720313616,
+            "shares": 264434436,
+            "prev_shares": 220675892,
+            "action": "▲加仓",
+            "pct": 19.8,
+            "ticker": "IVV/多",
+            "cusip": "464287184"
+          },
+          {
+            "issuer": "Nvidia Corporation",
+            "value": 23935207278,
+            "shares": 137243161,
+            "prev_shares": 154546023,
+            "action": "▼减仓",
+            "pct": -11.2,
+            "ticker": "NVDA",
+            "cusip": "67066G104"
+          },
+          {
+            "issuer": "Tesla Inc",
+            "value": 23763192721,
+            "shares": 63922509,
+            "prev_shares": 76753952,
+            "action": "▼减仓",
+            "pct": -16.7,
+            "ticker": "TSLA",
+            "cusip": "88160R101"
+          },
+          {
+            "issuer": "Alphabet Inc",
+            "value": 15831423322,
+            "shares": 55102352,
+            "prev_shares": 62835441,
+            "action": "▼减仓",
+            "pct": -12.3,
+            "ticker": "GOOGL",
+            "cusip": "02079K107"
+          },
+          {
+            "issuer": "Spdr Gold Trust",
+            "value": 14819928559,
+            "shares": 34441722,
+            "prev_shares": 31585475,
+            "action": "▲加仓",
+            "pct": 9.0,
+            "ticker": "",
+            "cusip": "78463V107"
+          },
+          {
+            "issuer": "Apple Inc",
+            "value": 14058207235,
+            "shares": 55393070,
+            "prev_shares": 60089590,
+            "action": "▼减仓",
+            "pct": -7.8,
+            "ticker": "AAPL",
+            "cusip": "037833100"
+          },
+          {
+            "issuer": "Meta Platforms Inc",
+            "value": 13712260878,
+            "shares": 23967037,
+            "prev_shares": 23936676,
+            "action": "▲加仓",
+            "pct": 0.1,
+            "ticker": "META",
+            "cusip": "30303M102"
+          },
+          {
+            "issuer": "Microsoft Corp",
+            "value": 11910746872,
+            "shares": 32176424,
+            "prev_shares": 23084909,
+            "action": "▲加仓",
+            "pct": 39.4,
+            "ticker": "MSFT",
+            "cusip": "594918104"
+          },
+          {
+            "issuer": "Amazon Com Inc",
+            "value": 10743074154,
+            "shares": 51582437,
+            "prev_shares": 57199771,
+            "action": "▼减仓",
+            "pct": -9.8,
+            "ticker": "AMZN",
+            "cusip": "023135106"
+          },
+          {
+            "issuer": "Micron Technology Inc",
+            "value": 10685802173,
+            "shares": 31629772,
+            "prev_shares": 23383675,
+            "action": "▲加仓",
+            "pct": 35.3,
+            "ticker": "",
+            "cusip": "595112103"
+          }
+        ],
+        "new_buys": [
+          {
+            "issuer": "State Str Spdr S&P 500 Etf T",
+            "value": 41989836181,
+            "shares": 64565975,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "SPY",
+            "cusip": "78462F103"
+          },
+          {
+            "issuer": "Netflix Inc.",
+            "value": 6676518987,
+            "shares": 69438575,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "NFLX",
+            "cusip": "64110L106"
+          },
+          {
+            "issuer": "Taiwan Semiconductor Manufac",
+            "value": 5382753373,
+            "shares": 15927662,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "874039100"
+          },
+          {
+            "issuer": "Jpmorgan Chase & Co",
+            "value": 3556651202,
+            "shares": 12090873,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "JPM",
+            "cusip": "46625H100"
+          },
+          {
+            "issuer": "Asml Hldg Nv",
+            "value": 3377652892,
+            "shares": 2557220,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "N07059210"
+          },
+          {
+            "issuer": "Costco Wholesale Corporation",
+            "value": 2954509611,
+            "shares": 2965095,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "22160K105"
+          }
+        ],
+        "exits": [
+          {
+            "issuer": "The Brand House Collective I",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 96331,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "497498105"
+          },
+          {
+            "issuer": "Old Second Bancorp Inc Ill",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 67313,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "680277100"
+          },
+          {
+            "issuer": "Envue Medical Inc.",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 16516,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "63008J884"
+          },
+          {
+            "issuer": "Mosaic Co New",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 5649838,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "61945C103"
+          },
+          {
+            "issuer": "Journey Med Corp",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 69415,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "48115J109"
+          },
+          {
+            "issuer": "Bakkt Holdings Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 405194,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "05759B305"
+          }
+        ]
+      },
+      {
+        "kol": "Izzy Englander",
+        "fund": "Millennium Management",
+        "cik": "1273087",
+        "sector": "量化多策略",
+        "sec_name": "MILLENNIUM MANAGEMENT LLC",
+        "status": "ok",
+        "prev_ok": true,
+        "report_date": "2026-03-31",
+        "filing_date": "2026-05-15",
+        "prev_report_date": "2025-12-31",
+        "total_value": 240290955946,
+        "n_positions": 3727,
+        "top_holdings": [
+          {
+            "issuer": "Ishares Trust",
+            "value": 26597009279,
+            "shares": 135233294,
+            "prev_shares": 133273392,
+            "action": "▲加仓",
+            "pct": 1.5,
+            "ticker": "IVV/多",
+            "cusip": "464287184"
+          },
+          {
+            "issuer": "Nvidia Corporation",
+            "value": 7251996197,
+            "shares": 41582547,
+            "prev_shares": 45273319,
+            "action": "▼减仓",
+            "pct": -8.2,
+            "ticker": "NVDA",
+            "cusip": "67066G104"
+          },
+          {
+            "issuer": "Select Sector Spdr Trust",
+            "value": 7048183309,
+            "shares": 111713527,
+            "prev_shares": 91009450,
+            "action": "▲加仓",
+            "pct": 22.7,
+            "ticker": "",
+            "cusip": "81369Y100"
+          },
+          {
+            "issuer": "Invesco Qqq Trust",
+            "value": 6136660874,
+            "shares": 10632144,
+            "prev_shares": 12971710,
+            "action": "▼减仓",
+            "pct": -18.0,
+            "ticker": "QQQ",
+            "cusip": "46090E103"
+          },
+          {
+            "issuer": "Alphabet Inc",
+            "value": 4791449000,
+            "shares": 16677373,
+            "prev_shares": 16447769,
+            "action": "▲加仓",
+            "pct": 1.4,
+            "ticker": "GOOGL",
+            "cusip": "02079K107"
+          },
+          {
+            "issuer": "Apple Inc",
+            "value": 4720527754,
+            "shares": 18600133,
+            "prev_shares": 18575947,
+            "action": "▲加仓",
+            "pct": 0.1,
+            "ticker": "AAPL",
+            "cusip": "037833100"
+          },
+          {
+            "issuer": "Microsoft Corp",
+            "value": 4611902499,
+            "shares": 12458877,
+            "prev_shares": 8120538,
+            "action": "▲加仓",
+            "pct": 53.4,
+            "ticker": "MSFT",
+            "cusip": "594918104"
+          },
+          {
+            "issuer": "Meta Platforms Inc",
+            "value": 4071558568,
+            "shares": 7116492,
+            "prev_shares": 5641532,
+            "action": "▲加仓",
+            "pct": 26.1,
+            "ticker": "META",
+            "cusip": "30303M102"
+          },
+          {
+            "issuer": "Amazon Com Inc",
+            "value": 3798071910,
+            "shares": 18236289,
+            "prev_shares": 16257026,
+            "action": "▲加仓",
+            "pct": 12.2,
+            "ticker": "AMZN",
+            "cusip": "023135106"
+          },
+          {
+            "issuer": "Spdr Series Trust",
+            "value": 3246055657,
+            "shares": 39024762,
+            "prev_shares": 10954224,
+            "action": "▲加仓",
+            "pct": 256.3,
+            "ticker": "",
+            "cusip": "78464A607"
+          },
+          {
+            "issuer": "State Str Spdr S&P 500 Etf T",
+            "value": 3205540167,
+            "shares": 4929022,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "SPY",
+            "cusip": "78462F103"
+          },
+          {
+            "issuer": "Tesla Inc",
+            "value": 3053704315,
+            "shares": 8214403,
+            "prev_shares": 4854498,
+            "action": "▲加仓",
+            "pct": 69.2,
+            "ticker": "TSLA",
+            "cusip": "88160R101"
+          }
+        ],
+        "new_buys": [
+          {
+            "issuer": "State Str Spdr S&P 500 Etf T",
+            "value": 3205540167,
+            "shares": 4929022,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "SPY",
+            "cusip": "78462F103"
+          },
+          {
+            "issuer": "Taiwan Semiconductor Manufac",
+            "value": 1376803907,
+            "shares": 4073987,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "874039100"
+          },
+          {
+            "issuer": "Netflix Inc.",
+            "value": 1194916913,
+            "shares": 12427633,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "NFLX",
+            "cusip": "64110L106"
+          },
+          {
+            "issuer": "Freeport Mcmoran Inc",
+            "value": 914681105,
+            "shares": 15561094,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "",
+            "cusip": "35671D857"
+          },
+          {
+            "issuer": "Chevron Corporation",
+            "value": 888337771,
+            "shares": 4293561,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "CVX",
+            "cusip": "166764100"
+          },
+          {
+            "issuer": "Jpmorgan Chase & Co",
+            "value": 863584632,
+            "shares": 2935765,
+            "prev_shares": 0,
+            "action": "🆕新建",
+            "pct": null,
+            "ticker": "JPM",
+            "cusip": "46625H100"
+          }
+        ],
+        "exits": [
+          {
+            "issuer": "Crane Hbr Acquisition Corp",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 174531,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "G24979109"
+          },
+          {
+            "issuer": "Old Second Bancorp Inc Ill",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 313560,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "680277100"
+          },
+          {
+            "issuer": "Mosaic Co New",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 1664241,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "61945C103"
+          },
+          {
+            "issuer": "Genie Energy Ltd",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 61161,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "372284208"
+          },
+          {
+            "issuer": "Bakkt Holdings Inc",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 534963,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "05759B115"
+          },
+          {
+            "issuer": "New York Times Co",
+            "value": 0,
+            "shares": 0,
+            "prev_shares": 349369,
+            "action": "❌清仓",
+            "pct": -100.0,
+            "ticker": "",
+            "cusip": "650111107"
+          }
+        ]
+      }
+    ]
+  },
+  "kol_note": "本期 KOL 全量 80 位因 web_search 后端持续故障（多轮泛主题查询均返回空，确诊后端限流/故障）未获取有效方向，79/80 标记「未找到」，无有效转向可报；待后端恢复由 cron 自动重跑填真值。"
+}
