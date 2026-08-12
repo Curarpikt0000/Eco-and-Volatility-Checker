@@ -34,6 +34,19 @@ INSTITUTIONS = [
     {"kol": "David Tepper", "fund": "Appaloosa", "cik": "1656456"},
     {"kol": "Stanley Druckenmiller", "fund": "Duquesne Family Office", "cik": "1536411"},
     {"kol": "Ted Oakley", "fund": "Oxbow Advisors", "cik": "1564770"},
+    # ── 2026-08 扩展: 按板块新增 9 家(Chao 追踪的科技成长/价值宏观/量化多策略) ──
+    # 科技/成长股
+    {"kol": "Chase Coleman", "fund": "Tiger Global", "cik": "1167483", "sector": "科技成长"},
+    {"kol": "Philippe Laffont", "fund": "Coatue Management", "cik": "1135730", "sector": "科技成长"},
+    {"kol": "Alex Sacerdote", "fund": "Whale Rock Capital", "cik": "1387322", "sector": "科技成长"},
+    # 价值/宏观对冲
+    {"kol": "Seth Klarman", "fund": "Baupost Group", "cik": "1061768", "sector": "价值宏观"},
+    {"kol": "Dan Loeb", "fund": "Third Point", "cik": "1040273", "sector": "价值宏观"},
+    {"kol": "Carl Icahn", "fund": "Icahn Enterprises", "cik": "921669", "sector": "价值宏观"},
+    # 量化/多策略
+    {"kol": "Jim Simons (RenTec)", "fund": "Renaissance Technologies", "cik": "1037389", "sector": "量化多策略"},
+    {"kol": "Ken Griffin", "fund": "Citadel Advisors", "cik": "1423053", "sector": "量化多策略"},
+    {"kol": "Izzy Englander", "fund": "Millennium Management", "cik": "1273087", "sector": "量化多策略"},
 ]
 
 

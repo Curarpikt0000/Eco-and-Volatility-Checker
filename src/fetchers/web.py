@@ -66,8 +66,27 @@ def fetch_fear_greed_history(start="2025-01-01"):
     return out
 
 
-# ─────────── multpl Shiller CAPE ───────────
+# ─────────── multpl Shiller CAPE (2026-08 改: pandas 直连,不用 Jina) ───────────
 def fetch_cape():
+    """Shiller CAPE。multpl.com 表格普通 UA 即 200(不需 Jina)。
+    pandas.read_html 取表0第0行=最新, 带日期。失败回退旧正则/Jina。"""
+    try:
+        import pandas as pd
+        from fetchers.util import HEADERS
+        tables = pd.read_html("https://www.multpl.com/shiller-pe/table/by-month",
+                              storage_options=HEADERS)
+        if tables:
+            df = tables[0]
+            # 列 [Date, Value]; 第0行最新
+            row = df.iloc[0]
+            raw = str(row.iloc[1])
+            v = float(re.sub(r"[^\d.]", "", raw))
+            ds = _parse_date(str(row.iloc[0]))
+            if 5 < v < 100:  # sanity: CAPE 合理区间
+                return {"value": round(v, 2), "as_of": ds, "status": "ok"}
+    except Exception:
+        pass
+    # 回退: 旧正则(http_get/jina)
     for body in (http_get("https://www.multpl.com/shiller-pe", timeout=25)[1],
                  jina_get("https://www.multpl.com/shiller-pe")):
         if body:
@@ -77,8 +96,22 @@ def fetch_cape():
     return {"value": None, "as_of": None, "status": "未找到"}
 
 
-# ─────────── currentmarketvaluation Buffett Indicator ───────────
+# ─────────── Buffett Indicator (2026-08 改: FRED 纯 API 双系列算比率) ───────────
 def fetch_buffett():
+    """巴菲特指标=美股总市值/GDP。用 FRED Z.1 官方口径(季度,零反爬):
+    NCBEILQ027S(公司股权市值,百万$) / (GDP,十亿$ ×1000) ×100。失败回退旧网页抓。"""
+    try:
+        from fetchers.fred import fetch_fred_latest
+        mv, mv_d = fetch_fred_latest("NCBEILQ027S")   # 百万$
+        gdp, _ = fetch_fred_latest("GDP")              # 十亿$
+        if mv and gdp:
+            ratio = mv / (gdp * 1000) * 100
+            if 50 < ratio < 400:  # sanity
+                return {"value": round(ratio, 1), "as_of": mv_d, "status": "ok",
+                        "extra": {"source": "FRED Z.1"}}
+    except Exception:
+        pass
+    # 回退: 旧网页抓
     body = http_get("https://www.currentmarketvaluation.com/models/buffett-indicator.php", timeout=25)[1]
     if body:
         m = re.search(r"we calculate the Buffett Indicator as\s+(\d{2,3})%", body)
@@ -92,15 +125,13 @@ def fetch_buffett():
     return {"value": None, "as_of": None, "status": "未找到"}
 
 
-# ─────────── NAAIM Exposure — 已于 2026-08-01 转付费停更 ───────────
+# ─────────── NAAIM Exposure — 2026-08-01 起非会员转付费(免费页延迟3个月,无实时值) ───────────
 def fetch_naaim():
+    """NAAIM 主动经理股票敞口。2026-08-01 起非会员转订阅制:免费页数据延迟3个月,
+    对当前情绪无用。替代已在 config: BofA FMS 现金水平(月度,信号最像)。此处保持标注不编。"""
     body = jina_get("https://www.naaim.org/programs/naaim-exposure-index/")
-    if body and "transitioned to a subscription" in body:
-        return {"value": None, "as_of": None, "status": "数据源已转付费停更(2026-08-01)"}
-    if body:
-        m = re.search(r"NAAIM (?:Exposure Index|Number)[^\d\-]{0,30}(-?\d{1,3}\.?\d*)", body)
-        if m:
-            return {"value": float(m.group(1)), "as_of": None, "status": "ok"}
+    if body and "subscription" in body.lower():
+        return {"value": None, "as_of": None, "status": "非会员延迟3月(2026-08转付费),用BofA FMS现金替代"}
     return {"value": None, "as_of": None, "status": "未找到"}
 
 
@@ -139,8 +170,27 @@ def fetch_aaii_sentiment():
     return {"value": None, "as_of": None, "status": "未找到"}
 
 
-# ─────────── AAII Asset Allocation (stocks %) ───────────
+# ─────────── AAII Asset Allocation (2026-08 改: read_html 直连,不用 Jina) ───────────
 def fetch_aaii_allocation():
+    """AAII 家庭股票总配置%。aaii.com 公开页普通 UA 即 200(不需 Jina/登录)。
+    pandas.read_html 找 10x4 表, iloc[3,2]=Stocks Total%。失败回退 Jina 正则。"""
+    try:
+        import pandas as pd
+        from fetchers.util import HEADERS
+        tables = pd.read_html("https://www.aaii.com/assetallocationsurvey", storage_options=HEADERS)
+        for df in tables:
+            if df.shape[0] >= 4 and df.shape[1] >= 3:
+                # 找含 "Stocks Total" 的行
+                for i in range(len(df)):
+                    label = str(df.iloc[i, 0])
+                    if "Stocks Total" in label or "Stock Total" in label:
+                        raw = str(df.iloc[i, df.shape[1] - 2] if df.shape[1] > 2 else df.iloc[i, 1])
+                        v = _num(raw)
+                        if v and 20 < v < 100:
+                            return {"value": round(v, 2), "as_of": None, "status": "ok"}
+    except Exception:
+        pass
+    # 回退 Jina 正则
     t = jina_get("https://www.aaii.com/assetallocationsurvey")
     if t:
         m = re.search(r"Stocks Total\s*([0-9]+\.[0-9]+)%", t)
@@ -245,8 +295,23 @@ def _parse_finra_any(s):
     return None
 
 
-# ─────────── Renaissance IPO count ───────────
+# ─────────── Renaissance IPO count (2026-08 改: stockanalysis 直连) ───────────
 def fetch_ipo():
+    """当年 YTD IPO 宗数。stockanalysis.com/ipos/<year> 普通 UA 直连(替 Renaissance 反爬)。
+    read_html 表0行数=YTD IPO 数。失败回退旧 Renaissance 抓。"""
+    try:
+        import pandas as pd, datetime
+        from fetchers.util import HEADERS
+        year = (datetime.datetime.utcnow() + datetime.timedelta(hours=9)).year
+        tables = pd.read_html(f"https://stockanalysis.com/ipos/{year}/", storage_options=HEADERS)
+        if tables:
+            n = len(tables[0])
+            if n > 0:
+                return {"value": float(n), "as_of": f"{year}-YTD", "status": "ok",
+                        "extra": {"source": "stockanalysis", "year": year}}
+    except Exception:
+        pass
+    # 回退旧 Renaissance
     body = http_get("https://www.renaissancecapital.com/IPO-Center/Stats", timeout=25)[1]
     if body:
         m = re.search(r"There have been\s*(?:<strong>)?\s*(\d+)\s*(?:</strong>)?\s*IPOs (?:priced this year|in \d{4})", body)
@@ -257,8 +322,38 @@ def fetch_ipo():
     return {"value": None, "as_of": None, "status": "未找到"}
 
 
-# ─────────── GuruFocus Insider Buy/Sell ───────────
+# ─────────── Insider Buy/Sell (2026-08 改: openinsider,替被403的gurufocus) ───────────
 def fetch_insider():
+    """内部人买卖比($)。openinsider.com 普通 UA 直连(gurufocus 已被 Cloudflare 403)。
+    买入榜$总额 / 卖出榜$总额。注:近期榜前100笔口径,做趋势方向。失败回退旧 gurufocus。"""
+    try:
+        import pandas as pd
+        from fetchers.util import HEADERS
+
+        def _sum_value(url):
+            tables = pd.read_html(url, storage_options=HEADERS)
+            for df in tables:
+                cols = [str(c) for c in df.columns]
+                if any("Value" in c for c in cols) and any("Ticker" in c for c in cols):
+                    vcol = [c for c in df.columns if "Value" in str(c)][0]
+                    tot = 0.0
+                    for x in df[vcol]:
+                        n = _num(str(x))
+                        if n:
+                            tot += abs(n)
+                    return tot
+            return None
+
+        buys = _sum_value("http://openinsider.com/insider-purchases")
+        sells = _sum_value("http://openinsider.com/insider-sales")
+        if buys and sells and sells > 0:
+            ratio = buys / sells
+            if 0 < ratio < 50:
+                return {"value": round(ratio, 3), "as_of": None, "status": "ok",
+                        "extra": {"source": "openinsider", "note": "近期榜前100笔口径,趋势用"}}
+    except Exception:
+        pass
+    # 回退旧 gurufocus
     t = jina_get("https://www.gurufocus.com/economic_indicators/4359/insider-buysell-ratio")
     if t:
         m = re.search(r"Insider Buy/Sell Ratio[^0-9]*is currently\s*([\d.]+)", t)
@@ -269,11 +364,25 @@ def fetch_insider():
     return {"value": None, "as_of": None, "status": "未找到"}
 
 
-# ─────────── Conference Board LEI (月度) ───────────
+# ─────────── Conference Board LEI (2026-08 改: FRED OECD CLI 替代付费源) ───────────
 def fetch_lei():
+    """领先经济指数。Conference Board LEI 已付费闭源 → 替代 FRED OECD 美国综合领先指标
+    USALOLITOAASTSAM(月度,基准100)。value=6个月变化(最新-6期前)。失败回退旧网页抓。"""
+    try:
+        from fetchers.fred import fetch_fred_history
+        hist = fetch_fred_history("USALOLITOAASTSAM", start="2024-01-01")
+        if hist and len(hist) >= 7:
+            latest_d, latest_v = hist[-1]
+            _, prev_v = hist[-7]  # 6 个月前
+            chg6 = round(latest_v - prev_v, 2)
+            return {"value": chg6, "as_of": latest_d, "status": "ok",
+                    "extra": {"cli_index": round(latest_v, 2), "source": "FRED OECD CLI",
+                              "note": "OECD综合领先指标6月变化(替Conference Board付费LEI)"}}
+    except Exception:
+        pass
+    # 回退旧 Conference Board 网页抓
     t = jina_get("https://www.conference-board.org/topics/us-leading-indicators/")
     if t:
-        # 6-month change: "LEI is down by only X% over the first half"
         m6 = re.search(r"LEI is down by only ([\d.]+)% over the first half", t)
         mlei = re.search(r"\(LEI\) for the US (?:declined|increased|fell|rose) by [\d.]+% in ([A-Za-z]+ \d{4}) to (\d{2,3}\.\d)", t)
         val6 = -float(m6.group(1)) if m6 else None

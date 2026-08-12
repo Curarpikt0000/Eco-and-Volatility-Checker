@@ -51,18 +51,23 @@
       "status": "ok"
     },
     "ipo_count": {
-      "value": 99.0,
-      "as_of": null,
+      "value": 225.0,
+      "as_of": "2026-YTD",
       "status": "ok",
       "extra": {
-        "proceeds_bil": 145.3
+        "source": "stockanalysis",
+        "year": 2026
       },
       "key": "ipo_count"
     },
     "insider": {
-      "value": 0.25,
-      "as_of": "2026-08-01",
+      "value": 0.27,
+      "as_of": null,
       "status": "ok",
+      "extra": {
+        "source": "openinsider",
+        "note": "近期榜前100笔口径,趋势用"
+      },
       "key": "insider"
     },
     "bofa_bull_bear": {
@@ -84,14 +89,17 @@
       "key": "ad_line"
     },
     "buffett": {
-      "value": 219.0,
-      "as_of": "2026-03-31",
+      "value": 214.0,
+      "as_of": "2026-01-01",
       "status": "ok",
+      "extra": {
+        "source": "FRED Z.1"
+      },
       "key": "buffett"
     },
     "cape": {
       "value": 42.24,
-      "as_of": null,
+      "as_of": "2026-08-11",
       "status": "ok",
       "key": "cape"
     },
@@ -102,14 +110,19 @@
       "status": "ok"
     },
     "lei": {
-      "value": -0.3,
-      "as_of": "2026-06-30",
+      "value": 0.58,
+      "as_of": "2026-06-01",
       "status": "ok",
+      "extra": {
+        "cli_index": 100.8,
+        "source": "FRED OECD CLI",
+        "note": "OECD综合领先指标6月变化(替Conference Board付费LEI)"
+      },
       "key": "lei"
     },
     "aaii_alloc": {
       "value": 70.38,
-      "as_of": "2026-07-31",
+      "as_of": null,
       "status": "ok",
       "key": "aaii_alloc"
     }
@@ -146,5 +159,5 @@
       "comm_surge": false
     }
   },
-  "generated_at": "2026-08-12T05:11:46.808708"
+  "generated_at": "2026-08-12T05:57:17.653419"
 }
