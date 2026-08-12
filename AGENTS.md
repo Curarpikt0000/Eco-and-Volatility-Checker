@@ -56,10 +56,15 @@ Notion 3 时序 DB → 莫兰迪配色 dashboard（雷达图 + 仪表盘 + 6 部
 - **KOL 独立数据源**：从 KOL 项目 GitHub 拉名册 data/kol_registry.json(80 KOL)，Eco **每日自己 web_search 全量 80 个 KOL** 判方向→写 data/kol_independent.json(不共用另一 agent 的 Notion 结论,准确性独立)。external_data.load_independent_kol() 优先,kol_stance_changes() 读另一agent DB 仅兜底
 - **Economic Dashboard 流动性**：external_data.fetch_liquidity_points() 读 Fed准备金/RRP/TGA(A5)+收益率(A1)+风控灯/关键变动(A6 750f9b46...)
 - **三大央行资产负债表(US/JP/CN)**：external_data.fetch_cb_balance_sheets() 读 Economic Dashboard 已维护的 B7(Fed周度 dea7e939)/B6(BoJ旬报 481f6e19)/B5(PBoC月度 20b0eb37) 最新两行,每科目算环比(Fed=WoW / BoJ=较上期 / PBoC=MoM)。dashboard 底部 bs-grid 三 view:左资产/右负债,每值带涨跌箭头+%
-- **机构持仓 13F + Trump**：holdings_13f.py 走 SEC EDGAR 官方(免费,可查历史)。9个有活跃13F的机构(Berkshire/Bridgewater/Scion/Soros/ARK/Pershing/Appaloosa/Duquesne + Oxbow[Ted Oakley,KOL名册里唯一有活跃13F的])最新vs上期13F,按issuer聚合算变动(🆕新建/▲加仓/▼减仓/❌清仓/→持平)。★单位自适应:部分旧式filer(如Druckenmiller)value填千美元,用中位数隐含股价<$1判定×1000。Trump无13F→cron agent web_search公开披露(PFD)append。写 Notion DB_HOLDINGS(title字段"机构-期",非Date→upsert传title_field) + dashboard 底部 h-grid 卡片
+- **机构持仓 13F + Trump**：holdings_13f.py 走 SEC EDGAR 官方(免费,可查历史)。9个有活跃13F的机构(Berkshire/Bridgewater/Scion/Soros/ARK/Pershing/Appaloosa/Duquesne + Oxbow[Ted Oakley,KOL名册里唯一有活跃13F的])最新vs上期13F,按issuer聚合算变动(🆕新建/▲加仓/▼减仓/❌清仓/→持平)。★单位自适应:部分旧式filer(如Druckenmiller)value填千美元,用中位数隐含股价<$1判定×1000。写 Notion DB_HOLDINGS(title字段"机构-期",非Date→upsert传title_field) + dashboard 底部 h-grid 卡片
 - ★KOL名册13F覆盖真相(probe_13f_cik.py探明):80个KOL多为分析师/经济学家/海外/债券/加密,无季度13F。名册候选11个有基金关键词的,实际有活跃13F仅Oxbow(Ted Oakley);Hayman(Kyle Bass 2016停)/PIMCO(2012停)等早停报。所以机构持仓覆盖=8知名+Oxbow=9,已是诚实上限
 - **2025全年回填**:holdings_13f.backfill_2025() 拉各机构2025四季度(+2024Q4基准)13F,每季vs上期算变动→DB_HOLDINGS写35机构-期行(Berkshire/Soros/ARK等各4期,Scion 3期)。CLI: python -m src.holdings_13f --backfill2025
-- dashboard 底部四板块(顺序):当日KOL状态变化 → 流动性要点 → 三大央行资产负债表 → 机构持仓13F+Trump；每个 metric 卡片加 📌 当日短评
+- ★**政要披露四源(2026-08 接入,推翻"川普无逐笔源"旧结论)**：politician_disclosure.fetch_all 整合4源→data/politician_disclosure.json,dashboard 政要板块自动读。CLI: python -m src.politician_disclosure
+  - ①众议院 PTR(src/politician_disclosure.py 原有)：disclosures-clerk.house.gov {year}FD.ZIP 索引→ptr-pdfs/{year}/{docid}.pdf,pdfplumber。佩洛西 CA11/Crenshaw TX02。
+  - ②**川普 OGE 278-T 逐笔(src/oge_trump.py,新)**：★川普作为总统在报 278-T 期间交易报告=**逐笔交易**(非仅年度快照)!源=OGE XPages API `extapps2.oge.gov/201/Presiden.nsf/API.xsp/v2/rest?length=20000`(返全量~16600条JSON,客户端过滤→本地筛name含trump);type字段内嵌<a href>直达PDF(无需Request)。有 278ANNUAL 年度快照+多份 278-T(~300+笔/份)。★解析坑:OCR噪音(purchase→lourchaso;金额$15 001内部空格+bullet分隔);交易日=买卖词**之后**第一个日期(不是债券DUE到期日);金额边界snap到OGE标准档修正。无ticker(只有资产描述名)。
+  - ③**川普 DJT Form 4(src/djt_form4.py,新,每日cron逐笔)**：SEC EDGAR CIK 947033=TRUMP DONALD J,submissions JSON里form=='4'→primary_doc.xml。code P买/S卖/G赠与/A授予/F扣税/M行权。带DJT ticker。川普持DJT股票最快逐笔信号。
+  - ④**参议员 Tuberville PTR(src/senate_ptr.py,新)**：efdsearch.senate.gov 会话流程:GET /search/home/拿csrf→POST同意条款(prohibition_agreement=1)→★GET /search/建referer链(缺这步data端点503!)→POST /search/report/data/(report_types=[11]=PTR,带X-Requested-With+X-CSRFToken)→GET /search/view/ptr/<uuid>/明细HTML。★参议院数据带ticker质量优于众议院PDF。可扩其他参议员(SENATE_TARGETS只增不减)。
+- dashboard 底部四板块(顺序):当日KOL状态变化 → 流动性要点 → 三大央行资产负债表 → 机构持仓13F+政要披露(5卡:佩洛西/Crenshaw/川普OGE 278-T/川普DJT Form 4/Tuberville)；每个 metric 卡片加 📌 当日短评
 
 ## Notion 5 DB (id 在 .env)
 - DB_INDICATORS 每日指标 · DB_COT 金银COT · DB_REPORT 每日报告(page内部写6部分+分领域+KOL+流动性+央行BS+持仓丰富blocks) · DB_WEEKLY 周报 · DB_HOLDINGS 机构持仓13F(3ba47eb5...)
