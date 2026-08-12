@@ -409,7 +409,7 @@ def _cb_delta_span(line, unit_period):
     return f'<span class="bs-wow {cls}">{arrow} {d:+,.2f}{pcs}</span>'
 
 
-def _cb_one_view(d):
+def _cb_one_view(d, fx=None):
     """单个央行资产负债表 view：左资产右负债 + 总资产 + WoW/环比。"""
     if not d or (not d.get("assets") and not d.get("liabilities")):
         return (f'<div class="bs-card"><div class="bs-head">{d.get("flag","")} '
@@ -436,10 +436,18 @@ def _cb_one_view(d):
         total_l_html = (f'<div class="bs-line bs-total"><span class="bs-name">总负债</span>'
                         f'<span class="bs-val">{_cb_bs_num(tl["value"])}</span>'
                         f'{_cb_delta_span(tl, up)}</div>')
+    # 换算标注: 若从本币换成 $B, 标原口径+汇率
+    fx_note = ""
+    orig = d.get("orig_unit")
+    if orig and fx:
+        rate = fx.get("USDJPY") if orig == "兆¥" else (fx.get("USDCNY") if orig == "亿¥" else None)
+        pair = "USD/JPY" if orig == "兆¥" else ("USD/CNY" if orig == "亿¥" else "")
+        if rate:
+            fx_note = f' · 原口径 {orig} · 按 {pair} {rate:g} 折美元'
     return (
         f'<div class="bs-card">'
         f'<div class="bs-head">{d.get("flag","")} {d.get("name","")}'
-        f'<span class="bs-meta">{d.get("date","")} · 单位 {d.get("unit","")} · 环比口径 {up}</span></div>'
+        f'<span class="bs-meta">{d.get("date","")} · 单位 {d.get("unit","")} · 环比口径 {up}{fx_note}</span></div>'
         f'<div class="bs-body">'
         f'<div class="bs-col bs-assets"><div class="bs-col-h">资产 (Assets)</div>{side(d.get("assets",[]))}{total_a_html}</div>'
         f'<div class="bs-col bs-liabs"><div class="bs-col-h">负债 (Liabilities)</div>{side(d.get("liabilities",[]))}{total_l_html}</div>'
@@ -448,11 +456,12 @@ def _cb_one_view(d):
 
 
 def _cb_balance_html(cb):
-    """底部三国央行资产负债表板块(JP/CN/US)。"""
+    """底部三国央行资产负债表板块(JP/CN/US)。统一 $B 横向可比。"""
     if not cb:
         return '<p class="empty">央行资产负债表数据未就绪。</p>'
+    fx = cb.get("_fx")
     order = ["US", "JP", "CN"]
-    cards = "".join(_cb_one_view(cb.get(cc, {})) for cc in order if cc in cb)
+    cards = "".join(_cb_one_view(cb.get(cc, {}), fx=fx) for cc in order if cc in cb)
     return cards or '<p class="empty">央行资产负债表数据未就绪。</p>'
 
 

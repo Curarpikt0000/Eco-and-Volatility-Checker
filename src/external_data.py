@@ -269,8 +269,29 @@ def _bs_line(cur, prev, disp, fld):
     return {"name": disp, "value": v, "delta": delta, "pct": pct}
 
 
-def fetch_cb_balance_sheets():
+def _usd_convert(cc_data, factor, orig_unit):
+    """把一个央行的资负表所有值 × factor 转成 $B。orig_unit 记进 note 保留原口径可溯源。"""
+    if not cc_data or factor is None:
+        return cc_data
+    def conv(line):
+        if not line:
+            return line
+        for k in ("value", "delta"):
+            if line.get(k) is not None:
+                line[k] = round(line[k] * factor, 1)
+        return line
+    for sec in ("assets", "liabilities"):
+        cc_data[sec] = [conv(x) for x in cc_data.get(sec, [])]
+    cc_data["total_assets"] = conv(cc_data.get("total_assets"))
+    cc_data["total_liab"] = conv(cc_data.get("total_liab"))
+    cc_data["unit"] = "$B"
+    cc_data["orig_unit"] = orig_unit
+    return cc_data
+
+
+def fetch_cb_balance_sheets(to_usd=True):
     """读 JP/CN/US 三大央行资产负债表最新两期, 每科目算环比。
+    to_usd=True: 统一换算成 $B(十亿美元)横向可比(汇率走 FRED DEXJPUS/DEXCHUS)。
     返回 {"US":{...}, "JP":{...}, "CN":{...}}, 每个:
       {name, flag, unit, period, date, assets:[{name,value,delta,pct}], liabilities:[...],
        total_assets:{value,delta,pct}, total_liab:{...}|None}
@@ -295,6 +316,22 @@ def fetch_cb_balance_sheets():
             "assets": assets, "liabilities": liabs,
             "total_assets": ta, "total_liab": tl,
         }
+    # ── 统一换算成 $B(十亿美元) ──
+    if to_usd:
+        try:
+            from fetchers.fred import fetch_fred_latest
+            jpy, _ = fetch_fred_latest("DEXJPUS")   # 日元/美元(如 147.5)
+            cny, _ = fetch_fred_latest("DEXCHUS")   # 人民币/美元(如 7.15)
+            # BoJ: 兆¥(1e12¥) → $B: ×1000/jpy
+            if "JP" in out and jpy:
+                out["JP"] = _usd_convert(out["JP"], 1000.0 / jpy, "兆¥")
+            # PBoC: 亿¥(1e8¥) → $B: ×0.1/cny
+            if "CN" in out and cny:
+                out["CN"] = _usd_convert(out["CN"], 0.1 / cny, "亿¥")
+            # 记录换算汇率(可溯源)
+            out["_fx"] = {"USDJPY": jpy, "USDCNY": cny}
+        except Exception as e:
+            out["_fx_error"] = str(e)
     return out
 
 
