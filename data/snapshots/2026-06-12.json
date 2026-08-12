@@ -17,49 +17,49 @@
       "key": "aaii_bull_bear",
       "value": null,
       "as_of": null,
-      "status": "无历史"
+      "status": "未找到"
     },
     "put_call": {
       "key": "put_call",
       "value": null,
       "as_of": null,
-      "status": "无历史"
+      "status": "未找到"
     },
     "naaim": {
       "key": "naaim",
       "value": null,
       "as_of": null,
-      "status": "无历史"
+      "status": "未找到"
     },
     "margin_debt": {
       "key": "margin_debt",
-      "value": 1415.6,
-      "as_of": "2026-06-12",
-      "status": "ok"
+      "value": null,
+      "as_of": null,
+      "status": "未找到"
     },
     "margin_gdp": {
       "key": "margin_gdp",
-      "value": 4.36,
-      "as_of": "2026-06-12",
-      "status": "ok"
+      "value": null,
+      "as_of": null,
+      "status": "未找到"
     },
     "ipo_count": {
       "key": "ipo_count",
       "value": null,
       "as_of": null,
-      "status": "无历史"
+      "status": "未找到"
     },
     "insider": {
       "key": "insider",
       "value": null,
       "as_of": null,
-      "status": "无历史"
+      "status": "未找到"
     },
     "bofa_bull_bear": {
       "key": "bofa_bull_bear",
       "value": null,
       "as_of": null,
-      "status": "无历史"
+      "status": "未找到"
     },
     "hy_oas": {
       "key": "hy_oas",
@@ -71,19 +71,19 @@
       "key": "ad_line",
       "value": null,
       "as_of": null,
-      "status": "无历史"
+      "status": "未找到"
     },
     "buffett": {
       "key": "buffett",
       "value": null,
       "as_of": null,
-      "status": "无历史"
+      "status": "未找到"
     },
     "cape": {
       "key": "cape",
       "value": null,
       "as_of": null,
-      "status": "无历史"
+      "status": "未找到"
     },
     "yield_curve": {
       "key": "yield_curve",
@@ -95,15 +95,46 @@
       "key": "lei",
       "value": null,
       "as_of": null,
-      "status": "无历史"
+      "status": "未找到"
     },
     "aaii_alloc": {
       "key": "aaii_alloc",
       "value": null,
       "as_of": null,
-      "status": "无历史"
+      "status": "未找到"
     }
   },
-  "cot": {},
-  "generated_at": "backfill"
+  "cot": {
+    "gold": {
+      "as_of": "2026-06-09",
+      "open_interest": 332709,
+      "comm_long": 58986,
+      "comm_short": 260022,
+      "comm_net": -201036,
+      "noncomm_long": 207984,
+      "noncomm_short": 34147,
+      "noncomm_net": 173837,
+      "metal": "gold",
+      "comm_net_wow": 5309,
+      "comm_long_wow": 5135,
+      "comm_short_wow": -174,
+      "comm_surge": false
+    },
+    "silver": {
+      "as_of": "2026-06-09",
+      "open_interest": 103440,
+      "comm_long": 26660,
+      "comm_short": 67028,
+      "comm_net": -40368,
+      "noncomm_long": 32487,
+      "noncomm_short": 10273,
+      "noncomm_net": 22214,
+      "metal": "silver",
+      "comm_net_wow": 2293,
+      "comm_long_wow": 878,
+      "comm_short_wow": -1415,
+      "comm_surge": false
+    }
+  },
+  "generated_at": "backfill-daily"
 }

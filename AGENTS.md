@@ -49,12 +49,18 @@ Notion 3 时序 DB → 莫兰迪配色 dashboard（雷达图 + 仪表盘 + 6 部
 - eco-vol-selfheal 每小时 :20 自愈 watchdog(no_agent)
 
 ## 数据联动 (2026-08 扩展)
-- **KOL 独立数据源**：从 KOL 项目 GitHub 拉名册 data/kol_registry.json(80 KOL)，Eco **每日自己 web_search** 20-25 核心 KOL 判方向→写 data/kol_independent.json(不共用另一 agent 的 Notion 结论,准确性独立)。external_data.load_independent_kol() 优先,kol_stance_changes() 读另一agent DB 仅兜底
+- **KOL 独立数据源**：从 KOL 项目 GitHub 拉名册 data/kol_registry.json(80 KOL)，Eco **每日自己 web_search 全量 80 个 KOL** 判方向→写 data/kol_independent.json(不共用另一 agent 的 Notion 结论,准确性独立)。external_data.load_independent_kol() 优先,kol_stance_changes() 读另一agent DB 仅兜底
 - **Economic Dashboard 流动性**：external_data.fetch_liquidity_points() 读 Fed准备金/RRP/TGA(A5)+收益率(A1)+风控灯/关键变动(A6 750f9b46...)
-- dashboard 底部两板块：当日KOL状态变化 + 流动性要点；每个 metric 卡片加 📌 当日短评
+- **三大央行资产负债表(US/JP/CN)**：external_data.fetch_cb_balance_sheets() 读 Economic Dashboard 已维护的 B7(Fed周度 dea7e939)/B6(BoJ旬报 481f6e19)/B5(PBoC月度 20b0eb37) 最新两行,每科目算环比(Fed=WoW / BoJ=较上期 / PBoC=MoM)。dashboard 底部 bs-grid 三 view:左资产/右负债,每值带涨跌箭头+%
+- **机构持仓 13F + Trump**：holdings_13f.py 走 SEC EDGAR 官方(免费,可查历史)。8个知名机构(Berkshire/Bridgewater/Scion/Soros/ARK/Pershing/Appaloosa/Duquesne)最新vs上期13F,按issuer聚合算变动(🆕新建/▲加仓/▼减仓/❌清仓/→持平)。★单位自适应:部分旧式filer(如Druckenmiller)value填千美元,用中位数隐含股价<$1判定×1000。Trump无13F→cron agent web_search公开披露(PFD)append。写 Notion DB_HOLDINGS(title字段"机构-期",非Date→upsert传title_field) + dashboard 底部 h-grid 卡片
+- dashboard 底部四板块(顺序):当日KOL状态变化 → 流动性要点 → 三大央行资产负债表 → 机构持仓13F+Trump；每个 metric 卡片加 📌 当日短评
 
-## Notion 4 DB (id 在 .env)
-- DB_INDICATORS 每日指标 · DB_COT 金银COT · DB_REPORT 每日报告(page内部写6部分+分领域分析+KOL+流动性丰富blocks) · DB_WEEKLY 周报
+## Notion 5 DB (id 在 .env)
+- DB_INDICATORS 每日指标 · DB_COT 金银COT · DB_REPORT 每日报告(page内部写6部分+分领域+KOL+流动性+央行BS+持仓丰富blocks) · DB_WEEKLY 周报 · DB_HOLDINGS 机构持仓13F(3ba47eb5...)
+
+## backfill 历史 (2026-08)
+- backfill.py: 周采样一年(FRED日度as-of/COT周度) → DB_INDICATORS ~52行
+- **backfill_daily_2mo.py**: 过去2月【每日】真值(FRED日度/COT as-of/CNN F&G) → DB_INDICATORS每日行 + snapshots + DB_REPORT每日行。诚实边界:反爬web源(AAII/CBOE/BofA/Insider/Buffett/CAPE/margin)无历史真值→标"未找到"不编;每日AI结论无法重建→DB_REPORT综合结论只用规则兜底+前缀"[历史回填·非当日AI分析]"
 
 ## GitHub 每日副本
 - reports/<date>.md + reports/latest.md + data/daily/<date>.json + reports/weekly/<week>.md

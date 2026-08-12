@@ -144,12 +144,15 @@ def threshold_text(ind):
 
 
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
-             daily_notes=None, kol_changes=None, liquidity=None):
+             daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
+             holdings=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
     kol_changes: [{kol,sector,prev_dir,new_dir,date,comments,targets},...] KOL状态变化。
     liquidity: Economic Dashboard 流动性关键点 dict。
+    cb_balance: {US/JP/CN: 央行资产负债表 dict}(左资产右负债+WoW)。
+    holdings: {date, institutions:[...]} 机构13F持仓+变动(+可含Trump)。
     返回 HTML 文件路径。"""
     results = snap["results"]
     cot = snap.get("cot", {})
@@ -158,6 +161,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
     daily_notes = daily_notes or {}
     kol_changes = kol_changes or []
     liquidity = liquidity or {}
+    cb_balance = cb_balance or {}
+    holdings = holdings or {}
     # 综合结论：优先用 agent 生成，否则用规则兜底
     ai_conclusions = ai_conclusions or _rule_conclusions(results, checks, hit, cot)
 
@@ -297,6 +302,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         concl_long=ai_conclusions.get("long", ""),
         kol_changes=_kol_changes_html(kol_changes),
         liquidity=_liquidity_html(liquidity),
+        cb_balance=_cb_balance_html(cb_balance),
+        holdings=_holdings_html(holdings),
     )
     path = os.path.join(OUT_DIR, "index.html")
     open(path, "w", encoding="utf-8").write(html)
@@ -375,6 +382,152 @@ def _liquidity_html(liq):
     if notes.get("AI短评"):
         parts.append(f'<div class="liq-note"><b>AI 短评</b><br>{notes["AI短评"]}</div>')
     return "".join(parts) or '<p class="empty">流动性数据未就绪。</p>'
+
+
+def _cb_bs_num(v):
+    """大数字千分位; 兆/亿保留合适小数。"""
+    if v is None:
+        return "—"
+    if abs(v) >= 1000:
+        return f"{v:,.0f}"
+    return f"{v:,.2f}"
+
+
+def _cb_delta_span(line, unit_period):
+    """一个科目的 WoW/环比标记(带涨跌色+箭头)。"""
+    d = line.get("delta")
+    pct = line.get("pct")
+    if d is None:
+        return f'<span class="bs-wow bs-flat">{unit_period} n/a</span>'
+    if abs(d) < 1e-9:
+        arrow, cls = "→", "bs-flat"
+    elif d > 0:
+        arrow, cls = "▲", "bs-up"
+    else:
+        arrow, cls = "▼", "bs-down"
+    pcs = f" ({pct:+.2f}%)" if pct is not None else ""
+    return f'<span class="bs-wow {cls}">{arrow} {d:+,.2f}{pcs}</span>'
+
+
+def _cb_one_view(d):
+    """单个央行资产负债表 view：左资产右负债 + 总资产 + WoW/环比。"""
+    if not d or (not d.get("assets") and not d.get("liabilities")):
+        return (f'<div class="bs-card"><div class="bs-head">{d.get("flag","")} '
+                f'{d.get("name","")}</div><p class="empty">数据未找到</p></div>')
+    up = d.get("period", "")  # WoW / 较上期 / MoM
+
+    def side(items):
+        rows = ""
+        for it in items:
+            rows += (f'<div class="bs-line"><span class="bs-name">{it["name"]}</span>'
+                     f'<span class="bs-val">{_cb_bs_num(it["value"])}</span>'
+                     f'{_cb_delta_span(it, up)}</div>')
+        return rows
+
+    ta = d.get("total_assets")
+    total_a_html = ""
+    if ta:
+        total_a_html = (f'<div class="bs-line bs-total"><span class="bs-name">总资产</span>'
+                        f'<span class="bs-val">{_cb_bs_num(ta["value"])}</span>'
+                        f'{_cb_delta_span(ta, up)}</div>')
+    tl = d.get("total_liab")
+    total_l_html = ""
+    if tl:
+        total_l_html = (f'<div class="bs-line bs-total"><span class="bs-name">总负债</span>'
+                        f'<span class="bs-val">{_cb_bs_num(tl["value"])}</span>'
+                        f'{_cb_delta_span(tl, up)}</div>')
+    return (
+        f'<div class="bs-card">'
+        f'<div class="bs-head">{d.get("flag","")} {d.get("name","")}'
+        f'<span class="bs-meta">{d.get("date","")} · 单位 {d.get("unit","")} · 环比口径 {up}</span></div>'
+        f'<div class="bs-body">'
+        f'<div class="bs-col bs-assets"><div class="bs-col-h">资产 (Assets)</div>{side(d.get("assets",[]))}{total_a_html}</div>'
+        f'<div class="bs-col bs-liabs"><div class="bs-col-h">负债 (Liabilities)</div>{side(d.get("liabilities",[]))}{total_l_html}</div>'
+        f'</div></div>'
+    )
+
+
+def _cb_balance_html(cb):
+    """底部三国央行资产负债表板块(JP/CN/US)。"""
+    if not cb:
+        return '<p class="empty">央行资产负债表数据未就绪。</p>'
+    order = ["US", "JP", "CN"]
+    cards = "".join(_cb_one_view(cb.get(cc, {})) for cc in order if cc in cb)
+    return cards or '<p class="empty">央行资产负债表数据未就绪。</p>'
+
+
+def _action_cls(action):
+    """持仓变动 → 色标 class。"""
+    if "新建" in action:
+        return "h-new"
+    if "加仓" in action:
+        return "h-add"
+    if "减仓" in action:
+        return "h-cut"
+    if "清仓" in action:
+        return "h-exit"
+    return "h-flat"
+
+
+def _holdings_one(r):
+    """单个机构持仓卡片: 头部(KOL/基金/报告期/总市值) + TOP持仓+变动 + 新建/清仓。"""
+    if r.get("status") != "ok":
+        return (f'<div class="h-card"><div class="h-head">{r.get("fund","?")} '
+                f'<span class="h-kol">{r.get("kol","")}</span></div>'
+                f'<p class="empty">{r.get("status","数据未找到")}</p></div>')
+    tv = r.get("total_value", 0) / 1e9
+    lines = ""
+    for h in r.get("top_holdings", [])[:10]:
+        pct = f' <span class="h-pct">{h["pct"]:+.0f}%</span>' if h.get("pct") is not None else ""
+        val = f'${h["value"]/1e6:,.0f}M' if h.get("value") else "—"
+        lines += (f'<div class="h-line"><span class="h-act {_action_cls(h["action"])}">{h["action"]}</span>'
+                  f'<span class="h-iss">{h["issuer"]}</span>'
+                  f'<span class="h-val">{val}{pct}</span></div>')
+    newb = "、".join(x["issuer"] for x in r.get("new_buys", [])[:5])
+    exits = "、".join(x["issuer"] for x in r.get("exits", [])[:5])
+    extra = ""
+    if newb:
+        extra += f'<div class="h-extra"><b class="h-new">🆕新建</b> {newb}</div>'
+    if exits:
+        extra += f'<div class="h-extra"><b class="h-exit">❌清仓</b> {exits}</div>'
+    return (
+        f'<div class="h-card">'
+        f'<div class="h-head">{r.get("fund","")}<span class="h-kol">{r.get("kol","")}</span>'
+        f'<span class="h-meta">13F {r.get("report_date","")} · ${tv:,.1f}B · {r.get("n_positions",0)}持仓 · vs {r.get("prev_report_date","-")}</span></div>'
+        f'<div class="h-body">{lines}</div>{extra}</div>'
+    )
+
+
+def _holdings_trump(inst):
+    """Trump 卡片(数据来自公开披露, 由 cron agent 填 holdings 里 kol=Trump 的项)。"""
+    lines = ""
+    for h in inst.get("top_holdings", [])[:10]:
+        act = h.get("action", "")
+        lines += (f'<div class="h-line"><span class="h-act {_action_cls(act)}">{act or "持有"}</span>'
+                  f'<span class="h-iss">{h.get("issuer","")}</span>'
+                  f'<span class="h-val">{h.get("note","")}</span></div>')
+    src = inst.get("source_note", "公开财务披露(PFD)")
+    return (
+        f'<div class="h-card h-trump">'
+        f'<div class="h-head">🇺🇸 Donald Trump<span class="h-kol">公开披露</span>'
+        f'<span class="h-meta">{inst.get("report_date","")} · 来源: {src}</span></div>'
+        f'<div class="h-body">{lines or "<p class=empty>暂无最新披露数据</p>"}</div></div>'
+    )
+
+
+def _holdings_html(hd):
+    """底部机构持仓(13F)+Trump 板块。"""
+    insts = hd.get("institutions", []) if hd else []
+    if not insts:
+        return '<p class="empty">机构持仓数据未就绪(季度 13F 披露后更新)。</p>'
+    cards = ""
+    for r in insts:
+        if str(r.get("kol", "")).lower().startswith("trump") or r.get("source") == "PFD":
+            cards += _holdings_trump(r)
+        else:
+            cards += _holdings_one(r)
+    meta = f'<div class="h-note">数据源：SEC EDGAR 官方 13F（季度披露，季末后约45天更新）+ Trump 公开财务披露。变动＝最新一期 vs 上一期持股数：🆕新建 ▲加仓 ▼减仓 ❌清仓 →持平。</div>'
+    return cards + meta
 
 
 def _rule_conclusions(results, checks, hit, cot):
@@ -526,6 +679,48 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .liq-note {{ font-size: 12px; color: var(--text); line-height: 1.7; background: var(--card2); border-radius: 8px; padding: 10px 12px; margin-top: 8px; }}
   .liq-note b {{ color: var(--dust-blue); }}
   .empty {{ color: var(--muted); font-size: 13px; font-style: italic; }}
+  /* 三大央行资产负债表 view */
+  .bs-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; margin-bottom: 8px; }}
+  .bs-card {{ background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }}
+  .bs-head {{ font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 10px; display: flex; flex-direction: column; gap: 3px; }}
+  .bs-meta {{ font-size: 10px; font-weight: 400; color: var(--muted); font-family: var(--mono); }}
+  .bs-body {{ display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }}
+  .bs-col {{ background: var(--card2); border-radius: 8px; padding: 8px 10px; }}
+  .bs-assets {{ border-top: 3px solid var(--sage); }}
+  .bs-liabs {{ border-top: 3px solid var(--clay); }}
+  .bs-col-h {{ font-size: 11px; font-weight: 700; letter-spacing: .04em; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; }}
+  .bs-line {{ display: flex; flex-direction: column; padding: 4px 0; border-bottom: 1px dashed var(--border); }}
+  .bs-line:last-child {{ border-bottom: none; }}
+  .bs-name {{ font-size: 11px; color: var(--text); }}
+  .bs-val {{ font-size: 14px; font-weight: 700; font-family: var(--mono); color: var(--text); }}
+  .bs-wow {{ font-size: 10px; font-family: var(--mono); }}
+  .bs-up {{ color: var(--sage); }}
+  .bs-down {{ color: var(--clay); }}
+  .bs-flat {{ color: var(--muted); }}
+  .bs-total {{ margin-top: 4px; padding-top: 6px; border-top: 1.5px solid var(--border); }}
+  .bs-total .bs-name {{ font-weight: 700; }}
+  .bs-total .bs-val {{ font-size: 15px; }}
+  /* 机构持仓 13F 卡片 */
+  .h-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; margin-bottom: 8px; }}
+  .h-card {{ background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }}
+  .h-trump {{ border-left: 3px solid var(--mustard); }}
+  .h-head {{ font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 8px; display: flex; flex-direction: column; gap: 2px; }}
+  .h-kol {{ font-size: 12px; font-weight: 500; color: var(--dust-blue); }}
+  .h-meta {{ font-size: 10px; font-weight: 400; color: var(--muted); font-family: var(--mono); }}
+  .h-body {{ display: flex; flex-direction: column; gap: 2px; }}
+  .h-line {{ display: grid; grid-template-columns: 54px 1fr auto; gap: 6px; align-items: center; padding: 3px 0; border-bottom: 1px dashed var(--border); font-size: 11px; }}
+  .h-line:last-child {{ border-bottom: none; }}
+  .h-act {{ font-size: 10px; font-weight: 700; padding: 1px 4px; border-radius: 4px; text-align: center; white-space: nowrap; }}
+  .h-new {{ background: var(--sage); color: #fff; }}
+  .h-add {{ background: rgba(122,153,122,.22); color: var(--sage); }}
+  .h-cut {{ background: rgba(179,122,110,.22); color: var(--clay); }}
+  .h-exit {{ background: var(--clay); color: #fff; }}
+  .h-flat {{ background: var(--card2); color: var(--muted); }}
+  .h-iss {{ color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
+  .h-val {{ font-family: var(--mono); font-weight: 700; color: var(--text); white-space: nowrap; }}
+  .h-pct {{ color: var(--muted); font-weight: 500; }}
+  .h-extra {{ font-size: 11px; color: var(--text); margin-top: 6px; line-height: 1.5; }}
+  .h-note {{ grid-column: 1/-1; font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.6; }}
   .dot-g {{ background: var(--sage); }}
   .dot-y {{ background: var(--mustard); }}
   .dot-r {{ background: var(--clay); }}
@@ -706,6 +901,14 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附二：流动性要点(联动 Economic Dashboard) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>流动性要点 · 央行/国债</div>
   <div class="card liq-wrap">{liquidity}</div>
+
+  <!-- ═══ 附三：三大央行资产负债表 (JP/CN/US) ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>三大央行资产负债表 · 每日更新 (左资产 / 右负债 · 带环比)</div>
+  <div class="bs-grid">{cb_balance}</div>
+
+  <!-- ═══ 附四：知名机构持仓 (13F) + Trump ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>机构持仓追踪 · 13F + Trump (对比上期变动)</div>
+  <div class="h-grid">{holdings}</div>
 
   <div class="footnote">
     数据源：FRED (VIX/HY/收益率曲线) · CNN F&amp;G · CBOE · AAII · GuruFocus · Conference Board · Renaissance · currentmarketvaluation · multpl · CFTC COT (金银 commercial)。<br>

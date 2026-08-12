@@ -192,6 +192,112 @@ def fetch_liquidity_points():
     return out
 
 
+# ─────────── 三大央行资产负债表 (JP/CN/US) ───────────
+# 数据源: Economic Dashboard 已维护的 B5(PBoC月度)/B6(BoJ旬报)/B7(Fed周度) Notion DB。
+# 读最新两行, 每科目算环比。对比口径随频率不同(Fed=WoW真周环比 / BoJ=较上期旬报 / PBoC=较上月MoM)。
+CB_BS_DB = {
+    "US": "dea7e939bb394d538f3cea3ff0da5a6b",  # B7 Fed 周度
+    "JP": "481f6e1960e4444383d66a1e1cafb49b",  # B6 BoJ 旬报
+    "CN": "20b0eb37d69744109cca9fba0c61b929",  # B5 PBoC 月度
+}
+
+# 每国: (title字段, 单位, 对比口径标签, 资产科目[(显示名,字段)], 负债科目[(显示名,字段)], 总资产字段, 总负债字段)
+CB_BS_SPEC = {
+    "US": {
+        "name": "美联储 Fed", "flag": "🇺🇸", "title": "Week", "unit": "$B", "period": "WoW",
+        "assets": [
+            ("美国国债 Treasuries", "资产_Treasuries_B"),
+            ("MBS 抵押债", "资产_MBS_B"),
+            ("短期国债 Bills", "资产_Bills_B"),
+            ("FIMA 海外回购", "资产_FIMA_B"),
+            ("SRF 常备回购", "资产_SRF_B"),
+        ],
+        "liabilities": [
+            ("准备金 Reserves", "负债_Reserves_B"),
+            ("隔夜逆回购 ON RRP", "负债_ON_RRP_B"),
+            ("财政部账户 TGA", "负债_TGA_B"),
+            ("流通货币 Currency", "负债_Currency_B"),
+        ],
+        "total_a": "总资产_B", "total_l": None,
+    },
+    "JP": {
+        "name": "日本央行 BoJ", "flag": "🇯🇵", "title": "Date", "unit": "兆¥", "period": "较上期",
+        "assets": [
+            ("日本国债 JGB", "资产_国债JGB_兆JPY"),
+            ("公司债", "资产_公司债_兆JPY"),
+            ("ETF", "资产_ETF_兆JPY"),
+            ("J-REIT", "资产_J_REIT_兆JPY"),
+        ],
+        "liabilities": [
+            ("银行券 Banknotes", "负债_银行券_兆JPY"),
+            ("经常项目存款", "负债_经常项目存款_兆JPY"),
+            ("政府存款", "负债_政府存款_兆JPY"),
+        ],
+        "total_a": "总资产_兆JPY", "total_l": None,
+    },
+    "CN": {
+        "name": "中国央行 PBoC", "flag": "🇨🇳", "title": "Month", "unit": "亿¥", "period": "MoM",
+        "assets": [
+            ("外汇占款", "资产_外汇占款_亿"),
+            ("对政府债权", "资产_对政府债权_亿"),
+            ("对其他存款性公司债权", "资产_对其他存款性公司债权_亿"),
+        ],
+        "liabilities": [
+            ("储备货币", "负债_储备货币_亿"),
+            ("货币发行", "负债_货币发行_亿"),
+            ("政府存款", "负债_政府存款_亿"),
+        ],
+        "total_a": "总资产_亿", "total_l": "总负债_亿",
+    },
+}
+
+
+def _title_val(props, field):
+    p = props.get(field, {})
+    arr = p.get("title") or []
+    return "".join(x.get("plain_text", "") for x in arr)
+
+
+def _bs_line(cur, prev, disp, fld):
+    """一个科目: 取当前值 + 环比。返回 {name,value,delta,pct} 或 None(值缺)。"""
+    v = _num(cur.get(fld, {}))
+    if v is None:
+        return None
+    pv = _num(prev.get(fld, {})) if prev else None
+    delta = round(v - pv, 3) if pv is not None else None
+    pct = round((v - pv) / pv * 100, 2) if (pv not in (None, 0)) else None
+    return {"name": disp, "value": v, "delta": delta, "pct": pct}
+
+
+def fetch_cb_balance_sheets():
+    """读 JP/CN/US 三大央行资产负债表最新两期, 每科目算环比。
+    返回 {"US":{...}, "JP":{...}, "CN":{...}}, 每个:
+      {name, flag, unit, period, date, assets:[{name,value,delta,pct}], liabilities:[...],
+       total_assets:{value,delta,pct}, total_liab:{...}|None}
+    取到什么算什么, 缺的科目跳过(绝不编)。"""
+    out = {}
+    for cc, spec in CB_BS_SPEC.items():
+        rows = _latest_row(CB_BS_DB[cc], title_field=spec["title"])
+        if not rows:
+            out[cc] = {"name": spec["name"], "flag": spec["flag"], "unit": spec["unit"],
+                       "period": spec["period"], "date": None, "assets": [], "liabilities": [],
+                       "total_assets": None, "total_liab": None, "status": "未找到"}
+            continue
+        cur = rows[0]
+        prev = rows[1] if len(rows) > 1 else {}
+        assets = [x for x in (_bs_line(cur, prev, d, f) for d, f in spec["assets"]) if x]
+        liabs = [x for x in (_bs_line(cur, prev, d, f) for d, f in spec["liabilities"]) if x]
+        ta = _bs_line(cur, prev, "总资产", spec["total_a"]) if spec.get("total_a") else None
+        tl = _bs_line(cur, prev, "总负债", spec["total_l"]) if spec.get("total_l") else None
+        out[cc] = {
+            "name": spec["name"], "flag": spec["flag"], "unit": spec["unit"],
+            "period": spec["period"], "date": _title_val(cur, spec["title"]),
+            "assets": assets, "liabilities": liabs,
+            "total_assets": ta, "total_liab": tl,
+        }
+    return out
+
+
 if __name__ == "__main__":
     import json
     print("=== KOL 状态变化(近10天) ===")

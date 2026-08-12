@@ -41,6 +41,7 @@ NOTION_DB = {
     "cot":        ENV.get("DB_COT", ""),          # DB-2 金银 COT 时序
     "report":     ENV.get("DB_REPORT", ""),       # DB-3 每日扫描报告
     "weekly":     ENV.get("DB_WEEKLY", ""),        # DB-4 周报
+    "holdings":   ENV.get("DB_HOLDINGS", ""),       # DB-5 机构持仓(13F)+Trump
 }
 
 # ─────────────────────── 信号方向 ───────────────────────

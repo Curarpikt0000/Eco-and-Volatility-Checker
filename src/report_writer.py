@@ -145,6 +145,20 @@ def write_daily_page_content(date_str, payload):
             if para.strip():
                 blocks.append(_bullet(para.strip()))
 
+    # 三大央行资产负债表摘要
+    if payload.get("cb_balance_notes"):
+        blocks.append(_h2("＋ 三大央行资产负债表（US/JP/CN · 带环比）"))
+        for para in payload["cb_balance_notes"].split("\n"):
+            if para.strip():
+                blocks.append(_bullet(para.strip()))
+
+    # 机构持仓 13F + Trump 要点
+    if payload.get("holdings_notes"):
+        blocks.append(_h2("＋ 机构持仓追踪（13F + Trump · 对比上期）"))
+        for para in payload["holdings_notes"].split("\n"):
+            if para.strip():
+                blocks.append(_bullet(para.strip()))
+
     # dashboard 链接
     if payload.get("dashboard_url"):
         blocks.append(_divider())

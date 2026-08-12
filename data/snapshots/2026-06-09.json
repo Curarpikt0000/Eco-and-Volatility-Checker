@@ -1,16 +1,16 @@
 {
-  "date": "2026-08-03",
+  "date": "2026-06-09",
   "results": {
     "vix": {
       "key": "vix",
-      "value": 15.86,
-      "as_of": "2026-08-03",
+      "value": 19.87,
+      "as_of": "2026-06-09",
       "status": "ok"
     },
     "fear_greed": {
       "key": "fear_greed",
-      "value": 50.7,
-      "as_of": "2026-08-03",
+      "value": 33.8,
+      "as_of": "2026-06-09",
       "status": "ok"
     },
     "aaii_bull_bear": {
@@ -64,7 +64,7 @@
     "hy_oas": {
       "key": "hy_oas",
       "value": 2.78,
-      "as_of": "2026-08-03",
+      "as_of": "2026-06-09",
       "status": "ok"
     },
     "ad_line": {
@@ -87,8 +87,8 @@
     },
     "yield_curve": {
       "key": "yield_curve",
-      "value": 0.45,
-      "as_of": "2026-08-03",
+      "value": 0.4,
+      "as_of": "2026-06-09",
       "status": "ok"
     },
     "lei": {
@@ -106,33 +106,33 @@
   },
   "cot": {
     "gold": {
-      "as_of": "2026-07-28",
-      "open_interest": 384603,
-      "comm_long": 75460,
-      "comm_short": 287769,
-      "comm_net": -212309,
-      "noncomm_long": 219622,
-      "noncomm_short": 37552,
-      "noncomm_net": 182070,
+      "as_of": "2026-06-09",
+      "open_interest": 332709,
+      "comm_long": 58986,
+      "comm_short": 260022,
+      "comm_net": -201036,
+      "noncomm_long": 207984,
+      "noncomm_short": 34147,
+      "noncomm_net": 173837,
       "metal": "gold",
-      "comm_net_wow": 890,
-      "comm_long_wow": -4997,
-      "comm_short_wow": -5887,
+      "comm_net_wow": 5309,
+      "comm_long_wow": 5135,
+      "comm_short_wow": -174,
       "comm_surge": false
     },
     "silver": {
-      "as_of": "2026-07-28",
-      "open_interest": 106719,
-      "comm_long": 32507,
-      "comm_short": 71316,
-      "comm_net": -38809,
-      "noncomm_long": 35314,
-      "noncomm_short": 13097,
-      "noncomm_net": 22217,
+      "as_of": "2026-06-09",
+      "open_interest": 103440,
+      "comm_long": 26660,
+      "comm_short": 67028,
+      "comm_net": -40368,
+      "noncomm_long": 32487,
+      "noncomm_short": 10273,
+      "noncomm_net": 22214,
       "metal": "silver",
-      "comm_net_wow": 1644,
-      "comm_long_wow": 457,
-      "comm_short_wow": -1187,
+      "comm_net_wow": 2293,
+      "comm_long_wow": 878,
+      "comm_short_wow": -1415,
       "comm_surge": false
     }
   },

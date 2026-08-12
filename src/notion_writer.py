@@ -52,21 +52,22 @@ def prop_date(v):
     return {"date": ({"start": v} if v else None)}
 
 
-def query_by_title(db_id, title_value):
+def query_by_title(db_id, title_value, title_field="Date"):
     """按 title 精确匹配查行，返回 page_id 或 None。"""
     st, body = _req("POST", f"/databases/{db_id}/query",
-                    {"filter": {"property": "Date", "title": {"equals": str(title_value)}},
+                    {"filter": {"property": title_field, "title": {"equals": str(title_value)}},
                      "page_size": 1})
     if st == 200 and body.get("results"):
         return body["results"][0]["id"]
     return None
 
 
-def upsert(db_id, title_value, props):
-    """幂等 upsert：存在则 patch，否则 create。返回 page_id 或 None。"""
+def upsert(db_id, title_value, props, title_field="Date"):
+    """幂等 upsert：存在则 patch，否则 create。返回 page_id 或 None。
+    title_field: title 属性名(默认 Date, 持仓 DB 用 机构-期)。"""
     props = dict(props)
-    props["Date"] = prop_title(title_value)
-    pid = query_by_title(db_id, title_value)
+    props[title_field] = prop_title(title_value)
+    pid = query_by_title(db_id, title_value, title_field)
     if pid:
         st, body = _req("PATCH", f"/pages/{pid}", {"properties": props})
     else:

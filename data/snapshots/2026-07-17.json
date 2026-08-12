@@ -15,51 +15,51 @@
     },
     "aaii_bull_bear": {
       "key": "aaii_bull_bear",
-      "value": -1.0,
-      "as_of": "2026-07-17",
-      "status": "ok"
+      "value": null,
+      "as_of": null,
+      "status": "未找到"
     },
     "put_call": {
       "key": "put_call",
-      "value": 0.61,
-      "as_of": "2026-07-17",
-      "status": "ok"
+      "value": null,
+      "as_of": null,
+      "status": "未找到"
     },
     "naaim": {
       "key": "naaim",
       "value": null,
       "as_of": null,
-      "status": "无历史"
+      "status": "未找到"
     },
     "margin_debt": {
       "key": "margin_debt",
-      "value": 1502.1,
-      "as_of": "2026-07-17",
-      "status": "ok"
+      "value": null,
+      "as_of": null,
+      "status": "未找到"
     },
     "margin_gdp": {
       "key": "margin_gdp",
-      "value": 4.63,
-      "as_of": "2026-07-17",
-      "status": "ok"
+      "value": null,
+      "as_of": null,
+      "status": "未找到"
     },
     "ipo_count": {
       "key": "ipo_count",
       "value": null,
       "as_of": null,
-      "status": "无历史"
+      "status": "未找到"
     },
     "insider": {
       "key": "insider",
-      "value": 0.25,
-      "as_of": "2026-07-17",
-      "status": "ok"
+      "value": null,
+      "as_of": null,
+      "status": "未找到"
     },
     "bofa_bull_bear": {
       "key": "bofa_bull_bear",
-      "value": 9.7,
-      "as_of": "2026-07-17",
-      "status": "ok"
+      "value": null,
+      "as_of": null,
+      "status": "未找到"
     },
     "hy_oas": {
       "key": "hy_oas",
@@ -69,21 +69,21 @@
     },
     "ad_line": {
       "key": "ad_line",
-      "value": false,
-      "as_of": "2026-07-17",
-      "status": "ok"
+      "value": null,
+      "as_of": null,
+      "status": "未找到"
     },
     "buffett": {
       "key": "buffett",
       "value": null,
       "as_of": null,
-      "status": "无历史"
+      "status": "未找到"
     },
     "cape": {
       "key": "cape",
       "value": null,
       "as_of": null,
-      "status": "无历史"
+      "status": "未找到"
     },
     "yield_curve": {
       "key": "yield_curve",
@@ -93,17 +93,48 @@
     },
     "lei": {
       "key": "lei",
-      "value": -0.3,
-      "as_of": "2026-07-17",
-      "status": "ok"
+      "value": null,
+      "as_of": null,
+      "status": "未找到"
     },
     "aaii_alloc": {
       "key": "aaii_alloc",
-      "value": 70.38,
-      "as_of": "2026-07-17",
-      "status": "ok"
+      "value": null,
+      "as_of": null,
+      "status": "未找到"
     }
   },
-  "cot": {},
-  "generated_at": "daily-backfill"
+  "cot": {
+    "gold": {
+      "as_of": "2026-07-14",
+      "open_interest": 383689,
+      "comm_long": 79639,
+      "comm_short": 294427,
+      "comm_net": -214788,
+      "noncomm_long": 227310,
+      "noncomm_short": 40628,
+      "noncomm_net": 186682,
+      "metal": "gold",
+      "comm_net_wow": 7494,
+      "comm_long_wow": 20075,
+      "comm_short_wow": 12581,
+      "comm_surge": true
+    },
+    "silver": {
+      "as_of": "2026-07-14",
+      "open_interest": 105023,
+      "comm_long": 32919,
+      "comm_short": 75516,
+      "comm_net": -42597,
+      "noncomm_long": 36246,
+      "noncomm_short": 11172,
+      "noncomm_net": 25074,
+      "metal": "silver",
+      "comm_net_wow": 498,
+      "comm_long_wow": 1582,
+      "comm_short_wow": 1084,
+      "comm_surge": false
+    }
+  },
+  "generated_at": "backfill-daily"
 }
