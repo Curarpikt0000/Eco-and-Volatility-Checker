@@ -42,6 +42,7 @@ Notion 3 时序 DB → 莫兰迪配色 dashboard（雷达图 + 仪表盘 + 6 部
 - **NAAIM 已于 2026-08-01 转付费停更** → 标注不编。
 - **金银 COT 用 CFTC 官方 Socrata API**(publicreporting.cftc.gov)，非 barchart(反爬/付费)，同源但更稳可 backfill。COMEX 主力合约精确匹配 `GOLD/SILVER - COMMODITY EXCHANGE INC.`(排除 MICRO)。
 - **纪律**：绝不编数字，取不到标 status；阈值静态不随情绪调；写后读回验证。
+- ★**web_search 后端故障判定**：web_search 偶发整体返回空(success:true 但 data.web:[])，泛主题查询(如"gold price outlook 2026")也空=后端挂了/限流，非"人名检索限制"、更非"数据不存在"。诊断法:测一个必有结果的泛 query,若也空即确诊后端故障。此时 KOL 全量抓取会全"未找到"(诚实但无效),绝不据此下结论,等后端恢复 cron 每日 11:00 自动重跑填真值。
 
 ## Cron (JST)
 - eco-vol-01-daily-scan-report 每日 **11:00**(工作日)：抓数+KOL独立抓取+流动性+AI分析→写Notion 3DB+每日报告page内部+dashboard+GitHub副本+push→Telegram详细日报(6部分+分领域分析+KOL转向+流动性)。11点是为等 KOL/Economic Dashboard 的09:00数据跑完
@@ -52,7 +53,9 @@ Notion 3 时序 DB → 莫兰迪配色 dashboard（雷达图 + 仪表盘 + 6 部
 - **KOL 独立数据源**：从 KOL 项目 GitHub 拉名册 data/kol_registry.json(80 KOL)，Eco **每日自己 web_search 全量 80 个 KOL** 判方向→写 data/kol_independent.json(不共用另一 agent 的 Notion 结论,准确性独立)。external_data.load_independent_kol() 优先,kol_stance_changes() 读另一agent DB 仅兜底
 - **Economic Dashboard 流动性**：external_data.fetch_liquidity_points() 读 Fed准备金/RRP/TGA(A5)+收益率(A1)+风控灯/关键变动(A6 750f9b46...)
 - **三大央行资产负债表(US/JP/CN)**：external_data.fetch_cb_balance_sheets() 读 Economic Dashboard 已维护的 B7(Fed周度 dea7e939)/B6(BoJ旬报 481f6e19)/B5(PBoC月度 20b0eb37) 最新两行,每科目算环比(Fed=WoW / BoJ=较上期 / PBoC=MoM)。dashboard 底部 bs-grid 三 view:左资产/右负债,每值带涨跌箭头+%
-- **机构持仓 13F + Trump**：holdings_13f.py 走 SEC EDGAR 官方(免费,可查历史)。8个知名机构(Berkshire/Bridgewater/Scion/Soros/ARK/Pershing/Appaloosa/Duquesne)最新vs上期13F,按issuer聚合算变动(🆕新建/▲加仓/▼减仓/❌清仓/→持平)。★单位自适应:部分旧式filer(如Druckenmiller)value填千美元,用中位数隐含股价<$1判定×1000。Trump无13F→cron agent web_search公开披露(PFD)append。写 Notion DB_HOLDINGS(title字段"机构-期",非Date→upsert传title_field) + dashboard 底部 h-grid 卡片
+- **机构持仓 13F + Trump**：holdings_13f.py 走 SEC EDGAR 官方(免费,可查历史)。9个有活跃13F的机构(Berkshire/Bridgewater/Scion/Soros/ARK/Pershing/Appaloosa/Duquesne + Oxbow[Ted Oakley,KOL名册里唯一有活跃13F的])最新vs上期13F,按issuer聚合算变动(🆕新建/▲加仓/▼减仓/❌清仓/→持平)。★单位自适应:部分旧式filer(如Druckenmiller)value填千美元,用中位数隐含股价<$1判定×1000。Trump无13F→cron agent web_search公开披露(PFD)append。写 Notion DB_HOLDINGS(title字段"机构-期",非Date→upsert传title_field) + dashboard 底部 h-grid 卡片
+- ★KOL名册13F覆盖真相(probe_13f_cik.py探明):80个KOL多为分析师/经济学家/海外/债券/加密,无季度13F。名册候选11个有基金关键词的,实际有活跃13F仅Oxbow(Ted Oakley);Hayman(Kyle Bass 2016停)/PIMCO(2012停)等早停报。所以机构持仓覆盖=8知名+Oxbow=9,已是诚实上限
+- **2025全年回填**:holdings_13f.backfill_2025() 拉各机构2025四季度(+2024Q4基准)13F,每季vs上期算变动→DB_HOLDINGS写35机构-期行(Berkshire/Soros/ARK等各4期,Scion 3期)。CLI: python -m src.holdings_13f --backfill2025
 - dashboard 底部四板块(顺序):当日KOL状态变化 → 流动性要点 → 三大央行资产负债表 → 机构持仓13F+Trump；每个 metric 卡片加 📌 当日短评
 
 ## Notion 5 DB (id 在 .env)

@@ -33,6 +33,7 @@ INSTITUTIONS = [
     {"kol": "Bill Ackman", "fund": "Pershing Square", "cik": "1336528"},
     {"kol": "David Tepper", "fund": "Appaloosa", "cik": "1656456"},
     {"kol": "Stanley Druckenmiller", "fund": "Duquesne Family Office", "cik": "1536411"},
+    {"kol": "Ted Oakley", "fund": "Oxbow Advisors", "cik": "1564770"},
 ]
 
 
@@ -195,6 +196,95 @@ def load_holdings():
     return {}
 
 
+def find_all_13f(cik, limit=12):
+    """返回该 CIK 最近 limit 期 13F-HR: [(filingDate, accession, reportDate),...] 降序。"""
+    cik10 = f"{int(cik):010d}"
+    d = json.loads(_get(f"https://data.sec.gov/submissions/CIK{cik10}.json"))
+    rec = d["filings"]["recent"]
+    forms, accs, fdates = rec["form"], rec["accessionNumber"], rec["filingDate"]
+    rdates = rec.get("reportDate", [""] * len(forms))
+    out = []
+    for i, f in enumerate(forms):
+        if f.startswith("13F-HR") and not f.endswith("/A"):
+            out.append((fdates[i], accs[i], rdates[i] if i < len(rdates) else ""))
+        if len(out) >= limit:
+            break
+    return out, d.get("name", "")
+
+
+def backfill_2025(institutions=None, write_notion=True):
+    """回填 2025 全年(+2024Q4基准)各机构每季 13F 持仓+变动 → Notion + json。
+    2025 季度 report_date: 2025-03-31 / 06-30 / 09-30 / 12-31。
+    每期变动 = 该期 vs 紧邻上一期。绝不编: 无该期就跳过。"""
+    import config as c
+    import notion_writer as nw
+    institutions = institutions or INSTITUTIONS
+    db = c.NOTION_DB.get("holdings") if write_notion else None
+    all_rows = []
+    total_written = 0
+    for inst in institutions:
+        try:
+            filings, name = find_all_13f(inst["cik"], limit=12)
+        except Exception as e:
+            print(f"  {inst['fund']}: submissions失败 {type(e).__name__}", flush=True)
+            continue
+        # 只保留 report_date 在 2024-12-31 ~ 2025-12-31 的期(2024Q4 作变动基准)
+        want = [f for f in filings if f[2] and "2024-12-31" <= f[2] <= "2025-12-31"]
+        want.sort(key=lambda x: x[2])  # 升序按报告期
+        if not want:
+            print(f"  {inst['fund']}: 2025 无 13F", flush=True)
+            continue
+        parsed = {}  # report_date -> agg
+        for fd, acc, rd in want:
+            time.sleep(0.3)
+            try:
+                parsed[rd] = parse_info_table(inst["cik"], acc)
+            except Exception as e:
+                print(f"    {inst['fund']} {rd} 解析失败 {type(e).__name__}", flush=True)
+        rds = sorted(parsed.keys())
+        # 对 2025 的每期(跳过纯基准 2024-12-31 除非它也要展示)算变动
+        for i, rd in enumerate(rds):
+            if not rd.startswith("2025"):
+                continue  # 2024Q4 仅作基准, 不单独写行
+            cur = parsed[rd]
+            prev = parsed[rds[i - 1]] if i > 0 else {}
+            changes = diff_holdings(cur, prev)
+            total_val = sum(v["value"] for v in cur.values())
+            row = {
+                **inst, "sec_name": name, "status": "ok",
+                "report_date": rd, "prev_report_date": rds[i - 1] if i > 0 else None,
+                "total_value": total_val, "n_positions": len(cur),
+                "top_holdings": changes[:12],
+                "new_buys": [x for x in changes if x["action"] == "🆕新建"][:6],
+                "exits": [x for x in changes if x["action"] == "❌清仓"][:6],
+            }
+            all_rows.append(row)
+            if db:
+                title = f"{inst['fund']} {rd}"
+                props = {
+                    "KOL": nw.prop_text(inst.get("kol", "")),
+                    "基金": nw.prop_text(inst.get("fund", "")),
+                    "报告期": nw.prop_date(rd),
+                    "上期": nw.prop_text(row["prev_report_date"] or "无上期"),
+                    "总市值_B": nw.prop_num(round(total_val / 1e9, 2)),
+                    "持仓数": nw.prop_num(len(cur)),
+                    "TOP持仓与变动": nw.prop_text(_fmt_holdings_text(row["top_holdings"])),
+                    "新建仓": nw.prop_text(_fmt_holdings_text(row["new_buys"]) or "无"),
+                    "清仓": nw.prop_text(_fmt_holdings_text(row["exits"], with_val=False) or "无"),
+                    "数据源": nw.prop_select("SEC 13F"),
+                }
+                if nw.upsert(db, title, props, title_field="机构-期"):
+                    total_written += 1
+        print(f"  {inst['fund']}: 2025 写 {sum(1 for r in rds if r.startswith('2025'))} 期", flush=True)
+        time.sleep(0.4)
+    # 存 2025 历史 json
+    json.dump({"date": "2025-backfill", "institutions": all_rows},
+              open(os.path.join(DATA_DIR, "holdings_13f_2025.json"), "w"),
+              ensure_ascii=False, indent=2, default=str)
+    print(f"[13F-2025] 回填 {len(all_rows)} 机构-期行, Notion 写 {total_written}", flush=True)
+    return all_rows
+
+
 def _fmt_holdings_text(items, with_val=True):
     """把持仓变动列表格式化为 Notion 文本。"""
     lines = []
@@ -241,7 +331,15 @@ if __name__ == "__main__":
     import argparse
     ap = argparse.ArgumentParser()
     ap.add_argument("--one", help="只测一个 fund 关键字")
+    ap.add_argument("--backfill2025", action="store_true", help="回填2025全年各机构季度13F")
     args = ap.parse_args()
+    if args.backfill2025:
+        insts = INSTITUTIONS
+        if args.one:
+            insts = [i for i in INSTITUTIONS if args.one.lower() in i["fund"].lower()]
+        print(f"[13F-2025] 回填 {len(insts)} 机构...", flush=True)
+        backfill_2025(insts, write_notion=True)
+        sys.exit(0)
     insts = INSTITUTIONS
     if args.one:
         insts = [i for i in INSTITUTIONS if args.one.lower() in i["fund"].lower()]
