@@ -223,6 +223,29 @@ def fetch_all(institutions=None, save=True):
         print(f"  {inst['fund']}: {st} report={rd} positions={r.get('n_positions','-')}", flush=True)
         time.sleep(0.4)
     out = {"date": today, "institutions": results}
+    # ── 批量补全 ticker(硬编码/缓存缺的走 OpenFIGI, 覆盖率~100%) ──
+    try:
+        from holdings_clean import enrich_tickers, cusip_to_ticker
+        all_cusips = []
+        for r in results:
+            for h in r.get("top_holdings", []):
+                if h.get("cusip") and not (h.get("ticker") or "").strip():
+                    all_cusips.append(h["cusip"])
+        if all_cusips:
+            print(f"  [ticker] 补全 {len(set(all_cusips))} 个缺失 CUSIP via OpenFIGI...", flush=True)
+            enrich_tickers(all_cusips, online=True)
+            # 回填
+            filled = 0
+            for r in results:
+                for h in r.get("top_holdings", []):
+                    if not (h.get("ticker") or "").strip() and h.get("cusip"):
+                        tk = cusip_to_ticker(h["cusip"])
+                        if tk:
+                            h["ticker"] = tk
+                            filled += 1
+            print(f"  [ticker] 回填 {filled} 个", flush=True)
+    except Exception as e:
+        print(f"  [ticker] 补全跳过: {e}", flush=True)
     if save:
         json.dump(out, open(HOLDINGS_JSON, "w"), ensure_ascii=False, indent=2, default=str)
     return out
