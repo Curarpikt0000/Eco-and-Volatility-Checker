@@ -74,8 +74,23 @@ def build_history():
     return fred_hist, fg_hist, cot_hist
 
 
-def results_for_day(day, fred_hist, fg_hist):
-    """组装某日 results(仅真值可得的填, 其余标 未找到)。"""
+def results_for_day(day, fred_hist, fg_hist, overrides=None):
+    """组装某日 results(仅真值可得的填, 其余标 未找到)。
+    overrides: manual_overrides.json。对反爬/search 源, 若其 as_of 与 day 相近(±7天)则用其值兜底,
+    避免把 backfill 的 None 覆盖掉 agent 已抓到的真值(如 BofA Bull&Bear=9.7)。更早历史仍留空(诚实)。"""
+    import datetime as _dt
+    overrides = overrides or {}
+
+    def _near(as_of, target, days=7):
+        if not as_of:
+            return False
+        try:
+            a = _dt.date.fromisoformat(as_of[:10])
+            t = _dt.date.fromisoformat(target[:10])
+            return abs((t - a).days) <= days
+        except Exception:
+            return False
+
     results = {}
     for ind in c.INDICATORS:
         key = ind["key"]
@@ -86,8 +101,13 @@ def results_for_day(day, fred_hist, fg_hist):
             v = _asof(fg_hist, day)
         if v is not None:
             results[key] = {"key": key, "value": v, "as_of": day, "status": "ok"}
+        elif key in overrides and overrides[key].get("value") is not None and _near(overrides[key].get("as_of"), day):
+            # 反爬/search 源: overrides 有近日真值 → 用它兜底(不覆盖 agent 已抓到的真值)
+            ov = dict(overrides[key])
+            ov["key"] = key
+            results[key] = ov
         else:
-            # 反爬/月度源: 无历史真值 → 诚实留空
+            # 反爬/月度源无历史真值 → 诚实留空
             results[key] = {"key": key, "value": None, "as_of": None, "status": "未找到"}
     return results
 
@@ -178,6 +198,14 @@ def main():
     args = ap.parse_args()
 
     fred_hist, fg_hist, cot_hist = build_history()
+    # 读 overrides(agent 已抓的反爬/search 源真值), 用于近日兜底避免覆盖
+    ov_path = os.path.join(os.path.dirname(__file__), "..", "data", "manual_overrides.json")
+    overrides = {}
+    if os.path.exists(ov_path):
+        try:
+            overrides = json.load(open(ov_path))
+        except Exception:
+            overrides = {}
     days = trading_days(args.days)
     print(f"[backfill-daily] 回填 {len(days)} 个交易日: {days[0]} ~ {days[-1]}", flush=True)
 
@@ -185,7 +213,7 @@ def main():
     db_rep = c.NOTION_DB["report"]
     wi = wr = 0
     for i, day in enumerate(days, 1):
-        results = results_for_day(day, fred_hist, fg_hist)
+        results = results_for_day(day, fred_hist, fg_hist, overrides)
         cotr = cot_for_day(day, cot_hist)
         # 先存快照(供后续 report 的 history_getter + dashboard 折线)
         snap = {"date": day, "results": results, "cot": cotr, "generated_at": "backfill-daily"}

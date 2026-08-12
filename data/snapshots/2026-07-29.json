@@ -50,10 +50,10 @@
       "status": "未找到"
     },
     "insider": {
-      "key": "insider",
-      "value": null,
-      "as_of": null,
-      "status": "未找到"
+      "value": 0.25,
+      "as_of": "2026-08-01",
+      "status": "ok",
+      "key": "insider"
     },
     "bofa_bull_bear": {
       "key": "bofa_bull_bear",
@@ -98,10 +98,10 @@
       "status": "未找到"
     },
     "aaii_alloc": {
-      "key": "aaii_alloc",
-      "value": null,
-      "as_of": null,
-      "status": "未找到"
+      "value": 70.38,
+      "as_of": "2026-07-31",
+      "status": "ok",
+      "key": "aaii_alloc"
     }
   },
   "cot": {
