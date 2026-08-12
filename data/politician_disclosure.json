@@ -1,0 +1,244 @@
+{
+  "as_of": "2026-08-12",
+  "politicians": [
+    {
+      "name": "Nancy Pelosi",
+      "title": "众议院议员 (加州 · 前议长)",
+      "n_filings": 5,
+      "n_recent_parsed": 3,
+      "trades": [
+        {
+          "ticker": "INTC",
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "05/29/2026",
+          "amount_range": "$1,000,001 - $5,000,000",
+          "filing_date": "6/23/2026",
+          "doc_id": "20034836"
+        },
+        {
+          "ticker": "UBER",
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "05/29/2026",
+          "amount_range": "$500,001 - $1,000,000",
+          "filing_date": "6/23/2026",
+          "doc_id": "20034836"
+        },
+        {
+          "ticker": "AB",
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "01/16/2026",
+          "amount_range": "$1,000,001 - $5,000,000",
+          "filing_date": "1/23/2026",
+          "doc_id": "20033725"
+        },
+        {
+          "ticker": "GOOGL",
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "01/16/2026",
+          "amount_range": "$500,001 - $1,000,000",
+          "filing_date": "1/23/2026",
+          "doc_id": "20033725"
+        },
+        {
+          "ticker": "AMZN",
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "01/16/2026",
+          "amount_range": "$500,001 - $1,000,000",
+          "filing_date": "1/23/2026",
+          "doc_id": "20033725"
+        },
+        {
+          "ticker": "NVDA",
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "01/16/2026",
+          "amount_range": "$250,001 - $500,000",
+          "filing_date": "1/23/2026",
+          "doc_id": "20033725"
+        },
+        {
+          "ticker": null,
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "01/16/2026",
+          "amount_range": "$50,001",
+          "filing_date": "1/23/2026",
+          "doc_id": "20033725"
+        },
+        {
+          "ticker": "VST",
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "01/16/2026",
+          "amount_range": "$100,001 - $250,000",
+          "filing_date": "1/23/2026",
+          "doc_id": "20033725"
+        },
+        {
+          "ticker": "GOOGL",
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "12/30/2025",
+          "amount_range": "$250,001 - $500,000",
+          "filing_date": "1/23/2026",
+          "doc_id": "20033725"
+        },
+        {
+          "ticker": "GOOGL",
+          "direction": "S (partial)",
+          "dir_cn": "部分卖出",
+          "txn_date": "12/30/2025",
+          "amount_range": "$1,000,001 - $5,000,000",
+          "filing_date": "1/23/2026",
+          "doc_id": "20033725"
+        },
+        {
+          "ticker": "AMZN",
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "12/30/2025",
+          "amount_range": "$100,001 - $250,000",
+          "filing_date": "1/23/2026",
+          "doc_id": "20033725"
+        },
+        {
+          "ticker": "AAPL",
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "12/30/2025",
+          "amount_range": "$250,001 - $500,000",
+          "filing_date": "1/23/2026",
+          "doc_id": "20033725"
+        },
+        {
+          "ticker": "AAPL",
+          "direction": "S (partial)",
+          "dir_cn": "部分卖出",
+          "txn_date": "12/30/2025",
+          "amount_range": "$5,000,001 - $25,000,000",
+          "filing_date": "1/23/2026",
+          "doc_id": "20033725"
+        },
+        {
+          "ticker": "NVDA",
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "12/30/2025",
+          "amount_range": "$100,001 - $250,000",
+          "filing_date": "1/23/2026",
+          "doc_id": "20033725"
+        },
+        {
+          "ticker": "PYPL",
+          "direction": "S",
+          "dir_cn": "卖出",
+          "txn_date": "12/30/2025",
+          "amount_range": "$250,001 - $500,000",
+          "filing_date": "1/23/2026",
+          "doc_id": "20033725"
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "name": "Dan Crenshaw",
+      "title": "众议院议员 (德州)",
+      "n_filings": 1,
+      "n_recent_parsed": 1,
+      "trades": [
+        {
+          "ticker": "GOOG",
+          "direction": "S",
+          "dir_cn": "卖出",
+          "txn_date": "06/01/2026",
+          "amount_range": "$1,001 - $15,000",
+          "filing_date": "7/16/2026",
+          "doc_id": "20035024"
+        },
+        {
+          "ticker": "AMZN",
+          "direction": "S",
+          "dir_cn": "卖出",
+          "txn_date": "06/01/2026",
+          "amount_range": "$1,001 - $15,000",
+          "filing_date": "7/16/2026",
+          "doc_id": "20035024"
+        },
+        {
+          "ticker": "AAPL",
+          "direction": "S",
+          "dir_cn": "卖出",
+          "txn_date": "06/01/2026",
+          "amount_range": "$1,001 - $15,000",
+          "filing_date": "7/16/2026",
+          "doc_id": "20035024"
+        },
+        {
+          "ticker": null,
+          "direction": "S",
+          "dir_cn": "卖出",
+          "txn_date": "06/01/2026",
+          "amount_range": "$1,001 - $15,000",
+          "filing_date": "7/16/2026",
+          "doc_id": "20035024"
+        },
+        {
+          "ticker": "META",
+          "direction": "S",
+          "dir_cn": "卖出",
+          "txn_date": "06/01/2026",
+          "amount_range": "$1,001 - $15,000",
+          "filing_date": "7/16/2026",
+          "doc_id": "20035024"
+        },
+        {
+          "ticker": "USOU",
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "06/01/2026",
+          "amount_range": "$1,001 - $15,000",
+          "filing_date": "7/16/2026",
+          "doc_id": "20035024"
+        },
+        {
+          "ticker": "META",
+          "direction": "S",
+          "dir_cn": "卖出",
+          "txn_date": "05/05/2026",
+          "amount_range": "$1,001 - $15,000",
+          "filing_date": "7/16/2026",
+          "doc_id": "20035024"
+        },
+        {
+          "ticker": "META",
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "04/28/2026",
+          "amount_range": "$1,001 - $15,000",
+          "filing_date": "7/16/2026",
+          "doc_id": "20035024"
+        }
+      ],
+      "status": "ok"
+    },
+    {
+      "name": "Donald Trump",
+      "title": "总统",
+      "status": "no_free_source",
+      "note": "非国会成员, 无 STOCK Act PTR 义务; 仅 OGE Form 278e 年度披露(非交易级), 无免费逐笔交易结构化源",
+      "trades": []
+    },
+    {
+      "name": "Tommy Tuberville",
+      "title": "参议员 (阿拉巴马)",
+      "status": "no_free_source",
+      "note": "参议员披露在 efdsearch.senate.gov(需会话 cookie), 本模块未覆盖; 待后续接入",
+      "trades": []
+    }
+  ]
+}

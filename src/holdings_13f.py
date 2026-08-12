@@ -16,6 +16,7 @@ Trump 无 13F(非投资经理) → 单独卡片, 数据由 cron agent web_search
 import sys, os, json, re, time, urllib.request, datetime
 
 sys.path.insert(0, os.path.dirname(__file__))
+from holdings_clean import clean_issuer, cusip_to_ticker, display_name
 
 UA = "EcoVolChecker research chao.jin@example.com"
 HDRS = {"User-Agent": UA}
@@ -91,9 +92,12 @@ def parse_info_table(cik, accession):
         nm = re.search(r"<(?:\w+:)?nameOfIssuer>(.*?)</(?:\w+:)?nameOfIssuer>", b, re.S)
         vl = re.search(r"<(?:\w+:)?value>(.*?)</(?:\w+:)?value>", b, re.S)
         sh = re.search(r"<(?:\w+:)?sshPrnamt>(.*?)</(?:\w+:)?sshPrnamt>", b, re.S)
+        cu = re.search(r"<(?:\w+:)?cusip>(.*?)</(?:\w+:)?cusip>", b, re.S)
         if not nm:
             continue
-        issuer = nm.group(1).strip().upper()
+        # issuer 键用清洗后名(解 HTML 实体+规范化), 保证聚合不因 &Amp; 分裂
+        issuer = clean_issuer(nm.group(1)).upper()
+        cusip = cu.group(1).strip() if cu else ""
         try:
             value = int(re.sub(r"[^\d]", "", vl.group(1))) if vl else 0
         except Exception:
@@ -102,7 +106,7 @@ def parse_info_table(cik, accession):
             shares = int(re.sub(r"[^\d]", "", sh.group(1))) if sh else 0
         except Exception:
             shares = 0
-        rows.append((issuer, value, shares))
+        rows.append((issuer, value, shares, cusip))
     # ── 单位自适应: 新版 13F 填美元全额, 部分旧式 filer 仍填千美元 ──
     # 判据: 用隐含股价(value/shares)中位数。双阈值带避免边界误判:
     #   中位数 <0.5 → 极可能千美元(×1000); >5 → 美元(不缩放); 0.5~5 灰区 → 保守不缩放(标记存疑)。
@@ -124,11 +128,16 @@ def parse_info_table(cik, accession):
         else:
             scale = 1  # 灰区: 保守按美元, 不放大
             unit_flag = "ambiguous"
-    for issuer, value, shares in rows:
+    for issuer, value, shares, cusip in rows:
         if issuer not in agg:
-            agg[issuer] = {"shares": 0, "value": 0}
+            agg[issuer] = {"shares": 0, "value": 0, "cusip": cusip,
+                           "ticker": cusip_to_ticker(cusip)}
         agg[issuer]["shares"] += shares
         agg[issuer]["value"] += value * scale
+        # 补 cusip/ticker(首个非空优先)
+        if not agg[issuer].get("cusip") and cusip:
+            agg[issuer]["cusip"] = cusip
+            agg[issuer]["ticker"] = cusip_to_ticker(cusip)
     return agg
 
 
@@ -152,8 +161,10 @@ def diff_holdings(cur, prev):
         else:
             action = "→持平"
         pct = round((c_sh - p_sh) / p_sh * 100, 1) if p_sh else (None if c_sh else 0)
+        meta = cur.get(iss, {}) or prev.get(iss, {})
         out.append({"issuer": iss.title(), "value": c_vl, "shares": c_sh,
-                    "prev_shares": p_sh, "action": action, "pct": pct})
+                    "prev_shares": p_sh, "action": action, "pct": pct,
+                    "ticker": meta.get("ticker", ""), "cusip": meta.get("cusip", "")})
     # 按当前市值降序(清仓的排后)
     out.sort(key=lambda x: (x["value"], x["shares"]), reverse=True)
     return out

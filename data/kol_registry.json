@@ -1,13 +1,13 @@
 {
   "_comment": "KOL 主注册表 — SSOT, 唯一权威源=Notion KOL List DB. 只增不减.",
-  "_last_updated": "2026-06-20",
-  "_source": "Notion KOL List DB 35947eb5fd3c800db852cef31f9de6a5",
+  "_last_updated": "2026-08-12",
+  "_source": "Notion KOL List DB (35947eb5fd3c800db852cef31f9de6a5), synced 2026-08-12; 只增不减",
   "_dropped_institutions": [
     "Citi / UBS",
     "Goldman Sachs",
     "Morgan Stanley"
   ],
-  "_count": 80,
+  "_count": 91,
   "kols": [
     {
       "id": "jim_curry",
@@ -1608,6 +1608,149 @@
       "list_num": "1",
       "bio": "FFTT 创始人 / 资深宏观分析师",
       "focus": "石油美元体系瓦解、联储财政主导、黄金作为主权储备"
+    },
+    {
+      "id": "goldman_sachs",
+      "display_name": "Goldman Sachs",
+      "notion_select_name": "Goldman Sachs",
+      "domain": "宏观货币与金融体系",
+      "sector": "宏观货币与金融体系",
+      "detail_sector": "宏观货币与金融体系",
+      "kol_or_ib": "KOL",
+      "institution": "全球顶级投资银行",
+      "monitor_dimensions": "利润驱动型牛市分析、电力竞赛投资框架",
+      "notion_num": "12",
+      "_added": "2026-08-12 (from Notion KOL List DB sync to 88)"
+    },
+    {
+      "id": "morgan_stanley",
+      "display_name": "Morgan Stanley",
+      "notion_select_name": "Morgan Stanley",
+      "domain": "宏观货币与金融体系",
+      "sector": "宏观货币与金融体系",
+      "detail_sector": "宏观货币与金融体系",
+      "kol_or_ib": "KOL",
+      "institution": "全球顶级投资银行",
+      "monitor_dimensions": "日本市场复苏、银行利差修复、亚洲供应链安全",
+      "notion_num": "13",
+      "_added": "2026-08-12 (from Notion KOL List DB sync to 88)"
+    },
+    {
+      "id": "citi_ubs",
+      "display_name": "Citi / UBS",
+      "notion_select_name": "Citi / UBS",
+      "domain": "宏观货币与金融体系",
+      "sector": "宏观货币与金融体系",
+      "detail_sector": "宏观货币与金融体系",
+      "kol_or_ib": "KOL",
+      "institution": "全球顶级投资银行",
+      "monitor_dimensions": "全球高净值资产配置、新兴市场宏观溢价",
+      "notion_num": "14",
+      "_added": "2026-08-12 (from Notion KOL List DB sync to 88)"
+    },
+    {
+      "id": "kirill_kirilenko",
+      "display_name": "Kirill Kirilenko",
+      "notion_select_name": "Kirill Kirilenko",
+      "domain": "贵金属",
+      "sector": "贵金属",
+      "detail_sector": "贵金属",
+      "kol_or_ib": "KOL",
+      "institution": "CRU Group 首席贵金属分析师，《贵金属市场展望》（Precious Metals Market Outlook）主编。专注于黄金、白银、铂族金属的供需基本面分析、价格预测与矿业成本曲线研究。",
+      "monitor_dimensions": "贵金属（黄金/白银/PGMs）供需基本面与价格预测；央行购金趋势与储备多元化；矿业成本曲线与供给端分析；宏观经济与贵金属关联分析。",
+      "notion_num": "81",
+      "_added": "2026-08-12 (from Notion KOL List DB sync to 88)"
+    },
+    {
+      "id": "edward_dowd",
+      "display_name": "Edward Dowd",
+      "notion_select_name": "Edward Dowd",
+      "domain": "宏观货币与金融体系",
+      "sector": "宏观货币与金融体系",
+      "detail_sector": "宏观货币与金融体系",
+      "kol_or_ib": "KOL",
+      "institution": "前 BlackRock 基金经理，Phinance Technologies 创始人。著有《Cause Unknown》。宏观经济与市场评论员，关注劳动力市场、财政赤字、货币政策和贵金属。",
+      "monitor_dimensions": "宏观经济数据异常监测（劳动力市场、GDP修正）；财政赤字与债务可持续性；货币政策转向与利率路径；黄金与避险资产配置；风险预警与市场周期判断。",
+      "notion_num": "82",
+      "_added": "2026-08-12 (from Notion KOL List DB sync to 88)"
+    },
+    {
+      "id": "gary_wagner",
+      "display_name": "Gary Wagner",
+      "notion_select_name": "Gary Wagner",
+      "domain": "贵金属",
+      "sector": "贵金属",
+      "detail_sector": "贵金属",
+      "kol_or_ib": "KOL",
+      "institution": "技术分析师，日本蜡烛图技术专家。著有《Trading Applications of Japanese Candlestick Charting》等多部蜡烛图交易著作。TheGoldForecast.com 创始人，专注黄金技术分析与交易策略。",
+      "monitor_dimensions": "黄金技术分析（日本蜡烛图形态、斐波那契回撤、趋势线）；黄金期货交易策略；关键支撑/阻力位识别；市场情绪与资金流向；贵金属中长期趋势判断。",
+      "notion_num": "83",
+      "_added": "2026-08-12 (from Notion KOL List DB sync to 88)"
+    },
+    {
+      "id": "william_watkins",
+      "display_name": "William Watkins",
+      "notion_select_name": "William Watkins",
+      "domain": "宏观货币与金融体系",
+      "sector": "宏观货币与金融体系",
+      "detail_sector": "宏观货币与金融体系",
+      "kol_or_ib": "KOL",
+      "institution": "资深职业律师，独立研究所宪法研究员。宪法专著作者，专注宪法解释、制度分析与法治研究。",
+      "monitor_dimensions": "宪法解释与制度演化；货币政策与宪法边界；财政权力分立与制衡；行政权扩张与法治；制度韧性与经济治理。",
+      "notion_num": "84",
+      "_added": "2026-08-12 (from Notion KOL List DB sync to 88)"
+    },
+    {
+      "id": "daron_acemoglu",
+      "display_name": "Daron Acemoglu",
+      "notion_select_name": "Daron Acemoglu",
+      "domain": "宏观货币与金融体系",
+      "sector": "宏观货币与金融体系",
+      "detail_sector": "宏观货币与金融体系",
+      "kol_or_ib": "KOL",
+      "institution": "MIT 经济学教授，2024 年诺贝尔经济学奖得主（与 Simon Johnson、James Robinson 共享）。《Why Nations Fail》《The Narrow Corridor》《Power and Progress》作者。全球引用最高的经济学家之一，专注制度经济学、政治经济学与技术变革。",
+      "monitor_dimensions": "制度与长期经济发展；民主与专制政治经济学；技术变革、AI 与自动化对劳动力和不平等的影响；国家能力与国家失败；殖民遗产与比较发展；创新与经济增长。",
+      "notion_num": "85",
+      "_added": "2026-08-12 (from Notion KOL List DB sync to 88)"
+    },
+    {
+      "id": "philippe_laffont",
+      "display_name": "Philippe Laffont（Coatue Management 创始人 / 首席投资官）",
+      "notion_select_name": "Philippe Laffont（Coatue Management 创始人 / 首席投资官）",
+      "domain": "股权市场",
+      "sector": "股权市场",
+      "detail_sector": "股权市场",
+      "kol_or_ib": "KOL",
+      "institution": "Coatue Management 创始人，聚焦科技股与成长股，AI/科技板块持仓影响力大",
+      "monitor_dimensions": "科技股 / AI / 持仓变动 / 13F 组合",
+      "notion_num": "86",
+      "_added": "2026-08-12 (from Notion KOL List DB sync to 88)"
+    },
+    {
+      "id": "carl_icahn",
+      "display_name": "Carl Icahn（Icahn Enterprises 创始人 / 董事长）",
+      "notion_select_name": "Carl Icahn（Icahn Enterprises 创始人 / 董事长）",
+      "domain": "股权市场",
+      "sector": "股权市场",
+      "detail_sector": "股权市场",
+      "kol_or_ib": "KOL",
+      "institution": "激进投资者（Activist Investor），通过 Icahn Enterprises 布局企业治理与困境资产",
+      "monitor_dimensions": "激进投资 / 企业治理 / 持仓变动 / 债务与困境资产",
+      "notion_num": "87",
+      "_added": "2026-08-12 (from Notion KOL List DB sync to 88)"
+    },
+    {
+      "id": "ken_griffin",
+      "display_name": "Ken Griffin（Citadel 创始人 / CEO）",
+      "notion_select_name": "Ken Griffin（Citadel 创始人 / CEO）",
+      "domain": "股权市场",
+      "sector": "股权市场",
+      "detail_sector": "股权市场",
+      "kol_or_ib": "KOL",
+      "institution": "Citadel 创始人，全球最大对冲基金之一，量化/做市与多策略投资",
+      "monitor_dimensions": "市场结构 / 量化 / 做市 / 宏观对冲 / 持仓变动",
+      "notion_num": "88",
+      "_added": "2026-08-12 (from Notion KOL List DB sync to 88)"
     }
   ]
 }

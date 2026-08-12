@@ -485,8 +485,13 @@ def _holdings_one(r):
     for h in r.get("top_holdings", [])[:10]:
         pct = f' <span class="h-pct">{h["pct"]:+.0f}%</span>' if h.get("pct") is not None else ""
         val = f'${h["value"]/1e6:,.0f}M' if h.get("value") else "—"
+        # issuer 展示: 有 ticker 就加后缀 (TICKER)
+        tk = h.get("ticker", "")
+        iss_disp = h["issuer"]
+        if tk and not tk.endswith("?") and "/" not in tk and "多" not in tk:
+            iss_disp = f'{h["issuer"]} <span class="h-tk">{tk}</span>'
         lines += (f'<div class="h-line"><span class="h-act {_action_cls(h["action"])}">{h["action"]}</span>'
-                  f'<span class="h-iss">{h["issuer"]}</span>'
+                  f'<span class="h-iss">{iss_disp}</span>'
                   f'<span class="h-val">{val}{pct}</span></div>')
     # 两句话介绍
     intro = ""
@@ -504,24 +509,38 @@ def _holdings_one(r):
 
 
 def _holdings_political(figures):
-    """政要持仓披露板块(国会交易披露 STOCK Act / PFD, 非13F)。"""
+    """政要持仓披露板块(国会交易披露 STOCK Act, 非13F)。真数据来自 politician_disclosure.json。"""
     if not figures:
         return ""
     cards = ""
     for f in figures:
+        trades = f.get("trades", [])
         lines = ""
-        for h in f.get("holdings", [])[:8]:
-            act = h.get("action", "")
-            lines += (f'<div class="h-line"><span class="h-act {_action_cls(act)}">{act or "持有"}</span>'
-                      f'<span class="h-iss">{h.get("issuer","")}</span>'
-                      f'<span class="h-val">{h.get("note","")}</span></div>')
-        body = lines or '<p class="empty">暂无最新披露数据(cron 每日 web_search 补)</p>'
+        for t in trades[:10]:
+            dir_cn = t.get("dir_cn", t.get("direction", ""))
+            act_cls = "h-buy" if "买" in dir_cn else ("h-sell" if "卖" in dir_cn else "")
+            tk = t.get("ticker") or "—"
+            amt = t.get("amount_range", "")
+            txn = t.get("txn_date", "")
+            lines += (f'<div class="h-line"><span class="h-act {act_cls}">{dir_cn}</span>'
+                      f'<span class="h-iss">{tk}</span>'
+                      f'<span class="h-val">{txn} · {amt}</span></div>')
+        status = f.get("status", "")
+        if lines:
+            body = lines
+        elif status == "no_free_source":
+            body = f'<p class="empty">{f.get("note","无免费逐笔交易结构化源")}</p>'
+        elif status == "no_filings":
+            body = '<p class="empty">近两年无 PTR 披露记录</p>'
+        else:
+            body = '<p class="empty">暂无最新交易明细</p>'
+        nf = f.get("n_filings")
+        meta_line = f'PTR 披露 {nf} 份' if nf else '国会交易披露 (STOCK Act)'
         cards += (
             f'<div class="h-card">'
-            f'<div class="h-head">{f.get("name_zh", f.get("name",""))}'
-            f'<span class="h-kol">{f.get("role","")}</span>'
-            f'<span class="h-meta">来源: {f.get("source","")}</span></div>'
-            f'<div class="h-intro"><div class="h-intro-l">{f.get("desc","")}</div></div>'
+            f'<div class="h-head">{f.get("name","")}'
+            f'<span class="h-kol">{f.get("title","")}</span>'
+            f'<span class="h-meta">{meta_line}</span></div>'
             f'<div class="h-body">{body}</div></div>'
         )
     return cards
@@ -560,28 +579,27 @@ def _holdings_html(hd):
             f'<span class="h-mod-n">{len(groups[mod])} 家</span></div>'
             f'<div class="h-grid-inner">{cards}</div></div>'
         )
-    # 政要板块
+    # 政要板块 — 读 politician_disclosure.json 真数据(国会 PTR)
     pol_figs = []
-    if im:
-        # 合并 meta 定义的政要 + holdings 里 source=PFD 的实际数据
-        actual = {r.get("name") or r.get("kol"): r for r in insts if r.get("source") == "PFD"}
-        for pf in im.POLITICAL_FIGURES:
-            merged = dict(pf)
-            if pf["name"] in actual:
-                merged["holdings"] = actual[pf["name"]].get("top_holdings", [])
-            pol_figs.append(merged)
+    try:
+        import politician_disclosure as pol
+        pd = pol.load_disclosure()
+        pol_figs = pd.get("politicians", [])
+    except Exception:
+        pol_figs = []
     if pol_figs:
-        pcolor = im.MODULES["政要披露"]["color"]
+        pcolor = im.MODULES["政要披露"]["color"] if im else "#a88a6a"
         pol_cards = _holdings_political(pol_figs)
         html += (
             f'<div class="h-module" style="border-color:{pcolor}">'
             f'<div class="h-module-title" style="background:{pcolor}">'
-            f'<span class="h-mod-dot"></span>政要持仓披露<span class="h-mod-en">Political · STOCK Act / PFD</span>'
+            f'<span class="h-mod-dot"></span>政要持仓披露<span class="h-mod-en">Political · STOCK Act PTR</span>'
             f'<span class="h-mod-n">{len(pol_figs)} 位</span></div>'
             f'<div class="h-grid-inner">{pol_cards}</div></div>'
         )
     meta_note = ('<div class="h-note">机构数据源：SEC EDGAR 官方 13F（季度，季末后约45天更新，dashboard 显最新期、全部历史存 Notion）。'
-                 '政要数据源：国会交易披露(STOCK Act)/年度财务披露(PFD)，非13F。'
+                 '政要数据源：美国众议院官方财务披露 STOCK Act PTR（disclosures-clerk.house.gov，逐笔交易真数据）；'
+                 '川普/参议员暂无免费逐笔源(诚实标注)。'
                  '变动＝最新期 vs 上一期持股数：🆕新建 ▲加仓 ▼减仓 ❌清仓 →持平。</div>')
     return (html or '<p class="empty">机构持仓数据未就绪。</p>') + meta_note
 
@@ -772,6 +790,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .h-cut {{ background: rgba(179,122,110,.22); color: var(--clay); }}
   .h-exit {{ background: var(--clay); color: #fff; }}
   .h-flat {{ background: var(--card2); color: var(--muted); }}
+  .h-buy {{ background: var(--sage); color: #fff; }}
+  .h-sell {{ background: var(--clay); color: #fff; }}
+  .h-tk {{ font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--sage); background: rgba(122,153,122,.14); padding: 0 3px; border-radius: 3px; margin-left: 3px; }}
   .h-iss {{ color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
   .h-val {{ font-family: var(--mono); font-weight: 700; color: var(--text); white-space: nowrap; }}
   .h-pct {{ color: var(--muted); font-weight: 500; }}
