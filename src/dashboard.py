@@ -470,7 +470,12 @@ def _action_cls(action):
 
 
 def _holdings_one(r):
-    """单个机构持仓卡片: 头部(KOL/基金/报告期/总市值) + TOP持仓+变动 + 新建/清仓。"""
+    """单个机构持仓卡片: 头部(基金/KOL/报告期/总市值) + 两句话介绍 + TOP持仓+变动。"""
+    try:
+        import institution_meta as im
+        meta = im.meta_for(r.get("fund", ""))
+    except Exception:
+        meta = {}
     if r.get("status") != "ok":
         return (f'<div class="h-card"><div class="h-head">{r.get("fund","?")} '
                 f'<span class="h-kol">{r.get("kol","")}</span></div>'
@@ -483,51 +488,102 @@ def _holdings_one(r):
         lines += (f'<div class="h-line"><span class="h-act {_action_cls(h["action"])}">{h["action"]}</span>'
                   f'<span class="h-iss">{h["issuer"]}</span>'
                   f'<span class="h-val">{val}{pct}</span></div>')
-    newb = "、".join(x["issuer"] for x in r.get("new_buys", [])[:5])
-    exits = "、".join(x["issuer"] for x in r.get("exits", [])[:5])
-    extra = ""
-    if newb:
-        extra += f'<div class="h-extra"><b class="h-new">🆕新建</b> {newb}</div>'
-    if exits:
-        extra += f'<div class="h-extra"><b class="h-exit">❌清仓</b> {exits}</div>'
+    # 两句话介绍
+    intro = ""
+    if meta.get("desc_type") or meta.get("desc_status"):
+        intro = (f'<div class="h-intro">'
+                 f'<div class="h-intro-l"><b>类型</b> {meta.get("desc_type","")}</div>'
+                 f'<div class="h-intro-l"><b>地位</b> {meta.get("desc_status","")}</div></div>')
     return (
         f'<div class="h-card">'
         f'<div class="h-head">{r.get("fund","")}<span class="h-kol">{r.get("kol","")}</span>'
         f'<span class="h-meta">13F {r.get("report_date","")} · ${tv:,.1f}B · {r.get("n_positions",0)}持仓 · vs {r.get("prev_report_date","-")}</span></div>'
-        f'<div class="h-body">{lines}</div>{extra}</div>'
+        f'{intro}'
+        f'<div class="h-body">{lines}</div></div>'
     )
 
 
-def _holdings_trump(inst):
-    """Trump 卡片(数据来自公开披露, 由 cron agent 填 holdings 里 kol=Trump 的项)。"""
-    lines = ""
-    for h in inst.get("top_holdings", [])[:10]:
-        act = h.get("action", "")
-        lines += (f'<div class="h-line"><span class="h-act {_action_cls(act)}">{act or "持有"}</span>'
-                  f'<span class="h-iss">{h.get("issuer","")}</span>'
-                  f'<span class="h-val">{h.get("note","")}</span></div>')
-    src = inst.get("source_note", "公开财务披露(PFD)")
-    return (
-        f'<div class="h-card h-trump">'
-        f'<div class="h-head">🇺🇸 Donald Trump<span class="h-kol">公开披露</span>'
-        f'<span class="h-meta">{inst.get("report_date","")} · 来源: {src}</span></div>'
-        f'<div class="h-body">{lines or "<p class=empty>暂无最新披露数据</p>"}</div></div>'
-    )
+def _holdings_political(figures):
+    """政要持仓披露板块(国会交易披露 STOCK Act / PFD, 非13F)。"""
+    if not figures:
+        return ""
+    cards = ""
+    for f in figures:
+        lines = ""
+        for h in f.get("holdings", [])[:8]:
+            act = h.get("action", "")
+            lines += (f'<div class="h-line"><span class="h-act {_action_cls(act)}">{act or "持有"}</span>'
+                      f'<span class="h-iss">{h.get("issuer","")}</span>'
+                      f'<span class="h-val">{h.get("note","")}</span></div>')
+        body = lines or '<p class="empty">暂无最新披露数据(cron 每日 web_search 补)</p>'
+        cards += (
+            f'<div class="h-card">'
+            f'<div class="h-head">{f.get("name_zh", f.get("name",""))}'
+            f'<span class="h-kol">{f.get("role","")}</span>'
+            f'<span class="h-meta">来源: {f.get("source","")}</span></div>'
+            f'<div class="h-intro"><div class="h-intro-l">{f.get("desc","")}</div></div>'
+            f'<div class="h-body">{body}</div></div>'
+        )
+    return cards
 
 
 def _holdings_html(hd):
-    """底部机构持仓(13F)+Trump 板块。"""
+    """机构持仓板块 — 按模块分组展示(每组带色标题+线框), 机构名下两句话介绍。"""
     insts = hd.get("institutions", []) if hd else []
-    if not insts:
+    try:
+        import institution_meta as im
+    except Exception:
+        im = None
+    if not insts and not im:
         return '<p class="empty">机构持仓数据未就绪(季度 13F 披露后更新)。</p>'
-    cards = ""
+    # 按模块分组
+    groups = {}
     for r in insts:
-        if str(r.get("kol", "")).lower().startswith("trump") or r.get("source") == "PFD":
-            cards += _holdings_trump(r)
-        else:
-            cards += _holdings_one(r)
-    meta = f'<div class="h-note">数据源：SEC EDGAR 官方 13F（季度披露，季末后约45天更新）+ Trump 公开财务披露。变动＝最新一期 vs 上一期持股数：🆕新建 ▲加仓 ▼减仓 ❌清仓 →持平。</div>'
-    return cards + meta
+        if r.get("source") == "PFD" or str(r.get("kol", "")).lower().startswith("trump"):
+            continue  # 政要单列
+        meta = im.meta_for(r.get("fund", "")) if im else {}
+        mod = meta.get("module", r.get("sector", "其他"))
+        groups.setdefault(mod, []).append(r)
+    # 模块顺序 + 配色
+    mod_order = ["价值传奇", "宏观对冲", "科技成长", "价值宏观", "量化多策略", "贵金属/另类", "其他"]
+    html = ""
+    for mod in mod_order:
+        if mod not in groups:
+            continue
+        color = im.module_color(mod) if im else "#8a8a80"
+        en = im.MODULES.get(mod, {}).get("en", "") if im else ""
+        cards = "".join(_holdings_one(r) for r in groups[mod])
+        html += (
+            f'<div class="h-module" style="border-color:{color}">'
+            f'<div class="h-module-title" style="background:{color}">'
+            f'<span class="h-mod-dot"></span>{mod}<span class="h-mod-en">{en}</span>'
+            f'<span class="h-mod-n">{len(groups[mod])} 家</span></div>'
+            f'<div class="h-grid-inner">{cards}</div></div>'
+        )
+    # 政要板块
+    pol_figs = []
+    if im:
+        # 合并 meta 定义的政要 + holdings 里 source=PFD 的实际数据
+        actual = {r.get("name") or r.get("kol"): r for r in insts if r.get("source") == "PFD"}
+        for pf in im.POLITICAL_FIGURES:
+            merged = dict(pf)
+            if pf["name"] in actual:
+                merged["holdings"] = actual[pf["name"]].get("top_holdings", [])
+            pol_figs.append(merged)
+    if pol_figs:
+        pcolor = im.MODULES["政要披露"]["color"]
+        pol_cards = _holdings_political(pol_figs)
+        html += (
+            f'<div class="h-module" style="border-color:{pcolor}">'
+            f'<div class="h-module-title" style="background:{pcolor}">'
+            f'<span class="h-mod-dot"></span>政要持仓披露<span class="h-mod-en">Political · STOCK Act / PFD</span>'
+            f'<span class="h-mod-n">{len(pol_figs)} 位</span></div>'
+            f'<div class="h-grid-inner">{pol_cards}</div></div>'
+        )
+    meta_note = ('<div class="h-note">机构数据源：SEC EDGAR 官方 13F（季度，季末后约45天更新，dashboard 显最新期、全部历史存 Notion）。'
+                 '政要数据源：国会交易披露(STOCK Act)/年度财务披露(PFD)，非13F。'
+                 '变动＝最新期 vs 上一期持股数：🆕新建 ▲加仓 ▼减仓 ❌清仓 →持平。</div>')
+    return (html or '<p class="empty">机构持仓数据未就绪。</p>') + meta_note
 
 
 def _rule_conclusions(results, checks, hit, cot):
@@ -721,6 +777,16 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .h-pct {{ color: var(--muted); font-weight: 500; }}
   .h-extra {{ font-size: 11px; color: var(--text); margin-top: 6px; line-height: 1.5; }}
   .h-note {{ grid-column: 1/-1; font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.6; }}
+  /* 机构持仓分模块展示 */
+  .h-module {{ border: 2px solid; border-radius: 12px; margin-bottom: 16px; overflow: hidden; }}
+  .h-module-title {{ display: flex; align-items: center; gap: 8px; padding: 8px 14px; color: #fff; font-size: 14px; font-weight: 700; }}
+  .h-mod-dot {{ width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.85); }}
+  .h-mod-en {{ font-size: 11px; font-weight: 400; opacity: .85; }}
+  .h-mod-n {{ margin-left: auto; font-size: 11px; font-weight: 500; background: rgba(255,255,255,.22); padding: 1px 8px; border-radius: 10px; }}
+  .h-grid-inner {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; padding: 12px; }}
+  .h-intro {{ font-size: 10.5px; color: var(--muted); line-height: 1.5; margin-bottom: 8px; background: var(--card2); border-radius: 6px; padding: 6px 8px; }}
+  .h-intro-l {{ margin-bottom: 2px; }}
+  .h-intro-l b {{ color: var(--dust-blue); font-weight: 700; margin-right: 3px; }}
   .dot-g {{ background: var(--sage); }}
   .dot-y {{ background: var(--mustard); }}
   .dot-r {{ background: var(--clay); }}
