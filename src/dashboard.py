@@ -525,10 +525,13 @@ def _holdings_political(figures):
     for f in figures:
         trades = f.get("trades", [])
         lines = ""
-        for t in trades[:10]:
+        for t in trades[:12]:
             dir_cn = t.get("dir_cn", t.get("direction", ""))
             act_cls = "h-buy" if "买" in dir_cn else ("h-sell" if "卖" in dir_cn else "")
-            tk = t.get("ticker") or "—"
+            # ticker 优先; 缺失时回退资产名(川普 278-T 只有资产描述, 无 ticker)
+            tk = t.get("ticker") or (t.get("asset") or "—")
+            if len(tk) > 28:
+                tk = tk[:27] + "…"
             amt = t.get("amount_range", "")
             txn = t.get("txn_date", "")
             lines += (f'<div class="h-line"><span class="h-act {act_cls}">{dir_cn}</span>'
@@ -539,18 +542,26 @@ def _holdings_political(figures):
             body = lines
         elif status == "no_free_source":
             body = f'<p class="empty">{f.get("note","无免费逐笔交易结构化源")}</p>'
-        elif status == "no_filings":
-            body = '<p class="empty">近两年无 PTR 披露记录</p>'
+        elif status in ("no_filings", "no_reports", "no_trades"):
+            body = '<p class="empty">近期无披露交易记录</p>'
+        elif status == "fetch_error":
+            body = '<p class="empty">数据源暂时不可达(下次 cron 重试)</p>'
         else:
             body = '<p class="empty">暂无最新交易明细</p>'
         nf = f.get("n_filings")
-        meta_line = f'PTR 披露 {nf} 份' if nf else '国会交易披露 (STOCK Act)'
+        src = f.get("source", "")
+        if nf:
+            meta_line = f'{nf} 笔披露交易' if src.startswith("OGE") else f'披露 {nf} 份'
+        else:
+            meta_line = src or '政要交易披露'
+        note = f.get("note", "")
+        note_html = f'<div class="h-pol-note">{note}</div>' if note and lines else ""
         cards += (
             f'<div class="h-card">'
             f'<div class="h-head">{f.get("name","")}'
             f'<span class="h-kol">{f.get("title","")}</span>'
             f'<span class="h-meta">{meta_line}</span></div>'
-            f'<div class="h-body">{body}</div></div>'
+            f'<div class="h-body">{body}{note_html}</div></div>'
         )
     return cards
 
@@ -802,6 +813,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .h-buy {{ background: var(--sage); color: #fff; }}
   .h-sell {{ background: var(--clay); color: #fff; }}
   .h-tk {{ font-family: var(--mono); font-size: 9.5px; font-weight: 700; color: var(--sage); background: rgba(122,153,122,.14); padding: 0 3px; border-radius: 3px; margin-left: 3px; }}
+  .h-pol-note {{ font-size: 10px; color: var(--muted); font-style: italic; margin-top: 6px; padding-top: 5px; border-top: 1px dashed rgba(160,160,150,.25); }}
   .h-iss {{ color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
   .h-val {{ font-family: var(--mono); font-weight: 700; color: var(--text); white-space: nowrap; }}
   .h-pct {{ color: var(--muted); font-weight: 500; }}

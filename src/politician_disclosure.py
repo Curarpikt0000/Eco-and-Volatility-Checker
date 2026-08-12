@@ -46,12 +46,9 @@ HOUSE_TARGETS = [
 ]
 
 # 无免费逐笔交易源的政要 → 占位卡片(诚实标注)
-NO_FREE_SOURCE = [
-    {"name": "Donald Trump", "title": "总统",
-     "note": "非国会成员, 无 STOCK Act PTR 义务; 仅 OGE Form 278e 年度披露(非交易级), 无免费逐笔交易结构化源"},
-    {"name": "Tommy Tuberville", "title": "参议员 (阿拉巴马)",
-     "note": "参议员披露在 efdsearch.senate.gov(需会话 cookie), 本模块未覆盖; 待后续接入"},
-]
+# 注: 川普/Tuberville 已于 2026-08 接入真数据(oge_trump/djt_form4/senate_ptr),
+#     此列表现仅留作 fallback(真源全失败时的诚实占位), 正常不触发。
+NO_FREE_SOURCE = []
 
 
 def _fetch(url, timeout=60):
@@ -173,13 +170,126 @@ def fetch_politician(target, years=None):
     }
 
 
+def _trump_oge_card():
+    """川普 OGE 278(Annual 快照 + 278-T 逐笔) → dashboard 政要卡结构。"""
+    try:
+        import oge_trump
+    except ImportError:
+        from . import oge_trump
+    r = oge_trump.fetch(save=True)
+    trades = []
+    for t in r.get("transactions", []):
+        trades.append({
+            "ticker": None,  # OGE 278-T 只有资产描述名, 无 ticker
+            "asset": t.get("asset"),
+            "dir_cn": t.get("dir_cn"), "direction": t.get("direction"),
+            "txn_date": t.get("txn_date"), "amount_range": t.get("amount_range"),
+        })
+    n_txn = r.get("n_transactions", 0)
+    ann = r.get("annual")
+    note = ""
+    if ann:
+        note = f"另有 278 年度快照({ann['doc_date']})"
+    return {
+        "name": "Donald J Trump", "title": "总统 · OGE 278-T",
+        "trades": trades, "n_filings": n_txn,
+        "status": r.get("status", "no_data"),
+        "note": note, "source": "OGE Form 278-T (逐笔交易报告)",
+    }
+
+
+def _djt_form4_card():
+    """川普 DJT Form 4(SEC 内部人) → dashboard 政要卡结构。"""
+    try:
+        import djt_form4
+    except ImportError:
+        from . import djt_form4
+    r = djt_form4.fetch(save=True)
+    trades = []
+    for t in r.get("txns", []):
+        sh = t.get("shares")
+        amt = f"{sh:,.0f} 股" if sh else ""
+        trades.append({
+            "ticker": t.get("ticker"),
+            "asset": t.get("security"),
+            "dir_cn": t.get("code_cn"), "direction": t.get("code"),
+            "txn_date": t.get("txn_date"), "amount_range": amt,
+        })
+    return {
+        "name": "Donald J Trump", "title": "总统 · DJT 内部人(SEC Form 4)",
+        "trades": trades, "n_filings": r.get("n_form4_total"),
+        "status": r.get("status", "no_data"),
+        "source": "SEC EDGAR Form 4 (Trump Media, DJT)",
+    }
+
+
+def _senate_cards():
+    """参议员 PTR(Tuberville 等) → dashboard 政要卡结构列表。"""
+    try:
+        import senate_ptr
+    except ImportError:
+        from . import senate_ptr
+    r = senate_ptr.fetch(save=True)
+    cards = []
+    for sen in r.get("senators", []):
+        trades = []
+        for t in sen.get("trades", []):
+            trades.append({
+                "ticker": t.get("ticker"), "asset": t.get("asset"),
+                "dir_cn": t.get("dir_cn"), "direction": t.get("direction"),
+                "txn_date": t.get("txn_date"), "amount_range": t.get("amount_range"),
+            })
+        cards.append({
+            "name": sen.get("name"),
+            "title": f"{sen.get('title','')} · 参议院 PTR",
+            "trades": trades, "n_filings": sen.get("n_reports"),
+            "status": sen.get("status", "no_data"),
+            "source": "Senate efdsearch PTR",
+        })
+    return cards
+
+
 def fetch_all(save=True):
-    """抓所有追踪政要。"""
+    """抓所有追踪政要: 众议院 PTR(佩洛西/Crenshaw) + 川普 OGE 278-T + DJT Form 4 + 参议员 PTR。"""
     result = {"as_of": datetime.date.today().isoformat(), "politicians": []}
+    # 1. 众议院议员(佩洛西/Crenshaw) — PDF PTR
     for t in HOUSE_TARGETS:
-        print(f"[政要] 抓 {t['name']}...", flush=True)
-        result["politicians"].append(fetch_politician(t))
-    # 无源政要占位
+        print(f"[政要·众议院] 抓 {t['name']}...", flush=True)
+        try:
+            result["politicians"].append(fetch_politician(t))
+        except Exception as e:
+            print(f"  失败: {e}")
+            result["politicians"].append({
+                "name": t["name"], "title": t["title"], "status": "fetch_error",
+                "error": str(e), "trades": []})
+    # 2. 川普 OGE 278-T 逐笔(总统级逐笔交易报告)
+    print("[政要·川普] 抓 OGE 278-T...", flush=True)
+    try:
+        result["politicians"].append(_trump_oge_card())
+    except Exception as e:
+        print(f"  OGE 失败: {e}")
+        result["politicians"].append({
+            "name": "Donald J Trump", "title": "总统 · OGE 278-T",
+            "status": "fetch_error", "error": str(e), "trades": []})
+    # 3. 川普 DJT Form 4(SEC 内部人逐笔)
+    print("[政要·川普] 抓 DJT Form 4...", flush=True)
+    try:
+        result["politicians"].append(_djt_form4_card())
+    except Exception as e:
+        print(f"  Form4 失败: {e}")
+        result["politicians"].append({
+            "name": "Donald J Trump", "title": "总统 · DJT Form 4",
+            "status": "fetch_error", "error": str(e), "trades": []})
+    # 4. 参议员 PTR(Tuberville)
+    print("[政要·参议院] 抓 PTR...", flush=True)
+    try:
+        result["politicians"] += _senate_cards()
+    except Exception as e:
+        print(f"  参议院失败: {e}")
+        result["politicians"].append({
+            "name": "Tommy Tuberville", "title": "参议员 (阿拉巴马) · 参议院 PTR",
+            "status": "fetch_error", "error": str(e), "trades": []})
+    # 5. 无源占位(现为空; fallback)
     for t in NO_FREE_SOURCE:
         result["politicians"].append({
             "name": t["name"], "title": t["title"], "status": "no_free_source",

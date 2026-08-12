@@ -1,0 +1,74 @@
+{
+  "as_of": "2026-08-12",
+  "name": "Donald J Trump",
+  "title": "总统 (DJT 大股东/内部人)",
+  "filings": [
+    {
+      "accession": "0001474506-24-000291",
+      "filing_date": "2024-12-19",
+      "issuer": "Trump Media & Technology Group Corp.",
+      "ticker": "DJT",
+      "n_txns": 1
+    },
+    {
+      "accession": "0001474506-24-000146",
+      "filing_date": "2024-04-30",
+      "issuer": "Trump Media & Technology Group Corp.",
+      "ticker": "DJT",
+      "n_txns": 2
+    }
+  ],
+  "txns": [
+    {
+      "security": "Common Stock, par value $0.0001 per share",
+      "txn_date": "2024-12-17",
+      "code": "G",
+      "code_cn": "赠与",
+      "acquired_disposed": "D",
+      "shares": 114750000.0,
+      "price": null,
+      "filing_date": "2024-12-19",
+      "accession": "0001474506-24-000291",
+      "ticker": "DJT",
+      "issuer": "Trump Media & Technology Group Corp."
+    },
+    {
+      "security": "Common Stock, par value $0.0001 per share",
+      "txn_date": "2024-04-26",
+      "code": "J",
+      "code_cn": "其他",
+      "acquired_disposed": "A",
+      "shares": 36000000.0,
+      "price": null,
+      "filing_date": "2024-04-30",
+      "accession": "0001474506-24-000146",
+      "ticker": "DJT",
+      "issuer": "Trump Media & Technology Group Corp."
+    },
+    {
+      "security": "Right to receive Earnout Shares",
+      "txn_date": "2024-04-26",
+      "code": "J",
+      "code_cn": "其他",
+      "acquired_disposed": "A",
+      "shares": 36000000.0,
+      "price": null,
+      "filing_date": "2024-04-30",
+      "accession": "0001474506-24-000146",
+      "ticker": "DJT",
+      "issuer": "Trump Media & Technology Group Corp."
+    }
+  ],
+  "status": "ok",
+  "sources": [
+    "https://www.sec.gov/Archives/edgar/data/947033/000147450624000291/primary_doc.xml",
+    "https://www.sec.gov/Archives/edgar/data/947033/000147450624000146/primary_doc.xml"
+  ],
+  "n_form4_total": 8,
+  "parse_errors": [
+    {
+      "accession": "0000899140-09-000582",
+      "error": "HTTP Error 404: Not Found"
+    }
+  ]
+}

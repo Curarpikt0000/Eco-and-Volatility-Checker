@@ -1,0 +1,164 @@
+{
+  "as_of": "2026-08-12",
+  "senators": [
+    {
+      "name": "Tommy Tuberville",
+      "title": "参议员 (阿拉巴马)",
+      "n_reports": 22,
+      "n_parsed": 3,
+      "trades": [
+        {
+          "ticker": "TSCO",
+          "asset": "Tractor Supply Company",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "02/14/2025"
+        },
+        {
+          "ticker": "CARR",
+          "asset": "Carrier Global Corp",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$1,001 - $15,000",
+          "filed": "02/14/2025"
+        },
+        {
+          "ticker": "TXN",
+          "asset": "Texas Instruments Incorporated - Common Stock",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "02/14/2025"
+        },
+        {
+          "ticker": "DEO",
+          "asset": "Diageo Plc ADR",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "02/14/2025"
+        },
+        {
+          "ticker": "MSFT",
+          "asset": "Microsoft Corp",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "02/14/2025"
+        },
+        {
+          "ticker": "AAPL",
+          "asset": "Apple Inc",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "02/14/2025"
+        },
+        {
+          "ticker": "TSCO",
+          "asset": "Tractor Supply Company",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "08/05/2026"
+        },
+        {
+          "ticker": "CARR",
+          "asset": "Carrier Global Corp",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$1,001 - $15,000",
+          "filed": "08/05/2026"
+        },
+        {
+          "ticker": "TXN",
+          "asset": "Texas Instruments Incorporated - Common Stock",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "08/05/2026"
+        },
+        {
+          "ticker": "DEO",
+          "asset": "Diageo Plc ADR",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "08/05/2026"
+        },
+        {
+          "ticker": "MSFT",
+          "asset": "Microsoft Corp",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "08/05/2026"
+        },
+        {
+          "ticker": "AAPL",
+          "asset": "Apple Inc",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Partial)",
+          "dir_cn": "部分卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "08/05/2026"
+        },
+        {
+          "ticker": "PARA",
+          "asset": "Paramount Global Cl B",
+          "txn_date": "12/26/2023",
+          "owner": "Joint",
+          "direction": "Purchase",
+          "dir_cn": "买入",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "01/12/2024"
+        },
+        {
+          "ticker": "VZ",
+          "asset": "Verizon Communications Inc",
+          "txn_date": "12/26/2023",
+          "owner": "Joint",
+          "direction": "Sale (Partial)",
+          "dir_cn": "部分卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "01/12/2024"
+        },
+        {
+          "ticker": "RF",
+          "asset": "Regions Financial Corp",
+          "txn_date": "12/26/2023",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "01/12/2024"
+        }
+      ],
+      "status": "ok"
+    }
+  ]
+}
