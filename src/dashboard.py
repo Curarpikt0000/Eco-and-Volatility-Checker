@@ -143,15 +143,21 @@ def threshold_text(ind):
         return f"🟢>{warn}{us} · 🟡{trig}–{warn}{us} · 🔴≤{trig}{us}"
 
 
-def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None):
+def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
+             daily_notes=None, kol_changes=None, liquidity=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
-    ai_reads: {key: 逐条解读文本}(agent 生成，可选)。
-    ai_conclusions: {"short":..,"mid":..,"long":..} 短中长综合结论(agent 生成，可选)。
+    ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
+    daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
+    kol_changes: [{kol,sector,prev_dir,new_dir,date,comments,targets},...] KOL状态变化。
+    liquidity: Economic Dashboard 流动性关键点 dict。
     返回 HTML 文件路径。"""
     results = snap["results"]
     cot = snap.get("cot", {})
     date_str = snap["date"]
     ai_reads = ai_reads or {}
+    daily_notes = daily_notes or {}
+    kol_changes = kol_changes or []
+    liquidity = liquidity or {}
     # 综合结论：优先用 agent 生成，否则用规则兜底
     ai_conclusions = ai_conclusions or _rule_conclusions(results, checks, hit, cot)
 
@@ -180,6 +186,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
             st = r.get("status", "")
             st_badge = "" if st == "ok" else f'<span class="stwarn">{st}</span>'
             how = HOW_TO_READ.get(key, ind.get("note", ""))
+            note = daily_notes.get(key, "")  # 当日一句话短评
+            note_html = f'<div class="mc-note">📌 {note}</div>' if note else ""
             # 2周变化
             chg = ""
             if len(hist) >= 2:
@@ -194,6 +202,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
               <div class="mc-val">{fmt_val(ind, r)} {chg}{st_badge}</div>
               <div class="mc-thr">{threshold_text(ind)}</div>
               <div class="mc-spark">{spark}<span class="mc-spark-lbl">近2周</span></div>
+              {note_html}
               <div class="mc-how"><b>如何看：</b>{how}</div>
             </div>"""
         return html
@@ -286,6 +295,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         concl_short=ai_conclusions.get("short", ""),
         concl_mid=ai_conclusions.get("mid", ""),
         concl_long=ai_conclusions.get("long", ""),
+        kol_changes=_kol_changes_html(kol_changes),
+        liquidity=_liquidity_html(liquidity),
     )
     path = os.path.join(OUT_DIR, "index.html")
     open(path, "w", encoding="utf-8").write(html)
@@ -300,6 +311,70 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
 
 def _sig_cls(lt):
     return {"🟢": "g", "🟡": "y", "🔴": "r", "⚪": "n"}.get(lt, "n")
+
+
+def _kol_changes_html(kol_changes):
+    """底部 KOL 状态变化板块。"""
+    if not kol_changes:
+        return '<p class="empty">近日无 KOL 主导方向变化。</p>'
+    dir_cls = {"强烈看多": "r", "看多": "y", "分歧": "n", "中性": "n", "看空": "g", "强烈看空": "g"}
+    rows = ""
+    for ch in kol_changes[:12]:
+        pc = dir_cls.get(ch["prev_dir"], "n")
+        nc = dir_cls.get(ch["new_dir"], "n")
+        comment = (ch.get("comments") or "").strip()
+        targets = (ch.get("targets") or "").strip()
+        extra = ""
+        if comment:
+            extra += f'<div class="kol-cmt">{comment}</div>'
+        if targets:
+            extra += f'<div class="kol-tgt">标的：{targets}</div>'
+        rows += f"""<div class="kol-item">
+          <div class="kol-line"><b>{ch['kol']}</b> <span class="kol-sec">{ch['sector']}</span> <span class="kol-date">{ch['date']}</span></div>
+          <div class="kol-shift"><span class="kdir kdir-{pc}">{ch['prev_dir']}</span> → <span class="kdir kdir-{nc}">{ch['new_dir']}</span></div>
+          {extra}
+        </div>"""
+    return rows
+
+
+def _liquidity_html(liq):
+    """底部流动性要点板块(来自 Economic Dashboard)。"""
+    if not liq:
+        return '<p class="empty">流动性数据未就绪。</p>'
+    parts = []
+    # Fed 流动性
+    fed = []
+    for label, key in [("Fed 准备金", "reserves_T"), ("ON RRP", "on_rrp_B"), ("TGA", "tga_B")]:
+        d = liq.get(key)
+        if d:
+            unit = "T" if key == "reserves_T" else "B"
+            delta = f' ({"+" if (d.get("delta") or 0)>=0 else ""}{d["delta"]})' if d.get("delta") is not None else ""
+            fed.append(f'<span class="liq-k">{label}</span> <b>${d["value"]}{unit}</b>{delta}')
+    if fed:
+        parts.append('<div class="liq-row">' + " · ".join(fed) + '</div>')
+    # 收益率
+    ylds = liq.get("yields", {})
+    if ylds:
+        ys = []
+        for f in ["10Y", "2Y", "30Y"]:
+            if f in ylds:
+                d = ylds[f]
+                delta = f'({"+" if (d.get("delta") or 0)>=0 else ""}{d["delta"]})' if d.get("delta") is not None else ""
+                ys.append(f'US {f} <b>{d["value"]}%</b>{delta}')
+        if ys:
+            parts.append('<div class="liq-row">' + " · ".join(ys) + '</div>')
+    # 风控灯
+    lights = liq.get("risk_lights", {})
+    if lights:
+        ls = " · ".join(f'{k}: {v}' for k, v in lights.items() if k not in ("运行状态",))
+        parts.append(f'<div class="liq-row liq-lights">{ls}</div>')
+    # 关键变动文本
+    notes = liq.get("risk_notes", {})
+    if notes.get("关键变动"):
+        parts.append(f'<div class="liq-note"><b>关键变动</b><br>{notes["关键变动"].replace(chr(10), "<br>")}</div>')
+    if notes.get("AI短评"):
+        parts.append(f'<div class="liq-note"><b>AI 短评</b><br>{notes["AI短评"]}</div>')
+    return "".join(parts) or '<p class="empty">流动性数据未就绪。</p>'
 
 
 def _rule_conclusions(results, checks, hit, cot):
@@ -429,6 +504,28 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .mc-spark-lbl {{ font-size: 9px; color: var(--muted); }}
   .mc-how {{ font-size: 10.5px; color: var(--text); line-height: 1.5; background: var(--card2); border-radius: 6px; padding: 6px 8px; }}
   .mc-how b {{ color: var(--dust-blue); }}
+  .mc-note {{ font-size: 11px; color: var(--text); line-height: 1.5; background: var(--dust-blue-bg); border-radius: 6px; padding: 6px 8px; margin-bottom: 5px; font-weight: 500; }}
+  /* KOL 状态变化板块 */
+  .kol-wrap {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }}
+  .kol-item {{ background: var(--card2); border-radius: 8px; padding: 10px 12px; border-left: 3px solid var(--mauve); }}
+  .kol-line b {{ font-size: 13px; }}
+  .kol-sec {{ font-size: 10px; color: var(--muted); background: var(--card); padding: 1px 6px; border-radius: 4px; }}
+  .kol-date {{ font-size: 10px; color: var(--muted); float: right; }}
+  .kol-shift {{ font-size: 13px; font-weight: 700; margin: 5px 0; }}
+  .kdir {{ padding: 1px 7px; border-radius: 4px; font-size: 12px; }}
+  .kdir-r {{ background: var(--clay-bg); color: #8a5648; }}
+  .kdir-y {{ background: var(--mustard-bg); color: #7a6a3e; }}
+  .kdir-g {{ background: var(--sage-bg); color: #5c6b58; }}
+  .kdir-n {{ background: var(--card); color: var(--muted); }}
+  .kol-cmt {{ font-size: 11px; color: var(--muted); line-height: 1.5; margin-top: 4px; }}
+  .kol-tgt {{ font-size: 10.5px; color: var(--dust-blue); margin-top: 3px; }}
+  /* 流动性板块 */
+  .liq-row {{ font-size: 13px; margin-bottom: 8px; line-height: 1.7; }}
+  .liq-k {{ color: var(--muted); }}
+  .liq-lights {{ background: var(--card2); border-radius: 6px; padding: 6px 10px; }}
+  .liq-note {{ font-size: 12px; color: var(--text); line-height: 1.7; background: var(--card2); border-radius: 8px; padding: 10px 12px; margin-top: 8px; }}
+  .liq-note b {{ color: var(--dust-blue); }}
+  .empty {{ color: var(--muted); font-size: 13px; font-style: italic; }}
   .dot-g {{ background: var(--sage); }}
   .dot-y {{ background: var(--mustard); }}
   .dot-r {{ background: var(--clay); }}
@@ -601,6 +698,14 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 第六部分：今日最需关注的一条信号 ═══ -->
   <div class="part-title"><span class="part-num">6</span>今日最需关注的一条信号</div>
   <div class="focus-box">{focus}</div>
+
+  <!-- ═══ 附一：当日 KOL 状态变化(联动 KOL 追踪) ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>当日 KOL 状态变化</div>
+  <div class="card kol-wrap">{kol_changes}</div>
+
+  <!-- ═══ 附二：流动性要点(联动 Economic Dashboard) ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>流动性要点 · 央行/国债</div>
+  <div class="card liq-wrap">{liquidity}</div>
 
   <div class="footnote">
     数据源：FRED (VIX/HY/收益率曲线) · CNN F&amp;G · CBOE · AAII · GuruFocus · Conference Board · Renaissance · currentmarketvaluation · multpl · CFTC COT (金银 commercial)。<br>

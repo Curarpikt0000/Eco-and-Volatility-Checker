@@ -40,6 +40,7 @@ NOTION_DB = {
     "indicators": ENV.get("DB_INDICATORS", ""),   # DB-1 每日 17 指标时序
     "cot":        ENV.get("DB_COT", ""),          # DB-2 金银 COT 时序
     "report":     ENV.get("DB_REPORT", ""),       # DB-3 每日扫描报告
+    "weekly":     ENV.get("DB_WEEKLY", ""),        # DB-4 周报
 }
 
 # ─────────────────────── 信号方向 ───────────────────────

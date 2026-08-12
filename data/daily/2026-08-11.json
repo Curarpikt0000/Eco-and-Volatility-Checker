@@ -1,0 +1,350 @@
+{
+  "date": "2026-08-11",
+  "overall": "🟡 警戒",
+  "hit": 1,
+  "results": {
+    "vix": {
+      "key": "vix",
+      "value": 14.9,
+      "as_of": "2026-08-07",
+      "status": "ok"
+    },
+    "fear_greed": {
+      "value": 65.0,
+      "as_of": "2026-08-11",
+      "status": "ok",
+      "extra": {
+        "rating": "greed"
+      },
+      "key": "fear_greed"
+    },
+    "aaii_bull_bear": {
+      "value": -1.0,
+      "as_of": "2026-08-05",
+      "status": "ok",
+      "key": "aaii_bull_bear"
+    },
+    "put_call": {
+      "value": 0.61,
+      "as_of": "2026-08-11",
+      "status": "ok",
+      "key": "put_call"
+    },
+    "naaim": {
+      "value": null,
+      "as_of": null,
+      "status": "数据源已转付费停更(2026-08-01)",
+      "key": "naaim"
+    },
+    "margin_debt": {
+      "value": 1502.1,
+      "as_of": "2026-06-30",
+      "status": "ok",
+      "key": "margin_debt"
+    },
+    "margin_gdp": {
+      "key": "margin_gdp",
+      "value": 4.63,
+      "as_of": "2026-08-11",
+      "status": "ok"
+    },
+    "ipo_count": {
+      "value": 99.0,
+      "as_of": null,
+      "status": "ok",
+      "extra": {
+        "proceeds_bil": 145.3
+      },
+      "key": "ipo_count"
+    },
+    "insider": {
+      "value": 0.25,
+      "as_of": "2026-08-01",
+      "status": "ok",
+      "key": "insider"
+    },
+    "bofa_bull_bear": {
+      "value": 9.7,
+      "as_of": "2026-08-07",
+      "status": "ok",
+      "key": "bofa_bull_bear"
+    },
+    "hy_oas": {
+      "key": "hy_oas",
+      "value": 2.7,
+      "as_of": "2026-08-07",
+      "status": "ok"
+    },
+    "ad_line": {
+      "value": false,
+      "as_of": "2026-08-10",
+      "status": "ok",
+      "key": "ad_line"
+    },
+    "buffett": {
+      "value": 219.0,
+      "as_of": "2026-03-31",
+      "status": "ok",
+      "key": "buffett"
+    },
+    "cape": {
+      "value": 42.37,
+      "as_of": null,
+      "status": "ok",
+      "key": "cape"
+    },
+    "yield_curve": {
+      "key": "yield_curve",
+      "value": 0.47,
+      "as_of": "2026-08-10",
+      "status": "ok"
+    },
+    "lei": {
+      "value": -0.3,
+      "as_of": "2026-06-30",
+      "status": "ok",
+      "key": "lei"
+    },
+    "aaii_alloc": {
+      "value": 70.38,
+      "as_of": "2026-07-31",
+      "status": "ok",
+      "key": "aaii_alloc"
+    }
+  },
+  "kol_changes": [
+    {
+      "kol": "Ray Dalio",
+      "sector": "Macro",
+      "prev_dir": "强烈看空",
+      "new_dir": "看多",
+      "date": "2026-08-12",
+      "comments": "Ray Dalio选择黄金而非比特币作为避险配置→建议1%投资组合配黄金。同时对AI风险表示担忧。Dalio近期在77岁生日时暗示预期美国帝国将因长期债务赤字而崩溃(Bridgewater已退出)。来源: it-boltwise.de 8/12",
+      "targets": "🟢 Gold | 🔴 US长期国债/美元信用"
+    },
+    {
+      "kol": "Luke Gromen",
+      "sector": "Precious Metals",
+      "prev_dir": "看多",
+      "new_dir": "强烈看多",
+      "date": "2026-08-11",
+      "comments": "Luke Gromen(FFTT创始人)指出财政主导下实际利率上升反而利好黄金→传统负相关框架已失效。当一国面临财政主导时，即使实际利率走高，市场对主权信用的担忧推升黄金需求。Gromen对比了黄金表现与倒挂的美国实际利率→验证新范式。来源: tradersunion.com 8/11",
+      "targets": "🟢 Gold, GLD, PHYS"
+    },
+    {
+      "kol": "Michael Saylor",
+      "sector": "Crypto",
+      "prev_dir": "看多",
+      "new_dir": "分歧",
+      "date": "2026-08-11",
+      "comments": "Strategy(MSTR)披露$64B比特币持仓浮亏约$10B→史上首次出售1,690 BTC引发市场关注。Saylor同时透露用ChatGPT设计新型BTC挂钩金融产品帮助Strategy融资$15B。虽然首次卖出但Saylor仍坚持BTC长期牛市叙事→强调AI与金融创新结合。来源: cryptobriefing/bitcoinfoundation 8/11",
+      "targets": "🔴 BTC(短期) | 🟢 BTC(长期)"
+    },
+    {
+      "kol": "Peter Schiff",
+      "sector": "Crypto",
+      "prev_dir": "强烈看多",
+      "new_dir": "分歧",
+      "date": "2026-08-11",
+      "comments": "Peter Schiff在X发文称BTC是反黄金资产→两者走势负相关→金价涨至$4,400时BTC将承压下跌。力劝投资者卖出BTC和MSTR→转向黄金白银避险。指出通胀+地缘政治不确定性下贵金属是更好保护。与VanEck CEO形成对立(VanEck认为BTC回调是买入机会)。来源: Benzinga/TipRanks/CryptoPanic 8/11",
+      "targets": "🔴 BTC, MSTR | 🟢 Gold, Silver, GLD, SLV"
+    },
+    {
+      "kol": "James Rickards",
+      "sector": "Macro",
+      "prev_dir": "看多",
+      "new_dir": "中性",
+      "date": "2026-08-11",
+      "comments": "James Rickards在TippInsights撰文论证BRICS金本位是虚构→各国央行没有实际能力也不愿回到金本位。指出虽然去美元化趋势真实存在但用黄金替代美元作为储备货币在操作层面不可行。来源: tippinsights.com 8/11",
+      "targets": "🟢 黄金(非金本位叙事) | 🔴 BRICS金本位炒作"
+    },
+    {
+      "kol": "Michael Hartnett",
+      "sector": "Equities",
+      "prev_dir": "分歧",
+      "new_dir": "看多",
+      "date": "2026-08-11",
+      "comments": "BofA首席策略师Michael Hartnett提出美股Too Big To Fail论→政府/美联储不会让美股崩盘因为401k退休金体系深度绑定。认为当前环境类似Too Big To Fail银行逻辑→市场下行风险被政策兜底限制。来源: thewealthadvisor.com 8/11",
+      "targets": "🟢 美股(S&P 500)"
+    },
+    {
+      "kol": "Cathie Wood",
+      "sector": "Equities",
+      "prev_dir": "看多",
+      "new_dir": "强烈看多",
+      "date": "2026-08-10",
+      "comments": "Cathie Wood 积极加仓：上周买入 $37M SpaceX 为最大单笔。同时增持 AI 基础设施和 Coinbase。认为 Big Tech 财报是 AI 货币化的惊叹时刻。尽管就业数据疲软仍看好比特币。持续减持 Roblox/Palantir 进行换仓。来源：GuruFocus / DigitalToday / CryptoPanic (Aug 10)",
+      "targets": "SpaceX, AI infra, BTC, COIN | RBLX, PLTR"
+    },
+    {
+      "kol": "Eric Nuttall",
+      "sector": "Energy & Commodities",
+      "prev_dir": "看多",
+      "new_dir": "强烈看多",
+      "date": "2026-08-10",
+      "comments": "此生最严重的能源危机持续 -> 安全缓冲正快速耗尽 -> 伊朗不会自愿放弃霍尔木兹海峡控制权，在等Trump任期结束 -> 入港油轮流量仍低迷 -> 中东风险溢价未充分定价。Top Picks：Cenovus(CVE)/Strathcona(SCR)/Ovintiv(OVV)。来源：BNN Bloomberg Market Call (08/10)",
+      "targets": "看多 原油, CVE, SCR, OVV"
+    },
+    {
+      "kol": "Jeffrey Gundlach",
+      "sector": "Government Debt",
+      "prev_dir": "看多",
+      "new_dir": "看空",
+      "date": "2026-08-10",
+      "comments": "Gundlach 指出债券市场正在向美联储发出明确信号——必须继续抗击通胀而非转向宽松。新任美联储主席 Kevin Warsh 持鹰派立场，不会带来'宽松货币'。长期国债面临持续压力，收益率有上行风险。债券市场定价反映出对通胀粘性的深度担忧。来源：The WealthAdvisor (Aug 10)",
+      "targets": "TLT, ZB | TIPS, STIP"
+    },
+    {
+      "kol": "Dan Ives",
+      "sector": "Equities",
+      "prev_dir": "强烈看多",
+      "new_dir": "看多",
+      "date": "2026-08-10",
+      "comments": "Dan Ives 认为科技财报季是 AI 货币化的惊叹时刻。科技公司盈利几乎已追上此前高企的估值。AI 军备竞赛的下一阶段是通过模型变现实现上涨。哪些公司能率先将 AI 产品化将脱颖而出。来源：CNBC / StockTwits (Aug 10)",
+      "targets": "MSFT, GOOGL, META, AI应用层"
+    },
+    {
+      "kol": "Jordan Roy-Byrne",
+      "sector": "Precious Metals",
+      "prev_dir": "看多",
+      "new_dir": "强烈看多",
+      "date": "2026-08-10",
+      "comments": "金银本轮严重回调已结束，底部已确认 -> 未来数周任何回调都应积极买入黄金、白银及优质矿业股和初级矿业公司 -> 这是不会再出现的低吸机会。来源：Silver Phoenix 500 (08/10)",
+      "targets": "看多 黄金, 白银, 矿业股"
+    },
+    {
+      "kol": "Rory Johnston",
+      "sector": "Energy",
+      "prev_dir": "分歧",
+      "new_dir": "看多",
+      "date": "2026-08-09",
+      "comments": "Rory Johnston（Commodity Context）：伊朗再度袭击美护航船只，所谓'霍尔木兹海峡协议'叙事被证伪 → 海峡并未真正重开，油轮通行风险仍在 → 原油风险溢价重新计入价格。地缘风险溢价从'被市场忽略'回到'被重新定价'，若护航冲突升级，油价短期上行风险显著。来源：Commodity Context 08-08。",
+      "targets": "🟢 原油(短期地缘风险溢价)"
+    },
+    {
+      "kol": "Frank Giustra",
+      "sector": "Crypto",
+      "prev_dir": "强烈看多",
+      "new_dir": "分歧",
+      "date": "2026-08-07",
+      "comments": "Frank Giustra在8月5日再次批评比特币，称其仅为“投机实验”，远未建立“数字黄金”地位，价格主要由投机驱动→作为矿业巨头，他同期通过关联实体增持Klondike Gold矿业股，明确偏好实物黄金而非加密资产。来源: https://www.binance.com/en/square/post/23273892149770",
+      "targets": "🟢 GLD, PHYS, GDX | 🔴 BTC, IBIT"
+    },
+    {
+      "kol": "Gareth Soloway",
+      "sector": "Equities",
+      "prev_dir": "强烈看多",
+      "new_dir": "看空",
+      "date": "2026-08-07",
+      "comments": "Gareth Soloway在8月6日交易计划中指出，科技板块正经历“现实检验”→半导体和AI相关股遭遇重挫，即使业绩稳固仍被抛售→核心逻辑：当完美已被定价，好业绩不再足够→资金从高估值科技股转向成熟企业和防御板块→具体点名Western Digital和Sandisk遭遇重挫，Nasdaq与其他指数分化加剧。来源: https://www.verifiedinvesting.com/blogs/trading/my-trading-game-plan-revealed-08-06-2026",
+      "targets": "🔴 SNDK, WDC, QQQ | 🟢 防御板块, XLP"
+    },
+    {
+      "kol": "Rick Rule",
+      "sector": "Precious Metals",
+      "prev_dir": "强烈看多",
+      "new_dir": "看多",
+      "date": "2026-08-07",
+      "comments": "资深资源投资者Rick Rule当前选择持有现金而非加仓贵金属。他认为市场最大风险在于高收益债ETF——投资者将其误当作现金等价物，一旦流动性冲击来临将引发连锁抛售。Rule指出Fed已失去对长期利率的控制，未来可能被迫再度印钱救市。他正等待一场崩盘后再入场黄金白银，白银矿商目前股价已定价$37-42/oz，若白银达到$55亦非不可能。Lobo Tiggre同样已在高位减持矿股。黄金技术面显示无顶，但短期等待更好买点。来源: beforeitsnews.com, bitrss.com (2026-08-06)",
+      "targets": "🔴 HYG（短期） | 🟢 GLD（长期） | 🟢 SLV（长期）"
+    },
+    {
+      "kol": "Matthew Piepenburg",
+      "sector": "Precious Metals",
+      "prev_dir": "看多",
+      "new_dir": "强烈看多",
+      "date": "2026-08-07",
+      "comments": "Piepenburg 指出两大事件指向同一结论——法币体系购买力加速流失，黄金战略价值处于新历史起点：①日元跌至四十年低点，日本央行加息至1%触发套利交易大规模平仓→美股美债遭同步抛售，股债双杀格局再现，传统60/40组合失效；②美联储主席沃什承认长端利率上行已非央行主导而是市场自发定价，Piepenburg 解读为央行对债市失控的隐性承认。美国40万亿美元债务每日利息30亿，未来12个月8万亿需以更高利率再融资→货币贬值是唯一'出路'但也是更深陷阱。2026年初贵金属曾被刻意压价，为机构提供实物黄金低位积累窗口。来源：https://wallstreetcn.com/articles/377",
+      "targets": "🟢 GLD, PHYS, 黄金 | 🔴 USD, TLT, UST"
+    },
+    {
+      "kol": "Doomberg / Kuppy",
+      "sector": "Precious Metals",
+      "prev_dir": "强烈看空",
+      "new_dir": "强烈看多",
+      "date": "2026-08-07",
+      "comments": "Doomberg在8月6日CapitalCosm访谈中指出，财长Bessent正释放“制度变革”信号→美元相对黄金过强，数十年强美元政策掏空美国制造业→Fed和财政部自2008年以来持续以不同方式压制金融压力、货币化债务→日元干预也是此体系一环：支撑日元使日本无需抛售美债→最终问题是美国财政破产，政策制定者将竭力防止美元体系崩溃→黄金是这一制度变革的晴雨表。来源: https://capitalcosm.substack.com/p/doomberg-gold-is-signaling-a-massive",
+      "targets": "🟢 GLD, PHYS, GDX | 🔴 UUP, TLT"
+    },
+    {
+      "kol": "Alasdair Macleod",
+      "sector": "Precious Metals",
+      "prev_dir": "强烈看多",
+      "new_dir": "强烈看空",
+      "date": "2026-08-06",
+      "comments": "Alasdair Macleod在8月6日SilverTrade发表文章警告债券市场自燃，美债收益率上升叠加美国财政赤字不可持续，美联储被迫进行收益率曲线控制和债务货币化，美元贬值压力加剧，在此背景下黄金作为法币体系崩溃的唯一对冲工具价值飙升，投资者应为法币体系崩溃做好准备。来源：SilverTrade, 2026-08-06",
+      "targets": "看空: 美债, 美元 | 看多: 黄金"
+    },
+    {
+      "kol": "Kyle Bass",
+      "sector": "Government Debt",
+      "prev_dir": "强烈看空",
+      "new_dir": "看空",
+      "date": "2026-08-06",
+      "comments": "Kyle Bass指出Sell America交易正在回归，全球投资者因美国政策和Fed不确定性重新讨论抛售美国资产，30年期美债收益率升至多年来最高水平，美元同步走弱，投资者担忧美国政策将动摇美元和债券稳定性，反映市场对美国财政纪律丧失信心的深层担忧。来源：moneyandbanking.co.th, 2026-08-06",
+      "targets": "看空: 美元, 美债 | 看多: 黄金"
+    },
+    {
+      "kol": "S. Druckenmiller",
+      "sector": "Equities",
+      "prev_dir": "看空",
+      "new_dir": "强烈看多",
+      "date": "2026-08-06",
+      "comments": "Druckenmiller发出强力看多信号→若不以当前价格买入Mag7将永远后悔→与Grantham/Dalio/Burry的AI泡沫警告形成鲜明对立→体现了价值投资派与成长派的根本分歧。Druckenmiller为传奇宏观对冲基金经理→其逆向买入信号历史上多次正确。来源：综合报道(8/5)",
+      "targets": "强烈看多 Mag7/科技巨头"
+    },
+    {
+      "kol": "Robert Kiyosaki",
+      "sector": "Precious Metals",
+      "prev_dir": "强烈看空",
+      "new_dir": "强烈看多",
+      "date": "2026-08-04",
+      "comments": "《富爸爸穷爸爸》作者Robert Kiyosaki重申对比特币、黄金和其他硬资产的坚定支持，预测到2035年黄金可达$35,000/盎司。Kiyosaki一贯主张'储蓄者是输家'，认为法币体系将持续贬值→实物资产才是真正的财富储存工具。他同时警告全球经济脆弱性→建议持有'可触摸的资产'而非纸质金融产品。来源：BitRss 2026-08-04",
+      "targets": "强烈看多 黄金 GLD PHYS | 看多 比特币 BTC | 看空 美元 USD"
+    }
+  ],
+  "liquidity": {
+    "reserves_T": {
+      "value": 2.993,
+      "prev": 2.993,
+      "delta": 0.0
+    },
+    "on_rrp_B": {
+      "value": 1.25,
+      "prev": 0.975,
+      "delta": 0.28
+    },
+    "tga_B": {
+      "value": 907.3,
+      "prev": 907.3,
+      "delta": 0.0
+    },
+    "risk_notes": {
+      "AI短评": "JGB 10Y 2.804%🔴持续突破2.5%红线，10Y-TONAR利差182.7bp；Fed准备金$2.993T连续多日<$3T，ON RRP仅$0.975B归零级；US 10Y 4.65% 2s10s 46bp正利差。本周Q3再融资拍卖启动（今日3Y/$580亿，明日10Y/$420亿），供给放量+准备金低位叠加→警惕长端抛压。日债🔴，Fed流动性🟡，综合🟡紧张。",
+      "操作建议": "161226: 减仓 — JGB 10Y 2.804%持续>2.5%红线，10Y-TONAR 182.7bp反映市场定价远超日银政策利率，债券价格承压。Q3再融资周US长端供给可能带动全球利率上行。\n1542.T: 持有 — 日本银行股受益于利率上行净息差扩大，JGB 10Y>2.8%为银行盈利提供支撑。但日债波动极端，需设止损。\n1164.HK: 持有 — 中美利差维持宽幅，港股受益于日资溢出效应和南向资金。US再融资周若利率急升则需减仓避险。\n8306.T: 持有 — 三菱UFJ作为日本最大银行，利率上行直接利好净息差。JGB 10Y>2.8%环境下持有，但需关注日银政策转向风险。",
+      "关键变动": "• Fed准备金$2.993T连续第7个交易日<$3T关口，ON RRP $0.975B归零级——流动性缓冲已基本耗尽\n• JGB 10Y 2.804%维持🔴，10Y-TONAR利差182.7bp（日银0.75%政策利率远落后市场定价），YCC退出风险高\n• Q3再融资拍卖周今日启动：3Y $580亿→明日10Y $420亿→后日30Y $250亿，供给放量考验长端承接力"
+    },
+    "risk_lights": {
+      "风控总分": "🟡紧张",
+      "运行状态": "✅成功",
+      "日债风险": "🔴",
+      "美债风险": "🟡",
+      "基差套利风险": "🟢",
+      "Fed流动性风险": "🟡"
+    },
+    "yields": {
+      "10Y": {
+        "value": 4.72,
+        "delta": 0.07
+      },
+      "2Y": {
+        "value": 4.25,
+        "delta": 0.06
+      },
+      "30Y": {
+        "value": 5.25,
+        "delta": 0.06
+      }
+    }
+  }
+}
