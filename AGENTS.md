@@ -43,9 +43,25 @@ Notion 3 时序 DB → 莫兰迪配色 dashboard（雷达图 + 仪表盘 + 6 部
 - **金银 COT 用 CFTC 官方 Socrata API**(publicreporting.cftc.gov)，非 barchart(反爬/付费)，同源但更稳可 backfill。COMEX 主力合约精确匹配 `GOLD/SILVER - COMMODITY EXCHANGE INC.`(排除 MICRO)。
 - **纪律**：绝不编数字，取不到标 status；阈值静态不随情绪调；写后读回验证。
 
-## Cron (JST，避开 08:00/09:00/:00/:30 拥挤时段)
-- eco-vol-01 每日 08:30 抓数+AI解读+dashboard+**push公开GitHub**+Telegram report(agent 模式,deliver=origin)
+## Cron (JST)
+- eco-vol-01-daily-scan-report 每日 **11:00**(工作日)：抓数+KOL独立抓取+流动性+AI分析→写Notion 3DB+每日报告page内部+dashboard+GitHub副本+push→Telegram详细日报(6部分+分领域分析+KOL转向+流动性)。11点是为等 KOL/Economic Dashboard 的09:00数据跑完
+- eco-vol-weekly-report 周六 **11:00**：汇总一周→周报DB+GitHub+Telegram周报(重点状态变化)
 - eco-vol-selfheal 每小时 :20 自愈 watchdog(no_agent)
+
+## 数据联动 (2026-08 扩展)
+- **KOL 独立数据源**：从 KOL 项目 GitHub 拉名册 data/kol_registry.json(80 KOL)，Eco **每日自己 web_search** 20-25 核心 KOL 判方向→写 data/kol_independent.json(不共用另一 agent 的 Notion 结论,准确性独立)。external_data.load_independent_kol() 优先,kol_stance_changes() 读另一agent DB 仅兜底
+- **Economic Dashboard 流动性**：external_data.fetch_liquidity_points() 读 Fed准备金/RRP/TGA(A5)+收益率(A1)+风控灯/关键变动(A6 750f9b46...)
+- dashboard 底部两板块：当日KOL状态变化 + 流动性要点；每个 metric 卡片加 📌 当日短评
+
+## Notion 4 DB (id 在 .env)
+- DB_INDICATORS 每日指标 · DB_COT 金银COT · DB_REPORT 每日报告(page内部写6部分+分领域分析+KOL+流动性丰富blocks) · DB_WEEKLY 周报
+
+## GitHub 每日副本
+- reports/<date>.md + reports/latest.md + data/daily/<date>.json + reports/weekly/<week>.md
+- report_writer.py: write_daily_page_content(Notion blocks) / write_github_copy / write_weekly
+
+## 每日报告必含 6 部分(硬骨架,Chao 强调)
+①仪表盘 ②警报统计(短X/5中X/7长X/5) ③逐条解读2-3句 ④短中长综合结论(减仓/调仓/再平衡具体动作) ⑤卖出触发7项表 ⑥今日焦点一条 + 分领域分析500-1000字(重状态变化)
 
 ## 发布 (2026-08 改：公开 GitHub Pages，不用 Uber vibe)
 - **宏观指标是公开信息** → 存公开个人 repo `Curarpikt0000/Eco-and-Volatility-Checker`(main)
