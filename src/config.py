@@ -83,10 +83,10 @@ INDICATORS = [
      "unit": "比率", "direction": "low_bad", "warn": 0.55, "trigger": 0.45,
      "note": "越低越自满(买权多)。<0.45 = 极度乐观，回调风险高。"},
 
-    {"key": "naaim", "name_zh": "NAAIM 主动部位指数", "name_en": "NAAIM Exposure",
-     "group": "short", "source": "web", "url": "https://www.naaim.org/programs/naaim-exposure-index/",
-     "unit": "%", "direction": "high_bad", "warn": 90, "trigger": 100,
-     "note": "主动经理股票敞口。>100% = 加杠杆满仓，过热。"},
+    {"key": "bofa_fms_cash", "name_zh": "BofA FMS 现金水平", "name_en": "BofA FMS Cash %",
+     "group": "short", "source": "search", "url": "",
+     "unit": "%", "direction": "low_bad", "warn": 4.5, "trigger": 4.0,
+     "note": "全球基金经理现金占比(BofA月度调查)。替代已停更的NAAIM主动仓位。现金<4%=满仓贪婪/过热(反向卖出信号),>5%=避险恐慌(反向买入)。"},
 
     # ═══════════ 🟡 中期指标 (周-月级别，判断趋势转折) ═══════════
     {"key": "margin_debt", "name_zh": "FINRA 保证金负债", "name_en": "FINRA Margin Debt",

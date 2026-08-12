@@ -227,43 +227,78 @@ def load_holdings():
     return {}
 
 
-def find_all_13f(cik, limit=12):
-    """返回该 CIK 最近 limit 期 13F-HR: [(filingDate, accession, reportDate),...] 降序。"""
+def find_all_13f(cik, limit=60, since_year=None):
+    """返回该 CIK 的 13F-HR filings: [(filingDate, accession, reportDate),...] 降序。
+    SEC submissions 的 recent 只含最近~1000条; 老机构要回到 since_year 需读 files[].name 分片。
+    limit: 最多返回期数; since_year: 只保留 reportDate 年份 >= 此(用于十年回填)。"""
     cik10 = f"{int(cik):010d}"
     d = json.loads(_get(f"https://data.sec.gov/submissions/CIK{cik10}.json"))
-    rec = d["filings"]["recent"]
-    forms, accs, fdates = rec["form"], rec["accessionNumber"], rec["filingDate"]
-    rdates = rec.get("reportDate", [""] * len(forms))
-    out = []
-    for i, f in enumerate(forms):
-        if f.startswith("13F-HR") and not f.endswith("/A"):
-            out.append((fdates[i], accs[i], rdates[i] if i < len(rdates) else ""))
-        if len(out) >= limit:
-            break
-    return out, d.get("name", "")
+    name = d.get("name", "")
+
+    def _collect(rec):
+        forms = rec.get("form", [])
+        accs = rec.get("accessionNumber", [])
+        fdates = rec.get("filingDate", [])
+        rdates = rec.get("reportDate", [""] * len(forms))
+        got = []
+        for i, f in enumerate(forms):
+            if f.startswith("13F-HR") and not f.endswith("/A"):
+                rd = rdates[i] if i < len(rdates) else ""
+                got.append((fdates[i], accs[i], rd))
+        return got
+
+    out = _collect(d["filings"]["recent"])
+    # 若要回溯更早年份, 读 additional filing 分片
+    if since_year:
+        import time as _t
+        for extra in d["filings"].get("files", []):
+            fn = extra.get("name")
+            if not fn:
+                continue
+            try:
+                _t.sleep(0.2)
+                ed = json.loads(_get(f"https://data.sec.gov/submissions/{fn}"))
+                out += _collect(ed)
+            except Exception:
+                continue
+    # 去重 + 过滤年份 + 排序
+    seen = set()
+    dedup = []
+    for fd, acc, rd in out:
+        if acc in seen:
+            continue
+        seen.add(acc)
+        if since_year and rd and rd[:4] < str(since_year):
+            continue
+        dedup.append((fd, acc, rd))
+    dedup.sort(key=lambda x: x[0], reverse=True)
+    return dedup[:limit], name
 
 
-def backfill_2025(institutions=None, write_notion=True):
-    """回填 2025 全年(+2024Q4基准)各机构每季 13F 持仓+变动 → Notion + json。
-    2025 季度 report_date: 2025-03-31 / 06-30 / 09-30 / 12-31。
-    每期变动 = 该期 vs 紧邻上一期。绝不编: 无该期就跳过。"""
+def backfill_2025(institutions=None, write_notion=True, start_year=2025, end_year=2025):
+    """回填 [start_year, end_year] 各机构每季 13F 持仓+变动 → Notion + json。
+    取 (start_year-1)Q4 作首期变动基准。每期变动 = 该期 vs 紧邻上一季。绝不编: 无该期就跳过。
+    默认只 2025(向后兼容); 十年回填传 start_year=2016,end_year=2025。"""
     import config as c
     import notion_writer as nw
     institutions = institutions or INSTITUTIONS
     db = c.NOTION_DB.get("holdings") if write_notion else None
+    lo = f"{start_year - 1}-12-31"   # 前一年Q4作基准
+    hi = f"{end_year}-12-31"
     all_rows = []
     total_written = 0
     for inst in institutions:
         try:
-            filings, name = find_all_13f(inst["cik"], limit=12)
+            # 十年回填需读 additional 分片(since_year=前一年)
+            filings, name = find_all_13f(inst["cik"], limit=60, since_year=start_year - 1)
         except Exception as e:
             print(f"  {inst['fund']}: submissions失败 {type(e).__name__}", flush=True)
             continue
-        # 只保留 report_date 在 2024-12-31 ~ 2025-12-31 的期(2024Q4 作变动基准)
-        want = [f for f in filings if f[2] and "2024-12-31" <= f[2] <= "2025-12-31"]
+        # 保留 report_date 在 [lo, hi] 的期
+        want = [f for f in filings if f[2] and lo <= f[2] <= hi]
         want.sort(key=lambda x: x[2])  # 升序按报告期
         if not want:
-            print(f"  {inst['fund']}: 2025 无 13F", flush=True)
+            print(f"  {inst['fund']}: {start_year}-{end_year} 无 13F", flush=True)
             continue
         parsed = {}  # report_date -> agg
         for fd, acc, rd in want:
@@ -275,8 +310,8 @@ def backfill_2025(institutions=None, write_notion=True):
         rds = sorted(parsed.keys())
         # 对 2025 的每期(跳过纯基准 2024-12-31 除非它也要展示)算变动
         for i, rd in enumerate(rds):
-            if not rd.startswith("2025"):
-                continue  # 2024Q4 仅作基准, 不单独写行
+            if not rd or int(rd[:4]) < start_year:
+                continue  # 基准年(start_year-1)Q4 仅作基准, 不单独写行
             cur = parsed[rd]
             prev_rd = rds[i - 1] if i > 0 else None
             # ★只在 prev 真正是紧邻季度(相差 75-105 天)时算变动, 避免季度缺失时错配基准
@@ -321,9 +356,9 @@ def backfill_2025(institutions=None, write_notion=True):
                     props["TOP持仓与变动"] = nw.prop_text(_fmt_holdings_text(plain) + "\n(注:无紧邻上季,未计变动)")
                 if nw.upsert(db, title, props, title_field="机构-期"):
                     total_written += 1
-        print(f"  {inst['fund']}: 2025 写 {sum(1 for r in rds if r.startswith('2025'))} 期", flush=True)
+        print(f"  {inst['fund']}: {start_year}-{end_year} 写 {sum(1 for r in rds if r and int(r[:4]) >= start_year)} 期", flush=True)
         time.sleep(0.4)
-    # 存 2025 历史 json
+    # 存历史 json
     json.dump({"date": "2025-backfill", "institutions": all_rows},
               open(os.path.join(DATA_DIR, "holdings_13f_2025.json"), "w"),
               ensure_ascii=False, indent=2, default=str)
@@ -386,7 +421,17 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--one", help="只测一个 fund 关键字")
     ap.add_argument("--backfill2025", action="store_true", help="回填2025全年各机构季度13F")
+    ap.add_argument("--backfill-years", nargs=2, type=int, metavar=("START", "END"),
+                    help="回填 [START,END] 年各机构季度13F(如 2016 2025)")
     args = ap.parse_args()
+    if args.backfill_years:
+        sy, ey = args.backfill_years
+        insts = INSTITUTIONS
+        if args.one:
+            insts = [i for i in INSTITUTIONS if args.one.lower() in i["fund"].lower()]
+        print(f"[13F-{sy}~{ey}] 回填 {len(insts)} 机构...", flush=True)
+        backfill_2025(insts, write_notion=True, start_year=sy, end_year=ey)
+        sys.exit(0)
     if args.backfill2025:
         insts = INSTITUTIONS
         if args.one:

@@ -22,7 +22,7 @@ HOW_TO_READ = {
     "fear_greed": "情绪钟摆。>75 极度贪婪(该减)，<25 极度恐惧(可贪)。从高位回落是顶部确认。",
     "aaii_bull_bear": "散户情绪。多空差 >30% = 散户太乐观(反向看空)，<-30% = 过度悲观(反向看多)。",
     "put_call": "对冲需求。越低=越少人买保险=越自满。<0.45 极度乐观(危险)，高=恐慌(可能见底)。",
-    "naaim": "主动经理仓位。>100% 加杠杆满仓(过热)，<20% 空仓避险。极值是反向信号。",
+    "bofa_fms_cash": "全球基金经理现金占比(BofA月度调查)。替NAAIM。现金<4%=满仓贪婪(反向卖出)，>5%=避险恐慌(反向买入)。极值反向信号。",
     "margin_debt": "借钱炒股总量。持续攀升=杠杆堆积；连续 3 月下降=去杠杆开始(历史顶部信号)。",
     "margin_gdp": "杠杆占经济比重。>3% 历史偏高，>3.5% 极端。回落往往伴随市场调整。",
     "ipo_count": "发行热度。IPO 井喷=市场情绪顶部特征(供给放量套现)。骤降=风险偏好收缩。",
@@ -185,7 +185,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
             r = results.get(key, {})
             lt = signals.light(ind, r.get("value"))
             cls = _sig_cls(lt)
-            hist = load_history(SNAP_DIR, key, days=14)
+            hist = load_history(SNAP_DIR, key, days=28)
             spark = sparkline_svg(hist, ind.get("direction", "high_bad"))
             arrow, acls = trend_arrow(hist, ind.get("direction", "high_bad"))
             st = r.get("status", "")
@@ -206,7 +206,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
               </div>
               <div class="mc-val">{fmt_val(ind, r)} {chg}{st_badge}</div>
               <div class="mc-thr">{threshold_text(ind)}</div>
-              <div class="mc-spark">{spark}<span class="mc-spark-lbl">近2周</span></div>
+              <div class="mc-spark">{spark}<span class="mc-spark-lbl">近4周</span></div>
               {note_html}
               <div class="mc-how"><b>如何看：</b>{how}</div>
             </div>"""
