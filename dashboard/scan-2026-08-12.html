@@ -204,6 +204,21 @@
   .mc-slabel-g { color: #3f5a3f; background: rgba(154,171,151,.30); }
   .mc-slabel-y { color: #8a6a2a; background: rgba(212,178,110,.32); }
   .mc-slabel-r { color: #fff; background: var(--clay); }
+  /* 外国官方托管美债卡片 */
+  .cust-wrap { display: flex; flex-direction: column; gap: 10px; }
+  .cust-lbl { font-size: 12px; color: var(--muted); font-weight: 600; }
+  .cust-val { font-family: var(--mono); font-size: 34px; font-weight: 800; color: var(--text); line-height: 1.1; }
+  .cust-unit { font-size: 18px; color: var(--muted); margin-left: 2px; }
+  .cust-wow { font-size: 14px; font-weight: 700; margin-left: 10px; padding: 2px 8px; border-radius: 5px; vertical-align: middle; }
+  .cust-wow-g { color: #3f5a3f; background: rgba(154,171,151,.28); }
+  .cust-wow-r { color: #fff; background: var(--clay); }
+  .cust-wow-n { color: var(--muted); background: var(--card2); }
+  .cust-sub { font-size: 10px; color: var(--muted); font-family: var(--mono); }
+  .cust-meta { display: flex; gap: 20px; flex-wrap: wrap; padding: 8px 0; border-top: 1px dashed rgba(160,160,150,.25); border-bottom: 1px dashed rgba(160,160,150,.25); }
+  .cust-row { font-size: 12px; color: var(--dust-blue); }
+  .cust-row b { font-family: var(--mono); color: var(--text); margin-left: 6px; }
+  .cust-how { font-size: 11.5px; color: var(--muted); line-height: 1.6; }
+  .cust-how b { color: var(--dust-blue); }
 
   /* 逐条解读 */
   .interp-group { font-size: 13px; color: var(--dust-blue); margin: 16px 0 8px; font-weight: 700; }
@@ -243,7 +258,7 @@
 <body>
 <header>
   <h1>宏观风险扫描 · <span>Eco &amp; Volatility Checker</span></h1>
-  <span id="update-time">数据日期 2026-08-12 · 生成 2026-08-12 19:06 JST</span>
+  <span id="update-time">数据日期 2026-08-12 · 生成 2026-08-12 22:28 JST</span>
 </header>
 <div class="container">
 
@@ -531,6 +546,10 @@
   <!-- ═══ 附三：三大央行资产负债表 (JP/CN/US) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>三大央行资产负债表 · 每日更新 (左资产 / 右负债 · 带环比)</div>
   <div class="bs-grid"><div class="bs-card"><div class="bs-head">🇺🇸 美联储 Fed<span class="bs-meta">2026-08-05 · 单位 $B · 环比口径 WoW</span></div><div class="bs-body"><div class="bs-col bs-assets"><div class="bs-col-h">资产 (Assets)</div><div class="bs-line"><span class="bs-name">美国国债 Treasuries</span><span class="bs-val">4,530</span><span class="bs-wow bs-up">▲ +10.30 (+0.23%)</span></div><div class="bs-line"><span class="bs-name">MBS 抵押债</span><span class="bs-val">1,931</span><span class="bs-wow bs-flat">→ +0.00 (+0.00%)</span></div><div class="bs-line"><span class="bs-name">短期国债 Bills</span><span class="bs-val">524.88</span><span class="bs-wow bs-up">▲ +10.36 (+2.01%)</span></div><div class="bs-line"><span class="bs-name">FIMA 海外回购</span><span class="bs-val">317.72</span><span class="bs-wow bs-down">▼ -16.76 (-5.01%)</span></div><div class="bs-line"><span class="bs-name">SRF 常备回购</span><span class="bs-val">0.00</span><span class="bs-wow bs-flat">→ +0.00 (+0.00%)</span></div><div class="bs-line bs-total"><span class="bs-name">总资产</span><span class="bs-val">6,749</span><span class="bs-wow bs-up">▲ +10.38 (+0.15%)</span></div></div><div class="bs-col bs-liabs"><div class="bs-col-h">负债 (Liabilities)</div><div class="bs-line"><span class="bs-name">准备金 Reserves</span><span class="bs-val">2,993</span><span class="bs-wow bs-up">▲ +8.78 (+0.29%)</span></div><div class="bs-line"><span class="bs-name">隔夜逆回购 ON RRP</span><span class="bs-val">1.65</span><span class="bs-wow bs-down">▼ -0.93 (-35.95%)</span></div><div class="bs-line"><span class="bs-name">财政部账户 TGA</span><span class="bs-val">907.32</span><span class="bs-wow bs-down">▼ -3.45 (-0.38%)</span></div><div class="bs-line"><span class="bs-name">流通货币 Currency</span><span class="bs-val">2,473</span><span class="bs-wow bs-up">▲ +2.09 (+0.08%)</span></div></div></div></div><div class="bs-card"><div class="bs-head">🇯🇵 日本央行 BoJ<span class="bs-meta">2026-07-31 · 单位 $B · 环比口径 较上期 · 原口径 兆¥ · 按 USD/JPY 157.54 折美元</span></div><div class="bs-body"><div class="bs-col bs-assets"><div class="bs-col-h">资产 (Assets)</div><div class="bs-line"><span class="bs-name">日本国债 JGB</span><span class="bs-val">3,297</span><span class="bs-wow bs-up">▲ +7.30 (+0.22%)</span></div><div class="bs-line"><span class="bs-name">公司债</span><span class="bs-val">9.10</span><span class="bs-wow bs-down">▼ -0.50 (-5.01%)</span></div><div class="bs-line"><span class="bs-name">ETF</span><span class="bs-val">234.90</span><span class="bs-wow bs-down">▼ -0.10 (-0.04%)</span></div><div class="bs-line"><span class="bs-name">J-REIT</span><span class="bs-val">4.10</span><span class="bs-wow bs-flat">→ +0.00 (+0.00%)</span></div><div class="bs-line bs-total"><span class="bs-name">总资产</span><span class="bs-val">4,090</span><span class="bs-wow bs-up">▲ +31.30 (+0.77%)</span></div></div><div class="bs-col bs-liabs"><div class="bs-col-h">负债 (Liabilities)</div><div class="bs-line"><span class="bs-name">银行券 Banknotes</span><span class="bs-val">729.90</span><span class="bs-wow bs-down">▼ -0.10 (-0.01%)</span></div><div class="bs-line"><span class="bs-name">经常项目存款</span><span class="bs-val">2,780</span><span class="bs-wow bs-up">▲ +40.70 (+1.48%)</span></div><div class="bs-line"><span class="bs-name">政府存款</span><span class="bs-val">46.60</span><span class="bs-wow bs-up">▲ +23.20 (+99.65%)</span></div></div></div></div><div class="bs-card"><div class="bs-head">🇨🇳 中国央行 PBoC<span class="bs-meta">2026-07 · 单位 $B · 环比口径 MoM · 原口径 亿¥ · 按 USD/CNY 6.7474 折美元</span></div><div class="bs-body"><div class="bs-col bs-assets"><div class="bs-col-h">资产 (Assets)</div><div class="bs-line"><span class="bs-name">外汇占款</span><span class="bs-val">3,206</span><span class="bs-wow bs-flat">→ +0.00 (+0.00%)</span></div><div class="bs-line"><span class="bs-name">对政府债权</span><span class="bs-val">331.20</span><span class="bs-wow bs-flat">→ +0.00 (+0.00%)</span></div><div class="bs-line"><span class="bs-name">对其他存款性公司债权</span><span class="bs-val">3,012</span><span class="bs-wow bs-flat">→ +0.00 (+0.00%)</span></div><div class="bs-line bs-total"><span class="bs-name">总资产</span><span class="bs-val">7,170</span><span class="bs-wow bs-flat">→ +0.00 (+0.00%)</span></div></div><div class="bs-col bs-liabs"><div class="bs-col-h">负债 (Liabilities)</div><div class="bs-line"><span class="bs-name">储备货币</span><span class="bs-val">5,798</span><span class="bs-wow bs-flat">→ +0.00 (+0.00%)</span></div><div class="bs-line"><span class="bs-name">货币发行</span><span class="bs-val">2,245</span><span class="bs-wow bs-flat">→ +0.00 (+0.00%)</span></div><div class="bs-line"><span class="bs-name">政府存款</span><span class="bs-val">891.50</span><span class="bs-wow bs-flat">→ +0.00 (+0.00%)</span></div><div class="bs-line bs-total"><span class="bs-name">总负债</span><span class="bs-val">7,170</span><span class="bs-wow bs-flat">→ +0.00 (+0.00%)</span></div></div></div></div></div>
+
+  <!-- ═══ 附三·五：外国官方在纽约联储托管的美债 ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>外国官方托管美债 · 纽约联储 (去美元化风向标)</div>
+  <div class="card"><div class="cust-wrap"><div class="cust-main"><div class="cust-lbl">可流通美债 · 外国官方托管</div><div class="cust-val">$2.647<span class="cust-unit">T</span> <span class="cust-wow cust-wow-g">▲ +8.5B (+0.32%)</span></div><div class="cust-sub">周环比 (Fed H.4.1 · 2026-08-06)</div></div><div class="cust-meta"><div class="cust-row"><span>托管总额(含机构债/MBS)</span><b>$2.926T</b></div><div class="cust-row"><span>其中非美债部分</span><b>$0.279T</b></div></div><div class="cust-how"><b>如何看：</b>外国央行/官方机构在纽约联储托管的美债存量。持续下降 = 外国官方减持美债 / 去美元化 / 抛售换汇干预，是主权层面对美债信心的风向标。关注中长期趋势与周环比方向，而非绝对水平。数据源：Fed H.4.1 周报（每周四更新）。</div></div></div>
 
   <!-- ═══ 附四：知名机构持仓 (13F) + Trump ═══ -->
   <div class="part-title"><span class="part-num">＋</span>机构持仓追踪 · 13F + Trump (对比上期变动)</div>

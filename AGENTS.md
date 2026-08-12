@@ -64,10 +64,11 @@ Notion 3 时序 DB → 莫兰迪配色 dashboard（雷达图 + 仪表盘 + 6 部
   - ②**川普 OGE 278-T 逐笔(src/oge_trump.py,新)**：★川普作为总统在报 278-T 期间交易报告=**逐笔交易**(非仅年度快照)!源=OGE XPages API `extapps2.oge.gov/201/Presiden.nsf/API.xsp/v2/rest?length=20000`(返全量~16600条JSON,客户端过滤→本地筛name含trump);type字段内嵌<a href>直达PDF(无需Request)。有 278ANNUAL 年度快照+多份 278-T(~300+笔/份)。★解析坑:OCR噪音(purchase→lourchaso;金额$15 001内部空格+bullet分隔);交易日=买卖词**之后**第一个日期(不是债券DUE到期日);金额边界snap到OGE标准档修正。无ticker(只有资产描述名)。
   - ③**川普 DJT Form 4(src/djt_form4.py,新,每日cron逐笔)**：SEC EDGAR CIK 947033=TRUMP DONALD J,submissions JSON里form=='4'→primary_doc.xml。code P买/S卖/G赠与/A授予/F扣税/M行权。带DJT ticker。川普持DJT股票最快逐笔信号。
   - ④**参议员 Tuberville PTR(src/senate_ptr.py,新)**：efdsearch.senate.gov 会话流程:GET /search/home/拿csrf→POST同意条款(prohibition_agreement=1)→★GET /search/建referer链(缺这步data端点503!)→POST /search/report/data/(report_types=[11]=PTR,带X-Requested-With+X-CSRFToken)→GET /search/view/ptr/<uuid>/明细HTML。★参议院数据带ticker质量优于众议院PDF。可扩其他参议员(SENATE_TARGETS只增不减)。
-- dashboard 底部四板块(顺序):当日KOL状态变化 → 流动性要点 → 三大央行资产负债表 → 机构持仓13F+政要披露(5卡:佩洛西/Crenshaw/川普OGE 278-T/川普DJT Form 4/Tuberville)；每个 metric 卡片加 📌 当日短评
+- dashboard 底部四板块(顺序):当日KOL状态变化 → 流动性要点 → 三大央行资产负债表 → 外国官方托管美债 → 机构持仓13F+政要披露(5卡:佩洛西/Crenshaw/川普OGE 278-T/川普DJT Form 4/Tuberville)；每个 metric 卡片加 📌 当日短评
+- ★**外国官方托管美债(2026-08 接入, Chao附FT图)**：external_data.fetch_foreign_custody_ust() 抓 Fed H.4.1 weekly release HTML(每周四更新)的"Securities held in custody for foreign official and international accounts"段→"Marketable U.S. Treasury securities"行。反映外国央行减持美债/去美元化趋势。★FRED WMTSECL 等 series 2012已停更,活跃真数据只在 Fed H.4.1 release 本身(federalreserve.gov/releases/h41/current/h41.htm)。当前$2.647T(2026-08-06),周环比+$8.5B。三处产出:①dashboard 底部独立卡片(_custody_html,大号值+周环比箭头绿/红+总托管+去美元化叙事)②Notion 周度时序 DB_CUSTODY(external_data.write_custody_notion 以as_of作title幂等)③GitHub每日json副本。每日cron步骤6抓+写Notion+进dashboard,步骤7进json。
 
-## Notion 5 DB (id 在 .env)
-- DB_INDICATORS 每日指标 · DB_COT 金银COT · DB_REPORT 每日报告(page内部写6部分+分领域+KOL+流动性+央行BS+持仓丰富blocks) · DB_WEEKLY 周报 · DB_HOLDINGS 机构持仓13F(3ba47eb5...)
+## Notion 6 DB (id 在 .env)
+- DB_INDICATORS 每日指标 · DB_COT 金银COT · DB_REPORT 每日报告(page内部写6部分+分领域+KOL+流动性+央行BS+持仓丰富blocks) · DB_WEEKLY 周报 · DB_HOLDINGS 机构持仓13F(3ba47eb5...) · DB_CUSTODY 外国官方托管美债(周度时序,3ba47eb5-fd3c-8143...)
 
 ## backfill 历史 (2026-08)
 - backfill.py: 周采样一年(FRED日度as-of/COT周度) → DB_INDICATORS ~52行

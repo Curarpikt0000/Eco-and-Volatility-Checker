@@ -335,6 +335,88 @@ def fetch_cb_balance_sheets(to_usd=True):
     return out
 
 
+# ─────────── 外国官方在纽约联储托管的美债 (Fed H.4.1) ───────────
+# Chao 需求(2026-08, 附FT图): 外国央行/官方机构在NY Fed托管的可流通美债。
+# 反映外国官方对美债的减持/去美元化趋势(FT图红箭头强调2025-26急跌)。
+# 数据源: Fed H.4.1 weekly release HTML(每周四更新), "Securities held in custody
+#   for foreign official and international accounts" 段的 "Marketable U.S. Treasury securities" 行。
+#   ★FRED 的 WMTSECL 等 series 2012 已停更, 活跃真数据只在 Fed H.4.1 release 本身。
+# 单位: 百万美元 → 转 $T(万亿)。绝不编: 抓不到标 status。
+FED_H41_URL = "https://www.federalreserve.gov/releases/h41/current/h41.htm"
+
+
+def fetch_foreign_custody_ust():
+    """抓 Fed H.4.1 外国官方托管可流通美债(当前值+周变动)。
+    返回 {value(单位$T), as_of, wow_delta_bn, wow_pct, total_custody_tn, status, source}。"""
+    import re
+    import requests
+    try:
+        r = requests.get(FED_H41_URL,
+                         headers={"User-Agent": "EcoVolChecker research (contact research@example.com)"},
+                         timeout=30)
+        if r.status_code != 200:
+            return {"value": None, "as_of": None, "status": f"HTTP {r.status_code}"}
+        txt = re.sub(r"<[^>]+>", " ", r.text)
+        txt = re.sub(r"&#xa0;", " ", txt)
+        txt = re.sub(r"\s+", " ", txt)
+        # 定位 custody 段
+        i = txt.find("held in custody for foreign official")
+        if i < 0:
+            return {"value": None, "as_of": None, "status": "H.4.1 未找到 custody 段"}
+        seg = txt[i:i + 700]
+        # 总托管(该行紧跟金额: 总值 +/- 周变动 +/- 年变动 期末值)
+        mt = re.search(r"international accounts\s+([\d,]+)", seg)
+        total_custody = int(mt.group(1).replace(",", "")) if mt else None
+        # Marketable U.S. Treasury securities 行: 当前值 [+/-] 周变动
+        m = re.search(r"Marketable U\.S\. Treasury securities\s*1?\s*([\d,]+)\s*([+\-])\s*([\d,]+)", seg)
+        if not m:
+            return {"value": None, "as_of": None, "status": "H.4.1 未找到美债托管行",
+                    "total_custody_tn": round(total_custody / 1e6, 3) if total_custody else None}
+        latest = int(m.group(1).replace(",", ""))          # 百万美元
+        sign = -1 if m.group(2) == "-" else 1
+        wow = sign * int(m.group(3).replace(",", ""))       # 周变动(百万美元)
+        # release 日期
+        dm = re.search(r"(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),\s+(20\d{2})", txt)
+        as_of = None
+        if dm:
+            import datetime
+            months = {"January": 1, "February": 2, "March": 3, "April": 4, "May": 5, "June": 6,
+                      "July": 7, "August": 8, "September": 9, "October": 10, "November": 11, "December": 12}
+            as_of = datetime.date(int(dm.group(3)), months[dm.group(1)], int(dm.group(2))).isoformat()
+        prev = latest - wow
+        return {
+            "value": round(latest / 1e6, 3),               # $T(万亿)
+            "as_of": as_of,
+            "wow_delta_bn": round(wow / 1e3, 1),            # 周变动 十亿美元
+            "wow_pct": round(wow / prev * 100, 2) if prev else None,
+            "total_custody_tn": round(total_custody / 1e6, 3) if total_custody else None,
+            "status": "ok",
+            "source": "Fed H.4.1 weekly release",
+        }
+    except Exception as e:
+        return {"value": None, "as_of": None, "status": f"错误:{e}"}
+
+
+def write_custody_notion(cust=None):
+    """把外国官方托管美债写入 Notion DB_CUSTODY(周度, 以 as_of 作 title 幂等 upsert)。
+    返回写入的 page id 或 None(数据无效/无DB时跳过)。"""
+    import config as c
+    import notion_writer as nw
+    if cust is None:
+        cust = fetch_foreign_custody_ust()
+    db = c.NOTION_DB.get("custody")
+    if not db or cust.get("value") is None or not cust.get("as_of"):
+        return None
+    props = {
+        "托管美债($T)": nw.prop_num(cust.get("value")),
+        "周变动($B)": nw.prop_num(cust.get("wow_delta_bn")),
+        "周变动(%)": nw.prop_num(cust.get("wow_pct")),
+        "托管总额($T)": nw.prop_num(cust.get("total_custody_tn")),
+        "数据源": {"rich_text": [{"type": "text", "text": {"content": cust.get("source", "Fed H.4.1")}}]},
+    }
+    return nw.upsert(db, cust["as_of"], props, title_field="Date")
+
+
 if __name__ == "__main__":
     import json
     print("=== KOL 状态变化(近10天) ===")
@@ -342,3 +424,5 @@ if __name__ == "__main__":
         print(f"  {ch['date']} {ch['kol']}({ch['sector']}): {ch['prev_dir']} → {ch['new_dir']}")
     print("\n=== 流动性关键点 ===")
     print(json.dumps(fetch_liquidity_points(), ensure_ascii=False, indent=2, default=str)[:1500])
+    print("\n=== 外国官方托管美债 (Fed H.4.1) ===")
+    print(json.dumps(fetch_foreign_custody_ust(), ensure_ascii=False, indent=2, default=str))

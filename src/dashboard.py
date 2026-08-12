@@ -146,7 +146,7 @@ def threshold_text(ind):
 
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
-             holdings=None):
+             holdings=None, custody=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -164,6 +164,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
     liquidity = liquidity or {}
     cb_balance = cb_balance or {}
     holdings = holdings or {}
+    custody = custody or {}
     # 综合结论：优先用 agent 生成，否则用规则兜底
     ai_conclusions = ai_conclusions or _rule_conclusions(results, checks, hit, cot)
 
@@ -312,6 +313,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         kol_changes=_kol_changes_html(kol_changes),
         liquidity=_liquidity_html(liquidity),
         cb_balance=_cb_balance_html(cb_balance),
+        custody=_custody_html(custody),
         holdings=_holdings_html(holdings),
     )
     path = os.path.join(OUT_DIR, "index.html")
@@ -461,6 +463,46 @@ def _cb_one_view(d, fx=None):
         f'<div class="bs-col bs-assets"><div class="bs-col-h">资产 (Assets)</div>{side(d.get("assets",[]))}{total_a_html}</div>'
         f'<div class="bs-col bs-liabs"><div class="bs-col-h">负债 (Liabilities)</div>{side(d.get("liabilities",[]))}{total_l_html}</div>'
         f'</div></div>'
+    )
+
+
+def _custody_html(cust):
+    """外国官方在纽约联储托管美债卡片(去美元化风向标)。"""
+    if not cust or cust.get("value") is None:
+        st = (cust or {}).get("status", "数据未就绪")
+        return f'<p class="empty">外国官方托管美债数据未就绪（{st}）。</p>'
+    val = cust["value"]           # $T
+    wow = cust.get("wow_delta_bn")  # 十亿$
+    wow_pct = cust.get("wow_pct")
+    total = cust.get("total_custody_tn")
+    as_of = cust.get("as_of", "")
+    # 方向: 下降=去美元化风险(clay红), 上升=回流(sage绿)
+    if wow is None:
+        acls, arrow, wtxt = "n", "→", "—"
+    elif wow < 0:
+        acls, arrow = "r", "▼"
+        wtxt = f"{arrow} {wow:+.1f}B ({wow_pct:+.2f}%)"
+    elif wow > 0:
+        acls, arrow = "g", "▲"
+        wtxt = f"{arrow} {wow:+.1f}B ({wow_pct:+.2f}%)"
+    else:
+        acls, arrow, wtxt = "n", "→", "持平"
+    return (
+        f'<div class="cust-wrap">'
+        f'<div class="cust-main">'
+        f'<div class="cust-lbl">可流通美债 · 外国官方托管</div>'
+        f'<div class="cust-val">${val:.3f}<span class="cust-unit">T</span> '
+        f'<span class="cust-wow cust-wow-{acls}">{wtxt}</span></div>'
+        f'<div class="cust-sub">周环比 (Fed H.4.1 · {as_of})</div>'
+        f'</div>'
+        f'<div class="cust-meta">'
+        f'<div class="cust-row"><span>托管总额(含机构债/MBS)</span><b>${total:.3f}T</b></div>'
+        + (f'<div class="cust-row"><span>其中非美债部分</span><b>${total-val:.3f}T</b></div>' if total else "")
+        + f'</div>'
+        f'<div class="cust-how"><b>如何看：</b>外国央行/官方机构在纽约联储托管的美债存量。'
+        f'持续下降 = 外国官方减持美债 / 去美元化 / 抛售换汇干预，是主权层面对美债信心的风向标。'
+        f'关注中长期趋势与周环比方向，而非绝对水平。数据源：Fed H.4.1 周报（每周四更新）。</div>'
+        f'</div>'
     )
 
 
@@ -899,6 +941,21 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .mc-slabel-g {{ color: #3f5a3f; background: rgba(154,171,151,.30); }}
   .mc-slabel-y {{ color: #8a6a2a; background: rgba(212,178,110,.32); }}
   .mc-slabel-r {{ color: #fff; background: var(--clay); }}
+  /* 外国官方托管美债卡片 */
+  .cust-wrap {{ display: flex; flex-direction: column; gap: 10px; }}
+  .cust-lbl {{ font-size: 12px; color: var(--muted); font-weight: 600; }}
+  .cust-val {{ font-family: var(--mono); font-size: 34px; font-weight: 800; color: var(--text); line-height: 1.1; }}
+  .cust-unit {{ font-size: 18px; color: var(--muted); margin-left: 2px; }}
+  .cust-wow {{ font-size: 14px; font-weight: 700; margin-left: 10px; padding: 2px 8px; border-radius: 5px; vertical-align: middle; }}
+  .cust-wow-g {{ color: #3f5a3f; background: rgba(154,171,151,.28); }}
+  .cust-wow-r {{ color: #fff; background: var(--clay); }}
+  .cust-wow-n {{ color: var(--muted); background: var(--card2); }}
+  .cust-sub {{ font-size: 10px; color: var(--muted); font-family: var(--mono); }}
+  .cust-meta {{ display: flex; gap: 20px; flex-wrap: wrap; padding: 8px 0; border-top: 1px dashed rgba(160,160,150,.25); border-bottom: 1px dashed rgba(160,160,150,.25); }}
+  .cust-row {{ font-size: 12px; color: var(--dust-blue); }}
+  .cust-row b {{ font-family: var(--mono); color: var(--text); margin-left: 6px; }}
+  .cust-how {{ font-size: 11.5px; color: var(--muted); line-height: 1.6; }}
+  .cust-how b {{ color: var(--dust-blue); }}
 
   /* 逐条解读 */
   .interp-group {{ font-size: 13px; color: var(--dust-blue); margin: 16px 0 8px; font-weight: 700; }}
@@ -1026,6 +1083,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三：三大央行资产负债表 (JP/CN/US) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>三大央行资产负债表 · 每日更新 (左资产 / 右负债 · 带环比)</div>
   <div class="bs-grid">{cb_balance}</div>
+
+  <!-- ═══ 附三·五：外国官方在纽约联储托管的美债 ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>外国官方托管美债 · 纽约联储 (去美元化风向标)</div>
+  <div class="card">{custody}</div>
 
   <!-- ═══ 附四：知名机构持仓 (13F) + Trump ═══ -->
   <div class="part-title"><span class="part-num">＋</span>机构持仓追踪 · 13F + Trump (对比上期变动)</div>
