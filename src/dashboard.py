@@ -466,8 +466,57 @@ def _cb_one_view(d, fx=None):
     )
 
 
+def _custody_chart_svg(hist, w=680, h=200):
+    """外国官方托管美债历史折线图(带 Y 轴刻度/日期标签/最新点标注)。
+    hist: [(date,$T),...] 升序。莫兰迪配色。"""
+    if not hist or len(hist) < 2:
+        return '<div class="cust-chart-na">历史数据不足，无法绘制折线图</div>'
+    dates = [d for d, _ in hist]
+    vals = [v for _, v in hist]
+    lo, hi = min(vals), max(vals)
+    rng = (hi - lo) or 0.01
+    # 留白: 左轴 52 / 右 14 / 上 16 / 下 30(日期)
+    ml, mr, mt, mb = 52, 14, 16, 30
+    pw, ph = w - ml - mr, h - mt - mb
+    n = len(vals)
+    def X(i): return ml + i * pw / (n - 1)
+    def Y(v): return mt + (hi - v) / rng * ph
+    pts = [f"{X(i):.1f},{Y(v):.1f}" for i, v in enumerate(vals)]
+    # 趋势色: 期末 vs 期初(下降=去美元化风险 clay红 / 上升=回流 sage绿)
+    rising = vals[-1] > vals[0]
+    color = "#9aab97" if rising else "#c08a7d"
+    fill = "rgba(154,171,151,0.10)" if rising else "rgba(192,138,125,0.10)"
+    area = f"{X(0):.1f},{mt+ph:.1f} " + " ".join(pts) + f" {X(n-1):.1f},{mt+ph:.1f}"
+    # Y 轴 4 条网格线 + 刻度
+    yl = []
+    for k in range(4):
+        gv = lo + rng * k / 3
+        gy = Y(gv)
+        yl.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" class="cc-grid"/>')
+        yl.append(f'<text x="{ml-6}" y="{gy+3:.1f}" class="cc-ylab">{gv:.2f}</text>')
+    # X 轴日期标签(首/中/末 + 每约1/4)
+    xl = []
+    idxs = sorted(set([0, n // 4, n // 2, 3 * n // 4, n - 1]))
+    for i in idxs:
+        dd = dates[i][5:]  # MM-DD
+        anchor = "start" if i == 0 else ("end" if i == n - 1 else "middle")
+        xl.append(f'<text x="{X(i):.1f}" y="{h-10}" class="cc-xlab" text-anchor="{anchor}">{dd}</text>')
+    # 最新点标注
+    lx, ly = X(n - 1), Y(vals[-1])
+    return (
+        f'<svg viewBox="0 0 {w} {h}" class="cust-chart" preserveAspectRatio="xMidYMid meet">'
+        + "".join(yl)
+        + f'<polygon points="{area}" fill="{fill}" stroke="none"/>'
+        + f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" stroke-width="2.4" stroke-linejoin="round"/>'
+        + f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="4" fill="{color}"/>'
+        + f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="8" fill="{color}" opacity="0.18"/>'
+        + "".join(xl)
+        + '</svg>'
+    )
+
+
 def _custody_html(cust):
-    """外国官方在纽约联储托管美债卡片(去美元化风向标)。"""
+    """外国官方在纽约联储托管美债卡片(去美元化风向标) + 6个月历史折线图。"""
     if not cust or cust.get("value") is None:
         st = (cust or {}).get("status", "数据未就绪")
         return f'<p class="empty">外国官方托管美债数据未就绪（{st}）。</p>'
@@ -476,6 +525,7 @@ def _custody_html(cust):
     wow_pct = cust.get("wow_pct")
     total = cust.get("total_custody_tn")
     as_of = cust.get("as_of", "")
+    hist = cust.get("history", [])
     # 方向: 下降=去美元化风险(clay红), 上升=回流(sage绿)
     if wow is None:
         acls, arrow, wtxt = "n", "→", "—"
@@ -487,21 +537,43 @@ def _custody_html(cust):
         wtxt = f"{arrow} {wow:+.1f}B ({wow_pct:+.2f}%)"
     else:
         acls, arrow, wtxt = "n", "→", "持平"
+    # 区间统计(高/低/首末回撤)
+    span_txt = ""
+    if len(hist) >= 2:
+        vals = [v for _, v in hist]
+        chg = vals[-1] - vals[0]
+        chg_pct = chg / vals[0] * 100 if vals[0] else 0
+        span_txt = (
+            f'<div class="cust-row"><span>区间（{hist[0][0]}→{hist[-1][0]}）</span>'
+            f'<b class="cust-{"r" if chg<0 else "g"}">{chg*1000:+.0f}B ({chg_pct:+.1f}%)</b></div>'
+            f'<div class="cust-row"><span>区间高 / 低</span><b>${max(vals):.3f}T / ${min(vals):.3f}T</b></div>'
+        )
+    total_rows = ""
+    if total:
+        total_rows = (
+            f'<div class="cust-row"><span>托管总额(含机构债/MBS)</span><b>${total:.3f}T</b></div>'
+            f'<div class="cust-row"><span>其中非美债部分</span><b>${total-val:.3f}T</b></div>'
+        )
     return (
         f'<div class="cust-wrap">'
         f'<div class="cust-main">'
         f'<div class="cust-lbl">可流通美债 · 外国官方托管</div>'
         f'<div class="cust-val">${val:.3f}<span class="cust-unit">T</span> '
         f'<span class="cust-wow cust-wow-{acls}">{wtxt}</span></div>'
-        f'<div class="cust-sub">周环比 (Fed H.4.1 · {as_of})</div>'
+        f'<div class="cust-sub">周环比（as of {as_of} · 周三口径）</div>'
+        f'</div>'
+        # === 折线图 ===
+        f'<div class="cust-chart-box">'
+        f'<div class="cust-chart-title">近 {len(hist)} 周走势（$T）</div>'
+        f'{_custody_chart_svg(hist)}'
         f'</div>'
         f'<div class="cust-meta">'
-        f'<div class="cust-row"><span>托管总额(含机构债/MBS)</span><b>${total:.3f}T</b></div>'
-        + (f'<div class="cust-row"><span>其中非美债部分</span><b>${total-val:.3f}T</b></div>' if total else "")
-        + f'</div>'
+        f'{span_txt}'
+        f'{total_rows}'
+        f'</div>'
         f'<div class="cust-how"><b>如何看：</b>外国央行/官方机构在纽约联储托管的美债存量。'
         f'持续下降 = 外国官方减持美债 / 去美元化 / 抛售换汇干预，是主权层面对美债信心的风向标。'
-        f'关注中长期趋势与周环比方向，而非绝对水平。数据源：Fed H.4.1 周报（每周四更新）。</div>'
+        f'关注中长期趋势与周环比方向，而非绝对水平。数据源：FRED WMTSECL1（Fed H.4.1 custody，每周三口径）。</div>'
         f'</div>'
     )
 
@@ -956,6 +1028,16 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .cust-row b {{ font-family: var(--mono); color: var(--text); margin-left: 6px; }}
   .cust-how {{ font-size: 11.5px; color: var(--muted); line-height: 1.6; }}
   .cust-how b {{ color: var(--dust-blue); }}
+  .cust-g {{ color: #3f5a3f !important; }}
+  .cust-r {{ color: var(--clay) !important; }}
+  /* 托管美债折线图 */
+  .cust-chart-box {{ background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px 6px; }}
+  .cust-chart-title {{ font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 4px; font-family: var(--mono); }}
+  .cust-chart {{ width: 100%; height: auto; display: block; }}
+  .cust-chart-na {{ font-size: 12px; color: var(--muted); padding: 20px; text-align: center; }}
+  .cc-grid {{ stroke: rgba(160,160,150,.20); stroke-width: 1; stroke-dasharray: 3 3; }}
+  .cc-ylab {{ fill: var(--muted); font-size: 9px; font-family: var(--mono); text-anchor: end; }}
+  .cc-xlab {{ fill: var(--muted); font-size: 9px; font-family: var(--mono); }}
 
   /* 逐条解读 */
   .interp-group {{ font-size: 13px; color: var(--dust-blue); margin: 16px 0 8px; font-weight: 700; }}

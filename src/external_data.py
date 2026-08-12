@@ -345,56 +345,65 @@ def fetch_cb_balance_sheets(to_usd=True):
 FED_H41_URL = "https://www.federalreserve.gov/releases/h41/current/h41.htm"
 
 
+def _custody_history_fred(start="2026-01-01"):
+    """从 FRED WMTSECL1(外国官方托管可流通美债, 周度 as-of Wednesday, 2002至今活跃)
+    拉历史序列。返回 [(date, value_$T), ...] 升序。空列表=拉取失败。"""
+    try:
+        from fetchers.fred import fetch_fred_history
+    except Exception:
+        from src.fetchers.fred import fetch_fred_history
+    raw = fetch_fred_history("WMTSECL1", start=start)  # 单位: 百万美元
+    return [(d, round(v / 1e6, 4)) for d, v in raw]     # → $T
+
+
 def fetch_foreign_custody_ust():
-    """抓 Fed H.4.1 外国官方托管可流通美债(当前值+周变动)。
-    返回 {value(单位$T), as_of, wow_delta_bn, wow_pct, total_custody_tn, status, source}。"""
+    """抓外国官方托管可流通美债(当前值+周变动+历史序列)。
+    ★口径统一走 FRED WMTSECL1(周度, 2002至今活跃, 单一可回溯口径), H.4.1 HTML 仅补总托管。
+    返回 {value($T), as_of, wow_delta_bn, wow_pct, total_custody_tn, history[(date,$T)], status, source}。"""
     import re
     import requests
+    # === 主口径: FRED WMTSECL1 历史序列(至少覆盖 6 个月, 用于折线图) ===
+    hist = _custody_history_fred(start="2026-01-01")
+    fred_val = fred_as_of = fred_wow_bn = fred_wow_pct = None
+    if len(hist) >= 2:
+        fred_as_of, fred_val = hist[-1]
+        prev = hist[-2][1]
+        fred_wow_bn = round((fred_val - prev) * 1000, 1)          # $T→$B
+        fred_wow_pct = round((fred_val - prev) / prev * 100, 2) if prev else None
+    # === 补充: H.4.1 HTML 拿总托管(含机构债/MBS) ===
+    total_custody_tn = None
     try:
         r = requests.get(FED_H41_URL,
-                         headers={"User-Agent": "EcoVolChecker research (contact research@example.com)"},
+                         headers={"User-Agent": "EcoVolChecker research (contact ANONYMIZED_EMAIL_ADDRESS_0_2)"},
                          timeout=30)
-        if r.status_code != 200:
-            return {"value": None, "as_of": None, "status": f"HTTP {r.status_code}"}
-        txt = re.sub(r"<[^>]+>", " ", r.text)
-        txt = re.sub(r"&#xa0;", " ", txt)
-        txt = re.sub(r"\s+", " ", txt)
-        # 定位 custody 段
-        i = txt.find("held in custody for foreign official")
-        if i < 0:
-            return {"value": None, "as_of": None, "status": "H.4.1 未找到 custody 段"}
-        seg = txt[i:i + 700]
-        # 总托管(该行紧跟金额: 总值 +/- 周变动 +/- 年变动 期末值)
-        mt = re.search(r"international accounts\s+([\d,]+)", seg)
-        total_custody = int(mt.group(1).replace(",", "")) if mt else None
-        # Marketable U.S. Treasury securities 行: 当前值 [+/-] 周变动
-        m = re.search(r"Marketable U\.S\. Treasury securities\s*1?\s*([\d,]+)\s*([+\-])\s*([\d,]+)", seg)
-        if not m:
-            return {"value": None, "as_of": None, "status": "H.4.1 未找到美债托管行",
-                    "total_custody_tn": round(total_custody / 1e6, 3) if total_custody else None}
-        latest = int(m.group(1).replace(",", ""))          # 百万美元
-        sign = -1 if m.group(2) == "-" else 1
-        wow = sign * int(m.group(3).replace(",", ""))       # 周变动(百万美元)
-        # release 日期
-        dm = re.search(r"(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2}),\s+(20\d{2})", txt)
-        as_of = None
-        if dm:
-            import datetime
-            months = {"January": 1, "February": 2, "March": 3, "April": 4, "May": 5, "June": 6,
-                      "July": 7, "August": 8, "September": 9, "October": 10, "November": 11, "December": 12}
-            as_of = datetime.date(int(dm.group(3)), months[dm.group(1)], int(dm.group(2))).isoformat()
-        prev = latest - wow
+        if r.status_code == 200:
+            txt = re.sub(r"<[^>]+>", " ", r.text)
+            txt = re.sub(r"&#xa0;", " ", txt)
+            txt = re.sub(r"\s+", " ", txt)
+            i = txt.find("held in custody for foreign official")
+            if i >= 0:
+                seg = txt[i:i + 700]
+                mt = re.search(r"international accounts\s+([\d,]+)", seg)
+                if mt:
+                    total_custody_tn = round(int(mt.group(1).replace(",", "")) / 1e6, 3)
+    except Exception:
+        pass  # 总托管拿不到不阻塞主口径
+
+    # === 构造返回: FRED 为主口径(历史+当前+周环比), H.4.1 补总托管 ===
+    if fred_val is not None:
         return {
-            "value": round(latest / 1e6, 3),               # $T(万亿)
-            "as_of": as_of,
-            "wow_delta_bn": round(wow / 1e3, 1),            # 周变动 十亿美元
-            "wow_pct": round(wow / prev * 100, 2) if prev else None,
-            "total_custody_tn": round(total_custody / 1e6, 3) if total_custody else None,
+            "value": round(fred_val, 3),                    # $T
+            "as_of": fred_as_of,
+            "wow_delta_bn": fred_wow_bn,                    # 周变动 十亿美元
+            "wow_pct": fred_wow_pct,
+            "total_custody_tn": total_custody_tn,
+            "history": hist,                               # [(date,$T)] 升序, ~6个月周点
             "status": "ok",
-            "source": "Fed H.4.1 weekly release",
+            "source": "FRED WMTSECL1 (Fed H.4.1 custody, weekly Wed)",
         }
-    except Exception as e:
-        return {"value": None, "as_of": None, "status": f"错误:{e}"}
+    return {"value": None, "as_of": None, "history": hist,
+            "total_custody_tn": total_custody_tn,
+            "status": "FRED WMTSECL1 无数据"}
 
 
 def write_custody_notion(cust=None):

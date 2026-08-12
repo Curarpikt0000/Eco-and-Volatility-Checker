@@ -219,6 +219,16 @@
   .cust-row b { font-family: var(--mono); color: var(--text); margin-left: 6px; }
   .cust-how { font-size: 11.5px; color: var(--muted); line-height: 1.6; }
   .cust-how b { color: var(--dust-blue); }
+  .cust-g { color: #3f5a3f !important; }
+  .cust-r { color: var(--clay) !important; }
+  /* 托管美债折线图 */
+  .cust-chart-box { background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px 6px; }
+  .cust-chart-title { font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 4px; font-family: var(--mono); }
+  .cust-chart { width: 100%; height: auto; display: block; }
+  .cust-chart-na { font-size: 12px; color: var(--muted); padding: 20px; text-align: center; }
+  .cc-grid { stroke: rgba(160,160,150,.20); stroke-width: 1; stroke-dasharray: 3 3; }
+  .cc-ylab { fill: var(--muted); font-size: 9px; font-family: var(--mono); text-anchor: end; }
+  .cc-xlab { fill: var(--muted); font-size: 9px; font-family: var(--mono); }
 
   /* 逐条解读 */
   .interp-group { font-size: 13px; color: var(--dust-blue); margin: 16px 0 8px; font-weight: 700; }
@@ -258,7 +268,7 @@
 <body>
 <header>
   <h1>宏观风险扫描 · <span>Eco &amp; Volatility Checker</span></h1>
-  <span id="update-time">数据日期 2026-08-12 · 生成 2026-08-12 22:28 JST</span>
+  <span id="update-time">数据日期 2026-08-12 · 生成 2026-08-12 23:22 JST</span>
 </header>
 <div class="container">
 
@@ -549,7 +559,7 @@
 
   <!-- ═══ 附三·五：外国官方在纽约联储托管的美债 ═══ -->
   <div class="part-title"><span class="part-num">＋</span>外国官方托管美债 · 纽约联储 (去美元化风向标)</div>
-  <div class="card"><div class="cust-wrap"><div class="cust-main"><div class="cust-lbl">可流通美债 · 外国官方托管</div><div class="cust-val">$2.647<span class="cust-unit">T</span> <span class="cust-wow cust-wow-g">▲ +8.5B (+0.32%)</span></div><div class="cust-sub">周环比 (Fed H.4.1 · 2026-08-06)</div></div><div class="cust-meta"><div class="cust-row"><span>托管总额(含机构债/MBS)</span><b>$2.926T</b></div><div class="cust-row"><span>其中非美债部分</span><b>$0.279T</b></div></div><div class="cust-how"><b>如何看：</b>外国央行/官方机构在纽约联储托管的美债存量。持续下降 = 外国官方减持美债 / 去美元化 / 抛售换汇干预，是主权层面对美债信心的风向标。关注中长期趋势与周环比方向，而非绝对水平。数据源：Fed H.4.1 周报（每周四更新）。</div></div></div>
+  <div class="card"><div class="cust-wrap"><div class="cust-main"><div class="cust-lbl">可流通美债 · 外国官方托管</div><div class="cust-val">$2.631<span class="cust-unit">T</span> <span class="cust-wow cust-wow-r">▼ -25.5B (-0.96%)</span></div><div class="cust-sub">周环比（as of 2026-08-05 · 周三口径）</div></div><div class="cust-chart-box"><div class="cust-chart-title">近 31 周走势（$T）</div><svg viewBox="0 0 680 200" class="cust-chart" preserveAspectRatio="xMidYMid meet"><line x1="52" y1="170.0" x2="666" y2="170.0" class="cc-grid"/><text x="46" y="173.0" class="cc-ylab">2.60</text><line x1="52" y1="118.7" x2="666" y2="118.7" class="cc-grid"/><text x="46" y="121.7" class="cc-ylab">2.67</text><line x1="52" y1="67.3" x2="666" y2="67.3" class="cc-grid"/><text x="46" y="70.3" class="cc-ylab">2.73</text><line x1="52" y1="16.0" x2="666" y2="16.0" class="cc-grid"/><text x="46" y="19.0" class="cc-ylab">2.80</text><polygon points="52.0,170.0 52.0,49.2 72.5,46.2 92.9,38.7 113.4,23.7 133.9,26.7 154.3,16.0 174.8,23.6 195.3,34.9 215.7,42.1 236.2,72.1 256.7,79.2 277.1,96.7 297.6,68.1 318.1,97.5 338.5,88.2 359.0,70.7 379.5,65.7 399.9,72.3 420.4,102.0 440.9,117.4 461.3,107.6 481.8,132.4 502.3,142.7 522.7,144.2 543.2,140.0 563.7,148.3 584.1,170.0 604.6,169.5 625.1,150.8 645.5,125.1 666.0,144.4 666.0,170.0" fill="rgba(192,138,125,0.10)" stroke="none"/><polyline points="52.0,49.2 72.5,46.2 92.9,38.7 113.4,23.7 133.9,26.7 154.3,16.0 174.8,23.6 195.3,34.9 215.7,42.1 236.2,72.1 256.7,79.2 277.1,96.7 297.6,68.1 318.1,97.5 338.5,88.2 359.0,70.7 379.5,65.7 399.9,72.3 420.4,102.0 440.9,117.4 461.3,107.6 481.8,132.4 502.3,142.7 522.7,144.2 543.2,140.0 563.7,148.3 584.1,170.0 604.6,169.5 625.1,150.8 645.5,125.1 666.0,144.4" fill="none" stroke="#c08a7d" stroke-width="2.4" stroke-linejoin="round"/><circle cx="666.0" cy="144.4" r="4" fill="#c08a7d"/><circle cx="666.0" cy="144.4" r="8" fill="#c08a7d" opacity="0.18"/><text x="52.0" y="190" class="cc-xlab" text-anchor="start">01-07</text><text x="195.3" y="190" class="cc-xlab" text-anchor="middle">02-25</text><text x="359.0" y="190" class="cc-xlab" text-anchor="middle">04-22</text><text x="522.7" y="190" class="cc-xlab" text-anchor="middle">06-17</text><text x="666.0" y="190" class="cc-xlab" text-anchor="end">08-05</text></svg></div><div class="cust-meta"><div class="cust-row"><span>区间（2026-01-07→2026-08-05）</span><b class="cust-r">-126B (-4.6%)</b></div><div class="cust-row"><span>区间高 / 低</span><b>$2.801T / $2.597T</b></div><div class="cust-row"><span>托管总额(含机构债/MBS)</span><b>$2.926T</b></div><div class="cust-row"><span>其中非美债部分</span><b>$0.295T</b></div></div><div class="cust-how"><b>如何看：</b>外国央行/官方机构在纽约联储托管的美债存量。持续下降 = 外国官方减持美债 / 去美元化 / 抛售换汇干预，是主权层面对美债信心的风向标。关注中长期趋势与周环比方向，而非绝对水平。数据源：FRED WMTSECL1（Fed H.4.1 custody，每周三口径）。</div></div></div>
 
   <!-- ═══ 附四：知名机构持仓 (13F) + Trump ═══ -->
   <div class="part-title"><span class="part-num">＋</span>机构持仓追踪 · 13F + Trump (对比上期变动)</div>
