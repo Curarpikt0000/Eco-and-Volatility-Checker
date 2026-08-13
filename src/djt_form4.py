@@ -17,7 +17,6 @@ Chao 需求(2026-08): 政要披露板块加川普 DJT(Trump Media)内部人逐�
 绝不编: 无新交易标 no_new; XML 解析失败标 parse_error。
 """
 import os
-import re
 import json
 import datetime
 import urllib.request

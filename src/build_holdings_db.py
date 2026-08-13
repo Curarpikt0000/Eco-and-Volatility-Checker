@@ -5,7 +5,7 @@
   TOP持仓+变动(文本) / 新建仓(文本) / 清仓(文本) / 数据源
 Trump 单独一行(数据源=公开披露PFD, 由 cron agent 填)。
 """
-import sys, os, json
+import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 import config as c
 from notion_writer import _req

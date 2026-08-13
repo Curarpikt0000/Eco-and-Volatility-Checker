@@ -17,7 +17,6 @@ import glob
 import json
 
 sys.path.insert(0, os.path.dirname(__file__))
-import config as c
 import signals as sg
 import dashboard as dash
 import holdings_13f as h13

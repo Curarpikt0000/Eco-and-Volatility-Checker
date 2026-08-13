@@ -16,7 +16,7 @@ Trump 无 13F(非投资经理) → 单独卡片, 数据由 cron agent web_search
 import sys, os, json, re, time, urllib.request, datetime
 
 sys.path.insert(0, os.path.dirname(__file__))
-from holdings_clean import clean_issuer, cusip_to_ticker, display_name
+from holdings_clean import clean_issuer, cusip_to_ticker
 
 UA = "EcoVolChecker research chao.jin@example.com"
 HDRS = {"User-Agent": UA}
@@ -115,19 +115,16 @@ def parse_info_table(cik, accession):
                and "PUT" not in r[0] and "CALL" not in r[0]]
     per_share = sorted(r[1] / r[2] for r in ps_rows)
     scale = 1
-    unit_flag = "usd"
     if len(per_share) >= 5:
         n = len(per_share)
         median_ps = (per_share[n // 2] if n % 2 else (per_share[n // 2 - 1] + per_share[n // 2]) / 2)
+        # 单位自适应: 隐含股价中位数 <0.5 判千美元(×1000) / >5 判美元 / 灰区保守按美元不放大
         if median_ps < 0.5:
             scale = 1000
-            unit_flag = "thousands"
         elif median_ps > 5:
             scale = 1
-            unit_flag = "usd"
         else:
             scale = 1  # 灰区: 保守按美元, 不放大
-            unit_flag = "ambiguous"
     for issuer, value, shares, cusip in rows:
         if issuer not in agg:
             agg[issuer] = {"shares": 0, "value": 0, "cusip": cusip,

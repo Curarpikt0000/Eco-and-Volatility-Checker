@@ -7,7 +7,7 @@
 
 Notion block children API 追加。绝不编数字。时区 JST。
 """
-import sys, os, json, datetime
+import sys, os, json
 sys.path.insert(0, os.path.dirname(__file__))
 import config as c
 from notion_writer import _req, query_by_title

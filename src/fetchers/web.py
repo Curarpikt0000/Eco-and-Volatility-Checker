@@ -146,7 +146,6 @@ def fetch_aaii_sentiment():
         r = requests.get("https://www.aaii.com/files/surveys/sentiment.xls",
                          headers=HEADERS, timeout=30)
         if r.status_code == 200 and len(r.content) > 1000:
-            import openpyxl  # 可能是老 xls，退回 xlrd
             # 老 .xls 用 pandas + xlrd
             import pandas as pd
             df = pd.read_excel(io.BytesIO(r.content), skiprows=3)
@@ -239,7 +238,7 @@ def fetch_margin_debt():
 
 def fetch_margin_debt_history():
     """从 FINRA 官方 xlsx 拉全部月度历史(供 backfill)。返回 [(YYYY-MM-DD, 十亿$),...] 升序。"""
-    import io, datetime
+    import io
     try:
         import requests
         from fetchers.util import HEADERS

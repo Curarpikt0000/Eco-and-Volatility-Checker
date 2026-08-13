@@ -1,4 +1,4 @@
-import json, sys
+import json
 from datetime import datetime, timedelta
 
 TODAY = (datetime.utcnow()+timedelta(hours=9)).strftime('%Y-%m-%d')

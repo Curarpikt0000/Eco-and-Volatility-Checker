@@ -38,7 +38,6 @@ def build():
     prev = prev_snapshot()
     prev_res = prev["results"] if prev else {}
 
-    getter = None
     gstats = signals.group_stats(results)
     checks, hit = signals.eval_sell_triggers(results, cot, None)
     overall = signals.overall_signal(hit, gstats)

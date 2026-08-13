@@ -3,7 +3,7 @@
 用 SEC full-text search + company search 找 CIK, 再查 submissions 确认有 13F-HR。
 输出候选清单供人工核对(避免错配 CIK)。绝不猜, 查不到就标 NONE。
 """
-import sys, json, time, urllib.request, urllib.parse
+import json, time, urllib.request, urllib.parse
 
 UA = "EcoVolChecker research chao.jin@example.com"
 HDRS = {"User-Agent": UA}
@@ -20,12 +20,11 @@ def search_cik(name):
     url = f"https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&company={q}&type=13F-HR&dateb=&owner=include&count=10&output=atom"
     try:
         raw = _get(url).decode("utf-8", "replace")
-    except Exception as e:
+    except Exception:
         return []
     import re
     # atom 里 CIK 在 <cik>...</cik>, 名字在 <title> 或 company-info
     ciks = re.findall(r"CIK=(\d+)", raw)
-    names = re.findall(r"<title>(.*?)</title>", raw)
     out = []
     seen = set()
     for c in ciks:

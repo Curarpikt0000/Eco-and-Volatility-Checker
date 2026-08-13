@@ -6,7 +6,7 @@
 
 雷达图：短/中/长三组指标归一化到 0-100 风险刻度(越大越危险)。
 """
-import sys, os, json, datetime
+import sys, os, json, datetime, html
 sys.path.insert(0, os.path.dirname(__file__))
 import config as c
 import signals
@@ -14,6 +14,14 @@ import signals
 OUT_DIR = os.path.join(os.path.dirname(__file__), "..", "dashboard")
 SNAP_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "snapshots")
 os.makedirs(OUT_DIR, exist_ok=True)
+
+
+def _esc(s):
+    """HTML 转义外部数据(KOL评论/政要资产名/API字段/OCR文本)后再拼进 f-string。
+    防公开 dashboard 的 HTML 注入。None→空串; 非字符串先转 str。"""
+    if s is None:
+        return ""
+    return html.escape(str(s), quote=True)
 
 
 # 每个指标"如何看"——交易员视角的一句话解读法
@@ -345,12 +353,12 @@ def _kol_changes_html(kol_changes):
         targets = (ch.get("targets") or "").strip()
         extra = ""
         if comment:
-            extra += f'<div class="kol-cmt">{comment}</div>'
+            extra += f'<div class="kol-cmt">{_esc(comment)}</div>'
         if targets:
-            extra += f'<div class="kol-tgt">标的：{targets}</div>'
+            extra += f'<div class="kol-tgt">标的：{_esc(targets)}</div>'
         rows += f"""<div class="kol-item">
-          <div class="kol-line"><b>{ch['kol']}</b> <span class="kol-sec">{ch['sector']}</span> <span class="kol-date">{ch['date']}</span></div>
-          <div class="kol-shift"><span class="kdir kdir-{pc}">{ch['prev_dir']}</span> → <span class="kdir kdir-{nc}">{ch['new_dir']}</span></div>
+          <div class="kol-line"><b>{_esc(ch['kol'])}</b> <span class="kol-sec">{_esc(ch['sector'])}</span> <span class="kol-date">{_esc(ch['date'])}</span></div>
+          <div class="kol-shift"><span class="kdir kdir-{pc}">{_esc(ch['prev_dir'])}</span> → <span class="kdir kdir-{nc}">{_esc(ch['new_dir'])}</span></div>
           {extra}
         </div>"""
     return rows
@@ -385,14 +393,14 @@ def _liquidity_html(liq):
     # 风控灯
     lights = liq.get("risk_lights", {})
     if lights:
-        ls = " · ".join(f'{k}: {v}' for k, v in lights.items() if k not in ("运行状态",))
+        ls = " · ".join(f'{_esc(k)}: {_esc(v)}' for k, v in lights.items() if k not in ("运行状态",))
         parts.append(f'<div class="liq-row liq-lights">{ls}</div>')
     # 关键变动文本
     notes = liq.get("risk_notes", {})
     if notes.get("关键变动"):
-        parts.append(f'<div class="liq-note"><b>关键变动</b><br>{notes["关键变动"].replace(chr(10), "<br>")}</div>')
+        parts.append(f'<div class="liq-note"><b>关键变动</b><br>{_esc(notes["关键变动"]).replace(chr(10), "<br>")}</div>')
     if notes.get("AI短评"):
-        parts.append(f'<div class="liq-note"><b>AI 短评</b><br>{notes["AI短评"]}</div>')
+        parts.append(f'<div class="liq-note"><b>AI 短评</b><br>{_esc(notes["AI短评"]).replace(chr(10), "<br>")}</div>')
     return "".join(parts) or '<p class="empty">流动性数据未就绪。</p>'
 
 
@@ -424,14 +432,14 @@ def _cb_delta_span(line, unit_period):
 def _cb_one_view(d, fx=None):
     """单个央行资产负债表 view：左资产右负债 + 总资产 + WoW/环比。"""
     if not d or (not d.get("assets") and not d.get("liabilities")):
-        return (f'<div class="bs-card"><div class="bs-head">{d.get("flag","")} '
-                f'{d.get("name","")}</div><p class="empty">数据未找到</p></div>')
+        return (f'<div class="bs-card"><div class="bs-head">{_esc(d.get("flag",""))} '
+                f'{_esc(d.get("name",""))}</div><p class="empty">数据未找到</p></div>')
     up = d.get("period", "")  # WoW / 较上期 / MoM
 
     def side(items):
         rows = ""
         for it in items:
-            rows += (f'<div class="bs-line"><span class="bs-name">{it["name"]}</span>'
+            rows += (f'<div class="bs-line"><span class="bs-name">{_esc(it["name"])}</span>'
                      f'<span class="bs-val">{_cb_bs_num(it["value"])}</span>'
                      f'{_cb_delta_span(it, up)}</div>')
         return rows
@@ -458,8 +466,8 @@ def _cb_one_view(d, fx=None):
             fx_note = f' · 原口径 {orig} · 按 {pair} {rate:g} 折美元'
     return (
         f'<div class="bs-card">'
-        f'<div class="bs-head">{d.get("flag","")} {d.get("name","")}'
-        f'<span class="bs-meta">{d.get("date","")} · 单位 {d.get("unit","")} · 环比口径 {up}{fx_note}</span></div>'
+        f'<div class="bs-head">{_esc(d.get("flag",""))} {_esc(d.get("name",""))}'
+        f'<span class="bs-meta">{_esc(d.get("date",""))} · 单位 {_esc(d.get("unit",""))} · 环比口径 {_esc(up)}{fx_note}</span></div>'
         f'<div class="bs-body">'
         f'<div class="bs-col bs-assets"><div class="bs-col-h">资产 (Assets)</div>{side(d.get("assets",[]))}{total_a_html}</div>'
         f'<div class="bs-col bs-liabs"><div class="bs-col-h">负债 (Liabilities)</div>{side(d.get("liabilities",[]))}{total_l_html}</div>'
@@ -492,9 +500,9 @@ def _auctions_html(auc):
         up_html = (
             f'<div class="auc-next-banner">'
             f'<span class="auc-next-lbl">下次拍卖</span> '
-            f'<b>{nx["auction_date"]}</b> · {nx["security_type"]} {nx["security_term"]} '
+            f'<b>{_esc(nx["auction_date"])}</b> · {_esc(nx["security_type"])} {_esc(nx["security_term"])} '
             f'· 规模 <b>${nx["offering_bn"]}B</b>'
-            + (f' · 交割 {nx["issue_date"]}' if nx.get("issue_date") else "")
+            + (f' · 交割 {_esc(nx["issue_date"])}' if nx.get("issue_date") else "")
             + '</div>'
         )
     # 券种顺序(短→长)
@@ -513,7 +521,7 @@ def _auctions_html(auc):
         # 最新拍卖(大字)
         latest_html = (
             f'<div class="auc-latest">'
-            f'<div class="auc-date">{latest["auction_date"]}<span class="auc-tag">最新</span></div>'
+            f'<div class="auc-date">{_esc(latest["auction_date"])}<span class="auc-tag">最新</span></div>'
             f'<div class="auc-metrics">'
             f'<span class="auc-m-item">规模 <b>${latest["offering_bn"]}B</b></span>'
             f'<span class="auc-m-item">中标率 <b class="{lcls}">{latest["bid_to_cover"]}</b></span>'
@@ -527,7 +535,7 @@ def _auctions_html(auc):
             pcls = _auc_btc_cls(p.get("bid_to_cover"))
             past_html += (
                 f'<div class="auc-past-node">'
-                f'<span class="auc-p-date">{p["auction_date"]}</span>'
+                f'<span class="auc-p-date">{_esc(p["auction_date"])}</span>'
                 f'<span class="auc-p-m">${p["offering_bn"]}B</span>'
                 f'<span class="auc-p-m">BTC <b class="{pcls}">{p["bid_to_cover"]}</b></span>'
                 f'<span class="auc-p-m">{p["high_yield"]}%</span>'
@@ -538,14 +546,14 @@ def _auctions_html(auc):
         next_html = ""
         if nxt:
             next_html = (
-                f'<div class="auc-next-node">▶ 下次 {nxt["auction_date"]} · '
+                f'<div class="auc-next-node">▶ 下次 {_esc(nxt["auction_date"])} · '
                 f'规模 ${nxt["offering_bn"]}B'
-                + (f' · 交割 {nxt["issue_date"]}' if nxt.get("issue_date") else "")
+                + (f' · 交割 {_esc(nxt["issue_date"])}' if nxt.get("issue_date") else "")
                 + '</div>'
             )
         rows.append(
             f'<div class="auc-term">'
-            f'<div class="auc-term-head"><span class="auc-term-name">{sec} · {term}</span></div>'
+            f'<div class="auc-term-head"><span class="auc-term-name">{_esc(sec)} · {_esc(term)}</span></div>'
             f'{latest_html}'
             f'<div class="auc-timeline">{past_html}</div>'
             f'{next_html}'
@@ -643,7 +651,7 @@ def _custody_html(cust):
         chg = vals[-1] - vals[0]
         chg_pct = chg / vals[0] * 100 if vals[0] else 0
         span_txt = (
-            f'<div class="cust-row"><span>区间（{hist[0][0]}→{hist[-1][0]}）</span>'
+            f'<div class="cust-row"><span>区间（{_esc(hist[0][0])}→{_esc(hist[-1][0])}）</span>'
             f'<b class="cust-{"r" if chg<0 else "g"}">{chg*1000:+.0f}B ({chg_pct:+.1f}%)</b></div>'
             f'<div class="cust-row"><span>区间高 / 低</span><b>${max(vals):.3f}T / ${min(vals):.3f}T</b></div>'
         )
@@ -659,7 +667,7 @@ def _custody_html(cust):
         f'<div class="cust-lbl">可流通美债 · 外国官方托管</div>'
         f'<div class="cust-val">${val:.3f}<span class="cust-unit">T</span> '
         f'<span class="cust-wow cust-wow-{acls}">{wtxt}</span></div>'
-        f'<div class="cust-sub">周环比（as of {as_of} · 周三口径）</div>'
+        f'<div class="cust-sub">周环比（as of {_esc(as_of)} · 周三口径）</div>'
         f'</div>'
         # === 折线图 ===
         f'<div class="cust-chart-box">'
@@ -708,9 +716,9 @@ def _holdings_one(r):
     except Exception:
         meta = {}
     if r.get("status") != "ok":
-        return (f'<div class="h-card"><div class="h-head">{r.get("fund","?")} '
-                f'<span class="h-kol">{r.get("kol","")}</span></div>'
-                f'<p class="empty">{r.get("status","数据未找到")}</p></div>')
+        return (f'<div class="h-card"><div class="h-head">{_esc(r.get("fund","?"))} '
+                f'<span class="h-kol">{_esc(r.get("kol",""))}</span></div>'
+                f'<p class="empty">{_esc(r.get("status","数据未找到"))}</p></div>')
     tv = r.get("total_value", 0) / 1e9
     lines = ""
     for h in r.get("top_holdings", [])[:10]:
@@ -718,22 +726,22 @@ def _holdings_one(r):
         val = f'${h["value"]/1e6:,.0f}M' if h.get("value") else "—"
         # issuer 展示: 有 ticker 就加后缀 (TICKER)
         tk = h.get("ticker", "")
-        iss_disp = h["issuer"]
+        iss_disp = _esc(h["issuer"])
         if tk and not tk.endswith("?") and "/" not in tk and "多" not in tk:
-            iss_disp = f'{h["issuer"]} <span class="h-tk">{tk}</span>'
-        lines += (f'<div class="h-line"><span class="h-act {_action_cls(h["action"])}">{h["action"]}</span>'
+            iss_disp = f'{_esc(h["issuer"])} <span class="h-tk">{_esc(tk)}</span>'
+        lines += (f'<div class="h-line"><span class="h-act {_action_cls(h["action"])}">{_esc(h["action"])}</span>'
                   f'<span class="h-iss">{iss_disp}</span>'
                   f'<span class="h-val">{val}{pct}</span></div>')
     # 两句话介绍
     intro = ""
     if meta.get("desc_type") or meta.get("desc_status"):
         intro = (f'<div class="h-intro">'
-                 f'<div class="h-intro-l"><b>类型</b> {meta.get("desc_type","")}</div>'
-                 f'<div class="h-intro-l"><b>地位</b> {meta.get("desc_status","")}</div></div>')
+                 f'<div class="h-intro-l"><b>类型</b> {_esc(meta.get("desc_type",""))}</div>'
+                 f'<div class="h-intro-l"><b>地位</b> {_esc(meta.get("desc_status",""))}</div></div>')
     return (
         f'<div class="h-card">'
-        f'<div class="h-head">{r.get("fund","")}<span class="h-kol">{r.get("kol","")}</span>'
-        f'<span class="h-meta">13F {r.get("report_date","")} · ${tv:,.1f}B · {r.get("n_positions",0)}持仓 · vs {r.get("prev_report_date","-")}</span></div>'
+        f'<div class="h-head">{_esc(r.get("fund",""))}<span class="h-kol">{_esc(r.get("kol",""))}</span>'
+        f'<span class="h-meta">13F {_esc(r.get("report_date",""))} · ${tv:,.1f}B · {r.get("n_positions",0)}持仓 · vs {_esc(r.get("prev_report_date","-"))}</span></div>'
         f'{intro}'
         f'<div class="h-body">{lines}</div></div>'
     )
@@ -756,14 +764,14 @@ def _holdings_political(figures):
                 tk = tk[:27] + "…"
             amt = t.get("amount_range", "")
             txn = t.get("txn_date", "")
-            lines += (f'<div class="h-line"><span class="h-act {act_cls}">{dir_cn}</span>'
-                      f'<span class="h-iss">{tk}</span>'
-                      f'<span class="h-val">{txn} · {amt}</span></div>')
+            lines += (f'<div class="h-line"><span class="h-act {act_cls}">{_esc(dir_cn)}</span>'
+                      f'<span class="h-iss">{_esc(tk)}</span>'
+                      f'<span class="h-val">{_esc(txn)} · {_esc(amt)}</span></div>')
         status = f.get("status", "")
         if lines:
             body = lines
         elif status == "no_free_source":
-            body = f'<p class="empty">{f.get("note","无免费逐笔交易结构化源")}</p>'
+            body = f'<p class="empty">{_esc(f.get("note","无免费逐笔交易结构化源"))}</p>'
         elif status in ("no_filings", "no_reports", "no_trades"):
             body = '<p class="empty">近期无披露交易记录</p>'
         elif status == "fetch_error":
@@ -777,12 +785,12 @@ def _holdings_political(figures):
         else:
             meta_line = src or '政要交易披露'
         note = f.get("note", "")
-        note_html = f'<div class="h-pol-note">{note}</div>' if note and lines else ""
+        note_html = f'<div class="h-pol-note">{_esc(note)}</div>' if note and lines else ""
         cards += (
             f'<div class="h-card">'
-            f'<div class="h-head">{f.get("name","")}'
-            f'<span class="h-kol">{f.get("title","")}</span>'
-            f'<span class="h-meta">{meta_line}</span></div>'
+            f'<div class="h-head">{_esc(f.get("name",""))}'
+            f'<span class="h-kol">{_esc(f.get("title",""))}</span>'
+            f'<span class="h-meta">{_esc(meta_line)}</span></div>'
             f'<div class="h-body">{body}{note_html}</div></div>'
         )
     return cards
@@ -875,12 +883,16 @@ def _rule_conclusions(results, checks, hit, cot):
         mid = "；".join(mid_parts) + "。"
 
     # 长期(1-3年+): 看 Buffett/CAPE/收益率曲线/LEI
-    buf, cape, yc = gv("buffett"), gv("cape"), gv("yield_curve")
+    buf, cape, yc, lei = gv("buffett"), gv("cape"), gv("yield_curve"), gv("lei")
     long_parts = []
     if buf is not None and buf > 180:
         long_parts.append(f"巴菲特指标 {buf}% 处极端泡沫区")
     if cape is not None and cape > 35:
         long_parts.append(f"CAPE {cape} 接近历史泡沫峰值")
+    if yc is not None and yc < 0:
+        long_parts.append(f"收益率曲线 10Y-2Y {yc} 倒挂(历史衰退领先信号)")
+    if lei is not None and lei < -4:
+        long_parts.append(f"LEI 领先指标 {lei}% 深度收缩(经济下行压力)")
     if long_parts:
         long = "、".join(long_parts) + "——长期估值结构性偏高，组合应逐步再平衡：降低美股权重、增配现金/防御/非美资产，为均值回归做准备。"
     else:
