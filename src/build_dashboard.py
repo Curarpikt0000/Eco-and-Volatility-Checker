@@ -54,7 +54,7 @@ def main():
     holdings = h13.load_holdings()
 
     # 可选: 联网读的板块(失败不阻塞)
-    kol_changes, liquidity, cb_balance, custody = [], {}, {}, {}
+    kol_changes, liquidity, cb_balance, custody, auctions = [], {}, {}, {}, {}
     # kol_changes 需 [{prev_dir,new_dir,...}] 结构, 由 daily cron 的 kol_stance_changes() 产出;
     # 本独立重建脚本不重算 KOL 变化(留空), 只验证机构/政要/流动性/央行板块渲染。
     try:
@@ -72,11 +72,17 @@ def main():
         custody = ed.fetch_foreign_custody_ust() or {}
     except Exception as e:
         print(f"[dashboard] 外国托管美债跳过: {e}")
+    try:
+        import external_data as ed
+        auctions = ed.fetch_treasury_auctions() or {}
+    except Exception as e:
+        print(f"[dashboard] 国债拍卖跳过: {e}")
 
     out = dash.generate(
         snap, checks, hit, gstats, overall,
         holdings=holdings, kol_changes=kol_changes,
         liquidity=liquidity, cb_balance=cb_balance, custody=custody,
+        auctions=auctions,
     )
     print(f"[dashboard] 生成: {out}")
     return out

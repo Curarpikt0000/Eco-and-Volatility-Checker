@@ -43,6 +43,7 @@ NOTION_DB = {
     "weekly":     ENV.get("DB_WEEKLY", ""),        # DB-4 周报
     "holdings":   ENV.get("DB_HOLDINGS", ""),       # DB-5 机构持仓(13F)+Trump
     "custody":    ENV.get("DB_CUSTODY", ""),        # DB-6 外国官方托管美债(周度)
+    "auctions":   ENV.get("DB_AUCTIONS", ""),       # DB-7 美国国债拍卖(每次一行)
 }
 
 # ─────────────────────── 信号方向 ───────────────────────

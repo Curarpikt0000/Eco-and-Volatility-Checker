@@ -146,7 +146,7 @@ def threshold_text(ind):
 
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
-             holdings=None, custody=None):
+             holdings=None, custody=None, auctions=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -314,6 +314,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         liquidity=_liquidity_html(liquidity),
         cb_balance=_cb_balance_html(cb_balance),
         custody=_custody_html(custody),
+        auctions=_auctions_html(auctions),
         holdings=_holdings_html(holdings),
     )
     path = os.path.join(OUT_DIR, "index.html")
@@ -463,6 +464,104 @@ def _cb_one_view(d, fx=None):
         f'<div class="bs-col bs-assets"><div class="bs-col-h">资产 (Assets)</div>{side(d.get("assets",[]))}{total_a_html}</div>'
         f'<div class="bs-col bs-liabs"><div class="bs-col-h">负债 (Liabilities)</div>{side(d.get("liabilities",[]))}{total_l_html}</div>'
         f'</div></div>'
+    )
+
+
+def _auc_btc_cls(btc):
+    """中标率(bid-to-cover)色标: >2.5 强需求(绿)/2.2-2.5 正常(灰)/<2.2 偏弱(红)。"""
+    if btc is None:
+        return "auc-n"
+    if btc >= 2.5:
+        return "auc-g"
+    if btc >= 2.2:
+        return "auc-m"
+    return "auc-r"
+
+
+def _auctions_html(auc):
+    """美国国债拍卖 timeline 卡片: 每个关键券种一条 timeline,
+    最新拍卖大字 + 过去3次下挂 + 下次日程。中标率色标(需求强弱)。"""
+    if not auc or auc.get("status") != "ok" or not auc.get("terms"):
+        st = (auc or {}).get("status", "数据未就绪")
+        return f'<p class="empty">国债拍卖数据未就绪（{st}）。</p>'
+    # 全局下次拍卖(醒目提示)
+    up = auc.get("upcoming", [])
+    up_html = ""
+    if up:
+        nx = up[0]
+        up_html = (
+            f'<div class="auc-next-banner">'
+            f'<span class="auc-next-lbl">下次拍卖</span> '
+            f'<b>{nx["auction_date"]}</b> · {nx["security_type"]} {nx["security_term"]} '
+            f'· 规模 <b>${nx["offering_bn"]}B</b>'
+            + (f' · 交割 {nx["issue_date"]}' if nx.get("issue_date") else "")
+            + '</div>'
+        )
+    # 券种顺序(短→长)
+    order = ["2-Year", "3-Year", "5-Year", "7-Year", "10-Year", "20-Year", "30-Year"]
+    rows = []
+    for term in order:
+        blk = auc["terms"].get(term)
+        if not blk or not blk["history"]:
+            continue
+        hist = blk["history"]
+        latest = hist[0]
+        past = hist[1:4]  # 过去3次
+        nxt = blk.get("next")
+        lcls = _auc_btc_cls(latest.get("bid_to_cover"))
+        sec = latest["security_type"]
+        # 最新拍卖(大字)
+        latest_html = (
+            f'<div class="auc-latest">'
+            f'<div class="auc-date">{latest["auction_date"]}<span class="auc-tag">最新</span></div>'
+            f'<div class="auc-metrics">'
+            f'<span class="auc-m-item">规模 <b>${latest["offering_bn"]}B</b></span>'
+            f'<span class="auc-m-item">中标率 <b class="{lcls}">{latest["bid_to_cover"]}</b></span>'
+            f'<span class="auc-m-item">收益率 <b>{latest["high_yield"]}%</b></span>'
+            + (f'<span class="auc-m-item">间接投标 <b>{latest["indirect_pct"]}%</b></span>' if latest.get("indirect_pct") else "")
+            + '</div></div>'
+        )
+        # 过去3次下挂(timeline 节点)
+        past_html = ""
+        for p in past:
+            pcls = _auc_btc_cls(p.get("bid_to_cover"))
+            past_html += (
+                f'<div class="auc-past-node">'
+                f'<span class="auc-p-date">{p["auction_date"]}</span>'
+                f'<span class="auc-p-m">${p["offering_bn"]}B</span>'
+                f'<span class="auc-p-m">BTC <b class="{pcls}">{p["bid_to_cover"]}</b></span>'
+                f'<span class="auc-p-m">{p["high_yield"]}%</span>'
+                + (f'<span class="auc-p-m">间接{p["indirect_pct"]}%</span>' if p.get("indirect_pct") else "")
+                + '</div>'
+            )
+        # 下次(该券种)
+        next_html = ""
+        if nxt:
+            next_html = (
+                f'<div class="auc-next-node">▶ 下次 {nxt["auction_date"]} · '
+                f'规模 ${nxt["offering_bn"]}B'
+                + (f' · 交割 {nxt["issue_date"]}' if nxt.get("issue_date") else "")
+                + '</div>'
+            )
+        rows.append(
+            f'<div class="auc-term">'
+            f'<div class="auc-term-head"><span class="auc-term-name">{sec} · {term}</span></div>'
+            f'{latest_html}'
+            f'<div class="auc-timeline">{past_html}</div>'
+            f'{next_html}'
+            f'</div>'
+        )
+    grid = "".join(rows)
+    return (
+        f'<div class="auc-wrap">'
+        f'{up_html}'
+        f'<div class="auc-grid">{grid}</div>'
+        f'<div class="auc-how"><b>如何看：</b>'
+        f'<b>中标率(Bid-to-Cover)</b>=总投标额/发行额，>2.5 需求强劲（绿）、2.2-2.5 正常、<2.2 偏弱（红）——拍卖遇冷是美债需求恶化的早期信号。'
+        f'<b>最高中标收益率</b>=清算利率，走高=融资成本上升。'
+        f'<b>间接投标占比</b>≈外国央行/官方代理需求份额，与上方托管美债互为印证。'
+        f'数据源：美国财政部 fiscaldata.treasury.gov（官方，每次拍卖后更新）。</div>'
+        f'</div>'
     )
 
 
@@ -1039,6 +1138,34 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .cc-ylab {{ fill: var(--muted); font-size: 9px; font-family: var(--mono); text-anchor: end; }}
   .cc-xlab {{ fill: var(--muted); font-size: 9px; font-family: var(--mono); }}
 
+  /* 国债拍卖 timeline */
+  .auc-wrap {{ display: flex; flex-direction: column; gap: 12px; }}
+  .auc-next-banner {{ background: rgba(140,155,175,.14); border: 1px solid var(--border); border-left: 3px solid var(--dust-blue); border-radius: 6px; padding: 8px 12px; font-size: 13px; color: var(--text); }}
+  .auc-next-lbl {{ font-size: 11px; color: var(--dust-blue); font-weight: 700; margin-right: 6px; }}
+  .auc-next-banner b {{ font-family: var(--mono); }}
+  .auc-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; }}
+  .auc-term {{ background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }}
+  .auc-term-head {{ margin-bottom: 6px; }}
+  .auc-term-name {{ font-size: 13px; font-weight: 800; color: var(--text); }}
+  .auc-latest {{ padding: 6px 0 8px; border-bottom: 1px dashed rgba(160,160,150,.28); }}
+  .auc-date {{ font-family: var(--mono); font-size: 13px; color: var(--text); font-weight: 700; margin-bottom: 4px; }}
+  .auc-tag {{ font-size: 9px; background: var(--dust-blue); color: #fff; padding: 1px 5px; border-radius: 4px; margin-left: 6px; vertical-align: middle; font-weight: 600; }}
+  .auc-metrics {{ display: flex; flex-wrap: wrap; gap: 10px; }}
+  .auc-m-item {{ font-size: 11.5px; color: var(--muted); }}
+  .auc-m-item b {{ font-family: var(--mono); color: var(--text); margin-left: 2px; }}
+  .auc-timeline {{ display: flex; flex-direction: column; gap: 3px; padding: 6px 0 0; position: relative; }}
+  .auc-past-node {{ display: flex; flex-wrap: wrap; gap: 8px; font-size: 10.5px; color: var(--muted); padding: 2px 0 2px 12px; border-left: 2px solid rgba(160,160,150,.30); }}
+  .auc-p-date {{ font-family: var(--mono); color: var(--dust-blue); min-width: 66px; }}
+  .auc-p-m {{ font-family: var(--mono); }}
+  .auc-p-m b {{ font-family: var(--mono); }}
+  .auc-next-node {{ font-size: 11px; color: var(--dust-blue); font-family: var(--mono); margin-top: 6px; padding-top: 5px; border-top: 1px dashed rgba(160,160,150,.28); }}
+  .auc-g {{ color: #3f5a3f !important; font-weight: 700; }}
+  .auc-m {{ color: var(--muted) !important; }}
+  .auc-r {{ color: var(--clay) !important; font-weight: 700; }}
+  .auc-n {{ color: var(--muted) !important; }}
+  .auc-how {{ font-size: 11.5px; color: var(--muted); line-height: 1.7; }}
+  .auc-how b {{ color: var(--dust-blue); }}
+
   /* 逐条解读 */
   .interp-group {{ font-size: 13px; color: var(--dust-blue); margin: 16px 0 8px; font-weight: 700; }}
   .interp-item {{ padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }}
@@ -1165,6 +1292,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三：三大央行资产负债表 (JP/CN/US) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>三大央行资产负债表 · 每日更新 (左资产 / 右负债 · 带环比)</div>
   <div class="bs-grid">{cb_balance}</div>
+
+  <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)</div>
+  <div class="card">{auctions}</div>
 
   <!-- ═══ 附三·五：外国官方在纽约联储托管的美债 ═══ -->
   <div class="part-title"><span class="part-num">＋</span>外国官方托管美债 · 纽约联储 (去美元化风向标)</div>

@@ -426,6 +426,133 @@ def write_custody_notion(cust=None):
     return nw.upsert(db, cust["as_of"], props, title_field="Date")
 
 
+# ─────────── 美国国债拍卖 (Treasury Auctions) ───────────
+TREASURY_AUCTION_API = ("https://api.fiscaldata.treasury.gov/services/api/"
+                        "fiscal_service/v1/accounting/od/auctions_query")
+# 关注的关键券种(Note/Bond, 反映市场对中长债需求; Bill 是货币工具口径不同, 不纳入)
+AUCTION_KEY_TERMS = ["2-Year", "3-Year", "5-Year", "7-Year", "10-Year", "20-Year", "30-Year"]
+
+
+def _auc_num(x):
+    """把 API 字符串数字转 float, 'null'/空 → None。"""
+    if x in (None, "", "null"):
+        return None
+    try:
+        return float(x)
+    except (ValueError, TypeError):
+        return None
+
+
+def fetch_treasury_auctions(history_days=420):
+    """抓美国财政部国债拍卖数据(fiscaldata 官方 API, 免费无 key)。
+    每个关键券种(2/3/5/7/10/20/30Y Note&Bond): 最新 + 过去3次(共4次) + 下次拍卖日程。
+    返回 {terms: {term: {history:[...], next:{...}|None}}, upcoming:[...], as_of, status, source}。
+    每次拍卖字段: auction_date, security_type, offering_bn, accepted_bn, bid_to_cover,
+    high_yield, indirect_pct(间接投标占比=外国央行代理需求), issue_date。"""
+    import requests
+    import datetime
+    from collections import defaultdict
+    start = (datetime.date.today() - datetime.timedelta(days=history_days)).isoformat()
+    today = datetime.date.today()
+    try:
+        r = requests.get(TREASURY_AUCTION_API,
+                         params={"sort": "-auction_date", "page[size]": "800",
+                                 "filter": f"auction_date:gte:{start}"},
+                         timeout=50)
+        if r.status_code != 200:
+            return {"terms": {}, "upcoming": [], "as_of": None, "status": f"HTTP {r.status_code}"}
+        rows = r.json().get("data", [])
+    except Exception as e:
+        return {"terms": {}, "upcoming": [], "as_of": None, "status": f"错误:{e}"}
+
+    def pack(x):
+        offer = _auc_num(x.get("offering_amt"))
+        acc = _auc_num(x.get("total_accepted"))
+        ind = _auc_num(x.get("indirect_bidder_accepted"))
+        # 间接投标占比 = 间接中标 / 总中标(近似外国央行/官方代理需求份额)
+        ind_pct = round(ind / acc * 100, 1) if (ind and acc) else None
+        return {
+            "auction_date": x.get("auction_date"),
+            "security_type": x.get("security_type"),
+            "security_term": x.get("security_term"),
+            "offering_bn": round(offer / 1e9, 1) if offer else None,
+            "accepted_bn": round(acc / 1e9, 1) if acc else None,
+            "bid_to_cover": _auc_num(x.get("bid_to_cover_ratio")),
+            "high_yield": _auc_num(x.get("high_yield")),
+            "indirect_pct": ind_pct,
+            "issue_date": x.get("issue_date"),
+            "reopening": x.get("reopening"),
+        }
+
+    done = defaultdict(list)     # term → 已完成(有中标结果)
+    future = defaultdict(list)   # term → 未来(auction_date>=today 且未开标)
+    for x in rows:
+        st, term, ad = x.get("security_type"), x.get("security_term"), x.get("auction_date")
+        if st not in ("Note", "Bond") or term not in AUCTION_KEY_TERMS or not ad:
+            continue
+        d = datetime.date.fromisoformat(ad)
+        has_result = x.get("high_yield") not in (None, "null", "")
+        if d >= today and not has_result:
+            future[term].append(pack(x))
+        elif has_result:
+            done[term].append(pack(x))
+
+    terms = {}
+    latest_date = None
+    for term in AUCTION_KEY_TERMS:
+        hist = sorted(done[term], key=lambda a: a["auction_date"], reverse=True)[:4]  # 最新+过去3
+        nxt = sorted(future[term], key=lambda a: a["auction_date"])
+        if not hist and not nxt:
+            continue
+        if hist:
+            ld = hist[0]["auction_date"]
+            if latest_date is None or ld > latest_date:
+                latest_date = ld
+        terms[term] = {"history": hist, "next": nxt[0] if nxt else None}
+
+    # 全局最近一次拍卖日程(所有关键券种混排取最近未来)
+    allf = [f for t in future for f in future[t]]
+    upcoming = sorted(allf, key=lambda a: a["auction_date"])[:6]
+    return {
+        "terms": terms,
+        "upcoming": upcoming,
+        "as_of": latest_date,
+        "status": "ok" if terms else "无拍卖数据",
+        "source": "US Treasury fiscaldata.treasury.gov auctions_query",
+    }
+
+
+def write_auctions_notion(auc=None):
+    """把国债拍卖写入 Notion DB_AUCTIONS(每次拍卖一行, cusip+日期作幂等 key)。
+    以 '券种 拍卖日' 作 title。返回写入行数。"""
+    import config as c
+    import notion_writer as nw
+    if auc is None:
+        auc = fetch_treasury_auctions()
+    db = c.NOTION_DB.get("auctions")
+    if not db or auc.get("status") != "ok":
+        return 0
+    n = 0
+    for term, blk in auc["terms"].items():
+        for a in blk["history"]:
+            title = f"{a['security_type']} {term} {a['auction_date']}"
+            props = {
+                "券种": {"select": {"name": f"{a['security_type']} {term}"}},
+                "拍卖日": {"date": {"start": a["auction_date"]}},
+                "发行规模($B)": nw.prop_num(a.get("offering_bn")),
+                "中标额($B)": nw.prop_num(a.get("accepted_bn")),
+                "中标率(BTC)": nw.prop_num(a.get("bid_to_cover")),
+                "最高中标收益率(%)": nw.prop_num(a.get("high_yield")),
+                "间接投标占比(%)": nw.prop_num(a.get("indirect_pct")),
+            }
+            try:
+                nw.upsert(db, title, props, title_field="Auction")
+                n += 1
+            except Exception:
+                pass
+    return n
+
+
 if __name__ == "__main__":
     import json
     print("=== KOL 状态变化(近10天) ===")
@@ -435,3 +562,5 @@ if __name__ == "__main__":
     print(json.dumps(fetch_liquidity_points(), ensure_ascii=False, indent=2, default=str)[:1500])
     print("\n=== 外国官方托管美债 (Fed H.4.1) ===")
     print(json.dumps(fetch_foreign_custody_ust(), ensure_ascii=False, indent=2, default=str))
+    print("\n=== 美国国债拍卖 ===")
+    print(json.dumps(fetch_treasury_auctions(), ensure_ascii=False, indent=2, default=str))

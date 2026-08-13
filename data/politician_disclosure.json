@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-12",
+  "as_of": "2026-08-13",
   "politicians": [
     {
       "name": "Nancy Pelosi",
@@ -2794,35 +2794,19 @@
       "title": "参议员 (阿拉巴马) · 参议院 PTR",
       "trades": [
         {
-          "ticker": "TSCO",
-          "asset": "Tractor Supply Company",
+          "ticker": "PEP",
+          "asset": "Pepsico Inc",
           "dir_cn": "卖出",
           "direction": "Sale (Full)",
-          "txn_date": "01/10/2025",
+          "txn_date": "10/07/2025",
           "amount_range": "$15,001 - $50,000"
         },
         {
-          "ticker": "CARR",
-          "asset": "Carrier Global Corp",
+          "ticker": "OC",
+          "asset": "Owens Corning Inc",
           "dir_cn": "卖出",
           "direction": "Sale (Full)",
-          "txn_date": "01/10/2025",
-          "amount_range": "$1,001 - $15,000"
-        },
-        {
-          "ticker": "TXN",
-          "asset": "Texas Instruments Incorporated - Common Stock",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "01/10/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "DEO",
-          "asset": "Diageo Plc ADR",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "01/10/2025",
+          "txn_date": "10/07/2025",
           "amount_range": "$15,001 - $50,000"
         },
         {
@@ -2830,7 +2814,7 @@
           "asset": "Microsoft Corp",
           "dir_cn": "卖出",
           "direction": "Sale (Full)",
-          "txn_date": "01/10/2025",
+          "txn_date": "10/07/2025",
           "amount_range": "$15,001 - $50,000"
         },
         {
@@ -2838,7 +2822,31 @@
           "asset": "Apple Inc",
           "dir_cn": "卖出",
           "direction": "Sale (Full)",
-          "txn_date": "01/10/2025",
+          "txn_date": "10/07/2025",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "GOOGL",
+          "asset": "Alphabet Inc. - Class A Common Stock",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "10/07/2025",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "ORCL",
+          "asset": "Oracle Corporation Common Stock",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "10/07/2025",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": null,
+          "asset": "BIRMINGHAM ALA GO WTS SER. 2018 B\n                                        \n                                        \n                                        \n                                            Rate/Coupon: 5.0% Matures: 12/01/2043",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "10/07/2025",
           "amount_range": "$15,001 - $50,000"
         },
         {
@@ -2902,14 +2910,6 @@
           "asset": "Verizon Communications Inc",
           "dir_cn": "部分卖出",
           "direction": "Sale (Partial)",
-          "txn_date": "12/26/2023",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "RF",
-          "asset": "Regions Financial Corp",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
           "txn_date": "12/26/2023",
           "amount_range": "$15,001 - $50,000"
         }
