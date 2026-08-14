@@ -239,11 +239,72 @@ def kol_weekly_changes():
     return sorted(changes, key=lambda x: x["kol"])
 
 
+def kol_weekly_views(min_comment_len=10):
+    """本周全部有实质观点的 KOL, 按 sector 分组(不只转向, 而是所有有意义的观点)。
+    数据源: Eco 自己每日快照(优先本周最新一天; 无快照回退 kol_independent.json 的 all)。
+    每个 KOL 取其本周最新一次观点(方向+言论+标的)。绝不编: 无言论/无数据则跳过。
+    返回 {"date": 观点日期, "total": KOL数, "modules": [{sector,en,color,views:[{kol,direction,comments,targets,date}]}]}。
+    """
+    import json
+    # 优先: 本周最新快照(独立数据仓库)
+    snaps = load_kol_daily_snapshots()
+    rows = []
+    src_date = ""
+    if snaps:
+        src_date = sorted(snaps.keys())[-1]
+        for kol, x in snaps[src_date].items():
+            rows.append({"kol": kol, "sector": x.get("sector", ""),
+                         "direction": x.get("direction", ""),
+                         "comments": x.get("comments", ""),
+                         "targets": x.get("targets", ""), "date": src_date})
+    else:
+        # 回退: kol_independent.json 的 all(当日全量)
+        if os.path.exists(KOL_INDEPENDENT):
+            try:
+                d = json.load(open(KOL_INDEPENDENT))
+                src_date = d.get("date", "")
+                for x in d.get("all", []):
+                    if x.get("kol"):
+                        rows.append({"kol": x["kol"], "sector": x.get("sector", ""),
+                                     "direction": x.get("direction", ""),
+                                     "comments": x.get("comments", ""),
+                                     "targets": x.get("targets", ""),
+                                     "date": x.get("date", src_date)})
+            except Exception:
+                pass
+    # 只保留有实质言论的
+    rows = [r for r in rows if (r.get("comments") or "").strip()
+            and len((r["comments"]).strip()) >= min_comment_len]
+    # 按归一 sector 分组
+    groups = {}
+    for r in rows:
+        sec_raw = (r.get("sector") or "").strip()
+        zh, en = _KOL_SECTOR_MAP.get(sec_raw, (sec_raw or "其他", sec_raw or "Other"))
+        groups.setdefault(zh, {"sector": zh, "en": en,
+                               "color": _KOL_SECTOR_COLOR.get(zh, "#8a8377"),
+                               "views": []})
+        groups[zh]["views"].append({
+            "kol": r.get("kol", ""),
+            "direction": r.get("direction", ""),
+            "comments": (r.get("comments") or "")[:400],
+            "targets": (r.get("targets") or "")[:150],
+            "date": r.get("date", src_date),
+        })
+    # 方向强弱排序: 看多在前(更醒目), 模块内按方向强弱降序
+    _rank = {"强烈看多": 2, "看多": 1, "分歧": 0, "中性": 0, "看空": -1, "强烈看空": -2}
+    for g in groups.values():
+        g["views"].sort(key=lambda v: (-_rank.get(v["direction"], 0), v["kol"]))
+    # 模块按观点数降序
+    modules = sorted(groups.values(), key=lambda g: len(g["views"]), reverse=True)
+    total = sum(len(g["views"]) for g in modules)
+    return {"date": src_date, "total": total, "modules": modules}
+
+
 # sector 中英归一(Notion DB 用英文, independent.json 用中文) → 统一中文模块名 + 英文副标 + 色
 _KOL_SECTOR_MAP = {
     "Precious Metals": ("贵金属", "Precious Metals"),
     "贵金属": ("贵金属", "Precious Metals"),
-    "贵金属与商品周期": ("贵金属与商品周期", "Precious Metals & Commodity Cycle"),
+    "贵金属与商品周期": ("贵金属", "Precious Metals & Commodity Cycle"),
     "Macro": ("宏观货币与金融体系", "Macro & Monetary"),
     "宏观货币与金融体系": ("宏观货币与金融体系", "Macro & Monetary"),
     "Equities": ("股权市场", "Equities"),

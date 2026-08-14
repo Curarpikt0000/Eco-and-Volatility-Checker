@@ -155,7 +155,7 @@ def threshold_text(ind):
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
-             country_ust=None):
+             country_ust=None, kol_views=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -320,6 +320,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         concl_mid=ai_conclusions.get("mid", ""),
         concl_long=ai_conclusions.get("long", ""),
         kol_changes=_kol_changes_html(kol_changes),
+        kol_views=_kol_views_html(kol_views),
         liquidity=_liquidity_html(liquidity),
         cb_balance=_cb_balance_html(cb_balance),
         money_supply=_money_supply_html(money_supply),
@@ -409,6 +410,56 @@ def _kol_changes_html(kol_changes):
             f'<div class="h-module-title" style="background:{color}">'
             f'<span class="h-mod-dot"></span>{_esc(sector)}<span class="h-mod-en">{_esc(en)}</span>'
             f'<span class="h-mod-n">{len(changes)} 转向</span></div>'
+            f'<div class="kol-mod-inner">{cards}</div></div>'
+        )
+    return html
+
+
+def _kol_views_html(views):
+    """本周 KOL 观点板块(按模块, 每 KOL 一卡带多空方向)。
+    接收 kol_weekly_views() 结果 {date,total,modules:[{sector,en,color,views:[...]}]}。
+    这是'本周有意义的观点'全景(不只转向), 回答'88个KOL不可能一周没话说'。"""
+    if not views or not views.get("modules") or views.get("total", 0) == 0:
+        return '<p class="empty">本周暂无 KOL 观点数据（快照未就绪）。</p>'
+    # 方向 → 徽章色 + 文案(看多暖/看空冷, 与转向徽章一致的语义)
+    dir_badge = {
+        "强烈看多": ("kv-bull2", "强烈看多"), "看多": ("kv-bull", "看多"),
+        "分歧": ("kv-mixed", "分歧"), "中性": ("kv-mixed", "中性"),
+        "看空": ("kv-bear", "看空"), "强烈看空": ("kv-bear2", "强烈看空"),
+    }
+    date = views.get("date", "")
+    total = views.get("total", 0)
+    modules = views["modules"]
+    head = (f'<div class="kol-overview">本周 KOL 观点全景（截至 <b>{_esc(date)}</b>）：'
+            f'共 <b>{total}</b> 位 KOL 有实质观点，覆盖 <b>{len(modules)}</b> 个模块。'
+            f'<span class="kol-ov-note">卡片按多空方向标色 · 强烈看多→强烈看空</span></div>')
+    html = head
+    for m in modules:
+        color = m.get("color", "#8a8377")
+        sector = m.get("sector", "其他")
+        en = m.get("en", "")
+        vs = m.get("views", [])
+        if not vs:
+            continue
+        cards = ""
+        for v in vs:
+            bcls, btxt = dir_badge.get(v["direction"], ("kv-mixed", v["direction"] or "—"))
+            comment = (v.get("comments") or "").strip()
+            targets = (v.get("targets") or "").strip()
+            extra = ""
+            if comment:
+                extra += f'<div class="kol-cmt">{_esc(comment)}</div>'
+            if targets:
+                extra += f'<div class="kol-tgt">标的：{_esc(targets)}</div>'
+            cards += f"""<div class="kol-item">
+              <div class="kol-line"><b>{_esc(v['kol'])}</b> <span class="kv-badge {bcls}">{_esc(btxt)}</span> <span class="kol-date">{_esc(v.get('date',''))}</span></div>
+              {extra}
+            </div>"""
+        html += (
+            f'<div class="h-module" style="border-color:{color}">'
+            f'<div class="h-module-title" style="background:{color}">'
+            f'<span class="h-mod-dot"></span>{_esc(sector)}<span class="h-mod-en">{_esc(en)}</span>'
+            f'<span class="h-mod-n">{len(vs)} 位</span></div>'
             f'<div class="kol-mod-inner">{cards}</div></div>'
         )
     return html
@@ -1370,6 +1421,13 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .kol-up {{ color: #fff; background: var(--clay); }}
   .kol-down {{ color: #fff; background: var(--sage); }}
   .kol-flat {{ color: var(--muted); background: var(--card); }}
+  /* 本周 KOL 观点方向徽章(多空标色: 看多暖红/看空冷绿) */
+  .kv-badge {{ font-size: 10.5px; font-weight: 700; padding: 1px 8px; border-radius: 4px; margin-left: 4px; vertical-align: middle; }}
+  .kv-bull2 {{ color: #fff; background: var(--clay); }}
+  .kv-bull {{ color: #8a3a2c; background: rgba(192,138,125,.30); }}
+  .kv-mixed {{ color: var(--muted); background: var(--card2); border: 1px solid var(--border); }}
+  .kv-bear {{ color: #2f5a3f; background: rgba(154,171,151,.32); }}
+  .kv-bear2 {{ color: #fff; background: var(--sage); }}
   /* 流动性板块 */
   .liq-row {{ font-size: 13px; margin-bottom: 8px; line-height: 1.7; }}
   .liq-k {{ color: var(--muted); }}
@@ -1710,6 +1768,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 第六部分：今日最需关注的一条信号 ═══ -->
   <div class="part-title"><span class="part-num">6</span>今日最需关注的一条信号</div>
   <div class="focus-box">{focus}</div>
+
+  <!-- ═══ 附一·零：本周 KOL 观点全景(按模块+多空, Eco 独立每日快照) ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>本周 KOL 观点全景 · 按模块 (多空方向卡片)</div>
+  <div class="card">{kol_views}</div>
 
   <!-- ═══ 附一：本周 KOL 状态变化(模块化, Eco 独立每日快照周对比) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>本周 KOL 状态变化 · 按模块 (态度转向 call-out)</div>

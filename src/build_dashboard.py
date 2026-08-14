@@ -54,6 +54,7 @@ def main():
 
     # 可选: 联网读的板块(失败不阻塞)
     kol_changes, liquidity, cb_balance, custody, auctions = {}, {}, {}, {}, {}
+    kol_views = {}
     try:
         import external_data as ed
         # ★先把当日全量方向落盘为 Eco 独立快照(data/kol/daily/), 供周对比累积
@@ -64,6 +65,7 @@ def main():
         except Exception as se:
             print(f"[dashboard] KOL 快照保存跳过: {se}")
         kol_changes = ed.kol_stance_changes_grouped() or {}
+        kol_views = ed.kol_weekly_views() or {}
     except Exception as e:
         print(f"[dashboard] KOL 变化跳过: {e}")
     try:
@@ -108,6 +110,7 @@ def main():
     out = dash.generate(
         snap, checks, hit, gstats, overall,
         holdings=holdings, kol_changes=kol_changes,
+        kol_views=kol_views,
         liquidity=liquidity, cb_balance=cb_balance, custody=custody,
         auctions=auctions, money_supply=money_supply, m2_history=m2_history,
         country_ust=country_ust,
