@@ -244,7 +244,7 @@ CB_BS_SPEC = {
         ],
         "liabilities": [
             ("储备货币", "负债_储备货币_亿"),
-            ("货币发行", "负债_货币发行_亿"),
+            ("货币发行", "负债_货币发行_亿", "sub"),
             ("政府存款", "负债_政府存款_亿"),
         ],
         "total_a": "总资产_亿", "total_l": "总负债_亿",
@@ -258,15 +258,16 @@ def _title_val(props, field):
     return "".join(x.get("plain_text", "") for x in arr)
 
 
-def _bs_line(cur, prev, disp, fld):
-    """一个科目: 取当前值 + 环比。返回 {name,value,delta,pct} 或 None(值缺)。"""
+def _bs_line(cur, prev, disp, fld, sub=False):
+    """一个科目: 取当前值 + 环比。返回 {name,value,delta,pct,sub} 或 None(值缺)。
+    sub=True 表示该项是上一总项的子项(如"货币发行"⊂"储备货币"),渲染层缩进显示"其中·",不与总项同层相加。"""
     v = _num(cur.get(fld, {}))
     if v is None:
         return None
     pv = _num(prev.get(fld, {})) if prev else None
     delta = round(v - pv, 3) if pv is not None else None
     pct = round((v - pv) / pv * 100, 2) if (pv not in (None, 0)) else None
-    return {"name": disp, "value": v, "delta": delta, "pct": pct}
+    return {"name": disp, "value": v, "delta": delta, "pct": pct, "sub": sub}
 
 
 def _usd_convert(cc_data, factor, orig_unit):
@@ -306,8 +307,8 @@ def fetch_cb_balance_sheets(to_usd=True):
             continue
         cur = rows[0]
         prev = rows[1] if len(rows) > 1 else {}
-        assets = [x for x in (_bs_line(cur, prev, d, f) for d, f in spec["assets"]) if x]
-        liabs = [x for x in (_bs_line(cur, prev, d, f) for d, f in spec["liabilities"]) if x]
+        assets = [x for x in (_bs_line(cur, prev, s[0], s[1], len(s) > 2 and s[2] == "sub") for s in spec["assets"]) if x]
+        liabs = [x for x in (_bs_line(cur, prev, s[0], s[1], len(s) > 2 and s[2] == "sub") for s in spec["liabilities"]) if x]
         ta = _bs_line(cur, prev, "总资产", spec["total_a"]) if spec.get("total_a") else None
         tl = _bs_line(cur, prev, "总负债", spec["total_l"]) if spec.get("total_l") else None
         out[cc] = {
@@ -550,6 +551,109 @@ def write_auctions_notion(auc=None):
                 n += 1
             except Exception:
                 pass
+    return n
+
+
+# ─────────── 货币供应量 M0/M1/M2 ───────────
+MONEY_SUPPLY_OVERRIDE = os.path.join(os.path.dirname(__file__), "..", "data", "money_supply_override.json")
+# FRED fredgraph.csv 直连(免 key), 取最后一行=最新
+_FRED_MS = {"m1": "M1SL", "m2": "M2SL", "m0": "BOGMBASE"}
+
+
+def _fred_latest(series_id):
+    """curl FRED fredgraph.csv 取最新 (date, value)。失败返回 (None, None)。"""
+    import requests
+    try:
+        r = requests.get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}", timeout=20)
+        if r.status_code != 200:
+            return None, None
+        lines = [ln for ln in r.text.strip().splitlines() if "," in ln]
+        # 从末尾找最后一个有数值的行(FRED 用 '.' 表示缺失)
+        for ln in reversed(lines[1:]):
+            d, v = ln.split(",", 1)
+            v = v.strip()
+            if v and v != ".":
+                try:
+                    return d.strip()[:7], round(float(v), 1)
+                except ValueError:
+                    continue
+        return None, None
+    except Exception:
+        return None, None
+
+
+def fetch_money_supply():
+    """三国货币供应量 M0/M1/M2(+日本 M3)。
+    US: FRED 直连(自动最新); JP/CN: 无稳定免费 API→读 money_supply_override.json(weekly cron agent 用官方源更新)。
+    返回 {"US":{...}, "JP":{...}, "CN":{...}}, 每国:
+      {name, flag, unit, as_of, m0, m0_label, m1, m2, (m3), source}
+    绝不编: US 抓不到该项留 None; JP/CN 缺 override 文件则该国留空 status。"""
+    import json
+    out = {}
+
+    # 美国: FRED 直连. M0 无官方概念→用基础货币 BOGMBASE 代理
+    us = {"name": "美国 Fed", "flag": "🇺🇸", "unit": "$B",
+          "m0_label": "基础货币 Monetary Base",
+          "source": "FRED (M1SL/M2SL/BOGMBASE), 月度"}
+    as_ofs = []
+    for k, sid in _FRED_MS.items():
+        d, v = _fred_latest(sid)
+        us[k] = v
+        if d:
+            as_ofs.append(d)
+    us["as_of"] = max(as_ofs) if as_ofs else None
+    if us.get("m2") is None and us.get("m1") is None:
+        us["status"] = "未找到"
+    out["US"] = us
+
+    # 日本 / 中国: 读 override
+    try:
+        ov = json.load(open(MONEY_SUPPLY_OVERRIDE))
+    except Exception:
+        ov = {}
+    jp_meta = {"name": "日本 BoJ", "flag": "🇯🇵"}
+    cn_meta = {"name": "中国 PBoC", "flag": "🇨🇳"}
+    for cc, meta in (("JP", jp_meta), ("CN", cn_meta)):
+        blk = ov.get(cc)
+        if isinstance(blk, dict) and (blk.get("m2") is not None or blk.get("m1") is not None):
+            row = dict(meta)
+            row.update({k: blk.get(k) for k in ("unit", "as_of", "m0", "m0_label", "m1", "m2", "m3", "source")})
+            out[cc] = row
+        else:
+            out[cc] = dict(meta, status="未找到")
+    return out
+
+
+def write_money_supply_notion(ms=None):
+    """把三国货币供应量写入 Notion DB_MONEY_SUPPLY(每国一行, '国家 as_of' 作 title 幂等)。
+    返回写入行数。DB id 缺失或无数据则返回 0。"""
+    import config as c
+    import notion_writer as nw
+    db = c.NOTION_DB.get("money_supply")
+    if not db:
+        return 0
+    ms = ms or fetch_money_supply()
+    n = 0
+    for cc in ("US", "JP", "CN"):
+        d = ms.get(cc) or {}
+        if d.get("status") == "未找到" or (d.get("m2") is None and d.get("m1") is None):
+            continue
+        title = f"{d.get('name', cc)} {d.get('as_of', '')}".strip()
+        props = {
+            "国家": {"select": {"name": d.get("name", cc)}},
+            "口径日期": {"rich_text": [{"text": {"content": str(d.get("as_of", ""))}}]},
+            "单位": {"select": {"name": d.get("unit", "")}},
+            "M0/基础货币": nw.prop_num(d.get("m0")),
+            "M1": nw.prop_num(d.get("m1")),
+            "M2": nw.prop_num(d.get("m2")),
+            "M3": nw.prop_num(d.get("m3")),
+            "来源": {"rich_text": [{"text": {"content": str(d.get("source", ""))[:300]}}]},
+        }
+        try:
+            nw.upsert(db, title, props, title_field="Country")
+            n += 1
+        except Exception:
+            pass
     return n
 
 

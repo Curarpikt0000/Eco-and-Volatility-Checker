@@ -1,0 +1,27 @@
+{
+  "_note": "M0/M1/M2 货币供应量。US 走 FRED 自动直连(fetch 时覆盖此处), JP/CN 无稳定免费 API→月度值走本 override(weekly cron agent 用 web_extract 从 BOJ/PBoC 官方更新)。单位=各国本币,量级不可跨国直接比。绝不编数字:更新时以官方发布为准,标 as_of。",
+  "_sources": {
+    "US": "FRED fredgraph.csv (M1SL/M2SL/BOGMBASE), 自动直连",
+    "JP": "BOJ Money Stock 速报 + Monetary Base (www.boj.or.jp/en/statistics/money)",
+    "CN": "PBoC 货币政策执行报告/金融统计月报 (www.pbc.gov.cn); Trading Economics 交叉印证"
+  },
+  "JP": {
+    "as_of": "2026-07",
+    "unit": "万亿円",
+    "m0": 554.9,
+    "m0_label": "基础货币 Monetary Base",
+    "m1": 1090.5,
+    "m2": 1297.0,
+    "m3": 1641.2,
+    "source": "BOJ 官方 PDF (Money Stock 速报 2026-08-12 发布; Monetary Base 2026-08-04 发布)"
+  },
+  "CN": {
+    "as_of": "2026-06",
+    "unit": "万亿元",
+    "m0": 14.7,
+    "m0_label": "流通中现金 M0",
+    "m1": 118.5,
+    "m2": 356.71,
+    "source": "PBoC 2026年二季度货币政策执行报告 (2026-08-12 发布); Trading Economics 交叉印证"
+  }
+}

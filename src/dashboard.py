@@ -154,7 +154,7 @@ def threshold_text(ind):
 
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
-             holdings=None, custody=None, auctions=None):
+             holdings=None, custody=None, auctions=None, money_supply=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -321,6 +321,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         kol_changes=_kol_changes_html(kol_changes),
         liquidity=_liquidity_html(liquidity),
         cb_balance=_cb_balance_html(cb_balance),
+        money_supply=_money_supply_html(money_supply),
         custody=_custody_html(custody),
         auctions=_auctions_html(auctions),
         holdings=_holdings_html(holdings),
@@ -439,9 +440,15 @@ def _cb_one_view(d, fx=None):
     def side(items):
         rows = ""
         for it in items:
-            rows += (f'<div class="bs-line"><span class="bs-name">{_esc(it["name"])}</span>'
-                     f'<span class="bs-val">{_cb_bs_num(it["value"])}</span>'
-                     f'{_cb_delta_span(it, up)}</div>')
+            if it.get("sub"):
+                # 子项(如"货币发行"⊂"储备货币"): 缩进 + "其中·"前缀, 表明是上一总项的明细, 不与总项同层相加
+                rows += (f'<div class="bs-line bs-sub"><span class="bs-name">└ 其中·{_esc(it["name"])}</span>'
+                         f'<span class="bs-val">{_cb_bs_num(it["value"])}</span>'
+                         f'{_cb_delta_span(it, up)}</div>')
+            else:
+                rows += (f'<div class="bs-line"><span class="bs-name">{_esc(it["name"])}</span>'
+                         f'<span class="bs-val">{_cb_bs_num(it["value"])}</span>'
+                         f'{_cb_delta_span(it, up)}</div>')
         return rows
 
     ta = d.get("total_assets")
@@ -693,6 +700,76 @@ def _cb_balance_html(cb):
     order = ["US", "JP", "CN"]
     cards = "".join(_cb_one_view(cb.get(cc, {}), fx=fx) for cc in order if cc in cb)
     return cards or '<p class="empty">央行资产负债表数据未就绪。</p>'
+
+
+def _ms_num(v):
+    """货币供应量数字格式化(千分位, 保留原量级)。"""
+    if v is None:
+        return "—"
+    try:
+        return f"{v:,.1f}" if v < 1000 else f"{v:,.0f}"
+    except Exception:
+        return _esc(str(v))
+
+
+def _money_supply_html(ms):
+    """三国货币供应量 M0/M1/M2 模块。ms: fetch_money_supply() 结果。
+    每国一卡: M0(基础货币)⊂M1⊂M2 三层递进条 + 口径/日期/源; 顶部一段层级说明(回答"基础货币≠流通量")。"""
+    if not ms:
+        return '<p class="empty">货币供应量数据未就绪。</p>'
+    # 层级说明(交易员视角一段话)
+    intro = (
+        '<div class="ms-intro">'
+        '<div class="ms-intro-l"><b>怎么读：</b>上面的央行资负表是"央行造了多少<u>底钱</u>"(基础货币/储备货币)；'
+        '这里的 M0/M1/M2 才是"社会上<u>实际流通</u>多少钱"。两者不是一回事。</div>'
+        '<div class="ms-intro-l"><b>包含关系(层层扩大)：</b>'
+        'M0(现金) ⊂ M1(现金+活期) ⊂ M2(M1+定期/储蓄)。层级越高口径越广，<b>不能相加</b>。</div>'
+        '<div class="ms-intro-l"><b>为什么 M2 远大于基础货币：</b>'
+        '商业银行放贷—存款—再放贷把底钱放大数倍(货币乘数)。M2 ≈ 基础货币 × 乘数，是"放水/收水"的真实力度。</div>'
+        '<div class="ms-intro-l ms-cav"><b>口径差异：</b>'
+        '中国官方直接公布 M0/M1/M2；美国、日本官方无"M0"，用<b>基础货币(Monetary Base)</b>代理。'
+        '三国均为<b>各自本币</b>(＄/¥/￥)，量级不可跨国直接比，看各国自己的绝对值与趋势。</div>'
+        '</div>'
+    )
+    order = ["US", "JP", "CN"]
+    cards = ""
+    for cc in order:
+        d = ms.get(cc)
+        if not d:
+            continue
+        if d.get("status") == "未找到" or (d.get("m2") is None and d.get("m1") is None):
+            cards += (f'<div class="ms-card"><div class="ms-head">{_esc(d.get("flag",""))} '
+                      f'{_esc(d.get("name",cc))}</div><p class="empty">数据未找到</p></div>')
+            continue
+        unit = d.get("unit", "")
+        m0, m1, m2 = d.get("m0"), d.get("m1"), d.get("m2")
+        m3 = d.get("m3")
+        # 递进条: 以 M2(或最大值)为满宽, 各层按比例
+        base = max([x for x in (m0, m1, m2, m3) if x is not None] or [1])
+        def bar(label, val, cls):
+            if val is None:
+                return (f'<div class="ms-row"><span class="ms-lbl">{_esc(label)}</span>'
+                        f'<span class="ms-bar-wrap"><span class="ms-bar {cls}" style="width:0"></span></span>'
+                        f'<span class="ms-v">—</span></div>')
+            w = max(3, round(val / base * 100))
+            return (f'<div class="ms-row"><span class="ms-lbl">{_esc(label)}</span>'
+                    f'<span class="ms-bar-wrap"><span class="ms-bar {cls}" style="width:{w}%"></span></span>'
+                    f'<span class="ms-v">{_ms_num(val)}</span></div>')
+        m0_lbl = d.get("m0_label", "M0")
+        rows = (bar(m0_lbl, m0, "ms-b0") + bar("M1", m1, "ms-b1") + bar("M2", m2, "ms-b2"))
+        if m3 is not None:
+            rows += bar("M3", m3, "ms-b3")
+        src = _esc(str(d.get("source", "")))
+        cards += (
+            f'<div class="ms-card">'
+            f'<div class="ms-head">{_esc(d.get("flag",""))} {_esc(d.get("name",cc))}'
+            f'<span class="ms-meta">{_esc(str(d.get("as_of","")))} · 单位 {_esc(unit)}</span></div>'
+            f'<div class="ms-body">{rows}</div>'
+            f'<div class="ms-src">源：{src}</div>'
+            f'</div>'
+        )
+    grid = f'<div class="ms-grid">{cards}</div>' if cards else '<p class="empty">货币供应量数据未就绪。</p>'
+    return intro + grid
 
 
 def _action_cls(action):
@@ -1015,6 +1092,28 @@ _TEMPLATE = r"""<!DOCTYPE html>
   /* 三大央行资产负债表 view */
   .bs-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; margin-bottom: 8px; }}
   .bs-card {{ background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }}
+  /* 货币供应量 M0/M1/M2 模块 */
+  .ms-intro {{ background: var(--card2); border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; }}
+  .ms-intro-l {{ font-size: 11.5px; color: var(--text); line-height: 1.6; margin-bottom: 3px; }}
+  .ms-intro-l b {{ color: var(--dust-blue); }}
+  .ms-intro-l u {{ text-decoration: underline; text-underline-offset: 2px; }}
+  .ms-cav {{ color: var(--muted); }}
+  .ms-cav b {{ color: var(--clay); }}
+  .ms-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }}
+  .ms-card {{ background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }}
+  .ms-head {{ font-size: 14px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: baseline; gap: 8px; }}
+  .ms-meta {{ font-size: 10.5px; color: var(--muted); font-weight: 400; margin-left: auto; }}
+  .ms-body {{ display: flex; flex-direction: column; gap: 8px; }}
+  .ms-row {{ display: grid; grid-template-columns: 92px 1fr auto; align-items: center; gap: 8px; }}
+  .ms-lbl {{ font-size: 11px; color: var(--text); font-weight: 600; }}
+  .ms-bar-wrap {{ background: var(--bg); border-radius: 4px; height: 16px; overflow: hidden; }}
+  .ms-bar {{ display: block; height: 100%; border-radius: 4px; }}
+  .ms-b0 {{ background: var(--dust-blue); }}
+  .ms-b1 {{ background: var(--sage); }}
+  .ms-b2 {{ background: var(--gold); }}
+  .ms-b3 {{ background: var(--mauve); }}
+  .ms-v {{ font-size: 13px; font-weight: 700; font-family: var(--mono); color: var(--text); text-align: right; min-width: 62px; }}
+  .ms-src {{ font-size: 9.5px; color: var(--muted); margin-top: 10px; line-height: 1.4; border-top: 1px dotted var(--border); padding-top: 6px; }}
   .bs-head {{ font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 10px; display: flex; flex-direction: column; gap: 3px; }}
   .bs-meta {{ font-size: 10px; font-weight: 400; color: var(--muted); font-family: var(--mono); }}
   .bs-body {{ display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }}
@@ -1033,6 +1132,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .bs-total {{ margin-top: 4px; padding-top: 6px; border-top: 1.5px solid var(--border); }}
   .bs-total .bs-name {{ font-weight: 700; }}
   .bs-total .bs-val {{ font-size: 15px; }}
+  /* 子项(如货币发行⊂储备货币): 缩进+弱化, 表明是上一总项明细而非并列科目 */
+  .bs-sub {{ padding-left: 14px; border-bottom: 1px dotted var(--border); }}
+  .bs-sub .bs-name {{ font-size: 10px; color: var(--muted); }}
+  .bs-sub .bs-val {{ font-size: 12px; font-weight: 600; color: var(--muted); }}
   /* 机构持仓 13F 卡片 */
   .h-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; margin-bottom: 8px; }}
   .h-card {{ background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }}
@@ -1309,6 +1412,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三：三大央行资产负债表 (JP/CN/US) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>三大央行资产负债表 · 每日更新 (左资产 / 右负债 · 带环比)</div>
   <div class="bs-grid">{cb_balance}</div>
+
+  <!-- ═══ 附三·二：三国货币供应量 M0/M1/M2 (央行资负表的延伸: 从"央行造多少底钱"到"社会流通多少钱") ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>三国货币供应量 M0 / M1 / M2 · 月度 (央行资负表下延: 社会实际流通的钱)</div>
+  <div class="card">{money_supply}</div>
 
   <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)</div>

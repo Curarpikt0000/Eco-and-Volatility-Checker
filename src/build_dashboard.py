@@ -76,12 +76,18 @@ def main():
         auctions = ed.fetch_treasury_auctions() or {}
     except Exception as e:
         print(f"[dashboard] 国债拍卖跳过: {e}")
+    money_supply = {}
+    try:
+        import external_data as ed
+        money_supply = ed.fetch_money_supply() or {}
+    except Exception as e:
+        print(f"[dashboard] 货币供应量跳过: {e}")
 
     out = dash.generate(
         snap, checks, hit, gstats, overall,
         holdings=holdings, kol_changes=kol_changes,
         liquidity=liquidity, cb_balance=cb_balance, custody=custody,
-        auctions=auctions,
+        auctions=auctions, money_supply=money_supply,
     )
     print(f"[dashboard] 生成: {out}")
     return out
