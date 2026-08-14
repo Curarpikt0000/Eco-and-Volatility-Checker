@@ -14,6 +14,8 @@ from notion_writer import _req
 KOL_BY_DAY_DB = "32347eb5fd3c8087b9c0f409f95f664e"
 KOL_REGISTRY = os.path.join(os.path.dirname(__file__), "..", "data", "kol_registry.json")
 KOL_INDEPENDENT = os.path.join(os.path.dirname(__file__), "..", "data", "kol_independent.json")
+# Eco 自己的每日 KOL 全量方向快照仓库(独立副本, 进 git, 供周度对比用, 不依赖任何 agent 的 Notion DB)
+KOL_DAILY_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "kol", "daily")
 
 
 def load_registry():
@@ -520,6 +522,101 @@ def write_custody_notion(cust=None):
         "数据源": {"rich_text": [{"type": "text", "text": {"content": cust.get("source", "Fed H.4.1")}}]},
     }
     return nw.upsert(db, cust["as_of"], props, title_field="Date")
+
+
+# ─────────── 分国别持有美债 (US Treasury TIC — Major Foreign Holders) ───────────
+# Chao 需求(2026-08): 在"外国官方托管美债"图下方加 日本/中国 各过去10年持有美债折线。
+# ★口径区别: 上面 custody 是 NY Fed 托管账户"外国官方合计"; 这里是 TIC 分国别口径
+#   (含官方+私人持有, 月度), 权威源=美国财政部 TIC Major Foreign Holders 历史文件。
+# 数据源: ticdata.treasury.gov/Publish/mfhhis01.txt (官方历史 TSV, 2000-03 至今, 免key)。
+#   ★注意 Publish/mfh.txt 是旧缓存(停在2023-01), 历史+最新都在 mfhhisNN.txt 系列。
+# 单位: 十亿美元($B)。绝不编: 抓不到标 status。
+TIC_MFH_HIST_URL = "https://ticdata.treasury.gov/Publish/mfhhis01.txt"
+_TIC_MON = {"Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4, "May": 5, "Jun": 6,
+            "Jul": 7, "Aug": 8, "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12}
+
+
+def _parse_tic_country(raw, country_key):
+    """从 TIC mfhhis 文本解析某国月度序列。country_key: 'Japan' 或 'China'。
+    文件结构: 每个年份块有一"月份行"(Jan..Dec)+"年份行"(Country + 4位年份),
+    随后 Japan / 'China, Mainland' 数据行, 按列对齐。返回 {'YYYY-MM': value_$B} 。"""
+    import re
+    lines = raw.replace("\r", "").split("\n")
+    series = {}
+    cur_months = cur_years = None
+    for l in lines:
+        cells = [c.strip() for c in l.split("\t")]
+        # 月份行: 至少含 6 个月份缩写
+        monpos = {i: _TIC_MON[c] for i, c in enumerate(cells) if c in _TIC_MON}
+        if len(monpos) >= 6:
+            cur_months, cur_years = monpos, None
+            continue
+        # 年份行: 第0列 == 'Country', 其余为4位年份
+        if cells and cells[0] == "Country":
+            cur_years = {i: int(c) for i, c in enumerate(cells) if re.fullmatch(r"\d{4}", c)}
+            continue
+        name = cells[0].strip('"').strip() if cells else ""
+        matched = (country_key == "Japan" and name == "Japan") or \
+                  (country_key == "China" and name.startswith("China"))
+        if matched and cur_months and cur_years:
+            for i, mm in cur_months.items():
+                yy = cur_years.get(i)
+                if not yy or i >= len(cells):
+                    continue
+                v = cells[i].replace(",", "").strip()
+                try:
+                    series[f"{yy:04d}-{mm:02d}"] = float(v)
+                except ValueError:
+                    continue
+    return series
+
+
+def fetch_country_ust_holdings(years=10):
+    """抓 日本 / 中国 分国别持有美债的月度序列(近 N 年)。
+    源: 美国财政部 TIC Major Foreign Holders 历史文件(官方, 月度, $B)。
+    返回 {"Japan":{...}, "China":{...}} 每个:
+      {name, flag, series:[(YYYY-MM, $B),...]升序, latest:(month,val), first:(month,val),
+       delta_bn, delta_pct, high, low, status, source} ; 拿不到 status='未找到'。
+    绝不编: 解析失败留空 series + status。"""
+    import requests
+    import datetime
+    out = {}
+    meta = {"Japan": ("日本", "🇯🇵"), "China": ("中国大陆", "🇨🇳")}
+    cutoff = (datetime.date.today().replace(day=1) -
+              datetime.timedelta(days=int(years * 365.25) + 45)).strftime("%Y-%m")
+    raw = None
+    try:
+        r = requests.get(TIC_MFH_HIST_URL,
+                         headers={"User-Agent": "Mozilla/5.0 (EcoVolChecker research)"},
+                         timeout=40)
+        if r.status_code == 200 and "MAJOR FOREIGN HOLDERS" in r.text:
+            raw = r.text
+    except Exception:
+        raw = None
+    for key, (zh, flag) in meta.items():
+        if not raw:
+            out[key] = {"name": zh, "flag": flag, "series": [], "status": "未找到",
+                        "source": "US Treasury TIC MFH"}
+            continue
+        s = _parse_tic_country(raw, key)
+        pts = sorted((m, v) for m, v in s.items() if m >= cutoff)
+        if len(pts) < 2:
+            out[key] = {"name": zh, "flag": flag, "series": pts, "status": "数据不足",
+                        "source": "US Treasury TIC MFH"}
+            continue
+        first_m, first_v = pts[0]
+        last_m, last_v = pts[-1]
+        vals = [v for _, v in pts]
+        out[key] = {
+            "name": zh, "flag": flag, "series": pts,
+            "latest": (last_m, last_v), "first": (first_m, first_v),
+            "delta_bn": round(last_v - first_v, 1),
+            "delta_pct": round((last_v - first_v) / first_v * 100, 1) if first_v else None,
+            "high": round(max(vals), 1), "low": round(min(vals), 1),
+            "status": "ok",
+            "source": "US Treasury TIC Major Foreign Holders (monthly)",
+        }
+    return out
 
 
 # ─────────── 美国国债拍卖 (Treasury Auctions) ───────────

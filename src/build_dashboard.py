@@ -91,12 +91,19 @@ def main():
         m2_history = ed.fetch_m2_history() or {}
     except Exception as e:
         print(f"[dashboard] M2历史跳过: {e}")
+    country_ust = {}
+    try:
+        import external_data as ed
+        country_ust = ed.fetch_country_ust_holdings(years=10) or {}
+    except Exception as e:
+        print(f"[dashboard] 分国别持美债跳过: {e}")
 
     out = dash.generate(
         snap, checks, hit, gstats, overall,
         holdings=holdings, kol_changes=kol_changes,
         liquidity=liquidity, cb_balance=cb_balance, custody=custody,
         auctions=auctions, money_supply=money_supply, m2_history=m2_history,
+        country_ust=country_ust,
     )
     print(f"[dashboard] 生成: {out}")
     return out

@@ -154,7 +154,8 @@ def threshold_text(ind):
 
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
-             holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None):
+             holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
+             country_ust=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -324,6 +325,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         money_supply=_money_supply_html(money_supply),
         m2_history=_m2_history_html(m2_history),
         custody=_custody_html(custody),
+        country_ust=_country_ust_html(country_ust),
         auctions=_auctions_html(auctions),
         holdings=_holdings_html(holdings),
     )
@@ -761,6 +763,98 @@ def _custody_span_line(hist):
             f'{_esc(hist[0][0])}→{_esc(hist[-1][0])}：'
             f'<b class="cust-{cls}">{chg*1000:+.0f}B ({chg_pct:+.1f}%)</b>'
             f' · 高 ${max(vals):.3f}T / 低 ${min(vals):.3f}T</div>')
+
+
+def _country_ust_svg(series, color, fill, w=680, h=200):
+    """分国别持有美债月度折线图($B 口径)。series: [(YYYY-MM, $B),...] 升序。"""
+    if not series or len(series) < 2:
+        return '<div class="cust-chart-na">历史数据不足，无法绘制折线图</div>'
+    dates = [d for d, _ in series]
+    vals = [v for _, v in series]
+    lo, hi = min(vals), max(vals)
+    rng = (hi - lo) or 1.0
+    ml, mr, mt, mb = 56, 14, 16, 30
+    pw, ph = w - ml - mr, h - mt - mb
+    n = len(vals)
+    def X(i): return ml + i * pw / (n - 1)
+    def Y(v): return mt + (hi - v) / rng * ph
+    pts = [f"{X(i):.1f},{Y(v):.1f}" for i, v in enumerate(vals)]
+    area = f"{X(0):.1f},{mt+ph:.1f} " + " ".join(pts) + f" {X(n-1):.1f},{mt+ph:.1f}"
+    # Y 轴 4 条网格 + 刻度($B, 无小数)
+    yl = []
+    for k in range(4):
+        gv = lo + rng * k / 3
+        gy = Y(gv)
+        yl.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" class="cc-grid"/>')
+        yl.append(f'<text x="{ml-6}" y="{gy+3:.1f}" class="cc-ylab">{gv:,.0f}</text>')
+    # X 轴年月标签
+    xl = []
+    idxs = sorted(set([0, n // 4, n // 2, 3 * n // 4, n - 1]))
+    for i in idxs:
+        dd = dates[i][:7]
+        anchor = "start" if i == 0 else ("end" if i == n - 1 else "middle")
+        xl.append(f'<text x="{X(i):.1f}" y="{h-10}" class="cc-xlab" text-anchor="{anchor}">{dd}</text>')
+    lx, ly = X(n - 1), Y(vals[-1])
+    return (
+        f'<svg viewBox="0 0 {w} {h}" class="cust-chart" preserveAspectRatio="xMidYMid meet">'
+        + "".join(yl)
+        + f'<polygon points="{area}" fill="{fill}" stroke="none"/>'
+        + f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" stroke-width="2.4" stroke-linejoin="round"/>'
+        + f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="4" fill="{color}"/>'
+        + f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="8" fill="{color}" opacity="0.18"/>'
+        + "".join(xl)
+        + '</svg>'
+    )
+
+
+def _country_ust_col(c):
+    """单国持有美债一列(标题 + 当前值/变动 + 折线 + 区间统计)。c: fetch_country_ust_holdings 单国 dict。"""
+    if not c or c.get("status") != "ok" or not c.get("series"):
+        st = (c or {}).get("status", "数据未就绪")
+        nm = (c or {}).get("name", "")
+        return (f'<div class="cust-chart-col"><div class="cust-chart-title">{_esc(nm)}</div>'
+                f'<div class="cust-chart-na">数据未就绪（{_esc(st)}）</div></div>')
+    series = c["series"]
+    last_m, last_v = c["latest"]
+    dbn, dpct = c.get("delta_bn"), c.get("delta_pct")
+    # 下降=减持/去美元化(clay红) 上升=增持(sage绿)
+    down = (dbn is not None and dbn < 0)
+    color = "#c08a7d" if down else "#9aab97"
+    fill = "rgba(192,138,125,0.10)" if down else "rgba(154,171,151,0.10)"
+    dcls = "r" if down else "g"
+    darrow = "▼" if down else "▲"
+    dtxt = f"{darrow} {dbn:+.0f}B ({dpct:+.1f}%)" if dbn is not None else "—"
+    return (
+        f'<div class="cust-chart-col">'
+        f'<div class="cust-chart-title">{c.get("flag","")} {_esc(c["name"])}持有美债（{len(series)}个月）</div>'
+        f'<div class="cu-cur">${last_v:,.0f}<span class="cust-unit">B</span> '
+        f'<span class="cust-wow cust-wow-{dcls}">{dtxt}</span> '
+        f'<span class="cu-asof">as of {_esc(last_m)}</span></div>'
+        f'{_country_ust_svg(series, color, fill)}'
+        f'<div class="cust-chart-span">{_esc(c["first"][0])}→{_esc(last_m)}：'
+        f'<b class="cust-{dcls}">{dbn:+.0f}B ({dpct:+.1f}%)</b>'
+        f' · 高 ${c["high"]:,.0f}B / 低 ${c["low"]:,.0f}B</div>'
+        f'</div>'
+    )
+
+
+def _country_ust_html(cu):
+    """日本 / 中国 分国别持有美债近10年折线(左右两图)。cu: fetch_country_ust_holdings()。"""
+    if not cu or (cu.get("Japan", {}).get("status") != "ok" and cu.get("China", {}).get("status") != "ok"):
+        return '<p class="empty">日本 / 中国 持有美债数据未就绪。</p>'
+    src = (cu.get("Japan") or cu.get("China") or {}).get("source", "US Treasury TIC")
+    return (
+        f'<div class="cust-wrap">'
+        f'<div class="cust-charts">'
+        f'{_country_ust_col(cu.get("Japan"))}'
+        f'{_country_ust_col(cu.get("China"))}'
+        f'</div>'
+        f'<div class="cust-how"><b>如何看：</b>美国财政部 TIC 口径下各国持有的美债总额（含官方+私人，月度）。'
+        f'与上方"外国官方托管美债"口径不同：托管是纽约联储账户的外国<b>官方合计</b>，这里是<b>分国别</b>总持仓。'
+        f'<b>日本</b>是美债最大持有国，近10年高位震荡；<b>中国</b>近10年持续系统性减持，是去美元化/中美博弈的结构性信号。'
+        f'数据源：{_esc(src)}。</div>'
+        f'</div>'
+    )
 
 
 def _cb_balance_html(cb):
@@ -1470,6 +1564,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .cc-grid {{ stroke: rgba(160,160,150,.20); stroke-width: 1; stroke-dasharray: 3 3; }}
   .cc-ylab {{ fill: var(--muted); font-size: 9px; font-family: var(--mono); text-anchor: end; }}
   .cc-xlab {{ fill: var(--muted); font-size: 9px; font-family: var(--mono); }}
+  /* 分国别持有美债(TIC) 列头当前值 */
+  .cu-cur {{ font-family: var(--mono); font-size: 20px; font-weight: 800; color: var(--text); line-height: 1.2; margin: 2px 0 6px; }}
+  .cu-asof {{ font-size: 10px; color: var(--muted); font-weight: 400; margin-left: 6px; }}
 
   /* 国债拍卖 timeline */
   .auc-wrap {{ display: flex; flex-direction: column; gap: 12px; }}
@@ -1641,6 +1738,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·五：外国官方在纽约联储托管的美债 ═══ -->
   <div class="part-title"><span class="part-num">＋</span>外国官方托管美债 · 纽约联储 (去美元化风向标)</div>
   <div class="card">{custody}</div>
+
+  <!-- ═══ 附三·六：日本 / 中国 分国别持有美债 (TIC, 近10年) ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>日本 / 中国 持有美债 · 近10年 (TIC 分国别口径)</div>
+  <div class="card">{country_ust}</div>
 
   <!-- ═══ 附四：知名机构持仓 (13F) + Trump ═══ -->
   <div class="part-title"><span class="part-num">＋</span>机构持仓追踪 · 13F + Trump (对比上期变动)</div>
