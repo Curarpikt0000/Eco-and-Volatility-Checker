@@ -452,7 +452,7 @@ def _kol_views_html(views):
             if targets:
                 extra += f'<div class="kol-tgt">标的：{_esc(targets)}</div>'
             cards += f"""<div class="kol-item">
-              <div class="kol-line"><b>{_esc(v['kol'])}</b> <span class="kv-badge {bcls}">{_esc(btxt)}</span> <span class="kol-date">{_esc(v.get('date',''))}</span></div>
+              <div class="kol-line"><b>{_esc(v['kol'])}</b> <span class="kv-badge {bcls}">{_esc(btxt)}</span></div>
               {extra}
             </div>"""
         html += (
