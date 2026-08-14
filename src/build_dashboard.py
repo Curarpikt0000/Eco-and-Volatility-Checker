@@ -82,12 +82,18 @@ def main():
         money_supply = ed.fetch_money_supply() or {}
     except Exception as e:
         print(f"[dashboard] 货币供应量跳过: {e}")
+    m2_history = {}
+    try:
+        import external_data as ed
+        m2_history = ed.fetch_m2_history() or {}
+    except Exception as e:
+        print(f"[dashboard] M2历史跳过: {e}")
 
     out = dash.generate(
         snap, checks, hit, gstats, overall,
         holdings=holdings, kol_changes=kol_changes,
         liquidity=liquidity, cb_balance=cb_balance, custody=custody,
-        auctions=auctions, money_supply=money_supply,
+        auctions=auctions, money_supply=money_supply, m2_history=m2_history,
     )
     print(f"[dashboard] 生成: {out}")
     return out

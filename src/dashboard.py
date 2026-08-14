@@ -154,7 +154,7 @@ def threshold_text(ind):
 
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
-             holdings=None, custody=None, auctions=None, money_supply=None):
+             holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -322,6 +322,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         liquidity=_liquidity_html(liquidity),
         cb_balance=_cb_balance_html(cb_balance),
         money_supply=_money_supply_html(money_supply),
+        m2_history=_m2_history_html(m2_history),
         custody=_custody_html(custody),
         auctions=_auctions_html(auctions),
         holdings=_holdings_html(holdings),
@@ -608,11 +609,11 @@ def _custody_chart_svg(hist, w=680, h=200):
         gy = Y(gv)
         yl.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" class="cc-grid"/>')
         yl.append(f'<text x="{ml-6}" y="{gy+3:.1f}" class="cc-ylab">{gv:.2f}</text>')
-    # X 轴日期标签(首/中/末 + 每约1/4)
+    # X 轴日期标签(首/中/末 + 每约1/4); 24个月跨度用 YYYY-MM 显示年月
     xl = []
     idxs = sorted(set([0, n // 4, n // 2, 3 * n // 4, n - 1]))
     for i in idxs:
-        dd = dates[i][5:]  # MM-DD
+        dd = dates[i][:7]  # YYYY-MM
         anchor = "start" if i == 0 else ("end" if i == n - 1 else "middle")
         xl.append(f'<text x="{X(i):.1f}" y="{h-10}" class="cc-xlab" text-anchor="{anchor}">{dd}</text>')
     # 最新点标注
@@ -713,10 +714,20 @@ def _ms_num(v):
 
 
 def _money_supply_html(ms):
-    """三国货币供应量 M0/M1/M2 模块。ms: fetch_money_supply() 结果。
-    每国一卡: M0(基础货币)⊂M1⊂M2 三层递进条 + 口径/日期/源; 顶部一段层级说明(回答"基础货币≠流通量")。"""
+    """三国货币供应量 M0/M1/M2 模块。ms: fetch_money_supply() 结果(已折 $B)。
+    每国一卡: M0(基础货币)⊂M1⊂M2 递进条(跨国同尺度,可横向比长度) + $B值+本币原值括注 + 口径/日期/源;
+    顶部一段层级说明(回答"基础货币≠流通量" + 折美元横向对比说明)。"""
     if not ms:
         return '<p class="empty">货币供应量数据未就绪。</p>'
+    fx = ms.get("_fx") or {}
+    fx_note = ""
+    if fx.get("USDJPY") or fx.get("USDCNY"):
+        parts = []
+        if fx.get("USDJPY"):
+            parts.append(f"USD/JPY {fx['USDJPY']:g}")
+        if fx.get("USDCNY"):
+            parts.append(f"USD/CNY {fx['USDCNY']:g}")
+        fx_note = "，按 " + " · ".join(parts) + " 折算(FRED)"
     # 层级说明(交易员视角一段话)
     intro = (
         '<div class="ms-intro">'
@@ -726,12 +737,20 @@ def _money_supply_html(ms):
         'M0(现金) ⊂ M1(现金+活期) ⊂ M2(M1+定期/储蓄)。层级越高口径越广，<b>不能相加</b>。</div>'
         '<div class="ms-intro-l"><b>为什么 M2 远大于基础货币：</b>'
         '商业银行放贷—存款—再放贷把底钱放大数倍(货币乘数)。M2 ≈ 基础货币 × 乘数，是"放水/收水"的真实力度。</div>'
-        '<div class="ms-intro-l ms-cav"><b>口径差异：</b>'
-        '中国官方直接公布 M0/M1/M2；美国、日本官方无"M0"，用<b>基础货币(Monetary Base)</b>代理。'
-        '三国均为<b>各自本币</b>(＄/¥/￥)，量级不可跨国直接比，看各国自己的绝对值与趋势。</div>'
+        '<div class="ms-intro-l ms-cav"><b>口径 & 单位：</b>'
+        '中国官方直接公布 M0/M1/M2；美国、日本官方无"M0"，用<b>基础货币(Monetary Base)</b>代理(日本另有 M3=M2+邮储/农协)。'
+        f'三国已<b>统一折成 $B(十亿美元)</b>横向可比{_esc(fx_note)}，括号内为本币原值。</div>'
         '</div>'
     )
     order = ["US", "JP", "CN"]
+    # 跨国同尺度: 取三国所有 M0/M1/M2/M3 的全局最大值作为满宽基准, 这样条长可横向比
+    allvals = []
+    for cc in order:
+        d = ms.get(cc) or {}
+        if d.get("status") == "未找到":
+            continue
+        allvals += [x for x in (d.get("m0"), d.get("m1"), d.get("m2"), d.get("m3")) if x is not None]
+    base = max(allvals) if allvals else 1
     cards = ""
     for cc in order:
         d = ms.get(cc)
@@ -742,23 +761,26 @@ def _money_supply_html(ms):
                       f'{_esc(d.get("name",cc))}</div><p class="empty">数据未找到</p></div>')
             continue
         unit = d.get("unit", "")
+        orig_unit = d.get("orig_unit")
         m0, m1, m2 = d.get("m0"), d.get("m1"), d.get("m2")
         m3 = d.get("m3")
-        # 递进条: 以 M2(或最大值)为满宽, 各层按比例
-        base = max([x for x in (m0, m1, m2, m3) if x is not None] or [1])
-        def bar(label, val, cls):
+
+        def bar(label, val, cls, orig=None):
             if val is None:
                 return (f'<div class="ms-row"><span class="ms-lbl">{_esc(label)}</span>'
                         f'<span class="ms-bar-wrap"><span class="ms-bar {cls}" style="width:0"></span></span>'
                         f'<span class="ms-v">—</span></div>')
-            w = max(3, round(val / base * 100))
+            w = max(2, round(val / base * 100))
+            orig_html = f'<span class="ms-orig">({_ms_num(orig)} {_esc(orig_unit)})</span>' if (orig is not None and orig_unit) else ""
             return (f'<div class="ms-row"><span class="ms-lbl">{_esc(label)}</span>'
                     f'<span class="ms-bar-wrap"><span class="ms-bar {cls}" style="width:{w}%"></span></span>'
-                    f'<span class="ms-v">{_ms_num(val)}</span></div>')
+                    f'<span class="ms-v">{_ms_num(val)}{orig_html}</span></div>')
         m0_lbl = d.get("m0_label", "M0")
-        rows = (bar(m0_lbl, m0, "ms-b0") + bar("M1", m1, "ms-b1") + bar("M2", m2, "ms-b2"))
+        rows = (bar(m0_lbl, m0, "ms-b0", d.get("orig_m0"))
+                + bar("M1", m1, "ms-b1", d.get("orig_m1"))
+                + bar("M2", m2, "ms-b2", d.get("orig_m2")))
         if m3 is not None:
-            rows += bar("M3", m3, "ms-b3")
+            rows += bar("M3", m3, "ms-b3", d.get("orig_m3"))
         src = _esc(str(d.get("source", "")))
         cards += (
             f'<div class="ms-card">'
@@ -769,6 +791,99 @@ def _money_supply_html(ms):
             f'</div>'
         )
     grid = f'<div class="ms-grid">{cards}</div>' if cards else '<p class="empty">货币供应量数据未就绪。</p>'
+    return intro + grid
+
+
+def _m2_line_svg(points, w=360, h=150):
+    """M2 月度历史折线图(单国)。points: [{date:'YYYY-MM', value:$B},...] 升序。
+    Y轴刻度($B, 大数用k简写)/年份标签/最新点标注。上升=sage绿(放水),整体一律上升多→用统一强调色 dust-blue。"""
+    pts_in = [p for p in (points or []) if p.get("value") is not None]
+    if len(pts_in) < 2:
+        return '<div class="m2-chart-na">历史数据不足</div>'
+    dates = [p["date"] for p in pts_in]
+    vals = [p["value"] for p in pts_in]
+    lo, hi = min(vals), max(vals)
+    rng = (hi - lo) or 0.01
+    ml, mr, mt, mb = 46, 10, 14, 26
+    pw, ph = w - ml - mr, h - mt - mb
+    n = len(vals)
+    def X(i): return ml + i * pw / (n - 1)
+    def Y(v): return mt + (hi - v) / rng * ph
+    pts = [f"{X(i):.1f},{Y(v):.1f}" for i, v in enumerate(vals)]
+    rising = vals[-1] >= vals[0]
+    color = "#9aab97" if rising else "#c08a7d"
+    fill = "rgba(154,171,151,0.10)" if rising else "rgba(192,138,125,0.10)"
+    area = f"{X(0):.1f},{mt+ph:.1f} " + " ".join(pts) + f" {X(n-1):.1f},{mt+ph:.1f}"
+
+    def _fmt(v):
+        return f"{v/1000:.1f}k" if v >= 10000 else f"{v:,.0f}"
+    yl = []
+    for k in range(4):
+        gv = lo + rng * k / 3
+        gy = Y(gv)
+        yl.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" class="cc-grid"/>')
+        yl.append(f'<text x="{ml-5}" y="{gy+3:.1f}" class="cc-ylab">{_fmt(gv)}</text>')
+    # X 轴年份标签(首/末 + 每约1/3, 只显示年份)
+    xl = []
+    idxs = sorted(set([0, n // 3, 2 * n // 3, n - 1]))
+    for i in idxs:
+        yr = dates[i][:4]
+        anchor = "start" if i == 0 else ("end" if i == n - 1 else "middle")
+        xl.append(f'<text x="{X(i):.1f}" y="{h-8}" class="cc-xlab" text-anchor="{anchor}">{yr}</text>')
+    lx, ly = X(n - 1), Y(vals[-1])
+    return (
+        f'<svg viewBox="0 0 {w} {h}" class="m2-chart" preserveAspectRatio="xMidYMid meet">'
+        + "".join(yl)
+        + f'<polygon points="{area}" fill="{fill}" stroke="none"/>'
+        + f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" stroke-width="2.2" stroke-linejoin="round"/>'
+        + f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="3.5" fill="{color}"/>'
+        + f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="7" fill="{color}" opacity="0.18"/>'
+        + "".join(xl)
+        + '</svg>'
+    )
+
+
+def _m2_history_html(m2h):
+    """三国 M2 十年历史折线图卡片。m2h: fetch_m2_history() 结果。
+    每国一卡: 折线图($B, 当月汇率折算) + 十年涨幅 + 首末值 + 源。放在 M0/M1/M2 框图下方。"""
+    if not m2h:
+        return '<p class="empty">M2 历史数据未就绪。</p>'
+    order = ["US", "JP", "CN"]
+    intro = (
+        '<div class="ms-intro">'
+        '<div class="ms-intro-l"><b>怎么读：</b>三国 M2 广义货币<b>十年月度走势</b>，'
+        '已按<u>当月汇率</u>折成 $B(十亿美元)横向可比——所以既含 M2 本币增长，也含汇率变动。</div>'
+        '<div class="ms-intro-l ms-cav"><b>看点：</b>美元计口径下，日元大幅贬值会抵消日本 M2 本币增长(线可能走平/下探)；'
+        '中国 M2 绝对规模已是全球最大。斜率越陡=放水越猛。</div>'
+        '</div>'
+    )
+    cards = ""
+    for cc in order:
+        b = m2h.get(cc) or {}
+        pts = b.get("points", [])
+        if not pts:
+            cards += (f'<div class="m2-card"><div class="m2-head">{_esc(b.get("flag",""))} '
+                      f'{_esc(b.get("name",cc))} M2</div><p class="empty">历史数据未找到</p></div>')
+            continue
+        v0, v1 = pts[0]["value"], pts[-1]["value"]
+        chg_pct = (v1 - v0) / v0 * 100 if v0 else 0
+        span_yr = f"{pts[0]['date']} → {pts[-1]['date']}"
+        chg_cls = "g" if chg_pct >= 0 else "r"
+        cards += (
+            f'<div class="m2-card">'
+            f'<div class="m2-head">{_esc(b.get("flag",""))} {_esc(b.get("name",cc))} · M2'
+            f'<span class="m2-meta">$B · 当月汇率折算</span></div>'
+            f'<div class="m2-chart-box">{_m2_line_svg(pts)}</div>'
+            f'<div class="m2-stats">'
+            f'<div class="m2-stat"><span>最新</span><b>{_ms_num(v1)}</b></div>'
+            f'<div class="m2-stat"><span>{_esc(str(len(pts)))}月涨幅</span><b class="cust-{chg_cls}">{chg_pct:+.0f}%</b></div>'
+            f'<div class="m2-stat"><span>区间</span><b>{_ms_num(v0)}→{_ms_num(v1)}</b></div>'
+            f'</div>'
+            f'<div class="m2-span">{_esc(span_yr)}</div>'
+            f'<div class="ms-src">源：{_esc(str(b.get("source","")))}</div>'
+            f'</div>'
+        )
+    grid = f'<div class="m2-grid">{cards}</div>' if cards else '<p class="empty">M2 历史数据未就绪。</p>'
     return intro + grid
 
 
@@ -1113,7 +1228,21 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .ms-b2 {{ background: var(--gold); }}
   .ms-b3 {{ background: var(--mauve); }}
   .ms-v {{ font-size: 13px; font-weight: 700; font-family: var(--mono); color: var(--text); text-align: right; min-width: 62px; }}
+  .ms-orig {{ display: block; font-size: 9px; font-weight: 400; color: var(--muted); }}
   .ms-src {{ font-size: 9.5px; color: var(--muted); margin-top: 10px; line-height: 1.4; border-top: 1px dotted var(--border); padding-top: 6px; }}
+  /* M2 十年历史折线卡片 */
+  .m2-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; }}
+  .m2-card {{ background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }}
+  .m2-head {{ font-size: 14px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: baseline; gap: 8px; }}
+  .m2-meta {{ font-size: 10px; color: var(--muted); font-weight: 400; margin-left: auto; }}
+  .m2-chart-box {{ margin: 4px 0 8px; }}
+  .m2-chart {{ width: 100%; height: auto; }}
+  .m2-chart-na {{ color: var(--muted); font-size: 11px; font-style: italic; padding: 20px 0; text-align: center; }}
+  .m2-stats {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 4px; }}
+  .m2-stat {{ text-align: center; }}
+  .m2-stat span {{ display: block; font-size: 9.5px; color: var(--muted); }}
+  .m2-stat b {{ font-size: 13px; font-family: var(--mono); }}
+  .m2-span {{ font-size: 9.5px; color: var(--muted); text-align: center; margin-top: 6px; }}
   .bs-head {{ font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 10px; display: flex; flex-direction: column; gap: 3px; }}
   .bs-meta {{ font-size: 10px; font-weight: 400; color: var(--muted); font-family: var(--mono); }}
   .bs-body {{ display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }}
@@ -1416,6 +1545,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·二：三国货币供应量 M0/M1/M2 (央行资负表的延伸: 从"央行造多少底钱"到"社会流通多少钱") ═══ -->
   <div class="part-title"><span class="part-num">＋</span>三国货币供应量 M0 / M1 / M2 · 月度 (央行资负表下延: 社会实际流通的钱)</div>
   <div class="card">{money_supply}</div>
+
+  <!-- ═══ 附三·二·二：三国 M2 十年历史折线 ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>三国 M2 十年走势 · 折线 ($B 当月汇率折算 · 放水力度长期对比)</div>
+  <div class="card">{m2_history}</div>
 
   <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)</div>

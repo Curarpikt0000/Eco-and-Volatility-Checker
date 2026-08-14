@@ -363,8 +363,10 @@ def fetch_foreign_custody_ust():
     返回 {value($T), as_of, wow_delta_bn, wow_pct, total_custody_tn, history[(date,$T)], status, source}。"""
     import re
     import requests
-    # === 主口径: FRED WMTSECL1 历史序列(至少覆盖 6 个月, 用于折线图) ===
-    hist = _custody_history_fred(start="2026-01-01")
+    # === 主口径: FRED WMTSECL1 历史序列(至少覆盖 24 个月, 用于长期折线图) ===
+    from datetime import datetime, timedelta
+    _start = (datetime.utcnow() - timedelta(days=740)).strftime("%Y-%m-%d")  # ~24个月前
+    hist = _custody_history_fred(start=_start)
     fred_val = fred_as_of = fred_wow_bn = fred_wow_pct = None
     if len(hist) >= 2:
         fred_as_of, fred_val = hist[-1]
@@ -582,16 +584,18 @@ def _fred_latest(series_id):
         return None, None
 
 
-def fetch_money_supply():
+def fetch_money_supply(to_usd=True):
     """三国货币供应量 M0/M1/M2(+日本 M3)。
     US: FRED 直连(自动最新); JP/CN: 无稳定免费 API→读 money_supply_override.json(weekly cron agent 用官方源更新)。
+    to_usd=True(默认): 三国统一折算成 $B(十亿美元)横向可比,汇率走 FRED DEXJPUS/DEXCHUS(与央行资负表同源);
+      本币原值保留在 orig_m0/orig_m1/orig_m2/orig_m3 + orig_unit 可溯源。
     返回 {"US":{...}, "JP":{...}, "CN":{...}}, 每国:
-      {name, flag, unit, as_of, m0, m0_label, m1, m2, (m3), source}
-    绝不编: US 抓不到该项留 None; JP/CN 缺 override 文件则该国留空 status。"""
+      {name, flag, unit, as_of, m0, m0_label, m1, m2, (m3), source, (orig_*), (_fx)}
+    绝不编: US 抓不到该项留 None; JP/CN 缺 override 文件则该国留空 status。折不动(缺汇率)则保留本币并标 orig_unit。"""
     import json
     out = {}
 
-    # 美国: FRED 直连. M0 无官方概念→用基础货币 BOGMBASE 代理
+    # 美国: FRED 直连. M0 无官方概念→用基础货币 BOGMBASE 代理. 本身就是 $B, 无需折算
     us = {"name": "美国 Fed", "flag": "🇺🇸", "unit": "$B",
           "m0_label": "基础货币 Monetary Base",
           "source": "FRED (M1SL/M2SL/BOGMBASE), 月度"}
@@ -606,7 +610,7 @@ def fetch_money_supply():
         us["status"] = "未找到"
     out["US"] = us
 
-    # 日本 / 中国: 读 override
+    # 日本 / 中国: 读 override(本币)
     try:
         ov = json.load(open(MONEY_SUPPLY_OVERRIDE))
     except Exception:
@@ -621,6 +625,169 @@ def fetch_money_supply():
             out[cc] = row
         else:
             out[cc] = dict(meta, status="未找到")
+
+    # ── 统一折算成 $B(十亿美元)横向可比 ──
+    if to_usd:
+        try:
+            from fetchers.fred import fetch_fred_latest
+            jpy, _ = fetch_fred_latest("DEXJPUS")   # 日元/美元(如 147.5)
+            cny, _ = fetch_fred_latest("DEXCHUS")   # 人民币/美元(如 7.15)
+            # 万亿本币 → $B: (值×1e12 本币) / 汇率 / 1e9 = 值×1000/汇率
+            def _to_usd_row(row, rate):
+                if not rate or row.get("status") == "未找到":
+                    return
+                factor = 1000.0 / rate
+                orig_unit = row.get("unit")
+                for k in ("m0", "m1", "m2", "m3"):
+                    if row.get(k) is not None:
+                        row[f"orig_{k}"] = row[k]           # 保留本币原值
+                        row[k] = round(row[k] * factor, 1)  # 折算 $B
+                if orig_unit:
+                    row["orig_unit"] = orig_unit
+                row["unit"] = "$B"
+            if "JP" in out and jpy:
+                _to_usd_row(out["JP"], jpy)
+            if "CN" in out and cny:
+                _to_usd_row(out["CN"], cny)
+            out["_fx"] = {"USDJPY": jpy, "USDCNY": cny}
+        except Exception as e:
+            out["_fx_error"] = str(e)
+    return out
+
+
+def fetch_m2_history(months=126, to_usd=True):
+    """三国 M2 月度历史序列(默认126月≈10.5年),用于折线图。折 $B 用当月汇率(反映真实美元口径)。
+    源: US=FRED M2SL / JP=BOJ stat-search CSV(第10列亿円,Shift_JIS) / CN=东方财富 datacenter API(亿元)。
+    返回 {"US":{unit,points:[{date,value},...],orig_unit,latest,source}, "JP":{...}, "CN":{...}}。
+    绝不编: 某国抓不到→该国 points=[] + status。折美元用 FRED 月度 DEXJPUS/DEXCHUS 历史序列(按月对齐,缺则用最近汇率)。"""
+    import requests
+    from datetime import datetime, timedelta
+    cosd = (datetime.utcnow() - timedelta(days=int(months * 30.5) + 40)).strftime("%Y-%m-01")
+
+    def _fred_series(sid, start):
+        """拉 FRED 月度全序列 [(YYYY-MM, float)],升序。"""
+        try:
+            r = requests.get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}&cosd={start}", timeout=25)
+            if r.status_code != 200:
+                return []
+            out = []
+            for ln in r.text.strip().splitlines()[1:]:
+                if "," not in ln:
+                    continue
+                d, v = ln.split(",", 1)
+                v = v.strip()
+                if v and v != ".":
+                    try:
+                        out.append((d.strip()[:7], float(v)))
+                    except ValueError:
+                        pass
+            return out
+        except Exception:
+            return []
+
+    # 历史汇率(月度, YYYY-MM -> rate), 用于按月折美元
+    jpy_hist = dict(_fred_series("DEXJPUS", cosd))
+    cny_hist = dict(_fred_series("DEXCHUS", cosd))
+
+    def _rate_for(month, hist, fallback):
+        """取该月汇率, 缺则用最近可得(往前找), 再缺用 fallback。"""
+        if month in hist:
+            return hist[month]
+        keys = sorted(k for k in hist if k <= month)
+        if keys:
+            return hist[keys[-1]]
+        return fallback
+
+    out = {}
+    # ── 美国: FRED M2SL, 本身 $B ──
+    us_pts = _fred_series("M2SL", cosd)
+    out["US"] = {
+        "name": "美国 Fed", "flag": "🇺🇸", "unit": "$B",
+        "orig_unit": "$B",
+        "points": [{"date": d, "value": round(v, 1)} for d, v in us_pts[-months:]],
+        "source": "FRED M2SL 月度",
+    }
+
+    # ── 日本: BOJ stat-search CSV(Shift_JIS, 第10列 M2存量亿円) ──
+    jp_pts = []
+    try:
+        r = requests.get("https://www.stat-search.boj.or.jp/ssi/mtshtml/csv/md02_m_1_en.csv", timeout=30)
+        if r.status_code == 200:
+            text = r.content.decode("shift_jis", errors="ignore")
+            for ln in text.splitlines():
+                cols = ln.split(",")
+                if len(cols) < 10:
+                    continue
+                dt = cols[0].strip()
+                if "/" not in dt:
+                    continue
+                y, m = dt.split("/")[:2]
+                if not (y.isdigit() and m.isdigit()):
+                    continue
+                raw = cols[9].strip()
+                try:
+                    oku = float(raw)  # 亿円
+                except ValueError:
+                    continue
+                mon = f"{y}-{int(m):02d}"
+                trillion_yen = oku / 10000.0  # 亿円→万亿円
+                jp_pts.append((mon, trillion_yen))
+    except Exception:
+        pass
+    jp_pts = jp_pts[-months:]
+    out["JP"] = {
+        "name": "日本 BoJ", "flag": "🇯🇵", "unit": "$B" if to_usd else "万亿円",
+        "orig_unit": "万亿円",
+        "points": [], "source": "BOJ Time-Series (Money Stock M2 存量, 月度)",
+    }
+    for mon, tri in jp_pts:
+        val = tri
+        if to_usd:
+            rate = _rate_for(mon, jpy_hist, 157.54)
+            val = round(tri * 1000.0 / rate, 1)  # 万亿円→$B
+        out["JP"]["points"].append({"date": mon, "value": round(val, 1), "orig": round(tri, 1)})
+
+    # ── 中国: 东方财富 datacenter API(亿元) ──
+    cn_pts = []
+    try:
+        url = ("https://datacenter-web.eastmoney.com/api/data/v1/get?columns=TIME,BASIC_CURRENCY"
+               "&pageSize=400&pageNumber=1&sortColumns=REPORT_DATE&sortTypes=1&reportName=RPT_ECONOMY_CURRENCY_SUPPLY")
+        r = requests.get(url, headers={"Referer": "https://data.eastmoney.com/", "User-Agent": "Mozilla/5.0"}, timeout=25)
+        if r.status_code == 200:
+            rows = (r.json().get("result") or {}).get("data") or []
+            for row in rows:
+                t = str(row.get("TIME", ""))  # "2026年06月份"
+                m2 = row.get("BASIC_CURRENCY")
+                if m2 is None:
+                    continue
+                import re as _re
+                mt = _re.search(r"(\d{4})\D+(\d{1,2})", t)
+                if not mt:
+                    continue
+                mon = f"{mt.group(1)}-{int(mt.group(2)):02d}"
+                wan_yi = float(m2) / 10000.0  # 亿元→万亿元
+                cn_pts.append((mon, wan_yi))
+    except Exception:
+        pass
+    cn_pts = cn_pts[-months:]
+    out["CN"] = {
+        "name": "中国 PBoC", "flag": "🇨🇳", "unit": "$B" if to_usd else "万亿元",
+        "orig_unit": "万亿元",
+        "points": [], "source": "东方财富 datacenter (PBoC 口径 M2, 月度)",
+    }
+    for mon, wy in cn_pts:
+        val = wy
+        if to_usd:
+            rate = _rate_for(mon, cny_hist, 6.7474)
+            val = round(wy * 1000.0 / rate, 1)  # 万亿元→$B
+        out["CN"]["points"].append({"date": mon, "value": round(val, 1), "orig": round(wy, 1)})
+
+    for cc in ("US", "JP", "CN"):
+        blk = out[cc]
+        if blk["points"]:
+            blk["latest"] = blk["points"][-1]
+        else:
+            blk["status"] = "未找到"
     return out
 
 
