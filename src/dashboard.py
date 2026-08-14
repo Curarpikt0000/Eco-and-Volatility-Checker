@@ -343,27 +343,73 @@ def _sig_cls(lt):
 
 
 def _kol_changes_html(kol_changes):
-    """底部 KOL 状态变化板块。"""
+    """KOL 状态变化板块(模块化, 仿 13F 报告)。
+    接收 kol_stance_changes_grouped() 的结果 {since,days,total,modules:[...]};
+    向后兼容旧 list 结构(自动包一层"其他"模块)。
+    每个 sector 一个彩色模块, 模块下列该模块转向的 KOL(主方向变化+言论+标的+日期)。"""
+    # 空/无数据
     if not kol_changes:
-        return '<p class="empty">近日无 KOL 主导方向变化。</p>'
+        return '<p class="empty">上周至今无 KOL 主导方向变化。</p>'
+    # 兼容: 旧 list 结构 → 包成单模块
+    if isinstance(kol_changes, list):
+        kol_changes = {"since": "", "days": 0, "total": len(kol_changes),
+                       "modules": [{"sector": "全部", "en": "", "color": "#8a8377", "changes": kol_changes}]}
+    modules = kol_changes.get("modules", [])
+    if not modules or kol_changes.get("total", 0) == 0:
+        return '<p class="empty">上周至今无 KOL 主导方向变化。</p>'
+
+    # 方向 → 色 + 强弱排序(用于判断转多/转空)
+    dir_rank = {"强烈看空": -2, "看空": -1, "分歧": 0, "中性": 0, "看多": 1, "强烈看多": 2}
     dir_cls = {"强烈看多": "r", "看多": "y", "分歧": "n", "中性": "n", "看空": "g", "强烈看空": "g"}
-    rows = ""
-    for ch in kol_changes[:12]:
-        pc = dir_cls.get(ch["prev_dir"], "n")
-        nc = dir_cls.get(ch["new_dir"], "n")
-        comment = (ch.get("comments") or "").strip()
-        targets = (ch.get("targets") or "").strip()
-        extra = ""
-        if comment:
-            extra += f'<div class="kol-cmt">{_esc(comment)}</div>'
-        if targets:
-            extra += f'<div class="kol-tgt">标的：{_esc(targets)}</div>'
-        rows += f"""<div class="kol-item">
-          <div class="kol-line"><b>{_esc(ch['kol'])}</b> <span class="kol-sec">{_esc(ch['sector'])}</span> <span class="kol-date">{_esc(ch['date'])}</span></div>
-          <div class="kol-shift"><span class="kdir kdir-{pc}">{_esc(ch['prev_dir'])}</span> → <span class="kdir kdir-{nc}">{_esc(ch['new_dir'])}</span></div>
-          {extra}
-        </div>"""
-    return rows
+
+    def _shift_badge(prev_d, new_d):
+        """转多(变乐观)=↑红 / 转空(变悲观)=↓绿(逆向: 看空是好的买点信号) / 平移=→。"""
+        pr, nr = dir_rank.get(prev_d, 0), dir_rank.get(new_d, 0)
+        if nr > pr:
+            return '<span class="kol-arrow kol-up">▲ 转多</span>'
+        if nr < pr:
+            return '<span class="kol-arrow kol-down">▼ 转空</span>'
+        return '<span class="kol-arrow kol-flat">→ 微调</span>'
+
+    # 顶部总览
+    since = kol_changes.get("since", "")
+    total = kol_changes.get("total", 0)
+    head = (f'<div class="kol-overview">上周至今（<b>{_esc(since)}</b> 起）共 '
+            f'<b>{total}</b> 位 KOL 主导方向转向，涉及 <b>{len(modules)}</b> 个模块。'
+            f'<span class="kol-ov-note">↑转多(变乐观) · ↓转空(变谨慎/逆向买点)</span></div>')
+
+    html = head
+    for m in modules:
+        color = m.get("color", "#8a8377")
+        sector = m.get("sector", "其他")
+        en = m.get("en", "")
+        changes = m.get("changes", [])
+        if not changes:
+            continue
+        cards = ""
+        for ch in changes:
+            pc = dir_cls.get(ch["prev_dir"], "n")
+            nc = dir_cls.get(ch["new_dir"], "n")
+            comment = (ch.get("comments") or "").strip()
+            targets = (ch.get("targets") or "").strip()
+            extra = ""
+            if comment:
+                extra += f'<div class="kol-cmt">{_esc(comment)}</div>'
+            if targets:
+                extra += f'<div class="kol-tgt">标的：{_esc(targets)}</div>'
+            cards += f"""<div class="kol-item">
+              <div class="kol-line"><b>{_esc(ch['kol'])}</b> {_shift_badge(ch['prev_dir'], ch['new_dir'])} <span class="kol-date">{_esc(ch['date'])}</span></div>
+              <div class="kol-shift"><span class="kdir kdir-{pc}">{_esc(ch['prev_dir'])}</span> → <span class="kdir kdir-{nc}">{_esc(ch['new_dir'])}</span></div>
+              {extra}
+            </div>"""
+        html += (
+            f'<div class="h-module" style="border-color:{color}">'
+            f'<div class="h-module-title" style="background:{color}">'
+            f'<span class="h-mod-dot"></span>{_esc(sector)}<span class="h-mod-en">{_esc(en)}</span>'
+            f'<span class="h-mod-n">{len(changes)} 转向</span></div>'
+            f'<div class="kol-mod-inner">{cards}</div></div>'
+        )
+    return html
 
 
 def _liquidity_html(liq):
@@ -1197,6 +1243,15 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .kdir-n {{ background: var(--card); color: var(--muted); }}
   .kol-cmt {{ font-size: 11px; color: var(--muted); line-height: 1.5; margin-top: 4px; }}
   .kol-tgt {{ font-size: 10.5px; color: var(--dust-blue); margin-top: 3px; }}
+  /* KOL 状态变化模块化(仿13F) */
+  .kol-overview {{ font-size: 12.5px; color: var(--text); line-height: 1.6; background: var(--card2); border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; }}
+  .kol-overview b {{ color: var(--dust-blue); }}
+  .kol-ov-note {{ display: block; font-size: 10.5px; color: var(--muted); margin-top: 4px; }}
+  .kol-mod-inner {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px; padding: 12px; }}
+  .kol-arrow {{ font-size: 10.5px; font-weight: 700; padding: 1px 7px; border-radius: 4px; margin-left: 4px; }}
+  .kol-up {{ color: #fff; background: var(--clay); }}
+  .kol-down {{ color: #fff; background: var(--sage); }}
+  .kol-flat {{ color: var(--muted); background: var(--card); }}
   /* 流动性板块 */
   .liq-row {{ font-size: 13px; margin-bottom: 8px; line-height: 1.7; }}
   .liq-k {{ color: var(--muted); }}
@@ -1530,9 +1585,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title"><span class="part-num">6</span>今日最需关注的一条信号</div>
   <div class="focus-box">{focus}</div>
 
-  <!-- ═══ 附一：当日 KOL 状态变化(联动 KOL 追踪) ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>当日 KOL 状态变化</div>
-  <div class="card kol-wrap">{kol_changes}</div>
+  <!-- ═══ 附一：上周至今 KOL 状态变化(模块化, 联动 KOL 追踪) ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>上周至今 KOL 状态变化 · 按模块 (态度转向 call-out)</div>
+  <div class="card">{kol_changes}</div>
 
   <!-- ═══ 附二：流动性要点(联动 Economic Dashboard) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>流动性要点 · 央行/国债</div>

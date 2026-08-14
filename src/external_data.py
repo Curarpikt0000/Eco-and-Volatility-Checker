@@ -123,6 +123,95 @@ def kol_stance_changes(days=10):
     return sorted(latest.values(), key=lambda x: x["date"], reverse=True)
 
 
+def _days_since_last_monday():
+    """今天回溯到『上周一』的天数(含今天区间)。
+    上周一 = 本周一 - 7天。用于 KOL 变化的回看窗口。"""
+    import datetime as _dt
+    today = _dt.date.today()
+    this_monday = today - _dt.timedelta(days=today.weekday())  # 本周一
+    last_monday = this_monday - _dt.timedelta(days=7)
+    return (today - last_monday).days + 1
+
+
+# sector 中英归一(Notion DB 用英文, independent.json 用中文) → 统一中文模块名 + 英文副标 + 色
+_KOL_SECTOR_MAP = {
+    "Precious Metals": ("贵金属", "Precious Metals"),
+    "贵金属": ("贵金属", "Precious Metals"),
+    "贵金属与商品周期": ("贵金属与商品周期", "Precious Metals & Commodity Cycle"),
+    "Macro": ("宏观货币与金融体系", "Macro & Monetary"),
+    "宏观货币与金融体系": ("宏观货币与金融体系", "Macro & Monetary"),
+    "Equities": ("股权市场", "Equities"),
+    "股权市场": ("股权市场", "Equities"),
+    "Crypto": ("加密资产", "Crypto"),
+    "加密资产": ("加密资产", "Crypto"),
+    "Energy & Commodities": ("资源与能源安全", "Energy & Commodities"),
+    "Energy": ("资源与能源安全", "Energy & Commodities"),
+    "资源与能源安全": ("资源与能源安全", "Energy & Commodities"),
+    "Government Debt": ("国债利率与债券市场", "Government Debt & Rates"),
+    "国债利率与债券市场": ("国债利率与债券市场", "Government Debt & Rates"),
+    "预测": ("预测与周期", "Forecast & Cycle"),
+    "科技与未来趋势": ("科技与未来趋势", "Tech & Future"),
+    "交易与市场微观结构": ("交易与市场微观结构", "Trading & Microstructure"),
+}
+_KOL_SECTOR_COLOR = {
+    "贵金属": "#bfa06a", "贵金属与商品周期": "#bfa06a",
+    "宏观货币与金融体系": "#8ea1ad", "股权市场": "#a693a0",
+    "加密资产": "#c9ac6b", "资源与能源安全": "#9aab97",
+    "国债利率与债券市场": "#c08a7d", "预测与周期": "#8a8377",
+    "科技与未来趋势": "#8ea1ad", "交易与市场微观结构": "#a693a0",
+}
+
+
+def kol_stance_changes_grouped(days=None):
+    """从『上周一至今』识别 KOL 方向转向, 按 sector 模块分组。
+    优先用 cron 独立抓的 kol_independent.json 的 changes(当日精准), 但那只有当日;
+    历史转向靠另一 agent 的 Notion by_day DB(逐日时序)回看 → kol_stance_changes(days)。
+    返回 {"since": 上周一日期, "days": N, "total": 转向总数,
+          "modules": [{"sector":中文, "en":英文, "color":色, "changes":[{kol,prev_dir,new_dir,date,comments,targets,sub_sector},...]}]}
+    绝不编: 无数据则 modules=[]。"""
+    if days is None:
+        days = _days_since_last_monday()
+    import datetime as _dt
+    today = _dt.date.today()
+    since = (today - _dt.timedelta(days=days - 1)).strftime("%Y-%m-%d")
+
+    # 主源: Notion by_day 逐日时序(支持跨天回看)
+    raw = kol_stance_changes(days=days)  # [{kol,sector,prev_dir,new_dir,date,comments,targets}]
+    # 补充: independent.json 的当日 changes(可能有 Notion DB 尚未同步的)
+    try:
+        ind_changes, _ = load_independent_kol()
+        seen = {c["kol"] for c in raw}
+        for c in ind_changes:
+            if c.get("kol") and c["kol"] not in seen:
+                raw.append(c)
+                seen.add(c["kol"])
+    except Exception:
+        pass
+
+    # 按归一 sector 分组
+    groups = {}
+    for ch in raw:
+        sec_raw = (ch.get("sector") or "").strip()
+        zh, en = _KOL_SECTOR_MAP.get(sec_raw, (sec_raw or "其他", sec_raw or "Other"))
+        groups.setdefault(zh, {"sector": zh, "en": en,
+                               "color": _KOL_SECTOR_COLOR.get(zh, "#8a8377"),
+                               "changes": []})
+        groups[zh]["changes"].append({
+            "kol": ch.get("kol", ""),
+            "prev_dir": ch.get("prev_dir", ""),
+            "new_dir": ch.get("new_dir", ""),
+            "date": ch.get("date", ""),
+            "comments": (ch.get("comments") or "")[:300],
+            "targets": (ch.get("targets") or "")[:150],
+        })
+    # 模块内按日期降序; 模块按转向数降序
+    for g in groups.values():
+        g["changes"].sort(key=lambda x: x["date"], reverse=True)
+    modules = sorted(groups.values(), key=lambda g: len(g["changes"]), reverse=True)
+    total = sum(len(g["changes"]) for g in modules)
+    return {"since": since, "days": days, "total": total, "modules": modules}
+
+
 def kol_today(date_str=None):
     """取指定日期(默认最新有数据日)的 KOL 言论。返回 [dict,...]。"""
     recs = fetch_kol_recent(days=7)

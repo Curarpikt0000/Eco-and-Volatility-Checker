@@ -53,9 +53,12 @@ def main():
     holdings = h13.load_holdings()
 
     # 可选: 联网读的板块(失败不阻塞)
-    kol_changes, liquidity, cb_balance, custody, auctions = [], {}, {}, {}, {}
-    # kol_changes 需 [{prev_dir,new_dir,...}] 结构, 由 daily cron 的 kol_stance_changes() 产出;
-    # 本独立重建脚本不重算 KOL 变化(留空), 只验证机构/政要/流动性/央行板块渲染。
+    kol_changes, liquidity, cb_balance, custody, auctions = {}, {}, {}, {}, {}
+    try:
+        import external_data as ed
+        kol_changes = ed.kol_stance_changes_grouped() or {}
+    except Exception as e:
+        print(f"[dashboard] KOL 变化跳过: {e}")
     try:
         import external_data as ed
         liquidity = ed.fetch_liquidity_points() or {}
