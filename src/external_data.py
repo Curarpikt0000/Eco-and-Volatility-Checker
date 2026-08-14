@@ -1009,10 +1009,13 @@ def fetch_money_supply(to_usd=True):
 
 
 def fetch_m2_history(months=126, to_usd=True):
-    """三国 M2 月度历史序列(默认126月≈10.5年),用于折线图。折 $B 用当月汇率(反映真实美元口径)。
+    """三国 M2 月度历史序列(默认126月≈10.5年),用于折线图。
+    ★折 $B 用【当天 crawl 的最新美元汇率】统一折算全序列(Chao 2026-08 要求):
+      不再用各月历史汇率, 而是抓当日最新 DEXJPUS/DEXCHUS, 整条序列都乘同一汇率。
+      → 曲线形状纯粹反映各国本币 M2 增长(剥离汇率波动), 反映真实"放水力度"横向对比。
     源: US=FRED M2SL / JP=BOJ stat-search CSV(第10列亿円,Shift_JIS) / CN=东方财富 datacenter API(亿元)。
-    返回 {"US":{unit,points:[{date,value},...],orig_unit,latest,source}, "JP":{...}, "CN":{...}}。
-    绝不编: 某国抓不到→该国 points=[] + status。折美元用 FRED 月度 DEXJPUS/DEXCHUS 历史序列(按月对齐,缺则用最近汇率)。"""
+    返回 {"US":{unit,points:[{date,value},...],orig_unit,latest,source,fx}, "JP":{...}, "CN":{...}}。
+    绝不编: 某国抓不到→该国 points=[] + status。汇率抓不到→退回内置 fallback 并标 fx_note。"""
     import requests
     from datetime import datetime, timedelta
     cosd = (datetime.utcnow() - timedelta(days=int(months * 30.5) + 40)).strftime("%Y-%m-01")
@@ -1038,18 +1041,21 @@ def fetch_m2_history(months=126, to_usd=True):
         except Exception:
             return []
 
-    # 历史汇率(月度, YYYY-MM -> rate), 用于按月折美元
-    jpy_hist = dict(_fred_series("DEXJPUS", cosd))
-    cny_hist = dict(_fred_series("DEXCHUS", cosd))
-
-    def _rate_for(month, hist, fallback):
-        """取该月汇率, 缺则用最近可得(往前找), 再缺用 fallback。"""
-        if month in hist:
-            return hist[month]
-        keys = sorted(k for k in hist if k <= month)
-        if keys:
-            return hist[keys[-1]]
-        return fallback
+    # ★当天最新汇率(全序列统一折算, 不用各月历史汇率)
+    jpy_now = cny_now = None
+    try:
+        from fetchers.fred import fetch_fred_latest
+        jpy_now, _ = fetch_fred_latest("DEXJPUS")   # 日元/美元
+        cny_now, _ = fetch_fred_latest("DEXCHUS")   # 人民币/美元
+    except Exception:
+        pass
+    # fallback: 若 fetch_fred_latest 不可用, 从 fredgraph 序列取最后一个有效值
+    if not jpy_now:
+        _js = _fred_series("DEXJPUS", cosd)
+        jpy_now = _js[-1][1] if _js else 157.54
+    if not cny_now:
+        _cs = _fred_series("DEXCHUS", cosd)
+        cny_now = _cs[-1][1] if _cs else 6.7474
 
     out = {}
     # ── 美国: FRED M2SL, 本身 $B ──
@@ -1096,8 +1102,7 @@ def fetch_m2_history(months=126, to_usd=True):
     for mon, tri in jp_pts:
         val = tri
         if to_usd:
-            rate = _rate_for(mon, jpy_hist, 157.54)
-            val = round(tri * 1000.0 / rate, 1)  # 万亿円→$B
+            val = round(tri * 1000.0 / jpy_now, 1)  # 万亿円→$B, 全序列用当天最新汇率
         out["JP"]["points"].append({"date": mon, "value": round(val, 1), "orig": round(tri, 1)})
 
     # ── 中国: 东方财富 datacenter API(亿元) ──
@@ -1131,9 +1136,12 @@ def fetch_m2_history(months=126, to_usd=True):
     for mon, wy in cn_pts:
         val = wy
         if to_usd:
-            rate = _rate_for(mon, cny_hist, 6.7474)
-            val = round(wy * 1000.0 / rate, 1)  # 万亿元→$B
+            val = round(wy * 1000.0 / cny_now, 1)  # 万亿元→$B, 全序列用当天最新汇率
         out["CN"]["points"].append({"date": mon, "value": round(val, 1), "orig": round(wy, 1)})
+
+    # 记录本次折算所用的当天汇率(可溯源, 供 dashboard 说明)
+    if to_usd:
+        out["_fx"] = {"USDJPY": round(jpy_now, 4), "USDCNY": round(cny_now, 4)}
 
     for cc in ("US", "JP", "CN"):
         blk = out[cc]

@@ -1064,12 +1064,22 @@ def _m2_history_html(m2h):
     if not m2h:
         return '<p class="empty">M2 历史数据未就绪。</p>'
     order = ["US", "JP", "CN"]
+    fx = m2h.get("_fx") or {}
+    fx_txt = ""
+    if fx.get("USDJPY") or fx.get("USDCNY"):
+        parts = []
+        if fx.get("USDJPY"):
+            parts.append(f"USD/JPY {fx['USDJPY']:g}")
+        if fx.get("USDCNY"):
+            parts.append(f"USD/CNY {fx['USDCNY']:g}")
+        fx_txt = "（当天汇率 " + " · ".join(parts) + "）"
     intro = (
         '<div class="ms-intro">'
         '<div class="ms-intro-l"><b>怎么读：</b>三国 M2 广义货币<b>十年月度走势</b>，'
-        '已按<u>当月汇率</u>折成 $B(十亿美元)横向可比——所以既含 M2 本币增长，也含汇率变动。</div>'
-        '<div class="ms-intro-l ms-cav"><b>看点：</b>美元计口径下，日元大幅贬值会抵消日本 M2 本币增长(线可能走平/下探)；'
-        '中国 M2 绝对规模已是全球最大。斜率越陡=放水越猛。</div>'
+        f'已按<u>当天最新汇率</u>{_esc(fx_txt)}把整条历史序列统一折成 $B(十亿美元)横向可比——'
+        '<b>剥离了汇率波动</b>，曲线纯粹反映各国本币 M2 的真实增长(放水力度)。</div>'
+        '<div class="ms-intro-l ms-cav"><b>看点：</b>用同一汇率折算后，日本 M2 本币十年真实增长清晰可见(不再被日元贬值掩盖)；'
+        '中国 M2 绝对规模已是全球最大且增速最猛。斜率越陡=印钞越猛。</div>'
         '</div>'
     )
     cards = ""
@@ -1087,7 +1097,7 @@ def _m2_history_html(m2h):
         cards += (
             f'<div class="m2-card">'
             f'<div class="m2-head">{_esc(b.get("flag",""))} {_esc(b.get("name",cc))} · M2'
-            f'<span class="m2-meta">$B · 当月汇率折算</span></div>'
+            f'<span class="m2-meta">$B · 当天汇率折算</span></div>'
             f'<div class="m2-chart-box">{_m2_line_svg(pts)}</div>'
             f'<div class="m2-stats">'
             f'<div class="m2-stat"><span>最新</span><b>{_ms_num(v1)}</b></div>'
@@ -1790,7 +1800,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="card">{money_supply}</div>
 
   <!-- ═══ 附三·二·二：三国 M2 十年历史折线 ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>三国 M2 十年走势 · 折线 ($B 当月汇率折算 · 放水力度长期对比)</div>
+  <div class="part-title"><span class="part-num">＋</span>三国 M2 十年走势 · 折线 ($B 当天汇率统一折算 · 放水力度长期对比)</div>
   <div class="card">{m2_history}</div>
 
   <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
