@@ -452,10 +452,13 @@ def fetch_foreign_custody_ust():
     返回 {value($T), as_of, wow_delta_bn, wow_pct, total_custody_tn, history[(date,$T)], status, source}。"""
     import re
     import requests
-    # === 主口径: FRED WMTSECL1 历史序列(至少覆盖 24 个月, 用于长期折线图) ===
+    # === 主口径: FRED WMTSECL1 历史序列 ===
+    # 短期图=近12个月; 长期图=近10年(均周度点)
     from datetime import datetime, timedelta
-    _start = (datetime.utcnow() - timedelta(days=740)).strftime("%Y-%m-%d")  # ~24个月前
-    hist = _custody_history_fred(start=_start)
+    _start_short = (datetime.utcnow() - timedelta(days=380)).strftime("%Y-%m-%d")   # ~12个月前
+    _start_long = (datetime.utcnow() - timedelta(days=3660)).strftime("%Y-%m-%d")   # ~10年前
+    hist = _custody_history_fred(start=_start_short)          # 短期(12月)
+    hist_long = _custody_history_fred(start=_start_long)       # 长期(10年)
     fred_val = fred_as_of = fred_wow_bn = fred_wow_pct = None
     if len(hist) >= 2:
         fred_as_of, fred_val = hist[-1]
@@ -489,11 +492,12 @@ def fetch_foreign_custody_ust():
             "wow_delta_bn": fred_wow_bn,                    # 周变动 十亿美元
             "wow_pct": fred_wow_pct,
             "total_custody_tn": total_custody_tn,
-            "history": hist,                               # [(date,$T)] 升序, ~6个月周点
+            "history": hist,                               # [(date,$T)] 升序, 近12个月周点(短期图)
+            "history_long": hist_long,                     # [(date,$T)] 升序, 近10年周点(长期图)
             "status": "ok",
             "source": "FRED WMTSECL1 (Fed H.4.1 custody, weekly Wed)",
         }
-    return {"value": None, "as_of": None, "history": hist,
+    return {"value": None, "as_of": None, "history": hist, "history_long": hist_long,
             "total_custody_tn": total_custody_tn,
             "status": "FRED WMTSECL1 无数据"}
 

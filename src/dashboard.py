@@ -687,6 +687,7 @@ def _custody_html(cust):
     total = cust.get("total_custody_tn")
     as_of = cust.get("as_of", "")
     hist = cust.get("history", [])
+    hist_long = cust.get("history_long", [])
     # 方向: 下降=去美元化风险(clay红), 上升=回流(sage绿)
     if wow is None:
         acls, arrow, wtxt = "n", "→", "—"
@@ -723,10 +724,18 @@ def _custody_html(cust):
         f'<span class="cust-wow cust-wow-{acls}">{wtxt}</span></div>'
         f'<div class="cust-sub">周环比（as of {_esc(as_of)} · 周三口径）</div>'
         f'</div>'
-        # === 折线图 ===
-        f'<div class="cust-chart-box">'
-        f'<div class="cust-chart-title">近 {len(hist)} 周走势（$T）</div>'
+        # === 左右双折线图: 左近12月(短期) / 右近10年(长期) ===
+        f'<div class="cust-charts">'
+        f'<div class="cust-chart-col">'
+        f'<div class="cust-chart-title">近 {len(hist)} 周（约12个月 · 短期）</div>'
         f'{_custody_chart_svg(hist)}'
+        f'{_custody_span_line(hist)}'
+        f'</div>'
+        f'<div class="cust-chart-col">'
+        f'<div class="cust-chart-title">近 {len(hist_long)} 周（约10年 · 长期）</div>'
+        f'{_custody_chart_svg(hist_long)}'
+        f'{_custody_span_line(hist_long)}'
+        f'</div>'
         f'</div>'
         f'<div class="cust-meta">'
         f'{span_txt}'
@@ -734,9 +743,24 @@ def _custody_html(cust):
         f'</div>'
         f'<div class="cust-how"><b>如何看：</b>外国央行/官方机构在纽约联储托管的美债存量。'
         f'持续下降 = 外国官方减持美债 / 去美元化 / 抛售换汇干预，是主权层面对美债信心的风向标。'
-        f'关注中长期趋势与周环比方向，而非绝对水平。数据源：FRED WMTSECL1（Fed H.4.1 custody，每周三口径）。</div>'
+        f'<b>短期图</b>看近期拐点/干预动作，<b>长期图</b>看去美元化大趋势(10年结构性方向)。'
+        f'数据源：FRED WMTSECL1（Fed H.4.1 custody，每周三口径）。</div>'
         f'</div>'
     )
+
+
+def _custody_span_line(hist):
+    """折线图下方一行区间统计: 首末变化 + 高低。"""
+    if not hist or len(hist) < 2:
+        return ""
+    vals = [v for _, v in hist]
+    chg = vals[-1] - vals[0]
+    chg_pct = chg / vals[0] * 100 if vals[0] else 0
+    cls = "r" if chg < 0 else "g"
+    return (f'<div class="cust-chart-span">'
+            f'{_esc(hist[0][0])}→{_esc(hist[-1][0])}：'
+            f'<b class="cust-{cls}">{chg*1000:+.0f}B ({chg_pct:+.1f}%)</b>'
+            f' · 高 ${max(vals):.3f}T / 低 ${min(vals):.3f}T</div>')
 
 
 def _cb_balance_html(cb):
@@ -1435,6 +1459,11 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .cust-r {{ color: var(--clay) !important; }}
   /* 托管美债折线图 */
   .cust-chart-box {{ background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px 6px; }}
+  /* 左右双图: 短期(12月) / 长期(10年) */
+  .cust-charts {{ display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }}
+  @media (max-width: 720px) {{ .cust-charts {{ grid-template-columns: 1fr; }} }}
+  .cust-chart-col {{ background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px 8px; }}
+  .cust-chart-span {{ font-size: 10px; color: var(--muted); margin-top: 4px; text-align: center; }}
   .cust-chart-title {{ font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 4px; font-family: var(--mono); }}
   .cust-chart {{ width: 100%; height: auto; display: block; }}
   .cust-chart-na {{ font-size: 12px; color: var(--muted); padding: 20px; text-align: center; }}
