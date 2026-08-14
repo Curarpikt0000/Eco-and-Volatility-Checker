@@ -107,6 +107,13 @@ def main():
     except Exception as e:
         print(f"[dashboard] 分国别持美债跳过: {e}")
 
+    credit_impulse = {}
+    try:
+        import external_data as ed
+        credit_impulse = ed.fetch_credit_impulse(years=8) or {}
+    except Exception as e:
+        print(f"[dashboard] Credit Impulse 跳过: {e}")
+
     out = dash.generate(
         snap, checks, hit, gstats, overall,
         holdings=holdings, kol_changes=kol_changes,
@@ -114,6 +121,7 @@ def main():
         liquidity=liquidity, cb_balance=cb_balance, custody=custody,
         auctions=auctions, money_supply=money_supply, m2_history=m2_history,
         country_ust=country_ust,
+        credit_impulse=credit_impulse,
     )
     print(f"[dashboard] 生成: {out}")
     return out

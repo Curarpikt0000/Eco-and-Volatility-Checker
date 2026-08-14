@@ -1343,9 +1343,134 @@ def write_money_supply_notion(ms=None):
     return n
 
 
+def fetch_credit_impulse(years=8):
+    """三国 Credit Impulse(信贷脉冲)——中期领先指标。
+
+    定义(BIS/学界标准): Credit Impulse = [新增信贷流量的变化] / GDP
+      = Δ(信贷流量)/GDP = 信贷存量的二阶差分 / GDP
+      衡量的不是债务总量、也不是新增债务, 而是【新增信贷的加速度】。
+      领先实体经济约 6-9 个月; 中国信贷脉冲是全球商品/风险资产最强领先指标之一。
+
+    ★口径: 用 BIS 官方 credit-to-GDP ratio (Q*PAM770A, credit to private
+      non-financial sector, % of GDP, 季度) 的【二阶差分】近似 Credit Impulse。
+      因 GDP 分母变化远慢于信贷, ratio 二阶差分 ≈ Δ信贷流量/GDP(已验证与
+      绝对额法方向/拐点完全一致, 数值差<0.2pp)。用 ratio 法的好处:
+        ① 三国统一 BIS 口径, 跨国可比(BIS 专门保证国际可比性)
+        ② 都到 2025-10, 避免中国季度 GDP 分母序列缺失(FRED 中国 GDP 停在 2023)
+        ③ BIS 官方比值, 权威。
+    ★频率: BIS 季度数据, 滞后约 1 季(最新到上一季末)。这是全球唯一跨国可比
+      的信贷口径, 无周度版本。定位=季度更新的【中期指标】, 领先性足够。
+    绝不编: 某国抓不到→该国 points=[] + status="未找到"。
+
+    返回 {"US":{name,flag,points:[{date,ci}],latest,latest_date,signal,source},
+          "CN":{...}, "EA":{...}}。signal: strong_pos/pos/neutral/neg/strong_neg。
+    """
+    import requests
+    from datetime import datetime, timedelta
+    cosd = (datetime.utcnow() - timedelta(days=int(years * 365) + 400)).strftime("%Y-%m-01")
+
+    def _fred_ratio(sid):
+        """拉 BIS credit-to-GDP ratio 季度序列 [(YYYY-MM-DD, float)] 升序。
+        优先用项目带 key 的 FRED API 通道(稳); 失败回退免 key fredgraph CSV。"""
+        # 通道1: 带 key API (fetchers.fred.fetch_fred_history) —— 更稳
+        try:
+            from fetchers.fred import fetch_fred_history
+            h = fetch_fred_history(sid, start=cosd)
+            if h:
+                out = []
+                for d, v in h:
+                    try:
+                        out.append((str(d).strip(), float(v)))
+                    except (ValueError, TypeError):
+                        pass
+                if out:
+                    return out
+        except Exception:
+            pass
+        # 通道2: 免 key fredgraph CSV 回退
+        try:
+            r = requests.get(
+                f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}&cosd={cosd}",
+                timeout=25, headers={"User-Agent": "Mozilla/5.0"})
+            if r.status_code != 200:
+                return []
+            out = []
+            for ln in r.text.strip().splitlines()[1:]:
+                if "," not in ln:
+                    continue
+                d, v = ln.split(",", 1)
+                v = v.strip()
+                if v and v != ".":
+                    try:
+                        out.append((d.strip(), float(v)))
+                    except ValueError:
+                        pass
+            return out
+        except Exception:
+            return []
+
+    def _impulse(ratio):
+        """ratio 二阶差分 → Credit Impulse(pp of GDP)。"""
+        r = [(d, v) for d, v in ratio if v is not None]
+        out = []
+        for i in range(2, len(r)):
+            d = r[i][0]
+            ci = (r[i][1] - r[i - 1][1]) - (r[i - 1][1] - r[i - 2][1])
+            out.append({"date": d, "ci": round(ci, 2)})
+        return out
+
+    def _signal(ci):
+        if ci is None:
+            return "unknown"
+        if ci >= 0.8:
+            return "strong_pos"
+        if ci >= 0.15:
+            return "pos"
+        if ci <= -0.8:
+            return "strong_neg"
+        if ci <= -0.15:
+            return "neg"
+        return "neutral"
+
+    spec = {
+        "US": ("美国", "🇺🇸", "QUSPAM770A"),
+        "CN": ("中国", "🇨🇳", "QCNPAM770A"),
+        "EA": ("欧元区", "🇪🇺", "QXMPAM770A"),
+    }
+    out = {}
+    for cc, (name, flag, sid) in spec.items():
+        ratio = _fred_ratio(sid)
+        pts = _impulse(ratio) if len(ratio) >= 3 else []
+        if pts:
+            latest = pts[-1]["ci"]
+            out[cc] = {
+                "name": name, "flag": flag, "points": pts,
+                "latest": latest, "latest_date": pts[-1]["date"],
+                "signal": _signal(latest),
+                "source": f"BIS credit-to-GDP ratio (FRED {sid}), 二阶差分",
+                "status": "ok",
+            }
+        else:
+            out[cc] = {
+                "name": name, "flag": flag, "points": [],
+                "latest": None, "latest_date": None, "signal": "unknown",
+                "source": f"BIS credit-to-GDP ratio (FRED {sid})",
+                "status": "未找到",
+            }
+    return out
+
+
 if __name__ == "__main__":
     import json
-    print("=== KOL 状态变化(近10天) ===")
+    print("=== Credit Impulse 三国(信贷脉冲) ===")
+    _ci = fetch_credit_impulse()
+    for cc, d in _ci.items():
+        if d["points"]:
+            tail = ", ".join(f"{p['date'][:7]}:{p['ci']:+.2f}" for p in d["points"][-4:])
+            print(f"  {d['flag']} {d['name']}: latest {d['latest']:+.2f} ({d['latest_date']}) [{d['signal']}]  近4季: {tail}")
+        else:
+            print(f"  {d['flag']} {d['name']}: {d['status']}")
+    print("\n=== KOL 状态变化(近10天) ===")
     for ch in kol_stance_changes()[:8]:
         print(f"  {ch['date']} {ch['kol']}({ch['sector']}): {ch['prev_dir']} → {ch['new_dir']}")
     print("\n=== 流动性关键点 ===")

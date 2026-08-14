@@ -155,7 +155,7 @@ def threshold_text(ind):
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
-             country_ust=None, kol_views=None):
+             country_ust=None, kol_views=None, credit_impulse=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -327,6 +327,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         m2_history=_m2_history_html(m2_history),
         custody=_custody_html(custody),
         country_ust=_country_ust_html(country_ust),
+        credit_impulse=_credit_impulse_html(credit_impulse),
         auctions=_auctions_html(auctions),
         holdings=_holdings_html(holdings),
     )
@@ -936,6 +937,119 @@ def _country_ust_html(cu):
         f'<div class="cust-how"><b>如何看：</b>美国财政部 TIC 口径下各国持有的美债总额（含官方+私人，月度）。'
         f'与上方"外国官方托管美债"口径不同：托管是纽约联储账户的外国<b>官方合计</b>，这里是<b>分国别</b>总持仓。'
         f'<b>日本</b>是美债最大持有国，近10年高位震荡；<b>中国</b>近10年持续系统性减持，是去美元化/中美博弈的结构性信号。'
+        f'数据源：{_esc(src)}。</div>'
+        f'</div>'
+    )
+
+
+SIG_META = {
+    "strong_pos": ("#2e9e5b", "强正·信贷加速"),
+    "pos":        ("#2e9e5b", "正·温和扩张"),
+    "neutral":    ("#e0a92e", "中性·基本持平"),
+    "neg":        ("#d64545", "负·信贷收缩"),
+    "strong_neg": ("#d64545", "强负·急剧收缩"),
+    "unknown":    ("#9a9a9a", "数据未就绪"),
+}
+
+
+def _credit_impulse_svg(points, w=360, h=190):
+    """Credit Impulse 折线图(带零轴, pp of GDP)。points: [{date, ci},...] 升序。
+    正负值→需零轴基准; 最新点用信号色空心圈突出。"""
+    if not points or len(points) < 2:
+        return '<div class="ci-na">历史数据不足</div>'
+    dates = [p["date"] for p in points]
+    vals = [p["ci"] for p in points]
+    lo, hi = min(vals), max(vals)
+    # 对称留白, 保证零轴在图内
+    lo = min(lo, 0.0)
+    hi = max(hi, 0.0)
+    pad = (hi - lo) * 0.10 or 0.5
+    lo -= pad
+    hi += pad
+    rng = (hi - lo) or 1.0
+    ml, mr, mt, mb = 40, 12, 14, 26
+    pw, ph = w - ml - mr, h - mt - mb
+    n = len(vals)
+    def X(i): return ml + i * pw / (n - 1)
+    def Y(v): return mt + (hi - v) / rng * ph
+    zy = Y(0.0)  # 零轴
+    # 分段折线: 正段绿、负段红(按点着色描边简化为整条中性描边 + 正负填充)
+    pts = [f"{X(i):.1f},{Y(v):.1f}" for i, v in enumerate(vals)]
+    # 面积到零轴(正上负下)
+    area = f"{X(0):.1f},{zy:.1f} " + " ".join(pts) + f" {X(n-1):.1f},{zy:.1f}"
+    # Y 轴刻度(3 条)
+    yl = []
+    for k in range(3):
+        gv = lo + rng * k / 2
+        gy = Y(gv)
+        yl.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" class="cc-grid"/>')
+        yl.append(f'<text x="{ml-5}" y="{gy+3:.1f}" class="cc-ylab">{gv:+.1f}</text>')
+    # 零轴加粗
+    yl.append(f'<line x1="{ml}" y1="{zy:.1f}" x2="{w-mr}" y2="{zy:.1f}" class="ci-zero"/>')
+    # X 轴标签(首/中/末)
+    xl = []
+    for i in sorted(set([0, n // 2, n - 1])):
+        anchor = "start" if i == 0 else ("end" if i == n - 1 else "middle")
+        xl.append(f'<text x="{X(i):.1f}" y="{h-8}" class="cc-xlab" text-anchor="{anchor}">{dates[i][:7]}</text>')
+    lx, ly = X(n - 1), Y(vals[-1])
+    last = vals[-1]
+    lc = "#2e9e5b" if last >= 0.15 else ("#d64545" if last <= -0.15 else "#e0a92e")
+    return (
+        f'<svg viewBox="0 0 {w} {h}" class="ci-chart" preserveAspectRatio="xMidYMid meet">'
+        + "".join(yl)
+        + f'<polygon points="{area}" fill="rgba(140,150,160,0.10)" stroke="none"/>'
+        + f'<polyline points="{" ".join(pts)}" fill="none" stroke="#7d8a97" stroke-width="2" stroke-linejoin="round"/>'
+        + f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="7" fill="none" stroke="{lc}" stroke-width="2.4"/>'
+        + f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="2.6" fill="{lc}"/>'
+        + "".join(xl)
+        + '</svg>'
+    )
+
+
+def _credit_impulse_col(d):
+    """单国 Credit Impulse 一列(标题 + 最新值/信号 + 折线)。"""
+    if not d or d.get("status") != "ok" or not d.get("points"):
+        nm = (d or {}).get("name", "")
+        flag = (d or {}).get("flag", "")
+        return (f'<div class="ci-col"><div class="ci-title">{flag} {_esc(nm)}</div>'
+                f'<div class="ci-na">数据未就绪</div></div>')
+    latest = d["latest"]
+    sig = d.get("signal", "neutral")
+    color, label = SIG_META.get(sig, SIG_META["neutral"])
+    return (
+        f'<div class="ci-col">'
+        f'<div class="ci-title">{d.get("flag","")} {_esc(d["name"])}</div>'
+        f'<div class="ci-cur" style="color:{color}">{latest:+.2f}'
+        f'<span class="ci-unit">pp GDP</span></div>'
+        f'<div class="ci-sig"><span class="ci-dot" style="border-color:{color}"></span>'
+        f'<span style="color:{color}">{label}</span> '
+        f'<span class="ci-asof">as of {_esc(d.get("latest_date",""))[:7]}</span></div>'
+        f'{_credit_impulse_svg(d["points"])}'
+        f'</div>'
+    )
+
+
+def _credit_impulse_html(ci):
+    """Credit Impulse(信贷脉冲)三国对比——中期领先指标(领先实体经济 6-9 月)。"""
+    if not ci or all((ci.get(cc, {}).get("status") != "ok") for cc in ("US", "CN", "EA")):
+        return '<p class="empty">Credit Impulse 数据未就绪。</p>'
+    src = next((ci[cc].get("source") for cc in ("US", "CN", "EA")
+                if ci.get(cc, {}).get("status") == "ok"), "BIS via FRED")
+    asof = next((ci[cc].get("latest_date") for cc in ("US", "CN", "EA")
+                 if ci.get(cc, {}).get("status") == "ok"), "")
+    return (
+        f'<div class="ci-wrap">'
+        f'<div class="ci-cols">'
+        f'{_credit_impulse_col(ci.get("US"))}'
+        f'{_credit_impulse_col(ci.get("CN"))}'
+        f'{_credit_impulse_col(ci.get("EA"))}'
+        f'</div>'
+        f'<div class="ci-how"><b>如何看：</b>Credit Impulse（信贷脉冲）= 新增信贷流量的<b>变化</b> ÷ GDP，'
+        f'衡量的不是债务总量、也不是新增债务，而是<b>新增信贷的加速度</b>。'
+        f'<span style="color:#2e9e5b">正值=信贷在加速扩张</span>（利好增长/风险资产），'
+        f'<span style="color:#d64545">负值=新增信贷放缓/收缩</span>（即使总债务仍在涨）。'
+        f'领先实体经济约 <b>6-9 个月</b>——<b>中国信贷脉冲</b>是全球商品、周期股、风险资产最强的领先指标之一。'
+        f'口径为 BIS credit-to-GDP ratio 的二阶差分（三国统一口径、国际可比），<b>季度更新、数据滞后约 1 季</b>（as of {_esc(asof)[:7]}）。'
         f'数据源：{_esc(src)}。</div>'
         f'</div>'
     )
@@ -1676,6 +1790,23 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .cu-cur {{ font-family: var(--mono); font-size: 20px; font-weight: 800; color: var(--text); line-height: 1.2; margin: 2px 0 6px; }}
   .cu-asof {{ font-size: 10px; color: var(--muted); font-weight: 400; margin-left: 6px; }}
 
+  /* Credit Impulse 信贷脉冲(中期领先指标, 三国) */
+  .ci-wrap {{ display: flex; flex-direction: column; gap: 10px; }}
+  .ci-cols {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }}
+  .ci-col {{ background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px 8px; }}
+  .ci-title {{ font-size: 12px; color: var(--text); font-weight: 700; margin-bottom: 4px; }}
+  .ci-cur {{ font-family: var(--mono); font-size: 24px; font-weight: 800; line-height: 1.1; }}
+  .ci-unit {{ font-size: 10px; color: var(--muted); font-weight: 400; margin-left: 5px; }}
+  .ci-sig {{ font-size: 11px; margin: 2px 0 4px; display: flex; align-items: center; gap: 5px; }}
+  .ci-dot {{ display: inline-block; width: 9px; height: 9px; border-radius: 50%; border: 2px solid; background: transparent; }}
+  .ci-asof {{ color: var(--muted); font-weight: 400; margin-left: auto; font-family: var(--mono); }}
+  .ci-chart {{ width: 100%; height: auto; display: block; }}
+  .ci-na {{ font-size: 12px; color: var(--muted); padding: 24px; text-align: center; }}
+  .ci-zero {{ stroke: rgba(160,160,150,.55); stroke-width: 1.2; }}
+  .ci-how {{ font-size: 11px; color: var(--muted); line-height: 1.6; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; }}
+  .ci-how b {{ color: var(--text); }}
+  @media (max-width: 720px) {{ .ci-cols {{ grid-template-columns: 1fr; }} }}
+
   /* 国债拍卖 timeline */
   .auc-wrap {{ display: flex; flex-direction: column; gap: 12px; }}
   .auc-next-banner {{ background: rgba(140,155,175,.14); border: 1px solid var(--border); border-left: 3px solid var(--dust-blue); border-radius: 6px; padding: 8px 12px; font-size: 13px; color: var(--text); }}
@@ -1842,6 +1973,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·二·二：三国 M2 十年历史折线 ═══ -->
   <div class="part-title"><span class="part-num">＋</span>三国 M2 十年走势 · 折线 ($B 当天汇率统一折算 · 放水力度长期对比)</div>
   <div class="card">{m2_history}</div>
+
+  <!-- ═══ 附三·二·三：Credit Impulse 信贷脉冲 (中期领先指标, 领先实体经济6-9月) ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>Credit Impulse 信贷脉冲 · 中期领先指标 (美/中/欧 · 季度 · 新增信贷的加速度 · 领先实体经济6-9月)</div>
+  <div class="card">{credit_impulse}</div>
 
   <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)</div>
