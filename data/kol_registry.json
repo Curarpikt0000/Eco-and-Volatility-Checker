@@ -1,13 +1,13 @@
 {
   "_comment": "KOL 主注册表 — SSOT, 唯一权威源=Notion KOL List DB. 只增不减.",
-  "_last_updated": "2026-08-12",
+  "_last_updated": "2026-08-14",
   "_source": "Notion KOL List DB (35947eb5fd3c800db852cef31f9de6a5), synced 2026-08-12; 只增不减",
   "_dropped_institutions": [
     "Citi / UBS",
     "Goldman Sachs",
     "Morgan Stanley"
   ],
-  "_count": 91,
+  "_count": 92,
   "kols": [
     {
       "id": "jim_curry",
@@ -1751,6 +1751,28 @@
       "monitor_dimensions": "市场结构 / 量化 / 做市 / 宏观对冲 / 持仓变动",
       "notion_num": "88",
       "_added": "2026-08-12 (from Notion KOL List DB sync to 88)"
+    },
+    {
+      "id": "craig_hamilton_parker",
+      "display_name": "Craig Hamilton-Parker",
+      "notion_select_name": "Craig Hamilton-Parker",
+      "domain": "预测",
+      "sector": "Alternative",
+      "detail_sector": "预测",
+      "kol_or_ib": "KOL",
+      "institution": "英国通灵预言家 (psychic medium)；YouTube \"World Predictions\" 频道，每年发布对政治/经济/灾难/市场的通灵年度预言",
+      "search_terms": [
+        "Craig Hamilton-Parker predictions",
+        "Craig Hamilton Parker world predictions"
+      ],
+      "x_handle": "",
+      "active": true,
+      "added_date": "2026-08-14",
+      "note": "另类/情绪信号追踪 — 通灵型末日/市场崩盘预言, 非数据方法论, 不按可交易方向严格归类; 作民间预期传播度参考(Chao 2026-08-14 明确要求)",
+      "focus": "通灵型世界年度预言: 市场崩盘/经济危机/地缘冲突/自然灾害窗口预测",
+      "notion_list_page_id": "",
+      "list_num": "",
+      "bio": ""
     }
   ]
 }
