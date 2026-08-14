@@ -567,10 +567,32 @@ def _cb_one_view(d, fx=None):
     fx_note = ""
     orig = d.get("orig_unit")
     if orig and fx:
-        rate = fx.get("USDJPY") if orig == "兆¥" else (fx.get("USDCNY") if orig == "亿¥" else None)
-        pair = "USD/JPY" if orig == "兆¥" else ("USD/CNY" if orig == "亿¥" else "")
+        rate = None
+        pair = ""
+        if orig == "兆¥":
+            rate, pair = fx.get("USDJPY"), "USD/JPY"
+        elif orig == "亿¥":
+            rate, pair = fx.get("USDCNY"), "USD/CNY"
+        elif orig == "十亿€":
+            rate, pair = (d.get("usd_per_eur") or fx.get("USDEUR")), "USD/EUR"
         if rate:
             fx_note = f' · 原口径 {orig} · 按 {pair} {rate:g} 折美元'
+    # ECB 政策利率行(务实版: 无分项, 展示三大政策利率)
+    rates_html = ""
+    r = d.get("rates") or {}
+    if r:
+        parts = []
+        if r.get("mro") is not None:
+            parts.append(f'主再融资 MRO <b>{r["mro"]:g}%</b>')
+        if r.get("dfr") is not None:
+            parts.append(f'存款便利 DFR <b>{r["dfr"]:g}%</b>')
+        if r.get("mlf") is not None:
+            parts.append(f'边际贷款 MLF <b>{r["mlf"]:g}%</b>')
+        if parts:
+            rates_html = ('<div class="bs-rates">政策利率：' + ' · '.join(parts) + '</div>')
+    partial_note = ""
+    if d.get("note_partial"):
+        partial_note = f'<div class="bs-partial">ⓘ {_esc(d["note_partial"])}</div>'
     return (
         f'<div class="bs-card">'
         f'<div class="bs-head">{_esc(d.get("flag",""))} {_esc(d.get("name",""))}'
@@ -578,7 +600,9 @@ def _cb_one_view(d, fx=None):
         f'<div class="bs-body">'
         f'<div class="bs-col bs-assets"><div class="bs-col-h">资产 (Assets)</div>{side(d.get("assets",[]))}{total_a_html}</div>'
         f'<div class="bs-col bs-liabs"><div class="bs-col-h">负债 (Liabilities)</div>{side(d.get("liabilities",[]))}{total_l_html}</div>'
-        f'</div></div>'
+        f'</div>'
+        f'{rates_html}{partial_note}'
+        f'</div>'
     )
 
 
@@ -909,11 +933,11 @@ def _country_ust_html(cu):
 
 
 def _cb_balance_html(cb):
-    """底部三国央行资产负债表板块(JP/CN/US)。统一 $B 横向可比。"""
+    """底部四大央行资产负债表板块(US/JP/CN/ECB), 2x2 布局。统一当天汇率折 $B 横向可比。"""
     if not cb:
         return '<p class="empty">央行资产负债表数据未就绪。</p>'
     fx = cb.get("_fx")
-    order = ["US", "JP", "CN"]
+    order = ["US", "JP", "CN", "ECB"]
     cards = "".join(_cb_one_view(cb.get(cc, {}), fx=fx) for cc in order if cc in cb)
     return cards or '<p class="empty">央行资产负债表数据未就绪。</p>'
 
@@ -1446,8 +1470,12 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .liq-note b {{ color: var(--dust-blue); }}
   .empty {{ color: var(--muted); font-size: 13px; font-style: italic; }}
   /* 三大央行资产负债表 view */
-  .bs-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; margin-bottom: 8px; }}
+  .bs-grid {{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 8px; }}
+  @media (max-width: 780px) {{ .bs-grid {{ grid-template-columns: 1fr; }} }}
   .bs-card {{ background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }}
+  .bs-rates {{ margin-top: 10px; padding-top: 8px; border-top: 1px dashed rgba(160,160,150,.28); font-size: 11.5px; color: var(--muted); }}
+  .bs-rates b {{ color: var(--dust-blue); font-family: var(--mono); }}
+  .bs-partial {{ margin-top: 6px; font-size: 10.5px; color: var(--muted); font-style: italic; }}
   /* 货币供应量 M0/M1/M2 模块 */
   .ms-intro {{ background: var(--card2); border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; }}
   .ms-intro-l {{ font-size: 11.5px; color: var(--text); line-height: 1.6; margin-bottom: 3px; }}
@@ -1791,8 +1819,8 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title"><span class="part-num">＋</span>流动性要点 · 央行/国债</div>
   <div class="card liq-wrap">{liquidity}</div>
 
-  <!-- ═══ 附三：三大央行资产负债表 (JP/CN/US) ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>三大央行资产负债表 · 每日更新 (左资产 / 右负债 · 带环比)</div>
+  <!-- ═══ 附三：四大央行资产负债表 (US/JP/CN/ECB, 2x2) ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>四大央行资产负债表 · 每日更新 (US/JP/CN/ECB · 2x2 · 当天汇率统一折$B)</div>
   <div class="bs-grid">{cb_balance}</div>
 
   <!-- ═══ 附三·二：三国货币供应量 M0/M1/M2 (央行资负表的延伸: 从"央行造多少底钱"到"社会流通多少钱") ═══ -->

@@ -461,8 +461,8 @@ CB_BS_SPEC = {
         "name": "美联储 Fed", "flag": "🇺🇸", "title": "Week", "unit": "$B", "period": "WoW",
         "assets": [
             ("美国国债 Treasuries", "资产_Treasuries_B"),
+            ("短期国债 Bills（RMP 储备管理购买）", "资产_Bills_B", "sub"),
             ("MBS 抵押债", "资产_MBS_B"),
-            ("短期国债 Bills", "资产_Bills_B"),
             ("FIMA 海外回购", "资产_FIMA_B"),
             ("SRF 常备回购", "资产_SRF_B"),
         ],
@@ -544,6 +544,81 @@ def _usd_convert(cc_data, factor, orig_unit):
     return cc_data
 
 
+def fetch_ecb_balance_sheet(to_usd=True, usd_per_eur=None):
+    """ECB 欧洲央行资产负债表(务实版: 总资产 + 三大政策利率)。
+    ★数据源: FRED ECBASSETSW(Eurosystem 总资产, 周度, 百万欧元) + 政策利率
+      ECBMRRFR(主再融资MRO)/ECBDFR(存款便利)/ECBMLFR(边际贷款)。
+    ★FRED 无免费可靠的 ECB 资产/负债【分项】周度序列 → 本版只列总资产(可靠),
+      分项(黄金/证券/银行券)待攻 ECB SDW SDMX API 后升级(Chao 2026-08 选项A)。
+    to_usd: 总资产按当天 USD/EUR(DEXUSEU, 1欧元=X美元)折成 $B(乘, 非除)。
+    返回与 CB_BS_SPEC 一致结构: {name,flag,unit,period,date,assets:[...],liabilities:[],
+      total_assets:{...}, total_liab:None, rates:{mro,dfr,mlf}, status}。"""
+    import requests
+
+    def _fred_last2(sid):
+        """返回 FRED 序列最后两个有效点 [(date,val),...] 升序, 用于算环比。"""
+        try:
+            r = requests.get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}", timeout=20)
+            if r.status_code != 200:
+                return []
+            out = []
+            for ln in r.text.strip().splitlines()[1:]:
+                if "," not in ln:
+                    continue
+                d, v = ln.split(",", 1)
+                v = v.strip()
+                if v and v != ".":
+                    try:
+                        out.append((d.strip()[:10], float(v)))
+                    except ValueError:
+                        pass
+            return out[-2:]
+        except Exception:
+            return []
+
+    ta_pts = _fred_last2("ECBASSETSW")   # 百万欧元
+    if not ta_pts:
+        return {"name": "欧洲央行 ECB", "flag": "🇪🇺", "unit": "$B" if to_usd else "十亿€",
+                "period": "WoW", "date": None, "assets": [], "liabilities": [],
+                "total_assets": None, "total_liab": None, "rates": {}, "status": "未找到"}
+    date = ta_pts[-1][0]
+    cur_eur_bn = ta_pts[-1][1] / 1000.0            # 百万€ → 十亿€
+    prev_eur_bn = ta_pts[-2][1] / 1000.0 if len(ta_pts) > 1 else None
+    # 政策利率(最新值)
+    rates = {}
+    for key, sid in (("mro", "ECBMRRFR"), ("dfr", "ECBDFR"), ("mlf", "ECBMLFR")):
+        pts = _fred_last2(sid)
+        if pts:
+            rates[key] = pts[-1][1]
+    # 折美元: 1€ = usd_per_eur 美元
+    if usd_per_eur is None:
+        try:
+            from fetchers.fred import fetch_fred_latest
+            usd_per_eur, _ = fetch_fred_latest("DEXUSEU")
+        except Exception:
+            usd_per_eur = None
+    if not usd_per_eur:
+        _p = _fred_last2("DEXUSEU")
+        usd_per_eur = _p[-1][1] if _p else 1.16
+    factor = usd_per_eur if to_usd else 1.0        # €B × (USD/EUR) = $B
+    val = round(cur_eur_bn * factor, 1)
+    delta = round((cur_eur_bn - prev_eur_bn) * factor, 1) if prev_eur_bn is not None else None
+    pct = round((cur_eur_bn - prev_eur_bn) / prev_eur_bn * 100, 2) if prev_eur_bn else None
+    ta_line = {"name": "总资产 Total Assets", "value": val, "delta": delta, "pct": pct, "sub": False}
+    return {
+        "name": "欧洲央行 ECB", "flag": "🇪🇺",
+        "unit": "$B" if to_usd else "十亿€", "orig_unit": "十亿€",
+        "period": "WoW", "date": date,
+        "assets": [ta_line],       # 只有总资产可靠(分项待SDW)
+        "liabilities": [],
+        "total_assets": dict(ta_line, name="总资产"),
+        "total_liab": None,
+        "rates": rates,
+        "usd_per_eur": round(usd_per_eur, 4),
+        "note_partial": "分项(黄金/证券/银行券)待 ECB SDW 接入; 现仅总资产+政策利率",
+    }
+
+
 def fetch_cb_balance_sheets(to_usd=True):
     """读 JP/CN/US 三大央行资产负债表最新两期, 每科目算环比。
     to_usd=True: 统一换算成 $B(十亿美元)横向可比(汇率走 FRED DEXJPUS/DEXCHUS)。
@@ -571,12 +646,14 @@ def fetch_cb_balance_sheets(to_usd=True):
             "assets": assets, "liabilities": liabs,
             "total_assets": ta, "total_liab": tl,
         }
-    # ── 统一换算成 $B(十亿美元) ──
+    # ── 统一换算成 $B(十亿美元), 全部用当天最新汇率(Chao 要求横向可比) ──
+    usd_per_eur = None
     if to_usd:
         try:
             from fetchers.fred import fetch_fred_latest
             jpy, _ = fetch_fred_latest("DEXJPUS")   # 日元/美元(如 147.5)
             cny, _ = fetch_fred_latest("DEXCHUS")   # 人民币/美元(如 7.15)
+            usd_per_eur, _ = fetch_fred_latest("DEXUSEU")  # 1欧元=X美元
             # BoJ: 兆¥(1e12¥) → $B: ×1000/jpy
             if "JP" in out and jpy:
                 out["JP"] = _usd_convert(out["JP"], 1000.0 / jpy, "兆¥")
@@ -584,9 +661,34 @@ def fetch_cb_balance_sheets(to_usd=True):
             if "CN" in out and cny:
                 out["CN"] = _usd_convert(out["CN"], 0.1 / cny, "亿¥")
             # 记录换算汇率(可溯源)
-            out["_fx"] = {"USDJPY": jpy, "USDCNY": cny}
+            out["_fx"] = {"USDJPY": jpy, "USDCNY": cny, "USDEUR": usd_per_eur}
         except Exception as e:
             out["_fx_error"] = str(e)
+
+    # ── ECB(欧洲央行): 独立源, 用同一当天 USD/EUR 折算 ──
+    try:
+        out["ECB"] = fetch_ecb_balance_sheet(to_usd=to_usd, usd_per_eur=usd_per_eur)
+    except Exception as e:
+        out["_ecb_error"] = str(e)
+
+    # ── 总资产/总负债强制加总: 补"其他"差额项(Chao 要求, 如中国总负债7170≠5798+891.5) ──
+    def _add_residual(blk):
+        """若有总额且明细未加满, 补一行'其他(差额)'使明细总和=总额。子项(sub)不计入加和。"""
+        for sec, tot_key in (("assets", "total_assets"), ("liabilities", "total_liab")):
+            tot = blk.get(tot_key)
+            lines = blk.get(sec) or []
+            if not tot or tot.get("value") is None or not lines:
+                continue
+            summed = sum(x["value"] for x in lines if x.get("value") is not None and not x.get("sub"))
+            resid = round(tot["value"] - summed, 1)
+            # 只在差额显著(>总额0.5%且>1)时补, 避免舍入噪音
+            if abs(resid) > max(1.0, abs(tot["value"]) * 0.005):
+                lines.append({"name": "其他 Other（差额）", "value": resid,
+                              "delta": None, "pct": None, "sub": False})
+                blk[sec] = lines
+    for cc in ("US", "JP", "CN", "ECB"):
+        if cc in out and isinstance(out[cc], dict):
+            _add_residual(out[cc])
     return out
 
 
