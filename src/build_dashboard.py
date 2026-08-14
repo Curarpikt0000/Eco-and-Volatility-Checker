@@ -56,6 +56,13 @@ def main():
     kol_changes, liquidity, cb_balance, custody, auctions = {}, {}, {}, {}, {}
     try:
         import external_data as ed
+        # ★先把当日全量方向落盘为 Eco 独立快照(data/kol/daily/), 供周对比累积
+        try:
+            sp = ed.save_kol_daily_snapshot()
+            if sp:
+                print(f"[dashboard] KOL 当日快照已存: {sp}")
+        except Exception as se:
+            print(f"[dashboard] KOL 快照保存跳过: {se}")
         kol_changes = ed.kol_stance_changes_grouped() or {}
     except Exception as e:
         print(f"[dashboard] KOL 变化跳过: {e}")

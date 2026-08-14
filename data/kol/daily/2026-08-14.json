@@ -1,0 +1,644 @@
+{
+ "date": "2026-08-14",
+ "count": 91,
+ "source": "Eco independent daily crawl (web_search 全量 KOL)",
+ "kols": [
+  {
+   "kol": "Jim Curry",
+   "sector": "贵金属",
+   "direction": "分歧",
+   "targets": "金",
+   "comments": "周期分析师;金6月于3955.40形成关键低点后波段,监测周期拐点,方向未定"
+  },
+  {
+   "kol": "James Turk",
+   "sector": "贵金属",
+   "direction": "强烈看多",
+   "targets": "金/银",
+   "comments": "FGMR;持续贴金银图,长期看空法币,坚定看多贵金属"
+  },
+  {
+   "kol": "Jordan Roy-Byrne",
+   "sector": "贵金属",
+   "direction": "看多",
+   "targets": "金/矿",
+   "comments": "8/3发《黄金长期牛市三大支柱》,明确看多黄金secular bull"
+  },
+  {
+   "kol": "Jesse Colombo",
+   "sector": "贵金属",
+   "direction": "强烈看多",
+   "targets": "金/银",
+   "comments": "看多金银,反泡沫论者看好硬资产(此前立场)"
+  },
+  {
+   "kol": "Larry Lepard",
+   "sector": "贵金属与商品周期",
+   "direction": "强烈看多",
+   "targets": "金/银/BTC",
+   "comments": "结构性看多金银比特币,物理供给紧+去美元化,BTC看$100k+"
+  },
+  {
+   "kol": "Frank Giustra",
+   "sector": "贵金属与商品周期",
+   "direction": "看多",
+   "targets": "金/铜",
+   "comments": "\"这不是黄金最后一涨\",看多金;铜供给短缺论"
+  },
+  {
+   "kol": "Alex Kuptsikevich",
+   "sector": "贵金属与商品周期",
+   "direction": "看多",
+   "targets": "金",
+   "comments": "FxPro分析师,金技术看多(此前立场)"
+  },
+  {
+   "kol": "Bob Haberkorn",
+   "sector": "贵金属与商品周期",
+   "direction": "看多",
+   "targets": "金",
+   "comments": "RJO Futures,金避险需求看多(此前立场)"
+  },
+  {
+   "kol": "Marc Chandler",
+   "sector": "宏观货币与金融体系",
+   "direction": "中性",
+   "targets": "FX/USD",
+   "comments": "Marc to Market:FX\"becalmed\",美元G10涨跌互现,中性"
+  },
+  {
+   "kol": "David Meger",
+   "sector": "贵金属与商品周期",
+   "direction": "看多",
+   "targets": "金",
+   "comments": "High Ridge金属交易主管,持续看多金(此前立场,本次未更新)"
+  },
+  {
+   "kol": "Dan Loeb",
+   "sector": "股权市场",
+   "direction": "看多",
+   "targets": "科技股",
+   "comments": "Q1 13F组合缩至$2.08B,AI空头,新建META/GOOGL,大仓AMZN"
+  },
+  {
+   "kol": "Todd \"Bubba\" Horowitz",
+   "sector": "贵金属与商品周期",
+   "direction": "强烈看空",
+   "targets": "美股",
+   "comments": "警告股市可能崩盘,贵金属谨慎;整体看空风险资产"
+  },
+  {
+   "kol": "Ronny Stoeferle",
+   "sector": "贵金属与商品周期",
+   "direction": "强烈看多",
+   "targets": "金",
+   "comments": "In Gold We Trust:金牛市未见顶,基准$7-8k(2028-30)"
+  },
+  {
+   "kol": "Massimiliano Castelli",
+   "sector": "宏观货币与金融体系",
+   "direction": "看多",
+   "targets": "金",
+   "comments": "UBS央行储备主管,央行增持黄金论(此前立场)"
+  },
+  {
+   "kol": "Timothy Arcuri",
+   "sector": "股权市场",
+   "direction": "看多",
+   "targets": "半导体",
+   "comments": "UBS半导体分析师,看多AI半导体(此前立场)"
+  },
+  {
+   "kol": "Jeff Currie",
+   "sector": "资源与能源安全",
+   "direction": "分歧",
+   "targets": "金/商品",
+   "comments": "近期看空金(先回落至$4000抹平年内涨幅)再长期看$10000;商品超级周期"
+  },
+  {
+   "kol": "Andy Schectman",
+   "sector": "贵金属与商品周期",
+   "direction": "强烈看多",
+   "targets": "金/银",
+   "comments": "看$10k金$200银,但警告bull trap与纸市操纵;实物需求强"
+  },
+  {
+   "kol": "Jeff Snider",
+   "sector": "国债利率与债券市场",
+   "direction": "看空",
+   "targets": "债券/宏观",
+   "comments": "通缩/美元短缺/信用收缩论,eurodollar系统破裂"
+  },
+  {
+   "kol": "Bill Gross",
+   "sector": "国债利率与债券市场",
+   "direction": "分歧",
+   "targets": "股/债",
+   "comments": "\"债王\":创纪录股市涨势有停滞风险,估值笼罩市场,谨慎"
+  },
+  {
+   "kol": "Kyle Bass",
+   "sector": "国债利率与债券市场",
+   "direction": "分歧",
+   "targets": "日债/CNY",
+   "comments": "JGB/日元与中国空头论,日本债务危机临近;无明确美股方向"
+  },
+  {
+   "kol": "James Grant",
+   "sector": "国债利率与债券市场",
+   "direction": "看多",
+   "targets": "金",
+   "comments": "黄金反映91年货币贬值趋势;私募风险上升,价值/逆向,看多金"
+  },
+  {
+   "kol": "Lacy Hunt",
+   "sector": "国债利率与债券市场",
+   "direction": "看空",
+   "targets": "长债",
+   "comments": "长期通缩论者现更担忧通胀;长债受益于债务通缩"
+  },
+  {
+   "kol": "Abhigya Anand",
+   "sector": "预测",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Plai Navaracha",
+   "sector": "预测",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Athos Salomé",
+   "sector": "预测",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "David Icke",
+   "sector": "预测",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Amanda Grace",
+   "sector": "预测",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Brandon Biggs",
+   "sector": "预测",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "FEMA",
+   "sector": "预测",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Ray Kurzweil",
+   "sector": "科技与未来趋势",
+   "direction": "中性",
+   "targets": "科技(长期乐观)",
+   "comments": "AI奇点2029/2045长期乐观,非市场方向判断"
+  },
+  {
+   "kol": "Michael Saylor",
+   "sector": "科技与未来趋势",
+   "direction": "强烈看多",
+   "targets": "BTC",
+   "comments": "8/12发比特币信用模型;Strategy近期减1690 BTC但长期强烈看多BTC"
+  },
+  {
+   "kol": "Ivan Zhao",
+   "sector": "科技与未来趋势",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Raoul Pal",
+   "sector": "科技与未来趋势",
+   "direction": "看多",
+   "targets": "BTC/crypto",
+   "comments": "看多crypto:\"即将补涨\",流动性周期仍在,BTC数字黄金"
+  },
+  {
+   "kol": "Cathie Wood",
+   "sector": "科技与未来趋势",
+   "direction": "看多",
+   "targets": "科技/创新",
+   "comments": "扫货Broadcom,\"通胀恐慌一年内消退\",看多创新/科技,预期反弹"
+  },
+  {
+   "kol": "Dan Ives",
+   "sector": "科技与未来趋势",
+   "direction": "强烈看多",
+   "targets": "科技/AI",
+   "comments": "仍强烈看多AI:\"AI革命第3局\",Nvidia需求超供给12:1"
+  },
+  {
+   "kol": "Anu Anand",
+   "sector": "资源与能源安全",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Rory Johnston",
+   "sector": "资源与能源安全",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Doomberg / Kuppy",
+   "sector": "资源与能源安全",
+   "direction": "分歧",
+   "targets": "油(空)/铀商品(多)",
+   "comments": "油战后或崩至$25-30,但铀/核能/结构性商品看多;SPR创1983新低"
+  },
+  {
+   "kol": "Eric Nuttall",
+   "sector": "资源与能源安全",
+   "direction": "看多",
+   "targets": "能源股",
+   "comments": "8/10 BNN能源股top picks,看多油气"
+  },
+  {
+   "kol": "Chris Vermeulen",
+   "sector": "交易与市场微观结构",
+   "direction": "看多",
+   "targets": "美股",
+   "comments": "股市\"firmly bullish\";金矿短期熊市,gold breakout可能失败"
+  },
+  {
+   "kol": "AG Thorson",
+   "sector": "交易与市场微观结构",
+   "direction": "强烈看多",
+   "targets": "金/银",
+   "comments": "goldscents技术分析,金银看多趋势(此前立场)"
+  },
+  {
+   "kol": "Robert Gottlieb",
+   "sector": "交易与市场微观结构",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Vince Lanci",
+   "sector": "交易与市场微观结构",
+   "direction": "看多",
+   "targets": "金/银",
+   "comments": "\"耐心是第一词\",COMEX破裂,长期看多金银短期谨慎"
+  },
+  {
+   "kol": "Gareth Soloway",
+   "sector": "交易与市场微观结构",
+   "direction": "分歧",
+   "targets": "BTC/美股",
+   "comments": "技术面:BTC临突破,S&P bull flag,选择性做多,分领域"
+  },
+  {
+   "kol": "Steve Penny",
+   "sector": "交易与市场微观结构",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Daniel Ghali",
+   "sector": "交易与市场微观结构",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Nate Miller",
+   "sector": "贵金属与商品周期",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Bob Coleman",
+   "sector": "贵金属与商品周期",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Bob Moriarty",
+   "sector": "贵金属与商品周期",
+   "direction": "看多",
+   "targets": "金/银",
+   "comments": "321gold;三位数银\"很现实\",看多金银"
+  },
+  {
+   "kol": "Jay Martin",
+   "sector": "贵金属与商品周期",
+   "direction": "看多",
+   "targets": "金/铜/商品",
+   "comments": "看多金铜,商品相对金融资产55年低位"
+  },
+  {
+   "kol": "Adrian Day",
+   "sector": "贵金属与商品周期",
+   "direction": "看多",
+   "targets": "金/矿",
+   "comments": "看多黄金(央行购金驱动)+bullish股票setup"
+  },
+  {
+   "kol": "Jeff Clark",
+   "sector": "贵金属与商品周期",
+   "direction": "看多",
+   "targets": "金/银/矿股",
+   "comments": "GoldSilver:金处早中期牛市,金股大幅跑赢其他资产"
+  },
+  {
+   "kol": "Rick Rule",
+   "sector": "贵金属与商品周期",
+   "direction": "看多",
+   "targets": "金/铀/铜",
+   "comments": "$12k金目标,但near-term波动,\"为股灾做准备\",金铀铜找价值"
+  },
+  {
+   "kol": "Keith Neumeyer",
+   "sector": "贵金属与商品周期",
+   "direction": "看多",
+   "targets": "银",
+   "comments": "First Majestic CEO,曾喊$100银,长期看多白银"
+  },
+  {
+   "kol": "Peter Krauth",
+   "sector": "贵金属与商品周期",
+   "direction": "看多",
+   "targets": "银",
+   "comments": "银$70(2026)→长期$300,强烈看多白银"
+  },
+  {
+   "kol": "Craig Hemke",
+   "sector": "贵金属与商品周期",
+   "direction": "强烈看多",
+   "targets": "金/银",
+   "comments": "TF Metals:贵金属强劲反弹,constructive,看多金银"
+  },
+  {
+   "kol": "David Garofalo",
+   "sector": "贵金属与商品周期",
+   "direction": "看多",
+   "targets": "金/矿",
+   "comments": "Gold Royalty记录业绩,看多金"
+  },
+  {
+   "kol": "Robert Kiyosaki",
+   "sector": "贵金属与商品周期",
+   "direction": "看多",
+   "targets": "金/银/BTC",
+   "comments": "一贯crash warning+金银BTC避险,银$200/BTC$750k"
+  },
+  {
+   "kol": "Willem Middelkoop",
+   "sector": "贵金属与商品周期",
+   "direction": "强烈看多",
+   "targets": "金",
+   "comments": "Big Reset作者,货币重置→黄金(此前立场,本次限流未更新)"
+  },
+  {
+   "kol": "Stephen Leeb",
+   "sector": "贵金属与商品周期",
+   "direction": "看多",
+   "targets": "金/资源",
+   "comments": "看多金与资源(此前立场)"
+  },
+  {
+   "kol": "Matthew Piepenburg",
+   "sector": "贵金属与商品周期",
+   "direction": "强烈看多",
+   "targets": "金",
+   "comments": "Matterhorn:全球债务陷阱→黄金黄金时代,强烈看多金"
+  },
+  {
+   "kol": "Alasdair Macleod",
+   "sector": "贵金属与商品周期",
+   "direction": "强烈看多",
+   "targets": "金/银",
+   "comments": "GoldMoney,法币崩溃论强烈看多金银(此前立场,本次限流未更新)"
+  },
+  {
+   "kol": "Daniel Oliver",
+   "sector": "贵金属与商品周期",
+   "direction": "看多",
+   "targets": "金矿",
+   "comments": "Myrmikan,金矿深度价值看多(此前立场)"
+  },
+  {
+   "kol": "Carroll Quigley",
+   "sector": "宏观货币与金融体系",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "S. Druckenmiller",
+   "sector": "宏观货币与金融体系",
+   "direction": "中性",
+   "targets": "红利股",
+   "comments": "Q1 13F避开megacap科技,防御/红利股,谨慎"
+  },
+  {
+   "kol": "Jeffrey Gundlach",
+   "sector": "国债利率与债券市场",
+   "direction": "分歧",
+   "targets": "债券/全球",
+   "comments": "\"不冒大险\",Treasury谨慎,倡全球轮动,盯2年期"
+  },
+  {
+   "kol": "Michael Hartnett",
+   "sector": "宏观货币与金融体系",
+   "direction": "看空",
+   "targets": "美股",
+   "comments": "BofA:\"retreat/rotate not reload\",卖出信号9.7,转防御"
+  },
+  {
+   "kol": "Ted Oakley",
+   "sector": "宏观货币与金融体系",
+   "direction": "看空",
+   "targets": "防御/金",
+   "comments": "Oxbow,建议防御持金持现,谨慎看空股市(此前立场)"
+  },
+  {
+   "kol": "Clem Chambers",
+   "sector": "宏观货币与金融体系",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "David Hunter",
+   "sector": "宏观货币与金融体系",
+   "direction": "分歧",
+   "targets": "美股",
+   "comments": "最后melt-up(S&P 9500)后全球bust深熊,短多长空"
+  },
+  {
+   "kol": "David Stockman",
+   "sector": "宏观货币与金融体系",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Larry McDonald",
+   "sector": "宏观货币与金融体系",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Peter Schiff",
+   "sector": "宏观货币与金融体系",
+   "direction": "强烈看多",
+   "targets": "金",
+   "comments": "金破$4400强烈看多金,卖BTC/MSTR,\"比衰退更糟的来了\"看空美股"
+  },
+  {
+   "kol": "James Rickards",
+   "sector": "宏观货币与金融体系",
+   "direction": "强烈看多",
+   "targets": "金",
+   "comments": "$10k金强烈看多,央行购金论"
+  },
+  {
+   "kol": "Stewart Thomson",
+   "sector": "贵金属与商品周期",
+   "direction": "看多",
+   "targets": "金/矿/银",
+   "comments": "Graceland:金矿与银\"通往新高之路\",看多"
+  },
+  {
+   "kol": "Zoltan Pozsar",
+   "sector": "宏观货币与金融体系",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Torsten Sløk",
+   "sector": "宏观货币与金融体系",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Ray Dalio",
+   "sector": "宏观货币与金融体系",
+   "direction": "看空",
+   "targets": "宏观/债",
+   "comments": "\"特别危险时期\",资本战争,债务压力,警告AI债务泡沫"
+  },
+  {
+   "kol": "Jeremy Grantham",
+   "sector": "宏观货币与金融体系",
+   "direction": "强烈看空",
+   "targets": "美股",
+   "comments": "\"美国史上最贵市场\",AI泡沫,美股或跌70%"
+  },
+  {
+   "kol": "Luke Gromen",
+   "sector": "宏观货币与金融体系",
+   "direction": "看空",
+   "targets": "美股/金",
+   "comments": "\"股市极度自满,去杠杆\";财政主导→利多黄金,看空股市"
+  },
+  {
+   "kol": "Goldman Sachs",
+   "sector": "宏观货币与金融体系",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Morgan Stanley",
+   "sector": "宏观货币与金融体系",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Citi / UBS",
+   "sector": "宏观货币与金融体系",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Kirill Kirilenko",
+   "sector": "贵金属",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Edward Dowd",
+   "sector": "宏观货币与金融体系",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Gary Wagner",
+   "sector": "贵金属",
+   "direction": "看多",
+   "targets": "金",
+   "comments": "The Gold Forecast:金强劲看涨动能,目标$4400+"
+  },
+  {
+   "kol": "William Watkins",
+   "sector": "宏观货币与金融体系",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Daron Acemoglu",
+   "sector": "宏观货币与金融体系",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Philippe Laffont（Coatue Management 创始人 / 首席投资官）",
+   "sector": "股权市场",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Carl Icahn（Icahn Enterprises 创始人 / 董事长）",
+   "sector": "股权市场",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  },
+  {
+   "kol": "Ken Griffin（Citadel 创始人 / CEO）",
+   "sector": "股权市场",
+   "direction": "未找到",
+   "targets": "",
+   "comments": ""
+  }
+ ]
+}

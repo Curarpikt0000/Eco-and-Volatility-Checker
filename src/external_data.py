@@ -135,6 +135,110 @@ def _days_since_last_monday():
     return (today - last_monday).days + 1
 
 
+# ═══════ Eco 自己的 KOL 每日快照仓库(独立副本, 供周度对比, 不依赖任何 agent) ═══════
+def save_kol_daily_snapshot(date_str=None):
+    """把当日 kol_independent.json 的全量方向(all)落盘为 data/kol/daily/YYYY-MM-DD.json。
+    这是 Eco 自己的独立数据仓库副本(进 git), 供周度对比用, 不依赖任何 agent 的 Notion DB。
+    幂等: 同日重复调用覆盖当日快照。返回写入路径或 None(无独立数据时跳过)。"""
+    import json
+    if not os.path.exists(KOL_INDEPENDENT):
+        return None
+    try:
+        ind = json.load(open(KOL_INDEPENDENT))
+    except Exception:
+        return None
+    all_dirs = ind.get("all") or []
+    if not all_dirs:
+        return None
+    ds = date_str or ind.get("date") or datetime.date.today().strftime("%Y-%m-%d")
+    os.makedirs(KOL_DAILY_DIR, exist_ok=True)
+    snap = {
+        "date": ds,
+        "count": len(all_dirs),
+        "source": "Eco independent daily crawl (web_search 全量 KOL)",
+        "kols": [
+            {
+                "kol": x.get("kol", ""),
+                "sector": x.get("sector", ""),
+                "direction": x.get("direction", ""),
+                "targets": (x.get("targets") or "")[:150],
+                "comments": (x.get("comments") or "")[:300],
+            }
+            for x in all_dirs if x.get("kol")
+        ],
+    }
+    path = os.path.join(KOL_DAILY_DIR, f"{ds}.json")
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(snap, f, ensure_ascii=False, indent=1)
+    return path
+
+
+def load_kol_daily_snapshots():
+    """读 data/kol/daily/ 下全部快照。返回 {YYYY-MM-DD: {kol: {direction,sector,targets,comments}}} 按日期。
+    无快照返回 {}。"""
+    import json
+    import glob
+    out = {}
+    if not os.path.isdir(KOL_DAILY_DIR):
+        return out
+    for p in glob.glob(os.path.join(KOL_DAILY_DIR, "*.json")):
+        try:
+            d = json.load(open(p))
+        except Exception:
+            continue
+        ds = d.get("date") or os.path.basename(p)[:10]
+        by_kol = {}
+        for x in d.get("kols", []):
+            if x.get("kol"):
+                by_kol[x["kol"]] = x
+        if by_kol:
+            out[ds] = by_kol
+    return out
+
+
+def kol_weekly_changes():
+    """本周 vs 上周 KOL 方向转向, 全部基于 Eco 自己的每日快照(data/kol/daily/), 不碰任何 agent DB。
+    比较逻辑: 对每个 KOL, 取『本周最新一天快照的方向』vs『上周最后一天快照的方向』, 不同则记为转向。
+    若快照不足(尚未攒够跨周数据), 回退到"最早快照 vs 最新快照"对比, 并标 note。
+    返回 [{kol, sector, prev_dir, new_dir, date, comments, targets},...] (供 grouped 分组)。"""
+    import datetime as _dt
+    snaps = load_kol_daily_snapshots()
+    if len(snaps) < 2:
+        return []
+    dates = sorted(snaps.keys())
+    today = _dt.date.today()
+    this_monday = today - _dt.timedelta(days=today.weekday())
+    last_monday = this_monday - _dt.timedelta(days=7)
+    tm, lm = this_monday.strftime("%Y-%m-%d"), last_monday.strftime("%Y-%m-%d")
+    # 本周快照 = 日期 >= 本周一; 上周快照 = 上周一 <= 日期 < 本周一
+    this_week = [d for d in dates if d >= tm]
+    last_week = [d for d in dates if lm <= d < tm]
+    if this_week and last_week:
+        cur_date, prev_date = this_week[-1], last_week[-1]
+    else:
+        # 跨周数据不足 → 用最新 vs 最早(诚实回退, 攒够后自动切回周对比)
+        cur_date, prev_date = dates[-1], dates[0]
+    cur, prev = snaps.get(cur_date, {}), snaps.get(prev_date, {})
+    changes = []
+    for kol, c in cur.items():
+        p = prev.get(kol)
+        if not p:
+            continue  # 上周无记录 → 不算"转向"(新覆盖的KOL不误报)
+        cd = (c.get("direction") or "").strip()
+        pd = (p.get("direction") or "").strip()
+        if cd and pd and cd != pd:
+            changes.append({
+                "kol": kol,
+                "sector": c.get("sector", ""),
+                "prev_dir": pd,
+                "new_dir": cd,
+                "date": cur_date,
+                "comments": (c.get("comments") or "")[:300],
+                "targets": (c.get("targets") or "")[:150],
+            })
+    return sorted(changes, key=lambda x: x["kol"])
+
+
 # sector 中英归一(Notion DB 用英文, independent.json 用中文) → 统一中文模块名 + 英文副标 + 色
 _KOL_SECTOR_MAP = {
     "Precious Metals": ("贵金属", "Precious Metals"),
@@ -165,30 +269,28 @@ _KOL_SECTOR_COLOR = {
 
 
 def kol_stance_changes_grouped(days=None):
-    """从『上周一至今』识别 KOL 方向转向, 按 sector 模块分组。
-    优先用 cron 独立抓的 kol_independent.json 的 changes(当日精准), 但那只有当日;
-    历史转向靠另一 agent 的 Notion by_day DB(逐日时序)回看 → kol_stance_changes(days)。
-    返回 {"since": 上周一日期, "days": N, "total": 转向总数,
-          "modules": [{"sector":中文, "en":英文, "color":色, "changes":[{kol,prev_dir,new_dir,date,comments,targets,sub_sector},...]}]}
+    """本周 KOL 方向转向, 按 sector 模块分组。
+    ★数据源: Eco 自己的每日快照(data/kol/daily/, kol_weekly_changes), 完全独立, 不依赖任何 agent 的 Notion DB。
+    本周最新快照 vs 上周最后快照对比转向; 跨周数据不足时回退最新vs最早(诚实, 攒够自动切回)。
+    返回 {"since": 上周对比基准日, "days": N, "total": 转向总数,
+          "modules": [{"sector":中文, "en":英文, "color":色, "changes":[{kol,prev_dir,new_dir,date,comments,targets},...]}]}
     绝不编: 无数据则 modules=[]。"""
-    if days is None:
-        days = _days_since_last_monday()
     import datetime as _dt
     today = _dt.date.today()
-    since = (today - _dt.timedelta(days=days - 1)).strftime("%Y-%m-%d")
 
-    # 主源: Notion by_day 逐日时序(支持跨天回看)
-    raw = kol_stance_changes(days=days)  # [{kol,sector,prev_dir,new_dir,date,comments,targets}]
-    # 补充: independent.json 的当日 changes(可能有 Notion DB 尚未同步的)
-    try:
-        ind_changes, _ = load_independent_kol()
-        seen = {c["kol"] for c in raw}
-        for c in ind_changes:
-            if c.get("kol") and c["kol"] not in seen:
-                raw.append(c)
-                seen.add(c["kol"])
-    except Exception:
-        pass
+    # ★主源: Eco 自己的每日快照做本周 vs 上周对比(完全独立)
+    raw = kol_weekly_changes()
+    # 基准日: 用快照里实际对比的 prev 日期(若无则本周一)
+    snaps = load_kol_daily_snapshots()
+    since = ""
+    if snaps:
+        dates = sorted(snaps.keys())
+        this_monday = today - _dt.timedelta(days=today.weekday())
+        last_monday = this_monday - _dt.timedelta(days=7)
+        tm, lm = this_monday.strftime("%Y-%m-%d"), last_monday.strftime("%Y-%m-%d")
+        last_week = [d for d in dates if lm <= d < tm]
+        since = last_week[-1] if last_week else dates[0]
+    days = len(snaps)
 
     # 按归一 sector 分组
     groups = {}

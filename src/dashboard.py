@@ -351,14 +351,14 @@ def _kol_changes_html(kol_changes):
     每个 sector 一个彩色模块, 模块下列该模块转向的 KOL(主方向变化+言论+标的+日期)。"""
     # 空/无数据
     if not kol_changes:
-        return '<p class="empty">上周至今无 KOL 主导方向变化。</p>'
+        return '<p class="empty">本周暂无 KOL 主导方向变化（或快照尚在累积中）。</p>'
     # 兼容: 旧 list 结构 → 包成单模块
     if isinstance(kol_changes, list):
         kol_changes = {"since": "", "days": 0, "total": len(kol_changes),
                        "modules": [{"sector": "全部", "en": "", "color": "#8a8377", "changes": kol_changes}]}
     modules = kol_changes.get("modules", [])
     if not modules or kol_changes.get("total", 0) == 0:
-        return '<p class="empty">上周至今无 KOL 主导方向变化。</p>'
+        return '<p class="empty">本周暂无 KOL 主导方向变化（或快照尚在累积中）。</p>'
 
     # 方向 → 色 + 强弱排序(用于判断转多/转空)
     dir_rank = {"强烈看空": -2, "看空": -1, "分歧": 0, "中性": 0, "看多": 1, "强烈看多": 2}
@@ -376,7 +376,7 @@ def _kol_changes_html(kol_changes):
     # 顶部总览
     since = kol_changes.get("since", "")
     total = kol_changes.get("total", 0)
-    head = (f'<div class="kol-overview">上周至今（<b>{_esc(since)}</b> 起）共 '
+    head = (f'<div class="kol-overview">本周 KOL 状态变化（对比基准 <b>{_esc(since)}</b>）共 '
             f'<b>{total}</b> 位 KOL 主导方向转向，涉及 <b>{len(modules)}</b> 个模块。'
             f'<span class="kol-ov-note">↑转多(变乐观) · ↓转空(变谨慎/逆向买点)</span></div>')
 
@@ -1711,8 +1711,8 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title"><span class="part-num">6</span>今日最需关注的一条信号</div>
   <div class="focus-box">{focus}</div>
 
-  <!-- ═══ 附一：上周至今 KOL 状态变化(模块化, 联动 KOL 追踪) ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>上周至今 KOL 状态变化 · 按模块 (态度转向 call-out)</div>
+  <!-- ═══ 附一：本周 KOL 状态变化(模块化, Eco 独立每日快照周对比) ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>本周 KOL 状态变化 · 按模块 (态度转向 call-out)</div>
   <div class="card">{kol_changes}</div>
 
   <!-- ═══ 附二：流动性要点(联动 Economic Dashboard) ═══ -->
