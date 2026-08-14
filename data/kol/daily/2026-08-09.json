@@ -1,0 +1,98 @@
+{
+ "date": "2026-08-09",
+ "count": 13,
+ "source": "imported from by_day DB (另一 agent 历史时序, 作 Eco 时序底座)",
+ "kols": [
+  {
+   "kol": "David Stockman",
+   "sector": "Market Strategy",
+   "direction": "强烈看空",
+   "targets": "🔴 SPX, 美股科技 | 🟢 现金, 黄金",
+   "comments": "Stockman上Fox Business称当前市场是'史上最令人作呕的高估'，投资者正被引向大坑。他重申标普500面临35%下跌的判断，并解释为何认为下跌刚开始。核心逻辑：AI投机泡沫+债务超载+盈利不可持续，与2000年/2008年前夜类似。来源: The Fringe News/Fox Business 8-9"
+  },
+  {
+   "kol": "Rick Rule",
+   "sector": "Oil Market Fundamentals",
+   "direction": "看多",
+   "targets": "🟢 原油, 能源股 | 🔴 短线油价(若和解)",
+   "comments": "Rule在访谈中称：政治协议能安抚现货油价，但造不出'没被资本开支资助的桶'。海湾持久和解或令油价短期走低，但今日扰动只是2029-30年供给短缺的'前菜'——届时短缺无法靠停火协议解决。资本开支不足是根本约束，长期看多油价。来源: TradingView/Benzinga 8-9"
+  },
+  {
+   "kol": "David Hunter",
+   "sector": "白银",
+   "direction": "强烈看多",
+   "targets": "🟢 SLV, 白银矿业 | 🟢 GLD, 黄金矿业",
+   "comments": "Hunter称白银大行情正在启动、价格可能暴涨。他维持'市场熔涨(meltup)迫近→随后前所未有的全球崩盘'框架，给出年内黄金$7,000、白银$200的激进目标，驱动来自美联储政策与市场情绪转向。与7月底'猛烈回调后$10,000/$300'相比，短期节奏更乐观。来源: Before It's News/David Hunter 8-9"
+  },
+  {
+   "kol": "Michael Saylor",
+   "sector": "比特币/加密货币",
+   "direction": "看多",
+   "targets": "🟢 BTC, MSTR",
+   "comments": "Saylor在Diary of a CEO访谈回应质疑：市场曾认为Strategy不敢卖BTC否则引发崩盘，我们用实际卖出证明BTC市场吸收力足够强。并称即便BTC跌到$5,000，Strategy对债务仍超额抵押——回应'BTC库房模型脆弱'的批评，坚定看多BTC长期。来源: CryptoPanic/Diary of a CEO 8-6"
+  },
+  {
+   "kol": "James Rickards",
+   "sector": "宏观货币与金融体系",
+   "direction": "看多",
+   "targets": "🟢 GLD, SLV | 🔴 日元套息交易/高杠杆风险资产",
+   "comments": "Rickards在Greg Hunter访谈称日元套息交易爆仓是'金融层面的全面核战争'。日本央行意外加息/日元急升触发套息交易平仓潮→全球杠杆资金被迫抛售风险资产回补日元→与1998年LTCM危机同构。避险逻辑下黄金白银受益，风险资产承压。来源: USAWatchdog/Greg Hunter 8-9"
+  },
+  {
+   "kol": "Peter Schiff",
+   "sector": "宏观货币与金融体系",
+   "direction": "强烈看多",
+   "targets": "🟢 GLD, SLV, 金银矿业 | 🔴 美元, 美债, 日元",
+   "comments": "Schiff称7月非农负增长、日本日元危机、美联储隐形QE三件事同时爆发=比衰退更糟。39.8万亿美债使Fed陷入两难：加息压不住通胀、降息引爆债务，只能靠隐形QE续命→美元购买力继续稀释，黄金白银应声大涨。日本触发的事件比衰退更严重，全球货币体系风险上升。来源: schiffsovereign视频/Benzinga 8-9"
+  },
+  {
+   "kol": "Rory Johnston",
+   "sector": "原油地缘",
+   "direction": "看多",
+   "targets": "🟢 原油(短期地缘风险溢价)",
+   "comments": "Rory Johnston（Commodity Context）：伊朗再度袭击美护航船只，所谓'霍尔木兹海峡协议'叙事被证伪 → 海峡并未真正重开，油轮通行风险仍在 → 原油风险溢价重新计入价格。地缘风险溢价从'被市场忽略'回到'被重新定价'，若护航冲突升级，油价短期上行风险显著。来源：Commodity Context 08-08。"
+  },
+  {
+   "kol": "Chris Vermeulen",
+   "sector": "技术分析与交易",
+   "direction": "分歧",
+   "targets": "🟡 黄金(中期看多/短期超买回调风险)",
+   "comments": "Chris Vermeulen：确认黄金上行趋势延续（白银月内涨幅+15%），但技术面提示超买——上升楔形形态显示短期动能衰竭风险 → 追高风险加大，建议等待回调再入场。黄金中期看多逻辑未变（实际利率下行+央行购金），但短期技术性回调随时可能发生。来源：TheTechnicalTraders 08-08。"
+  },
+  {
+   "kol": "Daron Acemoglu",
+   "sector": "AI生产力研究",
+   "direction": "看空",
+   "targets": "🔴 AI生产力叙事/AI科技股(长期估值)",
+   "comments": "MIT经济学家Acemoglu：AI未来十年对美国全要素生产率(TFP)的贡献仅约0.55%，远低于华尔街预期 → 市场对AI生产力革命的定价过度乐观。核心论据：AI对多数工作岗位是辅助而非替代，技术采纳周期漫长，且当前AI应用集中在少数领域 → 若Acemoglu正确，AI相关资产估值存在回调风险。来源：研究论文/访谈 08-08。"
+  },
+  {
+   "kol": "David Meger",
+   "sector": "贵金属市场分析",
+   "direction": "看多",
+   "targets": "🟢 黄金",
+   "comments": "David Meger（High Ridge Futures）：金价创七周新高$4,336，期金收报$4,399.70——非农就业数据大幅不及预期降低Fed加息预期 → 美元走弱+实际利率下行双重支撑黄金。市场重新定价货币政策路径，黄金作为无息资产在降息预期下吸引力上升。来源：Kitco 08-08。"
+  },
+  {
+   "kol": "Alex Kuptsikevich",
+   "sector": "技术分析与交易",
+   "direction": "看多",
+   "targets": "🟢 黄金",
+   "comments": "Kuptsikevich：金价突破$4,341（单周+7.4%）创七周新高，非农爆雷引爆降息交易 → 弱就业数据强化Fed降息预期，实际利率下行推升黄金估值。技术面上突破关键阻力后目标指向$4,500整数关口。若后续数据继续走弱，金价上行动能将进一步增强。来源：FX Empire 08-08。"
+  },
+  {
+   "kol": "Luke Gromen",
+   "sector": "宏观货币与金融体系",
+   "direction": "看多",
+   "targets": "🟢 黄金, BTC | 🔴 美元, 美债",
+   "comments": "Gromen解读7月非农-2.3万：这不是经济衰退信号，而是流动性周期转折点——弱就业数据杀死Fed加息叙事 → 市场转向宽松定价，美债收益率下行、美元走弱 → 黄金与BTC受益（BTC重回$65K），美元/美债承压。核心逻辑：财政赤字+债务利息支出使Fed无法维持紧缩，弱数据反而确认流动性宽松周期开启。来源：宏观访谈/FNN 08-08。"
+  },
+  {
+   "kol": "Michael Hartnett",
+   "sector": "宏观货币与金融体系",
+   "direction": "分歧",
+   "targets": "🟡 美股(战术看空/战略看多) | 🔴 Mag7 AI支出(短期风险)",
+   "comments": "Hartnett最新观点：战术看空但战略看多——政策制定者不会允许市场崩盘，任何深跌都有政策兜底 → 短期美股面临调整但长期牛市逻辑未破。同时警示Mag7的AI资本开支假设正遭遇考验：股市相对韧性，但信贷市场对AI支出已闪现谨慎信号，微软等超大规模厂商的AI支出可持续性成关键变量 → 若信用市场持续示警，AI交易估值将受压。来源：ZeroHedge/TheStreet 08-08~09。"
+  }
+ ]
+}

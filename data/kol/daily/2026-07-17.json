@@ -1,0 +1,77 @@
+{
+ "date": "2026-07-17",
+ "count": 10,
+ "source": "imported from by_day DB (另一 agent 历史时序, 作 Eco 时序底座)",
+ "kols": [
+  {
+   "kol": "Jeff Currie",
+   "sector": "原油/天然气",
+   "direction": "强烈看多",
+   "targets": "看多 原油 XLE 能源股 | 看空 能源密集型制造业",
+   "comments": "Currie警告全球石油市场已从周期性过剩转为结构性短缺→丰饶幻觉彻底消失→能源局势严峻→伊朗局势+霍尔木兹海峡风险加剧供应紧张→原油将面临持续上行压力。来源：Bloomberg TV 2026-07-17"
+  },
+  {
+   "kol": "Cathie Wood",
+   "sector": "科技/AI",
+   "direction": "看多",
+   "targets": "X-energy/核能SMR 看多 | SPCX/SpaceX 短期承压",
+   "comments": "ARK Invest披露大举买入X-energy(小型模块化核反应堆SMR开发商)共507K股，持仓估值约$88M。同时ARK的SpaceX早期投资在锁仓到期前显示亏损。Wood正在将AI主题延伸至能源基础设施——AI数据中心电力需求→核能是解决方案。这是ARK首次大规模进入核能赛道。来源:Barchart/TipRanks/Fortune"
+  },
+  {
+   "kol": "Dan Ives",
+   "sector": "科技/AI",
+   "direction": "看多",
+   "targets": "NVDA/MSFT/QQQ 看多 | SPCX/SpaceX 短期看空",
+   "comments": "Dan Ives在TheStreet/Bloomberg连发观点:AI板块抛售是'压力测试'(gut check)而非警告信号，AI革命仍在'第三局'。同时指出SpaceX估值支撑不足(Starship试飞中止+锁仓到期)但长期仍是'第四次工业革命'核心。NFLX财报抛售引发科技股连锁反应被过度解读。来源:TheStreet/Bloomberg/Benzinga"
+  },
+  {
+   "kol": "Larry Lepard",
+   "sector": "黄金白银",
+   "direction": "强烈看多",
+   "targets": "GLD/PHYS/矿业股GDX 看多 | BTC 看多",
+   "comments": "Lepard指出Q2贵金属和矿业股回调主因是伊朗冲突+Fed鹰派担忧，但强调这些是短期逆风不改变长期牛市逻辑。同时警告资产负债表挑战(主权债务膨胀+央行购金)将成为BTC上行催化剂。认为法币体系脆弱性利好黄金和比特币双资产。来源:TradersUnion/CryptoNews"
+  },
+  {
+   "kol": "Marc Chandler",
+   "sector": "美元指数",
+   "direction": "中性",
+   "targets": "新兴市场货币/商品货币 短期看多 | 美元DXY 短期看空",
+   "comments": "Bannockburn Global Forex的Marc Chandler指出中东两周停火协议正在提振市场风险偏好。停火虽脆弱但为风险资产提供了短期喘息窗口。美元可能阶段性走弱，新兴市场货币和大宗商品货币受益。但强调停火不等于冲突结束，地缘溢价随时可能回归。来源:Climateer Investing"
+  },
+  {
+   "kol": "S. Druckenmiller",
+   "sector": "科技/AI",
+   "direction": "看多",
+   "targets": "RVMD/生物科技XBI 看多",
+   "comments": "Duquesne Family Office披露Druckenmiller大举加仓Revolution Medicines(RVMD)，该股2026年已涨125%。RVMD专注靶向癌症治疗，正在推进多项临床管线。Druckenmiller押注其平台技术价值超越市场认知。来源:Motley Fool/Benzinga"
+  },
+  {
+   "kol": "Rory Johnston",
+   "sector": "原油/天然气",
+   "direction": "强烈看多",
+   "targets": "WTI/Brent 看多 | 能源股XLE 看多",
+   "comments": "Commodity Context周报W29:霍尔木兹海峡流量和海湾装载量已明确下降，伊朗冲突升级正在实质性冲击全球原油供应链。油价突破$79，12%的周涨幅反映市场定价从地缘风险溢价转向实际供应中断。原油远期曲线陡峭化表明市场在定价持久短缺。来源:Commodity Context/Substack"
+  },
+  {
+   "kol": "Jeremy Grantham",
+   "sector": "科技/AI",
+   "direction": "强烈看空",
+   "targets": "SPCX/SpaceX 看空",
+   "comments": "GMO联合创始人Jeremy Grantham称SpaceX是人类史上最疯狂的IPO，认为50年后人们会嘲笑现在的估值。指出SpaceX作为资本密集型企业，当前估值完全脱离基本面支撑，是超级泡沫的典型代表。华尔街分析师则意见分歧。来源:AOL/Morningstar"
+  },
+  {
+   "kol": "Ted Oakley",
+   "sector": "经济周期",
+   "direction": "强烈看空",
+   "targets": "SPY/QQQ 看空 | 防御型现金牛股 看多",
+   "comments": "Oxbow Advisors创始人Ted Oakley警告美股可能面临40%修正。指出投资者正在忽视被低估的防御型股票而追逐高估值标的。他认为当前市场与历史泡沫顶部的估值特征相似，资金过度集中在少数大市值科技股。来源:Morningstar/Phemex"
+  },
+  {
+   "kol": "Lacy Hunt",
+   "sector": "国债收益率",
+   "direction": "强烈看空",
+   "targets": "TLT/ZROZ/EDV 看空 通胀挂钩债TIPS 看多",
+   "comments": "Hoisington Q2季报:结构性财政赤字扩大+AI资本支出潮→长期通胀均衡升至3.5-4.5%(风险>5%)→长期国债收益率上行趋势确立。组合久期从20.88年砍至<1年。Gundlach评价'连Lacy Hunt都看空了'→历史上最坚定的债券多头都投降。来源:briefs.co/BigGo/SeekingAlpha"
+  }
+ ]
+}

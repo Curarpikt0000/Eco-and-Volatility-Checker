@@ -446,13 +446,22 @@ def _kol_views_html(views):
             bcls, btxt = dir_badge.get(v["direction"], ("kv-mixed", v["direction"] or "—"))
             comment = (v.get("comments") or "").strip()
             targets = (v.get("targets") or "").strip()
+            since = (v.get("since_date") or "").strip()
+            is_new = v.get("is_new")
+            # 首现日期标注: 本周内新转成→🆕 新观点; 否则→自 X 日持有(旧观点延续)
+            since_html = ""
+            if since:
+                if is_new:
+                    since_html = f'<span class="kol-since kol-since-new">🆕 本周新观点</span>'
+                else:
+                    since_html = f'<span class="kol-since">自 {_esc(since)} 持此观点</span>'
             extra = ""
             if comment:
                 extra += f'<div class="kol-cmt">{_esc(comment)}</div>'
             if targets:
                 extra += f'<div class="kol-tgt">标的：{_esc(targets)}</div>'
             cards += f"""<div class="kol-item">
-              <div class="kol-line"><b>{_esc(v['kol'])}</b> <span class="kv-badge {bcls}">{_esc(btxt)}</span></div>
+              <div class="kol-line"><b>{_esc(v['kol'])}</b> <span class="kv-badge {bcls}">{_esc(btxt)}</span> {since_html}</div>
               {extra}
             </div>"""
         html += (
@@ -1462,6 +1471,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .kv-mixed {{ color: var(--muted); background: var(--card2); border: 1px solid var(--border); }}
   .kv-bear {{ color: #2f5a3f; background: rgba(154,171,151,.32); }}
   .kv-bear2 {{ color: #fff; background: var(--sage); }}
+  /* KOL 观点首现日期标注 */
+  .kol-since {{ font-size: 9.5px; color: var(--muted); margin-left: 6px; font-family: var(--mono); }}
+  .kol-since-new {{ color: #8a3a2c; font-weight: 700; }}
   /* 流动性板块 */
   .liq-row {{ font-size: 13px; margin-bottom: 8px; line-height: 1.7; }}
   .liq-k {{ color: var(--muted); }}

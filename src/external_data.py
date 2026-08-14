@@ -219,6 +219,8 @@ def kol_weekly_changes():
         # 跨周数据不足 → 用最新 vs 最早(诚实回退, 攒够后自动切回周对比)
         cur_date, prev_date = dates[-1], dates[0]
     cur, prev = snaps.get(cur_date, {}), snaps.get(prev_date, {})
+    # 无效方向(空/未找到/数据滞后等非真实立场)不参与转向判定
+    _invalid_dir = {"", "未找到", "无", "n/a", "未知", "数据滞后", "-", "—"}
     changes = []
     for kol, c in cur.items():
         p = prev.get(kol)
@@ -226,6 +228,8 @@ def kol_weekly_changes():
             continue  # 上周无记录 → 不算"转向"(新覆盖的KOL不误报)
         cd = (c.get("direction") or "").strip()
         pd = (p.get("direction") or "").strip()
+        if cd in _invalid_dir or pd in _invalid_dir:
+            continue  # 任一端无效 → 不是真转向(避免"看空→未找到"伪转向)
         if cd and pd and cd != pd:
             changes.append({
                 "kol": kol,
@@ -246,19 +250,41 @@ def kol_weekly_views(min_comment_len=10):
     返回 {"date": 观点日期, "total": KOL数, "modules": [{sector,en,color,views:[{kol,direction,comments,targets,date}]}]}。
     """
     import json
+    import datetime as _dt
     # 优先: 本周最新快照(独立数据仓库)
     snaps = load_kol_daily_snapshots()
     rows = []
     src_date = ""
+    # ── 首现日期: 回溯快照历史, 算每个 KOL【当前方向连续保持的起始日】 ──
+    # 即"这个观点是从哪天开始的": 从最新往回找, 直到方向改变或断档
+    _invalid = {"", "未找到", "无", "n/a", "未知", "数据滞后", "-", "—"}
+    since_map = {}   # kol -> 当前方向起始日
     if snaps:
         src_date = sorted(snaps.keys())[-1]
+        sorted_dates = sorted(snaps.keys())          # 升序
+        for kol, x in snaps[src_date].items():
+            cur_dir = (x.get("direction") or "").strip()
+            since = src_date
+            if cur_dir and cur_dir not in _invalid:
+                # 从倒数第二天往前回溯, 方向相同则前推起始日
+                for dd in reversed(sorted_dates[:-1]):
+                    prev_rec = snaps.get(dd, {}).get(kol)
+                    if not prev_rec:
+                        break  # 断档(那天没这个KOL) → 起始日停在此
+                    pdir = (prev_rec.get("direction") or "").strip()
+                    if pdir == cur_dir:
+                        since = dd
+                    else:
+                        break  # 方向变了 → 当前方向从下一天才开始
+            since_map[kol] = since
         for kol, x in snaps[src_date].items():
             rows.append({"kol": kol, "sector": x.get("sector", ""),
                          "direction": x.get("direction", ""),
                          "comments": x.get("comments", ""),
-                         "targets": x.get("targets", ""), "date": src_date})
+                         "targets": x.get("targets", ""), "date": src_date,
+                         "since_date": since_map.get(kol, src_date)})
     else:
-        # 回退: kol_independent.json 的 all(当日全量)
+        # 回退: kol_independent.json 的 all(当日全量, 无历史→首现日=当日)
         if os.path.exists(KOL_INDEPENDENT):
             try:
                 d = json.load(open(KOL_INDEPENDENT))
@@ -269,9 +295,13 @@ def kol_weekly_views(min_comment_len=10):
                                      "direction": x.get("direction", ""),
                                      "comments": x.get("comments", ""),
                                      "targets": x.get("targets", ""),
-                                     "date": x.get("date", src_date)})
+                                     "date": x.get("date", src_date),
+                                     "since_date": x.get("date", src_date)})
             except Exception:
                 pass
+    # 本周一(判断"新观点": 当前方向起始日 >= 本周一 = 本周内新转成的)
+    _today = _dt.date.today()
+    _this_monday = (_today - _dt.timedelta(days=_today.weekday())).strftime("%Y-%m-%d")
     # 只保留有实质言论的
     rows = [r for r in rows if (r.get("comments") or "").strip()
             and len((r["comments"]).strip()) >= min_comment_len]
@@ -283,12 +313,15 @@ def kol_weekly_views(min_comment_len=10):
         groups.setdefault(zh, {"sector": zh, "en": en,
                                "color": _KOL_SECTOR_COLOR.get(zh, "#8a8377"),
                                "views": []})
+        since = r.get("since_date", r.get("date", src_date))
         groups[zh]["views"].append({
             "kol": r.get("kol", ""),
             "direction": r.get("direction", ""),
             "comments": (r.get("comments") or "")[:400],
             "targets": (r.get("targets") or "")[:150],
             "date": r.get("date", src_date),
+            "since_date": since,                    # 当前观点起始日(首现)
+            "is_new": bool(since and since >= _this_monday),  # 本周内新转成
         })
     # 方向强弱排序: 看多在前(更醒目), 模块内按方向强弱降序
     _rank = {"强烈看多": 2, "看多": 1, "分歧": 0, "中性": 0, "看空": -1, "强烈看空": -2}
@@ -545,52 +578,55 @@ def _usd_convert(cc_data, factor, orig_unit):
 
 
 def fetch_ecb_balance_sheet(to_usd=True, usd_per_eur=None):
-    """ECB 欧洲央行资产负债表(务实版: 总资产 + 三大政策利率)。
-    ★数据源: FRED ECBASSETSW(Eurosystem 总资产, 周度, 百万欧元) + 政策利率
-      ECBMRRFR(主再融资MRO)/ECBDFR(存款便利)/ECBMLFR(边际贷款)。
-    ★FRED 无免费可靠的 ECB 资产/负债【分项】周度序列 → 本版只列总资产(可靠),
-      分项(黄金/证券/银行券)待攻 ECB SDW SDMX API 后升级(Chao 2026-08 选项A)。
-    to_usd: 总资产按当天 USD/EUR(DEXUSEU, 1欧元=X美元)折成 $B(乘, 非除)。
-    返回与 CB_BS_SPEC 一致结构: {name,flag,unit,period,date,assets:[...],liabilities:[],
-      total_assets:{...}, total_liab:None, rates:{mro,dfr,mlf}, status}。"""
+    """ECB 欧洲央行资产负债表(完整分项版, 格式与另三国一致)。
+    ★数据源: ECB 官方 Data Portal SDMX API 的 ILM 数据集(Eurosystem 周度合并财务报表),
+      免费无key, wildcard 一次拉全部 43 分项(单条 series key 查询对维度取值敏感易 400, wildcard 最稳)。
+      base: https://data-api.ecb.europa.eu/service/data/ILM/W.U2.C... 单位=百万欧元。
+      政策利率 ECBMRRFR(MRO)/ECBDFR(存款便利)/ECBMLFR(边际贷款) 走 FRED。
+    to_usd: 全部分项按当天 USD/EUR(DEXUSEU, 1欧元=X美元)折成 $B(乘)。
+    返回与 CB_BS_SPEC 一致结构。绝不编: 抓不到的科目跳过。"""
     import requests
+    import csv as _csv
+    import io as _io
 
-    def _fred_last2(sid):
-        """返回 FRED 序列最后两个有效点 [(date,val),...] 升序, 用于算环比。"""
-        try:
-            r = requests.get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}", timeout=20)
-            if r.status_code != 200:
-                return []
-            out = []
-            for ln in r.text.strip().splitlines()[1:]:
-                if "," not in ln:
-                    continue
-                d, v = ln.split(",", 1)
-                v = v.strip()
-                if v and v != ".":
-                    try:
-                        out.append((d.strip()[:10], float(v)))
-                    except ValueError:
-                        pass
-            return out[-2:]
-        except Exception:
-            return []
+    # ── ILM wildcard 一次拉全部分项 (BS_ITEM.COUNT_AREA.CURRENCY_TRANS → (值,期次)) ──
+    got = {}
+    period = None
+    try:
+        r = requests.get("https://data-api.ecb.europa.eu/service/data/ILM/W.U2.C...",
+                         params={"lastNObservations": 1, "format": "csvdata"},
+                         headers={"User-Agent": "Mozilla/5.0"}, timeout=35)
+        if r.status_code == 200:
+            for row in _csv.DictReader(_io.StringIO(r.text)):
+                tail = f'{row["BS_ITEM"]}.{row["COUNT_AREA"]}.{row["CURRENCY_TRANS"]}'
+                try:
+                    got[tail] = float(row["OBS_VALUE"])
+                    period = row["TIME_PERIOD"]
+                except (ValueError, KeyError):
+                    pass
+    except Exception:
+        pass
 
-    ta_pts = _fred_last2("ECBASSETSW")   # 百万欧元
-    if not ta_pts:
-        return {"name": "欧洲央行 ECB", "flag": "🇪🇺", "unit": "$B" if to_usd else "十亿€",
-                "period": "WoW", "date": None, "assets": [], "liabilities": [],
-                "total_assets": None, "total_liab": None, "rates": {}, "status": "未找到"}
-    date = ta_pts[-1][0]
-    cur_eur_bn = ta_pts[-1][1] / 1000.0            # 百万€ → 十亿€
-    prev_eur_bn = ta_pts[-2][1] / 1000.0 if len(ta_pts) > 1 else None
-    # 政策利率(最新值)
-    rates = {}
-    for key, sid in (("mro", "ECBMRRFR"), ("dfr", "ECBDFR"), ("mlf", "ECBMLFR")):
-        pts = _fred_last2(sid)
-        if pts:
-            rates[key] = pts[-1][1]
-    # 折美元: 1€ = usd_per_eur 美元
+    # 科目映射(显示名 → ILM tail key), 已独立验证真实可抓, 单位百万€
+    ASSETS = [
+        ("黄金及黄金债权 Gold", "A010000.Z5.Z0Z"),
+        ("外币资产 FX Assets", "A020000.U4.Z06"),
+        ("货币政策证券 Securities(APP+PEPP)", "A070100.U2.EUR"),
+        ("对信贷机构贷款 Lending to CIs", "A050000.U2.EUR"),
+        ("其他资产 Other Assets", "A110000.Z5.Z01"),
+    ]
+    LIABS = [
+        ("流通银行券 Banknotes", "L010000.Z5.EUR"),
+        ("对信贷机构负债 Liab. to CIs", "L020000.U2.EUR"),
+        ("存款便利 Deposit Facility", "L020200.U2.EUR", "sub"),
+        ("对其他居民负债 Liab. to Others", "L050000.U2.EUR"),
+        ("重估账户 Revaluation", "L140000.Z5.Z01"),
+        ("资本与储备 Capital&Reserves", "L150000.Z5.Z01"),
+        ("其他负债 Other Liab.", "L120000.Z5.Z01"),
+    ]
+    total_key = "T000000.Z5.Z01"
+
+    # 折美元汇率: 1€ = usd_per_eur 美元
     if usd_per_eur is None:
         try:
             from fetchers.fred import fetch_fred_latest
@@ -598,24 +634,44 @@ def fetch_ecb_balance_sheet(to_usd=True, usd_per_eur=None):
         except Exception:
             usd_per_eur = None
     if not usd_per_eur:
-        _p = _fred_last2("DEXUSEU")
-        usd_per_eur = _p[-1][1] if _p else 1.16
-    factor = usd_per_eur if to_usd else 1.0        # €B × (USD/EUR) = $B
-    val = round(cur_eur_bn * factor, 1)
-    delta = round((cur_eur_bn - prev_eur_bn) * factor, 1) if prev_eur_bn is not None else None
-    pct = round((cur_eur_bn - prev_eur_bn) / prev_eur_bn * 100, 2) if prev_eur_bn else None
-    ta_line = {"name": "总资产 Total Assets", "value": val, "delta": delta, "pct": pct, "sub": False}
+        usd_per_eur = 1.16
+    # 百万€ → $B: /1000(百万→十亿€) × usd_per_eur; 不折美元则 /1000 得十亿€
+    factor = (usd_per_eur / 1000.0) if to_usd else (1.0 / 1000.0)
+
+    def _line(name, tail, sub=False):
+        if tail not in got:
+            return None
+        return {"name": name, "value": round(got[tail] * factor, 1),
+                "delta": None, "pct": None, "sub": sub}   # 周环比暂无(只拉最新1期)
+
+    # 政策利率(FRED)
+    rates = {}
+    for key, sid in (("mro", "ECBMRRFR"), ("dfr", "ECBDFR"), ("mlf", "ECBMLFR")):
+        try:
+            from fetchers.fred import fetch_fred_latest
+            v, _ = fetch_fred_latest(sid)
+            if v is not None:
+                rates[key] = v
+        except Exception:
+            pass
+
+    if not got:
+        return {"name": "欧洲央行 ECB", "flag": "🇪🇺", "unit": "$B" if to_usd else "十亿€",
+                "period": "周度", "date": None, "assets": [], "liabilities": [],
+                "total_assets": None, "total_liab": None, "rates": rates, "status": "未找到"}
+
+    assets = [x for x in (_line(n, k) for n, k in ASSETS) if x]
+    liabs = [x for x in (_line(s[0], s[1], len(s) > 2 and s[2] == "sub") for s in LIABS) if x]
+    ta = _line("总资产", total_key)
     return {
         "name": "欧洲央行 ECB", "flag": "🇪🇺",
         "unit": "$B" if to_usd else "十亿€", "orig_unit": "十亿€",
-        "period": "WoW", "date": date,
-        "assets": [ta_line],       # 只有总资产可靠(分项待SDW)
-        "liabilities": [],
-        "total_assets": dict(ta_line, name="总资产"),
-        "total_liab": None,
+        "period": "周度", "date": period,       # 如 2026-W32
+        "assets": assets, "liabilities": liabs,
+        "total_assets": ta, "total_liab": None,
         "rates": rates,
         "usd_per_eur": round(usd_per_eur, 4),
-        "note_partial": "分项(黄金/证券/银行券)待 ECB SDW 接入; 现仅总资产+政策利率",
+        "source": "ECB Data Portal ILM (Eurosystem 周度财务报表)",
     }
 
 
