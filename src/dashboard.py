@@ -944,6 +944,11 @@ _TEMPLATE = r"""<!DOCTYPE html>
     --dust-blue-bg: #dbe2e6;
     --mauve: #a693a0;       /* 灰紫 */
     --gold: #bfa06a;
+    /* 信号灯专用鲜明红绿黄(仅用于小圆点,与莫兰迪大色块区分,便于一眼辨别) */
+    --lamp-g: #2e9e5b;      /* 鲜明绿(正常) */
+    --lamp-y: #e0a92e;      /* 鲜明琥珀黄(警戒) */
+    --lamp-r: #d64545;      /* 鲜明红(危险) */
+    --lamp-n: #9a938a;      /* 无信号灰(改空心圈,不填充) */
   }}
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
   body {{ background: var(--bg); color: var(--text); font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; min-height: 100vh; line-height: 1.5; }}
@@ -1063,10 +1068,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .h-intro {{ font-size: 10.5px; color: var(--muted); line-height: 1.5; margin-bottom: 8px; background: var(--card2); border-radius: 6px; padding: 6px 8px; }}
   .h-intro-l {{ margin-bottom: 2px; }}
   .h-intro-l b {{ color: var(--dust-blue); font-weight: 700; margin-right: 3px; }}
-  .dot-g {{ background: var(--sage); }}
-  .dot-y {{ background: var(--mustard); }}
-  .dot-r {{ background: var(--clay); }}
-  .dot-n {{ background: var(--muted); opacity: .4; }}
+  .dot-g {{ background: var(--lamp-g); }}
+  .dot-y {{ background: var(--lamp-y); }}
+  .dot-r {{ background: var(--lamp-r); }}
+  .dot-n {{ background: transparent; border: 1.5px solid var(--lamp-n); box-shadow: none; }}
   .cc-short {{ background: var(--sage-bg); border-color: var(--sage); }}
   .cc-mid {{ background: var(--mustard-bg); border-color: var(--mustard); }}
   .cc-long {{ background: var(--clay-bg); border-color: var(--clay); }}
@@ -1113,12 +1118,12 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .ind-val {{ font-weight: 700; }}
   .ind-date, .ind-thr {{ color: var(--muted); font-size: 12px; }}
   .ind-sig {{ text-align: center; font-size: 16px; width: 44px; }}
-  /* 红绿灯彩色圆点(无 emoji 字体也能靠颜色区分) */
+  /* 红绿灯彩色圆点(鲜明红绿黄,与主指标灯统一,一眼可辨;无信号=空心圈) */
   .dot {{ display: inline-block; width: 13px; height: 13px; border-radius: 50%; vertical-align: middle; }}
-  .dot-g {{ background: var(--sage); box-shadow: 0 0 0 3px var(--sage-bg); }}
-  .dot-y {{ background: var(--mustard); box-shadow: 0 0 0 3px var(--mustard-bg); }}
-  .dot-r {{ background: var(--clay); box-shadow: 0 0 0 3px var(--clay-bg); }}
-  .dot-n {{ background: var(--muted); opacity: .4; }}
+  .dot-g {{ background: var(--lamp-g); box-shadow: 0 0 0 3px rgba(46,158,91,.20); }}
+  .dot-y {{ background: var(--lamp-y); box-shadow: 0 0 0 3px rgba(224,169,46,.22); }}
+  .dot-r {{ background: var(--lamp-r); box-shadow: 0 0 0 3px rgba(214,69,69,.20); }}
+  .dot-n {{ background: transparent; border: 1.5px solid var(--lamp-n); box-shadow: none; opacity: 1; }}
   .stwarn {{ font-size: 10px; color: var(--clay); background: var(--clay-bg); padding: 1px 5px; border-radius: 4px; }}
   .mc-slabel {{ font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px; margin-left: 4px; }}
   .mc-slabel-g {{ color: #3f5a3f; background: rgba(154,171,151,.30); }}
