@@ -1,0 +1,403 @@
+{
+ "terms": {
+  "2-Year": {
+   "history": [
+    {
+     "auction_date": "2026-07-27",
+     "security_type": "Note",
+     "security_term": "2-Year",
+     "offering_bn": 69.0,
+     "accepted_bn": 76.6,
+     "bid_to_cover": 2.66,
+     "high_yield": 4.315,
+     "indirect_pct": 50.1,
+     "issue_date": "2026-07-31",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2026-06-23",
+     "security_type": "Note",
+     "security_term": "2-Year",
+     "offering_bn": 69.0,
+     "accepted_bn": 79.3,
+     "bid_to_cover": 2.64,
+     "high_yield": 4.189,
+     "indirect_pct": 47.6,
+     "issue_date": "2026-06-30",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2026-05-26",
+     "security_type": "Note",
+     "security_term": "2-Year",
+     "offering_bn": 69.0,
+     "accepted_bn": 79.2,
+     "bid_to_cover": 2.64,
+     "high_yield": 4.071,
+     "indirect_pct": 49.6,
+     "issue_date": "2026-06-01",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2026-04-27",
+     "security_type": "Note",
+     "security_term": "2-Year",
+     "offering_bn": 69.0,
+     "accepted_bn": 77.7,
+     "bid_to_cover": 2.65,
+     "high_yield": 3.812,
+     "indirect_pct": 49.7,
+     "issue_date": "2026-04-30",
+     "reopening": "No"
+    }
+   ],
+   "next": null
+  },
+  "3-Year": {
+   "history": [
+    {
+     "auction_date": "2026-08-11",
+     "security_type": "Note",
+     "security_term": "3-Year",
+     "offering_bn": 58.0,
+     "accepted_bn": 72.7,
+     "bid_to_cover": 2.71,
+     "high_yield": 4.291,
+     "indirect_pct": 50.7,
+     "issue_date": "2026-08-17",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2026-07-07",
+     "security_type": "Note",
+     "security_term": "3-Year",
+     "offering_bn": 58.0,
+     "accepted_bn": 64.0,
+     "bid_to_cover": 2.6,
+     "high_yield": 4.179,
+     "indirect_pct": 60.9,
+     "issue_date": "2026-07-15",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2026-06-09",
+     "security_type": "Note",
+     "security_term": "3-Year",
+     "offering_bn": 58.0,
+     "accepted_bn": 58.0,
+     "bid_to_cover": 2.64,
+     "high_yield": 4.192,
+     "indirect_pct": 63.4,
+     "issue_date": "2026-06-15",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2026-05-11",
+     "security_type": "Note",
+     "security_term": "3-Year",
+     "offering_bn": 58.0,
+     "accepted_bn": 71.8,
+     "bid_to_cover": 2.54,
+     "high_yield": 3.965,
+     "indirect_pct": 50.5,
+     "issue_date": "2026-05-15",
+     "reopening": "No"
+    }
+   ],
+   "next": null
+  },
+  "5-Year": {
+   "history": [
+    {
+     "auction_date": "2026-07-27",
+     "security_type": "Note",
+     "security_term": "5-Year",
+     "offering_bn": 70.0,
+     "accepted_bn": 77.7,
+     "bid_to_cover": 2.28,
+     "high_yield": 4.408,
+     "indirect_pct": 53.2,
+     "issue_date": "2026-07-31",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2026-06-24",
+     "security_type": "Note",
+     "security_term": "5-Year",
+     "offering_bn": 70.0,
+     "accepted_bn": 80.5,
+     "bid_to_cover": 2.35,
+     "high_yield": 4.2,
+     "indirect_pct": 53.5,
+     "issue_date": "2026-06-30",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2026-05-27",
+     "security_type": "Note",
+     "security_term": "5-Year",
+     "offering_bn": 70.0,
+     "accepted_bn": 80.3,
+     "bid_to_cover": 2.34,
+     "high_yield": 4.182,
+     "indirect_pct": 65.0,
+     "issue_date": "2026-06-01",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2026-04-27",
+     "security_type": "Note",
+     "security_term": "5-Year",
+     "offering_bn": 70.0,
+     "accepted_bn": 78.8,
+     "bid_to_cover": 2.33,
+     "high_yield": 3.955,
+     "indirect_pct": 64.1,
+     "issue_date": "2026-04-30",
+     "reopening": "No"
+    }
+   ],
+   "next": null
+  },
+  "7-Year": {
+   "history": [
+    {
+     "auction_date": "2026-07-28",
+     "security_type": "Note",
+     "security_term": "7-Year",
+     "offering_bn": 44.0,
+     "accepted_bn": 48.9,
+     "bid_to_cover": 2.49,
+     "high_yield": 4.473,
+     "indirect_pct": 63.0,
+     "issue_date": "2026-07-31",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2026-06-25",
+     "security_type": "Note",
+     "security_term": "7-Year",
+     "offering_bn": 44.0,
+     "accepted_bn": 50.6,
+     "bid_to_cover": 2.5,
+     "high_yield": 4.26,
+     "indirect_pct": 50.0,
+     "issue_date": "2026-06-30",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2026-05-28",
+     "security_type": "Note",
+     "security_term": "7-Year",
+     "offering_bn": 44.0,
+     "accepted_bn": 50.5,
+     "bid_to_cover": 2.52,
+     "high_yield": 4.29,
+     "indirect_pct": 68.2,
+     "issue_date": "2026-06-01",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2026-04-28",
+     "security_type": "Note",
+     "security_term": "7-Year",
+     "offering_bn": 44.0,
+     "accepted_bn": 49.5,
+     "bid_to_cover": 2.51,
+     "high_yield": 4.175,
+     "indirect_pct": 51.7,
+     "issue_date": "2026-04-30",
+     "reopening": "No"
+    }
+   ],
+   "next": null
+  },
+  "10-Year": {
+   "history": [
+    {
+     "auction_date": "2026-08-12",
+     "security_type": "Note",
+     "security_term": "10-Year",
+     "offering_bn": 42.0,
+     "accepted_bn": 52.6,
+     "bid_to_cover": 2.53,
+     "high_yield": 4.683,
+     "indirect_pct": 61.0,
+     "issue_date": "2026-08-17",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2026-07-23",
+     "security_type": "Note",
+     "security_term": "10-Year",
+     "offering_bn": 21.0,
+     "accepted_bn": 23.3,
+     "bid_to_cover": 2.3,
+     "high_yield": 2.438,
+     "indirect_pct": 58.3,
+     "issue_date": "2026-07-31",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2026-05-12",
+     "security_type": "Note",
+     "security_term": "10-Year",
+     "offering_bn": 42.0,
+     "accepted_bn": 52.0,
+     "bid_to_cover": 2.4,
+     "high_yield": 4.468,
+     "indirect_pct": 51.5,
+     "issue_date": "2026-05-15",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2026-02-11",
+     "security_type": "Note",
+     "security_term": "10-Year",
+     "offering_bn": 42.0,
+     "accepted_bn": 53.9,
+     "bid_to_cover": 2.39,
+     "high_yield": 4.177,
+     "indirect_pct": 50.1,
+     "issue_date": "2026-02-17",
+     "reopening": "No"
+    }
+   ],
+   "next": null
+  },
+  "20-Year": {
+   "history": [
+    {
+     "auction_date": "2026-05-20",
+     "security_type": "Bond",
+     "security_term": "20-Year",
+     "offering_bn": 16.0,
+     "accepted_bn": 18.4,
+     "bid_to_cover": 2.55,
+     "high_yield": 5.122,
+     "indirect_pct": 58.3,
+     "issue_date": "2026-06-01",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2026-02-18",
+     "security_type": "Bond",
+     "security_term": "20-Year",
+     "offering_bn": 16.0,
+     "accepted_bn": 17.9,
+     "bid_to_cover": 2.36,
+     "high_yield": 4.664,
+     "indirect_pct": 49.1,
+     "issue_date": "2026-03-02",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2025-11-19",
+     "security_type": "Bond",
+     "security_term": "20-Year",
+     "offering_bn": 16.0,
+     "accepted_bn": 17.8,
+     "bid_to_cover": 2.41,
+     "high_yield": 4.706,
+     "indirect_pct": 53.0,
+     "issue_date": "2025-12-01",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2025-08-20",
+     "security_type": "Bond",
+     "security_term": "20-Year",
+     "offering_bn": 16.0,
+     "accepted_bn": 17.9,
+     "bid_to_cover": 2.54,
+     "high_yield": 4.876,
+     "indirect_pct": 53.6,
+     "issue_date": "2025-09-02",
+     "reopening": "No"
+    }
+   ],
+   "next": {
+    "auction_date": "2026-08-19",
+    "security_type": "Bond",
+    "security_term": "20-Year",
+    "offering_bn": 16.0,
+    "accepted_bn": null,
+    "bid_to_cover": null,
+    "high_yield": null,
+    "indirect_pct": null,
+    "issue_date": "2026-08-31",
+    "reopening": "No"
+   }
+  },
+  "30-Year": {
+   "history": [
+    {
+     "auction_date": "2026-08-13",
+     "security_type": "Bond",
+     "security_term": "30-Year",
+     "offering_bn": 25.0,
+     "accepted_bn": 31.3,
+     "bid_to_cover": 2.39,
+     "high_yield": 5.216,
+     "indirect_pct": 53.1,
+     "issue_date": "2026-08-17",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2026-05-13",
+     "security_type": "Bond",
+     "security_term": "30-Year",
+     "offering_bn": 25.0,
+     "accepted_bn": 30.9,
+     "bid_to_cover": 2.3,
+     "high_yield": 5.046,
+     "indirect_pct": 53.7,
+     "issue_date": "2026-05-15",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2026-02-19",
+     "security_type": "Bond",
+     "security_term": "30-Year",
+     "offering_bn": 9.0,
+     "accepted_bn": 9.0,
+     "bid_to_cover": 2.75,
+     "high_yield": 2.473,
+     "indirect_pct": 78.0,
+     "issue_date": "2026-02-27",
+     "reopening": "No"
+    },
+    {
+     "auction_date": "2026-02-12",
+     "security_type": "Bond",
+     "security_term": "30-Year",
+     "offering_bn": 25.0,
+     "accepted_bn": 32.1,
+     "bid_to_cover": 2.66,
+     "high_yield": 4.75,
+     "indirect_pct": 54.4,
+     "issue_date": "2026-02-17",
+     "reopening": "No"
+    }
+   ],
+   "next": null
+  }
+ },
+ "upcoming": [
+  {
+   "auction_date": "2026-08-19",
+   "security_type": "Bond",
+   "security_term": "20-Year",
+   "offering_bn": 16.0,
+   "accepted_bn": null,
+   "bid_to_cover": null,
+   "high_yield": null,
+   "indirect_pct": null,
+   "issue_date": "2026-08-31",
+   "reopening": "No"
+  }
+ ],
+ "as_of": "2026-08-13",
+ "status": "ok",
+ "source": "US Treasury fiscaldata.treasury.gov auctions_query"
+}

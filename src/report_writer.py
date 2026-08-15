@@ -201,7 +201,7 @@ def write_weekly(week_label, payload):
         "流动性周综述": nw.prop_text(payload.get("liquidity_summary", "")),
         "周综合结论": nw.prop_text(payload.get("conclusion", "")),
     }
-    pid = nw.upsert(db, week_label, props)
+    pid = nw.upsert(db, week_label, props, title_field="Week")
     # GitHub 副本
     if payload.get("md"):
         wdir = os.path.join(ROOT, "reports", "weekly")
