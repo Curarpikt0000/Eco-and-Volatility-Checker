@@ -1,0 +1,23 @@
+{
+  "kol": "David Icke",
+  "sector": "Alternative",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 2,
+  "history": [
+    {
+      "date": "2026-08-03",
+      "direction": "看空",
+      "comments": "在其Telegram频道转发'国际清算银行(BIS)正在编排向数字货币的大转换'的内容,延续其长期主张:精英推动CBDC数字货币以实现历史上最大规模的财富转移与金融控制。对法币体系与个人金融自由持悲观/警惕态度。",
+      "targets": "法币/CBDC/美元",
+      "source": "David Icke Telegram频道, 2026-08-03"
+    },
+    {
+      "date": "2026-08-16",
+      "direction": "看空",
+      "comments": "在官网转发并评论Wharton与波士顿大学经济学家的论文《The AI Layoff Trap》,称'两位经济学家从数学上证明AI将摧毁经济',描绘AI转型的经济终局并指出其致命缺陷。对AI驱动下的就业与整体经济前景高度看空。",
+      "targets": "美国经济/就业/AI板块",
+      "source": "davidicke.com, 2026-08-16"
+    }
+  ]
+}
