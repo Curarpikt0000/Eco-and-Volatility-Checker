@@ -1,0 +1,44 @@
+{
+  "kol": "Michael Saylor",
+  "sector": "Crypto",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 5,
+  "history": [
+    {
+      "date": "2025-07-09",
+      "direction": "强烈看多",
+      "comments": "在比特币升至约10.95万美元时发推力挺，称\"比特币价格列车全速前进\"，重申长期看多立场；同期Strategy发行42亿美元用于继续增持BTC。",
+      "targets": "BTC / MSTR",
+      "source": "thevoiceofmoney.com (2025-07-09 推文)"
+    },
+    {
+      "date": "2026-02-10",
+      "direction": "强烈看多",
+      "comments": "表示Strategy将\"永远持续买入比特币\"，并淡化矿工经济学构成价格底部的说法，认为银行放贷和华尔街信贷产品将在比特币下一阶段发挥更大作用。",
+      "targets": "BTC / MSTR",
+      "source": "bitcoinmagazine.com (2026-02-10)"
+    },
+    {
+      "date": "2026-04-08",
+      "direction": "强烈看多",
+      "comments": "认为比特币很可能已在2月初约6万美元触底，并称量子计算威胁被夸大、属理论层面且或需数十年才成真；判断下一轮牛市将由银行与数字信贷驱动。",
+      "targets": "BTC",
+      "source": "coindesk.com (2026-04-08)"
+    },
+    {
+      "date": "2026-04-29",
+      "direction": "强烈看多",
+      "comments": "在Bitcoin 2026大会上表示随着资本流入比特币网络，币价应持续上涨，强调机构资金流是核心驱动。",
+      "targets": "BTC",
+      "source": "finance.yahoo.com (2026-04-29)"
+    },
+    {
+      "date": "2026-07-06",
+      "direction": "强烈看多",
+      "comments": "重构比特币价格轨迹的思考框架，主张四年减半周期不再是主导模型，机构资本流入将驱动比特币未来十年增长；长期目标喊出单币500万美元。",
+      "targets": "BTC",
+      "source": "thestreet.com (2026-07-06)"
+    }
+  ]
+}

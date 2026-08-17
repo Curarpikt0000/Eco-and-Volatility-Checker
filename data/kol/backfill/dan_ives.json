@@ -1,0 +1,37 @@
+{
+  "kol": "Dan Ives",
+  "sector": "Equities",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 4,
+  "history": [
+    {
+      "date": "2025-11-25",
+      "direction": "强烈看多",
+      "comments": "年末重点科技选股，点名微软、英伟达和特斯拉为将持续驱动AI革命的核心标的。",
+      "targets": "MSFT / NVDA / TSLA",
+      "source": "cnbc.com (2025-11-25)"
+    },
+    {
+      "date": "2025-12-19",
+      "direction": "强烈看多",
+      "comments": "发布2026年科技与AI五大预测，看好AI基础设施提供商Nebius，将其列为最可能被大型科技公司收购的首选标的，微软/Alphabet/亚马逊为潜在买家。",
+      "targets": "Nebius / 大型科技",
+      "source": "businessinsider.com (2025-12-19)"
+    },
+    {
+      "date": "2025-12-31",
+      "direction": "强烈看多",
+      "comments": "看好特斯拉未来一年市值可达2万亿美元、牛市情景下2026年底或达3万亿美元；网络安全为顶级子板块，Palo Alto与CrowdStrike为首选。",
+      "targets": "TSLA / PANW / CRWD",
+      "source": "businessinsider.com (2025-12-31)"
+    },
+    {
+      "date": "2026-03-05",
+      "direction": "强烈看多",
+      "comments": "认为自动驾驶发展或迎转折点，给予特斯拉基准情景600美元估值、上行情景可达800美元；重点关注特斯拉、苹果、微软。",
+      "targets": "TSLA / AAPL / MSFT",
+      "source": "stocktwits.com (2026-03-05)"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "kol": "Raoul Pal",
+  "sector": "Crypto",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 3,
+  "history": [
+    {
+      "date": "2025-03-02",
+      "direction": "看多",
+      "comments": "预测\"香蕉区\"(Banana Zone)第二阶段将延伸至2026年，判断当前处于第一次修正阶段，3至5月将重新加速上涨进入下一阶段爆发式增长。",
+      "targets": "BTC / 加密资产",
+      "source": "dailyhodl.com (2025-03-02)"
+    },
+    {
+      "date": "2025-03-04",
+      "direction": "看多",
+      "comments": "指出本轮周期已经历7次20%以上回撤、自低点录得600%回报，强调韧性，呼吁投资者\"深呼吸\"等待被拉长至2026年的香蕉区下一阶段。",
+      "targets": "BTC / SOL",
+      "source": "benzinga.com (2025-03-04)"
+    },
+    {
+      "date": "2025-10-12",
+      "direction": "看多",
+      "comments": "因商业周期延长，预测原本预期2025年见顶的加密牛市周期可能延伸进2026年，维持结构性看多的宏观流动性驱动逻辑。",
+      "targets": "BTC / 加密资产",
+      "source": "benzinga.com (2025-10-12)"
+    }
+  ]
+}

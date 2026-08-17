@@ -1,0 +1,44 @@
+{
+  "kol": "Cathie Wood",
+  "sector": "Equities",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 5,
+  "history": [
+    {
+      "date": "2025-03-25",
+      "direction": "强烈看多",
+      "comments": "尽管特斯拉2025年内一度下跌约32%，仍重申5年内2600美元的看多目标价，核心逻辑押注Robotaxi与自动驾驶将贡献大部分价值。",
+      "targets": "TSLA",
+      "source": "benzinga.com (2025-03-25)"
+    },
+    {
+      "date": "2025-05-15",
+      "direction": "强烈看多",
+      "comments": "维持特斯拉股价目标2600美元、比特币到2030年至少70万美元的长期看多判断。",
+      "targets": "TSLA / BTC",
+      "source": "finance.yahoo.com (2025-05-15)"
+    },
+    {
+      "date": "2025-12-25",
+      "direction": "看多",
+      "comments": "ARK战略调整，削减特斯拉持仓以加码AI与加密押注，为2026年布局；关注特斯拉能否守住500美元关口。",
+      "targets": "TSLA / AI / Crypto",
+      "source": "financialcontent.com (2025-12-25)"
+    },
+    {
+      "date": "2026-01-19",
+      "direction": "强烈看多",
+      "comments": "预测2026年美国经济与股市将强劲反弹；旗舰ARK Innovation ETF在2025年上涨35.49%，大幅跑赢标普500的17.88%。",
+      "targets": "美股 / ARKK",
+      "source": "thestreet.com (2026-01-19)"
+    },
+    {
+      "date": "2026-02-26",
+      "direction": "看多",
+      "comments": "看好太空、国防科技及AI机器人板块，指近一年相关标的表现强劲，市场正开始理解其庞大机遇，ARKI(AI与机器人基金)是重点方向。",
+      "targets": "AI / 机器人 / 太空国防",
+      "source": "global.morningstar.com (2026-02-26)"
+    }
+  ]
+}
