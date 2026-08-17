@@ -847,17 +847,18 @@ def fetch_foreign_custody_ust():
             "status": "FRED WMTSECL1 无数据"}
 
 
-def fetch_custody_acceleration(weeks=13):
+def fetch_custody_acceleration(weeks=26):
     """外国官方托管美债(Fed H.4.1 WMTSECL1)超短期【加速度】分析。
-    ★数据颗粒度=周度(每周三 as-of), 无日度。故 trailing 7/14/28 天 ≡ 1/2/4 周(诚实标注)。
+    ★数据颗粒度=周度(每周三 as-of), 无日度。故 trailing 7/14/28/56 天 ≡ 1/2/4/8 周(诚实标注)。
     加速度 = 二阶差分(变化的变化), 零轴上=流入加速/流出减速, 零轴下=流出加速/流入减速。
       7天(1周)  = v[i] - 2·v[i-1] + v[i-2]
       14天(2周) = v[i] - 2·v[i-2] + v[i-4]
       28天(4周) = v[i] - 2·v[i-4] + v[i-8]
-    主平滑指标 = EMA(3周)斜率的差分(压制周度噪声, 拐点更干净, 供零轴填色主图)。
-    ★fredgraph CSV 端点对 requests 偶发超时 → 用 curl 子进程兜底(实测更稳)。
-    返回 {points:[{date, a7, a14, a28, ema_accel}], asof, unit, source, status, weeks}。
-    绝不编: 拉不到→points=[] + status。单位=百万美元($M)。
+      56天(8周) = v[i] - 2·v[i-8] + v[i-16]
+    主平滑指标 = EMA(3周)斜率的差分(压制周度噪声, 拐点更干净)。
+    ★fredgraph CSV 端点对 requests 偶发超时 → 优先带 key FRED API(fetch_fred_history)。
+    返回 {points:[{date, a7, a14, a28, a56, ema_accel}], asof, unit, source, status, weeks}。
+    绝不编: 拉不到→points=[] + status。单位=百万美元($M)。默认 weeks=26(过去约6个月)。
     """
     import datetime as _dt
     # 拉够长的历史(算 EMA + 4周二阶差分需预热, 多取 20 周余量)
@@ -925,6 +926,7 @@ def fetch_custody_acceleration(weeks=13):
         rec["a7"] = round(v[i] - 2 * v[i - 1] + v[i - 2], 0) if i >= 2 else None
         rec["a14"] = round(v[i] - 2 * v[i - 2] + v[i - 4], 0) if i >= 4 else None
         rec["a28"] = round(v[i] - 2 * v[i - 4] + v[i - 8], 0) if i >= 8 else None
+        rec["a56"] = round(v[i] - 2 * v[i - 8] + v[i - 16], 0) if i >= 16 else None
         # EMA 斜率差分(平滑加速度)
         rec["ema_accel"] = (round(ema_slope[i] - ema_slope[i - 1], 0)
                             if i >= 2 and ema_slope[i] is not None

@@ -116,7 +116,7 @@ def main():
 
     custody_accel = {}
     try:
-        custody_accel = ed.fetch_custody_acceleration(weeks=13) or {}
+        custody_accel = ed.fetch_custody_acceleration(weeks=26) or {}
     except Exception as e:
         print(f"[dashboard] 托管美债加速度 跳过: {e}")
 

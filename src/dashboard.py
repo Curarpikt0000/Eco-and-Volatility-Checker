@@ -850,8 +850,9 @@ def _custody_accel_html(acc):
     vals = [p["ema_accel"] for p in pts if p.get("ema_accel") is not None]
     if not vals:
         return '<p class="empty">托管美债加速度数据不足。</p>'
-    # ── 三条折线: 7/14/28天(1/2/4周)加速度, 带零轴, 可看交叉点 ──
-    lines = [("a7", "7天(1周)", "#c27a3e"), ("a14", "14天(2周)", "#5b8fb5"), ("a28", "28天(4周)", "#6f8f6a")]
+    # ── 四条折线: 7/14/28/56天(1/2/4/8周)加速度, 带零轴, 可看交叉点 ──
+    lines = [("a7", "7天(1周)", "#c27a3e"), ("a14", "14天(2周)", "#5b8fb5"),
+             ("a28", "28天(4周)", "#6f8f6a"), ("a56", "56天(8周)", "#9b6b9e")]
     n = len(pts)
     # 收集所有有效值定值域
     allv = [p[k] for k, _, _ in lines for p in pts if p.get(k) is not None]
@@ -907,17 +908,18 @@ def _custody_accel_html(acc):
                 f'<div class="ca-cnote" style="color:{col}">{arrow}</div></div>')
     cells = (_cell(last.get("a7"), "trailing 7天(1周)", "#c27a3e")
              + _cell(last.get("a14"), "trailing 14天(2周)", "#5b8fb5")
-             + _cell(last.get("a28"), "trailing 28天(4周)", "#6f8f6a"))
+             + _cell(last.get("a28"), "trailing 28天(4周)", "#6f8f6a")
+             + _cell(last.get("a56"), "trailing 56天(8周)", "#9b6b9e"))
     return (
         f'<div class="ca-wrap">'
-        f'<div class="cust-lbl">超短期加速度 · 托管美债流入/流出的加速度（零轴上下 · 三周期对比） · as of {_esc(asof)}</div>'
+        f'<div class="cust-lbl">超短期加速度 · 托管美债流入/流出的加速度（零轴上下 · 四周期对比 · 过去6个月） · as of {_esc(asof)}</div>'
         f'<div class="ca-cells">{cells}</div>'
         f'{chart}'
-        f'<div class="ci-how"><b>如何看：</b>三条线分别是 <span style="color:#c27a3e"><b>7天(短)</b></span>、<span style="color:#5b8fb5"><b>14天(中)</b></span>、<span style="color:#6f8f6a"><b>28天(长)</b></span> 周期的加速度（托管美债<b>变化的变化</b>=二阶差分）。'
+        f'<div class="ci-how"><b>如何看：</b>四条线分别是 <span style="color:#c27a3e"><b>7天(短)</b></span>、<span style="color:#5b8fb5"><b>14天(中)</b></span>、<span style="color:#6f8f6a"><b>28天(中长)</b></span>、<span style="color:#9b6b9e"><b>56天/8周(长)</b></span> 周期的加速度（托管美债<b>变化的变化</b>=二阶差分），覆盖<b>过去 6 个月</b>。'
         f'<span style="color:#2e9e5b">线在零轴上=资金流入在加速（或流出在减速）</span>，'
         f'<span style="color:#d64545">线在零轴下=资金流出在加速（或流入在减速）</span>。'
-        f'★<b>看交叉点</b>：短周期(7天)线穿越中长周期(14/28天)线时=短期动能相对中长期在<b>转向</b>——短线上穿=短期率先加速（可能领先反转），短线下穿=短期率先减速。三线同向发散=趋势强化，收敛交叉=动能切换。'
-        f'数据源为 Fed H.4.1 <b>周度</b>（每周三 as-of），故 7/14/28 天 ≡ <b>1/2/4 周</b>。单位百万美元。{_esc(acc.get("source",""))}。</div>'
+        f'★<b>看交叉点</b>：短周期(7/14天)线穿越中长周期(28/56天)线时=短期动能相对中长期在<b>转向</b>——短线上穿=短期率先加速（可能领先反转），短线下穿=短期率先减速。四线同向发散=趋势强化，收敛交叉=动能切换；长周期(8周)线最平滑，代表中期基调。'
+        f'数据源为 Fed H.4.1 <b>周度</b>（每周三 as-of），故 7/14/28/56 天 ≡ <b>1/2/4/8 周</b>。单位百万美元。{_esc(acc.get("source",""))}。</div>'
         f'</div>'
     )
 
@@ -1958,7 +1960,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .ci-wrap {{ display: flex; flex-direction: column; gap: 10px; }}
   .ci-cols {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }}
   .ca-wrap {{ display: flex; flex-direction: column; gap: 10px; }}
-  .ca-cells {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }}
+  .ca-cells {{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }}
   .ca-cell {{ background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; text-align: center; }}
   .ca-clbl {{ font-size: 10px; color: var(--muted); margin-bottom: 3px; }}
   .ca-cval {{ font-family: var(--mono); font-size: 20px; font-weight: 800; line-height: 1.1; }}
