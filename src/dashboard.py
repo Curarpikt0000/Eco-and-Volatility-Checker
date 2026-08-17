@@ -155,7 +155,7 @@ def threshold_text(ind):
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
-             country_ust=None, kol_views=None, credit_impulse=None):
+             country_ust=None, kol_views=None, credit_impulse=None, custody_accel=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -326,6 +326,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         money_supply=_money_supply_html(money_supply),
         m2_history=_m2_history_html(m2_history),
         custody=_custody_html(custody),
+        custody_accel=_custody_accel_html(custody_accel),
         country_ust=_country_ust_html(country_ust),
         credit_impulse=_credit_impulse_html(credit_impulse),
         auctions=_auctions_html(auctions),
@@ -832,6 +833,80 @@ def _custody_html(cust):
         f'持续下降 = 外国官方减持美债 / 去美元化 / 抛售换汇干预，是主权层面对美债信心的风向标。'
         f'<b>短期图</b>看近期拐点/干预动作，<b>长期图</b>看去美元化大趋势(10年结构性方向)。'
         f'数据源：FRED WMTSECL1（Fed H.4.1 custody，每周三口径）。</div>'
+        f'</div>'
+    )
+
+
+def _custody_accel_html(acc):
+    """外国官方托管美债 超短期加速度分析(周度 WMTSECL1)。
+    主图=EMA(3周)斜率差分零轴填色(绿上=流入加速/红下=流出加速);
+    叠加 7/14/28天(1/2/4周)二阶差分作数值参考。诚实标注周度约束。"""
+    if not acc or acc.get("status") != "ok" or not acc.get("points"):
+        st = (acc or {}).get("status", "未就绪")
+        return f'<p class="empty">托管美债加速度数据未就绪（{_esc(st)}）。</p>'
+    pts = acc["points"]
+    asof = acc.get("asof", "")
+    # ── 主图: EMA 平滑加速度, 零轴填色柱 ──
+    vals = [p["ema_accel"] for p in pts if p.get("ema_accel") is not None]
+    if not vals:
+        return '<p class="empty">托管美债加速度数据不足。</p>'
+    w, h = 900, 210
+    ml, mr, mt, mb = 52, 16, 16, 34
+    pw, ph = w - ml - mr, h - mt - mb
+    amax = max(abs(min(vals)), abs(max(vals)), 1.0) * 1.15
+    n = len(pts)
+    bw = pw / n * 0.62
+    def X(i): return ml + (i + 0.5) * pw / n
+    def Y(v): return mt + ph / 2 - (v / amax) * (ph / 2)
+    zy = mt + ph / 2
+    parts = [f'<svg viewBox="0 0 {w} {h}" class="ca-chart" preserveAspectRatio="xMidYMid meet">']
+    # 网格 + Y标
+    for frac in (1.0, 0.5, 0.0, -0.5, -1.0):
+        gy = Y(amax * frac)
+        parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" class="cc-grid"/>')
+        parts.append(f'<text x="{ml-5}" y="{gy+3:.1f}" class="cc-ylab">{amax*frac:+,.0f}</text>')
+    # 零轴(加粗)
+    parts.append(f'<line x1="{ml}" y1="{zy:.1f}" x2="{w-mr}" y2="{zy:.1f}" class="ci-zero"/>')
+    # EMA 平滑加速度柱(绿上红下)
+    for i, p in enumerate(pts):
+        ev = p.get("ema_accel")
+        if ev is None:
+            continue
+        y = Y(ev)
+        color = "#2e9e5b" if ev >= 0 else "#d64545"
+        top = min(y, zy)
+        hh = abs(y - zy)
+        parts.append(f'<rect x="{X(i)-bw/2:.1f}" y="{top:.1f}" width="{bw:.1f}" height="{hh:.1f}" fill="{color}" opacity="0.82" rx="1.5"/>')
+    # X 轴日期(首/中/末)
+    for i in (0, n // 2, n - 1):
+        anchor = "start" if i == 0 else ("end" if i == n - 1 else "middle")
+        parts.append(f'<text x="{X(i):.1f}" y="{h-6}" class="cc-xlab" text-anchor="{anchor}">{pts[i]["date"][5:]}</text>')
+    parts.append('</svg>')
+    chart = "".join(parts)
+    # ── 最新读数三窗口 ──
+    last = pts[-1]
+    def _cell(v, lbl):
+        if v is None:
+            return f'<div class="ca-cell"><div class="ca-clbl">{lbl}</div><div class="ca-cval">—</div></div>'
+        col = "#2e9e5b" if v >= 0 else "#d64545"
+        arrow = "▲加速流入" if v >= 0 else "▼加速流出"
+        return (f'<div class="ca-cell"><div class="ca-clbl">{lbl}</div>'
+                f'<div class="ca-cval" style="color:{col}">{v:+,.0f}</div>'
+                f'<div class="ca-cnote" style="color:{col}">{arrow}</div></div>')
+    cells = (_cell(last.get("a7"), "trailing 7天(1周)")
+             + _cell(last.get("a14"), "trailing 14天(2周)")
+             + _cell(last.get("a28"), "trailing 28天(4周)"))
+    return (
+        f'<div class="ca-wrap">'
+        f'<div class="cust-lbl">超短期加速度 · 托管美债流入/流出的加速度（零轴上下） · as of {_esc(asof)}</div>'
+        f'<div class="ca-cells">{cells}</div>'
+        f'{chart}'
+        f'<div class="ci-how"><b>如何看：</b>这是托管美债<b>变化的变化</b>（二阶差分/加速度），'
+        f'<span style="color:#2e9e5b">零轴上=资金流入在加速（或流出在减速）</span>，'
+        f'<span style="color:#d64545">零轴下=资金流出在加速（或流入在减速）</span>。'
+        f'主图柱为 <b>EMA(3周)斜率差分</b>（平滑版，压制周度噪声、拐点更干净）；上方三格为 7/14/28 天原始二阶差分（7天最敏感/最快，28天最稳/滞后）。'
+        f'★数据源为 Fed H.4.1 <b>周度</b>（每周三 as-of），非日频——故 7/14/28 天 ≡ <b>1/2/4 周</b>。单位百万美元。'
+        f'数据源：{_esc(acc.get("source",""))}。</div>'
         f'</div>'
     )
 
@@ -1871,6 +1946,14 @@ _TEMPLATE = r"""<!DOCTYPE html>
   /* Credit Impulse 信贷脉冲(中期领先指标, 三国) */
   .ci-wrap {{ display: flex; flex-direction: column; gap: 10px; }}
   .ci-cols {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }}
+  .ca-wrap {{ display: flex; flex-direction: column; gap: 10px; }}
+  .ca-cells {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }}
+  .ca-cell {{ background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; text-align: center; }}
+  .ca-clbl {{ font-size: 10px; color: var(--muted); margin-bottom: 3px; }}
+  .ca-cval {{ font-family: var(--mono); font-size: 20px; font-weight: 800; line-height: 1.1; }}
+  .ca-cnote {{ font-size: 10px; margin-top: 2px; }}
+  .ca-chart {{ width: 100%; height: auto; }}
+  @media (max-width: 720px) {{ .ca-cells {{ grid-template-columns: 1fr; }} }}
   .ci-cols-4 {{ grid-template-columns: repeat(4, 1fr); }}
   .ci-long {{ margin-top: 12px; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px 6px; }}
   .ci-long-title {{ font-size: 12px; color: var(--text); font-weight: 700; margin-bottom: 6px; }}
@@ -2068,6 +2151,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·五：外国官方在纽约联储托管的美债 ═══ -->
   <div class="part-title"><span class="part-num">＋</span>外国官方托管美债 · 纽约联储 (去美元化风向标)</div>
   <div class="card">{custody}</div>
+  <div class="card">{custody_accel}</div>
 
   <!-- ═══ 附三·六：日本 / 中国 分国别持有美债 (TIC, 近10年) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>日本 / 中国 持有美债 · 近10年 (TIC 分国别口径)</div>

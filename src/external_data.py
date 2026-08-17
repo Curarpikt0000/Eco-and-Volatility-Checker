@@ -847,6 +847,96 @@ def fetch_foreign_custody_ust():
             "status": "FRED WMTSECL1 无数据"}
 
 
+def fetch_custody_acceleration(weeks=13):
+    """外国官方托管美债(Fed H.4.1 WMTSECL1)超短期【加速度】分析。
+    ★数据颗粒度=周度(每周三 as-of), 无日度。故 trailing 7/14/28 天 ≡ 1/2/4 周(诚实标注)。
+    加速度 = 二阶差分(变化的变化), 零轴上=流入加速/流出减速, 零轴下=流出加速/流入减速。
+      7天(1周)  = v[i] - 2·v[i-1] + v[i-2]
+      14天(2周) = v[i] - 2·v[i-2] + v[i-4]
+      28天(4周) = v[i] - 2·v[i-4] + v[i-8]
+    主平滑指标 = EMA(3周)斜率的差分(压制周度噪声, 拐点更干净, 供零轴填色主图)。
+    ★fredgraph CSV 端点对 requests 偶发超时 → 用 curl 子进程兜底(实测更稳)。
+    返回 {points:[{date, a7, a14, a28, ema_accel}], asof, unit, source, status, weeks}。
+    绝不编: 拉不到→points=[] + status。单位=百万美元($M)。
+    """
+    import datetime as _dt
+    # 拉够长的历史(算 EMA + 4周二阶差分需预热, 多取 20 周余量)
+    need = weeks + 20
+    cosd = (_dt.date.today() - _dt.timedelta(weeks=need + 4)).strftime("%Y-%m-%d")
+    pts = []
+    # ★通道1: 项目带 key FRED API(fetch_fred_history) —— 现有 custody 板块一直用它, 最稳
+    try:
+        try:
+            from fetchers.fred import fetch_fred_history
+        except Exception:
+            from src.fetchers.fred import fetch_fred_history
+        raw = fetch_fred_history("WMTSECL1", start=cosd)  # 单位: 百万美元
+        for d, v in raw:
+            try:
+                pts.append((str(d).strip(), float(v)))
+            except (ValueError, TypeError):
+                pass
+    except Exception:
+        pass
+    # 通道2: curl 子进程回退(fredgraph CSV, 该端点在本环境偶发超时)
+    if len(pts) < 10:
+        import subprocess
+        url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id=WMTSECL1&cosd={cosd}"
+        text = ""
+        for _attempt in range(3):
+            try:
+                r = subprocess.run(["curl", "-s", url, "--max-time", "30",
+                                    "-H", "User-Agent: Mozilla/5.0"],
+                                   capture_output=True, text=True, timeout=38)
+                if r.returncode == 0 and r.stdout and "observation_date" in r.stdout:
+                    text = r.stdout
+                    break
+            except Exception:
+                pass
+        if text:
+            pts = []
+            for ln in text.strip().splitlines()[1:]:
+                if "," not in ln:
+                    continue
+                d, v = ln.split(",", 1)
+                v = v.strip()
+                if v and v != ".":
+                    try:
+                        pts.append((d.strip(), float(v)))
+                    except ValueError:
+                        pass
+    if len(pts) < 10:
+        return {"points": [], "asof": None, "unit": "$M",
+                "source": "FRED WMTSECL1 (Fed H.4.1 custody, weekly Wed)",
+                "status": "拉取失败(端点超时)", "weeks": weeks}
+    dates = [p[0] for p in pts]
+    v = [p[1] for p in pts]
+    n = len(v)
+    # EMA(3周) + 斜率(一阶差) + 斜率差分(加速度)
+    span = 3
+    alpha = 2.0 / (span + 1)
+    ema = [v[0]]
+    for i in range(1, n):
+        ema.append(alpha * v[i] + (1 - alpha) * ema[-1])
+    ema_slope = [None] + [ema[i] - ema[i - 1] for i in range(1, n)]
+    out = []
+    for i in range(n):
+        rec = {"date": dates[i]}
+        rec["a7"] = round(v[i] - 2 * v[i - 1] + v[i - 2], 0) if i >= 2 else None
+        rec["a14"] = round(v[i] - 2 * v[i - 2] + v[i - 4], 0) if i >= 4 else None
+        rec["a28"] = round(v[i] - 2 * v[i - 4] + v[i - 8], 0) if i >= 8 else None
+        # EMA 斜率差分(平滑加速度)
+        rec["ema_accel"] = (round(ema_slope[i] - ema_slope[i - 1], 0)
+                            if i >= 2 and ema_slope[i] is not None
+                            and ema_slope[i - 1] is not None else None)
+        out.append(rec)
+    # 只保留最近 weeks 周(有完整加速度的)
+    out = [r for r in out if r["a28"] is not None][-weeks:]
+    return {"points": out, "asof": dates[-1], "unit": "$M",
+            "source": "FRED WMTSECL1 (Fed H.4.1 custody, 周度 as-of Wed)",
+            "status": "ok" if out else "无有效加速度点", "weeks": weeks}
+
+
 def write_custody_notion(cust=None):
     """把外国官方托管美债写入 Notion DB_CUSTODY(周度, 以 as_of 作 title 幂等 upsert)。
     返回写入的 page id 或 None(数据无效/无DB时跳过)。"""
@@ -1464,7 +1554,24 @@ def fetch_credit_impulse(years=8):
     cosd_long = "2006-01-01"
 
     def _fred_ratio_long(sid):
-        """拉 2006 起的长序列(供 2008 至今参考图)。带 2 次重试(端点偶发超时)。"""
+        """拉 2006 起的长序列(供 2008 至今参考图)。
+        ★优先带 key FRED API(fetch_fred_history, 稳); fredgraph CSV 端点在本环境偶发超时作回退。"""
+        # 通道1: 带 key API
+        try:
+            from fetchers.fred import fetch_fred_history
+            h = fetch_fred_history(sid, start=cosd_long)
+            if h:
+                out = []
+                for d, v in h:
+                    try:
+                        out.append((str(d).strip(), float(v)))
+                    except (ValueError, TypeError):
+                        pass
+                if out:
+                    return out
+        except Exception:
+            pass
+        # 通道2: 免 key fredgraph CSV 回退(带 2 次重试)
         for _attempt in range(2):
             try:
                 r = requests.get(

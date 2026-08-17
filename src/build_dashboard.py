@@ -114,6 +114,12 @@ def main():
     except Exception as e:
         print(f"[dashboard] Credit Impulse 跳过: {e}")
 
+    custody_accel = {}
+    try:
+        custody_accel = ed.fetch_custody_acceleration(weeks=13) or {}
+    except Exception as e:
+        print(f"[dashboard] 托管美债加速度 跳过: {e}")
+
     out = dash.generate(
         snap, checks, hit, gstats, overall,
         holdings=holdings, kol_changes=kol_changes,
@@ -122,6 +128,7 @@ def main():
         auctions=auctions, money_supply=money_supply, m2_history=m2_history,
         country_ust=country_ust,
         credit_impulse=credit_impulse,
+        custody_accel=custody_accel,
     )
     print(f"[dashboard] 生成: {out}")
     return out
