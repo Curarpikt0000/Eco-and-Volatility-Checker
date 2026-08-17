@@ -1013,21 +1013,95 @@ def _country_ust_col(c):
     )
 
 
+def _country_ust_long_svg(series_by_country, w=920, h=250):
+    """三国(日/中/欧)持有美债 2008 至今长历史多国折线($B)。
+    series_by_country: {key: {name,flag,color,points:[(YYYY-MM,$B)]}}。"""
+    active = {k: d for k, d in series_by_country.items() if d.get("points") and len(d["points"]) >= 2}
+    if not active:
+        return '<div class="cust-chart-na">2008 长历史数据不足</div>'
+    all_dates = sorted({m for d in active.values() for m, _ in d["points"]})
+    all_vals = [v for d in active.values() for _, v in d["points"]]
+    lo, hi = min(all_vals + [0.0]), max(all_vals)
+    rng = (hi - lo) or 1.0
+    ml, mr, mt, mb = 56, 96, 16, 30
+    pw, ph = w - ml - mr, h - mt - mb
+    n = len(all_dates)
+    didx = {d: i for i, d in enumerate(all_dates)}
+    def X(i): return ml + i * pw / (n - 1)
+    def Y(v): return mt + (hi - v) / rng * ph
+    parts = [f'<svg viewBox="0 0 {w} {h}" class="cust-chart" preserveAspectRatio="xMidYMid meet">']
+    # Y 轴 4 刻度
+    for k in range(4):
+        gv = lo + rng * k / 3
+        gy = Y(gv)
+        parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" class="cc-grid"/>')
+        parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" class="cc-ylab">{gv:,.0f}</text>')
+    # X 轴年份标签(每2年)
+    for i, d in enumerate(all_dates):
+        if d[5:7] == "01" and int(d[:4]) % 2 == 0:
+            anchor = "start" if i == 0 else ("end" if i >= n - 2 else "middle")
+            parts.append(f'<text x="{X(i):.1f}" y="{h-10}" class="cc-xlab" text-anchor="{anchor}">{d[:4]}</text>')
+    legend_y = mt + 6
+    for k, d in active.items():
+        color = d["color"]
+        pts = [f"{X(didx[m]):.1f},{Y(v):.1f}" for m, v in d["points"] if m in didx]
+        if len(pts) >= 2:
+            parts.append(f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" '
+                         f'stroke-width="2" stroke-linejoin="round" opacity="0.9"/>')
+            lm, lv = d["points"][-1]
+            parts.append(f'<circle cx="{X(didx[lm]):.1f}" cy="{Y(lv):.1f}" r="3.5" fill="{color}"/>')
+        parts.append(f'<line x1="{w-mr+8}" y1="{legend_y}" x2="{w-mr+24}" y2="{legend_y}" stroke="{color}" stroke-width="2.6"/>')
+        parts.append(f'<text x="{w-mr+28}" y="{legend_y+4}" class="ci-leg" fill="{color}">{d["flag"]}{_esc(d["name"])}</text>')
+        legend_y += 18
+    parts.append('</svg>')
+    return "".join(parts)
+
+
 def _country_ust_html(cu):
-    """日本 / 中国 分国别持有美债近10年折线(左右两图)。cu: fetch_country_ust_holdings()。"""
-    if not cu or (cu.get("Japan", {}).get("status") != "ok" and cu.get("China", {}).get("status") != "ok"):
-        return '<p class="empty">日本 / 中国 持有美债数据未就绪。</p>'
-    src = (cu.get("Japan") or cu.get("China") or {}).get("source", "US Treasury TIC")
+    """日本 / 中国 / 欧盟 分国别持有美债近10年折线(三图) + 2008 至今三国长历史图。cu: fetch_country_ust_holdings()。"""
+    _keys = ("Japan", "China", "EU")
+    if not cu or all(cu.get(k, {}).get("status") != "ok" for k in _keys):
+        return '<p class="empty">日本 / 中国 / 欧盟 持有美债数据未就绪。</p>'
+    src = next((cu[k].get("source") for k in _keys if cu.get(k, {}).get("status") == "ok"),
+               "US Treasury TIC")
+    # 2008 长历史多国折线数据
+    _long_colors = {"Japan": "#6b8fb5", "China": "#c0757d", "EU": "#7fa085"}
+    long_series = {}
+    for k in _keys:
+        d = cu.get(k, {})
+        sl = d.get("series_long") or []
+        if len(sl) >= 2:
+            long_series[k] = {"name": d.get("name", k), "flag": d.get("flag", ""),
+                              "color": _long_colors.get(k, "#8a8377"),
+                              "points": sl}
+    long_range = ""
+    if long_series:
+        _alld = sorted({m for s in long_series.values() for m, _ in s["points"]})
+        if _alld:
+            long_range = f"{_alld[0]} → {_alld[-1]}"
+    long_block = ""
+    if long_series:
+        long_block = (
+            f'<div class="ci-long">'
+            f'<div class="ci-long-title">📉 长历史 · 日/中/欧 持有美债 2008 至今（{_esc(long_range)}）'
+            f'<span class="ci-long-note">同一 TIC 口径 · $B · 结构性趋势对比</span></div>'
+            f'{_country_ust_long_svg(long_series)}'
+            f'</div>'
+        )
     return (
         f'<div class="cust-wrap">'
-        f'<div class="cust-charts">'
+        f'<div class="cust-charts cust-charts-3">'
         f'{_country_ust_col(cu.get("Japan"))}'
         f'{_country_ust_col(cu.get("China"))}'
+        f'{_country_ust_col(cu.get("EU"))}'
         f'</div>'
-        f'<div class="cust-how"><b>如何看：</b>美国财政部 TIC 口径下各国持有的美债总额（含官方+私人，月度）。'
+        f'<div class="cust-how"><b>如何看：</b>美国财政部 TIC 口径下各国/地区持有的美债总额（含官方+私人，月度）。'
         f'与上方"外国官方托管美债"口径不同：托管是纽约联储账户的外国<b>官方合计</b>，这里是<b>分国别</b>总持仓。'
-        f'<b>日本</b>是美债最大持有国，近10年高位震荡；<b>中国</b>近10年持续系统性减持，是去美元化/中美博弈的结构性信号。'
+        f'<b>日本</b>是美债最大单一持有国，近10年高位震荡；<b>中国</b>近10年持续系统性减持，是去美元化/中美博弈的结构性信号；'
+        f'<b>欧盟</b>为欧元区主要成员（德/法/意/荷/比/卢/爱/西/芬）加总（TIC 无欧盟合计口径），'
+        f'其中比利时含 Euroclear 国际托管中心的第三方持仓，故欧盟合计偏高、趋势性增长明显。'
         f'数据源：{_esc(src)}。</div>'
+        f'{long_block}'
         f'</div>'
     )
 
@@ -1816,6 +1890,32 @@ _TEMPLATE = r"""<!DOCTYPE html>
   header h1 span {{ color: var(--dust-blue); }}
   #update-time {{ font-size: 12px; color: var(--muted); }}
   .container {{ max-width: 1280px; margin: 0 auto; padding: 22px 28px 60px; }}
+
+  /* ═══ 左侧模块索引栏(sticky nav) ═══ */
+  .sidenav {{ position: fixed; top: 0; left: 0; width: 230px; height: 100vh; overflow-y: auto;
+    background: var(--card2, #efece5); border-right: 1px solid var(--border); padding: 18px 12px 40px;
+    z-index: 90; box-sizing: border-box; transition: transform .25s ease; }}
+  .sidenav-title {{ font-size: 12px; font-weight: 800; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 1px; padding: 0 8px 10px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }}
+  .sidenav a {{ display: block; font-size: 12.5px; line-height: 1.35; color: var(--text); text-decoration: none;
+    padding: 7px 9px; border-radius: 7px; margin-bottom: 2px; border-left: 3px solid transparent; transition: all .15s; }}
+  .sidenav a:hover {{ background: rgba(140,155,175,.14); }}
+  .sidenav a.sn-active {{ background: rgba(140,155,175,.20); border-left-color: var(--dust-blue); font-weight: 700; color: var(--text); }}
+  .sidenav a .sn-num {{ display: inline-block; min-width: 18px; color: var(--dust-blue); font-weight: 800; font-family: var(--mono); margin-right: 4px; }}
+  /* 宽屏: 主体右移给侧栏留位; 章节标题锚点偏移(避免被顶部遮挡) */
+  .part-title {{ scroll-margin-top: 16px; }}
+  #sn-toggle {{ display: none; }}
+  @media (min-width: 1101px) {{
+    body {{ padding-left: 230px; }}
+  }}
+  @media (max-width: 1100px) {{
+    .sidenav {{ transform: translateX(-100%); box-shadow: 2px 0 16px rgba(0,0,0,.15); }}
+    .sidenav.sn-open {{ transform: translateX(0); }}
+    #sn-toggle {{ display: flex; position: fixed; top: 12px; left: 12px; z-index: 95;
+      width: 42px; height: 42px; align-items: center; justify-content: center;
+      background: var(--dust-blue); color: #fff; border: none; border-radius: 10px;
+      font-size: 20px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.2); }}
+  }}
   .section-title {{ font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin: 26px 0 12px; }}
   /* 编号章节标题(6部分) */
   .part-title {{ display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; color: var(--text); margin: 30px 0 14px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }}
@@ -2072,7 +2172,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .cust-chart-box {{ background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px 6px; }}
   /* 左右双图: 短期(12月) / 长期(10年) */
   .cust-charts {{ display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }}
-  @media (max-width: 720px) {{ .cust-charts {{ grid-template-columns: 1fr; }} }}
+  .cust-charts-3 {{ grid-template-columns: 1fr 1fr 1fr; }}
+  @media (max-width: 720px) {{ .cust-charts, .cust-charts-3 {{ grid-template-columns: 1fr; }} }}
+  @media (min-width: 721px) and (max-width: 1000px) {{ .cust-charts-3 {{ grid-template-columns: 1fr 1fr; }} }}
   .cust-chart-col {{ background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px 8px; }}
   .cust-chart-span {{ font-size: 10px; color: var(--muted); margin-top: 4px; text-align: center; }}
   .cust-chart-title {{ font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 4px; font-family: var(--mono); }}
@@ -2205,6 +2307,11 @@ _TEMPLATE = r"""<!DOCTYPE html>
 </style>
 </head>
 <body>
+<button id="sn-toggle" aria-label="模块索引" onclick="document.getElementById('sidenav').classList.toggle('sn-open')">☰</button>
+<nav class="sidenav" id="sidenav">
+  <div class="sidenav-title">📑 模块索引</div>
+  <div id="sidenav-links"></div>
+</nav>
 <header>
   <h1>宏观风险扫描 · <span>Eco &amp; Volatility Checker</span></h1>
   <span id="update-time">数据日期 {date} · 生成 {generated}</span>
@@ -2326,7 +2433,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="card">{custody_accel}</div>
 
   <!-- ═══ 附三·六：日本 / 中国 分国别持有美债 (TIC, 近10年) ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>日本 / 中国 持有美债 · 近10年 (TIC 分国别口径)</div>
+  <div class="part-title"><span class="part-num">＋</span>日本 / 中国 / 欧盟 持有美债 · 近10年 + 2008长历史 (TIC 分国别口径)</div>
   <div class="card">{country_ust}</div>
 
   <!-- ═══ 附四：知名机构持仓 (13F) + Trump ═══ -->
@@ -2366,6 +2473,48 @@ function mkRadar(id, d) {{
 mkRadar('rShort', RADAR.short);
 mkRadar('rMid', RADAR.mid);
 mkRadar('rLong', RADAR.long);
+
+// ═══ 自动生成左侧模块索引栏(扫描所有 .part-title) ═══
+(function() {{
+  var titles = Array.prototype.slice.call(document.querySelectorAll('.part-title'));
+  var box = document.getElementById('sidenav-links');
+  if (!titles.length || !box) return;
+  var links = [];
+  titles.forEach(function(t, i) {{
+    // 生成锚点 id
+    var id = 'sec-' + i;
+    t.id = id;
+    // 侧栏标题文字 = part-title 去掉编号圈的纯文本, 截断过长
+    var label = (t.textContent || '').trim();
+    // 取"·"或"("前的主名, 更简洁
+    var short = label.split('·')[0].split('（')[0].split('(')[0].trim();
+    if (short.length > 20) short = short.slice(0, 20) + '…';
+    var numEl = t.querySelector('.part-num');
+    var num = numEl ? numEl.textContent.trim() : (i + 1);
+    var a = document.createElement('a');
+    a.href = '#' + id;
+    a.innerHTML = '<span class="sn-num">' + num + '</span>' + short;
+    a.addEventListener('click', function(e) {{
+      e.preventDefault();
+      document.getElementById(id).scrollIntoView({{ behavior: 'smooth', block: 'start' }});
+      // 移动端点击后收起
+      if (window.innerWidth <= 1100) document.getElementById('sidenav').classList.remove('sn-open');
+    }});
+    box.appendChild(a);
+    links.push(a);
+  }});
+  // 滚动高亮当前板块
+  function onScroll() {{
+    var y = window.scrollY + 80;
+    var active = 0;
+    for (var i = 0; i < titles.length; i++) {{
+      if (titles[i].offsetTop <= y) active = i; else break;
+    }}
+    links.forEach(function(l, i) {{ l.classList.toggle('sn-active', i === active); }});
+  }}
+  window.addEventListener('scroll', onScroll, {{ passive: true }});
+  onScroll();
+}})();
 </script>
 </body>
 </html>"""

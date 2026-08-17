@@ -972,12 +972,19 @@ _TIC_MON = {"Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4, "May": 5, "Jun": 6,
 
 
 def _parse_tic_country(raw, country_key):
-    """从 TIC mfhhis 文本解析某国月度序列。country_key: 'Japan' 或 'China'。
+    """从 TIC mfhhis 文本解析某国月度序列。country_key: 'Japan' / 'China' / 'EU'。
     文件结构: 每个年份块有一"月份行"(Jan..Dec)+"年份行"(Country + 4位年份),
-    随后 Japan / 'China, Mainland' 数据行, 按列对齐。返回 {'YYYY-MM': value_$B} 。"""
+    随后 Japan / 'China, Mainland' 数据行, 按列对齐。返回 {'YYYY-MM': value_$B} 。
+    ★'EU' = 欧元区主要成员国加总(德/法/意/荷/比/卢/爱/西/芬), 逐月求和(TIC 无欧盟合计行;
+      注: Belgium 含 Euroclear 托管, 属 TIC 口径固有特性)。"""
     import re
+    # 欧元区主要成员(精确行名匹配, 避免误伤脚注文本)
+    EU_MEMBERS = {"Germany", "France", "Italy", "Netherlands", "Belgium",
+                  "Luxembourg", "Ireland", "Spain", "Finland",
+                  "Belgium-Luxembourg"}
     lines = raw.replace("\r", "").split("\n")
-    series = {}
+    series = {}          # 单国: {月:值}
+    eu_series = {}       # EU: {月: 累加值}
     cur_months = cur_years = None
     for l in lines:
         cells = [c.strip() for c in l.split("\t")]
@@ -991,8 +998,14 @@ def _parse_tic_country(raw, country_key):
             cur_years = {i: int(c) for i, c in enumerate(cells) if re.fullmatch(r"\d{4}", c)}
             continue
         name = cells[0].strip('"').strip() if cells else ""
-        matched = (country_key == "Japan" and name == "Japan") or \
-                  (country_key == "China" and name.startswith("China"))
+        if country_key == "EU":
+            matched = name in EU_MEMBERS
+        elif country_key == "Japan":
+            matched = (name == "Japan")
+        elif country_key == "China":
+            matched = name.startswith("China")
+        else:
+            matched = False
         if matched and cur_months and cur_years:
             for i, mm in cur_months.items():
                 yy = cur_years.get(i)
@@ -1000,25 +1013,33 @@ def _parse_tic_country(raw, country_key):
                     continue
                 v = cells[i].replace(",", "").strip()
                 try:
-                    series[f"{yy:04d}-{mm:02d}"] = float(v)
+                    val = float(v)
                 except ValueError:
                     continue
-    return series
+                mk = f"{yy:04d}-{mm:02d}"
+                if country_key == "EU":
+                    eu_series[mk] = eu_series.get(mk, 0.0) + val
+                else:
+                    series[mk] = val
+    return eu_series if country_key == "EU" else series
 
 
 def fetch_country_ust_holdings(years=10):
-    """抓 日本 / 中国 分国别持有美债的月度序列(近 N 年)。
-    源: 美国财政部 TIC Major Foreign Holders 历史文件(官方, 月度, $B)。
-    返回 {"Japan":{...}, "China":{...}} 每个:
-      {name, flag, series:[(YYYY-MM, $B),...]升序, latest:(month,val), first:(month,val),
-       delta_bn, delta_pct, high, low, status, source} ; 拿不到 status='未找到'。
+    """抓 日本 / 中国 / 欧盟(欧元区加总) 分国别持有美债的月度序列(近 N 年 + 2008起长历史)。
+    源: 美国财政部 TIC Major Foreign Holders 历史文件(官方, 月度, $B, 覆盖2000-至今)。
+    返回 {"Japan":{...}, "China":{...}, "EU":{...}} 每个:
+      {name, flag, series:[(YYYY-MM, $B),...]升序(近N年), series_long:[...](2008起长历史),
+       latest:(month,val), first:(month,val), delta_bn, delta_pct, high, low, status, source}。
+    ★EU = 欧元区主要成员(德/法/意/荷/比/卢/爱/西/芬)逐月加总(TIC 无欧盟合计行; Belgium 含 Euroclear 托管)。
     绝不编: 解析失败留空 series + status。"""
     import requests
     import datetime
     out = {}
-    meta = {"Japan": ("日本", "🇯🇵"), "China": ("中国大陆", "🇨🇳")}
+    meta = {"Japan": ("日本", "🇯🇵"), "China": ("中国大陆", "🇨🇳"),
+            "EU": ("欧盟(欧元区加总)", "🇪🇺")}
     cutoff = (datetime.date.today().replace(day=1) -
               datetime.timedelta(days=int(years * 365.25) + 45)).strftime("%Y-%m")
+    long_cutoff = "2008-01"  # 2008 起长历史
     raw = None
     try:
         r = requests.get(TIC_MFH_HIST_URL,
@@ -1030,20 +1051,21 @@ def fetch_country_ust_holdings(years=10):
         raw = None
     for key, (zh, flag) in meta.items():
         if not raw:
-            out[key] = {"name": zh, "flag": flag, "series": [], "status": "未找到",
-                        "source": "US Treasury TIC MFH"}
+            out[key] = {"name": zh, "flag": flag, "series": [], "series_long": [],
+                        "status": "未找到", "source": "US Treasury TIC MFH"}
             continue
         s = _parse_tic_country(raw, key)
-        pts = sorted((m, v) for m, v in s.items() if m >= cutoff)
+        pts = sorted((m, round(v, 1)) for m, v in s.items() if m >= cutoff)
+        pts_long = sorted((m, round(v, 1)) for m, v in s.items() if m >= long_cutoff)
         if len(pts) < 2:
-            out[key] = {"name": zh, "flag": flag, "series": pts, "status": "数据不足",
-                        "source": "US Treasury TIC MFH"}
+            out[key] = {"name": zh, "flag": flag, "series": pts, "series_long": pts_long,
+                        "status": "数据不足", "source": "US Treasury TIC MFH"}
             continue
         first_m, first_v = pts[0]
         last_m, last_v = pts[-1]
         vals = [v for _, v in pts]
         out[key] = {
-            "name": zh, "flag": flag, "series": pts,
+            "name": zh, "flag": flag, "series": pts, "series_long": pts_long,
             "latest": (last_m, last_v), "first": (first_m, first_v),
             "delta_bn": round(last_v - first_v, 1),
             "delta_pct": round((last_v - first_v) / first_v * 100, 1) if first_v else None,
@@ -1785,8 +1807,14 @@ def fetch_treasury_stress_panels(years=3):
         "id": "mkt_stress",
         "title": "② 国债市场压力代理",
         "subtitle": "Treasury Market Stress Proxy (公开替代 BrokerTec 日内价差)",
-        "note": "⚠ 非 BrokerTec 日内 bid-ask 价差(MS 专有数据无公开源)——改用免费公开压力代理："
-                "10年期限溢价(市场要求的持有长债额外补偿, 承压时走高) + IG 企业债利差(信用/流动性压力)。两者走高 = 融资/流动性环境收紧。",
+        "note": "⚠ 非 BrokerTec 日内 bid-ask 价差(MS 专有数据无公开源)——改用免费公开压力代理，两条线都是「持有风险资产要求的补偿」，走高=市场压力↑。<br>"
+                "<b>① 10年期限溢价(左轴, 橙线)</b>：投资者持有10年期国债、相比不断滚动短债，额外要求的年化补偿(%)。"
+                "<b>怎么看</b>：走高=市场担心久期风险/供给过剩/通胀不确定，要求更高补偿；走低甚至转负=避险买盘涌入压低补偿。"
+                "<b>怎么用</b>：期限溢价快速抬升往往先于长端收益率飙升，是国债承压的早期信号。<br>"
+                "<b>② IG企业债利差 OAS(右轴, 紫线)</b>：投资级公司债相对同期限国债的信用利差(%，期权调整后)。"
+                "<b>怎么看</b>：走阔=市场要求更高信用补偿=融资环境收紧/避险；收窄=信用环境宽松、风险偏好回升。"
+                "<b>怎么用</b>：IG OAS 是「机构级」流动性/信用压力的温度计，比股市更早反映融资面紧张。<br>"
+                "<b>两线同向走高 = 融资/流动性环境明显收紧</b>（对应 MS 原图「买卖价差扩大、成本上升」的主题）。",
         "unit_left": "期限溢价 %", "unit_right": "IG OAS %",
         "series": [
             {"name": "10年期限溢价", "color": "#b58a6a", "axis": "left",
@@ -1804,8 +1832,15 @@ def fetch_treasury_stress_panels(years=3):
         "id": "curve_credit",
         "title": "③ 收益率曲线与信用压力",
         "subtitle": "Yield Curve & Credit Stress (公开替代 BrokerTec DV01 成交量)",
-        "note": "⚠ 非 BrokerTec 周度 DV01 成交量(MS 专有数据无公开源)——改用免费公开风险/曲线代理："
-                "10Y-2Y 曲线利差(倒挂/陡峭化反映利率预期与压力) + 高收益债利差 HY OAS(风险偏好/避险传导)。HY OAS 骤升 = 风险资产承压。",
+        "note": "⚠ 非 BrokerTec 周度 DV01 成交量(MS 专有数据无公开源)——改用免费公开风险/曲线代理，反映利率预期与风险传导。<br>"
+                "<b>① 10Y-2Y 曲线利差(左轴, 蓝线)</b>：10年期国债收益率 − 2年期国债收益率(%)。"
+                "<b>怎么看</b>：<span style=\"color:#2e9e5b\">正值=正常向上倾斜</span>(长债利率高于短债)；"
+                "<span style=\"color:#d64545\">负值=倒挂</span>(短债高于长债，历史上是衰退的经典领先信号)；由负转正的「陡峭化」常出现在降息预期升温/衰退临近。"
+                "<b>怎么用</b>：看拐点——倒挂后重新转正(bear steepening)往往对应政策转向或risk-off。<br>"
+                "<b>② 高收益债利差 HY OAS(右轴, 红线)</b>：高收益(垃圾级)公司债相对国债的信用利差(%)。"
+                "<b>怎么看</b>：这是市场「风险偏好」最灵敏的指标——骤升=避险情绪爆发、风险资产承压；低位平稳=risk-on。"
+                "<b>怎么用</b>：HY OAS 突破关键位(如>4.5%)是本系统的硬性卖出触发之一；它领先或同步于股市大跌。<br>"
+                "<b>HY OAS 骤升 + 曲线快速变动 = 风险传导、市场剧烈调仓</b>（对应 MS 原图「成交量激增/风险交易」的主题）。",
         "unit_left": "10Y-2Y 利差 %", "unit_right": "HY OAS %",
         "series": [
             {"name": "10Y-2Y 曲线利差", "color": "#6b8fb5", "axis": "left",
