@@ -1,0 +1,23 @@
+{
+  "kol": "Karen Dynan",
+  "sector": "Macro",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 2,
+  "history": [
+    {
+      "date": "2025-04-15",
+      "direction": "看空",
+      "comments": "在PIIE半年度全球经济展望发布会上主导预测,认为美国经济从稳固基础转向增长停滞与更高通胀。预计2025年GDP增速仅1.1%、2026年0.6%,四季度PCE通胀达4.0%,美国衰退概率约40%。关税抬价、移民骤减压制潜在产出,DOGE裁员节省有限反致运营中断。判断美联储将维持利率至年底再降。",
+      "targets": "美国经济/美联储利率/PCE通胀",
+      "source": "https://english.news.cn/northamerica/20250416/9400cf5bc4454ee6865b8ca993b04f2c/c.html"
+    },
+    {
+      "date": "2026-04-09",
+      "direction": "中性",
+      "comments": "在PIIE春季展望中判断全球经济2026年放缓至3.0%,美国增速2.0%放缓。AI投资周期支撑增长但伊朗战争与霍尔木兹海峡能源冲击带来新风险,能源价仍高于战前30-40%。通胀居于目标上方,主张美联储保持耐心,最可能在能源冲击过后于2026年晚些降息,但路径高度不确定,下行风险为主(滞胀、AI投资失速)。",
+      "targets": "全球/美国经济/美联储/能源",
+      "source": "https://www.piie.com/blogs/realtime-economics/2026/global-economy-slow-2026-and-outlook-clouded-war-other-uncertainties"
+    }
+  ]
+}

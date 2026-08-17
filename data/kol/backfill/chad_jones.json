@@ -1,0 +1,23 @@
+{
+  "kol": "Chad Jones",
+  "sector": "Macro",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 2,
+  "history": [
+    {
+      "date": "2025-10-03",
+      "direction": "看多",
+      "comments": "在旧金山联储EERN讲座'AI与经济增长'中,作为斯坦福GSB经济学Professor阐述AI对经济增长的潜在推动及风险。延续其增长经济学框架,认为如电力、半导体、互联网般AI可能是变革性通用技术,显著提升增长。",
+      "targets": "AI/长期经济增长",
+      "source": "https://www.frbsf.org/news-and-media/events/2025/09/chad-jones-ai-and-economic-growth/"
+    },
+    {
+      "date": "2026-02-01",
+      "direction": "看多",
+      "comments": "在斯坦福GSB演讲'AI与我们的经济未来'中呈现研究,包括与Tonetti合著'Past Automation and Future A.I.: How Weak Links Tame the Growth Explosion'(2026年1月),探讨自动化与AI对增长的影响及'弱环节'如何驯服增长爆发,整体对AI驱动增长持建设性乐观。",
+      "targets": "AI/经济增长/自动化",
+      "source": "https://web.stanford.edu/~chadj/AIandEconomicFuture.pdf"
+    }
+  ]
+}

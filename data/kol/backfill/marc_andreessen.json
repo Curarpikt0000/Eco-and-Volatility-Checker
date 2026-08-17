@@ -1,0 +1,23 @@
+{
+  "kol": "Marc Andreessen",
+  "sector": "Macro",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 2,
+  "history": [
+    {
+      "date": "2025-11-25",
+      "direction": "强烈看多",
+      "comments": "在a16z播客发布2026展望,围绕AI时间线、美中竞争与'AI的价格'展开,延续其对AI技术乐观的强烈看多立场,其firm激进押注AI初创(2025年7月领投Thinking Machines Lab创纪录20亿美元种子轮,估值120亿)。",
+      "targets": "AI/科技股/风险投资",
+      "source": "https://a16z.com/podcasts/a16z-show/"
+    },
+    {
+      "date": "2026-01-01",
+      "direction": "看多",
+      "comments": "被美联储任命进入研究AI对生产率与就业影响的新任务小组。作为激进押注AI初创的风投,被列为预测'超通缩'(hyper-deflation)时代的阵营之一,即认为AI将大幅压低成本与价格,与美联储关于AI的通胀辩论形成张力。",
+      "targets": "AI/宏观通胀/美联储",
+      "source": "https://netzender.com/ais-costly-build-out-complicates-the-feds-inflation-fight"
+    }
+  ]
+}

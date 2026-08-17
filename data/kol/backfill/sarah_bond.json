@@ -1,0 +1,23 @@
+{
+  "kol": "Sarah Bond",
+  "sector": "Macro",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 2,
+  "history": [
+    {
+      "date": "2025-11-17",
+      "direction": "看多",
+      "comments": "作为Xbox总裁,面对外界对Xbox前景的质疑表示并不担忧,描绘未来硬件平台既强大又能运行所有现有主机游戏,强调'硬件绝对是Xbox一切的核心,最有价值的玩家热爱硬件体验',对游戏硬件生态持乐观看多。",
+      "targets": "游戏行业/Xbox/游戏硬件",
+      "source": "https://mabumbe.com/people/sarah-bond-biography-age-net-worth-xbox-president-life-story/"
+    },
+    {
+      "date": "2026-03-02",
+      "direction": "看多",
+      "comments": "在卸任Xbox总裁之际接受USA TODAY'年度女性'采访,重申游戏具有连接人们的力量,回顾任内(2023.10-2026.02)引领Xbox度过监管战、生态扩张与领导层变动的关键转型期,对游戏作为连接媒介保持信念。",
+      "targets": "游戏行业/Xbox",
+      "source": "https://www.usatoday.com/story/tech/gaming/2026/03/02/sarah-bond-women-of-the-year-2026/88440199007/"
+    }
+  ]
+}
