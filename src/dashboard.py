@@ -778,6 +778,7 @@ def _custody_html(cust):
     as_of = cust.get("as_of", "")
     hist = cust.get("history", [])
     hist_long = cust.get("history_long", [])
+    hist_2008 = cust.get("history_2008", [])
     # 方向: 下降=去美元化风险(clay红), 上升=回流(sage绿)
     if wow is None:
         acls, arrow, wtxt = "n", "→", "—"
@@ -827,13 +828,23 @@ def _custody_html(cust):
         f'{_custody_span_line(hist_long)}'
         f'</div>'
         f'</div>'
-        f'<div class="cust-meta">'
+        # === 2008 至今全周期结构图(用户 2026-08 要求) ===
+        + (
+            f'<div class="cust-chart-col cust-chart-full">'
+            f'<div class="cust-chart-title">2008 至今 · 全周期结构（{len(hist_2008)} 周 · 约{len(hist_2008)//52} 年）</div>'
+            f'{_custody_chart_svg(hist_2008, w=920, h=210)}'
+            f'{_custody_span_line(hist_2008)}'
+            f'</div>'
+            if len(hist_2008) >= 2 else ""
+        )
+        + f'<div class="cust-meta">'
         f'{span_txt}'
         f'{total_rows}'
         f'</div>'
         f'<div class="cust-how"><b>如何看：</b>外国央行/官方机构在纽约联储托管的美债存量。'
         f'持续下降 = 外国官方减持美债 / 去美元化 / 抛售换汇干预，是主权层面对美债信心的风向标。'
-        f'<b>短期图</b>看近期拐点/干预动作，<b>长期图</b>看去美元化大趋势(10年结构性方向)。'
+        f'<b>短期图</b>看近期拐点/干预动作，<b>长期图</b>看去美元化大趋势(10年结构性方向)，'
+        f'<b>2008至今全周期图</b>看更长的结构性拐点(如2015-16去美元化起点、疫情后再平衡)。'
         f'数据源：FRED WMTSECL1（Fed H.4.1 custody，每周三口径）。</div>'
         f'</div>'
     )
@@ -2176,6 +2187,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   @media (max-width: 720px) {{ .cust-charts, .cust-charts-3 {{ grid-template-columns: 1fr; }} }}
   @media (min-width: 721px) and (max-width: 1000px) {{ .cust-charts-3 {{ grid-template-columns: 1fr 1fr; }} }}
   .cust-chart-col {{ background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px 8px; }}
+  .cust-chart-full {{ margin-top: 12px; }}
   .cust-chart-span {{ font-size: 10px; color: var(--muted); margin-top: 4px; text-align: center; }}
   .cust-chart-title {{ font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 4px; font-family: var(--mono); }}
   .cust-chart {{ width: 100%; height: auto; display: block; }}

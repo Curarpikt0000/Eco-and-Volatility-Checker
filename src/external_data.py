@@ -804,6 +804,7 @@ def fetch_foreign_custody_ust():
     _start_long = (datetime.utcnow() - timedelta(days=3660)).strftime("%Y-%m-%d")   # ~10年前
     hist = _custody_history_fred(start=_start_short)          # 短期(12月)
     hist_long = _custody_history_fred(start=_start_long)       # 长期(10年)
+    hist_2008 = _custody_history_fred(start="2008-01-01")      # 2008至今(全周期结构性)
     fred_val = fred_as_of = fred_wow_bn = fred_wow_pct = None
     if len(hist) >= 2:
         fred_as_of, fred_val = hist[-1]
@@ -839,10 +840,12 @@ def fetch_foreign_custody_ust():
             "total_custody_tn": total_custody_tn,
             "history": hist,                               # [(date,$T)] 升序, 近12个月周点(短期图)
             "history_long": hist_long,                     # [(date,$T)] 升序, 近10年周点(长期图)
+            "history_2008": hist_2008,                     # [(date,$T)] 升序, 2008至今周点(全周期结构图)
             "status": "ok",
             "source": "FRED WMTSECL1 (Fed H.4.1 custody, weekly Wed)",
         }
     return {"value": None, "as_of": None, "history": hist, "history_long": hist_long,
+            "history_2008": hist_2008,
             "total_custody_tn": total_custody_tn,
             "status": "FRED WMTSECL1 无数据"}
 
