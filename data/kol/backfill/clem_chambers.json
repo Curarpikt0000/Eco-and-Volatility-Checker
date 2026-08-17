@@ -1,0 +1,30 @@
+{
+  "kol": "Clem Chambers",
+  "sector": "Macro",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 3,
+  "history": [
+    {
+      "date": "2026-06-27",
+      "direction": "看空",
+      "comments": "自称'比特币变量派'而非永久空头,长期看空比特币且预言应验——认为BTC仍将下探,坚持已'唱空比特币许久'的立场。相对更看好黄金跑赢加密。",
+      "targets": "比特币/黄金",
+      "source": "https://www.forbes.com/sites/investor/people/clem/"
+    },
+    {
+      "date": "2026-07-12",
+      "direction": "强烈看空",
+      "comments": "断言比特币仍在寻底,目标底部区间在3万至4万美元之间,展示'他们不想让你看到的比特币图表'佐证其熊市判断。",
+      "targets": "比特币",
+      "source": "https://www.forbes.com/sites/digital-assets/2026/07/12/the-1-bitcoin-chart-they-dont-want-you-to-see/"
+    },
+    {
+      "date": "2026-05-19",
+      "direction": "看空",
+      "comments": "认为比特币陷入僵局,黄金正在盖过加密的风头;当前仍对比特币感兴趣的只剩在顶部买入被套的玩家,'比特币已不再是原来的比特币'。相对看多黄金。",
+      "targets": "比特币/黄金",
+      "source": "https://www.forbes.com/sites/digital-assets/2026/05/19/bitcoin-stuck-in-limbo-as-gold-outshines-crypto/"
+    }
+  ]
+}

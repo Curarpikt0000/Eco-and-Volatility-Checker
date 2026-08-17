@@ -1,0 +1,30 @@
+{
+  "kol": "Larry McDonald",
+  "sector": "Macro",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 3,
+  "history": [
+    {
+      "date": "2025-12-12",
+      "direction": "看多",
+      "comments": "Bear Traps Report创始人在MoneyShow论坛判断硬资产将在2026跑赢金融资产,通缩时代已终结,资本将大规模轮动进入硬资产与价值股。",
+      "targets": "硬资产/价值股/大宗商品",
+      "source": "https://seekingalpha.com/article/4852910-hard-assets-vs-financial-larry-mcdonald-what-leads-in-2026"
+    },
+    {
+      "date": "2025-12-18",
+      "direction": "看多",
+      "comments": "在Kitco Outlook 2026警告信贷与流动性信号预示大轮动:美联储在核心CPI约2.8%下重启QE,私募信贷是2026最大风险'已经开始破裂'。长期看多金银,认为美联储将被迫降息+QE+弱美元,大宗商品将像疫后一样爆发。比特币对流动性极敏感、非传统避险。",
+      "targets": "黄金/白银/大宗商品/私募信贷(风险)",
+      "source": "https://www.kitco.com/news/article/2025-12-18/larry-mcdonald-says-credit-stress-and-liquidity-signals-are-setting-major"
+    },
+    {
+      "date": "2025-12-24",
+      "direction": "看多",
+      "comments": "认为2026将是价值股之年,一场庞大的资本转移将定义2026,'反通胀格局已彻底成为过去',强调向硬资产与价值板块的巨大轮动。",
+      "targets": "价值股/硬资产",
+      "source": "https://themarket.ch/english/2026-is-set-to-be-the-year-of-value-stocks-ld.15676"
+    }
+  ]
+}

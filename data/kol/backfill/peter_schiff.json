@@ -1,0 +1,16 @@
+{
+  "kol": "Peter Schiff",
+  "sector": "Macro",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 1,
+  "history": [
+    {
+      "date": "2026-08-14",
+      "direction": "强烈看多",
+      "comments": "核心警告直白:美国财政状况无法长期支撑美元,债务成本上升、通胀顽固、美债需求走弱可能演变为主权债务与储备货币危机。认为日本会加速这一清算(日本央行加息与日元走强或引爆日元套利平仓,迫使抛售美债美股)。看多黄金白银(视近期回调为机会),关注中国增持黄金与人民币贸易体系或标志新货币秩序开端。",
+      "targets": "黄金/白银/矿股/美元(看空)",
+      "source": "https://silvertrade.com/news/precious-metals/silver-news/peter-schiff-people-are-going-to-panic-when-this-happens/"
+    }
+  ]
+}

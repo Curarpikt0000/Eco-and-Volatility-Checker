@@ -1,0 +1,30 @@
+{
+  "kol": "Ted Oakley",
+  "sector": "Macro",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 3,
+  "history": [
+    {
+      "date": "2026-05-21",
+      "direction": "看多",
+      "comments": "华尔街被AI狂热与债务陷阱裹挟,消费者已'见顶':信用卡拖欠率回到2008金融危机水平。长期看多黄金白银作为核心财富保值,但警告短线金价可能再跌约500美元至4000一线,清洗动量资金后才是买点。看多能源(仅占标普3%,严重低配)与金银矿股(现金流创纪录估值极低)。Oxbow约45%仓位持短债留干火药。",
+      "targets": "黄金/白银/金银矿股/能源股",
+      "source": "https://www.kitco.com/news/article/2026-05-21/wall-street-dancing-door-ted-oakley-warns-ai-debt-trap-and-tapped-out"
+    },
+    {
+      "date": "2026-01-15",
+      "direction": "看多",
+      "comments": "在Oxbow Quick Takes节目分享对金银市场判断,认为贵金属处于结构性上行,分享价格可能的下一步走向,持续强调'持有黄金且绝不卖出'的核心配置理念。",
+      "targets": "黄金/白银",
+      "source": "https://oxbowadvisors.com/video-ted-oakley-quick-takes-oxbow-advisors-january-15-2026-gold-silver/"
+    },
+    {
+      "date": "2026-04-01",
+      "direction": "看多",
+      "comments": "40年华尔街老将在Oxbow月度更新中重申以黄金白银为核心的抗通胀抗波动配置,看好被低估的能源股与新兴市场(尤其日本)机会,对高估值科技股保持警惕。",
+      "targets": "黄金/白银/能源/新兴市场/日本",
+      "source": "https://www.youtube.com/watch?v=BX77QUsWeSs (Oxbow Market Update April 2026)"
+    }
+  ]
+}
