@@ -1,0 +1,30 @@
+{
+  "kol": "Jeff Clark",
+  "sector": "Precious Metals",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 3,
+  "history": [
+    {
+      "date": "2025-11-20",
+      "direction": "看多",
+      "comments": "在Wealthion大会上发布贵金属矿业股详尽预测更新,给出当前最看好的个股名单,认为矿业股仍处于历史性牛市并具吸引力,延续对金银矿股的乐观判断。",
+      "targets": "金银矿业股",
+      "source": "https://www.wealthion.com/learn/top-gold-silver-mining-stock-picks-precious-metals-analyst-jeff-clark/"
+    },
+    {
+      "date": "2026-02-10",
+      "direction": "强烈看多",
+      "comments": "在Goldseek访谈中以'谨慎乐观但强烈看多'定调2026金银市场,正积极寻找被低估的早期阶段机会,认为当前处于历史性金银牛市,初级矿股上行空间显著。",
+      "targets": "黄金/白银/初级矿股",
+      "source": "https://goldseek.com/article/jeff-clark-seeking-undervalued-early-stage-opportunities-historic-gold-silver-bull-market"
+    },
+    {
+      "date": "2026-07-01",
+      "direction": "看多",
+      "comments": "在Mining Network访谈中指出当前黄金牛市更像波动剧烈的1970年代而非2011周期,意味着大幅回调与再创新高交替出现,投资者进入2026下半年应做好高波动准备,长期方向仍强烈看多。",
+      "targets": "黄金/白银/矿业股",
+      "source": "https://miningnetwork.co.uk/jeff-clark-why-this-gold-bull-market-is-repeating-the-1970s-not-2011/"
+    }
+  ]
+}

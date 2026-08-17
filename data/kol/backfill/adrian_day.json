@@ -1,0 +1,30 @@
+{
+  "kol": "Adrian Day",
+  "sector": "Precious Metals",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 3,
+  "history": [
+    {
+      "date": "2025-11-03",
+      "direction": "强烈看多",
+      "comments": "在Streetwise专栏《这是黄金顶部吗?》中明确判断'这远非顶部'。10月16日金价创13年最大单日跌幅、此后累计下跌5.9%仅属超买后修正,回撤不足25%远低于典型40-60%。基金流向、机构持仓极低(78%投顾配置不足1%),缺乏公众参与,不具备见顶特征。看好金矿股估值仍低于长期均值。",
+      "targets": "黄金/金矿股(Agnico Eagle AEM等)",
+      "source": "https://www.streetwisereports.com/article/2025/11/03/was-this-the-top-for-gold.html"
+    },
+    {
+      "date": "2026-02-08",
+      "direction": "强烈看多",
+      "comments": "在访谈中表示对矿业股毫无疑问地更加看多,认为金矿股相对黄金仍严重低估,是目前贵金属板块中杠杆最优的配置方向。",
+      "targets": "金矿股/黄金",
+      "source": "https://www.youtube.com/watch?v=8tiDcA_UKK4"
+    },
+    {
+      "date": "2026-07-13",
+      "direction": "强烈看多",
+      "comments": "在Boca Raton的Rule研讨会上对Kitco表示,矿业股看多情绪已崩塌至约7%(常态为60/40),这种极度悲观的逆向情绪恰恰是强烈的买入信号,重申对黄金及金矿股的坚定看多。",
+      "targets": "金矿股/黄金",
+      "source": "https://www.youtube.com/watch?v=8iJ8WeNQxkY"
+    }
+  ]
+}

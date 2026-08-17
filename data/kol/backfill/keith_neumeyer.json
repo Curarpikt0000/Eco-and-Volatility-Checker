@@ -1,0 +1,23 @@
+{
+  "kol": "Keith Neumeyer",
+  "sector": "Precious Metals",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 2,
+  "history": [
+    {
+      "date": "2025-02-28",
+      "direction": "看多",
+      "comments": "在2025 BMO全球金属矿业大会Kitco访谈中表示,First Majestic完成对Gatos Silver的9.7亿美元收购后继续追求增长,自身正囤积现金并回购股票;强调白银强劲需求与稀缺供给推动金属过去一年上涨,长期坚定看多白银。",
+      "targets": "白银/First Majestic(AG)",
+      "source": "https://www.kitco.com/news/article/2025-02-28/keith-neumeyer-why-im-hoarding-cash-buying-back-shares"
+    },
+    {
+      "date": "2026-07-08",
+      "direction": "强烈看多",
+      "comments": "在Daniela Cambone节目中断言白银已进入全新价格环境,'有生之年白银或不再跌破50美元'。实物买盘突破50美元后银行大规模空头回补加速上涨,叠加年产约8.5亿盎司十年停滞、工业需求升至13亿盎司的结构性赤字,类比铜的永久性上移,看多前景强烈。",
+      "targets": "白银/First Majestic(AG)",
+      "source": "https://www.itmtrading.com/blog/banks-got-caught-why-silver-will-never-trade-below-50-again-keith-neumeyer/"
+    }
+  ]
+}

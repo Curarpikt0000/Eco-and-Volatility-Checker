@@ -1,0 +1,30 @@
+{
+  "kol": "Jay Martin",
+  "sector": "Precious Metals",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 3,
+  "history": [
+    {
+      "date": "2025-01-21",
+      "direction": "看多",
+      "comments": "在访谈中展望贵金属前景,指出铀板块正在整合,同时持续看好黄金、铜、白银的中长期机会,认为大宗资源仍处于结构性牛市早中段。",
+      "targets": "黄金/白银/铜/铀",
+      "source": "https://www.youtube.com/watch?v=uzQPRVMnKMs"
+    },
+    {
+      "date": "2025-11-27",
+      "direction": "看多",
+      "comments": "在VRIC相关INN报道中提出'大钱在白银、稳钱在黄金',并强调本周中国推出的政策变化有可能显著影响黄金市场,看好贵金属与矿业股方向。",
+      "targets": "黄金/白银/矿业股",
+      "source": "https://investingnews.com/jay-martin-vric/"
+    },
+    {
+      "date": "2026-07-20",
+      "direction": "强烈看多",
+      "comments": "在《Jay Martin Show》'7月24日:中国揭示黄金真实价格'一集中,认为中国叫停银行零售纸黄金交易或在挑战以纸货主导的国际金价体系,黄金正开始进入数字金融系统角色,矿业股仍是最具吸引力的板块之一。",
+      "targets": "黄金/白银/矿业股",
+      "source": "https://investoffshore.com/the-truth-about-gold-is-china-moving-from-paper-promises-to-physical-metal/"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "kol": "ANONYMIZED_PERSON_0_12",
+  "sector": "Precious Metals",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 3,
+  "history": [
+    {
+      "date": "2025-10-31",
+      "direction": "强烈看多",
+      "comments": "在Streetwise访谈中称金银均未见顶,未来数月仍有新高;金价可达4400美元以上,银价将重回50美元中高段。10月中旬银价触及55美元后出现双顶回调约15%属正常修正,DSI为89并非真正顶部信号。看好初级矿商为一生一次的多年机会。",
+      "targets": "黄金/白银/初级金矿(Rackla Metals RAK等)",
+      "source": "https://www.streetwisereports.com/article/2025/10/31/gold-and-silver-havent-peaked-yet-says-bob-moriarty.html"
+    },
+    {
+      "date": "2025-07-29",
+      "direction": "看多",
+      "comments": "在321Gold专栏中表示白银今年将成为热门品种,相关初级矿股(如SNAG)将受到市场追捧,延续其对贵金属板块的乐观判断。",
+      "targets": "白银/初级银矿",
+      "source": "https://www.streetwisereports.com/pub/htdocs/expert.html?id=3"
+    },
+    {
+      "date": "2026-04-15",
+      "direction": "强烈看多",
+      "comments": "在INN访谈中警告全球局势极度危险,呼吁投资者立即采取保护措施配置金银燃料食品。看好中国叫停零售纸黄金交易将挑战西方纸货市场,推动价格向物理供需回归,长期利好实物贵金属。",
+      "targets": "黄金/白银/实物贵金属",
+      "source": "https://investingnews.com/bob-moriarty-gold-silver-forecast/"
+    }
+  ]
+}
