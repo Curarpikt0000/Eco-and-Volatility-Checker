@@ -1,0 +1,30 @@
+{
+  "kol": "Vince Lanci",
+  "sector": "Precious Metals",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 3,
+  "history": [
+    {
+      "date": "2025-06-20",
+      "direction": "分歧",
+      "comments": "在GoldFix节目中解读花旗最新报告,该行预测金价明年可能跌至2500美元。Lanci逐条分析花旗看空逻辑并提出质疑,整体呈现多空博弈的分歧视角,提示投资者关注机构悲观预期背后的假设。",
+      "targets": "黄金",
+      "source": "https://www.gold-eagle.com/authors/vince-lanci"
+    },
+    {
+      "date": "2025-10-17",
+      "direction": "强烈看多",
+      "comments": "Echobay合伙人、GoldFix出版人Lanci指出白银创纪录上涨源于伦敦市场流动性危机,各国倾向把白银留在本国不再出借或抛售,导致伦敦交易极度紧张,支撑金银价格进一步上行。",
+      "targets": "白银,黄金",
+      "source": "https://investingnews.com/vince-lanci-gold-silver-forecast/"
+    },
+    {
+      "date": "2026-07-17",
+      "direction": "分歧",
+      "comments": "解释尽管央行大举买入,金银为何仍承压;称Comex作为定价机制已经\"失灵\",并警告中国超廉价AI模型可能冲击美国科技股估值。观点复杂,对贵金属短期偏谨慎、结构上看多。",
+      "targets": "黄金,白银",
+      "source": "https://www.gold-eagle.com/authors/vince-lanci"
+    }
+  ]
+}

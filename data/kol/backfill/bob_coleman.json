@@ -1,0 +1,23 @@
+{
+  "kol": "Bob Coleman",
+  "sector": "Precious Metals",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 2,
+  "history": [
+    {
+      "date": "2026-01-23",
+      "direction": "分歧",
+      "comments": "Idaho Armored Vaults创始人Coleman称白银破100美元、黄金逼近5000美元是一场\"狂热\",由空头/gamma逼空、期权波动率飙升和FOMO推动;他驳斥COMEX将崩、白银短缺、中国断供等传言,提醒白银跌得很快、应逢强预判性卖出。",
+      "targets": "白银,黄金",
+      "source": "https://www.financialsense.com/podcast/21531/silver-spikes-over-100-gold-nears-5000-bob-coleman-metals-mania"
+    },
+    {
+      "date": "2026-05-17",
+      "direction": "中性",
+      "comments": "Coleman基于COMEX持仓数据分析白银价格前景,指出黄金矿商牛市百分比指数已跌至3.7的低位,从实物金属投资者角度解读市场结构,偏数据驱动的中性研判而非单向喊多喊空。",
+      "targets": "白银,黄金,矿业股",
+      "source": "https://www.goldsilvervault.com/2026/05/17/blog-silver-price-outlook-comex-data-bob-coleman/"
+    }
+  ]
+}

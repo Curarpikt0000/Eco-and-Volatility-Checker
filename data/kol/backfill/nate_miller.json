@@ -1,0 +1,10 @@
+{
+  "kol": "Nate Miller",
+  "sector": "Precious Metals",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 0,
+  "status": "未找到",
+  "history": [],
+  "note": "搜索仅返回Kitco署名综述性稿件,无法确认为该分析师本人可独立归属的市场观点条目;按铁律不编造,标count:0。"
+}

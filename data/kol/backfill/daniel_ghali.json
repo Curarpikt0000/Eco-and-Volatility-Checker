@@ -1,0 +1,23 @@
+{
+  "kol": "Daniel Ghali",
+  "sector": "Precious Metals",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 2,
+  "history": [
+    {
+      "date": "2025-02-25",
+      "direction": "看多",
+      "comments": "TD证券高级商品策略师Ghali称黄金呈现\"双赢\"格局:强美元下亚洲买盘对冲货币贬值,弱美元下西方宏观基金传统买入,双向都有支撑但难持久。白银则连续第五年结构性赤字,是\"可以买入的逼空\",长线更优。",
+      "targets": "黄金,白银",
+      "source": "https://www.kitco.com/news/article/2025-02-25/gold-has-win-win-setup-not-long-while-silver-squeeze-you-can-buy-td"
+    },
+    {
+      "date": "2025-10-16",
+      "direction": "看多",
+      "comments": "在白银历史性上涨中,Ghali所在TD证券平仓一笔战术性白银空头录得239万美元亏损,侧面印证其此前对白银逼空、伦敦金属外流至美国不会回流的判断,结构性看多逻辑持续兑现。",
+      "targets": "白银,黄金",
+      "source": "https://markets.financialcontent.com/stocks/article/marketminute-2025-10-16-td-securities-stumbles-with-239-million-silver-short-loss-amidst-historic-rally"
+    }
+  ]
+}

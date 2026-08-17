@@ -1,0 +1,23 @@
+{
+  "kol": "Steve Penny",
+  "sector": "Precious Metals",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 2,
+  "history": [
+    {
+      "date": "2026-01-22",
+      "direction": "强烈看多",
+      "comments": "SilverChartist创始人Penny认为通缩冲击最终将把白银推向三位数、黄金推向1万美元以上;长期极度看多,但强调真正的大行情催化剂是美联储对下一次危机的应对,类似1979年式的爆发时刻。",
+      "targets": "白银,黄金,铀",
+      "source": "https://investingnews.com/steve-penny-silver-price-forecast/"
+    },
+    {
+      "date": "2026-03-04",
+      "direction": "看多",
+      "comments": "Penny此前在1月受访时确信白银在触及54美元后近期将升至96美元,但3月复盘时表示没料到会涨得如此之快,提示短线节奏难测,维持长期看多、近中期或偏震荡的判断。",
+      "targets": "白银",
+      "source": "https://investingnews.com/daily/resource-investing/precious-metals-investing/silver-investing/silver-in-the-future/"
+    }
+  ]
+}
