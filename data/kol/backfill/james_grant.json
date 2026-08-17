@@ -1,0 +1,16 @@
+{
+  "kol": "James Grant",
+  "sector": "Government Debt",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 1,
+  "history": [
+    {
+      "date": "2025-05-03",
+      "direction": "看空",
+      "comments": "Grant's Interest Rate Observer创办人认为债市已进入新一轮长期熊市,可能像历史利率周期一样持续数十年。他以1946-1981年利率长期上行为参照,判断当前是又一个多年期利率上升周期的起点,利率将'更高、持续更久'。对长久期债券持谨慎看空,警示银行体系因商业地产恶化的脆弱性。",
+      "targets": "美国国债/长久期债券/银行股",
+      "source": "Adam Taggart Thoughtful Money (Substack/marketsanity 转述), 2025-05-03"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "kol": "Lacy Hunt",
+  "sector": "Government Debt",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 1,
+  "history": [
+    {
+      "date": "2026-07-16",
+      "direction": "看空",
+      "comments": "Hoisington首席经济学家、坚持看多美债逾30-40年的著名债牛,在二季度展望《资本稀缺与全球化去通胀时代的终结》中罕见反转转为看空债券。判断美国长期通胀均衡区间正从1.5-3.5%上移至3.5-4.5%,存在通胀超5%风险,理由是全球化逆转、劳动力增长放缓、AI数据中心与财政赤字造成资本稀缺。行动上大幅削减客户债券久期,转入短期国库券。",
+      "targets": "美国长期国债/国库券",
+      "source": "Advisor Perspectives / AdvisorAnalyst.com, 2026-07-16"
+    }
+  ]
+}
