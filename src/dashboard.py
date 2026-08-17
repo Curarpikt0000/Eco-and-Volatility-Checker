@@ -155,7 +155,8 @@ def threshold_text(ind):
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
-             country_ust=None, kol_views=None, credit_impulse=None, custody_accel=None):
+             country_ust=None, kol_views=None, credit_impulse=None, custody_accel=None,
+             stress_panels=None, ofr_fsi=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -329,6 +330,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         custody_accel=_custody_accel_html(custody_accel),
         country_ust=_country_ust_html(country_ust),
         credit_impulse=_credit_impulse_html(credit_impulse),
+        stress_panels=_stress_panels_html(stress_panels, ofr_fsi),
         auctions=_auctions_html(auctions),
         holdings=_holdings_html(holdings),
     )
@@ -1221,6 +1223,133 @@ def _credit_impulse_html(ci):
     )
 
 
+def _stress_panel_svg(panel, w=940, h=300):
+    """双轴(或单轴)多线折线图, 用于国债市场压力四联图。竖向排列时每张全宽。
+    panel: {series:[{name,color,axis(left/right),dash?,width?,points:[{date,v}]}], unit_left, unit_right, single_axis?}。
+    左轴/右轴各自独立缩放; 带 x 轴年月标签; 图例在右侧。绝不编: 空序列跳过。"""
+    series = [s for s in panel.get("series", []) if s.get("points")]
+    if not series:
+        return '<div class="sp-na">数据未就绪</div>'
+    single = panel.get("single_axis")
+    # 统一时间轴(所有 series 的日期并集)
+    all_dates = sorted({p["date"] for s in series for p in s["points"]})
+    if len(all_dates) < 2:
+        return '<div class="sp-na">数据不足</div>'
+    n = len(all_dates)
+    didx = {d: i for i, d in enumerate(all_dates)}
+    # 左右轴各自值域
+    left_vals = [p["v"] for s in series if s.get("axis", "left") == "left" for p in s["points"]]
+    right_vals = [p["v"] for s in series if s.get("axis") == "right" for p in s["points"]]
+    def _range(vals, incl_zero=False):
+        if not vals:
+            return (0.0, 1.0)
+        lo, hi = min(vals), max(vals)
+        if incl_zero:
+            lo, hi = min(lo, 0.0), max(hi, 0.0)
+        pad = (hi - lo) * 0.10 or (abs(hi) * 0.1 or 1.0)
+        return (lo - pad, hi + pad)
+    # OFR 单轴含0基准; 其余左轴不强制0
+    l_lo, l_hi = _range(left_vals, incl_zero=single)
+    r_lo, r_hi = _range(right_vals)
+    l_rng = (l_hi - l_lo) or 1.0
+    r_rng = (r_hi - r_lo) or 1.0
+    ml, mr, mt, mb = 52, (150 if not single else 150), 18, 30
+    pw, ph = w - ml - mr, h - mt - mb
+    def X(i): return ml + i * pw / (n - 1)
+    def YL(v): return mt + (l_hi - v) / l_rng * ph
+    def YR(v): return mt + (r_hi - v) / r_rng * ph
+    parts = [f'<svg viewBox="0 0 {w} {h}" class="sp-chart" preserveAspectRatio="xMidYMid meet">']
+    # 左轴刻度(4)
+    for k in range(4):
+        gv = l_lo + l_rng * k / 3
+        gy = YL(gv)
+        parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" class="sp-grid"/>')
+        parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" class="sp-ylab" text-anchor="end">{gv:.2f}</text>')
+    # 右轴刻度(单轴时不画)
+    if not single and right_vals:
+        for k in range(4):
+            gv = r_lo + r_rng * k / 3
+            gy = YR(gv)
+            parts.append(f'<text x="{w-mr+6}" y="{gy+3:.1f}" class="sp-ylab sp-ylab-r" text-anchor="start">{gv:.2f}</text>')
+    # 零轴(单轴 OFR 高亮)
+    if single and l_lo <= 0 <= l_hi:
+        zy = YL(0.0)
+        parts.append(f'<line x1="{ml}" y1="{zy:.1f}" x2="{w-mr}" y2="{zy:.1f}" class="sp-zero"/>')
+        parts.append(f'<text x="{ml+4}" y="{zy-4:.1f}" class="sp-zlab">0 = 历史正常</text>')
+    # x 轴年月标签(每约6个月)
+    step = max(1, n // 6)
+    for i in range(0, n, step):
+        d = all_dates[i]
+        anchor = "start" if i == 0 else ("end" if i >= n - step else "middle")
+        parts.append(f'<text x="{X(i):.1f}" y="{h-8}" class="sp-xlab" text-anchor="{anchor}">{d[:7]}</text>')
+    # 每条线
+    legend_y = mt + 8
+    for s in series:
+        color = s["color"]
+        axis = s.get("axis", "left")
+        Y = YL if axis == "left" else YR
+        pts = [f"{X(didx[p['date']]):.1f},{Y(p['v']):.1f}" for p in s["points"] if p["date"] in didx]
+        if len(pts) >= 2:
+            dash = ' stroke-dasharray="5,3"' if s.get("dash") else ""
+            width = s.get("width", 1.7)
+            parts.append(f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" '
+                         f'stroke-width="{width}" stroke-linejoin="round" opacity="0.9"{dash}/>')
+            # 最新点
+            lp = s["points"][-1]
+            parts.append(f'<circle cx="{X(didx[lp["date"]]):.1f}" cy="{Y(lp["v"]):.1f}" r="3" '
+                         f'fill="none" stroke="{color}" stroke-width="1.8"/>')
+        # 图例
+        axtag = "" if single else (" ◂L" if axis == "left" else " R▸")
+        leg_dash = ' stroke-dasharray="5,3"' if s.get("dash") else ""
+        parts.append(f'<line x1="{w-mr+8}" y1="{legend_y}" x2="{w-mr+26}" y2="{legend_y}" '
+                     f'stroke="{color}" stroke-width="2.6"{leg_dash}/>')
+        parts.append(f'<text x="{w-mr+30}" y="{legend_y+4}" class="sp-leg" fill="{color}">'
+                     f'{_esc(s["name"])}{axtag}</text>')
+        legend_y += 20
+    parts.append('</svg>')
+    return "".join(parts)
+
+
+def _stress_panels_html(sp, ofr=None):
+    """国债市场压力【竖向四联图】(对齐 Morgan Stanley 三图 + OFR 官方压力指数)。
+    竖向排列(而非横向), 每张全宽大图, 更清晰。全部过去3年真实公开数据。
+    sp: fetch_treasury_stress_panels() 结果; ofr: fetch_ofr_fsi() 结果(第4图)。"""
+    panels = list((sp or {}).get("panels") or [])
+    if ofr and ofr.get("panel"):
+        panels.append(ofr["panel"])
+    panels = [p for p in panels if any(s.get("points") for s in p.get("series", []))]
+    if not panels:
+        return '<p class="empty">国债市场压力数据未就绪。</p>'
+    asof = (sp or {}).get("asof") or (ofr or {}).get("asof") or ""
+    years = (sp or {}).get("years") or (ofr or {}).get("years") or 3
+    blocks = []
+    for p in panels:
+        axinfo = ""
+        if not p.get("single_axis"):
+            axinfo = (f'<span class="sp-axk">左轴 ◂ {_esc(p.get("unit_left",""))}</span>'
+                      f'<span class="sp-axk">{_esc(p.get("unit_right",""))} ▸ 右轴</span>')
+        else:
+            axinfo = f'<span class="sp-axk">{_esc(p.get("unit_left",""))}</span>'
+        blocks.append(
+            f'<div class="sp-panel">'
+            f'<div class="sp-head"><span class="sp-title">{_esc(p["title"])}</span>'
+            f'<span class="sp-sub">{_esc(p.get("subtitle",""))}</span></div>'
+            f'<div class="sp-axrow">{axinfo}</div>'
+            f'{_stress_panel_svg(p)}'
+            f'<div class="sp-note">{p.get("note","")}</div>'
+            f'<div class="sp-src">数据源：{_esc(p.get("source",""))}</div>'
+            f'</div>'
+        )
+    intro = (
+        f'<div class="sp-intro">参照 Morgan Stanley 三图（国债收益率+波动性 / 市场流动性价差 / 成交活跃度），'
+        f'用<b>过去 {years} 年真实公开数据</b>竖向复刻。'
+        f'MS 的 BrokerTec 日内价差与 DV01 成交量为其专有数据（无免费公开源），'
+        f'图②③ 改用主题对齐的公开压力代理并已明确标注；图④ 为 OFR 官方金融压力指数。'
+        f'<span class="sp-asof">as of {_esc(str(asof))} · 周度降噪 · 每日更新</span></div>'
+    )
+    return f'<div class="sp-wrap">{intro}{"".join(blocks)}</div>'
+
+
 def _cb_balance_html(cb):
     """底部四大央行资产负债表板块(US/JP/CN/ECB), 2x2 布局。统一当天汇率折 $B 横向可比。"""
     if not cb:
@@ -1988,6 +2117,30 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .ci-how b {{ color: var(--text); }}
   @media (max-width: 720px) {{ .ci-cols, .ci-cols-4 {{ grid-template-columns: 1fr; }} }}
 
+  /* 国债市场压力四联图(竖向, 对齐 Morgan Stanley) */
+  .sp-wrap {{ display: flex; flex-direction: column; gap: 18px; }}
+  .sp-intro {{ font-size: 11.5px; color: var(--muted); line-height: 1.65; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 9px 13px; }}
+  .sp-intro b {{ color: var(--text); }}
+  .sp-asof {{ display: block; margin-top: 5px; font-family: var(--mono); font-size: 10.5px; color: var(--dust-blue); }}
+  .sp-panel {{ background: var(--card2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px 10px; }}
+  .sp-head {{ display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 2px; }}
+  .sp-title {{ font-size: 14px; font-weight: 700; color: var(--text); }}
+  .sp-sub {{ font-size: 11px; color: var(--muted); font-style: italic; }}
+  .sp-axrow {{ display: flex; gap: 14px; margin: 2px 0 6px; }}
+  .sp-axk {{ font-size: 10.5px; color: var(--muted); font-family: var(--mono); }}
+  .sp-chart {{ width: 100%; height: auto; display: block; }}
+  .sp-grid {{ stroke: rgba(160,160,150,.18); stroke-width: 1; stroke-dasharray: 3 3; }}
+  .sp-zero {{ stroke: rgba(214,69,69,.55); stroke-width: 1.3; }}
+  .sp-zlab {{ fill: rgba(214,69,69,.8); font-size: 9.5px; font-family: var(--mono); }}
+  .sp-ylab {{ fill: var(--muted); font-size: 9.5px; font-family: var(--mono); }}
+  .sp-ylab-r {{ fill: var(--muted); }}
+  .sp-xlab {{ fill: var(--muted); font-size: 9.5px; font-family: var(--mono); }}
+  .sp-leg {{ font-size: 10.5px; font-family: var(--mono); }}
+  .sp-note {{ font-size: 11px; color: var(--muted); line-height: 1.6; margin-top: 6px; padding: 6px 10px; background: rgba(140,155,175,.08); border-radius: 6px; }}
+  .sp-note b {{ color: var(--text); }}
+  .sp-src {{ font-size: 10px; color: var(--muted); font-family: var(--mono); margin-top: 5px; opacity: .8; }}
+  .sp-na {{ font-size: 12px; color: var(--muted); padding: 24px; text-align: center; }}
+
   /* 国债拍卖 timeline */
   .auc-wrap {{ display: flex; flex-direction: column; gap: 12px; }}
   .auc-next-banner {{ background: rgba(140,155,175,.14); border: 1px solid var(--border); border-left: 3px solid var(--dust-blue); border-radius: 6px; padding: 8px 12px; font-size: 13px; color: var(--text); }}
@@ -2158,6 +2311,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·二·三：Credit Impulse 信贷脉冲 (中期领先指标, 领先实体经济6-9月) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>Credit Impulse 信贷脉冲 · 中期领先指标 (美/中/欧 · 季度 · 新增信贷的加速度 · 领先实体经济6-9月)</div>
   <div class="card">{credit_impulse}</div>
+
+  <!-- ═══ 附三·二·四：国债市场压力四联图 (对齐 Morgan Stanley 三图 + OFR官方压力指数, 竖向) ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>国债市场收益率·波动性·压力 · 竖向四联图 (对齐 Morgan Stanley · 过去3年真实公开数据 · 每日更新)</div>
+  <div class="card">{stress_panels}</div>
 
   <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)</div>

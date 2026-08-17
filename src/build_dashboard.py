@@ -120,6 +120,47 @@ def main():
     except Exception as e:
         print(f"[dashboard] 托管美债加速度 跳过: {e}")
 
+    # ── 国债市场压力四联图(对齐 Morgan Stanley 三图 + OFR官方压力指数) ──
+    stress_panels = {}
+    ofr_fsi = {}
+    try:
+        stress_panels = ed.fetch_treasury_stress_panels(years=3) or {}
+        print(f"[dashboard] 国债压力三联图: status={stress_panels.get('status')} asof={stress_panels.get('asof')}")
+    except Exception as e:
+        print(f"[dashboard] 国债压力三联图 跳过: {e}")
+    try:
+        ofr_fsi = ed.fetch_ofr_fsi(years=3) or {}
+        print(f"[dashboard] OFR FSI: status={ofr_fsi.get('status')} asof={ofr_fsi.get('asof')} latest={ofr_fsi.get('latest',{}).get('OFR FSI 总指数')}")
+    except Exception as e:
+        print(f"[dashboard] OFR FSI 跳过: {e}")
+    # ★数据落盘 GitHub 副本(完整历史序列进 git)
+    try:
+        _data_dir = os.path.join(os.path.dirname(__file__), "..", "data", "stress")
+        os.makedirs(_data_dir, exist_ok=True)
+        if stress_panels.get("panels"):
+            with open(os.path.join(_data_dir, "treasury_stress_panels.json"), "w", encoding="utf-8") as f:
+                json.dump(stress_panels, f, ensure_ascii=False, indent=2)
+            print(f"[dashboard] 国债压力数据已落盘 data/stress/treasury_stress_panels.json")
+        if ofr_fsi.get("panel"):
+            with open(os.path.join(_data_dir, "ofr_fsi.json"), "w", encoding="utf-8") as f:
+                json.dump(ofr_fsi, f, ensure_ascii=False, indent=2)
+            print(f"[dashboard] OFR FSI 数据已落盘 data/stress/ofr_fsi.json")
+    except Exception as e:
+        print(f"[dashboard] 国债压力数据落盘跳过: {e}")
+    # ★写 Notion(最新值时序, 失败不阻塞)
+    try:
+        pid = ed.write_stress_panels_notion(stress_panels)
+        if pid:
+            print(f"[dashboard] 国债压力最新值已写 Notion: {pid}")
+    except Exception as e:
+        print(f"[dashboard] 国债压力写 Notion 跳过: {e}")
+    try:
+        pid = ed.write_ofr_notion(ofr_fsi)
+        if pid:
+            print(f"[dashboard] OFR FSI 最新值已写 Notion: {pid}")
+    except Exception as e:
+        print(f"[dashboard] OFR 写 Notion 跳过: {e}")
+
     out = dash.generate(
         snap, checks, hit, gstats, overall,
         holdings=holdings, kol_changes=kol_changes,
@@ -129,6 +170,8 @@ def main():
         country_ust=country_ust,
         credit_impulse=credit_impulse,
         custody_accel=custody_accel,
+        stress_panels=stress_panels,
+        ofr_fsi=ofr_fsi,
     )
     print(f"[dashboard] 生成: {out}")
     return out

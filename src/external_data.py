@@ -1627,6 +1627,357 @@ def fetch_credit_impulse(years=8):
     return out
 
 
+# ─────────── 国债市场压力三联图 (对齐 Morgan Stanley 三图, 过去3年真实公开数据) ───────────
+# Chao 需求(2026-08): 参照 MS 报告三图(收益率+波动性/BrokerTec价差/BrokerTec DV01量),
+#   用过去3年【真实公开数据】新增三个图, 竖向排列, 数据进 GitHub + Notion。
+# ★诚实边界: MS 图2(BrokerTec日内bid-ask)/图3(BrokerTec周度DV01量)是 Morgan Stanley
+#   BrokerTec 专有数据, 无免费公开源(已搜索确认只对付费机构客户开放)。故图2/图3 换成
+#   主题对齐的免费公开【压力代理】, 并在 dashboard 明确标注"非BrokerTec原指标"。
+# 三图逻辑(与 MS 一致): 波动性↑(MOVE) → 市场压力↑(期限溢价/IG OAS) → 风险传导(曲线利差/HY OAS)。
+#   图1 收益率+波动性: DGS10/DGS2(FRED) + MOVE指数(yfinance ^MOVE, ICE专有但Yahoo有免费历史)
+#   图2 国债市场压力代理: THREEFYTP10(10yr期限溢价,NY Fed ACM) + BAMLC0A0CM(IG企业债OAS)
+#   图3 曲线/信用压力代理: T10Y2Y(10Y-2Y曲线利差) + BAMLH0A0HYM2(HY OAS)
+# 全部 FRED 带 key API 优先(fredgraph CSV 本环境偶发超时); MOVE 走 yfinance。绝不编: 抓不到标 status。
+
+
+def _fred_series_hist(sid, start):
+    """拉单个 FRED 序列历史, 带 key API 优先, curl CSV 回退。返回 [(date,val),...] 只含有效点。"""
+    pts = []
+    try:
+        try:
+            from fetchers.fred import fetch_fred_history
+        except Exception:
+            from src.fetchers.fred import fetch_fred_history
+        raw = fetch_fred_history(sid, start=start)
+        for d, v in raw:
+            try:
+                if v is not None:
+                    pts.append((str(d).strip(), float(v)))
+            except (ValueError, TypeError):
+                pass
+    except Exception:
+        pass
+    if len(pts) < 20:
+        import subprocess
+        url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}&cosd={start}"
+        for _attempt in range(3):
+            try:
+                r = subprocess.run(["curl", "-s", url, "--max-time", "30",
+                                    "-H", "User-Agent: Mozilla/5.0"],
+                                   capture_output=True, text=True, timeout=38)
+                if r.returncode == 0 and r.stdout and "observation_date" in r.stdout:
+                    pts = []
+                    for ln in r.stdout.strip().splitlines()[1:]:
+                        if "," not in ln:
+                            continue
+                        d, v = ln.split(",", 1)
+                        v = v.strip()
+                        if v and v != ".":
+                            try:
+                                pts.append((d.strip(), float(v)))
+                            except ValueError:
+                                pass
+                    if len(pts) >= 20:
+                        break
+            except Exception:
+                pass
+    return pts
+
+
+def _fetch_move_history(start):
+    """MOVE 指数(ICE BofA, 专有)历史 —— 走 yfinance ^MOVE(Yahoo 免费历史)。
+    返回 [(date,val),...]。抓不到返回 []（诚实, 不编）。"""
+    try:
+        import yfinance as yf
+    except Exception:
+        return []
+    try:
+        df = yf.download("^MOVE", start=start, interval="1d",
+                         progress=False, auto_adjust=False)
+        if df is None or len(df) == 0:
+            return []
+        c = df["Close"]
+        # 多列(MultiIndex)时取第一列
+        try:
+            if hasattr(c, "columns"):
+                c = c.iloc[:, 0]
+        except Exception:
+            pass
+        c = c.dropna()
+        out = []
+        for idx, val in c.items():
+            try:
+                out.append((idx.date().isoformat(), round(float(val), 2)))
+            except Exception:
+                pass
+        return out
+    except Exception:
+        return []
+
+
+def _weekly_resample(pts, agg="last"):
+    """把日度 [(date,val)] 降采样到周度(周五 as-of), 减少折线噪声。agg: last|mean|max。
+    返回 [(week_date, val)]。"""
+    import datetime as _dt
+    from collections import defaultdict
+    buckets = defaultdict(list)
+    for d, v in pts:
+        try:
+            dt = _dt.date.fromisoformat(d[:10])
+        except Exception:
+            continue
+        # 归到该周的周五
+        friday = dt + _dt.timedelta(days=(4 - dt.weekday()))
+        buckets[friday.isoformat()].append(v)
+    out = []
+    for wk in sorted(buckets):
+        vs = buckets[wk]
+        if agg == "mean":
+            val = sum(vs) / len(vs)
+        elif agg == "max":
+            val = max(vs)
+        else:
+            val = vs[-1]
+        out.append((wk, round(val, 4)))
+    return out
+
+
+def fetch_treasury_stress_panels(years=3):
+    """国债市场压力三联图(对齐 Morgan Stanley 三图, 过去 N 年真实公开数据, 竖向排列)。
+    返回 {panels:[p1,p2,p3], asof, years, status}。每个 panel:
+      {id, title, subtitle, note, unit_left, unit_right, series:[{name,color,axis,points:[{date,v}]}], source}
+    全部真实公开数据; 图2/图3 是公开压力代理(非 BrokerTec 原指标, note 明确标注)。
+    绝不编: 某序列抓不到→该 series.points=[] + 整体 status 反映缺失。周度降采样降噪。"""
+    import datetime as _dt
+    start = (_dt.date.today() - _dt.timedelta(days=int(365.3 * years) + 10)).isoformat()
+
+    def _mk(pts, weekly=True, agg="last"):
+        if not pts:
+            return []
+        wp = _weekly_resample(pts, agg=agg) if weekly else pts
+        return [{"date": d, "v": v} for d, v in wp]
+
+    # ── 图1: 收益率 + 波动性 ──
+    dgs10 = _fred_series_hist("DGS10", start)
+    dgs2 = _fred_series_hist("DGS2", start)
+    move = _fetch_move_history(start)
+    panel1 = {
+        "id": "yields_vol",
+        "title": "① 美债收益率与波动性",
+        "subtitle": "US Treasury Yields & MOVE Volatility",
+        "note": "MOVE 指数 = ICE BofA 债券市场隐含波动率(国债版 VIX)。收益率与 MOVE 同向飙升 = 利率风险定价剧烈。",
+        "unit_left": "MOVE 指数", "unit_right": "收益率 %",
+        "series": [
+            {"name": "MOVE 指数", "color": "#c17d6a", "axis": "left",
+             "dash": True, "points": _mk(move, agg="last")},
+            {"name": "10年收益率", "color": "#6b8fb5", "axis": "right",
+             "points": _mk(dgs10, agg="last")},
+            {"name": "2年收益率", "color": "#7fa085", "axis": "right",
+             "points": _mk(dgs2, agg="last")},
+        ],
+        "source": "FRED DGS10/DGS2 · ICE BofA MOVE (Yahoo Finance ^MOVE)",
+    }
+
+    # ── 图2: 国债市场压力代理(对齐 MS 图2 流动性/成本恶化主题) ──
+    tp10 = _fred_series_hist("THREEFYTP10", start)   # 10yr 期限溢价(NY Fed ACM), %
+    igoas = _fred_series_hist("BAMLC0A0CM", start)    # IG 企业债 OAS, %
+    panel2 = {
+        "id": "mkt_stress",
+        "title": "② 国债市场压力代理",
+        "subtitle": "Treasury Market Stress Proxy (公开替代 BrokerTec 日内价差)",
+        "note": "⚠ 非 BrokerTec 日内 bid-ask 价差(MS 专有数据无公开源)——改用免费公开压力代理："
+                "10年期限溢价(市场要求的持有长债额外补偿, 承压时走高) + IG 企业债利差(信用/流动性压力)。两者走高 = 融资/流动性环境收紧。",
+        "unit_left": "期限溢价 %", "unit_right": "IG OAS %",
+        "series": [
+            {"name": "10年期限溢价", "color": "#b58a6a", "axis": "left",
+             "points": _mk(tp10, agg="last")},
+            {"name": "IG企业债利差(OAS)", "color": "#8a7fa8", "axis": "right",
+             "points": _mk(igoas, agg="last")},
+        ],
+        "source": "FRED THREEFYTP10 (NY Fed ACM 10yr term premium) · BAMLC0A0CM (ICE BofA IG OAS)",
+    }
+
+    # ── 图3: 曲线利差 + 信用压力(对齐 MS 图3 活跃度/风险传导主题) ──
+    t10y2y = _fred_series_hist("T10Y2Y", start)       # 10Y-2Y 曲线利差, %
+    hyoas = _fred_series_hist("BAMLH0A0HYM2", start)   # HY OAS, %
+    panel3 = {
+        "id": "curve_credit",
+        "title": "③ 收益率曲线与信用压力",
+        "subtitle": "Yield Curve & Credit Stress (公开替代 BrokerTec DV01 成交量)",
+        "note": "⚠ 非 BrokerTec 周度 DV01 成交量(MS 专有数据无公开源)——改用免费公开风险/曲线代理："
+                "10Y-2Y 曲线利差(倒挂/陡峭化反映利率预期与压力) + 高收益债利差 HY OAS(风险偏好/避险传导)。HY OAS 骤升 = 风险资产承压。",
+        "unit_left": "10Y-2Y 利差 %", "unit_right": "HY OAS %",
+        "series": [
+            {"name": "10Y-2Y 曲线利差", "color": "#6b8fb5", "axis": "left",
+             "points": _mk(t10y2y, agg="last")},
+            {"name": "高收益债利差(HY OAS)", "color": "#c0757d", "axis": "right",
+             "points": _mk(hyoas, agg="last")},
+        ],
+        "source": "FRED T10Y2Y (10Y-2Y spread) · BAMLH0A0HYM2 (ICE BofA HY OAS)",
+    }
+
+    panels = [panel1, panel2, panel3]
+    # asof = 所有 series 里最新的日期
+    all_last = []
+    for p in panels:
+        for s in p["series"]:
+            if s["points"]:
+                all_last.append(s["points"][-1]["date"])
+    asof = max(all_last) if all_last else None
+    # status: 统计缺失序列
+    missing = [f'{p["id"]}/{s["name"]}' for p in panels for s in p["series"] if not s["points"]]
+    status = "ok" if not missing else ("部分缺失: " + ", ".join(missing))
+    return {"panels": panels, "asof": asof, "years": years, "status": status}
+
+
+def fetch_ofr_fsi(years=3):
+    """OFR 金融压力指数(Financial Stress Index) —— 对齐'国债市场压力'主题的官方权威总览指标。
+    数据源: OFR 官方 CSV (financialresearch.gov/financial-stress-index/data/fsi.csv, 免key, 日频2000至今)。
+    列: Date, OFR FSI(总), Credit, Equity valuation, Safe assets, Funding, Volatility, +3区域。
+    OFR FSI: 0=金融压力处于历史正常水平; 正值=压力高于正常; 负值=低于正常。
+    返回 {panel:{...同stress_panel结构...}, asof, years, status, latest:{分量最新值}}。绝不编: 抓不到→status。
+    """
+    import datetime as _dt
+    import subprocess
+    start_year = (_dt.date.today() - _dt.timedelta(days=int(365.3 * years) + 10))
+    url = "https://www.financialresearch.gov/financial-stress-index/data/fsi.csv"
+    text = ""
+    # 通道1: urllib
+    try:
+        import urllib.request
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        text = urllib.request.urlopen(req, timeout=30).read().decode("utf-8", "replace")
+    except Exception:
+        text = ""
+    # 通道2: curl 回退
+    if "OFR FSI" not in text:
+        for _attempt in range(3):
+            try:
+                r = subprocess.run(["curl", "-s", url, "--max-time", "30",
+                                    "-H", "User-Agent: Mozilla/5.0"],
+                                   capture_output=True, text=True, timeout=38)
+                if r.returncode == 0 and "OFR FSI" in (r.stdout or ""):
+                    text = r.stdout
+                    break
+            except Exception:
+                pass
+    if "OFR FSI" not in text:
+        return {"panel": None, "asof": None, "years": years,
+                "status": "拉取失败(OFR 端点超时)", "latest": {}}
+    lines = text.strip().splitlines()
+    header = [h.strip() for h in lines[0].split(",")]
+    idx = {h: i for i, h in enumerate(header)}
+    # 需要的列
+    want = {"OFR FSI": "总指数", "Credit": "信用", "Funding": "融资",
+            "Safe assets": "安全资产", "Volatility": "波动性"}
+    series_pts = {k: [] for k in want}
+    for ln in lines[1:]:
+        cells = ln.split(",")
+        if not cells or len(cells) < len(header):
+            continue
+        d = cells[idx["Date"]].strip()
+        try:
+            dt = _dt.date.fromisoformat(d)
+        except Exception:
+            continue
+        if dt < start_year:
+            continue
+        for col in want:
+            j = idx.get(col)
+            if j is None or j >= len(cells):
+                continue
+            v = cells[j].strip()
+            if v and v not in (".", ""):
+                try:
+                    series_pts[col].append((d, round(float(v), 3)))
+                except ValueError:
+                    pass
+    # 周度降采样降噪
+    colors = {"OFR FSI": "#c0757d", "Credit": "#b58a6a", "Funding": "#8a7fa8",
+              "Safe assets": "#7fa085", "Volatility": "#6b8fb5"}
+    series = []
+    for col, zh in want.items():
+        wp = _weekly_resample(series_pts[col], agg="last") if series_pts[col] else []
+        series.append({
+            "name": (f"OFR FSI 总指数" if col == "OFR FSI" else zh),
+            "color": colors[col],
+            "axis": "left",
+            "width": (2.4 if col == "OFR FSI" else 1.3),
+            "points": [{"date": d, "v": v} for d, v in wp],
+        })
+    all_last = [s["points"][-1]["date"] for s in series if s["points"]]
+    asof = max(all_last) if all_last else None
+    latest = {s["name"]: (s["points"][-1]["v"] if s["points"] else None) for s in series}
+    panel = {
+        "id": "ofr_fsi",
+        "title": "④ OFR 金融压力指数",
+        "subtitle": "OFR Financial Stress Index (官方权威·全市场压力总览)",
+        "note": "OFR FSI = 美国金融研究办公室(财政部下属)编制的官方金融压力指数, 综合 33 个全球金融市场变量。"
+                "<b>0 = 压力处于历史正常水平</b>; <span style=\"color:#d64545\">正值 = 压力高于正常</span>(承压); "
+                "<span style=\"color:#2e9e5b\">负值 = 低于正常</span>(平静)。粗线为总指数, 细线为分量(信用/融资/安全资产/波动性)。",
+        "unit_left": "压力指数(0=正常)", "unit_right": "",
+        "series": series,
+        "source": "OFR (Office of Financial Research, US Treasury) FSI 官方 CSV",
+        "single_axis": True,
+    }
+    return {"panel": panel, "asof": asof, "years": years,
+            "status": "ok" if asof else "无有效数据", "latest": latest}
+
+
+def write_stress_panels_notion(sp=None):
+    """把国债市场压力三联图【最新值】写入 Notion DB_STRESS(以 asof 作 title 幂等 upsert)。
+    存最新一期6个指标的当前读数(时序), 完整历史序列存 GitHub data/ 副本。
+    返回写入 page id 或 None(无DB/无数据时跳过)。"""
+    import config as c
+    import notion_writer as nw
+    if sp is None:
+        sp = fetch_treasury_stress_panels()
+    db = c.NOTION_DB.get("stress")
+    if not db or not sp.get("asof"):
+        return None
+    # 从 panels 取每个 series 的最新值
+    latest = {}
+    for p in sp["panels"]:
+        for s in p["series"]:
+            latest[s["name"]] = s["points"][-1]["v"] if s["points"] else None
+    props = {
+        "MOVE指数": nw.prop_num(latest.get("MOVE 指数")),
+        "10年收益率": nw.prop_num(latest.get("10年收益率")),
+        "2年收益率": nw.prop_num(latest.get("2年收益率")),
+        "10年期限溢价": nw.prop_num(latest.get("10年期限溢价")),
+        "IG企业债OAS": nw.prop_num(latest.get("IG企业债利差(OAS)")),
+        "10Y2Y曲线利差": nw.prop_num(latest.get("10Y-2Y 曲线利差")),
+        "HY_OAS": nw.prop_num(latest.get("高收益债利差(HY OAS)")),
+        "数据源": {"rich_text": [{"type": "text", "text": {"content":
+                  "FRED + ICE BofA MOVE(Yahoo); 图2/图3为公开压力代理(非BrokerTec)"}}]},
+    }
+    return nw.upsert(db, sp["asof"], props, title_field="Date")
+
+
+def write_ofr_notion(ofr=None):
+    """把 OFR 金融压力指数【最新值】写入 Notion DB_OFR(以 asof 作 title 幂等 upsert)。
+    存最新一期总指数+分量当前读数(时序), 完整3年序列存 GitHub data/ 副本。
+    返回写入 page id 或 None(无DB/无数据时跳过)。"""
+    import config as c
+    import notion_writer as nw
+    if ofr is None:
+        ofr = fetch_ofr_fsi()
+    db = c.NOTION_DB.get("ofr")
+    if not db or not ofr.get("asof"):
+        return None
+    latest = ofr.get("latest", {})
+    props = {
+        "OFR_FSI总指数": nw.prop_num(latest.get("OFR FSI 总指数")),
+        "信用": nw.prop_num(latest.get("信用")),
+        "融资": nw.prop_num(latest.get("融资")),
+        "安全资产": nw.prop_num(latest.get("安全资产")),
+        "波动性": nw.prop_num(latest.get("波动性")),
+        "数据源": {"rich_text": [{"type": "text", "text": {"content":
+                  "OFR (Office of Financial Research, US Treasury) FSI 官方 CSV"}}]},
+    }
+    return nw.upsert(db, ofr["asof"], props, title_field="Date")
+
+
 if __name__ == "__main__":
     import json
     print("=== Credit Impulse 三国(信贷脉冲) ===")

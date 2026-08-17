@@ -45,6 +45,8 @@ NOTION_DB = {
     "custody":    ENV.get("DB_CUSTODY", ""),        # DB-6 外国官方托管美债(周度)
     "auctions":   ENV.get("DB_AUCTIONS", ""),       # DB-7 美国国债拍卖(每次一行)
     "money_supply": ENV.get("DB_MONEY_SUPPLY", ""),  # DB-8 货币供应量 M0/M1/M2(月度,每国一行)
+    "stress":     ENV.get("DB_STRESS", ""),        # DB-9 国债市场压力四联图最新值(as-of时序)
+    "ofr":        ENV.get("DB_OFR", ""),           # DB-10 OFR 金融压力指数(as-of时序)
 }
 
 # ─────────────────────── 信号方向 ───────────────────────
