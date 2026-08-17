@@ -1,0 +1,30 @@
+{
+  "kol": "James Rickards",
+  "sector": "Macro",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 3,
+  "history": [
+    {
+      "date": "2025-05-01",
+      "direction": "强烈看多",
+      "comments": "预测黄金在央行抢购与全球法币贬值的推动下,将于2026年突破27,000美元/盎司,核心逻辑是各国央行在法币贬值背景下集中抢购黄金。",
+      "targets": "黄金",
+      "source": "news.bitcoin.com (Jim Rickards: Gold Might Avoid Crypto Substituting the US Dollar)"
+    },
+    {
+      "date": "2026-08-13",
+      "direction": "强烈看多",
+      "comments": "警告霍尔木兹海峡与红海中断叠加战略石油储备枯竭,全球经济或将停摆;预计美国严重衰退、通胀走高、伊朗战争升级。黄金可能先跌向3,600美元再加速冲向10,000美元,白银随后跟涨。",
+      "targets": "黄金、白银",
+      "source": "silvertrade.com / GoldRepublic 访谈"
+    },
+    {
+      "date": "2026-08-05",
+      "direction": "强烈看多",
+      "comments": "认为当前市场是史上最大泡沫,终将破裂;届时现金将变得极其宝贵,投资者应重视真正的分散配置,并坚信黄金可达10,000美元/盎司。",
+      "targets": "黄金、现金",
+      "source": "YouTube (Jim Rickards | The Biggest Bubble in History Is About to Pop)"
+    }
+  ]
+}

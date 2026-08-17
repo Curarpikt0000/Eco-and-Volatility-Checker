@@ -1,0 +1,30 @@
+{
+  "kol": "Torsten Sløk",
+  "sector": "Macro",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 3,
+  "history": [
+    {
+      "date": "2025-05-01",
+      "direction": "看空",
+      "comments": "阿波罗首席经济学家认为若特朗普关税政策不变,2025年美国衰退概率高达90%,商业地产行业将首当其冲承受冲击。",
+      "targets": "美股、商业地产、美国经济",
+      "source": "commercialobserver.com / financialexpress.com"
+    },
+    {
+      "date": "2026-03-29",
+      "direction": "分歧",
+      "comments": "指出10年期美债收益率4.4%比合理水平3.9%高出约55个基点,期限溢价升高源于财政担忧、量化紧缩、外资需求下降及对美联储独立性的疑虑。",
+      "targets": "美债、利率",
+      "source": "apolloacademy.com (The Daily Spark)"
+    },
+    {
+      "date": "2026-06-22",
+      "direction": "中性",
+      "comments": "认为油价两个月内跌破80美元、下跌22%,已经削弱了美联储前一天发布的鹰派点阵图,暗示利率路径需下修。",
+      "targets": "原油、利率",
+      "source": "247wallst.com"
+    }
+  ]
+}

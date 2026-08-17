@@ -1,0 +1,30 @@
+{
+  "kol": "Jeremy Grantham",
+  "sector": "Macro",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 3,
+  "history": [
+    {
+      "date": "2025-05-01",
+      "direction": "看空",
+      "comments": "认为AI热潮令未修正的市场演变为\"泡沫中的泡沫\";投资者应对策略明确——\"重仓价值股、重仓非美市场\"以保护组合。",
+      "targets": "美股、价值股、非美股",
+      "source": "acquirersmultiple.com"
+    },
+    {
+      "date": "2026-01-20",
+      "direction": "强烈看空",
+      "comments": "直言AI热潮是典型泡沫,其不可避免的破裂可能拖累大盘进入痛苦调整,并预测2026年可能出现约50%的市场崩盘。",
+      "targets": "美股、AI板块",
+      "source": "webpronews.com"
+    },
+    {
+      "date": "2026-07-03",
+      "direction": "强烈看空",
+      "comments": "在CNBC《Squawk Box》表示,AI驱动的狂热已把美股估值推到史无前例的高度,重申其长期看空立场。",
+      "targets": "美股",
+      "source": "qz.com (CNBC Squawk Box 访谈)"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "kol": "Ray Dalio",
+  "sector": "Macro",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 3,
+  "history": [
+    {
+      "date": "2025-07-28",
+      "direction": "看多",
+      "comments": "在Kitco News访谈中建议投资者将约15%的组合配置到黄金或比特币,理由是美国国债攀升(约36.7万亿美元)、货币贬值风险与系统性金融风险上升,硬资产日益重要。",
+      "targets": "黄金、比特币",
+      "source": "goldsilver.com / goldcharterinc.com (Kitco访谈)"
+    },
+    {
+      "date": "2025-09-03",
+      "direction": "看多",
+      "comments": "在接受金融时报访谈并在社媒补充,阐述美元走弱正推动投资者转向数字资产与黄金,称美元贬值是2025年最大的市场故事。",
+      "targets": "黄金、比特币、美元",
+      "source": "blockonomi.com (FT 访谈)"
+    },
+    {
+      "date": "2025-09-19",
+      "direction": "看多",
+      "comments": "桥水创始人表示,在全球债务压力与主要货币贬值风险下,黄金与非法币货币将成为更强的价值储存工具。",
+      "targets": "黄金、非法币资产",
+      "source": "linkedin.com/CNBC"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "kol": "Zoltan Pozsar",
+  "sector": "Macro",
+  "backfill_date": "2026-08-17",
+  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "count": 3,
+  "history": [
+    {
+      "date": "2025-09-07",
+      "direction": "看多",
+      "comments": "在Ex Uno Plures发布《The Terms of the Commonwealth Fund》,延续多极储备货币与去美元化框架,认为黄金在新世界货币秩序中扮演重要角色。",
+      "targets": "黄金、美元",
+      "source": "exunoplures.hu (Money and World Order 系列)"
+    },
+    {
+      "date": "2026-01-12",
+      "direction": "看多",
+      "comments": "发布《Gold and the Lomonosov Ridge》,从地缘(北极资源争夺)角度分析黄金的战略地位,延续其黄金货币化与去美元化论点。",
+      "targets": "黄金",
+      "source": "exunoplures.hu"
+    },
+    {
+      "date": "2026-03-13",
+      "direction": "看多",
+      "comments": "发布《Physical QE and Gold》,提出实物量化宽松概念,论述央行以实物黄金作为储备管理与货币体系重构的一环。",
+      "targets": "黄金",
+      "source": "exunoplures.hu"
+    }
+  ]
+}
