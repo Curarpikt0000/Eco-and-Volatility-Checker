@@ -850,13 +850,18 @@ def _custody_accel_html(acc):
     vals = [p["ema_accel"] for p in pts if p.get("ema_accel") is not None]
     if not vals:
         return '<p class="empty">托管美债加速度数据不足。</p>'
-    w, h = 900, 210
-    ml, mr, mt, mb = 52, 16, 16, 34
-    pw, ph = w - ml - mr, h - mt - mb
-    amax = max(abs(min(vals)), abs(max(vals)), 1.0) * 1.15
+    # ── 三条折线: 7/14/28天(1/2/4周)加速度, 带零轴, 可看交叉点 ──
+    lines = [("a7", "7天(1周)", "#c27a3e"), ("a14", "14天(2周)", "#5b8fb5"), ("a28", "28天(4周)", "#6f8f6a")]
     n = len(pts)
-    bw = pw / n * 0.62
-    def X(i): return ml + (i + 0.5) * pw / n
+    # 收集所有有效值定值域
+    allv = [p[k] for k, _, _ in lines for p in pts if p.get(k) is not None]
+    if not allv:
+        return '<p class="empty">托管美债加速度数据不足。</p>'
+    amax = max(abs(min(allv)), abs(max(allv)), 1.0) * 1.12
+    w, h = 900, 260
+    ml, mr, mt, mb = 56, 108, 16, 34
+    pw, ph = w - ml - mr, h - mt - mb
+    def X(i): return ml + (i * pw / (n - 1) if n > 1 else pw / 2)
     def Y(v): return mt + ph / 2 - (v / amax) * (ph / 2)
     zy = mt + ph / 2
     parts = [f'<svg viewBox="0 0 {w} {h}" class="ca-chart" preserveAspectRatio="xMidYMid meet">']
@@ -865,48 +870,54 @@ def _custody_accel_html(acc):
         gy = Y(amax * frac)
         parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" class="cc-grid"/>')
         parts.append(f'<text x="{ml-5}" y="{gy+3:.1f}" class="cc-ylab">{amax*frac:+,.0f}</text>')
-    # 零轴(加粗)
+    # 零轴(加粗) + 上下方向标注
     parts.append(f'<line x1="{ml}" y1="{zy:.1f}" x2="{w-mr}" y2="{zy:.1f}" class="ci-zero"/>')
-    # EMA 平滑加速度柱(绿上红下)
-    for i, p in enumerate(pts):
-        ev = p.get("ema_accel")
-        if ev is None:
-            continue
-        y = Y(ev)
-        color = "#2e9e5b" if ev >= 0 else "#d64545"
-        top = min(y, zy)
-        hh = abs(y - zy)
-        parts.append(f'<rect x="{X(i)-bw/2:.1f}" y="{top:.1f}" width="{bw:.1f}" height="{hh:.1f}" fill="{color}" opacity="0.82" rx="1.5"/>')
-    # X 轴日期(首/中/末)
-    for i in (0, n // 2, n - 1):
-        anchor = "start" if i == 0 else ("end" if i == n - 1 else "middle")
+    parts.append(f'<text x="{ml+3}" y="{mt+11:.1f}" class="ca-zlab" fill="#2e9e5b">▲ 零轴上 = 流入在加速 / 流出在减速</text>')
+    parts.append(f'<text x="{ml+3}" y="{h-mb+13:.1f}" class="ca-zlab" fill="#d64545">▼ 零轴下 = 流出在加速 / 流入在减速</text>')
+    # X 轴日期(每隔几个)
+    step = max(1, n // 6)
+    for i in range(0, n, step):
+        anchor = "start" if i == 0 else ("end" if i >= n - step else "middle")
         parts.append(f'<text x="{X(i):.1f}" y="{h-6}" class="cc-xlab" text-anchor="{anchor}">{pts[i]["date"][5:]}</text>')
+    # 三条折线
+    legend_y = mt + 8
+    for key, lbl, color in lines:
+        seg = [(X(i), Y(p[key])) for i, p in enumerate(pts) if p.get(key) is not None]
+        if len(seg) >= 2:
+            poly = " ".join(f"{x:.1f},{y:.1f}" for x, y in seg)
+            parts.append(f'<polyline points="{poly}" fill="none" stroke="{color}" stroke-width="2.1" stroke-linejoin="round" stroke-linecap="round"/>')
+            # 最新点标记
+            lx, ly = seg[-1]
+            parts.append(f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="3.2" fill="{color}"/>')
+        # 图例(右侧)
+        parts.append(f'<line x1="{w-mr+8}" y1="{legend_y}" x2="{w-mr+26}" y2="{legend_y}" stroke="{color}" stroke-width="2.6"/>')
+        parts.append(f'<text x="{w-mr+30}" y="{legend_y+4}" class="ca-leg" fill="{color}">{lbl}</text>')
+        legend_y += 20
     parts.append('</svg>')
     chart = "".join(parts)
     # ── 最新读数三窗口 ──
     last = pts[-1]
-    def _cell(v, lbl):
+    def _cell(v, lbl, color):
         if v is None:
             return f'<div class="ca-cell"><div class="ca-clbl">{lbl}</div><div class="ca-cval">—</div></div>'
         col = "#2e9e5b" if v >= 0 else "#d64545"
         arrow = "▲加速流入" if v >= 0 else "▼加速流出"
-        return (f'<div class="ca-cell"><div class="ca-clbl">{lbl}</div>'
+        return (f'<div class="ca-cell" style="border-top:2px solid {color}"><div class="ca-clbl">{lbl}</div>'
                 f'<div class="ca-cval" style="color:{col}">{v:+,.0f}</div>'
                 f'<div class="ca-cnote" style="color:{col}">{arrow}</div></div>')
-    cells = (_cell(last.get("a7"), "trailing 7天(1周)")
-             + _cell(last.get("a14"), "trailing 14天(2周)")
-             + _cell(last.get("a28"), "trailing 28天(4周)"))
+    cells = (_cell(last.get("a7"), "trailing 7天(1周)", "#c27a3e")
+             + _cell(last.get("a14"), "trailing 14天(2周)", "#5b8fb5")
+             + _cell(last.get("a28"), "trailing 28天(4周)", "#6f8f6a"))
     return (
         f'<div class="ca-wrap">'
-        f'<div class="cust-lbl">超短期加速度 · 托管美债流入/流出的加速度（零轴上下） · as of {_esc(asof)}</div>'
+        f'<div class="cust-lbl">超短期加速度 · 托管美债流入/流出的加速度（零轴上下 · 三周期对比） · as of {_esc(asof)}</div>'
         f'<div class="ca-cells">{cells}</div>'
         f'{chart}'
-        f'<div class="ci-how"><b>如何看：</b>这是托管美债<b>变化的变化</b>（二阶差分/加速度），'
-        f'<span style="color:#2e9e5b">零轴上=资金流入在加速（或流出在减速）</span>，'
-        f'<span style="color:#d64545">零轴下=资金流出在加速（或流入在减速）</span>。'
-        f'主图柱为 <b>EMA(3周)斜率差分</b>（平滑版，压制周度噪声、拐点更干净）；上方三格为 7/14/28 天原始二阶差分（7天最敏感/最快，28天最稳/滞后）。'
-        f'★数据源为 Fed H.4.1 <b>周度</b>（每周三 as-of），非日频——故 7/14/28 天 ≡ <b>1/2/4 周</b>。单位百万美元。'
-        f'数据源：{_esc(acc.get("source",""))}。</div>'
+        f'<div class="ci-how"><b>如何看：</b>三条线分别是 <span style="color:#c27a3e"><b>7天(短)</b></span>、<span style="color:#5b8fb5"><b>14天(中)</b></span>、<span style="color:#6f8f6a"><b>28天(长)</b></span> 周期的加速度（托管美债<b>变化的变化</b>=二阶差分）。'
+        f'<span style="color:#2e9e5b">线在零轴上=资金流入在加速（或流出在减速）</span>，'
+        f'<span style="color:#d64545">线在零轴下=资金流出在加速（或流入在减速）</span>。'
+        f'★<b>看交叉点</b>：短周期(7天)线穿越中长周期(14/28天)线时=短期动能相对中长期在<b>转向</b>——短线上穿=短期率先加速（可能领先反转），短线下穿=短期率先减速。三线同向发散=趋势强化，收敛交叉=动能切换。'
+        f'数据源为 Fed H.4.1 <b>周度</b>（每周三 as-of），故 7/14/28 天 ≡ <b>1/2/4 周</b>。单位百万美元。{_esc(acc.get("source",""))}。</div>'
         f'</div>'
     )
 
@@ -1953,6 +1964,8 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .ca-cval {{ font-family: var(--mono); font-size: 20px; font-weight: 800; line-height: 1.1; }}
   .ca-cnote {{ font-size: 10px; margin-top: 2px; }}
   .ca-chart {{ width: 100%; height: auto; }}
+  .ca-leg {{ font-size: 11px; font-family: var(--mono); font-weight: 700; }}
+  .ca-zlab {{ font-size: 9.5px; opacity: 0.75; }}
   @media (max-width: 720px) {{ .ca-cells {{ grid-template-columns: 1fr; }} }}
   .ci-cols-4 {{ grid-template-columns: repeat(4, 1fr); }}
   .ci-long {{ margin-top: 12px; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px 6px; }}
