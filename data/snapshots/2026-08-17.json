@@ -1,0 +1,174 @@
+{
+  "date": "2026-08-17",
+  "results": {
+    "vix": {
+      "key": "vix",
+      "value": 14.63,
+      "as_of": "2026-08-13",
+      "status": "ok"
+    },
+    "fear_greed": {
+      "value": 65.0,
+      "as_of": "2026-08-14",
+      "status": "ok",
+      "extra": {
+        "rating": "greed"
+      },
+      "key": "fear_greed"
+    },
+    "aaii_bull_bear": {
+      "value": -3.2,
+      "as_of": "2026-08-12",
+      "status": "ok",
+      "extra": {
+        "note": "scrape glitch(bull=bear) -> override fallback"
+      },
+      "key": "aaii_bull_bear"
+    },
+    "put_call": {
+      "value": 0.61,
+      "as_of": "2026-08-17",
+      "status": "ok",
+      "key": "put_call"
+    },
+    "bofa_fms_cash": {
+      "value": 3.6,
+      "as_of": "2026-07",
+      "status": "ok",
+      "key": "bofa_fms_cash"
+    },
+    "sofr_iorb": {
+      "key": "sofr_iorb",
+      "value": -3.0,
+      "as_of": "2026-08-17",
+      "status": "ok",
+      "extra": {
+        "sofr": 3.62,
+        "iorb": 3.65,
+        "sofr_as_of": "2026-08-13",
+        "iorb_as_of": "2026-08-17"
+      }
+    },
+    "margin_debt": {
+      "value": 1502.1,
+      "as_of": "2026-06-30",
+      "status": "ok",
+      "key": "margin_debt"
+    },
+    "margin_gdp": {
+      "key": "margin_gdp",
+      "value": 4.63,
+      "as_of": "2026-08-17",
+      "status": "ok"
+    },
+    "ipo_count": {
+      "value": 229.0,
+      "as_of": "2026-YTD",
+      "status": "ok",
+      "extra": {
+        "source": "stockanalysis",
+        "year": 2026
+      },
+      "key": "ipo_count"
+    },
+    "insider": {
+      "value": 0.16,
+      "as_of": null,
+      "status": "ok",
+      "extra": {
+        "source": "openinsider",
+        "note": "近期榜前100笔口径,趋势用"
+      },
+      "key": "insider"
+    },
+    "bofa_bull_bear": {
+      "value": 9.7,
+      "as_of": "2026-08-07",
+      "status": "ok",
+      "key": "bofa_bull_bear"
+    },
+    "hy_oas": {
+      "key": "hy_oas",
+      "value": 2.71,
+      "as_of": "2026-08-13",
+      "status": "ok"
+    },
+    "ad_line": {
+      "value": false,
+      "as_of": "2026-08-11",
+      "status": "ok",
+      "key": "ad_line"
+    },
+    "buffett": {
+      "value": 214.0,
+      "as_of": "2026-01-01",
+      "status": "ok",
+      "extra": {
+        "source": "FRED Z.1"
+      },
+      "key": "buffett"
+    },
+    "cape": {
+      "value": 42.56,
+      "as_of": "2026-08-14",
+      "status": "ok",
+      "key": "cape"
+    },
+    "yield_curve": {
+      "key": "yield_curve",
+      "value": 0.51,
+      "as_of": "2026-08-14",
+      "status": "ok"
+    },
+    "lei": {
+      "value": 0.58,
+      "as_of": "2026-06-01",
+      "status": "ok",
+      "extra": {
+        "cli_index": 100.8,
+        "source": "FRED OECD CLI",
+        "note": "OECD综合领先指标6月变化(替Conference Board付费LEI)"
+      },
+      "key": "lei"
+    },
+    "aaii_alloc": {
+      "value": 70.38,
+      "as_of": null,
+      "status": "ok",
+      "key": "aaii_alloc"
+    }
+  },
+  "cot": {
+    "gold": {
+      "as_of": "2026-08-11",
+      "open_interest": 400309,
+      "comm_long": 69385,
+      "comm_short": 322025,
+      "comm_net": -252640,
+      "noncomm_long": 250936,
+      "noncomm_short": 32996,
+      "noncomm_net": 217940,
+      "metal": "gold",
+      "comm_net_wow": -26149,
+      "comm_long_wow": -2447,
+      "comm_short_wow": 23702,
+      "comm_surge": true
+    },
+    "silver": {
+      "as_of": "2026-08-11",
+      "open_interest": 115127,
+      "comm_long": 31801,
+      "comm_short": 75775,
+      "comm_net": -43974,
+      "noncomm_long": 39275,
+      "noncomm_short": 15629,
+      "noncomm_net": 23646,
+      "metal": "silver",
+      "comm_net_wow": -3552,
+      "comm_long_wow": -1317,
+      "comm_short_wow": 2235,
+      "comm_surge": false
+    }
+  },
+  "generated_at": "2026-08-17T02:03:25.535904"
+}
