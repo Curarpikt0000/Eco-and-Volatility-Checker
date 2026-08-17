@@ -251,38 +251,61 @@ def kol_weekly_views(min_comment_len=10):
     """
     import json
     import datetime as _dt
-    # 优先: 本周最新快照(独立数据仓库)
+    # 优先: 过去一周(上周一→今天)滚动窗口聚合(独立数据仓库)
+    # ★"本周"= 过去 7 天滚动窗口(上周一 00:00 → 今天), 每个 KOL 取其窗口内
+    #   【最近一次有实质观点】的记录 → 只要过去一周任意一天有观点就一直显示,
+    #   不会因"最新那天快照恰好空/稀疏/未跑"而整个模块空掉(Chao 2026-08 修正)。
     snaps = load_kol_daily_snapshots()
     rows = []
     src_date = ""
-    # ── 首现日期: 回溯快照历史, 算每个 KOL【当前方向连续保持的起始日】 ──
-    # 即"这个观点是从哪天开始的": 从最新往回找, 直到方向改变或断档
     _invalid = {"", "未找到", "无", "n/a", "未知", "数据滞后", "-", "—"}
-    since_map = {}   # kol -> 当前方向起始日
+    _today = _dt.date.today()
+    _this_monday = _today - _dt.timedelta(days=_today.weekday())
+    _last_monday = _this_monday - _dt.timedelta(days=7)
+    _win_start = _last_monday.strftime("%Y-%m-%d")   # 滚动窗口起点=上周一
+    _win_end = _today.strftime("%Y-%m-%d")
+    since_map = {}   # kol -> 当前方向连续保持起始日
     if snaps:
-        src_date = sorted(snaps.keys())[-1]
-        sorted_dates = sorted(snaps.keys())          # 升序
-        for kol, x in snaps[src_date].items():
+        all_dates = sorted(snaps.keys())              # 升序
+        # 滚动窗口内的快照日期(上周一 ≤ d ≤ 今天)
+        window_dates = [d for d in all_dates if _win_start <= d <= _win_end]
+        # 若窗口内一个快照都没有(极端: 长期没跑), 诚实回退到最近有数据的一天
+        if not window_dates:
+            window_dates = all_dates[-1:]
+        src_date = window_dates[-1] if window_dates else (all_dates[-1] if all_dates else "")
+        # ── 每个 KOL 取窗口内【最近一次有实质观点】的记录(按日期从新到旧找) ──
+        latest_view = {}   # kol -> (date, record)
+        for dd in reversed(window_dates):             # 新→旧
+            for kol, x in snaps.get(dd, {}).items():
+                if kol in latest_view:
+                    continue                          # 已有更新的记录
+                cmt = (x.get("comments") or "").strip()
+                direction = (x.get("direction") or "").strip()
+                # 只收有实质言论的(方向可为分歧等, 但 comments 要有内容)
+                if cmt:
+                    latest_view[kol] = (dd, x)
+        # ── 首现日期: 对每个当前观点, 回溯全历史算【当前方向连续保持起始日】 ──
+        for kol, (vdate, x) in latest_view.items():
             cur_dir = (x.get("direction") or "").strip()
-            since = src_date
+            since = vdate
             if cur_dir and cur_dir not in _invalid:
-                # 从倒数第二天往前回溯, 方向相同则前推起始日
-                for dd in reversed(sorted_dates[:-1]):
+                # 从 vdate 往前回溯(全历史, 不限窗口), 方向相同则前推起始日
+                earlier = [d for d in all_dates if d < vdate]
+                for dd in reversed(earlier):
                     prev_rec = snaps.get(dd, {}).get(kol)
                     if not prev_rec:
-                        break  # 断档(那天没这个KOL) → 起始日停在此
+                        break  # 断档 → 起始日停在此
                     pdir = (prev_rec.get("direction") or "").strip()
                     if pdir == cur_dir:
                         since = dd
                     else:
-                        break  # 方向变了 → 当前方向从下一天才开始
+                        break  # 方向变了
             since_map[kol] = since
-        for kol, x in snaps[src_date].items():
             rows.append({"kol": kol, "sector": x.get("sector", ""),
                          "direction": x.get("direction", ""),
                          "comments": x.get("comments", ""),
-                         "targets": x.get("targets", ""), "date": src_date,
-                         "since_date": since_map.get(kol, src_date)})
+                         "targets": x.get("targets", ""), "date": vdate,
+                         "since_date": since})
     else:
         # 回退: kol_independent.json 的 all(当日全量, 无历史→首现日=当日)
         if os.path.exists(KOL_INDEPENDENT):
@@ -300,8 +323,7 @@ def kol_weekly_views(min_comment_len=10):
             except Exception:
                 pass
     # 本周一(判断"新观点": 当前方向起始日 >= 本周一 = 本周内新转成的)
-    _today = _dt.date.today()
-    _this_monday = (_today - _dt.timedelta(days=_today.weekday())).strftime("%Y-%m-%d")
+    _this_monday_str = _this_monday.strftime("%Y-%m-%d")
     # 只保留有实质言论的
     rows = [r for r in rows if (r.get("comments") or "").strip()
             and len((r["comments"]).strip()) >= min_comment_len]
@@ -321,7 +343,7 @@ def kol_weekly_views(min_comment_len=10):
             "targets": (r.get("targets") or "")[:150],
             "date": r.get("date", src_date),
             "since_date": since,                    # 当前观点起始日(首现)
-            "is_new": bool(since and since >= _this_monday),  # 本周内新转成
+            "is_new": bool(since and since >= _this_monday_str),  # 本周内新转成
         })
     # 方向强弱排序: 看多在前(更醒目), 模块内按方向强弱降序
     _rank = {"强烈看多": 2, "看多": 1, "分歧": 0, "中性": 0, "看空": -1, "强烈看空": -2}
@@ -1436,15 +1458,50 @@ def fetch_credit_impulse(years=8):
         "US": ("美国", "🇺🇸", "QUSPAM770A"),
         "CN": ("中国", "🇨🇳", "QCNPAM770A"),
         "EA": ("欧元区", "🇪🇺", "QXMPAM770A"),
+        "JP": ("日本", "🇯🇵", "QJPPAM770A"),
     }
+    # 长历史(2008至今)序列: 用于粗颗粒度参考图。cosd 提前到 2006(留二阶差分预热)
+    cosd_long = "2006-01-01"
+
+    def _fred_ratio_long(sid):
+        """拉 2006 起的长序列(供 2008 至今参考图)。带 2 次重试(端点偶发超时)。"""
+        for _attempt in range(2):
+            try:
+                r = requests.get(
+                    f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}&cosd={cosd_long}",
+                    timeout=18, headers={"User-Agent": "Mozilla/5.0"})
+                if r.status_code != 200:
+                    continue
+                out = []
+                for ln in r.text.strip().splitlines()[1:]:
+                    if "," not in ln:
+                        continue
+                    d, v = ln.split(",", 1)
+                    v = v.strip()
+                    if v and v != ".":
+                        try:
+                            out.append((d.strip(), float(v)))
+                        except ValueError:
+                            pass
+                if out:
+                    return out
+            except Exception:
+                continue
+        return []
+
     out = {}
     for cc, (name, flag, sid) in spec.items():
         ratio = _fred_ratio(sid)
         pts = _impulse(ratio) if len(ratio) >= 3 else []
+        # 长历史(2008起)——粗颗粒度参考
+        ratio_long = _fred_ratio_long(sid)
+        pts_long_all = _impulse(ratio_long) if len(ratio_long) >= 3 else []
+        pts_long = [p for p in pts_long_all if p["date"] >= "2008-01-01"]
         if pts:
             latest = pts[-1]["ci"]
             out[cc] = {
                 "name": name, "flag": flag, "points": pts,
+                "points_long": pts_long,
                 "latest": latest, "latest_date": pts[-1]["date"],
                 "signal": _signal(latest),
                 "source": f"BIS credit-to-GDP ratio (FRED {sid}), 二阶差分",
@@ -1453,6 +1510,7 @@ def fetch_credit_impulse(years=8):
         else:
             out[cc] = {
                 "name": name, "flag": flag, "points": [],
+                "points_long": pts_long,
                 "latest": None, "latest_date": None, "signal": "unknown",
                 "source": f"BIS credit-to-GDP ratio (FRED {sid})",
                 "status": "未找到",

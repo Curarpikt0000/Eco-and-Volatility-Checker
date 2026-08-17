@@ -1029,28 +1029,106 @@ def _credit_impulse_col(d):
     )
 
 
+def _credit_impulse_long_svg(series_by_country, w=920, h=240):
+    """2008 至今长历史 Credit Impulse 多国折线(粗颗粒度参考图, 带零轴)。
+    series_by_country: {cc: {"name","flag","color","points":[{date,ci}]}}。"""
+    active = {cc: d for cc, d in series_by_country.items() if d.get("points")}
+    if not active:
+        return '<div class="ci-na">长历史数据不足</div>'
+    # 统一时间轴 + 值域
+    all_dates = sorted({p["date"] for d in active.values() for p in d["points"]})
+    all_vals = [p["ci"] for d in active.values() for p in d["points"]]
+    if len(all_dates) < 2:
+        return '<div class="ci-na">长历史数据不足</div>'
+    lo, hi = min(all_vals + [0.0]), max(all_vals + [0.0])
+    pad = (hi - lo) * 0.08 or 1.0
+    lo -= pad
+    hi += pad
+    rng = (hi - lo) or 1.0
+    ml, mr, mt, mb = 44, 90, 16, 28
+    pw, ph = w - ml - mr, h - mt - mb
+    n = len(all_dates)
+    didx = {d: i for i, d in enumerate(all_dates)}
+    def X(i): return ml + i * pw / (n - 1)
+    def Y(v): return mt + (hi - v) / rng * ph
+    zy = Y(0.0)
+    parts = [f'<svg viewBox="0 0 {w} {h}" class="ci-chart" preserveAspectRatio="xMidYMid meet">']
+    # Y 轴 3 刻度
+    for k in range(3):
+        gv = lo + rng * k / 2
+        gy = Y(gv)
+        parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" class="cc-grid"/>')
+        parts.append(f'<text x="{ml-5}" y="{gy+3:.1f}" class="cc-ylab">{gv:+.0f}</text>')
+    parts.append(f'<line x1="{ml}" y1="{zy:.1f}" x2="{w-mr}" y2="{zy:.1f}" class="ci-zero"/>')
+    # X 轴年份标签(每2年)
+    for i, d in enumerate(all_dates):
+        yr = d[:4]
+        if d[5:7] == "01" and int(yr) % 2 == 0:
+            anchor = "start" if i == 0 else ("end" if i == n - 1 else "middle")
+            parts.append(f'<text x="{X(i):.1f}" y="{h-8}" class="cc-xlab" text-anchor="{anchor}">{yr}</text>')
+    # 每国一条线
+    legend_y = mt + 6
+    for cc, d in active.items():
+        color = d["color"]
+        pts = [f"{X(didx[p['date']]):.1f},{Y(p['ci']):.1f}" for p in d["points"] if p["date"] in didx]
+        if len(pts) >= 2:
+            parts.append(f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" stroke-width="1.6" stroke-linejoin="round" opacity="0.85"/>')
+        # 图例
+        parts.append(f'<line x1="{w-mr+6}" y1="{legend_y}" x2="{w-mr+22}" y2="{legend_y}" stroke="{color}" stroke-width="2.4"/>')
+        parts.append(f'<text x="{w-mr+26}" y="{legend_y+3}" class="ci-leg" fill="{color}">{d["flag"]}{_esc(d["name"])}</text>')
+        legend_y += 18
+    parts.append('</svg>')
+    return "".join(parts)
+
+
 def _credit_impulse_html(ci):
-    """Credit Impulse(信贷脉冲)三国对比——中期领先指标(领先实体经济 6-9 月)。"""
-    if not ci or all((ci.get(cc, {}).get("status") != "ok") for cc in ("US", "CN", "EA")):
+    """Credit Impulse(信贷脉冲)四国对比——中期领先指标(领先实体经济 6-9 月)。"""
+    _cc_all = ("US", "CN", "EA", "JP")
+    if not ci or all((ci.get(cc, {}).get("status") != "ok") for cc in _cc_all):
         return '<p class="empty">Credit Impulse 数据未就绪。</p>'
-    src = next((ci[cc].get("source") for cc in ("US", "CN", "EA")
+    src = next((ci[cc].get("source") for cc in _cc_all
                 if ci.get(cc, {}).get("status") == "ok"), "BIS via FRED")
-    asof = next((ci[cc].get("latest_date") for cc in ("US", "CN", "EA")
+    asof = next((ci[cc].get("latest_date") for cc in _cc_all
                  if ci.get(cc, {}).get("status") == "ok"), "")
+    # 长历史(2008起)参考图数据: 收集各国 points_long + 配色
+    _ci_colors = {"US": "#6b8fb5", "CN": "#c08a7d", "EA": "#9aab97", "JP": "#c9a86a"}
+    long_series = {}
+    for cc in _cc_all:
+        d = ci.get(cc, {})
+        pl = d.get("points_long") or []
+        if pl:
+            long_series[cc] = {"name": d.get("name", cc), "flag": d.get("flag", ""),
+                               "color": _ci_colors.get(cc, "#8a8377"), "points": pl}
+    long_range = ""
+    if long_series:
+        _alld = sorted({p["date"] for s in long_series.values() for p in s["points"]})
+        if _alld:
+            long_range = f"{_alld[0][:7]} → {_alld[-1][:7]}"
+    long_block = ""
+    if long_series:
+        long_block = (
+            f'<div class="ci-long">'
+            f'<div class="ci-long-title">📉 长历史参考 · Credit Impulse 2008 至今（{_esc(long_range)}）'
+            f'<span class="ci-long-note">粗颗粒度·仅作长周期参考·十年图见上</span></div>'
+            f'{_credit_impulse_long_svg(long_series)}'
+            f'</div>'
+        )
     return (
         f'<div class="ci-wrap">'
-        f'<div class="ci-cols">'
+        f'<div class="ci-cols ci-cols-4">'
         f'{_credit_impulse_col(ci.get("US"))}'
         f'{_credit_impulse_col(ci.get("CN"))}'
         f'{_credit_impulse_col(ci.get("EA"))}'
+        f'{_credit_impulse_col(ci.get("JP"))}'
         f'</div>'
         f'<div class="ci-how"><b>如何看：</b>Credit Impulse（信贷脉冲）= 新增信贷流量的<b>变化</b> ÷ GDP，'
         f'衡量的不是债务总量、也不是新增债务，而是<b>新增信贷的加速度</b>。'
         f'<span style="color:#2e9e5b">正值=信贷在加速扩张</span>（利好增长/风险资产），'
         f'<span style="color:#d64545">负值=新增信贷放缓/收缩</span>（即使总债务仍在涨）。'
         f'领先实体经济约 <b>6-9 个月</b>——<b>中国信贷脉冲</b>是全球商品、周期股、风险资产最强的领先指标之一。'
-        f'口径为 BIS credit-to-GDP ratio 的二阶差分（三国统一口径、国际可比），<b>季度更新、数据滞后约 1 季</b>（as of {_esc(asof)[:7]}）。'
+        f'口径为 BIS credit-to-GDP ratio 的二阶差分（美/中/欧/日统一口径、国际可比），<b>季度更新、数据滞后约 1 季</b>（as of {_esc(asof)[:7]}）。'
         f'数据源：{_esc(src)}。</div>'
+        f'{long_block}'
         f'</div>'
     )
 
@@ -1793,6 +1871,11 @@ _TEMPLATE = r"""<!DOCTYPE html>
   /* Credit Impulse 信贷脉冲(中期领先指标, 三国) */
   .ci-wrap {{ display: flex; flex-direction: column; gap: 10px; }}
   .ci-cols {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }}
+  .ci-cols-4 {{ grid-template-columns: repeat(4, 1fr); }}
+  .ci-long {{ margin-top: 12px; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px 6px; }}
+  .ci-long-title {{ font-size: 12px; color: var(--text); font-weight: 700; margin-bottom: 6px; }}
+  .ci-long-note {{ font-size: 10px; color: var(--muted); font-weight: 400; margin-left: 8px; }}
+  .ci-leg {{ font-size: 10px; font-family: var(--mono); }}
   .ci-col {{ background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px 8px; }}
   .ci-title {{ font-size: 12px; color: var(--text); font-weight: 700; margin-bottom: 4px; }}
   .ci-cur {{ font-family: var(--mono); font-size: 24px; font-weight: 800; line-height: 1.1; }}
@@ -1805,7 +1888,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .ci-zero {{ stroke: rgba(160,160,150,.55); stroke-width: 1.2; }}
   .ci-how {{ font-size: 11px; color: var(--muted); line-height: 1.6; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; }}
   .ci-how b {{ color: var(--text); }}
-  @media (max-width: 720px) {{ .ci-cols {{ grid-template-columns: 1fr; }} }}
+  @media (max-width: 720px) {{ .ci-cols, .ci-cols-4 {{ grid-template-columns: 1fr; }} }}
 
   /* 国债拍卖 timeline */
   .auc-wrap {{ display: flex; flex-direction: column; gap: 12px; }}
