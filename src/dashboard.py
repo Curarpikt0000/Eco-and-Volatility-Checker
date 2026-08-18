@@ -1374,6 +1374,22 @@ def _oil_bar_redline_svg(pts, w=900, h=230, redline=None, redline_label="",
     return "".join(parts)
 
 
+def _eia_next_release(as_of_date):
+    """EIA 周度石油状况报告(WPSR)固定每周三发布(覆盖上周五收盘的库存)。
+    给定最新数据日期(YYYY-MM-DD, EIA period 为周五), 推算下次发布日(下一个周三)。失败返回 ''。"""
+    import datetime as _dt
+    try:
+        d = _dt.date.fromisoformat(str(as_of_date)[:10])
+    except Exception:
+        return ""
+    # EIA period 是周五。下一份周报覆盖再下一个周五, 发布日=其后的周三。
+    # 简化: 从数据日期起找下一个周三(weekday()==2)且在数据日期之后≥5天
+    nd = d + _dt.timedelta(days=5)
+    while nd.weekday() != 2:
+        nd += _dt.timedelta(days=1)
+    return nd.isoformat()
+
+
 def _oil_inventory_html(oil):
     """美国石油库存运营红线三图: ①Brent-WTI价差(过去一年,日频折线,0线) ②Cushing库存(过去一年,周频柱状+2000万桶红线)
     ③SPR战略石油储备(过去十年,周频折线+3亿桶红线)。oil: fetch_oil_inventory()。绝不编造,缺项标未获取。"""
@@ -1427,23 +1443,32 @@ def _oil_inventory_html(oil):
     else:
         spr_meta = "数据未获取"; spr_chart = '<div class="sp-na">未获取</div>'; spr_src = ""
 
+    # ── 更新频率说明(周频受限于 EIA 周报, 价差为日频) ──
+    cu_next = _eia_next_release(cu.get("as_of", "")) if cu.get("status") == "ok" else ""
+    spr_next = _eia_next_release(spr.get("as_of", "")) if spr.get("status") == "ok" else ""
+    _daily_note = '<span class="chart-freq">🟢 日频 · 每个交易日更新（油价为市场实时报价）</span>'
+    _cu_note = (f'<span class="chart-freq freq-w">🔵 周频 · EIA 每周三发布（数据截至上周五）'
+                + (f' · 下次约 {_esc(cu_next)}' if cu_next else '') + '</span>')
+    _spr_note = (f'<span class="chart-freq freq-w">🔵 周频 · EIA 每周三发布（数据截至上周五）'
+                 + (f' · 下次约 {_esc(spr_next)}' if spr_next else '') + '</span>')
+
     return (
         f'<div class="cust-wrap oil-wrap">'
         # ①
         f'<div class="cust-chart-col cust-chart-full">'
-        f'<div class="cust-chart-title">① Brent-WTI 价差 · 过去一年（日频）</div>'
+        f'<div class="cust-chart-title">① Brent-WTI 价差 · 过去一年（日频）{_daily_note}</div>'
         f'{sp_chart}<div class="oil-meta">{sp_meta}</div>'
         f'{f"<div class=&#39;oil-src&#39;>数据源：{_linkify_sources(sp_src)}</div>" if sp_src else ""}'
         f'</div>'
         # ②
         f'<div class="cust-chart-col cust-chart-full" style="margin-top:16px;">'
-        f'<div class="cust-chart-title">② Cushing (Oklahoma) 原油库存 · 过去一年（周频柱状 · WTI 交割枢纽）</div>'
+        f'<div class="cust-chart-title">② Cushing (Oklahoma) 原油库存 · 过去一年（周频柱状 · WTI 交割枢纽）{_cu_note}</div>'
         f'{cu_chart}<div class="oil-meta">{cu_meta}</div>'
         f'{f"<div class=&#39;oil-src&#39;>数据源：{_linkify_sources(cu_src)}</div>" if cu_src else ""}'
         f'</div>'
         # ③
         f'<div class="cust-chart-col cust-chart-full" style="margin-top:16px;">'
-        f'<div class="cust-chart-title">③ 美国战略石油储备 SPR · 过去十年（周频）</div>'
+        f'<div class="cust-chart-title">③ 美国战略石油储备 SPR · 过去十年（周频）{_spr_note}</div>'
         f'{spr_chart}<div class="oil-meta">{spr_meta}</div>'
         f'{f"<div class=&#39;oil-src&#39;>数据源：{_linkify_sources(spr_src)}</div>" if spr_src else ""}'
         f'</div>'
@@ -1453,7 +1478,10 @@ def _oil_inventory_html(oil):
         f'<b>②Cushing 库存</b>是 WTI 期货的实物交割枢纽，跌破约 2000 万桶(tank bottom / 管道与罐底最低运营量)则交割体系承压、易现逼仓；'
         f'<b>③SPR</b>是国家应急储备，其运营红线约 3 亿桶(时任能源安全顾问 Amos Hochstein 披露)——低于此则应急调节能力所剩无几。'
         f'三者同时逼近红线＝美国原油"缓冲垫"被抽薄，对地缘冲击/供给中断的抗压能力显著下降，是能源与通胀风险的结构性预警。'
-        f'<br>红色虚线＝各自运营红线；跌破处以红色高亮。数据源：EIA 周度石油状况报告 + FRED 日频油价，均为官方公开数据。</div>'
+        f'<br>红色虚线＝各自运营红线；跌破处以红色高亮。'
+        f'<br>⏱️ <b>更新频率说明</b>：①价差为<b>日频</b>(市场实时油价)；②Cushing 与 ③SPR 受限于 <b>EIA 周度石油状况报告(WPSR)只发布周频数据</b>——'
+        f'EIA 官方不采集日频库存(全美各储油设施盘点需时)，故每周三更新一次(覆盖上周五)，此即两张库存图能取到的<b>最细粒度</b>。'
+        f'数据源：EIA 周度石油状况报告 + FRED 日频油价，均为官方公开数据。</div>'
         f'</div>'
     )
 
@@ -2652,6 +2680,8 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .cust-chart-full {{ margin-top: 12px; }}
   .cust-chart-span {{ font-size: 10px; color: var(--muted); margin-top: 4px; text-align: center; }}
   .cust-chart-title {{ font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 4px; font-family: var(--mono); }}
+  .chart-freq {{ display: inline-block; margin-left: 8px; font-size: 10px; font-weight: 600; font-family: -apple-system, "PingFang SC", sans-serif; color: #4a6d95; background: rgba(107,143,181,0.12); border: 1px solid rgba(107,143,181,0.28); border-radius: 9px; padding: 1px 8px; vertical-align: middle; }}
+  .chart-freq.freq-w {{ color: #4a6d95; }}
   .cust-chart {{ width: 100%; height: auto; display: block; }}
   .cust-chart-na {{ font-size: 12px; color: var(--muted); padding: 20px; text-align: center; }}
   .cc-grid {{ stroke: rgba(160,160,150,.20); stroke-width: 1; stroke-dasharray: 3 3; }}
