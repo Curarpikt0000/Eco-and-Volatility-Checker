@@ -214,7 +214,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              stress_panels=None, ofr_fsi=None, maturing_treasury=None, bis_latest=None,
              oil_inventory=None, us_jp_yields=None, nikkei225=None, foreign_flow=None,
              iip_four=None, fiscal_news=None, hf_leverage=None, bis_gold_swaps=None,
-             market_breadth=None):
+             market_breadth=None, silver_bank_positions=None, comex_silver_issues_ref=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -395,6 +395,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         hf_leverage=_hf_leverage_html(hf_leverage),
         bis_gold_swaps=_bis_gold_swaps_html(bis_gold_swaps),
         market_breadth=_market_breadth_html(market_breadth),
+        silver_bank_positions=_silver_bank_positions_html(silver_bank_positions),
+        comex_silver_issues_ref=_comex_silver_issues_ref_html(comex_silver_issues_ref),
         bis_section=_bis_section_html(bis_latest, "https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/"),
         country_ust=_country_ust_html(country_ust),
         credit_impulse=_credit_impulse_html(credit_impulse),
@@ -1730,6 +1732,104 @@ def _bis_gold_swaps_html(bg):
         f'<b>数据诚实说明</b>：BIS 不单列 swaps 科目，年度值取自 BIS 年报明确确认，月度值为 GATA 从 BIS 官方月报推算'
         f'（BIS 年报每年验证其推算准确）；BIS 未公开精确勾稽算法，故本页不做无法验证的自行换算，'
         f'仅呈现已核实公开真值，月度点由 cron 读 GATA 新披露只增补充，<b>绝不编造</b>。</div>'
+        f'</div>'
+    )
+
+
+def _silver_bank_positions_html(sb):
+    """白银做市商头寸 section: CFTC COT commercial 净持仓折线(净空区), 一手官方真数据。
+    sb: fetch_silver_bank_positions()。绝不编造, 抓不到读缓存真值。"""
+    if not sb or sb.get("status") in (None, "未获取") or not sb.get("points"):
+        return '<p class="empty">白银做市商头寸(CFTC COT)数据未就绪（cron 每周更新）。</p>'
+    pts = [p for p in sb["points"] if p.get("comm_net") is not None]
+    if not pts:
+        return '<p class="empty">白银做市商头寸(CFTC COT)数据未就绪。</p>'
+    line_pts = [(p["date"], p["comm_net"]) for p in pts]
+    svg = _yield_curves_svg({
+        "commnet": {"status": "ok", "name": "商业(做市商)净持仓(合约)", "color": "#6b8fb5",
+                    "dash": "none", "points": line_pts, "latest": sb.get("latest_net")},
+    }, yunit="")
+    net = sb.get("latest_net"); asof = sb.get("as_of", "")
+    wow = sb.get("latest_wow")
+    peak = sb.get("peak_short_net"); peakd = sb.get("peak_short_date", "")
+    lg = sb.get("latest_long"); sh = sb.get("latest_short"); oi = sb.get("latest_oi")
+    # 方向判读: 净空扩大=加空压价; 净空收窄=减空/被逼平
+    if wow is not None:
+        if wow < 0:
+            dir_txt = f'<span style="color:#d64545;font-weight:600">净空扩大 {abs(wow):,}（做市商加空/压价，与图里 Issued 同向）</span>'
+        elif wow > 0:
+            dir_txt = f'<span style="color:#2e9e5b;font-weight:600">净空收窄 {wow:,}（做市商减空/被逼平，与图里 Stopped 同向）</span>'
+        else:
+            dir_txt = '持平'
+    else:
+        dir_txt = '—'
+    status_badge = ('🟡 缓存(CFTC暂未更新)' if sb.get("status") == "缓存" else '🟢 每周 · CFTC 官方')
+    return (
+        f'<div class="cust-wrap">'
+        f'<div class="cust-chart-col cust-chart-full">'
+        f'<div class="cust-chart-title">白银做市商(bullion banks)净持仓 · CFTC COT commercial（合约 · 近10年）'
+        f'<span class="chart-freq freq-w">{status_badge}</span></div>'
+        f'{svg}'
+        f'<div class="oil-meta">最新（{_esc(asof)}）：净持仓 <b style="color:#6b8fb5">{net:,}</b> 合约'
+        f'（多 {lg:,} / 空 {sh:,} · OI {oi:,}） · 周环比 {dir_txt} · '
+        f'历史最深净空 <b>{peak:,}</b>（{_esc(peakd)}）</div>'
+        f'<div class="oil-src">数据源：{_esc(sb.get("source",""))} · '
+        f'<a class="src-lnk" href="https://publicreporting.cftc.gov/" target="_blank" rel="noopener">CFTC Public Reporting ↗</a> · '
+        f'{_esc(sb.get("inventory_note",""))}</div>'
+        f'</div>'
+        f'<div class="cust-how"><b>如何看：</b>这是<b>「做市商/投行在 COMEX 白银上是接货还是压价」的一手官方真数据</b>，'
+        f'语义等价于 Michael Lynch(@DtDS_WSS) 那张「投行累计 issues/stops」图想说的核心，但用 <b>CFTC 官方 COT</b>'
+        f'（免 key、可回溯到 1986、每周五更新），而非被 CME 官方封禁抓取的逐日交割报告。<br>'
+        f'COT 里的 <b>commercial(商业套保)</b> 主体就是 <b>bullion banks</b>，它们长期持<b>净空</b>（对冲实物多头）：<br>'
+        f'• 净空<b>扩大</b> → 做市商<b>加空压价</b>（对应图里 “Issued＝交货压价”，看跌/卖压增强）<br>'
+        f'• 净空<b>收窄或转多</b> → 做市商<b>减空/被逼平</b>（对应图里 “Stopped＝接货 squeeze”，看涨/逼空信号）<br>'
+        f'<b>为何值得看</b>：白银做市商净空是判断<b>价格压制 vs 逼空</b>的关键结构信号；当净空从历史深位（如 -116K, 2017）'
+        f'大幅收窄，往往预示做市商难以继续压价、白银具备上行动能。<br>'
+        f'<b>数据诚实说明</b>：全序列取自 CFTC 官方 Socrata API 真值，抓不到读上次缓存真值绝不覆盖成空。'
+        f'下方另附 Michael Lynch 原图静态参考（因 CME 封禁无法自动更新）。</div>'
+        f'</div>'
+    )
+
+
+def _comex_silver_issues_ref_html(cs):
+    """C: COMEX 白银 issues/stops 静态参考 section: Michael Lynch 图累计线 + 红字批注 + 来源标注。
+    cs: fetch_comex_silver_issues_ref()。静态锚点(手抄自公开图), 明确标注非实时。"""
+    if not cs or cs.get("status") != "ok" or not cs.get("points"):
+        return '<p class="empty">COMEX 白银 issues/stops 参考图数据未就绪。</p>'
+    pts = cs["points"]
+    line_pts = [(p["date"], p["cumulative_koz"]) for p in pts if p.get("cumulative_koz") is not None]
+    svg = _yield_curves_svg({
+        "cum": {"status": "ok", "name": "累计净头寸(千oz, 手抄锚点)", "color": "#8a8f98",
+                "dash": "6,4", "points": line_pts, "latest": (line_pts[-1][1] if line_pts else None)},
+    }, yunit="")
+    asof = cs.get("as_of", "")
+    src = cs.get("source", ""); src_url = cs.get("source_url", "#")
+    ann = cs.get("annotations", [])
+    ann_col = {"red": "#d64545", "blue": "#6b8fb5"}
+    ann_html = "".join(
+        f'<li style="color:{ann_col.get(a.get("color"),"#3a3a3a")}">{_esc(a.get("text",""))}</li>'
+        for a in ann
+    )
+    return (
+        f'<div class="cust-wrap">'
+        f'<div class="cust-chart-col cust-chart-full">'
+        f'<div class="cust-chart-title">【静态参考】COMEX 白银 投行累计 issues/stops（千 oz · 2009→2026-04）'
+        f'<span class="chart-freq" style="background:#e8e2d5;color:#8a6d3b">⚪ 静态参考 · 非实时 · 事件驱动</span></div>'
+        f'{svg}'
+        f'<div class="oil-meta">数据截止 <b>{_esc(asof)}</b> · 累计线走高＝做市商净<b>接货(stop)</b>；走低＝净<b>交货(issue)</b> · '
+        f'2018-20 见顶 ~170K 后回落，2026 回升至 ~100K</div>'
+        f'<ul class="csi-ann">{ann_html}</ul>'
+        f'<div class="oil-src">数据源：{_esc(src)} · '
+        f'<a class="src-lnk" href="{_esc(src_url)}" target="_blank" rel="noopener">EconAnalytics / @DtDS_WSS ↗</a></div>'
+        f'</div>'
+        f'<div class="cust-how"><b>如何看 &amp; 为何静态：</b>这张图由 <b>Michael Lynch(@DtDS_WSS)</b> 制作，'
+        f'追踪 COMEX 白银<b>各投行(bullion banks)累计与月度 issues/stops</b>——累计净头寸走高＝做市商净接货囤货(看涨)，'
+        f'红字批注为图作者观点（“做市商囤 3200 吨、占库存约 1/3；对策：建国储夺库存打破价格控制”）。<br>'
+        f'<b>为何本节静态、不自动每日更新</b>：底层是 <b>CME COMEX 每日 Issues&amp;Stops by firm 报告</b>，'
+        f'CME 官方<b>明确封禁脚本抓取</b>（IP block + Data Terms of Use），无免 key、可回溯的每日源；'
+        f'图作者虽在 Substack/X <b>周期性更新</b>，但<b>事件驱动、不规律、无 API、图为嵌入 PNG、不公开原始序列</b>。'
+        f'故本节仅<b>从公开图手抄关键锚点</b>做趋势参考，<b>精度有限、绝不伪造每日折线</b>。'
+        f'<b>真实可每周更新的做市商头寸方向请看上方「白银做市商净持仓(CFTC COT)」一手数据。</b></div>'
         f'</div>'
     )
 
@@ -3691,6 +3791,14 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title" id="sec-market-breadth"><span class="part-num">＋</span>美股市场广度 · RSP/SPY 等权比 (A/D 腾落线真数据版·顶背离判定)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{market_breadth}</div>
 
+  <!-- ═══ 附三·十二D：白银做市商头寸(CFTC COT, 一手) ═══ -->
+  <div class="part-title" id="sec-silver-bank-positions"><span class="part-num">＋</span>白银做市商头寸 · CFTC COT commercial 净持仓 (做市商接货 vs 压价·一手真数据)<span class="freq-badge freq-weekly">每周更新</span></div>
+  <div class="card">{silver_bank_positions}</div>
+
+  <!-- ═══ 附三·十二E：COMEX 白银 issues/stops 静态参考(ANONYMIZED_PERSON_0_15) ═══ -->
+  <div class="part-title" id="sec-comex-silver-issues"><span class="part-num">＋</span>COMEX 白银 投行累计 issues/stops · 静态参考 (Michael Lynch @DtDS_WSS·CME封禁无法自动更新)<span class="freq-badge" style="background:#e8e2d5;color:#8a6d3b">静态参考</span></div>
+  <div class="card">{comex_silver_issues_ref}</div>
+
   <!-- ═══ 附三·十一：美日财政政策事件时间线 ═══ -->
   <div class="part-title" id="sec-fiscal-news"><span class="part-num">＋</span>美日财政政策事件 · 债务上限/CR/补正预算/国债发行 (每日检索)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{fiscal_news}</div>
@@ -3744,7 +3852,7 @@ mkRadar('rLong', RADAR.long);
     {{ name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化'] }},
     {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','BIS','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲'] }},
     {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款'] }},
-    {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent'] }},
+    {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','白银做市商','COMEX 白银','投行累计'] }},
     {{ name: '财政政策', match: ['美日财政政策事件','债务上限','补正预算','国债发行'] }},
     {{ name: '日本市场', match: ['日经225','外资净买入','日本市场'] }},
     {{ name: '机构与政要持仓', match: ['机构持仓','13F','Trump'] }}

@@ -2869,6 +2869,135 @@ def fetch_market_breadth(cache_path=None, lookback_days=250, nh_window=20):
     return out
 
 
+def fetch_silver_bank_positions(cache_path=None, weeks=520):
+    """白银做市商(bullion banks = commercial)头寸方向 —— CFTC COT commercial 净持仓。
+
+    ★这是「投行/做市商在 COMEX 白银上是接货还是压价」的**一手官方真数据等价物**,
+    语义覆盖 Michael Lynch(@DtDS_WSS) 的 "cumulative & monthly issues and stops by bullion
+    banks" 图想说的核心(做市商头寸方向), 但用 CFTC 官方 Socrata(免key/可回溯到1986/可每周更新),
+    而非被 CME 封禁的 issues/stops 逐日抓取。
+
+    含义: commercial(商业套保, 主体是 bullion banks) 净持仓通常为净空(对冲实物多头)。
+      - 净空**扩大** = 做市商加空压价 / 卖压增强(与图里 "Issued" 交货压价同向)
+      - 净空**收窄/转多** = 做市商减空 / 被逼平 (与图里 "Stopped" 接货 squeeze 同向)
+    绝不编造: 抓不到读上次缓存真值, 绝不覆盖成空。
+
+    返回 {status, as_of, source, unit, latest_net, latest_wow, peak_short_date,
+          points:[{date, comm_net, comm_long, comm_short, open_interest}], inventory_note}。
+    """
+    import json
+    if cache_path is None:
+        cache_path = os.path.join(os.path.dirname(__file__), "..", "data",
+                                  "silver_bank_positions.json")
+
+    def _load_cache():
+        try:
+            with open(cache_path, encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            return None
+
+    pts = []
+    try:
+        from fetchers import cot as _cot
+        hist = _cot.fetch_history("silver", weeks=weeks)
+        for r in hist:
+            if not r.get("as_of"):
+                continue
+            pts.append({
+                "date": r["as_of"],
+                "comm_net": r.get("comm_net"),
+                "comm_long": r.get("comm_long"),
+                "comm_short": r.get("comm_short"),
+                "open_interest": r.get("open_interest"),
+            })
+    except Exception:
+        pts = []
+
+    if not pts:
+        cached = _load_cache()
+        if cached and cached.get("points"):
+            cached["status"] = "缓存"
+            return cached
+        return {"status": "未获取", "as_of": "", "unit": "contracts",
+                "source": "CFTC COT 白银 commercial 净持仓(未获取)", "points": []}
+
+    pts.sort(key=lambda p: p.get("date", ""))
+    latest = pts[-1]
+    prev = pts[-2] if len(pts) > 1 else None
+    latest_net = latest.get("comm_net")
+    latest_wow = (latest_net - prev["comm_net"]) if (prev and prev.get("comm_net") is not None
+                                                      and latest_net is not None) else None
+    # 净空最深点(comm_net 最小)
+    valid = [p for p in pts if p.get("comm_net") is not None]
+    peak_short = min(valid, key=lambda p: p["comm_net"]) if valid else None
+
+    # COMEX 白银库存当前锚点(文字标注, 非每日折线 —— 无稳定免key每日源)
+    inv_note = ("COMEX 白银库存约 335M oz(≈10,400 吨), 其中注册(registered)"
+                "占比与做市商囤货状态需结合 CME 每日仓单报告(metalcharts.org 快照)。")
+
+    out = {
+        "status": "ok",
+        "as_of": latest["date"],
+        "unit": "contracts",
+        "source": "CFTC COT · SILVER - COMMODITY EXCHANGE INC. · commercial 净持仓(官方 Socrata, 免key)",
+        "latest_net": latest_net,
+        "latest_long": latest.get("comm_long"),
+        "latest_short": latest.get("comm_short"),
+        "latest_oi": latest.get("open_interest"),
+        "latest_wow": latest_wow,
+        "peak_short_date": (peak_short or {}).get("date"),
+        "peak_short_net": (peak_short or {}).get("comm_net"),
+        "inventory_note": inv_note,
+        "points": pts,
+    }
+    try:
+        with open(cache_path, "w", encoding="utf-8") as f:
+            json.dump(out, f, ensure_ascii=False, default=str)
+    except Exception:
+        pass
+    return out
+
+
+def fetch_comex_silver_issues_ref(cache_path=None):
+    """C: COMEX 白银 issues/stops by bullion banks 静态参考(数据源=Michael Lynch @DtDS_WSS)。
+
+    ★为什么静态不自动更新: 原始底层是 CME COMEX 每日 Issues&Stops by firm 报告, CME 官方
+    明确封禁脚本抓取(IP block + Data Terms of Use), 无免key可回溯每日源。ANONYMIZED_PERSON_0_12 本人在
+    Substack(econanalytics.substack.com)/X(@DtDS_WSS)周期性更新, 但**事件驱动、不规律、
+    无 API、图为嵌入 PNG、不公开原始累加序列**。故本 section 只做诚实的静态参考锚点 + 明确
+    标注来源与更新性质, 绝不伪造每日折线。真实可更新的做市商头寸方向见 fetch_silver_bank_positions
+    (CFTC 官方一手数据)。
+
+    数据由 data/comex_silver_issues_ref.json 驱动(从公开图手抄的关键锚点, 明确标注非实时)。
+    返回 {status, as_of, source, source_url, note, points:[{date, cumulative_koz}], annotations}。
+    """
+    import json
+    if cache_path is None:
+        cache_path = os.path.join(os.path.dirname(__file__), "..", "data",
+                                  "comex_silver_issues_ref.json")
+    try:
+        with open(cache_path, encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return {"status": "未获取", "as_of": "", "unit": "thousands_oz",
+                "source": "COMEX 白银累计 issues/stops(文件缺失)", "points": []}
+    pts = [p for p in (data.get("points") or []) if p.get("date")]
+    pts.sort(key=lambda p: p.get("date", ""))
+    return {
+        "status": "ok" if pts else "未获取",
+        "as_of": data.get("as_of", ""),
+        "unit": data.get("unit", "thousands_oz"),
+        "source": data.get("source", "Michael Lynch (@DtDS_WSS) · EconAnalytics"),
+        "source_url": data.get("source_url", "https://econanalytics.substack.com/"),
+        "update_nature": data.get("update_nature",
+                                  "事件驱动·不规律更新·CME官方封禁脚本抓取·仅静态参考锚点"),
+        "note": data.get("note", ""),
+        "annotations": data.get("annotations", []),
+        "points": pts,
+    }
+
+
 def fetch_fiscal_news(cache_path=None, limit=20):
     """美日财政政策事件时间线(离散事件文本,非时序数字)。
     数据由 data/fiscal_news.json 驱动: 每日 cron agent 模式 web 检索权威源

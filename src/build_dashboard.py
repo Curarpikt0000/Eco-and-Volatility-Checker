@@ -218,6 +218,25 @@ def main():
     except Exception as e:
         print(f"[dashboard] 市场广度 跳过: {e}")
 
+    # ── 白银做市商头寸(CFTC COT commercial 净持仓, 一手官方) ──
+    silver_bank_positions = {}
+    try:
+        silver_bank_positions = ed.fetch_silver_bank_positions() or {}
+        print(f"[dashboard] 白银做市商头寸: status={silver_bank_positions.get('status')} "
+              f"as_of={silver_bank_positions.get('as_of')} net={silver_bank_positions.get('latest_net')} "
+              f"pts={len(silver_bank_positions.get('points',[]))}")
+    except Exception as e:
+        print(f"[dashboard] 白银做市商头寸 跳过: {e}")
+
+    # ── COMEX 白银 issues/stops 静态参考(Michael Lynch, 手抄锚点) ──
+    comex_silver_issues_ref = {}
+    try:
+        comex_silver_issues_ref = ed.fetch_comex_silver_issues_ref() or {}
+        print(f"[dashboard] COMEX白银issues参考: status={comex_silver_issues_ref.get('status')} "
+              f"as_of={comex_silver_issues_ref.get('as_of')} pts={len(comex_silver_issues_ref.get('points',[]))}")
+    except Exception as e:
+        print(f"[dashboard] COMEX白银issues参考 跳过: {e}")
+
     # ── BIS 国际清算银行报告(Quarterly Review 季度综述) ──
     bis_latest = None
     try:
@@ -293,6 +312,8 @@ def main():
         hf_leverage=hf_leverage,
         bis_gold_swaps=bis_gold_swaps,
         market_breadth=market_breadth,
+        silver_bank_positions=silver_bank_positions,
+        comex_silver_issues_ref=comex_silver_issues_ref,
         bis_latest=bis_latest,
     )
     print(f"[dashboard] 生成: {out}")
