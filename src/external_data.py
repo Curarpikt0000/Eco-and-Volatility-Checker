@@ -1905,9 +1905,9 @@ def fetch_ofr_fsi(years=3):
     lines = text.strip().splitlines()
     header = [h.strip() for h in lines[0].split(",")]
     idx = {h: i for i, h in enumerate(header)}
-    # 需要的列
-    want = {"OFR FSI": "总指数", "Credit": "信用", "Funding": "融资",
-            "Safe assets": "安全资产", "Volatility": "波动性"}
+    # 需要的列(官方 FSI 5 大分量: 信用/股票估值/融资/安全资产/波动性 + 总指数)
+    want = {"OFR FSI": "总指数", "Credit": "信用", "Equity valuation": "股票估值",
+            "Funding": "融资", "Safe assets": "安全资产", "Volatility": "波动性"}
     series_pts = {k: [] for k in want}
     for ln in lines[1:]:
         cells = ln.split(",")
@@ -1931,8 +1931,8 @@ def fetch_ofr_fsi(years=3):
                 except ValueError:
                     pass
     # 周度降采样降噪
-    colors = {"OFR FSI": "#c0757d", "Credit": "#b58a6a", "Funding": "#8a7fa8",
-              "Safe assets": "#7fa085", "Volatility": "#6b8fb5"}
+    colors = {"OFR FSI": "#c0757d", "Credit": "#b58a6a", "Equity valuation": "#c9a86a",
+              "Funding": "#8a7fa8", "Safe assets": "#7fa085", "Volatility": "#6b8fb5"}
     series = []
     for col, zh in want.items():
         wp = _weekly_resample(series_pts[col], agg="last") if series_pts[col] else []
@@ -1952,7 +1952,7 @@ def fetch_ofr_fsi(years=3):
         "subtitle": "OFR Financial Stress Index (官方权威·全市场压力总览)",
         "note": "OFR FSI = 美国金融研究办公室(财政部下属)编制的官方金融压力指数, 综合 33 个全球金融市场变量。"
                 "<b>0 = 压力处于历史正常水平</b>; <span style=\"color:#d64545\">正值 = 压力高于正常</span>(承压); "
-                "<span style=\"color:#2e9e5b\">负值 = 低于正常</span>(平静)。粗线为总指数, 细线为分量(信用/融资/安全资产/波动性)。",
+                "<span style=\"color:#2e9e5b\">负值 = 低于正常</span>(平静)。粗线为总指数, 细线为官方5大分量(信用/股票估值/融资/安全资产/波动性)——分量线用于定位压力来源(哪个市场在制造压力)。",
         "unit_left": "压力指数(0=正常)", "unit_right": "",
         "series": series,
         "source": "OFR (Office of Financial Research, US Treasury) FSI 官方 CSV",
@@ -2007,6 +2007,7 @@ def write_ofr_notion(ofr=None):
     props = {
         "OFR_FSI总指数": nw.prop_num(latest.get("OFR FSI 总指数")),
         "信用": nw.prop_num(latest.get("信用")),
+        "股票估值": nw.prop_num(latest.get("股票估值")),
         "融资": nw.prop_num(latest.get("融资")),
         "安全资产": nw.prop_num(latest.get("安全资产")),
         "波动性": nw.prop_num(latest.get("波动性")),
