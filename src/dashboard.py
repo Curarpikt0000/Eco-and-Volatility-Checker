@@ -212,7 +212,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
              country_ust=None, kol_views=None, credit_impulse=None, custody_accel=None,
              stress_panels=None, ofr_fsi=None, maturing_treasury=None, bis_latest=None,
-             oil_inventory=None):
+             oil_inventory=None, us_jp_yields=None, nikkei225=None, foreign_flow=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -386,6 +386,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         custody_accel=_custody_accel_html(custody_accel),
         maturing_treasury=_maturing_treasury_html(maturing_treasury),
         oil_inventory=_oil_inventory_html(oil_inventory),
+        yield_curves=_yield_curves_html(us_jp_yields),
+        nikkei_flow=_nikkei_flow_html(nikkei225, foreign_flow),
         bis_section=_bis_section_html(bis_latest, "https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/"),
         country_ust=_country_ust_html(country_ust),
         credit_impulse=_credit_impulse_html(credit_impulse),
@@ -1141,6 +1143,216 @@ def _country_ust_long_svg(series_by_country, w=920, h=250):
         legend_y += 18
     parts.append('</svg>')
     return "".join(parts)
+
+
+def _yield_curves_svg(series, w=920, h=280):
+    """美日 10Y/30Y 收益率四线图(过去一年,日频,共%轴)。
+    series: {key:{name,color,dash('none'/'dash'),points:[(date,%)],latest}}。美实线/日虚线。"""
+    active = {k: d for k, d in series.items() if d.get("status") == "ok" and len(d.get("points", [])) >= 2}
+    if not active:
+        return '<div class="cust-chart-na">美日收益率数据不足</div>'
+    all_dates = sorted({dd for d in active.values() for dd, _ in d["points"]})
+    all_vals = [v for d in active.values() for _, v in d["points"]]
+    lo, hi = min(all_vals), max(all_vals)
+    pad = (hi - lo) * 0.08 or 0.2
+    lo -= pad; hi += pad
+    rng = (hi - lo) or 1.0
+    ml, mr, mt, mb = 46, 104, 16, 30
+    pw, ph = w - ml - mr, h - mt - mb
+    n = len(all_dates)
+    didx = {d: i for i, d in enumerate(all_dates)}
+    def X(i): return ml + i * pw / (n - 1)
+    def Y(v): return mt + (hi - v) / rng * ph
+    parts = [f'<svg viewBox="0 0 {w} {h}" class="cust-chart" preserveAspectRatio="xMidYMid meet" font-family="-apple-system,PingFang SC,sans-serif">']
+    # Y 轴 5 刻度(%)
+    for k in range(5):
+        gv = lo + rng * k / 4
+        gy = Y(gv)
+        parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" stroke="#d4cdbe" stroke-width="1" stroke-dasharray="3,3"/>')
+        parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" font-size="10" fill="#8a8578" text-anchor="end">{gv:.1f}%</text>')
+    # X 轴月份标签(每约2月)
+    last_ym = None
+    for i, d in enumerate(all_dates):
+        ym = d[:7]
+        if ym != last_ym and int(d[5:7]) % 2 == 1:
+            last_ym = ym
+            anchor = "start" if i == 0 else ("end" if i >= n - 3 else "middle")
+            parts.append(f'<text x="{X(i):.1f}" y="{h-9}" font-size="9" fill="#8a8578" text-anchor="{anchor}">{d[:7]}</text>')
+    # 四条线 + 图例
+    legend_y = mt + 6
+    order = ["us_10y", "us_30y", "jp_10y", "jp_30y"]
+    for key in [k for k in order if k in active]:
+        d = active[key]
+        color = d["color"]
+        dash = 'stroke-dasharray="5,3"' if d.get("dash") == "dash" else ''
+        pts = [f"{X(didx[dd]):.1f},{Y(v):.1f}" for dd, v in d["points"] if dd in didx]
+        if len(pts) >= 2:
+            parts.append(f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" stroke-width="1.9" stroke-linejoin="round" opacity="0.92" {dash}/>')
+            ld, lv = d["points"][-1]
+            parts.append(f'<circle cx="{X(didx[ld]):.1f}" cy="{Y(lv):.1f}" r="3.2" fill="{color}"/>')
+        # 图例(右侧): 线样 + 名称 + 最新值
+        lx1, lx2 = w - mr + 8, w - mr + 26
+        parts.append(f'<line x1="{lx1}" y1="{legend_y}" x2="{lx2}" y2="{legend_y}" stroke="{color}" stroke-width="2.4" {dash}/>')
+        parts.append(f'<text x="{lx2+4}" y="{legend_y+4}" font-size="10.5" fill="{color}" font-weight="600">{_esc(d["name"])} {d["latest"]:.2f}%</text>')
+        legend_y += 19
+    parts.append('</svg>')
+    return "".join(parts)
+
+
+def _yield_curves_html(yc):
+    """美日 10Y/30Y 收益率四线图 section。yc: fetch_us_jp_yields()。绝不编造。"""
+    if not yc or yc.get("status") != "ok":
+        return '<p class="empty">美日国债收益率数据未就绪。</p>'
+    ser = yc.get("series", {})
+    chart = _yield_curves_svg(ser)
+    # 各线区间统计(过去一年变动)
+    rows = []
+    for key in ("us_10y", "us_30y", "jp_10y", "jp_30y"):
+        d = ser.get(key, {})
+        if d.get("status") != "ok":
+            continue
+        pts = d["points"]
+        chg = (pts[-1][1] - pts[0][1]) * 100  # bp
+        col = "#d64545" if chg >= 0 else "#2e9e5b"
+        rows.append(f'<span style="color:{d["color"]};font-weight:600">{_esc(d["name"])}</span> '
+                    f'{pts[0][1]:.2f}%→<b>{pts[-1][1]:.2f}%</b>（<b style="color:{col}">{chg:+.0f}bp</b>）')
+    meta = " · ".join(rows)
+    srcs = "；".join(sorted({d.get("source", "") for d in ser.values() if d.get("status") == "ok"}))
+    return (
+        f'<div class="cust-wrap">'
+        f'<div class="cust-chart-col cust-chart-full">'
+        f'<div class="cust-chart-title">美国 vs 日本 · 10年/30年国债收益率 · 过去一年（日频）'
+        f'<span class="chart-freq">🟢 日频 · 每交易日更新</span></div>'
+        f'{chart}'
+        f'<div class="oil-meta">{meta}</div>'
+        f'<div class="oil-src">数据源：{_esc(srcs)}（实线=美国，虚线=日本）</div>'
+        f'</div>'
+        f'<div class="cust-how"><b>如何看：</b>四条线同框对比中美两国长端利率的<b>相对走势与利差</b>：'
+        f'<b>美债 10Y/30Y</b>反映全球无风险利率锚与期限溢价；<b>日债 10Y/30Y</b>是全球最后的低利率洼地——'
+        f'日本长端利率快速上行(BOJ 退出 YCC/加息 + 财政赤字担忧)会<b>收窄美日利差</b>，削弱日元套息(carry trade)吸引力、'
+        f'触发套息平仓回流日元，是全球流动性与汇率的重要变量。若日债 30Y 逼近甚至超过美债，说明市场对日本财政/通胀定价显著重估。'
+        f'<br>实线=美国，虚线=日本；均为各国官方公开数据。</div>'
+        f'</div>'
+    )
+
+
+def _nikkei_flow_svg(nk, ff, w=920, h=300):
+    """日经225指数(折线,左轴) + 外资净买入日股(周频柱状,右轴,正绿负红)双轴同图。
+    nk: fetch_nikkei225(); ff: fetch_foreign_flow_japan()。周对齐: 日经取每周最后一日近似。"""
+    nk_ok = nk and nk.get("status") == "ok" and len(nk.get("points", [])) >= 2
+    ff_ok = ff and ff.get("status") == "ok" and len(ff.get("points", [])) >= 2
+    if not nk_ok and not ff_ok:
+        return '<div class="cust-chart-na">日经225 / 外资流入数据不足</div>'
+    ml, mr, mt, mb = 56, 62, 16, 32
+    pw, ph = w - ml - mr, h - mt - mb
+    # x 轴统一用外资流入的周日期(若无则用日经日期)
+    weeks = [d for d, _ in ff["points"]] if ff_ok else [d for d, _ in nk["points"]]
+    n = len(weeks)
+    widx = {d: i for i, d in enumerate(weeks)}
+    def X(i): return ml + i * pw / (max(n - 1, 1))
+    parts = [f'<svg viewBox="0 0 {w} {h}" class="cust-chart" preserveAspectRatio="xMidYMid meet" font-family="-apple-system,PingFang SC,sans-serif">']
+    # ── 右轴: 外资流入柱状(先画,当背景) ──
+    if ff_ok:
+        fvals = [v for _, v in ff["points"]]
+        fmax = max(abs(min(fvals)), abs(max(fvals))) or 1.0
+        # 右轴 0 线居中
+        def FY(v): return mt + ph / 2 - (v / fmax) * (ph / 2 * 0.9)
+        zero_y = FY(0)
+        bw = pw / n * 0.6
+        for i, (d, v) in enumerate(ff["points"]):
+            cx = X(i)
+            y = FY(v)
+            col = "#5b9e6f" if v >= 0 else "#c0757d"
+            top = min(y, zero_y); ht = abs(y - zero_y)
+            parts.append(f'<rect x="{cx-bw/2:.1f}" y="{top:.1f}" width="{bw:.1f}" height="{ht:.1f}" fill="{col}" opacity="0.55"/>')
+        # 0 线
+        parts.append(f'<line x1="{ml}" y1="{zero_y:.1f}" x2="{w-mr}" y2="{zero_y:.1f}" stroke="#8a8578" stroke-width="1" opacity="0.5"/>')
+        # 右轴刻度
+        for frac in (1, 0, -1):
+            yy = FY(fmax * frac * 0.9)
+            parts.append(f'<text x="{w-mr+5}" y="{yy+3:.1f}" font-size="9" fill="#8a8578" text-anchor="start">{fmax*frac*0.9:+.1f}</text>')
+        parts.append(f'<text x="{w-mr+5}" y="{mt+8}" font-size="8.5" fill="#8a8578">外资¥T</text>')
+    # ── 左轴: 日经225 折线 ──
+    if nk_ok:
+        # 把日经日频对齐到周(取<=周日期的最后一个)
+        nk_map = {}
+        for d, v in nk["points"]:
+            nk_map[d] = v
+        nk_dates = sorted(nk_map)
+        aligned = []
+        for wk in weeks:
+            # 取 <= wk 的最近交易日
+            cand = [d for d in nk_dates if d <= wk]
+            if cand:
+                aligned.append((wk, nk_map[cand[-1]]))
+        if len(aligned) >= 2:
+            nvals = [v for _, v in aligned]
+            nlo, nhi = min(nvals), max(nvals)
+            npad = (nhi - nlo) * 0.1 or 1
+            nlo -= npad; nhi += npad
+            nrng = (nhi - nlo) or 1
+            def NY(v): return mt + (nhi - v) / nrng * ph
+            line = [f"{X(widx[wk]):.1f},{NY(v):.1f}" for wk, v in aligned if wk in widx]
+            parts.append(f'<polyline points="{" ".join(line)}" fill="none" stroke="#3a5a7d" stroke-width="2.3" stroke-linejoin="round"/>')
+            ld, lv = aligned[-1]
+            parts.append(f'<circle cx="{X(widx[ld]):.1f}" cy="{NY(lv):.1f}" r="3.5" fill="#3a5a7d"/>')
+            # 左轴刻度
+            for k in range(4):
+                gv = nlo + nrng * k / 3
+                gy = NY(gv)
+                parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" font-size="9" fill="#3a5a7d" text-anchor="end">{gv:,.0f}</text>')
+            parts.append(f'<text x="{ml-6}" y="{mt+8}" font-size="8.5" fill="#3a5a7d" text-anchor="end">日经</text>')
+    # x 轴月标签
+    last_ym = None
+    for i, d in enumerate(weeks):
+        if d[:7] != last_ym and int(d[5:7]) % 2 == 1:
+            last_ym = d[:7]
+            anchor = "start" if i == 0 else ("end" if i >= n - 2 else "middle")
+            parts.append(f'<text x="{X(i):.1f}" y="{h-9}" font-size="9" fill="#8a8578" text-anchor="{anchor}">{d[:7]}</text>')
+    parts.append('</svg>')
+    return "".join(parts)
+
+
+def _nikkei_flow_html(nk, ff):
+    """日经225 + 外资净买入日股 双轴同图 section。nk/ff 各自 fetch。绝不编造,缺项标注。"""
+    if (not nk or nk.get("status") != "ok") and (not ff or ff.get("status") != "ok"):
+        return '<p class="empty">日经225 / 外资流入日股数据未就绪。</p>'
+    chart = _nikkei_flow_svg(nk, ff)
+    metas = []
+    if nk and nk.get("status") == "ok":
+        p = nk["points"]
+        chg = (p[-1][1] - p[0][1]) / p[0][1] * 100
+        col = "#d64545" if chg >= 0 else "#2e9e5b"
+        metas.append(f'<span style="color:#3a5a7d;font-weight:600">日经225</span> '
+                     f'{p[0][1]:,.0f}→<b>{p[-1][1]:,.0f}</b>（<b style="color:{col}">{chg:+.1f}%</b>，'
+                     f'高{nk["hi"]:,.0f}/低{nk["lo"]:,.0f}）')
+    if ff and ff.get("status") == "ok":
+        p = ff["points"]
+        net = sum(v for _, v in p)
+        col = "#5b9e6f" if net >= 0 else "#c0757d"
+        pos = sum(1 for _, v in p if v > 0); neg = sum(1 for _, v in p if v < 0)
+        metas.append(f'<span style="color:#5b9e6f;font-weight:600">外资净买入</span> '
+                     f'过去一年累计<b style="color:{col}">{net:+.1f}万亿円</b>（{pos}周净买/{neg}周净卖，'
+                     f'最新周{p[-1][1]:+.2f}万亿円）')
+    src_nk = nk.get("source", "") if nk and nk.get("status") == "ok" else ""
+    src_ff = ff.get("source", "") if ff and ff.get("status") == "ok" else ""
+    srcs = "；".join([s for s in (src_nk, src_ff) if s])
+    return (
+        f'<div class="cust-wrap">'
+        f'<div class="cust-chart-col cust-chart-full">'
+        f'<div class="cust-chart-title">日经225 指数（折线·左轴） vs 外资净买入日股（柱状·右轴·周频） · 过去一年'
+        f'<span class="chart-freq freq-w">🔵 指数日频 / 外资流入周频（JPX 每周4个工作日更新）</span></div>'
+        f'{chart}'
+        f'<div class="oil-meta">{" · ".join(metas)}</div>'
+        f'<div class="oil-src">数据源：{_esc(srcs)}（绿柱=外资净买入，红柱=净卖出）</div>'
+        f'</div>'
+        f'<div class="cust-how"><b>如何看：</b>把<b>日经225 走势</b>与<b>外资资金流</b>叠在一起，看外资是不是日股行情的主要推手：'
+        f'日本股市外资持仓/成交占比高(约6-7成成交)，<b>绿柱(外资净买入)持续＝外资加仓推升指数</b>；'
+        f'<b>红柱(净卖出)＝外资撤离</b>，若指数仍涨则靠内资/自社股回购支撑，行情根基相对脆弱。'
+        f'外资流向也与日元汇率、美日利差、全球风险偏好联动——套息交易(carry)活跃期外资倾向流入，平仓期则撤出。'
+        f'<br>左轴=日经225 点位(蓝线)，右轴=外资单周净买卖(万亿日元,0 线上下)。数据均为官方公开。</div>'
+        f'</div>'
+    )
 
 
 def _bis_section_html(bis_latest, page_url):
@@ -2953,6 +3165,14 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title"><span class="part-num">＋</span>美国石油库存运营红线 · 能源安全 (Brent-WTI 价差 / Cushing / SPR · tank bottom)<span class="freq-badge freq-weekly">每周更新 · 价差每日</span></div>
   <div class="card">{oil_inventory}</div>
 
+  <!-- ═══ 附三·八：美日 10Y/30Y 国债收益率四线图 ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>美日 10年/30年国债收益率 · 过去一年 (四线同图 · 美日利差与套息)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{yield_curves}</div>
+
+  <!-- ═══ 附三·九：日经225 vs 外资净买入日股 ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>日经225 vs 外资净买入日股 · 过去一年 (日本市场 · 外资资金流)<span class="freq-badge freq-weekly">指数每日 · 外资每周</span></div>
+  <div class="card">{nikkei_flow}</div>
+
   <!-- ═══ 附三·六：日本 / 中国 分国别持有美债 (TIC, 近10年) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>日本 / 中国 / 欧盟 持有美债 · 近10年 + 2008长历史 (TIC 分国别口径)<span class="freq-badge freq-monthly">每月更新 · 滞后约2月</span></div>
   <div class="card">{country_ust}</div>
@@ -3005,8 +3225,9 @@ mkRadar('rLong', RADAR.long);
     {{ name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注'] }},
     {{ name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化'] }},
     {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','BIS','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲'] }},
-    {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别'] }},
+    {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日'] }},
     {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent'] }},
+    {{ name: '日本市场', match: ['日经225','外资净买入','日本市场'] }},
     {{ name: '机构与政要持仓', match: ['机构持仓','13F','Trump'] }}
   ];
   function groupOf(label) {{

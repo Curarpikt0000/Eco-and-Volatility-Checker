@@ -142,6 +142,33 @@ def main():
     except Exception as e:
         print(f"[dashboard] 石油库存 跳过: {e}")
 
+    # ── 美日 10Y/30Y 收益率(FRED + MOF JGB) ──
+    us_jp_yields = {}
+    try:
+        us_jp_yields = ed.fetch_us_jp_yields() or {}
+        _ys = us_jp_yields.get("series", {})
+        print(f"[dashboard] 美日收益率: " + " ".join(
+            f"{k}={_ys.get(k,{}).get('status')}({_ys.get(k,{}).get('latest')})" for k in ("us_10y","us_30y","jp_10y","jp_30y")))
+    except Exception as e:
+        print(f"[dashboard] 美日收益率 跳过: {e}")
+
+    # ── 日经225(FRED) ──
+    nikkei225 = {}
+    try:
+        nikkei225 = ed.fetch_nikkei225() or {}
+        print(f"[dashboard] 日经225: status={nikkei225.get('status')} latest={nikkei225.get('latest')} asof={nikkei225.get('as_of')}")
+    except Exception as e:
+        print(f"[dashboard] 日经225 跳过: {e}")
+
+    # ── 外资净买入日股(JPX 周报) ──
+    foreign_flow = {}
+    try:
+        foreign_flow = ed.fetch_foreign_flow_japan() or {}
+        _fp = foreign_flow.get("points", [])
+        print(f"[dashboard] 外资流入日股: status={foreign_flow.get('status')} 周数={len(_fp)} 最新={foreign_flow.get('latest')}万亿円")
+    except Exception as e:
+        print(f"[dashboard] 外资流入日股 跳过: {e}")
+
     # ── BIS 国际清算银行报告(Quarterly Review 季度综述) ──
     bis_latest = None
     try:
@@ -209,6 +236,9 @@ def main():
         ofr_fsi=ofr_fsi,
         maturing_treasury=maturing_treasury,
         oil_inventory=oil_inventory,
+        us_jp_yields=us_jp_yields,
+        nikkei225=nikkei225,
+        foreign_flow=foreign_flow,
         bis_latest=bis_latest,
     )
     print(f"[dashboard] 生成: {out}")

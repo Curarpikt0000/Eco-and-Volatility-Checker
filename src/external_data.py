@@ -2211,6 +2211,225 @@ def _eia_series(series_id, start=None):
         return []
 
 
+def _mof_jgb_yields(term_idx):
+    """抓日本财务省(MOF)每日 JGB 收益率 CSV(历史 all + 当月), 取指定期限列。
+    term_idx: CSV 中列索引(10Y=10, 30Y=14; 列0=Date)。
+    返回 {date 'YYYY-MM-DD': yield%} 升序 dict。失败返回 {}。绝不编造。"""
+    import csv, io, requests, datetime as _dt
+    urls = [
+        "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/historical/jgbcme_all.csv",
+        "https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/jgbcme.csv",
+    ]
+    out = {}
+    for url in urls:
+        try:
+            r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=40)
+            if r.status_code != 200:
+                continue
+            rows = list(csv.reader(io.StringIO(r.content.decode("utf-8", errors="replace"))))
+            for row in rows:
+                if not row or len(row) <= term_idx:
+                    continue
+                d = row[0].strip()
+                # 日期形如 2026/8/17
+                if "/" not in d:
+                    continue
+                try:
+                    dt = _dt.datetime.strptime(d, "%Y/%m/%d").date()
+                except ValueError:
+                    continue
+                raw = row[term_idx].strip()
+                if not raw or raw == "-":
+                    continue
+                try:
+                    out[dt.isoformat()] = float(raw)
+                except ValueError:
+                    continue
+        except Exception:
+            continue
+    return dict(sorted(out.items()))
+
+
+def fetch_us_jp_yields(cache_path=None):
+    """美日 10Y/30Y 国债收益率同图对比(过去一年, 日频)。绝不编造, 缺项标 status。
+      美债: FRED DGS10/DGS30(日频, %)。日债: 日本财务省(MOF) 每日 JGB CSV 10Y/30Y列(日频, %)。
+    返回 {status, as_of, series:{us_10y/us_30y/jp_10y/jp_30y: {name,color,dash,points:[(date,%)],latest,as_of}}}。
+    """
+    import json, datetime as _dt
+    if cache_path is None:
+        cache_path = os.path.join(os.path.dirname(__file__), "..", "data", "us_jp_yields.json")
+    today = _dt.date.today()
+    cutoff = (today - _dt.timedelta(days=366)).isoformat()
+
+    # 美债(FRED 日频) — 复用 _fred_series
+    us10 = [(d, v) for d, v in _fred_series("DGS10", start=cutoff) if d >= cutoff]
+    us30 = [(d, v) for d, v in _fred_series("DGS30", start=cutoff) if d >= cutoff]
+    # 日债(MOF 日频)
+    jp10_all = _mof_jgb_yields(10)
+    jp30_all = _mof_jgb_yields(14)
+    jp10 = [(d, v) for d, v in jp10_all.items() if d >= cutoff]
+    jp30 = [(d, v) for d, v in jp30_all.items() if d >= cutoff]
+
+    def pack(name, color, dash, pts, src):
+        if len(pts) < 2:
+            return {"status": "未获取", "name": name}
+        return {"status": "ok", "name": name, "color": color, "dash": dash,
+                "points": pts, "latest": pts[-1][1], "as_of": pts[-1][0], "source": src}
+
+    series = {
+        "us_10y": pack("美国 10Y", "#c0757d", "none", us10, "FRED DGS10 (日频)"),
+        "us_30y": pack("美国 30Y", "#8a3f47", "none", us30, "FRED DGS30 (日频)"),
+        "jp_10y": pack("日本 10Y", "#6b8fb5", "dash", jp10, "日本财务省 MOF JGB (日频)"),
+        "jp_30y": pack("日本 30Y", "#3a5a7d", "dash", jp30, "日本财务省 MOF JGB (日频)"),
+    }
+    ok_any = any(s.get("status") == "ok" for s in series.values())
+    asofs = [s["as_of"] for s in series.values() if s.get("status") == "ok"]
+    out = {"status": "ok" if ok_any else "未获取",
+           "as_of": max(asofs) if asofs else today.isoformat(),
+           "series": series}
+    try:
+        with open(cache_path, "w") as f:
+            json.dump(out, f, ensure_ascii=False, default=str)
+    except Exception:
+        pass
+    return out
+
+
+def fetch_nikkei225(cache_path=None):
+    """日经225指数(过去一年,日频)。FRED NIKKEI225。绝不编造,缺失跳过。
+    返回 {status, as_of, latest, hi, lo, points:[(date,收盘)], source}。"""
+    import json, datetime as _dt
+    if cache_path is None:
+        cache_path = os.path.join(os.path.dirname(__file__), "..", "data", "nikkei225.json")
+    today = _dt.date.today()
+    cutoff = (today - _dt.timedelta(days=366)).isoformat()
+    pts = [(d, v) for d, v in _fred_series("NIKKEI225", start=cutoff) if d >= cutoff]
+    if len(pts) < 2:
+        out = {"status": "未获取"}
+    else:
+        out = {"status": "ok", "as_of": pts[-1][0], "latest": pts[-1][1],
+               "hi": max(v for _, v in pts), "lo": min(v for _, v in pts),
+               "points": pts, "source": "FRED NIKKEI225 (日经225指数,日频)"}
+    try:
+        with open(cache_path, "w") as f:
+            json.dump(out, f, ensure_ascii=False, default=str)
+    except Exception:
+        pass
+    return out
+
+
+def _jpx_foreign_flow_weekly():
+    """抓 JPX 投资部门别周报(东证Prime,金额), 解析海外投资家(Foreigners)每周净买卖(差引き Balance)。
+    从 archive 页(00=本年,01=上年)解析 stock_val_1_*.xls 链接→逐个读:
+      · 周结束日期从 Excel row3 '(M/D - M/D)' 解析(文件名code是YYMM週号非日期,不能当日期);
+      · '海外投資家/Foreigners' 行的 差引き Balance(第6列 idx6)为净额, 字符串带逗号需去除。
+    单位:日元→万亿日元(¥T)。返回 [(week_end 'YYYY-MM-DD', 净额¥T)] 升序。失败返回 []。绝不编造。"""
+    import re, requests, datetime as _dt, io
+    try:
+        import pandas as pd
+    except Exception:
+        return []
+    base = "https://www.jpx.co.jp"
+    out = []
+    links = []
+    # archive-00=本年, archive-01=上年 (覆盖过去一年绰绰有余)
+    for nn in (0, 1):
+        u = base + f"/english/markets/statistics-equities/investor-type/00-00-archives-{nn:02d}.html"
+        try:
+            h = requests.get(u, headers={"User-Agent": "Mozilla/5.0"}, timeout=30).text
+            links += re.findall(r'(/english/markets/statistics-equities/investor-type/[^"]*?stock_val_1_\d{6}\.xls)', h)
+        except Exception:
+            continue
+    cutoff = _dt.date.today() - _dt.timedelta(days=380)
+    seen = set()
+
+    def _to_float(x):
+        try:
+            import pandas as _pd
+            if _pd.isna(x):
+                return None
+        except Exception:
+            pass
+        if isinstance(x, (int, float)):
+            try:
+                f = float(x)
+                return None if f != f else f  # NaN check
+            except Exception:
+                return None
+        if isinstance(x, str):
+            s = x.replace(",", "").replace("△", "-").replace("▲", "-").strip()
+            if not s or s == "-":
+                return None
+            try:
+                return float(s)
+            except ValueError:
+                return None
+        return None
+
+    for path in links:
+        if path in seen:
+            continue
+        seen.add(path)
+        try:
+            raw = requests.get(base + path, headers={"User-Agent": "Mozilla/5.0"}, timeout=30).content
+            df = pd.read_excel(io.BytesIO(raw), header=None, sheet_name=0)
+        except Exception:
+            continue
+        # 1) 周结束日期: 扫前6行找 '( M/D - M/D )'
+        wk_end = None
+        for i in range(min(6, len(df))):
+            cell = str(df.iloc[i, 0])
+            m = re.search(r'(\d{4})年.*?(\d{1,2})/(\d{1,2})\s*[-–]\s*(\d{1,2})/(\d{1,2})', cell)
+            if m:
+                yr, _, _, em, ed = m.groups()
+                try:
+                    wk_end = _dt.date(int(yr), int(em), int(ed))
+                except ValueError:
+                    wk_end = None
+                break
+        if wk_end is None or wk_end < cutoff:
+            continue
+        # 2) 海外投資家 Balance(差引き, 第6列 idx6, 在'売り'行): 单位日元→亿日元(¥100M)
+        bal = None
+        for i in range(len(df)):
+            c0 = str(df.iloc[i, 0])
+            if "海外投資家" in c0 or "Foreign" in c0:
+                # 差引き净额在'売り'行(本行)第6列; 兜底试下一行
+                for j in (i, i + 1):
+                    if j < len(df) and df.shape[1] > 6:
+                        v = _to_float(df.iloc[j, 6])
+                        if v is not None:
+                            bal = v; break
+                break
+        if bal is not None:
+            # Excel 单位=千円(1,000 yen): 千円→万亿日元(¥T) = /1e9
+            out.append((wk_end.isoformat(), round(bal / 1e9, 3)))  # 千円→万亿日元(¥T)
+    out.sort(key=lambda t: t[0])
+    return out
+
+
+def fetch_foreign_flow_japan(cache_path=None):
+    """外资净买入日本股票(过去一年,周频)。JPX 投资部门别周报'海外投資家'差引き净额。
+    绝不编造,抓不到留空 status。返回 {status,as_of,latest,points:[(week,¥T)],source}。"""
+    import json
+    if cache_path is None:
+        cache_path = os.path.join(os.path.dirname(__file__), "..", "data", "foreign_flow_japan.json")
+    pts = _jpx_foreign_flow_weekly()
+    if len(pts) < 2:
+        out = {"status": "未获取"}
+    else:
+        out = {"status": "ok", "as_of": pts[-1][0], "latest": pts[-1][1],
+               "hi": max(v for _, v in pts), "lo": min(v for _, v in pts),
+               "points": pts,
+               "source": "JPX 投资部门别交易(东证Prime,海外投資家净买卖,周频,万亿日元¥T,原表千円)"}
+    try:
+        with open(cache_path, "w") as f:
+            json.dump(out, f, ensure_ascii=False, default=str)
+    except Exception:
+        pass
+    return out
+
+
 def fetch_oil_inventory(cache_path=None):
     """美国石油库存运营红线三序列。绝不编造,取不到该项 status='未获取'。
       1) Brent-WTI 价差(过去一年,日频): FRED DCOILBRENTEU - DCOILWTICO(同日对齐,$/桶)
