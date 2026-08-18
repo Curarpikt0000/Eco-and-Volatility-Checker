@@ -2502,6 +2502,36 @@ def fetch_iip_four_countries(cache_path=None):
     return out
 
 
+def fetch_fiscal_news(cache_path=None, limit=20):
+    """美日财政政策事件时间线(离散事件文本,非时序数字)。
+    数据由 data/fiscal_news.json 驱动: 每日 cron agent 模式 web 检索权威源
+    (US Treasury/Congress/路透/彭博 · 日本财务省/NHK/日经)动态写入最新美日财政举措
+    (债务上限/持续决议CR/政府关门/补正预算/国债发行计划等)。
+    绝不编造: 每条事件带真实 source_url。本函数只读文件+按日期倒序+截断到 limit 条。
+    返回 {status, as_of, source, events:[{date,country,flag,category,title,summary,source_url,source_name}]}。
+    """
+    import json
+    if cache_path is None:
+        cache_path = os.path.join(os.path.dirname(__file__), "..", "data", "fiscal_news.json")
+    try:
+        with open(cache_path, encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return {"status": "未获取", "as_of": "", "source": "美日财政事件(文件缺失)", "events": []}
+    events = data.get("events", []) or []
+    # 只保留有必需字段的真实条目, 按日期倒序
+    clean = [e for e in events if e.get("date") and e.get("title") and e.get("source_url")]
+    clean.sort(key=lambda e: e.get("date", ""), reverse=True)
+    clean = clean[:limit]
+    return {
+        "status": "ok" if clean else "未获取",
+        "as_of": data.get("as_of", clean[0]["date"] if clean else ""),
+        "source": data.get("source", "美日财政政策事件时间线"),
+        "note": data.get("note", ""),
+        "events": clean,
+    }
+
+
 def fetch_oil_inventory(cache_path=None):
     """美国石油库存运营红线三序列。绝不编造,取不到该项 status='未获取'。
       1) Brent-WTI 价差(过去一年,日频): FRED DCOILBRENTEU - DCOILWTICO(同日对齐,$/桶)

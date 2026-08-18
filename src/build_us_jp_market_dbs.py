@@ -11,7 +11,7 @@ CLI: python -m src.build_us_jp_market_dbs
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 import config as c
-from notion_writer import _req, upsert, prop_title, prop_num
+from notion_writer import _req, upsert, prop_title, prop_num, prop_text, prop_select
 import external_data as ed
 
 PARENT = c.NOTION_PARENT_PAGE
@@ -89,13 +89,25 @@ def build():
             {"name": "德国", "color": "green"}, {"name": "中国", "color": "yellow"}]}},
         "Year": _num_prop(), "Assets_T": _num_prop(), "Liabilities_T": _num_prop(), "Net_T": _num_prop(),
     })
-    for k, v in (("DB_YIELDS", yid), ("DB_NIKKEI", nid), ("DB_FOREIGN_FLOW", fid), ("DB_IIP", iid)):
+    # ── DB-5 美日财政政策事件(离散事件) ──
+    gid = create_db("Eco-美日财政政策事件(每日检索)", {
+        "Event": {"title": {}},
+        "Date": {"rich_text": {}},
+        "Country": {"select": {"options": [
+            {"name": "美国", "color": "red"}, {"name": "日本", "color": "blue"}]}},
+        "Category": {"rich_text": {}},
+        "Summary": {"rich_text": {}},
+        "Source_URL": {"url": {}},
+        "Source_Name": {"rich_text": {}},
+    })
+    for k, v in (("DB_YIELDS", yid), ("DB_NIKKEI", nid), ("DB_FOREIGN_FLOW", fid),
+                 ("DB_IIP", iid), ("DB_FISCAL_NEWS", gid)):
         if v:
             _write_env(k, v)
-    return yid, nid, fid, iid
+    return yid, nid, fid, iid, gid
 
 
-def write_data(yid, nid, fid, iid=None, recent_days=60):
+def write_data(yid, nid, fid, iid=None, gid=None, recent_days=60):
     # 美日收益率: 按日期对齐四序列, 写最近 recent_days 天
     yc = ed.fetch_us_jp_yields()
     if yid and yc.get("status") == "ok":
@@ -154,6 +166,27 @@ def write_data(yid, nid, fid, iid=None, recent_days=60):
                     n += 1
             print(f"[data] 四国IIP写入 {n} 行")
 
+    # 美日财政政策事件: 每条一行(title=日期+标题, 幂等)
+    if gid:
+        fn = ed.fetch_fiscal_news()
+        if fn.get("status") == "ok":
+            n = 0
+            for ev in fn["events"]:
+                title = f"{ev.get('date','')} {ev.get('title','')}"[:200]
+                cc = "美国" if ev.get("country") == "US" else ("日本" if ev.get("country") == "JP" else "")
+                props = {
+                    "Event": prop_title(title),
+                    "Date": prop_text(ev.get("date", "")),
+                    "Country": prop_select(cc) if cc else {"select": None},
+                    "Category": prop_text(ev.get("category", "")),
+                    "Summary": prop_text(ev.get("summary", "")),
+                    "Source_URL": {"url": ev.get("source_url") or None},
+                    "Source_Name": prop_text(ev.get("source_name", "")),
+                }
+                upsert(gid, title, props, title_field="Event")
+                n += 1
+            print(f"[data] 美日财政事件写入 {n} 条")
+
 
 def write_data_from_env(recent_days=60):
     """从 .env 读三个 db_id 后写入(供每日 cron 调用, DB 已存在时无需重新建库)。
@@ -164,13 +197,13 @@ def write_data_from_env(recent_days=60):
                 if ln.startswith(k + "="):
                     return ln.strip().split("=", 1)[1]
         return os.environ.get(k)
-    yid, nid, fid, iid = _env("DB_YIELDS"), _env("DB_NIKKEI"), _env("DB_FOREIGN_FLOW"), _env("DB_IIP")
-    if not (yid and nid and fid and iid):
-        yid, nid, fid, iid = build()
-    write_data(yid, nid, fid, iid, recent_days=recent_days)
+    yid, nid, fid, iid, gid = _env("DB_YIELDS"), _env("DB_NIKKEI"), _env("DB_FOREIGN_FLOW"), _env("DB_IIP"), _env("DB_FISCAL_NEWS")
+    if not (yid and nid and fid and iid and gid):
+        yid, nid, fid, iid, gid = build()
+    write_data(yid, nid, fid, iid, gid, recent_days=recent_days)
 
 
 if __name__ == "__main__":
-    yid, nid, fid, iid = build()
-    write_data(yid, nid, fid, iid)
-    print("完成。db_id 已写回 .env (DB_YIELDS/DB_NIKKEI/DB_FOREIGN_FLOW/DB_IIP)")
+    yid, nid, fid, iid, gid = build()
+    write_data(yid, nid, fid, iid, gid)
+    print("完成。db_id 已写回 .env (DB_YIELDS/DB_NIKKEI/DB_FOREIGN_FLOW/DB_IIP/DB_FISCAL_NEWS)")

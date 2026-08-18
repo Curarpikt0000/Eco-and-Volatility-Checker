@@ -179,6 +179,15 @@ def main():
     except Exception as e:
         print(f"[dashboard] 四国IIP 跳过: {e}")
 
+    # ── 美日财政政策事件时间线(data/fiscal_news.json, cron agent 动态更新) ──
+    fiscal_news = {}
+    try:
+        fiscal_news = ed.fetch_fiscal_news() or {}
+        print(f"[dashboard] 美日财政事件: status={fiscal_news.get('status')} "
+              f"as_of={fiscal_news.get('as_of')} 事件数={len(fiscal_news.get('events', []))}")
+    except Exception as e:
+        print(f"[dashboard] 美日财政事件 跳过: {e}")
+
     # ── BIS 国际清算银行报告(Quarterly Review 季度综述) ──
     bis_latest = None
     try:
@@ -250,6 +259,7 @@ def main():
         nikkei225=nikkei225,
         foreign_flow=foreign_flow,
         iip_four=iip_four,
+        fiscal_news=fiscal_news,
         bis_latest=bis_latest,
     )
     print(f"[dashboard] 生成: {out}")

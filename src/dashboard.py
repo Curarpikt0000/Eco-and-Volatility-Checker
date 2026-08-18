@@ -213,7 +213,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              country_ust=None, kol_views=None, credit_impulse=None, custody_accel=None,
              stress_panels=None, ofr_fsi=None, maturing_treasury=None, bis_latest=None,
              oil_inventory=None, us_jp_yields=None, nikkei225=None, foreign_flow=None,
-             iip_four=None):
+             iip_four=None, fiscal_news=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -390,6 +390,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         yield_curves=_yield_curves_html(us_jp_yields),
         nikkei_flow=_nikkei_flow_html(nikkei225, foreign_flow),
         iip_four=_iip_html(iip_four),
+        fiscal_news=_fiscal_news_html(fiscal_news),
         bis_section=_bis_section_html(bis_latest, "https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/"),
         country_ust=_country_ust_html(country_ust),
         credit_impulse=_credit_impulse_html(credit_impulse),
@@ -1483,6 +1484,49 @@ def _iip_html(iip):
         f'<b>🇯🇵 日本 / 🇩🇪 德国 / 🇨🇳 中国</b>是主要<b>净债权国</b>(常年经常账户顺差累积对外资产)。'
         f'净债务国若外部融资条件收紧(利率↑/避险)会承压；净债权国则在全球动荡时资本回流本国、支撑本币。'
         f'是判断<b>全球资本流向与外部脆弱性</b>的结构性指标。<br>年频，IMF 官方公开数据。</div>'
+        f'</div>'
+    )
+
+
+def _fiscal_news_html(fn):
+    """美日财政政策事件时间线 section: 离散事件卡片(日期+国旗+分类+标题+摘要+来源链接)。
+    fn: fetch_fiscal_news() 返回。绝不编造, 每条带真实来源链接。"""
+    if not fn or fn.get("status") != "ok" or not fn.get("events"):
+        return '<p class="empty">美日财政政策事件数据待更新（daily cron 检索中，抓不到不编造）。</p>'
+    cat_col = {"US": "#c0757d", "JP": "#6b8fb5"}
+    cards = []
+    for ev in fn["events"]:
+        cc = ev.get("country", "")
+        bar = cat_col.get(cc, "#8a8f98")
+        src = ev.get("source_url", "")
+        src_name = ev.get("source_name", "来源")
+        src_link = (f'<a class="src-lnk" href="{_esc(src)}" target="_blank" rel="noopener">{_esc(src_name)} ↗</a>'
+                    if src else _esc(src_name))
+        cards.append(
+            f'<div class="fn-card" style="border-left:3px solid {bar};">'
+            f'<div class="fn-head">'
+            f'<span class="fn-date">{_esc(ev.get("date",""))}</span>'
+            f'<span class="fn-flag">{ev.get("flag","")}</span>'
+            f'<span class="fn-cat" style="color:{bar};">{_esc(ev.get("category",""))}</span>'
+            f'</div>'
+            f'<div class="fn-title">{_esc(ev.get("title",""))}</div>'
+            f'<div class="fn-sum">{_esc(ev.get("summary",""))}</div>'
+            f'<div class="fn-src">{src_link}</div>'
+            f'</div>'
+        )
+    body = "".join(cards)
+    asof = fn.get("as_of", "")
+    return (
+        f'<div class="fn-wrap">'
+        f'<div class="fn-meta">🇺🇸 美国 + 🇯🇵 日本财政政策事件 · 按日期倒序 · 最新 {_esc(asof)}'
+        f'<span class="chart-freq freq-d">🟢 每日 · cron 检索权威源动态更新</span></div>'
+        f'<div class="fn-list">{body}</div>'
+        f'<div class="cust-how"><b>如何看：</b>本节追踪<b>美日两国当前的财政政策举措</b>——'
+        f'美国侧关注<b>债务上限、持续决议(CR)、政府关门风险、拨款法案</b>；'
+        f'日本侧关注<b>补正预算(补充预算)、特例公债(赤字国债)发行、国债发行计划</b>。'
+        f'这些事件直接影响两国<b>国债供给、财政赤字与利率</b>：'
+        f'美国关门/债限僵局→短端波动+避险；日本增发赤字国债→JGB 供给压力(与本页日债收益率上行呼应)。'
+        f'每条事件均附<b>真实来源链接</b>，可点击核实，绝不编造。<br>每日更新，cron agent 检索官方与权威媒体源。</div>'
         f'</div>'
     )
 
@@ -2998,6 +3042,17 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .mt-barmeta {{ font-size: 12px; color: var(--text); text-align: center; margin-top: 6px; }}
   .oil-meta {{ font-size: 12px; color: var(--text); text-align: center; margin-top: 6px; line-height: 1.5; }}
   .oil-src {{ font-size: 10.5px; color: var(--muted); text-align: center; margin-top: 3px; }}
+  .fn-wrap {{ display: flex; flex-direction: column; gap: 12px; }}
+  .fn-meta {{ font-size: 12px; color: var(--muted); display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }}
+  .fn-list {{ display: flex; flex-direction: column; gap: 10px; }}
+  .fn-card {{ background: var(--card2); border-radius: 8px; padding: 11px 14px; }}
+  .fn-head {{ display: flex; align-items: center; gap: 9px; margin-bottom: 4px; }}
+  .fn-date {{ font-family: var(--mono); font-size: 11.5px; color: var(--muted); }}
+  .fn-flag {{ font-size: 14px; }}
+  .fn-cat {{ font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 4px; background: rgba(160,160,150,.14); }}
+  .fn-title {{ font-size: 13.5px; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 3px; }}
+  .fn-sum {{ font-size: 12px; color: var(--muted); line-height: 1.6; }}
+  .fn-src {{ font-size: 11px; margin-top: 5px; }}
   .cust-lbl {{ font-size: 12px; color: var(--muted); font-weight: 600; }}
   .cust-val {{ font-family: var(--mono); font-size: 34px; font-weight: 800; color: var(--text); line-height: 1.1; }}
   .cust-unit {{ font-size: 18px; color: var(--muted); margin-left: 2px; }}
@@ -3313,6 +3368,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title"><span class="part-num">＋</span>四国国际投资头寸 IIP · 过去十年 (美/日/德/中 对外资产·负债·净债权地位)<span class="freq-badge freq-quarterly">每年更新</span></div>
   <div class="card">{iip_four}</div>
 
+  <!-- ═══ 附三·十一：美日财政政策事件时间线 ═══ -->
+  <div class="part-title" id="sec-fiscal-news"><span class="part-num">＋</span>美日财政政策事件 · 债务上限/CR/补正预算/国债发行 (每日检索)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{fiscal_news}</div>
+
   <!-- ═══ 附四：知名机构持仓 (13F) + Trump ═══ -->
   <div class="part-title"><span class="part-num">＋</span>机构持仓追踪 · 13F + Trump (对比上期变动)<span class="freq-badge freq-quarterly">每季度 · Trump不定期</span></div>
   <div class="h-grid">{holdings}</div>
@@ -3361,8 +3420,9 @@ mkRadar('rLong', RADAR.long);
     {{ name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注'] }},
     {{ name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化'] }},
     {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','BIS','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲'] }},
-    {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日','国际投资头寸','IIP','净头寸'] }},
+    {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸'] }},
     {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent'] }},
+    {{ name: '财政政策', match: ['美日财政政策事件','债务上限','补正预算','国债发行'] }},
     {{ name: '日本市场', match: ['日经225','外资净买入','日本市场'] }},
     {{ name: '机构与政要持仓', match: ['机构持仓','13F','Trump'] }}
   ];
