@@ -213,7 +213,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              country_ust=None, kol_views=None, credit_impulse=None, custody_accel=None,
              stress_panels=None, ofr_fsi=None, maturing_treasury=None, bis_latest=None,
              oil_inventory=None, us_jp_yields=None, nikkei225=None, foreign_flow=None,
-             iip_four=None, fiscal_news=None, hf_leverage=None, bis_gold_swaps=None):
+             iip_four=None, fiscal_news=None, hf_leverage=None, bis_gold_swaps=None,
+             market_breadth=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -393,6 +394,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         fiscal_news=_fiscal_news_html(fiscal_news),
         hf_leverage=_hf_leverage_html(hf_leverage),
         bis_gold_swaps=_bis_gold_swaps_html(bis_gold_swaps),
+        market_breadth=_market_breadth_html(market_breadth),
         bis_section=_bis_section_html(bis_latest, "https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/"),
         country_ust=_country_ust_html(country_ust),
         credit_impulse=_credit_impulse_html(credit_impulse),
@@ -1579,6 +1581,110 @@ def _hf_leverage_html(hf):
         f'高杠杆头寸被迫平仓→抛售美债→收益率跳升→更多平仓，形成<b>去杠杆螺旋</b>(2020年3月「dash for cash」即此机制)。'
         f'敞口越高、回购依赖越重，美债市场对流动性冲击越脆弱。<br>季度更新(SEC Form PF 底层)，OFR 官方公开数据。'
         f'<br><span style="color:#8a8578">注：BIS 原图另有「零折扣(zero haircut)占比」一图，因 OFR/ESRB 仅在报告 PDF 内出静态图、无公开时间序列，本 section 未纳入（绝不用代理冒充）。</span></div>'
+        f'</div>'
+    )
+
+
+def _market_breadth_html(mb):
+    """美股市场广度 section: SP500(SPY) vs RSP/SPY 广度比 双线折线, 数值化顶背离判定。
+    mb: fetch_market_breadth()。替代原无数据源的 A/D 布尔判断, 真数据可复现。"""
+    if not mb or mb.get("status") != "ok" or not mb.get("spy_points"):
+        return ('<p class="empty">美股市场广度(RSP/SPY)数据抓取中——东方财富源间歇限流，'
+                '每日 cron 低频重试，抓到即填真值，绝不编造。</p>')
+    spy_pts = mb["spy_points"]
+    ratio_pts = mb["ratio_points"]
+    ev = mb.get("evidence", {})
+    diverge = mb.get("divergence")
+    stale = mb.get("stale", False)
+
+    # 双线各自归一化到面板高度(量级差大: SPY~770 vs ratio~100)
+    w, h = 920, 260
+    ml, mr, mt, mb_ = 20, 160, 18, 30
+    pw, ph = w - ml - mr, h - mt - mb_
+    dates = [d for d, _ in spy_pts]
+    n = len(dates)
+    didx = {d: i for i, (d, _) in enumerate(spy_pts)}
+    def X(i): return ml + i * pw / max(n - 1, 1)
+    def norm(vals):
+        lo, hi = min(vals), max(vals)
+        rng = (hi - lo) or 1
+        return lo, hi, rng
+    spy_v = [v for _, v in spy_pts]
+    rt_map = dict(ratio_pts)
+    rt_v = [rt_map[d] for d in dates if d in rt_map]
+    slo, shi, srng = norm(spy_v)
+    rlo, rhi, rrng = norm(rt_v)
+    def Ys(v): return mt + (shi - v) / srng * ph
+    def Yr(v): return mt + (rhi - v) / rrng * ph
+
+    parts = [f'<svg viewBox="0 0 {w} {h}" class="cust-chart" preserveAspectRatio="xMidYMid meet" '
+             f'font-family="-apple-system,PingFang SC,sans-serif">']
+    # 网格
+    for k in range(5):
+        gy = mt + ph * k / 4
+        parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" stroke="#d4cdbe" stroke-width="1" stroke-dasharray="3,3"/>')
+    # x 年标签
+    seen = set()
+    for i, d in enumerate(dates):
+        yr = d[:4]
+        if yr not in seen and (i == 0 or i == n - 1 or i % max(n // 5, 1) == 0):
+            seen.add(yr)
+            anchor = "start" if i == 0 else ("end" if i >= n - 2 else "middle")
+            parts.append(f'<text x="{X(i):.1f}" y="{h-10}" font-size="9" fill="#8a8578" text-anchor="{anchor}">{_esc(d)}</text>')
+    # SP500 线(蓝)
+    sp_line = [f"{X(i):.1f},{Ys(v):.1f}" for i, (_, v) in enumerate(spy_pts)]
+    parts.append(f'<polyline points="{" ".join(sp_line)}" fill="none" stroke="#6b8fb5" stroke-width="2.2" stroke-linejoin="round"/>')
+    # 广度比线(琥珀)
+    rt_line = [f"{X(didx[d]):.1f},{Yr(rt_map[d]):.1f}" for d in dates if d in rt_map and d in didx]
+    parts.append(f'<polyline points="{" ".join(rt_line)}" fill="none" stroke="#c9a94e" stroke-width="2.2" stroke-linejoin="round"/>')
+    # 末点圈
+    parts.append(f'<circle cx="{X(n-1):.1f}" cy="{Ys(spy_v[-1]):.1f}" r="3.4" fill="#6b8fb5"/>')
+    parts.append(f'<circle cx="{X(n-1):.1f}" cy="{Yr(rt_v[-1]):.1f}" r="3.4" fill="#c9a94e"/>')
+    # 图例
+    ly = mt + 6
+    parts.append(f'<line x1="{w-mr+8}" y1="{ly}" x2="{w-mr+24}" y2="{ly}" stroke="#6b8fb5" stroke-width="2.6"/>')
+    parts.append(f'<text x="{w-mr+28}" y="{ly+3.5}" font-size="10" fill="#6b8fb5">S&amp;P500 (SPY) {mb.get("latest_spy")}</text>')
+    ly += 18
+    parts.append(f'<line x1="{w-mr+8}" y1="{ly}" x2="{w-mr+24}" y2="{ly}" stroke="#c9a94e" stroke-width="2.6"/>')
+    parts.append(f'<text x="{w-mr+28}" y="{ly+3.5}" font-size="10" fill="#c9a94e">广度比 RSP/SPY {mb.get("latest_ratio")}</text>')
+    parts.append("</svg>")
+    svg = "".join(parts)
+
+    # 判定徽标
+    if diverge is True:
+        badge = '<span style="color:#d64545;font-weight:700">⚠ 顶背离(广度恶化)</span>'
+        verdict = "🔴 顶背离"
+    elif diverge is False:
+        badge = '<span style="color:#2e9e5b;font-weight:700">✓ 广度确认(健康)</span>'
+        verdict = "🟢 广度确认"
+    else:
+        badge = '<span style="color:#8a8578">数据不足</span>'
+        verdict = "⚪ 未判定"
+
+    stale_note = (' <span style="color:#c08a2e">(缓存数据，东财源今日限流，最新真值待 cron 刷新)</span>'
+                  if stale else "")
+    return (
+        f'<div class="cust-wrap">'
+        f'<div class="cust-chart-col cust-chart-full">'
+        f'<div class="cust-chart-title">美股市场广度：S&amp;P500 vs 等权/市值加权比(RSP/SPY) · 判定：{badge}'
+        f'<span class="chart-freq freq-d">🟢 每日 · 东方财富 push2his</span></div>'
+        f'{svg}'
+        f'<div class="oil-meta">最新（{_esc(mb.get("as_of",""))}）：{verdict}{stale_note}<br>'
+        f'判定依据：SPY 近 {ev.get("lookback_days","?")} 日高点 <b>{ev.get("spy_lookback_high","?")}</b>，'
+        f'近 {ev.get("nh_window","?")} 日高点 <b>{ev.get("spy_recent_high","?")}</b>'
+        f'（{"创新高" if ev.get("spy_made_new_high") else "未创新高"}）；'
+        f'广度比距其高点差 <b>{ev.get("ratio_gap_from_high_pct","?")}%</b>'
+        f'（{"广度确认" if ev.get("breadth_confirmed") else "广度未跟上"}）</div>'
+        f'<div class="oil-src">数据源：{_esc(mb.get("source",""))} · '
+        f'判定规则：{_esc(ev.get("rule",""))}</div>'
+        f'</div>'
+        f'<div class="cust-how"><b>如何看：</b>这是<b>市场广度(market breadth)</b>的真数据版——替代原先无数据源的「NYSE A/D 腾落线」定性判断。'
+        f'<b>RSP</b>=等权标普(每只股权重相同)，<b>SPY</b>=市值加权标普(大票主导)。'
+        f'<b>RSP/SPY 比值上行</b>=普涨、广度健康；<b>比值下行</b>=少数大权重股(如「七巨头」)领涨、多数股走弱=<b>广度恶化</b>，'
+        f'与 A/D 腾落线「顶背离」同义。<br>'
+        f'<b>顶背离判定(可复现数值规则)</b>：当 <b>S&amp;P 创新高、但 RSP/SPY 广度比未同步创高</b>(距其高点 &gt;2%) 时判为顶背离——'
+        f'指数只靠少数股撑、内部走弱，历史上是<b>见顶前兆</b>。<br>'
+        f'相比旧布尔判断，这里<b>有折线图、有数字、判定规则透明可回溯</b>，绝不靠 AI 主观。每日更新(东财源，间歇限流则用缓存真值兜底)。</div>'
         f'</div>'
     )
 
@@ -3581,6 +3687,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title" id="sec-bis-gold-swaps"><span class="part-num">＋</span>BIS 自营黄金掉期 · 央行黄金市场隐秘干预信号 (吨 · 2010→今)<span class="freq-badge freq-quarterly">年度确认+月度推算</span></div>
   <div class="card">{bis_gold_swaps}</div>
 
+  <!-- ═══ 附三·十二C：美股市场广度(RSP/SPY, 替代 A/D 腾落线) ═══ -->
+  <div class="part-title" id="sec-market-breadth"><span class="part-num">＋</span>美股市场广度 · RSP/SPY 等权比 (A/D 腾落线真数据版·顶背离判定)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{market_breadth}</div>
+
   <!-- ═══ 附三·十一：美日财政政策事件时间线 ═══ -->
   <div class="part-title" id="sec-fiscal-news"><span class="part-num">＋</span>美日财政政策事件 · 债务上限/CR/补正预算/国债发行 (每日检索)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{fiscal_news}</div>
@@ -3630,7 +3740,7 @@ mkRadar('rLong', RADAR.long);
   if (!titles.length || !box) return;
 
   var GROUPS = [
-    {{ name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注'] }},
+    {{ name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注','市场广度'] }},
     {{ name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化'] }},
     {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','BIS','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲'] }},
     {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款'] }},

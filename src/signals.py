@@ -97,11 +97,25 @@ def eval_sell_triggers(results, cot_results, history_getter=None):
                 fgstate = "⚠️"; fgdesc = f"{fg}(高位)"
     checks.append(("Fear&Greed 从>75回落<50", ">75→<50", fgdesc, fgstate))
 
-    # 5. A/D Line 顶背离 (search 结果)
+    # 5. A/D Line 顶背离 (RSP/SPY 广度比真数据, 见 run.py 注入; 抓不到回退 override)
     ad = results.get("ad_line", {})
     adval = ad.get("value")  # True=背离
+    adx = ad.get("extra", {}) or {}
     s = "✅" if adval is True else ("❌" if adval is False else "❌")
-    addesc = "顶背离" if adval is True else ("广度确认(无背离)" if adval is False else "无数据")
+    if adval is True:
+        addesc = "顶背离"
+    elif adval is False:
+        addesc = "广度确认(无背离)"
+    else:
+        addesc = "无数据"
+    # 附证据来源(真数据时)
+    if adx.get("source") and adval is not None:
+        gap = adx.get("ratio_gap_from_high_pct")
+        addesc += f"｜{adx['source']}"
+        if gap is not None:
+            addesc += f"(广度比距高点{gap}%)"
+        if adx.get("stale"):
+            addesc += "[缓存]"
     checks.append(("A/D Line 顶背离", "背离", addesc, s))
     if s == "✅": hit += 1
 

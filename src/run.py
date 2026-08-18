@@ -113,6 +113,35 @@ def fetch_all():
             results["margin_gdp"] = {"key": "margin_gdp",
                                      "value": round(md / gdp_v * 100, 2),
                                      "as_of": jst_today(), "status": "ok"}
+
+    # ad_line 顶背离 = 用真数据市场广度(RSP/SPY)覆盖旧的无依据 override 布尔
+    # (2026-08 Chao 质疑: 原 ad_line 只有 web_search 主观布尔 True、无图无数据。
+    #  改用东财 RSP/SPY 广度比数值化判定, 可复现、可回溯。抓不到则保留旧值不覆盖成空。)
+    try:
+        import external_data as _ed
+        mb = _ed.fetch_market_breadth()
+        if mb.get("status") == "ok" and mb.get("divergence") is not None:
+            ev = mb.get("evidence", {})
+            results["ad_line"] = {
+                "key": "ad_line",
+                "value": bool(mb["divergence"]),  # True=顶背离
+                "as_of": mb.get("as_of", ""),
+                "status": "ok",
+                "extra": {
+                    "source": "RSP/SPY 广度比(东方财富真数据)",
+                    "spy_lookback_high": ev.get("spy_lookback_high"),
+                    "spy_recent_high": ev.get("spy_recent_high"),
+                    "spy_made_new_high": ev.get("spy_made_new_high"),
+                    "ratio_gap_from_high_pct": ev.get("ratio_gap_from_high_pct"),
+                    "breadth_confirmed": ev.get("breadth_confirmed"),
+                    "rule": ev.get("rule"),
+                    "stale": mb.get("stale", False),
+                },
+            }
+        # 抓不到(status!=ok): 不动 results["ad_line"], 保留 override/旧值(绝不覆盖成空)
+    except Exception as e:
+        pass  # 广度抓取异常不影响主流程, ad_line 保留原值
+
     return results
 
 

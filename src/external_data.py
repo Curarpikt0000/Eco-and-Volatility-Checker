@@ -2735,6 +2735,140 @@ def fetch_bis_gold_swaps(cache_path=None):
     }
 
 
+def fetch_market_breadth(cache_path=None, lookback_days=250, nh_window=20):
+    """美股市场广度: RSP(等权标普)/SPY(市值加权标普) 比值, 替代无数据源的 A/D 布尔判断。
+
+    数据源: 东方财富 push2his 原生 API(免 key)。SPY=107.SPY, RSP=107.RSP, 日线复权。
+    注: akshare 封装被东财挡, 但原生 push2his API 实测通, 故直接请求(带重试)。
+
+    市场广度含义: RSP/SPY 比值下行 = 少数大权重股领涨、多数股走弱(广度恶化),
+    与 NYSE A/D 腾落线「顶背离」同义, 但这是**连续可量化真数据**, 可画折线、可复现判定。
+
+    数值化背离判定(可复现规则, 不靠 AI 主观):
+      在最近 nh_window 个交易日内,
+      若 S&P(用 SPY 代理)创下近 lookback_days 新高, 但 RSP/SPY 广度比 **未**同步创新高
+      (广度比距其近 lookback 高点还差 > 2%), 则判定为 **顶背离(divergence=True)**。
+      否则 divergence=False(广度确认)。
+
+    返回 {status, as_of, divergence(bool), evidence{...}, spy_points:[(d,close)],
+          ratio_points:[(d, RSP/SPY 归一化)], source}。
+    绝不编造: 取不到 status='未获取'。
+    """
+    import json, requests, datetime as _dt, time as _time
+    if cache_path is None:
+        cache_path = os.path.join(os.path.dirname(__file__), "..", "data", "market_breadth.json")
+
+    def _load_cache():
+        """读上次成功落盘的真数据(抓不到时兜底, 绝不覆盖成空)。"""
+        try:
+            with open(cache_path, encoding="utf-8") as f:
+                c = json.load(f)
+            if c.get("status") == "ok" and c.get("spy_points"):
+                c["stale"] = True  # 标记为缓存(非当日新抓)
+                return c
+        except Exception:
+            pass
+        return None
+
+    UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+          "Referer": "https://quote.eastmoney.com/"}
+    _sess = requests.Session()
+    _sess.headers.update(UA)
+
+    def _kline(secid, beg="20180101"):
+        end = _dt.date.today().strftime("%Y%m%d")
+        url = "https://push2his.eastmoney.com/api/qt/stock/kline/get"
+        params = {"secid": secid, "fields1": "f1,f2,f3,f4,f5,f6",
+                  "fields2": "f51,f52,f53,f54,f55,f56,f57,f58",
+                  "klt": 101, "fqt": 1, "beg": beg, "end": end}
+        for attempt in range(6):
+            try:
+                r = _sess.get(url, params=params, timeout=25)
+                d = r.json().get("data")
+                if d and d.get("klines"):
+                    # klines: "date,open,close,high,low,vol,amount,pct"
+                    out = []
+                    for ln in d["klines"]:
+                        parts = ln.split(",")
+                        out.append((parts[0], float(parts[2])))  # (date, close)
+                    return out
+            except Exception:
+                pass
+            _time.sleep(1.5 * (attempt + 1))  # 递增退避
+        return None
+
+    spy = _kline("107.SPY")
+    _time.sleep(1.0)
+    rsp = _kline("107.RSP")
+    if not spy or not rsp:
+        cached = _load_cache()
+        if cached:
+            return cached  # 东财限流/抖动 → 用上次真数据兜底(绝不覆盖成空)
+        return {"status": "未获取", "as_of": "",
+                "source": "美股市场广度 RSP/SPY(东方财富, 抓取失败且无缓存)", "divergence": None}
+
+    spy_map = dict(spy)
+    rsp_map = dict(rsp)
+    common = sorted(set(spy_map) & set(rsp_map))
+    if len(common) < nh_window + 5:
+        cached = _load_cache()
+        if cached:
+            return cached
+        return {"status": "未获取", "as_of": common[-1] if common else "",
+                "source": "美股市场广度 RSP/SPY(数据不足)", "divergence": None}
+
+    # 广度比 = RSP/SPY, 归一化到起点=100 便于观感
+    base = rsp_map[common[0]] / spy_map[common[0]]
+    ratio_pts = [(d, round((rsp_map[d] / spy_map[d]) / base * 100.0, 3)) for d in common]
+    spy_pts = [(d, round(spy_map[d], 2)) for d in common]
+
+    # 数值化背离判定
+    recent = common[-nh_window:]
+    lb = common[-lookback_days:] if len(common) >= lookback_days else common
+    spy_vals_lb = [spy_map[d] for d in lb]
+    ratio_vals_lb = [rsp_map[d] / spy_map[d] for d in lb]
+    spy_hi = max(spy_vals_lb)
+    ratio_hi = max(ratio_vals_lb)
+    # 最近 nh_window 内 SPY 是否触及/接近 lookback 新高(>= 99.5% of hi)
+    spy_recent_hi = max(spy_map[d] for d in recent)
+    ratio_recent_hi = max(rsp_map[d] / spy_map[d] for d in recent)
+    spy_made_high = spy_recent_hi >= spy_hi * 0.995
+    # 广度比距其 lookback 高点差多少 %
+    ratio_gap_pct = round((ratio_hi - ratio_recent_hi) / ratio_hi * 100.0, 2)
+    breadth_confirmed = ratio_recent_hi >= ratio_hi * 0.98  # 广度也接近新高=确认
+    divergence = bool(spy_made_high and not breadth_confirmed)
+
+    last_d = common[-1]
+    evidence = {
+        "spy_recent_high": round(spy_recent_hi, 2),
+        "spy_lookback_high": round(spy_hi, 2),
+        "spy_made_new_high": spy_made_high,
+        "ratio_gap_from_high_pct": ratio_gap_pct,
+        "breadth_confirmed": breadth_confirmed,
+        "lookback_days": len(lb),
+        "nh_window": nh_window,
+        "rule": "SPY创近lookback新高 且 RSP/SPY广度比距其高点>2% = 顶背离",
+    }
+
+    out = {
+        "status": "ok",
+        "as_of": last_d,
+        "divergence": divergence,
+        "evidence": evidence,
+        "spy_points": spy_pts[-lookback_days:],
+        "ratio_points": ratio_pts[-lookback_days:],
+        "latest_spy": spy_pts[-1][1],
+        "latest_ratio": ratio_pts[-1][1],
+        "source": "美股市场广度 RSP(等权)/SPY(市值加权) · 东方财富 push2his API",
+    }
+    try:
+        with open(cache_path, "w", encoding="utf-8") as f:
+            json.dump(out, f, ensure_ascii=False, default=str)
+    except Exception:
+        pass
+    return out
+
+
 def fetch_fiscal_news(cache_path=None, limit=20):
     """美日财政政策事件时间线(离散事件文本,非时序数字)。
     数据由 data/fiscal_news.json 驱动: 每日 cron agent 模式 web 检索权威源

@@ -208,6 +208,16 @@ def main():
     except Exception as e:
         print(f"[dashboard] BIS黄金掉期 跳过: {e}")
 
+    # ── 美股市场广度(RSP/SPY 等权比, 替代 A/D 腾落线, 东财原生API) ──
+    market_breadth = {}
+    try:
+        market_breadth = ed.fetch_market_breadth() or {}
+        print(f"[dashboard] 市场广度: status={market_breadth.get('status')} "
+              f"as_of={market_breadth.get('as_of')} divergence={market_breadth.get('divergence')} "
+              f"stale={market_breadth.get('stale')} pts={len(market_breadth.get('spy_points',[]))}")
+    except Exception as e:
+        print(f"[dashboard] 市场广度 跳过: {e}")
+
     # ── BIS 国际清算银行报告(Quarterly Review 季度综述) ──
     bis_latest = None
     try:
@@ -282,6 +292,7 @@ def main():
         fiscal_news=fiscal_news,
         hf_leverage=hf_leverage,
         bis_gold_swaps=bis_gold_swaps,
+        market_breadth=market_breadth,
         bis_latest=bis_latest,
     )
     print(f"[dashboard] 生成: {out}")
