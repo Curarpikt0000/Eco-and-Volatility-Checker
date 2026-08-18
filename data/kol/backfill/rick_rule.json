@@ -1,30 +1,23 @@
 {
   "kol": "Rick Rule",
   "sector": "Precious Metals",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 3,
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+  "count": 2,
   "history": [
     {
-      "date": "2026-03-12",
-      "direction": "分歧",
-      "comments": "在Sprott Money访谈中透露已卖出约80%的实物白银,但强调'不要卖黄金'。视黄金为核心储蓄资产长期持有,而白银经历回调后偏投机;长期贵金属牛市仍有显著上行空间,只是节奏上需谨慎。",
-      "targets": "黄金/白银/矿业股",
-      "source": "https://www.sprottmoney.com/blog/rick-rule-sold-80-percent-silver-dont-sell-gold"
-    },
-    {
-      "date": "2026-05-18",
+      "date": "2026-05-28",
       "direction": "看多",
-      "comments": "在Commodity Culture播客中解释年初把大量实物白银换成银矿股的逻辑:银矿股在75美元银价环境下仅计价42美元,涨跌均具防御与杠杆优势。看好铀为未来十年'绝对黄金般'的机会,黄金作储蓄、白银股作投机。",
-      "targets": "银矿股/黄金/铀(SPUT)/油气",
-      "source": "https://www.canadianminingreport.com/blog/rick-rule-on-silver-gold-oil-uranium-why-he-sold-physical-silver-rotated-into-miners-and-remains-bullish-on-natural-resources-in-2026"
+      "comments": "Rule称黄金跌破$4500使美国利率重回市场辩论中心，但对矿业投资者更重要的是生产商需通过并购补充储量的压力上升；黄金疲软是买入机会。",
+      "targets": "黄金/矿业股",
+      "source": "https://www.kitco.com/news/article/2026-05-28/gold-pullback-puts-rate-pressure-mining-ma-back-focus-rick-rule"
     },
     {
-      "date": "2026-07-16",
-      "direction": "中性",
-      "comments": "在INN访谈中称'我们正进入资源投资很好的五年,但我不认为2026会是其中之一',建议今年用来磨练技能、逢低捡便宜货。将金价回调形容为类似1975年的'休整期',长期看多但短期谨慎。",
-      "targets": "黄金/油气/矿业股",
-      "source": "https://investingnews.com/rick-rule-gold-market-forecast/"
+      "date": "2026-07-14",
+      "direction": "看多",
+      "comments": "Rule讨论仅有1%的管理团队能创造十倍回报，看好铜的超级周期，认为优质矿业管理团队是长期价值来源。",
+      "targets": "铜/矿业股",
+      "source": "https://miningnetwork.co.uk/governments-bail-out-tomago/"
     }
   ]
 }

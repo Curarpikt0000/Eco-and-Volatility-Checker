@@ -1,23 +1,51 @@
 {
   "kol": "Daniel Ghali",
   "sector": "Precious Metals",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 2,
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+  "count": 6,
   "history": [
     {
       "date": "2025-02-25",
       "direction": "看多",
-      "comments": "TD证券高级商品策略师Ghali称黄金呈现\"双赢\"格局:强美元下亚洲买盘对冲货币贬值,弱美元下西方宏观基金传统买入,双向都有支撑但难持久。白银则连续第五年结构性赤字,是\"可以买入的逼空\",长线更优。",
-      "targets": "黄金,白银",
+      "comments": "TDS高级商品策略师Ghali称白银不再是黄金的穷亲戚，正进入连续第五年结构性赤字，投资需求可能引发挤压，看好白银独特上行故事。",
+      "targets": "白银/黄金",
       "source": "https://www.kitco.com/news/article/2025-02-25/gold-has-win-win-setup-not-long-while-silver-squeeze-you-can-buy-td"
+    },
+    {
+      "date": "2025-09-12",
+      "direction": "强烈看多",
+      "comments": "Ghali称白银挤压终局临近，若投资需求像以往宽松周期般回升，库存可能在四个月内耗尽，$50关口在望。",
+      "targets": "白银",
+      "source": "https://www.zerohedge.com/news/2025-09-12/tds-ghali-silver-endgame-approaches-50-table"
     },
     {
       "date": "2025-10-16",
       "direction": "看多",
-      "comments": "在白银历史性上涨中,Ghali所在TD证券平仓一笔战术性白银空头录得239万美元亏损,侧面印证其此前对白银逼空、伦敦金属外流至美国不会回流的判断,结构性看多逻辑持续兑现。",
-      "targets": "白银,黄金",
-      "source": "https://markets.financialcontent.com/stocks/article/marketminute-2025-10-16-td-securities-stumbles-with-239-million-silver-short-loss-amidst-historic-rally"
+      "comments": "在白银历史性上涨中TDS平掉战术性白银空头，亏损239万美元，但贵金属整体仍净正向，长期维持看多白银判断。",
+      "targets": "白银",
+      "source": "https://www.kitco.com/news/article/2025-10-16/tds-gets-hit-silver-train-it-closes-tactical-short-position-239-million"
+    },
+    {
+      "date": "2025-12-08",
+      "direction": "看空",
+      "comments": "Ghali转向，称2026年白银经历史上最大规模的LBMA自由流通库存补充浪潮，从稀缺溢价转为库存过剩，白银挤压结束，价格将回落至$40s。",
+      "targets": "白银",
+      "source": "https://www.scottsdalemint.com/articles/2025/tds-ghali-says-platinum-setting-up-for-big-squeeze-now/"
+    },
+    {
+      "date": "2026-01-14",
+      "direction": "中性",
+      "comments": "Ghali称黄金白银风险已两面化多年未见，债务货币化贬值交易仍支撑金银，但铂族金属PGM上行空间最强，最看好；对白银初步做空目标$40。",
+      "targets": "黄金/白银/铂族金属",
+      "source": "https://www.kitco.com/news/article/2026-01-14/debasement-trade-supporting-gold-and-silver-pgms-now-have-strongest-upside"
+    },
+    {
+      "date": "2026-05-25",
+      "direction": "看多",
+      "comments": "Ghali预测白银价格将持续攀升，主因电子和清洁能源技术对白银的关键需求推动全球需求激增。",
+      "targets": "白银",
+      "source": "https://www.juniorstocks.com/the-silver-surge-expert-forecasts-explosive-growth"
     }
   ]
 }

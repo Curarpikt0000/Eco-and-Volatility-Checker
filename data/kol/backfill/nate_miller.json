@@ -1,10 +1,30 @@
 {
   "kol": "Nate Miller",
   "sector": "Precious Metals",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 0,
-  "status": "未找到",
-  "history": [],
-  "note": "搜索仅返回Kitco署名综述性稿件,无法确认为该分析师本人可独立归属的市场观点条目;按铁律不编造,标count:0。"
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)；此Nate Miller=Amplify ETFs产品开发副总裁(白银ETF方向)，已与政治预测家Nate Silver区分",
+  "count": 3,
+  "history": [
+    {
+      "date": "2025-08-27",
+      "direction": "看多",
+      "comments": "Amplify ETFs产品开发副总裁Miller称白银投资需求激增带来巨大增长，$3400金价意味着银价可达$50/oz，仍看到白银巨大上行空间。",
+      "targets": "白银",
+      "source": "https://www.kitco.com/news/article/2025-08-27/3400-gold-means-silver-50oz-we-still-see-tremendous-upside-silver-amplifys"
+    },
+    {
+      "date": "2026-02-25",
+      "direction": "看多",
+      "comments": "Miller称白银在年初抛物线式上涨后进入盘整阶段，但由零售需求强劲支撑的整体牛市逻辑保持完好。",
+      "targets": "白银",
+      "source": "https://www.kitco.com/news/article/2026-02-25/silver-consolidating-retail-investors-remain-confident-amplify-etfs"
+    },
+    {
+      "date": "2026-04-13",
+      "direction": "看多",
+      "comments": "Miller称白银在年初急涨后进入盘整期，但工业需求与投资需求支撑整体前景仍偏建设性；白银已告别$20-30时代，$60-70成新常态，围绕$70盘整是结构性转变的积极信号。",
+      "targets": "白银",
+      "source": "https://www.kitco.com/news/article/2026-04-13/silver-builds-strong-base-above-70-upside-depends-inflation-amplify-etfs"
+    }
+  ]
 }
