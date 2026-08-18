@@ -1,37 +1,44 @@
 {
   "kol": "Dan Ives",
   "sector": "Equities",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 4,
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+  "count": 5,
   "history": [
     {
-      "date": "2025-11-25",
+      "date": "2025-01-15",
       "direction": "强烈看多",
-      "comments": "年末重点科技选股，点名微软、英伟达和特斯拉为将持续驱动AI革命的核心标的。",
-      "targets": "MSFT / NVDA / TSLA",
-      "source": "cnbc.com (2025-11-25)"
+      "comments": "Wedbush 预期 2025 年科技股整体上涨约 25%，点名 10 只受益 AI 浪潮的股票(Nvidia/微软/Palantir/Tesla/Alphabet/苹果等)，看好 AI 革命驱动的持续行情。",
+      "targets": "美股科技股/AI",
+      "source": "https://finance.yahoo.com/news/analysts-reveal-top-ai-stocks-155738138.html"
     },
     {
-      "date": "2025-12-19",
-      "direction": "强烈看多",
-      "comments": "发布2026年科技与AI五大预测，看好AI基础设施提供商Nebius，将其列为最可能被大型科技公司收购的首选标的，微软/Alphabet/亚马逊为潜在买家。",
-      "targets": "Nebius / 大型科技",
-      "source": "businessinsider.com (2025-12-19)"
+      "date": "2025-04-07",
+      "direction": "看空",
+      "comments": "在 Trump Liberation Day 关税冲击、标普濒临熊市之际，将 Tesla 12 个月目标价由 550 大砍至 315 美元(降 43%)，称 Tesla 品牌已沦为全球政治符号，对该标的转谨慎。",
+      "targets": "Tesla/美股",
+      "source": "https://www.businessinsider.com/tesla-dan-ives-wedbush-price-target-cut-2025-4"
     },
     {
-      "date": "2025-12-31",
+      "date": "2025-11-28",
       "direction": "强烈看多",
-      "comments": "看好特斯拉未来一年市值可达2万亿美元、牛市情景下2026年底或达3万亿美元；网络安全为顶级子板块，Palo Alto与CrowdStrike为首选。",
-      "targets": "TSLA / PANW / CRWD",
-      "source": "businessinsider.com (2025-12-31)"
+      "comments": "宣称当前是 Nvidia 的天下、其它公司都在交租，英伟达芯片需求供给比达 12:1、库存售罄至 2026，判定市场处于 risk-on，科技牛市将延续到 2026 年。",
+      "targets": "Nvidia/美股科技股",
+      "source": "https://intellectia.ai/news/stock/dan-ives-declares-its-nvidias-world-with-others-paying-rent-anticipates-major-tech-surge-through-2026"
     },
     {
-      "date": "2026-03-05",
+      "date": "2025-12-27",
       "direction": "强烈看多",
-      "comments": "认为自动驾驶发展或迎转折点，给予特斯拉基准情景600美元估值、上行情景可达800美元；重点关注特斯拉、苹果、微软。",
-      "targets": "TSLA / AAPL / MSFT",
-      "source": "stocktwits.com (2026-03-05)"
+      "comments": "维持 Nvidia 2026 年底 250 美元目标价，理由是市场低估其 AI 建设带来的盈利潜力(低估约 15-20%)及中国市场重新开放的利好，网络业务收入同比暴增 162%。",
+      "targets": "Nvidia",
+      "source": "https://www.ainvest.com/news/nvidia-250-horizon-analyst-confidence-2026-growth-trajectory-2512/"
+    },
+    {
+      "date": "2025-12-30",
+      "direction": "强烈看多",
+      "comments": "列出 2026 年 Top 5 AI 选股，除 Nvidia 外还推荐三只 Magnificent Seven 成分股加一只 cult 股和一只软件股，认为 AI 交易主线在 2026 年继续走强。",
+      "targets": "美股科技股/AI",
+      "source": "https://www.morningstar.com/news/marketwatch/2025123073/techs-biggest-bull-lists-his-top-5-ai-stocks-for-2026-and-nvidias-isnt-one-of-them"
     }
   ]
 }

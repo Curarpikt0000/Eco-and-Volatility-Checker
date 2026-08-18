@@ -1,1 +1,37 @@
-{"kol":"Doomberg / Kuppy","sector":"Energy & Commodities","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":2,"history":[{"date":"2026-06-18","direction":"看空","comments":"战后能源市场访谈：认为大宗商品长期实际价格更低，油市基本无视了伊朗冲突，油价可能大幅走低甚至出现崩盘；对铜牛市持怀疑，认为铜多头忽略了关键供给因素。整体对油/工业金属偏空。","targets":"原油/铜","source":"Triangle Investor Substack (triangleinvestor.substack.com/p/post-war-energy-markets-whats-next)"},{"date":"2026-06-23","direction":"分歧","comments":"Monetary Metals 访谈：预期未来能源趋于丰裕、油等消耗型商品价格总体走低（对油偏空）；但明确看好货币金属，指出金银在2025-2026经历强劲上涨。呈现能源看空、贵金属看多的分化观点。","targets":"能源(空)/金银(多)","source":"Monetary Metals Podcast (monetary-metals.com/insights/podcasts/doomberg-why-energy-abundance-may-be-ahead)"}]}
+{
+  "kol": "Doomberg / Kuppy",
+  "sector": "Energy & Commodities",
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+  "count": 4,
+  "history": [
+    {
+      "date": "2025-05-19",
+      "direction": "看多",
+      "comments": "认为 AI 融入各行业将驱动前所未有的能源需求，天然气是未来关键能源、铀战略重要性上升，黄金正成为后俄制裁时代的关键中性储备资产，能源股或将走强。",
+      "targets": "天然气/铀/黄金/能源股",
+      "source": "https://metalsandminers.substack.com/p/ais-infinite-energy-demand-markets"
+    },
+    {
+      "date": "2025-11-09",
+      "direction": "强烈看多",
+      "comments": "提出油气革命论：AI 驱动需求叠加 LNG 出口产能扩张将大幅抬升全球天然气需求，未来十年美加天然气需求或翻倍，并改变与原油的联产经济学，长线看多天然气。",
+      "targets": "天然气/LNG",
+      "source": "https://adamtaggart.substack.com/p/an-oil-and-gas-revolution-is-underway"
+    },
+    {
+      "date": "2026-05-15",
+      "direction": "看多",
+      "comments": "在 Palisades Gold Radio 谈油价冲击后的韧性、地缘大交易可能性及北美能源主导地位，对加拿大大宗商品、金属与矿业股给出偏多看法。",
+      "targets": "原油/加拿大大宗商品/金属矿业股",
+      "source": "https://www.canadianminingreport.com/blog/doomberg-oil-shock-resilience-grand-bargain-potential-north-america-s-energy-dominance-bullish-outlook-for-canadian-commodities-metals-mining-stocks"
+    },
+    {
+      "date": "2026-06-20",
+      "direction": "看多",
+      "comments": "战后能源展望：尽管经历近年最重大地缘冲突之一，全球能源系统反而更强韧、更灵活，超出多数分析师预期，认为大宗商品多头仍有支撑。",
+      "targets": "能源/大宗商品",
+      "source": "https://triangle-investor.com/articles/post-war-energy-markets-doomberg/"
+    }
+  ]
+}

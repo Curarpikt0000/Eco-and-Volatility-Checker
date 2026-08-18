@@ -1,1 +1,37 @@
-{"kol":"Rory Johnston","sector":"Energy & Commodities","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":2,"history":[{"date":"2026-03-10","direction":"看多","comments":"在 Bloomberg Odd Lots 节目中阐述油价可能升破每桶200美元的路径：结构性供给紧张叠加地缘风险，若冲击叠加会推高美国零售油价并造成全球供应短缺。整体对油价持偏多/风险偏上判断。","targets":"WTI/Brent 原油","source":"Bloomberg Odd Lots (bloomberg.com/news/articles/2026-03-10)"},{"date":"2026-06","direction":"看多","comments":"伊朗战争爆发期给 Commodity Context 订户的周中更新：伊朗冲突与霍尔木兹海峡受阻造成历史级供给缺口，油价波动性大幅上升，推高全球燃料价格，判断供给端风险显著偏上。","targets":"原油/成品油","source":"Commodity Context / MacroVoices (tradersunion.com, summyt.app)"}]}
+{
+  "kol": "Rory Johnston",
+  "sector": "Energy & Commodities",
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+  "count": 4,
+  "history": [
+    {
+      "date": "2025-12-16",
+      "direction": "看空",
+      "comments": "作为 Commodity Context 创始人指出，油市正处于供应过剩阶段，尽管一连串地缘风险及大量原油进入海上/中国库存暂时维持了市场紧张，但基本面偏松，油价承压下行。",
+      "targets": "原油",
+      "source": "https://www.rigzone.com/news/wire/oil_sinks_as_oversupply_pressures_intensify-16-dec-2025-182549-article/?rss=true"
+    },
+    {
+      "date": "2026-06-26",
+      "direction": "中性",
+      "comments": "在 Bloomberg Odd Lots 复盘为何自己 200 美元油价预测未兑现，归因于运输改道、Trump 口头施压及中国进口意外减少等因素共同压制了油价，态度转务实。",
+      "targets": "原油",
+      "source": "https://www.bloomberg.com/news/audio/2026-06-26/odd-lots-rory-johnston-on-why-oil-didn-t-hit-200-podcast"
+    },
+    {
+      "date": "2026-07-23",
+      "direction": "中性",
+      "comments": "发布 74 页 7 月版全球石油数据册(付费)，以数据密集、可视化方式追踪全球油市供需平衡，延续其数据优先的中性研究定位。",
+      "targets": "原油",
+      "source": "https://www.commoditycontext.com/p/global-oil-data-deck-july-2026"
+    },
+    {
+      "date": "2026-08-01",
+      "direction": "看空",
+      "comments": "撰文指出 2025 年油市最终远比 IEA/EIA/OPEC 预期更宽松，市场对 2026 年供需平衡的预期开始转向，讨论过剩(glut)正在兑现还是被否认的问题，整体偏空。",
+      "targets": "原油",
+      "source": "https://www.linkedin.com/posts/rorysjjohnston_new-post-barreling-ahead-realizingor-denying-activity-7422643025253703680-UajK"
+    }
+  ]
+}
