@@ -2144,6 +2144,141 @@ def write_ofr_notion(ofr=None):
     return nw.upsert(db, ofr["asof"], props, title_field="Date")
 
 
+def _fred_series(series_id, start=None):
+    """curl FRED fredgraph.csv 取完整历史 [(date, value)] 升序。缺失('.')跳过。失败返回 []。"""
+    import requests
+    url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}"
+    if start:
+        url += f"&cosd={start}"
+    try:
+        r = requests.get(url, timeout=30)
+        if r.status_code != 200:
+            return []
+        out = []
+        for ln in r.text.strip().splitlines()[1:]:
+            if "," not in ln:
+                continue
+            d, v = ln.split(",", 1)
+            v = v.strip()
+            if v and v != ".":
+                try:
+                    out.append((d.strip(), float(v)))
+                except ValueError:
+                    continue
+        return out
+    except Exception:
+        return []
+
+
+def _eia_series(series_id, start=None):
+    """EIA API v2 petroleum stocks 周频序列。返回 [(date 'YYYY-MM-DD', value 千桶)] 升序。
+    需 EIA_API_KEY(在 .env)。失败/无 key 返回 []。绝不编造。"""
+    import requests
+    key = os.environ.get("EIA_API_KEY")
+    if not key:
+        # 从 .env 兜底读
+        envp = os.path.join(os.path.dirname(__file__), "..", ".env")
+        if os.path.exists(envp):
+            for line in open(envp):
+                if line.startswith("EIA_API_KEY="):
+                    key = line.strip().split("=", 1)[1]
+                    break
+    if not key:
+        return []
+    url = ("https://api.eia.gov/v2/petroleum/stoc/wstk/data/"
+           f"?api_key={key}&frequency=weekly&data[0]=value"
+           f"&facets[series][]={series_id}"
+           "&sort[0][column]=period&sort[0][direction]=asc&length=5000")
+    if start:
+        url += f"&start={start}"
+    try:
+        r = requests.get(url, timeout=40)
+        if r.status_code != 200:
+            return []
+        data = r.json().get("response", {}).get("data", [])
+        out = []
+        for x in data:
+            per = x.get("period")
+            val = x.get("value")
+            if per and val is not None:
+                try:
+                    out.append((per, float(val)))
+                except (ValueError, TypeError):
+                    continue
+        out.sort(key=lambda t: t[0])
+        return out
+    except Exception:
+        return []
+
+
+def fetch_oil_inventory(cache_path=None):
+    """美国石油库存运营红线三序列。绝不编造,取不到该项 status='未获取'。
+      1) Brent-WTI 价差(过去一年,日频): FRED DCOILBRENTEU - DCOILWTICO(同日对齐,$/桶)
+         价差转负(WTI>Brent)=Cushing 交割枢纽库存逼近 tank bottom 的市场信号。
+      2) Cushing 原油库存(过去一年,周频): EIA W_EPC0_SAX_YCUOK_MBBL(千桶→百万桶)。运营红线~2000万桶(tank bottom)。
+      3) SPR 战略石油储备(过去十年,周频): EIA WCSSTUS1(千桶→百万桶)。运营红线3亿桶(Amos Hochstein 披露)。
+    返回 {status, as_of, spread:{...}, cushing:{...}, spr:{...}}。
+    """
+    import json, datetime as _dt
+    if cache_path is None:
+        cache_path = os.path.join(os.path.dirname(__file__), "..", "data", "oil_inventory.json")
+    today = _dt.date.today()
+    out = {"status": "ok", "as_of": today.isoformat(),
+           "spread": {"status": "未获取"}, "cushing": {"status": "未获取"}, "spr": {"status": "未获取"}}
+
+    # 1) Brent-WTI 价差(过去一年,日频)
+    start_1y = (today - _dt.timedelta(days=400)).isoformat()
+    brent = dict(_fred_series("DCOILBRENTEU", start=start_1y))
+    wti = dict(_fred_series("DCOILWTICO", start=start_1y))
+    common = sorted(set(brent) & set(wti))
+    # 只保留近约 366 天
+    cutoff = (today - _dt.timedelta(days=366)).isoformat()
+    spread_pts = [(d, round(brent[d] - wti[d], 2)) for d in common if d >= cutoff]
+    if len(spread_pts) >= 2:
+        last_d, last_v = spread_pts[-1]
+        neg_days = sum(1 for _, v in spread_pts if v < 0)
+        out["spread"] = {
+            "status": "ok", "points": spread_pts, "as_of": last_d,
+            "latest": last_v, "hi": max(v for _, v in spread_pts),
+            "lo": min(v for _, v in spread_pts), "neg_days": neg_days,
+            "source": "FRED (DCOILBRENTEU - DCOILWTICO), 日频",
+        }
+
+    # 2) Cushing 库存(过去一年,周频) — EIA 千桶→百万桶
+    cush = _eia_series("W_EPC0_SAX_YCUOK_MBBL", start=(today - _dt.timedelta(days=400)).strftime("%Y-%m-%d"))
+    cush = [(d, round(v / 1000.0, 2)) for d, v in cush if d >= cutoff]
+    if len(cush) >= 2:
+        cd, cv = cush[-1]
+        out["cushing"] = {
+            "status": "ok", "points": cush, "as_of": cd, "latest": cv,
+            "hi": max(v for _, v in cush), "lo": min(v for _, v in cush),
+            "redline": 20.0,  # 运营红线 2000 万桶(tank bottom)
+            "source": "EIA Weekly Petroleum Status (W_EPC0_SAX_YCUOK_MBBL), 周频",
+        }
+
+    # 3) SPR(过去十年,周频) — EIA 千桶→百万桶
+    spr_start = (today - _dt.timedelta(days=3670)).strftime("%Y-%m-%d")  # ~10年+buffer
+    spr = _eia_series("WCSSTUS1", start=spr_start)
+    spr = [(d, round(v / 1000.0, 2)) for d, v in spr]
+    if len(spr) >= 2:
+        sd, sv = spr[-1]
+        out["spr"] = {
+            "status": "ok", "points": spr, "as_of": sd, "latest": sv,
+            "hi": max(v for _, v in spr), "lo": min(v for _, v in spr),
+            "redline": 300.0,  # 运营红线 3 亿桶(Amos Hochstein 披露)
+            "source": "EIA Weekly Ending Stocks Crude Oil in SPR (WCSSTUS1), 周频",
+        }
+
+    if all(out[k].get("status") != "ok" for k in ("spread", "cushing", "spr")):
+        out["status"] = "未获取"
+    try:
+        with open(cache_path, "w") as f:
+            json.dump(out, f, ensure_ascii=False, default=str)
+    except Exception:
+        pass
+    return out
+
+
 if __name__ == "__main__":
     import json
     print("=== Credit Impulse 三国(信贷脉冲) ===")

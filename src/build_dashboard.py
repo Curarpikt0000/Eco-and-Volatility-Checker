@@ -129,6 +129,19 @@ def main():
     except Exception as e:
         print(f"[dashboard] 1年内到期国债 跳过: {e}")
 
+    # ── 美国石油库存运营红线(Brent-WTI价差 / Cushing / SPR, EIA+FRED) ──
+    oil_inventory = {}
+    try:
+        oil_inventory = ed.fetch_oil_inventory() or {}
+        _sp = oil_inventory.get("spread", {})
+        _cu = oil_inventory.get("cushing", {})
+        _spr = oil_inventory.get("spr", {})
+        print(f"[dashboard] 石油库存: spread={_sp.get('status')}({_sp.get('latest')}) "
+              f"cushing={_cu.get('status')}({_cu.get('latest')}Mbbl) "
+              f"spr={_spr.get('status')}({_spr.get('latest')}Mbbl)")
+    except Exception as e:
+        print(f"[dashboard] 石油库存 跳过: {e}")
+
     # ── BIS 国际清算银行报告(Quarterly Review 季度综述) ──
     bis_latest = None
     try:
@@ -195,6 +208,7 @@ def main():
         stress_panels=stress_panels,
         ofr_fsi=ofr_fsi,
         maturing_treasury=maturing_treasury,
+        oil_inventory=oil_inventory,
         bis_latest=bis_latest,
     )
     print(f"[dashboard] 生成: {out}")

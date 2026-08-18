@@ -211,7 +211,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
              country_ust=None, kol_views=None, credit_impulse=None, custody_accel=None,
-             stress_panels=None, ofr_fsi=None, maturing_treasury=None, bis_latest=None):
+             stress_panels=None, ofr_fsi=None, maturing_treasury=None, bis_latest=None,
+             oil_inventory=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -384,6 +385,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         custody=_custody_html(custody),
         custody_accel=_custody_accel_html(custody_accel),
         maturing_treasury=_maturing_treasury_html(maturing_treasury),
+        oil_inventory=_oil_inventory_html(oil_inventory),
         bis_section=_bis_section_html(bis_latest, "https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/"),
         country_ust=_country_ust_html(country_ust),
         credit_impulse=_credit_impulse_html(credit_impulse),
@@ -1256,6 +1258,202 @@ def _maturing_treasury_html(mt):
         f'<br>⚠️ <b>口径说明</b>：本图为 MSPD 全部可交易国债中1年内到期部分的<b>总量(含 Fed SOMA + 私营部门持有)</b>，'
         f'未单独剔除美联储持仓（Fed 持有约占 15-20%）；如需纯私营口径需再减 SOMA 短端持仓。'
         f'数据源：<a class="src-lnk" href="https://fiscaldata.treasury.gov/datasets/monthly-statement-public-debt/" target="_blank" rel="noopener">US Treasury MSPD Table 3</a>（月度，按到期日逐券加总）。</div>'
+        f'</div>'
+    )
+
+
+def _oil_line_svg(pts, w=900, h=230, redline=None, redline_label="", zero_line=False,
+                  unit="", val_fmt="{:.1f}", rising_good=None):
+    """油库存/价差折线 SVG(带可选红线阈值虚线 + 0 线)。pts:[(date,val)] 升序。
+    redline: 数值阈值(画红色虚线); zero_line: 画 0 基准线(价差用)。最新点高亮圆点。"""
+    if not pts or len(pts) < 2:
+        return '<div class="sp-na">折线数据不足</div>'
+    dates = [d for d, _ in pts]
+    vals = [v for _, v in pts]
+    lo, hi = min(vals), max(vals)
+    # 把红线/0线纳入 y 轴范围
+    extra = [x for x in (redline, 0.0 if zero_line else None) if x is not None]
+    lo = min([lo] + extra)
+    hi = max([hi] + extra)
+    pad = (hi - lo) * 0.08 or abs(hi) * 0.05 or 1.0
+    lo -= pad
+    hi += pad
+    rng = (hi - lo) or 1.0
+    ml, mr, mt, mb = 54, 14, 16, 30
+    pw, ph = w - ml - mr, h - mt - mb
+    n = len(vals)
+    def X(i): return ml + i * pw / (n - 1)
+    def Y(v): return mt + (hi - v) / rng * ph
+    linepts = " ".join(f"{X(i):.1f},{Y(v):.1f}" for i, v in enumerate(vals))
+    # 趋势色
+    if rising_good is None:
+        color = "#7fa085"
+    else:
+        up = vals[-1] > vals[0]
+        color = "#9aab97" if (up == rising_good) else "#c08a7d"
+    fill_area = f"{X(0):.1f},{mt+ph:.1f} " + linepts + f" {X(n-1):.1f},{mt+ph:.1f}"
+    parts = [f'<svg viewBox="0 0 {w} {h}" width="100%" preserveAspectRatio="xMidYMid meet" '
+             f'font-family="-apple-system,PingFang SC,sans-serif">']
+    # y 网格 4 档
+    for k in range(4):
+        gv = lo + rng * k / 3
+        gy = Y(gv)
+        parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" stroke="#d4cdbe" stroke-width="1" stroke-dasharray="3,3"/>')
+        parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" font-size="10" fill="#8a8578" text-anchor="end">{val_fmt.format(gv)}</text>')
+    # 面积 + 折线
+    parts.append(f'<polygon points="{fill_area}" fill="{color}" opacity="0.10" stroke="none"/>')
+    parts.append(f'<polyline points="{linepts}" fill="none" stroke="{color}" stroke-width="2.2" stroke-linejoin="round"/>')
+    # 0 基准线(价差)
+    if zero_line:
+        zy = Y(0.0)
+        parts.append(f'<line x1="{ml}" y1="{zy:.1f}" x2="{w-mr}" y2="{zy:.1f}" stroke="#8a8578" stroke-width="1.2" stroke-dasharray="1,0" opacity="0.55"/>')
+        parts.append(f'<text x="{w-mr}" y="{zy-4:.1f}" font-size="9.5" fill="#8a8578" text-anchor="end">0（价差转负=WTI&gt;Brent）</text>')
+    # 红线阈值
+    if redline is not None:
+        ry = Y(redline)
+        parts.append(f'<line x1="{ml}" y1="{ry:.1f}" x2="{w-mr}" y2="{ry:.1f}" stroke="#d64545" stroke-width="1.6" stroke-dasharray="6,4"/>')
+        parts.append(f'<text x="{ml+4}" y="{ry-4:.1f}" font-size="10" font-weight="700" fill="#d64545">{_esc(redline_label)}</text>')
+    # 最新点
+    lx, ly = X(n - 1), Y(vals[-1])
+    parts.append(f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="8" fill="{color}" opacity="0.18"/>')
+    parts.append(f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="4" fill="{color}"/>')
+    parts.append(f'<text x="{lx:.1f}" y="{ly-9:.1f}" font-size="10.5" font-weight="700" fill="{color}" text-anchor="end">{val_fmt.format(vals[-1])}{unit}</text>')
+    # x 日期标签
+    idxs = sorted(set([0, n // 4, n // 2, 3 * n // 4, n - 1]))
+    for i in idxs:
+        anchor = "start" if i == 0 else ("end" if i == n - 1 else "middle")
+        parts.append(f'<text x="{X(i):.1f}" y="{h-9}" font-size="9.5" fill="#8a8578" text-anchor="{anchor}">{dates[i][:7]}</text>')
+    parts.append("</svg>")
+    return "".join(parts)
+
+
+def _oil_bar_redline_svg(pts, w=900, h=230, redline=None, redline_label="",
+                         color="#b0895e", unit="", val_fmt="{:.1f}"):
+    """周频柱状图 + 红线阈值。跌破红线的柱染红色。pts:[(date,val)] 升序。"""
+    if not pts or len(pts) < 2:
+        return '<div class="sp-na">柱状图数据不足</div>'
+    vals = [v for _, v in pts]
+    vmax = max(vals + ([redline] if redline is not None else []))
+    vmin = min(vals + ([redline] if redline is not None else []))
+    lo = vmin - (vmax - vmin) * 0.15 if vmax > vmin else vmin * 0.95
+    hi = vmax + (vmax - vmin) * 0.08 if vmax > vmin else vmax * 1.05
+    span = (hi - lo) or 1.0
+    pad_l, pad_r, pad_t, pad_b = 54, 14, 20, 32
+    plot_w = w - pad_l - pad_r
+    plot_h = h - pad_t - pad_b
+    n = len(pts)
+    gap = plot_w / n
+    bw = gap * 0.6
+    parts = [f'<svg viewBox="0 0 {w} {h}" width="100%" preserveAspectRatio="xMidYMid meet" '
+             f'font-family="-apple-system,PingFang SC,sans-serif">']
+    for i in range(4):
+        gv = lo + span * i / 3
+        gy = pad_t + plot_h - (gv - lo) / span * plot_h
+        parts.append(f'<line x1="{pad_l}" y1="{gy:.1f}" x2="{w-pad_r}" y2="{gy:.1f}" stroke="#d4cdbe" stroke-width="1" stroke-dasharray="3,3"/>')
+        parts.append(f'<text x="{pad_l-6}" y="{gy+3:.1f}" font-size="10" fill="#8a8578" text-anchor="end">{val_fmt.format(gv)}</text>')
+    lbl_step = max(1, n // 6)
+    for i, (lab, v) in enumerate(pts):
+        cx = pad_l + gap * i + gap / 2
+        bx = cx - bw / 2
+        bh = (v - lo) / span * plot_h
+        by = pad_t + plot_h - bh
+        breached = redline is not None and v < redline
+        last = (i == n - 1)
+        fill = "#d64545" if breached else color
+        op = 0.9 if (last or breached) else 0.72
+        parts.append(f'<rect x="{bx:.1f}" y="{by:.1f}" width="{bw:.1f}" height="{bh:.1f}" rx="1.5" fill="{fill}" opacity="{op}"/>')
+        if last:
+            parts.append(f'<text x="{cx:.1f}" y="{by-4:.1f}" font-size="10.5" font-weight="700" fill="{fill}" text-anchor="middle">{val_fmt.format(v)}{unit}</text>')
+        if i % lbl_step == 0 or last:
+            parts.append(f'<text x="{cx:.1f}" y="{h-pad_b+15:.1f}" font-size="9" fill="#8a8578" text-anchor="middle">{_esc(lab[:7])}</text>')
+    if redline is not None:
+        ry = pad_t + plot_h - (redline - lo) / span * plot_h
+        parts.append(f'<line x1="{pad_l}" y1="{ry:.1f}" x2="{w-pad_r}" y2="{ry:.1f}" stroke="#d64545" stroke-width="1.6" stroke-dasharray="6,4"/>')
+        parts.append(f'<text x="{pad_l+4}" y="{ry-4:.1f}" font-size="10" font-weight="700" fill="#d64545">{_esc(redline_label)}</text>')
+    parts.append("</svg>")
+    return "".join(parts)
+
+
+def _oil_inventory_html(oil):
+    """美国石油库存运营红线三图: ①Brent-WTI价差(过去一年,日频折线,0线) ②Cushing库存(过去一年,周频柱状+2000万桶红线)
+    ③SPR战略石油储备(过去十年,周频折线+3亿桶红线)。oil: fetch_oil_inventory()。绝不编造,缺项标未获取。"""
+    if not oil or oil.get("status") != "ok":
+        return '<p class="empty">美国石油库存数据未就绪。</p>'
+    sp = oil.get("spread", {})
+    cu = oil.get("cushing", {})
+    spr = oil.get("spr", {})
+
+    # ① Brent-WTI 价差
+    if sp.get("status") == "ok":
+        neg = sp.get("neg_days", 0)
+        sp_meta = (f'{_esc(sp["points"][0][0])} → {_esc(sp["as_of"])}：最新 '
+                   f'<b>${sp["latest"]:+.2f}/桶</b> · 区间 ${sp["lo"]:+.2f} ~ ${sp["hi"]:+.2f} · '
+                   f'过去一年<b style="color:#d64545">{neg} 个交易日价差转负</b>（WTI&gt;Brent＝Cushing 库存逼近 tank bottom 信号）')
+        sp_chart = _oil_line_svg(sp["points"], w=900, h=230, zero_line=True,
+                                 unit="", val_fmt="{:.0f}", rising_good=None)
+        sp_src = sp.get("source", "")
+    else:
+        sp_meta = "数据未获取"; sp_chart = '<div class="sp-na">未获取</div>'; sp_src = ""
+
+    # ② Cushing 库存(柱状 + 红线)
+    if cu.get("status") == "ok":
+        breach_c = sum(1 for _, v in cu["points"] if v < 20.0)
+        cstat = ("跌破" if cu["latest"] < 20.0 else "高于") + "红线"
+        ccol = "#d64545" if cu["latest"] < 20.0 else "#2e9e5b"
+        cu_meta = (f'{_esc(cu["points"][0][0])} → {_esc(cu["as_of"])}：最新 '
+                   f'<b style="color:{ccol}">{cu["latest"]:.1f} 百万桶（{cstat}）</b> · '
+                   f'区间 {cu["lo"]:.1f} ~ {cu["hi"]:.1f} · '
+                   f'过去一年<b style="color:#d64545">{breach_c} 周跌破 2000 万桶运营红线</b>')
+        cu_chart = _oil_bar_redline_svg(cu["points"], w=900, h=230, redline=20.0,
+                                        redline_label="运营红线 20（tank bottom）",
+                                        color="#b0895e", unit="", val_fmt="{:.0f}")
+        cu_src = cu.get("source", "")
+    else:
+        cu_meta = "数据未获取"; cu_chart = '<div class="sp-na">未获取</div>'; cu_src = ""
+
+    # ③ SPR(折线 + 红线)
+    if spr.get("status") == "ok":
+        sstat = ("跌破" if spr["latest"] < 300.0 else "高于") + "红线"
+        scol = "#d64545" if spr["latest"] < 300.0 else "#2e9e5b"
+        drop_pct = (spr["latest"] - spr["hi"]) / spr["hi"] * 100 if spr["hi"] else 0
+        spr_meta = (f'{_esc(spr["points"][0][0])} → {_esc(spr["as_of"])}：最新 '
+                    f'<b style="color:{scol}">{spr["latest"]:.1f} 百万桶（{sstat}）</b> · '
+                    f'十年高 {spr["hi"]:.0f} → 今 {spr["latest"]:.0f}（<b style="color:#d64545">{drop_pct:+.0f}%</b>） · '
+                    f'距 3 亿桶运营红线仅 <b>{spr["latest"]-300.0:+.1f}</b> 百万桶')
+        spr_chart = _oil_line_svg(spr["points"], w=900, h=230, redline=300.0,
+                                  redline_label="运营红线 300（Amos Hochstein 披露）",
+                                  unit="", val_fmt="{:.0f}", rising_good=True)
+        spr_src = spr.get("source", "")
+    else:
+        spr_meta = "数据未获取"; spr_chart = '<div class="sp-na">未获取</div>'; spr_src = ""
+
+    return (
+        f'<div class="cust-wrap oil-wrap">'
+        # ①
+        f'<div class="cust-chart-col cust-chart-full">'
+        f'<div class="cust-chart-title">① Brent-WTI 价差 · 过去一年（日频）</div>'
+        f'{sp_chart}<div class="oil-meta">{sp_meta}</div>'
+        f'{f"<div class=&#39;oil-src&#39;>数据源：{_linkify_sources(sp_src)}</div>" if sp_src else ""}'
+        f'</div>'
+        # ②
+        f'<div class="cust-chart-col cust-chart-full" style="margin-top:16px;">'
+        f'<div class="cust-chart-title">② Cushing (Oklahoma) 原油库存 · 过去一年（周频柱状 · WTI 交割枢纽）</div>'
+        f'{cu_chart}<div class="oil-meta">{cu_meta}</div>'
+        f'{f"<div class=&#39;oil-src&#39;>数据源：{_linkify_sources(cu_src)}</div>" if cu_src else ""}'
+        f'</div>'
+        # ③
+        f'<div class="cust-chart-col cust-chart-full" style="margin-top:16px;">'
+        f'<div class="cust-chart-title">③ 美国战略石油储备 SPR · 过去十年（周频）</div>'
+        f'{spr_chart}<div class="oil-meta">{spr_meta}</div>'
+        f'{f"<div class=&#39;oil-src&#39;>数据源：{_linkify_sources(spr_src)}</div>" if spr_src else ""}'
+        f'</div>'
+        # 如何看
+        f'<div class="cust-how"><b>如何看：</b>三图串起美国原油库存的<b>运营红线(tank bottom)</b>压力链：'
+        f'<b>①Brent-WTI 价差</b>转负(WTI 反超 Brent)＝WTI 交割地 Cushing 库存逼近可动用下限，市场愿为"能立刻提货的现货"付溢价；'
+        f'<b>②Cushing 库存</b>是 WTI 期货的实物交割枢纽，跌破约 2000 万桶(tank bottom / 管道与罐底最低运营量)则交割体系承压、易现逼仓；'
+        f'<b>③SPR</b>是国家应急储备，其运营红线约 3 亿桶(时任能源安全顾问 Amos Hochstein 披露)——低于此则应急调节能力所剩无几。'
+        f'三者同时逼近红线＝美国原油"缓冲垫"被抽薄，对地缘冲击/供给中断的抗压能力显著下降，是能源与通胀风险的结构性预警。'
+        f'<br>红色虚线＝各自运营红线；跌破处以红色高亮。数据源：EIA 周度石油状况报告 + FRED 日频油价，均为官方公开数据。</div>'
         f'</div>'
     )
 
@@ -2418,6 +2616,8 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .mt-asof {{ font-size: 11px; color: var(--muted); font-family: var(--mono); margin-left: 6px; }}
   .mt-sub {{ display: block; font-size: 11px; color: var(--muted); margin-top: 3px; }}
   .mt-barmeta {{ font-size: 12px; color: var(--text); text-align: center; margin-top: 6px; }}
+  .oil-meta {{ font-size: 12px; color: var(--text); text-align: center; margin-top: 6px; line-height: 1.5; }}
+  .oil-src {{ font-size: 10.5px; color: var(--muted); text-align: center; margin-top: 3px; }}
   .cust-lbl {{ font-size: 12px; color: var(--muted); font-weight: 600; }}
   .cust-val {{ font-family: var(--mono); font-size: 34px; font-weight: 800; color: var(--text); line-height: 1.1; }}
   .cust-unit {{ font-size: 18px; color: var(--muted); margin-left: 2px; }}
@@ -2711,6 +2911,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title"><span class="part-num">＋</span>1年内到期可交易国债 · 再融资墙 (rollover 压力)</div>
   <div class="card">{maturing_treasury}</div>
 
+  <!-- ═══ 附三·七：美国石油库存运营红线 (Brent-WTI价差 / Cushing / SPR) ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>美国石油库存运营红线 · 能源安全 (Brent-WTI 价差 / Cushing / SPR · tank bottom)</div>
+  <div class="card">{oil_inventory}</div>
+
   <!-- ═══ 附三·六：日本 / 中国 分国别持有美债 (TIC, 近10年) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>日本 / 中国 / 欧盟 持有美债 · 近10年 + 2008长历史 (TIC 分国别口径)</div>
   <div class="card">{country_ust}</div>
@@ -2764,6 +2968,7 @@ mkRadar('rLong', RADAR.long);
     {{ name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化'] }},
     {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','BIS','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲'] }},
     {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别'] }},
+    {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent'] }},
     {{ name: '机构与政要持仓', match: ['机构持仓','13F','Trump'] }}
   ];
   function groupOf(label) {{
