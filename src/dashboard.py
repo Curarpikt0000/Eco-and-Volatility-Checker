@@ -81,7 +81,7 @@ def _linkify_sources(text):
 
 # 每个指标"如何看"——交易员视角的一句话解读法
 HOW_TO_READ = {
-    "vix": "恐慌温度计。<13 市场自满(危险)，20-25 转紧张，>25 恐慌抛售。飙升=避险信号。",
+    "vix": "<b>VIX=Volatility Index(CBOE 波动率指数)</b>，衡量S&P500未来30天预期波动。恐慌温度计。<13 市场自满(危险)，20-25 转紧张，>25 恐慌抛售。飙升=避险信号。",
     "fear_greed": "情绪钟摆。>75 极度贪婪(该减)，<25 极度恐惧(可贪)。从高位回落是顶部确认。",
     "aaii_bull_bear": "散户情绪。多空差 >30% = 散户太乐观(反向看空)，<-30% = 过度悲观(反向看多)。",
     "put_call": "对冲需求。越低=越少人买保险=越自满。<0.45 极度乐观(危险)，高=恐慌(可能见底)。",
@@ -92,13 +92,13 @@ HOW_TO_READ = {
     "insider": "内部人用脚投票。<0.17 内部人只卖不买(看空)，>1 大举买入(看多)。最聪明的钱。",
     "bofa_bull_bear": "华尔街情绪综合指标。>8 极度贪婪(卖出信号)，<2 极度恐慌(买入信号)。",
     "hy_oas": "信用市场压力。利差扩张=风险偏好收缩、违约担忧上升。>4.5% 信用警报。",
-    "ad_line": "市场广度。S&P 创新高但腾落线不创新高=顶背离(少数股撑指数，危险)。同步创新高=健康。",
+    "ad_line": "<b>A/D=Advance/Decline(上涨/下跌家数)</b>。腾落线=每日累加(NYSE上涨家数−下跌家数)的曲线，衡量市场广度。S&P创新高但腾落线不创新高=<b>顶背离</b>(指数只靠少数权重股撑，多数股走弱，危险)；同步创新高=健康。",
     "buffett": "总市值/GDP。巴菲特最爱的估值尺。>150% 显著高估，>180% 极端泡沫区。",
-    "cape": "10年周期市盈率。>30 历史高估，>35 逼近 2000/2021 泡沫峰值。均值回归压力大。",
+    "cape": "<b>CAPE=Cyclically Adjusted PE(席勒周期调整市盈率，又称PE10)</b>=股价/过去10年通胀调整后平均EPS，平滑经济周期。>30 历史高估，>35 逼近 2000/2021 泡沫峰值。均值回归压力大。",
     "yield_curve": "10Y-2Y 利差。倒挂(<0)历史预示衰退；由倒挂转正常是衰退临近的最后信号。",
-    "lei": "领先经济指数。6个月变化率 <-4% 强烈预示衰退。领先实体经济约 7 个月。",
+    "lei": "<b>LEI=Leading Economic Index(Conference Board 领先经济指数)</b>，由10项领先分量合成。6个月变化率 <-4% 强烈预示衰退。领先实体经济约 7 个月。",
     "aaii_alloc": "家庭股票仓位。>70% 是历史仓位极值(2000年峰值区)，反向看空信号。",
-    "sofr_iorb": "货币市场压力计。SOFR(隔夜回购利率)−IORB(准备金利率)。≤0 正常🟢；7–17bps 心绞痛🟡(准备金趋紧)；>17bps 心肌梗塞🔴(钱荒/回购危机,如2019年9月)。是美联储缩表触底、流动性拐点的最灵敏信号。",
+    "sofr_iorb": "货币市场压力计。<b>SOFR=Secured Overnight Financing Rate(担保隔夜融资利率)</b>−<b>IORB=Interest on Reserve Balances(准备金余额利率)</b>。≤0 正常🟢；7–17bps 心绞痛🟡(准备金趋紧)；>17bps 心肌梗塞🔴(钱荒/回购危机,如2019年9月)。是美联储缩表触底、流动性拐点的最灵敏信号。",
 }
 
 
@@ -211,7 +211,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
              country_ust=None, kol_views=None, credit_impulse=None, custody_accel=None,
-             stress_panels=None, ofr_fsi=None):
+             stress_panels=None, ofr_fsi=None, maturing_treasury=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -383,6 +383,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         m2_history=_m2_history_html(m2_history),
         custody=_custody_html(custody),
         custody_accel=_custody_accel_html(custody_accel),
+        maturing_treasury=_maturing_treasury_html(maturing_treasury),
         country_ust=_country_ust_html(country_ust),
         credit_impulse=_credit_impulse_html(credit_impulse),
         stress_panels=_stress_panels_html(stress_panels, ofr_fsi),
@@ -1121,6 +1122,40 @@ def _country_ust_long_svg(series_by_country, w=920, h=250):
         legend_y += 18
     parts.append('</svg>')
     return "".join(parts)
+
+
+def _maturing_treasury_html(mt):
+    """私营部门(含Fed)1年内到期需展期的【可交易国债】规模: 左近两年 / 右2001至今全周期，两图。
+    mt: fetch_maturing_treasury()。数据源 US Treasury MSPD table 3，按到期日筛≤1年加总 outstanding。"""
+    if not mt or mt.get("status") != "ok" or not mt.get("history_long"):
+        st = (mt or {}).get("status", "数据未就绪")
+        return f'<p class="empty">1年内到期可交易国债数据未就绪（{st}）。</p>'
+    long = mt["history_long"]       # [(YYYY-MM,$T)]
+    recent = mt.get("history_recent") or []
+    val = mt["value"]
+    asof = mt.get("as_of", "")
+    # 复用 custody 折线 SVG(接受 [(date,$T)])
+    recent_svg = _custody_chart_svg(recent, w=440, h=210) if len(recent) >= 2 else '<div class="sp-na">近两年数据不足</div>'
+    long_svg = _custody_chart_svg(long, w=440, h=210) if len(long) >= 2 else '<div class="sp-na">长历史数据不足</div>'
+    return (
+        f'<div class="cust-wrap">'
+        f'<div class="mt-hero">当前 <b>${val:.2f}T</b> <span class="mt-asof">as of {_esc(asof)}</span> '
+        f'<span class="mt-sub">1年内到期需展期的可交易美国国债（Bills + 1年内到期的 Notes/Bonds/TIPS）</span></div>'
+        f'<div class="cust-charts-3" style="grid-template-columns:1fr 1fr;">'
+        f'<div class="cust-chart-col"><div class="cust-chart-title">近两年 · 月末（{len(recent)} 点）</div>'
+        f'{recent_svg}{_custody_span_line(recent)}</div>'
+        f'<div class="cust-chart-col"><div class="cust-chart-title">2001 至今 · 全周期（{len(long)} 月 · 约{len(long)//12} 年）</div>'
+        f'{long_svg}{_custody_span_line(long)}</div>'
+        f'</div>'
+        f'<div class="cust-how"><b>如何看：</b>这是<b>一年内到期、必须靠新发债滚动展期</b>的可交易国债总规模——'
+        f'规模越大，Treasury 每年要在市场上<b>再融资(rollover)的压力越大</b>，对短端利率与货币市场流动性越敏感。'
+        f'持续陡升＝债务结构短期化(发短债依赖加深)，若遇利率高企则利息负担与再融资风险同步放大；'
+        f'是判断<b>财政再融资墙(refinancing wall)与货币市场承压</b>的结构性指标。'
+        f'<br>⚠️ <b>口径说明</b>：本图为 MSPD 全部可交易国债中1年内到期部分的<b>总量(含 Fed SOMA + 私营部门持有)</b>，'
+        f'未单独剔除美联储持仓（Fed 持有约占 15-20%）；如需纯私营口径需再减 SOMA 短端持仓。'
+        f'数据源：<a class="src-lnk" href="https://fiscaldata.treasury.gov/datasets/monthly-statement-public-debt/" target="_blank" rel="noopener">US Treasury MSPD Table 3</a>（月度，按到期日逐券加总）。</div>'
+        f'</div>'
+    )
 
 
 def _country_ust_html(cu):
@@ -2068,6 +2103,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .kol-cmt {{ font-size: 11px; color: var(--muted); line-height: 1.5; margin-top: 4px; }}
   .kol-tgt {{ font-size: 10.5px; color: var(--dust-blue); margin-top: 3px; }}
   /* KOL 状态变化模块化(仿13F) */
+  .part-title-flex {{ display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }}
+  .kol-dash-btn {{ font-size: 12px; font-weight: 600; color: #fff; background: var(--dust-blue); padding: 6px 14px; border-radius: 6px; text-decoration: none; white-space: nowrap; transition: opacity .15s; }}
+  .kol-dash-btn:hover {{ opacity: .82; }}
   .kol-overview {{ font-size: 12.5px; color: var(--text); line-height: 1.6; background: var(--card2); border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; }}
   .kol-overview b {{ color: var(--dust-blue); }}
   .kol-ov-note {{ display: block; font-size: 10.5px; color: var(--muted); margin-top: 4px; }}
@@ -2256,6 +2294,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .mc-slabel-r {{ color: #fff; background: var(--clay); }}
   /* 外国官方托管美债卡片 */
   .cust-wrap {{ display: flex; flex-direction: column; gap: 10px; }}
+  .mt-hero {{ font-size: 14px; color: var(--text); padding: 8px 12px; background: rgba(140,155,175,.10); border-radius: 8px; }}
+  .mt-hero b {{ font-size: 20px; color: var(--sage); font-family: var(--mono); }}
+  .mt-asof {{ font-size: 11px; color: var(--muted); font-family: var(--mono); margin-left: 6px; }}
+  .mt-sub {{ display: block; font-size: 11px; color: var(--muted); margin-top: 3px; }}
   .cust-lbl {{ font-size: 12px; color: var(--muted); font-weight: 600; }}
   .cust-val {{ font-family: var(--mono); font-size: 34px; font-weight: 800; color: var(--text); line-height: 1.1; }}
   .cust-unit {{ font-size: 18px; color: var(--muted); margin-left: 2px; }}
@@ -2501,7 +2543,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="focus-box">{focus}</div>
 
   <!-- ═══ 附一·零：本周 KOL 观点全景(按模块+多空, Eco 独立每日快照) ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>本周 KOL 观点全景 · 按模块 (多空方向卡片)</div>
+  <div class="part-title part-title-flex"><span><span class="part-num">＋</span>本周 KOL 观点全景 · 按模块 (多空方向卡片)</span><a class="kol-dash-btn" href="https://curarpikt0000.github.io/kol-dashboard/" target="_blank" rel="noopener">📊 打开 KOL Dashboard →</a></div>
   <div class="card">{kol_views}</div>
 
   <!-- ═══ 附一：本周 KOL 状态变化(模块化, Eco 独立每日快照周对比) ═══ -->
@@ -2540,6 +2582,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title"><span class="part-num">＋</span>外国官方托管美债 · 纽约联储 (去美元化风向标)</div>
   <div class="card">{custody}</div>
   <div class="card">{custody_accel}</div>
+
+  <!-- ═══ 附三·六：1年内到期需展期的可交易国债(再融资墙) ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>1年内到期可交易国债 · 再融资墙 (rollover 压力)</div>
+  <div class="card">{maturing_treasury}</div>
 
   <!-- ═══ 附三·六：日本 / 中国 分国别持有美债 (TIC, 近10年) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>日本 / 中国 / 欧盟 持有美债 · 近10年 + 2008长历史 (TIC 分国别口径)</div>

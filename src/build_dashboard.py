@@ -120,6 +120,15 @@ def main():
     except Exception as e:
         print(f"[dashboard] 托管美债加速度 跳过: {e}")
 
+    # ── 1年内到期需展期的可交易国债(再融资墙, MSPD) ──
+    maturing_treasury = {}
+    try:
+        maturing_treasury = ed.fetch_maturing_treasury() or {}
+        print(f"[dashboard] 1年内到期国债: status={maturing_treasury.get('status')} "
+              f"latest={maturing_treasury.get('value')}T asof={maturing_treasury.get('as_of')}")
+    except Exception as e:
+        print(f"[dashboard] 1年内到期国债 跳过: {e}")
+
     # ── 国债市场压力四联图(对齐 Morgan Stanley 三图 + OFR官方压力指数) ──
     stress_panels = {}
     ofr_fsi = {}
@@ -172,6 +181,7 @@ def main():
         custody_accel=custody_accel,
         stress_panels=stress_panels,
         ofr_fsi=ofr_fsi,
+        maturing_treasury=maturing_treasury,
     )
     print(f"[dashboard] 生成: {out}")
     return out

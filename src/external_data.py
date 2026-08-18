@@ -791,6 +791,133 @@ def _custody_history_fred(start="2026-01-01"):
     return [(d, round(v / 1e6, 4)) for d, v in raw]     # → $T
 
 
+def _mspd_maturing_within_1yr(record_date, rows):
+    """给定某 record_date 的 MSPD table_3 明细行, 加总"距该日1年内到期"的可交易国债 outstanding。
+    outstanding_amt 缺失时用 issued_amt+redeemed_amt(redeemed为负)兜底。单位: 百万美元 → 返回 $T。"""
+    from datetime import datetime
+    try:
+        rec = datetime.strptime(record_date, "%Y-%m-%d")
+    except Exception:
+        return None
+    total = 0.0
+    for r in rows:
+        md = r.get("maturity_date")
+        if not md or md == "null":
+            continue
+        try:
+            mdt = datetime.strptime(md, "%Y-%m-%d")
+        except Exception:
+            continue
+        days = (mdt - rec).days
+        if 0 <= days <= 366:
+            oa = r.get("outstanding_amt")
+            if oa in ("null", None, ""):
+                try:
+                    oa = float(r.get("issued_amt", 0) or 0) + float(r.get("redeemed_amt", 0) or 0)
+                except Exception:
+                    oa = 0
+            else:
+                try:
+                    oa = float(oa)
+                except Exception:
+                    oa = 0
+            total += oa
+    return round(total / 1e6, 4)  # 百万 → 万亿($T)
+
+
+def fetch_maturing_treasury(cache_path=None):
+    """私营部门(含Fed)持有的、1年内到期需展期的【可交易国债】规模, 月末采样。
+    ★口径: MSPD table_3(逐券明细) 按 maturity_date 筛"距 record_date ≤366天"的 Marketable 券加总 outstanding。
+    ★注意: 该口径为总量(含 Fed SOMA + 私营), 未单独剔除 Fed 持仓(dashboard 明确标注)。
+    返回 {history_long[(YYYY-MM,$T)] 2001起, history_recent[(YYYY-MM,$T)] 近两年, value, as_of, status, source}。
+    有本地缓存(data/maturing_treasury.json)则增量更新, 只补最新缺失月, 避免每次全量拉。"""
+    import os, json, requests
+    from datetime import datetime, timedelta
+    if cache_path is None:
+        cache_path = os.path.join(os.path.dirname(__file__), "..", "data", "maturing_treasury.json")
+    BASE = ("https://api.fiscaldata.treasury.gov/services/api/fiscal_service"
+            "/v1/debt/mspd/mspd_table_3_market")
+    FIELDS = "record_date,maturity_date,outstanding_amt,issued_amt,redeemed_amt,security_type_desc"
+
+    # 1) 读缓存
+    cached = {}
+    if os.path.exists(cache_path):
+        try:
+            cj = json.load(open(cache_path))
+            cached = {d: v for d, v in cj.get("monthly", [])}
+        except Exception:
+            cached = {}
+
+    # 2) 按年拉(增量: 已缓存年份的所有月都齐则跳过, 只拉当前年+缺失年)
+    def _pull_year(year):
+        out = {}
+        page = 1
+        while True:
+            # ★Treasury API: filter 的 : 和 , 是语法字符不可编码; 仅 page[] 方括号需编码; page size 上限 10000。
+            url = (f"{BASE}?filter=record_date:gte:{year}-01-01,record_date:lte:{year}-12-31"
+                   f"&fields={FIELDS}&page%5Bsize%5D=10000&page%5Bnumber%5D={page}")
+            try:
+                resp = requests.get(url, timeout=40)
+                data = resp.json().get("data", [])
+            except Exception:
+                break
+            if not data:
+                break
+            # 按 record_date 分组
+            by_date = {}
+            for r in data:
+                by_date.setdefault(r["record_date"], []).append(r)
+            for rd, rows in by_date.items():
+                out.setdefault(rd, []).extend(rows)
+            if len(data) < 10000:
+                break
+            page += 1
+        return out
+
+    now = datetime.utcnow()
+    start_year = 2001
+    monthly = dict(cached)  # YYYY-MM-DD → $T
+    # 需要拉的年份: 未缓存足月的年 + 当前年(总是刷新最新)
+    cached_years = {}
+    for d in cached:
+        cached_years[d[:4]] = cached_years.get(d[:4], 0) + 1
+    for year in range(start_year, now.year + 1):
+        y = str(year)
+        # 已有>=11个月且非当前年 → 跳过(历史不变)
+        if cached_years.get(y, 0) >= 11 and year < now.year:
+            continue
+        yr_rows = _pull_year(year)
+        for rd, rows in yr_rows.items():
+            val = _mspd_maturing_within_1yr(rd, rows)
+            if val is not None:
+                monthly[rd] = val
+
+    if not monthly:
+        return {"history_long": [], "history_recent": [], "value": None,
+                "as_of": None, "status": "MSPD 无数据",
+                "source": "US Treasury MSPD table 3 (marketable, maturity≤1yr)"}
+
+    # 3) 排序 + 写缓存
+    items = sorted(monthly.items())
+    os.makedirs(os.path.dirname(cache_path), exist_ok=True)
+    json.dump({"monthly": items, "updated": now.strftime("%Y-%m-%d"),
+               "source": "US Treasury MSPD table 3 (marketable, maturity within 1yr, 含Fed+私营)"},
+              open(cache_path, "w"), ensure_ascii=False, indent=1)
+
+    # 4) 长图(全部, YYYY-MM) + 近两年图
+    hist_long = [(d[:7], v) for d, v in items]
+    cutoff = (now - timedelta(days=760)).strftime("%Y-%m")
+    hist_recent = [(m, v) for m, v in hist_long if m >= cutoff]
+    last_d, last_v = items[-1]
+    return {
+        "history_long": hist_long,          # 2001至今月末
+        "history_recent": hist_recent,      # 近两年月末
+        "value": last_v, "as_of": last_d,
+        "status": "ok",
+        "source": "US Treasury MSPD table 3 (可交易国债·1年内到期·含Fed+私营)",
+    }
+
+
 def fetch_foreign_custody_ust():
     """抓外国官方托管可流通美债(当前值+周变动+历史序列)。
     ★口径统一走 FRED WMTSECL1(周度, 2002至今活跃, 单一可回溯口径), H.4.1 HTML 仅补总托管。
