@@ -211,7 +211,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
              country_ust=None, kol_views=None, credit_impulse=None, custody_accel=None,
-             stress_panels=None, ofr_fsi=None, maturing_treasury=None):
+             stress_panels=None, ofr_fsi=None, maturing_treasury=None, bis_latest=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -384,6 +384,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         custody=_custody_html(custody),
         custody_accel=_custody_accel_html(custody_accel),
         maturing_treasury=_maturing_treasury_html(maturing_treasury),
+        bis_section=_bis_section_html(bis_latest, "https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/"),
         country_ust=_country_ust_html(country_ust),
         credit_impulse=_credit_impulse_html(credit_impulse),
         stress_panels=_stress_panels_html(stress_panels, ofr_fsi),
@@ -1138,6 +1139,33 @@ def _country_ust_long_svg(series_by_country, w=920, h=250):
         legend_y += 18
     parts.append('</svg>')
     return "".join(parts)
+
+
+def _bis_section_html(bis_latest, page_url):
+    """BIS(国际清算银行)报告 section: 只放最新一份的摘要要点 + 跳转独立页 button。
+    bis_latest: bis_reports.latest_report() 返回的单份报告 dict(或 None)。
+    page_url: 独立页公开地址。"""
+    if not bis_latest or bis_latest.get("summary_status") != "ok" or not bis_latest.get("summary"):
+        # 无摘要: 仍给 button, 提示待更新
+        pts = '<div class="bis-na">最新 BIS 报告摘要待更新（daily cron 扫描中，抓不到不编造）。</div>'
+        meta = ""
+    else:
+        pts = "".join(f'<li>{_esc(p)}</li>' for p in bis_latest["summary"])
+        pts = f'<ul class="bis-pts">{pts}</ul>'
+        pdf = bis_latest.get("pdf_url", "")
+        pdf_link = (f'　·　<a class="src-lnk" href="{_esc(pdf)}" target="_blank" rel="noopener">原文 PDF</a>'
+                    if pdf else "")
+        meta = (f'<div class="bis-meta"><b>{_esc(bis_latest.get("title",""))}</b>'
+                f'（{_esc(bis_latest.get("date",""))}）{pdf_link}</div>')
+    return (
+        f'<div class="card bis-card">'
+        f'{meta}'
+        f'{pts}'
+        f'<div class="bis-how"><b>如何看：</b>BIS(国际清算银行)是"央行的央行"，其 Quarterly Review 每季'
+        f'(3/6/9/12月)综述全球金融市场、银行体系、流动性、信用与系统性风险，是最权威的跨国央行视角。'
+        f'点右上按钮查看过去一年全部报告要点。</div>'
+        f'</div>'
+    )
 
 
 def _maturing_treasury_html(mt):
@@ -2133,6 +2161,12 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .part-title-flex {{ display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }}
   .kol-dash-btn {{ font-size: 12px; font-weight: 600; color: #fff; background: var(--dust-blue); padding: 6px 14px; border-radius: 6px; text-decoration: none; white-space: nowrap; transition: opacity .15s; }}
   .kol-dash-btn:hover {{ opacity: .82; }}
+  .bis-card {{ line-height: 1.7; }}
+  .bis-meta {{ font-size: 13px; color: var(--ink); margin-bottom: 8px; }}
+  .bis-pts {{ margin: 6px 0 10px 0; padding-left: 20px; }}
+  .bis-pts li {{ margin-bottom: 6px; font-size: 13px; color: var(--ink); }}
+  .bis-how {{ font-size: 12px; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 8px; margin-top: 6px; }}
+  .bis-na {{ font-size: 13px; color: var(--muted); padding: 8px 0; }}
   .kol-overview {{ font-size: 12.5px; color: var(--text); line-height: 1.6; background: var(--card2); border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; }}
   .kol-overview b {{ color: var(--dust-blue); }}
   .kol-ov-note {{ display: block; font-size: 10.5px; color: var(--muted); margin-top: 4px; }}
@@ -2585,6 +2619,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title"><span class="part-num">＋</span>四大央行资产负债表 · 每日更新 (US/JP/CN/ECB · 2x2 · 当天汇率统一折$B)</div>
   <div class="bs-grid">{cb_balance}</div>
 
+  <!-- ═══ 附三·一半：BIS 国际清算银行报告 (央行的央行 · 摘要+独立页) ═══ -->
+  <div class="part-title part-title-flex"><span><span class="part-num">＋</span>BIS 国际清算银行报告 · 最新要点 (Quarterly Review 季度综述)</span><a class="kol-dash-btn" href="https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/" target="_blank" rel="noopener">📄 查看 BIS 报告全库 →</a></div>
+  {bis_section}
+
   <!-- ═══ 附三·二：三国货币供应量 M0/M1/M2 (央行资负表的延伸: 从"央行造多少底钱"到"社会流通多少钱") ═══ -->
   <div class="part-title"><span class="part-num">＋</span>三国货币供应量 M0 / M1 / M2 · 月度 (央行资负表下延: 社会实际流通的钱)</div>
   <div class="card">{money_supply}</div>
@@ -2665,7 +2703,7 @@ mkRadar('rLong', RADAR.long);
   var GROUPS = [
     {{ name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注'] }},
     {{ name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化'] }},
-    {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','货币供应','M2 十年','Credit Impulse','信贷脉冲'] }},
+    {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','BIS','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲'] }},
     {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别'] }},
     {{ name: '机构与政要持仓', match: ['机构持仓','13F','Trump'] }}
   ];

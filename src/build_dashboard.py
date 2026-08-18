@@ -129,6 +129,19 @@ def main():
     except Exception as e:
         print(f"[dashboard] 1年内到期国债 跳过: {e}")
 
+    # ── BIS 国际清算银行报告(Quarterly Review 季度综述) ──
+    bis_latest = None
+    try:
+        from src import bis_reports as bisr
+        added, _store = bisr.sync_quarterly(5)   # 幂等: 发现最新几季 Quarterly, 不覆盖已有摘要
+        bis_latest = bisr.latest_report()
+        _bn = len((bis_latest or {}).get("summary", []))
+        print(f"[dashboard] BIS: 新增{added}份, 最新={(bis_latest or {}).get('date','?')} 摘要{_bn}条")
+        _bp = bisr.build_standalone_page()   # 生成独立页 docs/bis/index.html
+        print(f"[dashboard] BIS 独立页: {_bp}")
+    except Exception as e:
+        print(f"[dashboard] BIS 跳过: {e}")
+
     # ── 国债市场压力四联图(对齐 Morgan Stanley 三图 + OFR官方压力指数) ──
     stress_panels = {}
     ofr_fsi = {}
@@ -182,6 +195,7 @@ def main():
         stress_panels=stress_panels,
         ofr_fsi=ofr_fsi,
         maturing_treasury=maturing_treasury,
+        bis_latest=bis_latest,
     )
     print(f"[dashboard] 生成: {out}")
     return out
