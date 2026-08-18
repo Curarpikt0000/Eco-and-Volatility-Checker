@@ -215,7 +215,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              oil_inventory=None, us_jp_yields=None, nikkei225=None, foreign_flow=None,
              iip_four=None, fiscal_news=None, hf_leverage=None, bis_gold_swaps=None,
              market_breadth=None, silver_bank_positions=None, comex_silver_issues_ref=None,
-             gold_exports=None):
+             gold_exports=None, us_yield_century=None, comex_issue_stop=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -399,6 +399,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         silver_bank_positions=_silver_bank_positions_html(silver_bank_positions),
         comex_silver_issues_ref=_comex_silver_issues_ref_html(comex_silver_issues_ref),
         gold_exports=_gold_exports_html(gold_exports),
+        us_yield_century=_us_yield_century_html(us_yield_century),
+        comex_issue_stop=_comex_issue_stop_html(comex_issue_stop),
         bis_section=_bis_section_html(bis_latest, "https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/"),
         country_ust=_country_ust_html(country_ust),
         credit_impulse=_credit_impulse_html(credit_impulse),
@@ -1894,6 +1896,129 @@ def _gold_exports_html(ge):
         f'且真正的货币黄金（央行储备金）不会这样出口——真实对应该暴涨现象的是 <b>Nonmonetary gold（非货币黄金'
         f'＝民间/商业实物金）</b>。本节采用 FRED 官方真序列 <b>IEAXGG</b> 与真标题，'
         f'不照抄不准确的原标题，全序列为 FRED/BEA 官方真值，每季更新，<b>绝不编造</b>。</div>'
+        f'</div>'
+    )
+
+
+def _us_yield_century_html(yc):
+    """图5: 美国国债收益率百年周期 4线折线 + 周期锚点。yc: fetch_us_yield_century()。"""
+    if not yc or yc.get("status") != "ok" or not yc.get("series"):
+        return '<p class="empty">美国国债收益率百年周期数据未就绪。</p>'
+    ser = yc["series"]
+    curves = {}
+    for k, d in ser.items():
+        if d.get("points"):
+            curves[k] = {"status": "ok", "name": d["label"], "color": d["color"],
+                         "dash": "none", "points": [(p[0], p[1]) for p in d["points"]],
+                         "latest": d["points"][-1][1]}
+    svg = _yield_curves_svg(curves, yunit="%")
+    ann = yc.get("annotations", [])
+    cyc = yc.get("cycles", [])
+    ann_html = " · ".join(
+        f'<b style="color:{"#d64545" if a.get("kind")=="top" else "#2e9e5b"}">{_esc(a.get("label",""))}</b>'
+        for a in ann)
+    cyc_html = " → ".join(
+        f'<b style="color:{"#c0757d" if c.get("dir")=="up" else "#6b8fb5"}">{_esc(c.get("label",""))}（{_esc(c.get("from",""))}-{_esc(c.get("to",""))}）</b>'
+        for c in cyc)
+    latest_bits = []
+    for k, d in ser.items():
+        if d.get("points"):
+            latest_bits.append(f'<span style="color:{d["color"]};font-weight:600">{_esc(d["label"])} {d["points"][-1][1]:.2f}%</span>')
+    return (
+        f'<div class="cust-wrap">'
+        f'<div class="cust-chart-col cust-chart-full">'
+        f'<div class="cust-chart-title">美国国债收益率百年周期 · Fed Funds / 3M / 10Y / 30Y（月度）'
+        f'<span class="chart-freq freq-w">🟢 每季 · FRED 官方</span></div>'
+        f'{svg}'
+        f'<div class="oil-meta">最新（{_esc(yc.get("as_of",""))}）：{" · ".join(latest_bits)}</div>'
+        f'<div class="oil-meta">周期锚点：{ann_html}<br>周期论：{cyc_html}</div>'
+        f'<div class="oil-src">数据源：{_esc(yc.get("source",""))} · '
+        f'<a class="src-lnk" href="{_esc(yc.get("source_url","#"))}" target="_blank" rel="noopener">FRED ↗</a></div>'
+        f'</div>'
+        f'<div class="cust-how"><b>如何看：</b>这是<b>美国利率的百年长周期视角</b>——四条关键利率同框，'
+        f'揭示"周期论"框架：<b>1940 年大底 → 1981 年大顶（利率冲到 13-16%）→ 2020 年大底</b>，'
+        f'构成 <b>40 年上涨（1940-1980）+ 40 年下降（1980-2020）</b> 两个完整长周期。'
+        f'该框架认为 <b>2020 年是又一个大底，正开启新的 40 年上涨大周期</b>——若成立，未来数十年利率中枢趋势性抬升，'
+        f'对债券估值、股权风险溢价、财政付息负担是<b>结构性逆风</b>。<br>'
+        f'<b>数据诚实说明</b>：四线均为 FRED/美联储官方月度真值。各线起点为 FRED 收录起点'
+        f'（3M T-Bill 1934、Fed Funds 1954、10Y 1953、30Y 1977），'
+        f'<b>1920-1933 段 FRED 无月度序列，不编造，图从各线真实起点画</b>。周期论为市场分析框架，非预测承诺。</div>'
+        f'</div>'
+    )
+
+
+def _comex_issue_stop_html(cs):
+    """图1: COMEX 做市商每周净 issue/stop 柱状图(金+银, 两口径)。cs: fetch_comex_issue_stop_weekly()。"""
+    if not cs or cs.get("status") != "ok" or not (cs.get("gold") or cs.get("silver")):
+        return '<p class="empty">COMEX 做市商周净 issue/stop 数据未就绪。</p>'
+
+    def _bars_svg(rows, field, w=920, h=230):
+        if not rows:
+            return '<div class="cust-chart-na">无数据</div>'
+        vals = [r[field] for r in rows]
+        vmax = max(abs(min(vals)), abs(max(vals)), 1)
+        ml, mr, mt, mb = 52, 20, 14, 38
+        pw, ph = w - ml - mr, h - mt - mb
+        n = len(rows)
+        bw = pw / n * 0.7
+        zero_y = mt + ph / 2
+        def X(i): return ml + (i + 0.5) * pw / n
+        def BY(v): return zero_y - (v / vmax) * (ph / 2 * 0.92)
+        parts = [f'<svg viewBox="0 0 {w} {h}" class="cust-chart" preserveAspectRatio="xMidYMid meet" font-family="-apple-system,PingFang SC,sans-serif">']
+        for frac in (1, 0.5, -0.5, -1):
+            gy = BY(vmax*frac); gv = vmax*frac
+            parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" stroke="#e5ded0" stroke-width="0.6" stroke-dasharray="3,3"/>')
+            parts.append(f'<text x="{ml-5}" y="{gy+3:.1f}" font-size="9" fill="#8a8578" text-anchor="end">{gv:+.0f}</text>')
+        parts.append(f'<line x1="{ml}" y1="{zero_y:.1f}" x2="{w-mr}" y2="{zero_y:.1f}" stroke="#8a8578" stroke-width="1"/>')
+        for i, r in enumerate(rows):
+            v = r[field]; x = X(i); y = BY(v)
+            col = "#d64545" if v > 0 else ("#2e9e5b" if v < 0 else "#8a8578")
+            top = min(y, zero_y); ht = abs(y - zero_y)
+            parts.append(f'<rect x="{x-bw/2:.1f}" y="{top:.1f}" width="{bw:.1f}" height="{ht:.1f}" fill="{col}" opacity="0.82"/>')
+        step = max(1, round(n/8)); prev=None
+        for i in range(0, n, step):
+            lbl = rows[i]["week"][:7]
+            if lbl==prev: continue
+            prev=lbl
+            parts.append(f'<text x="{X(i):.1f}" y="{h-9}" font-size="8.5" fill="#8a8578" text-anchor="middle">{lbl}</text>')
+        parts.append('</svg>')
+        return "".join(parts)
+
+    def _metal_block(metal_name, rows):
+        if not rows:
+            return f'<div class="cust-chart-na">{metal_name} 无数据</div>'
+        latest = rows[-1]
+        cn = latest["core_net"]
+        cdir = "净发货(交货/压价)" if cn>0 else ("净接货(囤货/看涨)" if cn<0 else "持平")
+        return (
+            f'<div style="margin-bottom:18px">'
+            f'<div class="cust-chart-title">{metal_name} · 核心做市商每周净 issue/stop（合约）'
+            f'<span class="chart-freq freq-d">最新周 {_esc(latest["week"])}：净 {cn:+d}（{cdir}）</span></div>'
+            f'{_bars_svg(rows, "core_net")}'
+            f'<div class="cust-chart-title" style="margin-top:8px;font-size:12px;color:#8a8578">{metal_name} · 全投行(17家)对照</div>'
+            f'{_bars_svg(rows, "all_net")}'
+            f'</div>'
+        )
+
+    banks_core = "、".join(cs.get("banks_core", []))
+    return (
+        f'<div class="cust-wrap">'
+        f'<div class="cust-chart-col cust-chart-full">'
+        f'<div class="cust-chart-title">COMEX 做市商每周净 issue/stop · 金 + 银（{_esc(cs.get("archive_range",""))}，{cs.get("archive_pdfs_parsed","?")} 个交易日）'
+        f'<span class="chart-freq freq-d">🟢 每日更新 · CME 交割报告</span></div>'
+        f'{_metal_block("白银 Silver", cs.get("silver", []))}'
+        f'{_metal_block("黄金 Gold", cs.get("gold", []))}'
+        f'<div class="oil-src">数据源：CME 每日 Issues &amp; Stops 交割报告（ScraperAPI/Jina/Wayback 三层兜底采集，x坐标精确解析）· '
+        f'核心做市商(10家)：{_esc(banks_core)}</div>'
+        f'</div>'
+        f'<div class="cust-how"><b>如何看：</b>每根柱=<b>该周大行(bullion banks)净 issue/stop</b>＝Σ发货−Σ接货：'
+        f'<b style="color:#d64545">红柱(正)=净发货</b>（做市商向市场交货，对应 Issued，压价/看跌）；'
+        f'<b style="color:#2e9e5b">绿柱(负)=净接货</b>（做市商从市场接货囤积，对应 Stopped，逼空/看涨）。<br>'
+        f'<b>两口径</b>：上图=<b>核心做市商(10家传统 LBMA 金银做市大行)</b>；下图=<b>全投行(17家)</b>对照。'
+        f'<b>为何值得看</b>：做市商是 COMEX 实物交割主力，其每周净方向是判断<b>价格压制 vs 逼空、实物紧张度</b>的一手结构信号，'
+        f'与白银 COT commercial 净持仓、BIS 黄金掉期互相印证。<br>'
+        f'<b>数据诚实说明</b>：全序列来自 CME 官方每日交割报告，per-firm 精确解析（x坐标定向，133 PDF 全自洽验证）；'
+        f'CME 封 IP→ScraperAPI/Jina/Wayback 三层兜底；每日 cron 增量并入当周，抓不到读缓存绝不编造。</div>'
         f'</div>'
     )
 
@@ -3831,6 +3956,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title"><span class="part-num">＋</span>美日 10年/30年国债收益率 · 过去一年 (四线同图 · 美日利差与套息)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{yield_curves}</div>
 
+  <!-- ═══ 附三·八B：美国国债收益率百年周期(4线, 1934→今) ═══ -->
+  <div class="part-title" id="sec-us-yield-century"><span class="part-num">＋</span>美国国债收益率百年周期 · Fed Funds/3M/10Y/30Y (40年长周期·1940大底/1980大顶/2020大底)<span class="freq-badge freq-quarterly">每季更新</span></div>
+  <div class="card">{us_yield_century}</div>
+
   <!-- ═══ 附三·九：日经225 vs 外资净买入日股 ═══ -->
   <div class="part-title"><span class="part-num">＋</span>日经225 vs 外资净买入日股 · 过去一年 (日本市场 · 外资资金流)<span class="freq-badge freq-weekly">指数每日 · 外资每周</span></div>
   <div class="card">{nikkei_flow}</div>
@@ -3864,8 +3993,12 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="card">{silver_bank_positions}</div>
 
   <!-- ═══ 附三·十二E：COMEX 白银 issues/stops 静态参考(ANONYMIZED_PERSON_0_15) ═══ -->
-  <div class="part-title" id="sec-comex-silver-issues"><span class="part-num">＋</span>COMEX 白银 投行累计 issues/stops · 静态参考 (Michael Lynch @DtDS_WSS·CME封禁无法自动更新)<span class="freq-badge" style="background:#e8e2d5;color:#8a6d3b">静态参考</span></div>
+  <div class="part-title" id="sec-comex-silver-issues"><span class="part-num">＋</span>COMEX 白银 投行累计 issues/stops · 静态参考 (ANONYMIZED_PERSON_0_23 @DtDS_WSS·CME封禁无法自动更新)<span class="freq-badge" style="background:#e8e2d5;color:#8a6d3b">静态参考</span></div>
   <div class="card">{comex_silver_issues_ref}</div>
+
+  <!-- ═══ 附三·十二F：COMEX 做市商每周净 issue/stop 柱状图(金+银, 一手) ═══ -->
+  <div class="part-title" id="sec-comex-issue-stop"><span class="part-num">＋</span>COMEX 做市商每周净 issue/stop · 金+银 (一手·大行发货vs接货·每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{comex_issue_stop}</div>
 
   <!-- ═══ 附三·十一：美日财政政策事件时间线 ═══ -->
   <div class="part-title" id="sec-fiscal-news"><span class="part-num">＋</span>美日财政政策事件 · 债务上限/CR/补正预算/国债发行 (每日检索)<span class="freq-badge freq-daily">每日更新</span></div>
@@ -3919,8 +4052,8 @@ mkRadar('rLong', RADAR.long);
     {{ name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注','市场广度'] }},
     {{ name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化'] }},
     {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','BIS','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲','黄金出口','Nonmonetary'] }},
-    {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款'] }},
-    {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','白银做市商','COMEX 白银','投行累计'] }},
+    {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
+    {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','白银做市商','COMEX 白银','投行累计','做市商每周净','issue/stop'] }},
     {{ name: '财政政策', match: ['美日财政政策事件','债务上限','补正预算','国债发行'] }},
     {{ name: '日本市场', match: ['日经225','外资净买入','日本市场'] }},
     {{ name: '机构与政要持仓', match: ['机构持仓','13F','Trump'] }}

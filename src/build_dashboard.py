@@ -247,6 +247,25 @@ def main():
     except Exception as e:
         print(f"[dashboard] 美国黄金出口 跳过: {e}")
 
+    # ── 美国国债收益率百年周期(图5, FRED 4线月度) ──
+    us_yield_century = {}
+    try:
+        us_yield_century = ed.fetch_us_yield_century() or {}
+        print(f"[dashboard] 百年收益率: status={us_yield_century.get('status')} "
+              f"as_of={us_yield_century.get('as_of')} series={len(us_yield_century.get('series',{}))}")
+    except Exception as e:
+        print(f"[dashboard] 百年收益率 跳过: {e}")
+
+    # ── COMEX 做市商每周净 issue/stop(图1, 金+银两口径) ──
+    comex_issue_stop = {}
+    try:
+        comex_issue_stop = ed.fetch_comex_issue_stop_weekly() or {}
+        print(f"[dashboard] COMEX做市商周净: status={comex_issue_stop.get('status')} "
+              f"as_of={comex_issue_stop.get('as_of')} gold={len(comex_issue_stop.get('gold',[]))}周 "
+              f"silver={len(comex_issue_stop.get('silver',[]))}周")
+    except Exception as e:
+        print(f"[dashboard] COMEX做市商周净 跳过: {e}")
+
     # ── BIS 国际清算银行报告(Quarterly Review 季度综述) ──
     bis_latest = None
     try:
@@ -325,6 +344,8 @@ def main():
         silver_bank_positions=silver_bank_positions,
         comex_silver_issues_ref=comex_silver_issues_ref,
         gold_exports=gold_exports,
+        us_yield_century=us_yield_century,
+        comex_issue_stop=comex_issue_stop,
         bis_latest=bis_latest,
     )
     print(f"[dashboard] 生成: {out}")

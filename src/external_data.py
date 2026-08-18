@@ -3066,6 +3066,60 @@ def fetch_gold_exports(cache_path=None):
     return out
 
 
+def fetch_us_yield_century(cache_path=None):
+    """图5: 美国国债收益率百年周期(4线月度: Fed Funds/3M/10Y/30Y, FRED)。
+
+    数据由 data/us_yield_century.json 驱动(scratch/build_yield_century.py 从 FRED 生成)。
+    每季 cron 增量刷新最新月。抓不到读缓存真值绝不覆盖成空。
+    诚实: 各线起点为 FRED 收录起点(TB3M 1934/FEDFUNDS 1954/GS10 1953/GS30 1977),
+    1920-1933 FRED 无月度序列, 不编造。周期锚点 1940大底/1981大顶/2020大底。
+    返回 {status, as_of, source, unit, annotations, cycles, series:{key:{label,color,points}}}。
+    """
+    import json
+    if cache_path is None:
+        cache_path = os.path.join(os.path.dirname(__file__), "..", "data", "us_yield_century.json")
+    try:
+        with open(cache_path, encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return {"status": "未获取", "as_of": "", "unit": "%",
+                "source": "美国国债收益率百年周期(文件缺失)", "series": {}}
+    if not data.get("series"):
+        return {"status": "未获取", "as_of": data.get("as_of", ""), "unit": "%",
+                "source": data.get("source", ""), "series": {}}
+    data["status"] = data.get("status", "ok")
+    return data
+
+
+def fetch_comex_issue_stop_weekly(cache_path=None):
+    """图1: COMEX 做市商每周净 issue/stop(金+银, 两口径: 全投行/核心做市商)。
+
+    数据由 Comex-Daily-Report/data/comex_issue_stop_weekly.json 驱动
+    (scratch/build_issue_stop_weekly.py 扫 archive 133 PDF + Notion 6/6+ 生成)。
+    净值=Σ(大行发货)−Σ(大行接货), 正=净发货(交货/压价), 负=净接货(囤货/看涨)。
+    每日 cron 增量: 采集当日 PDF→per-firm 拆分→并入当周。抓不到读缓存绝不覆盖成空。
+    返回 {status, as_of, gold:[{week,all_net,core_net,...}], silver:[...], banks_all, banks_core}。
+    """
+    import json
+    if cache_path is None:
+        # 数据在姊妹 Comex 项目, Eco dashboard 跨项目读
+        cache_path = "/home/user/Projects/Comex-Daily-Report/data/comex_issue_stop_weekly.json"
+    try:
+        with open(cache_path, encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return {"status": "未获取", "as_of": "",
+                "source": "COMEX 做市商周净 issue/stop(文件缺失)", "gold": [], "silver": []}
+    if not (data.get("gold") or data.get("silver")):
+        return {"status": "未获取", "as_of": data.get("archive_range", ""),
+                "source": data.get("note", ""), "gold": [], "silver": []}
+    data["status"] = data.get("status", "ok")
+    # as_of = 最新周
+    last_weeks = [r["week"] for r in (data.get("silver") or []) + (data.get("gold") or [])]
+    data["as_of"] = max(last_weeks) if last_weeks else data.get("archive_range", "")
+    return data
+
+
 def fetch_fiscal_news(cache_path=None, limit=20):
     """美日财政政策事件时间线(离散事件文本,非时序数字)。
     数据由 data/fiscal_news.json 驱动: 每日 cron agent 模式 web 检索权威源
