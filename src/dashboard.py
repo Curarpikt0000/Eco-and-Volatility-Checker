@@ -6,7 +6,7 @@
 
 雷达图：短/中/长三组指标归一化到 0-100 风险刻度(越大越危险)。
 """
-import sys, os, json, datetime, html
+import sys, os, json, datetime, html, re
 sys.path.insert(0, os.path.dirname(__file__))
 import config as c
 import signals
@@ -22,6 +22,61 @@ def _esc(s):
     if s is None:
         return ""
     return html.escape(str(s), quote=True)
+
+
+# ── 数据源代码 → 官方链接映射 ──────────────────────────────────
+# 把 source 字符串里的裸指标代码(FRED series / OFR / TIC 等)渲染成可点击超链接，
+# 点击直达该指标的官方源页面，便于核实。一处逻辑，全 dashboard 复用。
+# FRED series 统一跳 https://fred.stlouisfed.org/series/<ID>；其它源各自官方页。
+_SRC_LINK_SPECIAL = {
+    # 非 FRED、或需要专门落地页的代码/关键词 → (显示锚文本正则, URL)
+    "OFR FSI": "https://www.financialresearch.gov/financial-stress-index/",
+    "Office of Financial Research": "https://www.financialresearch.gov/financial-stress-index/",
+    "^MOVE": "https://finance.yahoo.com/quote/%5EMOVE/",
+    "Yahoo Finance": "https://finance.yahoo.com/quote/%5EMOVE/",
+    "TIC": "https://home.treasury.gov/data/treasury-international-capital-tic-system",
+    "fiscaldata.treasury.gov": "https://fiscaldata.treasury.gov/",
+}
+# FRED series ID：2+ 位大写字母/数字组合(如 DGS10, BAMLH0A0HYM2, THREEFYTP10, T10Y2Y, WMTSECL1)
+_FRED_ID_RE = re.compile(r"\b([A-Z][A-Z0-9]{2,15})\b")
+# 已知的 FRED series 白名单(避免误伤普通大写词如 US/JP/MS/OAS/IG/BofA)
+_FRED_IDS = {
+    "DGS10", "DGS2", "T10Y2Y", "THREEFYTP10", "BAMLC0A0CM", "BAMLH0A0HYM2",
+    "WMTSECL1", "DTWEXBGS", "VIXCLS", "BAMLH0A0HYM2EY", "DFII10", "T10YIE",
+    "WALCL", "WRESBAL", "RRPONTSYD", "WTREGEN", "QBPBSTAS",
+}
+
+
+def _fred_link(sid):
+    return f'https://fred.stlouisfed.org/series/{sid}'
+
+
+def _linkify_sources(text):
+    """把 source 文本里的指标代码替换成可点击超链接(已含 HTML 转义)。
+    - 已知 FRED series ID → fred.stlouisfed.org/series/<ID>
+    - OFR/TIC/yfinance 等特殊源 → 各自官方页
+    None→空串。链接 target=_blank，莫兰迪浅色下划线样式(.src-lnk)。"""
+    if text is None:
+        return ""
+    esc = html.escape(str(text), quote=True)
+    # 1) 特殊关键词(先处理，避免被 FRED 正则误吃)
+    for kw, url in _SRC_LINK_SPECIAL.items():
+        kw_esc = html.escape(kw, quote=True)
+        if kw_esc in esc and f'>{kw_esc}<' not in esc:
+            esc = esc.replace(
+                kw_esc,
+                f'<a class="src-lnk" href="{url}" target="_blank" rel="noopener">{kw_esc}</a>',
+                1,
+            )
+    # 2) FRED series ID(白名单内才转，避免误伤普通大写缩写)
+    def _repl(m):
+        sid = m.group(1)
+        if sid in _FRED_IDS:
+            return (f'<a class="src-lnk" href="{_fred_link(sid)}" '
+                    f'target="_blank" rel="noopener">{sid}</a>')
+        return sid
+    esc = _FRED_ID_RE.sub(_repl, esc)
+    return esc
 
 
 # 每个指标"如何看"——交易员视角的一句话解读法
@@ -712,7 +767,7 @@ def _auctions_html(auc):
         f'<b>中标率(Bid-to-Cover)</b>=总投标额/发行额，>2.5 需求强劲（绿）、2.2-2.5 正常、<2.2 偏弱（红）——拍卖遇冷是美债需求恶化的早期信号。'
         f'<b>最高中标收益率</b>=清算利率，走高=融资成本上升。'
         f'<b>间接投标占比</b>≈外国央行/官方代理需求份额，与上方托管美债互为印证。'
-        f'数据源：美国财政部 fiscaldata.treasury.gov（官方，每次拍卖后更新）。</div>'
+        f'数据源：美国财政部 <a class="src-lnk" href="https://fiscaldata.treasury.gov/" target="_blank" rel="noopener">fiscaldata.treasury.gov</a>（官方，每次拍卖后更新）。</div>'
         f'</div>'
     )
 
@@ -845,7 +900,7 @@ def _custody_html(cust):
         f'持续下降 = 外国官方减持美债 / 去美元化 / 抛售换汇干预，是主权层面对美债信心的风向标。'
         f'<b>短期图</b>看近期拐点/干预动作，<b>长期图</b>看去美元化大趋势(10年结构性方向)，'
         f'<b>2008至今全周期图</b>看更长的结构性拐点(如2015-16去美元化起点、疫情后再平衡)。'
-        f'数据源：FRED WMTSECL1（Fed H.4.1 custody，每周三口径）。</div>'
+        f'数据源：FRED <a class="src-lnk" href="https://fred.stlouisfed.org/series/WMTSECL1" target="_blank" rel="noopener">WMTSECL1</a>（Fed H.4.1 custody，每周三口径）。</div>'
         f'</div>'
     )
 
@@ -932,7 +987,7 @@ def _custody_accel_html(acc):
         f'<span style="color:#2e9e5b">线在零轴上=资金流入在加速（或流出在减速）</span>，'
         f'<span style="color:#d64545">线在零轴下=资金流出在加速（或流入在减速）</span>。'
         f'★<b>看交叉点</b>：短周期(7/14天)线穿越中长周期(28/56天)线时=短期动能相对中长期在<b>转向</b>——短线上穿=短期率先加速（可能领先反转），短线下穿=短期率先减速。四线同向发散=趋势强化，收敛交叉=动能切换；长周期(8周)线最平滑，代表中期基调。'
-        f'数据源为 Fed H.4.1 <b>周度</b>（每周三 as-of），故 7/14/28/56 天 ≡ <b>1/2/4/8 周</b>。单位百万美元。{_esc(acc.get("source",""))}。</div>'
+        f'数据源为 Fed H.4.1 <b>周度</b>（每周三 as-of），故 7/14/28/56 天 ≡ <b>1/2/4/8 周</b>。单位百万美元。{_linkify_sources(acc.get("source",""))}。</div>'
         f'</div>'
     )
 
@@ -1111,7 +1166,7 @@ def _country_ust_html(cu):
         f'<b>日本</b>是美债最大单一持有国，近10年高位震荡；<b>中国</b>近10年持续系统性减持，是去美元化/中美博弈的结构性信号；'
         f'<b>欧盟</b>为欧元区主要成员（德/法/意/荷/比/卢/爱/西/芬）加总（TIC 无欧盟合计口径），'
         f'其中比利时含 Euroclear 国际托管中心的第三方持仓，故欧盟合计偏高、趋势性增长明显。'
-        f'数据源：{_esc(src)}。</div>'
+        f'数据源：{_linkify_sources(src)}。</div>'
         f'{long_block}'
         f'</div>'
     )
@@ -1302,7 +1357,7 @@ def _credit_impulse_html(ci):
         f'<span style="color:#d64545">负值=新增信贷放缓/收缩</span>（即使总债务仍在涨）。'
         f'领先实体经济约 <b>6-9 个月</b>——<b>中国信贷脉冲</b>是全球商品、周期股、风险资产最强的领先指标之一。'
         f'口径为 BIS credit-to-GDP ratio 的二阶差分（美/中/欧/日统一口径、国际可比），<b>季度更新、数据滞后约 1 季</b>（as of {_esc(asof)[:7]}）。'
-        f'数据源：{_esc(src)}。</div>'
+        f'数据源：{_linkify_sources(src)}。</div>'
         f'{long_block}'
         f'</div>'
     )
@@ -1422,7 +1477,7 @@ def _stress_panels_html(sp, ofr=None):
             f'<div class="sp-axrow">{axinfo}</div>'
             f'{_stress_panel_svg(p)}'
             f'<div class="sp-note">{p.get("note","")}</div>'
-            f'<div class="sp-src">数据源：{_esc(p.get("source",""))}</div>'
+            f'<div class="sp-src">数据源：{_linkify_sources(p.get("source",""))}</div>'
             f'</div>'
         )
     intro = (
@@ -1523,7 +1578,7 @@ def _money_supply_html(ms):
                 + bar("M2", m2, "ms-b2", d.get("orig_m2")))
         if m3 is not None:
             rows += bar("M3", m3, "ms-b3", d.get("orig_m3"))
-        src = _esc(str(d.get("source", "")))
+        src = _linkify_sources(str(d.get("source", "")))
         cards += (
             f'<div class="ms-card">'
             f'<div class="ms-head">{_esc(d.get("flag",""))} {_esc(d.get("name",cc))}'
@@ -1632,7 +1687,7 @@ def _m2_history_html(m2h):
             f'<div class="m2-stat"><span>区间</span><b>{_ms_num(v0)}→{_ms_num(v1)}</b></div>'
             f'</div>'
             f'<div class="m2-span">{_esc(span_yr)}</div>'
-            f'<div class="ms-src">源：{_esc(str(b.get("source","")))}</div>'
+            f'<div class="ms-src">源：{_linkify_sources(str(b.get("source","")))}</div>'
             f'</div>'
         )
     grid = f'<div class="m2-grid">{cards}</div>' if cards else '<p class="empty">M2 历史数据未就绪。</p>'
@@ -2253,6 +2308,8 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .sp-note {{ font-size: 11px; color: var(--muted); line-height: 1.6; margin-top: 6px; padding: 6px 10px; background: rgba(140,155,175,.08); border-radius: 6px; }}
   .sp-note b {{ color: var(--text); }}
   .sp-src {{ font-size: 10px; color: var(--muted); font-family: var(--mono); margin-top: 5px; opacity: .8; }}
+  .src-lnk {{ color: #7fa0b8; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 2px; }}
+  .src-lnk:hover {{ color: #a8c4d8; text-decoration-style: solid; }}
   .sp-na {{ font-size: 12px; color: var(--muted); padding: 24px; text-align: center; }}
 
   /* 国债拍卖 timeline */
@@ -2453,7 +2510,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="h-grid">{holdings}</div>
 
   <div class="footnote">
-    数据源：FRED (VIX/HY/收益率曲线) · CNN F&amp;G · CBOE · AAII · GuruFocus · Conference Board · Renaissance · currentmarketvaluation · multpl · CFTC COT (金银 commercial)。<br>
+    数据源：<a class="src-lnk" href="https://fred.stlouisfed.org/" target="_blank" rel="noopener">FRED</a> (VIX/HY/收益率曲线) · CNN F&amp;G · CBOE · AAII · GuruFocus · Conference Board · Renaissance · currentmarketvaluation · multpl · <a class="src-lnk" href="https://www.cftc.gov/dea/futures/deacmxsf.htm" target="_blank" rel="noopener">CFTC COT</a> (金银 commercial)。<br>
     阈值基于历史经验静态设定，不随市场情绪调整。取不到的指标标注"—"或状态，绝不以训练数据/猜测填充。时区 JST。
   </div>
 </div>
