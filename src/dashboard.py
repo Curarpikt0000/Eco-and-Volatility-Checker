@@ -490,6 +490,19 @@ def _kol_views_html(views):
     date = views.get("date", "")
     total = views.get("total", 0)
     modules = views["modules"]
+    # 加载 KOL 名册的业界地位/机构声誉(institution 字段), 按名字匹配渲染到卡片底部
+    _kol_standing = {}
+    try:
+        import os as _os
+        _reg_path = _os.path.join(_os.path.dirname(__file__), "..", "data", "kol_registry.json")
+        _reg = json.load(open(_reg_path))
+        for _k in _reg.get("kols", []):
+            _nm = (_k.get("display_name") or "").strip()
+            _st = (_k.get("institution") or _k.get("bio") or "").strip()
+            if _nm and _st:
+                _kol_standing[_nm] = _st
+    except Exception:
+        _kol_standing = {}
     head = (f'<div class="kol-overview">本周 KOL 观点全景（截至 <b>{_esc(date)}</b>）：'
             f'共 <b>{total}</b> 位 KOL 有实质观点，覆盖 <b>{len(modules)}</b> 个模块。'
             f'<span class="kol-ov-note">卡片按多空方向标色 · 强烈看多→强烈看空</span></div>')
@@ -520,6 +533,9 @@ def _kol_views_html(views):
                 extra += f'<div class="kol-cmt">{_esc(comment)}</div>'
             if targets:
                 extra += f'<div class="kol-tgt">标的：{_esc(targets)}</div>'
+            _standing = _kol_standing.get((v.get("kol") or "").strip(), "")
+            if _standing:
+                extra += f'<div class="kol-standing">🏛 {_esc(_standing)}</div>'
             cards += f"""<div class="kol-item">
               <div class="kol-line"><b>{_esc(v['kol'])}</b> <span class="kv-badge {bcls}">{_esc(btxt)}</span> {since_html}</div>
               {extra}
@@ -2112,6 +2128,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .kdir-n {{ background: var(--card); color: var(--muted); }}
   .kol-cmt {{ font-size: 11px; color: var(--muted); line-height: 1.5; margin-top: 4px; }}
   .kol-tgt {{ font-size: 10.5px; color: var(--dust-blue); margin-top: 3px; }}
+  .kol-standing {{ font-size: 10px; color: var(--muted); margin-top: 5px; padding-top: 5px; border-top: 1px dashed var(--border); line-height: 1.45; }}
   /* KOL 状态变化模块化(仿13F) */
   .part-title-flex {{ display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }}
   .kol-dash-btn {{ font-size: 12px; font-weight: 600; color: #fff; background: var(--dust-blue); padding: 6px 14px; border-radius: 6px; text-decoration: none; white-space: nowrap; transition: opacity .15s; }}
