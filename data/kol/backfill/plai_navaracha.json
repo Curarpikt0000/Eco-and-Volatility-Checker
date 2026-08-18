@@ -1,23 +1,30 @@
 {
   "kol": "Plai Navaracha",
   "sector": "Alternative",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 2,
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)；泰国灵媒（Mor Plai）预言类KOL，作民间预期/情绪信号，无可交易市场方向",
+  "count": 3,
   "history": [
     {
-      "date": "2026-01-16",
-      "direction": "看空",
-      "comments": "泰国知名神婆(Mor Plai)预言2026上半年全球动荡,建议民众避免前往三处以'H''J''T'代称的地点旅行,称只接收到象征性异象。对整体局势偏悲观、风险规避倾向。",
-      "targets": "全球局势/旅行安全",
-      "source": "YouTube 转述其预言, 2026-01-16"
+      "date": "2025-09-15",
+      "direction": "未找到",
+      "comments": "泰国神秘预言家Mor Plai发布预测内容（TikTok传播），属灾害/事件类民间预言，无明确市场方向。",
+      "targets": "灾害/事件",
+      "source": "https://www.tiktok.com/discover/plai-navaracha-prediction"
     },
     {
-      "date": "2026-07-24",
-      "direction": "强烈看空",
-      "comments": "针对2026下半年做出'6大终极预测',强调凡存在'云端'的数字资产(含加密货币、网上银行资产)都将面临巨大风险——不仅是被黑客入侵,而是价值下跌、安全感消失。建议民众务必保留一定数量实体现金以备金融系统故障。对数字资产/加密货币强烈看空,看多实体现金避险。",
-      "targets": "加密货币/数字资产/实体现金",
-      "source": "YouTube 转述其预言 (泰神婆下半年6大预测), 2026-07-24"
+      "date": "2025-12-12",
+      "direction": "未找到",
+      "comments": "被报道曾准确预测缅甸地震并波及泰国曼谷、清迈，以及日本环太平洋火山带海底喷发等，属地震/灾害预言，无市场方向。",
+      "targets": "灾害/地震",
+      "source": "https://inasianspaces.com/2025/07/05/ryo-tatsuki-mega-earthquake-prediction-japan/"
+    },
+    {
+      "date": "2026-02-02",
+      "direction": "未找到",
+      "comments": "泰国神秘预言家Mor Plai再发预警，预言毁灭性海啸将来袭，当局对其最新警告持保留态度；属灾害预言，无市场方向。",
+      "targets": "灾害/海啸",
+      "source": "https://www.tiktok.com/discover/mor-plai-prophecy-2025?lang=en"
     }
   ]
 }

@@ -1,23 +1,30 @@
 {
   "kol": "Athos Salomé",
   "sector": "Alternative",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 2,
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)；巴西'活体诺查丹玛斯'预言类KOL，作民间预期/情绪信号，无可交易市场方向",
+  "count": 3,
   "history": [
     {
-      "date": "2025-12-28",
-      "direction": "看空",
-      "comments": "被称'活着的诺查丹玛斯'的巴西灵媒发布2026年十大预言,经济板块预警:沙特推动金砖国家用非美元结算,加速全球去美元化;波兰因高赤字与IMF谈判面临金融危机;日本因半导体储备枯竭致工业产出下滑(Q2)。整体对美元与全球经济稳定偏悲观。",
-      "targets": "美元/波兰/日本半导体/全球宏观",
-      "source": "Express.co.uk 独家专访, 2025-12-28"
+      "date": "2025-01-15",
+      "direction": "未找到",
+      "comments": "提醒其对洛杉矶山火的预测已成真，并列出一系列2025年可能发生的全球事件预言，属灾害/地缘类预言，无市场方向。",
+      "targets": "地缘/灾害",
+      "source": "https://economictimes.indiatimes.com/news/international/us/living-nostradamus-who-correctly-predicted-the-los-angeles-wildfires-and-their-devastation-says-this-is-in-store-for-2025/articleshow/117153110.cms"
     },
     {
-      "date": "2026-08-01",
-      "direction": "看空",
-      "comments": "声称其2026年两项预言已应验,第三项正在展开且可能带来灾难性全球影响,延续对全球局势与经济动荡的悲观基调。属预言性表述,非具体金融分析。",
-      "targets": "全球宏观/避险",
-      "source": "Yahoo News, 2026-08-01"
+      "date": "2025-12-15",
+      "direction": "未找到",
+      "comments": "去年12月发布2026年10项预测，含警告伊朗与以色列紧张关系可能升级、中东局势逼近临界点，属地缘冲突预言，无市场方向。",
+      "targets": "地缘/中东",
+      "source": "https://www.express.co.uk/news/uk/2233522/athos-salome-living-nostradamus-2026-predictions-warnings"
+    },
+    {
+      "date": "2026-07-22",
+      "direction": "未找到",
+      "comments": "称其2026年两项预言已成真，警告最黑暗的预言（世界冲突）仍可能发生，属地缘冲突/末日类预言，无市场方向。",
+      "targets": "地缘/冲突",
+      "source": "https://www.tyla.com/news/living-nostradamus-predictions-2026-world-conflict-728629-20260722"
     }
   ]
 }

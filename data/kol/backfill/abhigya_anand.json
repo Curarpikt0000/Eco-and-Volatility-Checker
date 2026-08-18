@@ -1,23 +1,30 @@
 {
   "kol": "Abhigya Anand",
   "sector": "Alternative",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 2,
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)；另类预言类KOL作民间预期/情绪信号，不按可交易方向严格归类",
+  "count": 3,
   "history": [
     {
-      "date": "2025-11-04",
-      "direction": "强烈看多",
-      "comments": "印度少年预言家(吠陀占星)预测将发生大规模经济冲击、金融市场剧烈波动,并称黄金价格将飙升最高至4倍。同时预警全球资源短缺与粮食危机。对黄金/避险资产极度看多,对整体金融市场看空。",
-      "targets": "黄金/避险资产/全球金融市场",
-      "source": "gate.com news (转述其预言), 2025-11-04"
+      "date": "2025-01-02",
+      "direction": "未找到",
+      "comments": "印度吠陀占星少年发布2025世界预测，含对俄罗斯与全球趋势的星象解读，属地缘/灾害类预言，无明确市场方向。",
+      "targets": "地缘/全球",
+      "source": "https://www.dkscore.com/jyotishmedium/discover-vedic-astrology-insights-on-predictions-and-global-events-1551"
     },
     {
-      "date": "2025-12-23",
-      "direction": "看空",
-      "comments": "在'2026展望'视频中警示2026年地缘政治风险,点名中国、朝韩、菲律宾、印度等地存在重大风险,并划出2026年4月下旬、7月24日前后、11月中旬三个需格外谨慎的时间窗口。整体对全球局势偏悲观,但认为科技医药领域将有优异进展。",
-      "targets": "全球市场/避险",
-      "source": "abhigyaanand.com 官方视频 (上传日 2025-12-23)"
+      "date": "2025-12-25",
+      "direction": "未找到",
+      "comments": "发布2026年预测，标注具体地理风险区（东亚/朝鲜半岛等），称对应星象压力点，警示环境与安全脆弱性，属灾害预警非市场判断。",
+      "targets": "地缘/灾害",
+      "source": "https://www.dkscore.com/jyotishmedium/2026-predictions-by-abhigya-anand-2176"
+    },
+    {
+      "date": "2026-01-23",
+      "direction": "强烈看多",
+      "comments": "2026年预言：太平洋巨型地震、黄金价格暴涨4倍、AI叛乱危机，强调极端自然灾害与经济地缘剧变，对黄金极度看多（民间预期信号）。",
+      "targets": "黄金",
+      "source": "https://www.gate.com/news/detail/15524685"
     }
   ]
 }

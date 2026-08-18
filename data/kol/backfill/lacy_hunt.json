@@ -1,16 +1,30 @@
 {
   "kol": "Lacy Hunt",
   "sector": "Government Debt",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 1,
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+  "count": 3,
   "history": [
     {
       "date": "2026-07-16",
       "direction": "看空",
-      "comments": "Hoisington首席经济学家、坚持看多美债逾30-40年的著名债牛,在二季度展望《资本稀缺与全球化去通胀时代的终结》中罕见反转转为看空债券。判断美国长期通胀均衡区间正从1.5-3.5%上移至3.5-4.5%,存在通胀超5%风险,理由是全球化逆转、劳动力增长放缓、AI数据中心与财政赤字造成资本稀缺。行动上大幅削减客户债券久期,转入短期国库券。",
-      "targets": "美国长期国债/国库券",
-      "source": "Advisor Perspectives / AdvisorAnalyst.com, 2026-07-16"
+      "comments": "Hoisington二季报（Hunt与Hoisington共同署名）由持续三十余年看多美债转为看空，理由是更大的财政赤字与更高的资本需求构成结构性背景转变。",
+      "targets": "美债",
+      "source": "https://www.advisorperspectives.com/articles/2026/07/16/hoisington-us-bond-bull-decades-bearish"
+    },
+    {
+      "date": "2026-07-29",
+      "direction": "看空",
+      "comments": "结束长达44年的长债多头立场，将组合久期大幅砍至1年以内，预期通胀升至4.5%以上，明确转为看空长期美债。",
+      "targets": "美债",
+      "source": "http://www.ratespike.com/articles/lacy-hunt-bond-reversal-treasury-yield-outlook-2026"
+    },
+    {
+      "date": "2026-08-13",
+      "direction": "看空",
+      "comments": "近四十年一直呼吁看多低收益率的Hunt发生U型反转，二季度评论开篇即阐述转熊逻辑，放弃'去全球化+高债务压低利率'旧框架。",
+      "targets": "美债",
+      "source": "https://realinvestmentadvice.com/resources/blog/lacy-hunt-turns-bearish-bonds-studying-his-reversal/"
     }
   ]
 }
