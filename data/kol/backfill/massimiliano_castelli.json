@@ -1,1 +1,30 @@
-{"kol":"Massimiliano Castelli","sector":"Macro","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":2,"history":[{"date":"2025-07-07","direction":"看多","comments":"UBS资产管理主权投资者报告(Castelli主笔):2025年储备经理调查显示逾90%机构预期黄金未来一年跑赢,但对当前点位是否仍可买入存分歧;央行持续推进美元多元化,黄金仍是核心配置。","targets":"黄金/央行储备/美元","source":"https://www.ubs.com/global/en/assetmanagement/insights/sovereign-investors/articles/what-keeps-central-banks-awake.html"},{"date":"2025-08-01","direction":"分歧","comments":"UBS 2025储备经理调查(约40家央行)显示美元仍居中心地位但信心走弱,基准情景为美元维持主导、储备经理边际渐进多元化;定调从确定性转向情景规划。","targets":"美元/主权储备/黄金","source":"https://www.omfif.org/2025/08/the-dollar-endures-but-for-how-long/"}]}
+{
+  "kol": "Massimiliano Castelli",
+  "sector": "Macro",
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+  "count": 3,
+  "history": [
+    {
+      "date": "2025-07-07",
+      "direction": "看多",
+      "comments": "UBS资产管理全球主权市场董事总经理，发布UBS储备管理研讨会洞见，指央行在剧烈演变的宏观环境中重新布局，黄金仍是核心配置。",
+      "targets": "黄金/主权储备",
+      "source": "https://www.linkedin.com/posts/massimiliano-castelli-phd-msc-6624125_global-sovereign-markets-activity-7348649230472757248-6oDU"
+    },
+    {
+      "date": "2025-09-15",
+      "direction": "看多",
+      "comments": "UBS年度调查显示逾90%受访机构预期黄金未来一年跑赢，但对当前点位是否仍值得买入存在分歧；黄金在央行储备配置中地位持续上升。",
+      "targets": "黄金",
+      "source": "https://www.ubs.com/global/en/assetmanagement/insights/sovereign-investors/articles/what-keeps-central-banks-awake.html"
+    },
+    {
+      "date": "2026-02-15",
+      "direction": "看多",
+      "comments": "访谈中指出不确定性上升时央行囤积、资本轮动入金；黄金回调时具备流动性者分批吸纳，强调非美市场跑赢与美元资产多元化趋势。",
+      "targets": "黄金/非美资产",
+      "source": "https://www.linkedin.com/posts/ubs-asset-management_interview-massimiliano-castelli-activity-7430174312365613057-m6II"
+    }
+  ]
+}

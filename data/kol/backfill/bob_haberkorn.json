@@ -1,1 +1,37 @@
-{"kol":"Bob Haberkorn","sector":"Precious Metals","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":1,"history":[{"date":"2025-12-03","direction":"看多","comments":"作为RJO Futures高级市场策略师评论金价,称当日ADP数据不及预期叠加白银隔夜创历史新高,对黄金构成支撑;2月交割金期货结算上涨0.3%至4232.50美元,盘面偏强。","targets":"黄金、白银","source":"https://www.newsmax.com/finance/streettalk/gold-silver-jobs/2025/12/03/"}]}
+{
+  "kol": "Bob Haberkorn",
+  "sector": "Precious Metals",
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+  "count": 4,
+  "history": [
+    {
+      "date": "2025-08-13",
+      "direction": "看多",
+      "comments": "RJO Futures 高级策略师，金价在美国通胀数据后上涨；引述高盛/摩根士丹利预期年底金价升至3700-3800美元，认为黄金持续跑赢股市。",
+      "targets": "黄金/白银",
+      "source": "https://www.linkedin.com/posts/bob-haberkorn-21750484_gold-nudges-higher-after-us-inflation-data-activity-7361068202920955904-ZbNP"
+    },
+    {
+      "date": "2025-12-03",
+      "direction": "看多",
+      "comments": "ADP就业数据不及预期叠加白银隔夜创历史新高，对黄金构成支撑；黄金期货收涨0.3%至4232.50美元，情绪偏多。",
+      "targets": "黄金/白银",
+      "source": "https://www.newsmax.com/finance/streettalk/gold-silver-jobs/2025/12/03/id/1236958/"
+    },
+    {
+      "date": "2026-01-15",
+      "direction": "强烈看多",
+      "comments": "在RJO Futures播客中判断金价突破3300美元后投资者犹豫，建议在白银和铂金寻找更优入场点；预期白银年内有望冲击50美元。",
+      "targets": "白银/铂金/黄金",
+      "source": "https://rjofutures.rjobrien.com/rjo-university/podcasts/episode-2-golds-skyrocket-silvers-stability-and-platinums-potential"
+    },
+    {
+      "date": "2025-01-24",
+      "direction": "中性",
+      "comments": "市场焦点在特朗普重返白宫及其通胀政策对美联储2025展望的影响，美债收益率高企压制无息黄金，金价假期薄量交易中承压。",
+      "targets": "黄金",
+      "source": "https://www.scrapprices.com/news/gold-under-pressure-from-high-us-bond-yields-in-holiday-trading-week/2103"
+    }
+  ]
+}

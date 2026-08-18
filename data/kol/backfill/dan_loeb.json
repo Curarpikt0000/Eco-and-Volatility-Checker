@@ -1,1 +1,30 @@
-{"kol":"Dan Loeb","sector":"Equities","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":1,"history":[{"date":"2026-03-16","direction":"看多","comments":"Third Point第四季度调仓活跃,退出13只股票并减持14只(含亚马逊,约减持四分之一持仓),平仓5.83亿美元标普500看跌对冲、卖出Meta,转向为AI算力供电的电力供应商,布局AI数据中心建设的'铲子股',反映其对AI主题的看多。","targets":"美股、AI电力股、亚马逊","source":"https://www.fool.com/investing/2026/03/16/billionaire-dan-loeb-slash-amzn-buy-3750-since-ipo/"}]}
+{
+  "kol": "Dan Loeb",
+  "sector": "Equities",
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+  "count": 3,
+  "history": [
+    {
+      "date": "2026-01-27",
+      "direction": "看多",
+      "comments": "Third Point创始人，计划对CoStar发起新一轮维权投资，延续其事件驱动、价值导向的选股风格，对特定标的持积极进取态度。",
+      "targets": "美股/个股",
+      "source": "https://money.usnews.com/investing/news/articles/2026-01-27/exclusive-loebs-third-point-plans-to-take-aim-at-costar-in-new-activist-campaign-sources-say"
+    },
+    {
+      "date": "2026-05-15",
+      "direction": "看多",
+      "comments": "Third Point认为尽管特朗普非常规政策带来阶段性波动，股市仍将受益于宏观环境，建议投资者保持淡定，对美股中期前景乐观。",
+      "targets": "美股",
+      "source": "https://incapitalquest.com/third-points-dan-loeb-says-stock-market-will-be-fine-despite-trumps-unconventional-approach/"
+    },
+    {
+      "date": "2026-08-14",
+      "direction": "看多",
+      "comments": "Q2平仓5.83亿美元S&P500看跌对冲、减持Meta，转向AI算力背后的电力供应商，押注AI数据中心建设的卖铲逻辑，整体加仓风险资产。",
+      "targets": "美股/AI电力股",
+      "source": "https://themarketcontext.com/article/daniel-loebs-7-3b-third-point-drops-its-sp-500-hedge-and-bets-on-ai-power/"
+    }
+  ]
+}

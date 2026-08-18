@@ -1,1 +1,37 @@
-{"kol":"Marc Chandler","sector":"Macro","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":2,"history":[{"date":"2026-01-02","direction":"看空","comments":"在KE Report 2026开年编辑节目中作为Bannockburn Global Forex管理合伙人展望全年,持长期看空美元观点,预计大宗商品走强、地缘政治热点频发,并看好AI下一阶段,提醒投资者密切关注这些主导力量。","targets":"美元、大宗商品","source":"https://kereport.substack.com/p/2026-macro-playbook-currencies-commodities"},{"date":"2026-08-15","direction":"看空","comments":"作为Bannockburn首席策略师讨论美元前景,认为布雷顿森林体系终结55年后美元将走弱,并阐述黄金按市价重估的合理性,整体延续对美元的中长期偏空判断。","targets":"美元、黄金","source":"https://www.europesays.com/3195094/"}]}
+{
+  "kol": "Marc Chandler",
+  "sector": "Macro",
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+  "count": 4,
+  "history": [
+    {
+      "date": "2025-06-20",
+      "direction": "看空",
+      "comments": "Bannockburn首席策略师，指零售/工业/新屋开工等数据接连令人失望，美国经济渐弱，美联储将2025 GDP预期下调至1.4%；点阵图分歧大，暗示不确定性高，美元承压。",
+      "targets": "美元/美债",
+      "source": "https://www.kereport.com/2025/06/20/marc-chandler-fed-recap-u-s-data-weakness-and-dollar-trends/"
+    },
+    {
+      "date": "2025-08-30",
+      "direction": "看空",
+      "comments": "多数G10及新兴市场央行今年已降息而美联储按兵不动，即将到来的降息将收窄利差并压制美元；对美元中期偏空。",
+      "targets": "美元",
+      "source": "https://www.marctomarket.com/2025/08/september-2025-monthly.html"
+    },
+    {
+      "date": "2025-09-06",
+      "direction": "看空",
+      "comments": "点评美国就业数据疲软、CPI风险与降息概率上升，认为这对美元偏空、对债券及全球风险资产有影响。",
+      "targets": "美元/美债",
+      "source": "https://kereport.substack.com/p/jobs-weak-cuts-ahead-marc-chandler"
+    },
+    {
+      "date": "2026-01-02",
+      "direction": "看空",
+      "comments": "2026宏观展望：对美元长期偏空，看好大宗商品走强，关注地缘冲突与AI交易的下一阶段，提醒投资者留意汇率与利率走势。",
+      "targets": "美元/大宗商品",
+      "source": "https://www.youtube.com/watch?v=jiLaby86gGE"
+    }
+  ]
+}

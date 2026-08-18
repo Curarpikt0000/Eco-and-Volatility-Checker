@@ -1,1 +1,30 @@
-{"kol":"David Meger","sector":"Precious Metals","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":1,"history":[{"date":"2026-01-29","direction":"分歧","comments":"作为High Ridge Futures金属交易主管向路透评论,称贵金属在创下近期历史新高后出现剧烈抛售,当日2月交割金期货下跌2.8%至5156.20美元,属获利了结引发的高位回调。","targets":"黄金","source":"https://www.theglobeandmail.com/investing/article-gold-drops-over-4-as-investors-take-profits-after-record-high/"}]}
+{
+  "kol": "David Meger",
+  "sector": "Precious Metals",
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+  "count": 3,
+  "history": [
+    {
+      "date": "2026-01-29",
+      "direction": "看多",
+      "comments": "High Ridge Futures金属交易总监，点评金银在弱美元与去货币化交易背景下走强；布伦特原油因伊朗担忧升破70美元，铜价创高，整体大宗商品偏强。",
+      "targets": "黄金/白银",
+      "source": "https://www.theguardian.com/business/live/2026/jan/29/gold-price-weak-dollar-silver-debasement-trade-markets-business-live-news-updates"
+    },
+    {
+      "date": "2026-02-15",
+      "direction": "中性",
+      "comments": "在金银创历史新高后市场出现急剧回调；将金价走势定性为在横盘至上行趋势中的回撤或修正，未改变中长期方向。",
+      "targets": "黄金/白银",
+      "source": "https://in.marketscreener.com/quote/index/S-P-GSCI-SILVER-INDEX-46869173/news/Gold-eases-after-record-on-knock-on-effect-of-wider-selloff-49515117/"
+    },
+    {
+      "date": "2026-06-01",
+      "direction": "看多",
+      "comments": "点评贵金属在record高位后经历急剧修正，认为具备流动性的投资者可分批逢低吸纳，反映其对金银中期趋势仍偏乐观。",
+      "targets": "黄金/白银",
+      "source": "https://chron.uz/en/main/selected/investors-reap-massive-gains-as-golds-relentless-rally-continues"
+    }
+  ]
+}
