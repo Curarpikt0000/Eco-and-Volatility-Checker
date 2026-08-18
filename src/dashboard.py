@@ -2368,6 +2368,14 @@ _TEMPLATE = r"""<!DOCTYPE html>
   /* 编号章节标题(6部分) */
   .part-title {{ display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; color: var(--text); margin: 30px 0 14px; padding-bottom: 8px; border-bottom: 2px solid var(--border); }}
   .part-num {{ display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--dust-blue); color: #fff; font-size: 14px; font-weight: 800; flex-shrink: 0; }}
+  .freq-badge {{ margin-left: auto; font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 10px; white-space: nowrap; letter-spacing: .02em; align-self: center; }}
+  .freq-daily {{ background: rgba(46,158,91,0.14); color: #2e7d52; border: 1px solid rgba(46,158,91,0.3); }}
+  .freq-weekly {{ background: rgba(107,143,181,0.16); color: #4a6d95; border: 1px solid rgba(107,143,181,0.34); }}
+  .freq-monthly {{ background: rgba(224,169,46,0.16); color: #a9791a; border: 1px solid rgba(224,169,46,0.36); }}
+  .freq-quarterly {{ background: rgba(150,120,175,0.16); color: #7a5a95; border: 1px solid rgba(150,120,175,0.34); }}
+  .freq-event {{ background: rgba(138,133,120,0.14); color: #6d685c; border: 1px solid rgba(138,133,120,0.3); }}
+  /* 普通(非flex) part-title 用 flex 让徽章能靠右 */
+  .part-title {{ display: flex; align-items: center; gap: 10px; }}
   /* 综合结论卡片 */
   .concl-card {{ border-radius: 12px; padding: 16px 18px; border: 1px solid var(--border); }}
   /* ── 指标卡片网格(交易员屏) ── */
@@ -2802,7 +2810,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   </div>
 
   <!-- ═══ 第一部分：指标卡片(短/中/长分区，每卡带2周折线+threshold+如何看) ═══ -->
-  <div class="part-title"><span class="part-num">1</span>指标卡片 · 18 项（短 → 中 → 长）</div>
+  <div class="part-title"><span class="part-num">1</span>指标卡片 · 18 项（短 → 中 → 长）<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="grp-label grp-short">🟢 短期指标 · 天-周 · 判断过热回调</div>
   <div class="mcard-grid">{cards_short}</div>
   <div class="grp-label grp-mid">🟡 中期指标 · 周-月 · 判断趋势转折</div>
@@ -2811,7 +2819,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="mcard-grid">{cards_long}</div>
 
   <!-- ═══ 第二部分：警报统计速览 + 雷达图 ═══ -->
-  <div class="part-title"><span class="part-num">2</span>警报统计速览</div>
+  <div class="part-title"><span class="part-num">2</span>警报统计速览<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="grid-2">
     <div class="card">
       <div class="grid-3">{stat_short}{stat_mid}{stat_long}</div>
@@ -2829,11 +2837,11 @@ _TEMPLATE = r"""<!DOCTYPE html>
   </div>
 
   <!-- ═══ 第三部分：逐条解读 ═══ -->
-  <div class="part-title"><span class="part-num">3</span>逐条简短解读</div>
+  <div class="part-title"><span class="part-num">3</span>逐条简短解读<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{interp}</div>
 
   <!-- ═══ 第四部分：短中长期综合结论 ═══ -->
-  <div class="part-title"><span class="part-num">4</span>短中长期综合结论</div>
+  <div class="part-title"><span class="part-num">4</span>短中长期综合结论<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="grid-3">
     <div class="concl-card cc-short">
       <div class="cc-head">🟢 短期（1-3 个月）</div>
@@ -2850,7 +2858,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   </div>
 
   <!-- ═══ 第五部分：卖出触发状态追踪 ═══ -->
-  <div class="part-title"><span class="part-num">5</span>卖出触发状态追踪（同时 ≥3 项 = 开始分批卖出）</div>
+  <div class="part-title"><span class="part-num">5</span>卖出触发状态追踪（同时 ≥3 项 = 开始分批卖出）<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">
     <table class="trig">
       <thead><tr><th>触发条件</th><th>阈值</th><th>今日状态</th><th>达成</th></tr></thead>
@@ -2859,68 +2867,68 @@ _TEMPLATE = r"""<!DOCTYPE html>
   </div>
 
   <!-- ═══ 第六部分：今日最需关注的一条信号 ═══ -->
-  <div class="part-title"><span class="part-num">6</span>今日最需关注的一条信号</div>
+  <div class="part-title"><span class="part-num">6</span>今日最需关注的一条信号<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="focus-box">{focus}</div>
 
   <!-- ═══ 附一·零：本周 KOL 观点全景(按模块+多空, Eco 独立每日快照) ═══ -->
-  <div class="part-title part-title-flex"><span><span class="part-num">＋</span>本周 KOL 观点全景 · 按模块 (多空方向卡片)</span><a class="kol-dash-btn" href="https://curarpikt0000.github.io/kol-dashboard/" target="_blank" rel="noopener">📊 打开 KOL Dashboard →</a></div>
+  <div class="part-title part-title-flex"><span><span class="part-num">＋</span>本周 KOL 观点全景 · 按模块 (多空方向卡片)</span><span class="freq-badge freq-daily" style="margin-left:0">每日更新</span><a class="kol-dash-btn" href="https://curarpikt0000.github.io/kol-dashboard/" target="_blank" rel="noopener">📊 打开 KOL Dashboard →</a></div>
   <div class="card">{kol_views}</div>
 
   <!-- ═══ 附一：本周 KOL 状态变化(模块化, Eco 独立每日快照周对比) ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>本周 KOL 状态变化 · 按模块 (态度转向 call-out)</div>
+  <div class="part-title"><span class="part-num">＋</span>本周 KOL 状态变化 · 按模块 (态度转向 call-out)<span class="freq-badge freq-weekly">每周更新</span></div>
   <div class="card">{kol_changes}</div>
 
   <!-- ═══ 附二：流动性要点(联动 Economic Dashboard) ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>流动性要点 · 央行/国债</div>
+  <div class="part-title"><span class="part-num">＋</span>流动性要点 · 央行/国债<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card liq-wrap">{liquidity}</div>
 
   <!-- ═══ 附三：四大央行资产负债表 (US/JP/CN/ECB, 2x2) ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>四大央行资产负债表 · 每日更新 (US/JP/CN/ECB · 2x2 · 当天汇率统一折$B)</div>
+  <div class="part-title"><span class="part-num">＋</span>四大央行资产负债表 · 每日更新 (US/JP/CN/ECB · 2x2 · 当天汇率统一折$B)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="bs-grid">{cb_balance}</div>
 
   <!-- ═══ 附三·一半：BIS 国际清算银行报告 (央行的央行 · 摘要+独立页) ═══ -->
-  <div class="part-title part-title-flex"><span><span class="part-num">＋</span>BIS 国际清算银行报告 · 最新要点 (Quarterly Review 季度综述)</span><a class="kol-dash-btn" href="https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/" target="_blank" rel="noopener">📄 查看 BIS 报告全库 →</a></div>
+  <div class="part-title part-title-flex"><span><span class="part-num">＋</span>BIS 国际清算银行报告 · 最新要点 (Quarterly Review 季度综述)</span><span class="freq-badge freq-quarterly" style="margin-left:0">每季度更新</span><a class="kol-dash-btn" href="https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/" target="_blank" rel="noopener">📄 查看 BIS 报告全库 →</a></div>
   {bis_section}
 
   <!-- ═══ 附三·二：三国货币供应量 M0/M1/M2 (央行资负表的延伸: 从"央行造多少底钱"到"社会流通多少钱") ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>三国货币供应量 M0 / M1 / M2 · 月度 (央行资负表下延: 社会实际流通的钱)</div>
+  <div class="part-title"><span class="part-num">＋</span>三国货币供应量 M0 / M1 / M2 · 月度 (央行资负表下延: 社会实际流通的钱)<span class="freq-badge freq-monthly">每月更新</span></div>
   <div class="card">{money_supply}</div>
 
   <!-- ═══ 附三·二·二：三国 M2 十年历史折线 ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>三国 M2 十年走势 · 折线 ($B 当天汇率统一折算 · 放水力度长期对比)</div>
+  <div class="part-title"><span class="part-num">＋</span>三国 M2 十年走势 · 折线 ($B 当天汇率统一折算 · 放水力度长期对比)<span class="freq-badge freq-monthly">每月更新</span></div>
   <div class="card">{m2_history}</div>
 
   <!-- ═══ 附三·二·三：Credit Impulse 信贷脉冲 (中期领先指标, 领先实体经济6-9月) ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>Credit Impulse 信贷脉冲 · 中期领先指标 (美/中/欧 · 季度 · 新增信贷的加速度 · 领先实体经济6-9月)</div>
+  <div class="part-title"><span class="part-num">＋</span>Credit Impulse 信贷脉冲 · 中期领先指标 (美/中/欧 · 季度 · 新增信贷的加速度 · 领先实体经济6-9月)<span class="freq-badge freq-quarterly">每季度更新</span></div>
   <div class="card">{credit_impulse}</div>
 
   <!-- ═══ 附三·二·四：国债市场压力四联图 (对齐 Morgan Stanley 三图 + OFR官方压力指数, 竖向) ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>国债市场收益率·波动性·压力 · 竖向四联图 (对齐 Morgan Stanley · 过去3年真实公开数据 · 每日更新)</div>
+  <div class="part-title"><span class="part-num">＋</span>国债市场收益率·波动性·压力 · 竖向四联图 (对齐 Morgan Stanley · 过去3年真实公开数据 · 每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{stress_panels}</div>
 
   <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)</div>
+  <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)<span class="freq-badge freq-event">每次拍卖</span></div>
   <div class="card">{auctions}</div>
 
   <!-- ═══ 附三·五：外国官方在纽约联储托管的美债 ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>外国官方托管美债 · 纽约联储 (去美元化风向标)</div>
+  <div class="part-title"><span class="part-num">＋</span>外国官方托管美债 · 纽约联储 (去美元化风向标)<span class="freq-badge freq-weekly">每周更新</span></div>
   <div class="card">{custody}</div>
   <div class="card">{custody_accel}</div>
 
   <!-- ═══ 附三·六：1年内到期需展期的可交易国债(再融资墙) ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>1年内到期可交易国债 · 再融资墙 (rollover 压力)</div>
+  <div class="part-title"><span class="part-num">＋</span>1年内到期可交易国债 · 再融资墙 (rollover 压力)<span class="freq-badge freq-monthly">每月更新</span></div>
   <div class="card">{maturing_treasury}</div>
 
   <!-- ═══ 附三·七：美国石油库存运营红线 (Brent-WTI价差 / Cushing / SPR) ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>美国石油库存运营红线 · 能源安全 (Brent-WTI 价差 / Cushing / SPR · tank bottom)</div>
+  <div class="part-title"><span class="part-num">＋</span>美国石油库存运营红线 · 能源安全 (Brent-WTI 价差 / Cushing / SPR · tank bottom)<span class="freq-badge freq-weekly">每周更新 · 价差每日</span></div>
   <div class="card">{oil_inventory}</div>
 
   <!-- ═══ 附三·六：日本 / 中国 分国别持有美债 (TIC, 近10年) ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>日本 / 中国 / 欧盟 持有美债 · 近10年 + 2008长历史 (TIC 分国别口径)</div>
+  <div class="part-title"><span class="part-num">＋</span>日本 / 中国 / 欧盟 持有美债 · 近10年 + 2008长历史 (TIC 分国别口径)<span class="freq-badge freq-monthly">每月更新 · 滞后约2月</span></div>
   <div class="card">{country_ust}</div>
 
   <!-- ═══ 附四：知名机构持仓 (13F) + Trump ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>机构持仓追踪 · 13F + Trump (对比上期变动)</div>
+  <div class="part-title"><span class="part-num">＋</span>机构持仓追踪 · 13F + Trump (对比上期变动)<span class="freq-badge freq-quarterly">每季度 · Trump不定期</span></div>
   <div class="h-grid">{holdings}</div>
 
   <div class="footnote">
@@ -2985,7 +2993,9 @@ mkRadar('rLong', RADAR.long);
   titles.forEach(function(t, i) {{
     var id = 'sec-' + i;
     t.id = id;
-    var label = (t.textContent || '').trim();
+    var _tc = t.cloneNode(true);
+    var _fb = _tc.querySelector('.freq-badge'); if (_fb) _fb.remove();
+    var label = (_tc.textContent || '').trim();
     var short = label.split('·')[0].split('（')[0].split('(')[0].trim();
     short = short.replace(/^[0-9０-９＋+\s]+/, '').trim();
     if (short.indexOf('打开 KOL Dashboard') >= 0) short = short.split('打开')[0].trim();
