@@ -1182,14 +1182,32 @@ def _yield_curves_svg(series, w=920, h=280, yunit="%"):
         gy = Y(gv)
         parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" stroke="#d4cdbe" stroke-width="1" stroke-dasharray="3,3"/>')
         parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" font-size="10" fill="#8a8578" text-anchor="end">{gv:.1f}{yunit}</text>')
-    # X 轴月份标签(每约2月)
-    last_ym = None
-    for i, d in enumerate(all_dates):
-        ym = d[:7]
-        if ym != last_ym and int(d[5:7]) % 2 == 1:
-            last_ym = ym
-            anchor = "start" if i == 0 else ("end" if i >= n - 3 else "middle")
-            parts.append(f'<text x="{X(i):.1f}" y="{h-9}" font-size="9" fill="#8a8578" text-anchor="{anchor}">{d[:7]}</text>')
+    # X 轴标签: 动态间隔, 目标约 8 个均匀分布的标签(避免长跨度数据标签互相覆盖)。
+    # 不论数据是 1 年日频 / 10 年周频 / 27 年季频, 都只显示 ~8 个不重叠标签。
+    target_labels = 8
+    step = max(1, round(n / target_labels))
+    # 长跨度(>3年)显示"年"或"年-月", 短跨度显示"年-月"
+    span_days = 0
+    try:
+        from datetime import date as _date
+        d0 = _date.fromisoformat(all_dates[0][:10]); d1 = _date.fromisoformat(all_dates[-1][:10])
+        span_days = (d1 - d0).days
+    except Exception:
+        span_days = 0
+    long_span = span_days > 3 * 365
+    label_idxs = list(range(0, n, step))
+    if (n - 1) not in label_idxs:
+        label_idxs.append(n - 1)  # 保证最后一个点有标签
+    _prev_lbl = None
+    for i in label_idxs:
+        d = all_dates[i]
+        lbl = d[:4] if long_span else d[:7]  # 长跨度只显示年, 短跨度显示年-月
+        # 去重: 若与上一个标签相同则跳过(避免末尾重复, 如 2026/2026 或 2026-08/2026-08)
+        if lbl == _prev_lbl:
+            continue
+        _prev_lbl = lbl
+        anchor = "start" if i == 0 else ("end" if i >= n - 2 else "middle")
+        parts.append(f'<text x="{X(i):.1f}" y="{h-9}" font-size="9" fill="#8a8578" text-anchor="{anchor}">{lbl}</text>')
     # 四条线 + 图例
     legend_y = mt + 6
     order = ["us_10y", "us_30y", "jp_10y", "jp_30y"]
