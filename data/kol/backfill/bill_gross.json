@@ -1,16 +1,16 @@
 {
   "kol": "Bill Gross",
   "sector": "Government Debt",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
   "count": 1,
   "history": [
     {
-      "date": "2025-06-30",
-      "direction": "分歧",
-      "comments": "债王在6月社媒帖中称股市由AI主导,尽管有关税和地缘紧张,仍暗示经济仅1-2%增长。他判断股票是'小牛市'、债券是'小熊市',短期内两边都不会剧烈波动。整体温和偏谨慎,认为10年期美债收益率历史上应比通胀高约175个基点。",
-      "targets": "美股/美国国债/10年期美债",
-      "source": "Orange County Business Journal (OCBJ), 2025-07-28 引用其6月社媒帖"
+      "date": "2026-01-23",
+      "direction": "看空",
+      "comments": "债王警告美股多年牛市动能减弱、需新燃料（降息、15%+盈利增长、AI生产力证据）才能延续，估值极端（巴菲特指标创新高），呼应看空同行；对股票转谨慎偏空。",
+      "targets": "美股",
+      "source": "https://www.businessinsider.com/bond-king-bill-gross-stock-market-outlook-ai-valuations-government-2026-1"
     }
   ]
 }

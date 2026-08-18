@@ -1,1 +1,23 @@
-{"kol":"Jeff Snider","sector":"Government Debt","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":1,"history":[{"date":"2025-07-08","direction":"看空","comments":"做客Soar Financially解读欧洲美元(Eurodollar)体系,认为隐藏的全球影子银行网络正在故障运转,货币体系失灵,暗示流动性紧缩与经济下行(silent depression)风险。","targets":"美元流动性/美债/宏观","source":"https://clearcommodity.net/playlists/soar-financially/silent-depression-jeff-snider-on-shadow-banking-truths"}]}
+{
+  "kol": "Jeff Snider",
+  "sector": "Government Debt",
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+  "count": 2,
+  "history": [
+    {
+      "date": "2026-02-20",
+      "direction": "看空",
+      "comments": "在Rebel Capitalist News作为嘉宾谈国债收益率飙升，从欧洲美元/影子银行流动性视角解读，长期持衰退与流动性紧缩论，对经济与风险资产偏悲观。",
+      "targets": "美债/风险资产",
+      "source": "https://podbay.fm/p/rebel-capitalist-news/e/1719852300"
+    },
+    {
+      "date": "2026-05-23",
+      "direction": "看空",
+      "comments": "Substack撰文分析2年期收益率逼近4%、10年期一度触及4.70%，指出收益率曲线结构与2021-2022不同，暗含增长与流动性隐忧，维持谨慎/衰退倾向判断。",
+      "targets": "美债/收益率曲线/风险资产",
+      "source": "https://eurodollaruniversity.substack.com/p/sofr-tips-and-yields-walked-into"
+    }
+  ]
+}

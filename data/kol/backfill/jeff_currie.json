@@ -1,1 +1,37 @@
-{"kol":"Jeff Currie","sector":"Energy & Commodities","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":2,"history":[{"date":"2025-08-12","direction":"看空","comments":"Carlyle Compass报告:预期油价温和走低,因OPEC+增产将在下半年转化为大幅供给过剩,但强调至今尚未看到这些增产真正演变为长期预期的供应过剩。","targets":"原油","source":"https://www.carlyle.com/sites/default/files/2025-08/The_Carlyle_Compass_Risking_Price_Stability_to_Solve_Ukraine_08122025.pdf"},{"date":"2026-05-15","direction":"强烈看多","comments":"X长文宣称市场正处下一轮大宗商品超级周期起点,称为现代金融史上最不对称的交易。逻辑:AI资本开支瓶颈+去全球化(HAGO转HALO)+矿业投资较2012峰值少40%。结论:Get long,做多硬资产。","targets":"石油/铜/金/大宗商品(Munificent 7油气巨头)","source":"https://finance.yahoo.com/markets/article/the-market-is-at-the-start-of-the-next-commodity-supercycle-carlyles-jeff-currie-says-181208277.html"}]}
+{
+  "kol": "Jeff Currie",
+  "sector": "Energy & Commodities",
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+  "count": 4,
+  "history": [
+    {
+      "date": "2025-05-13",
+      "direction": "看多",
+      "comments": "在Carlyle Compass报告中重申大宗商品结构性牛市，因多年投资不足（老经济复仇），2026年油价与商品上行风险持续累积，即便政府希望油价走低。",
+      "targets": "原油/大宗商品",
+      "source": "https://www.carlyle.com/sites/default/files/2025-05/The_Carlyle_Compass_May_13_2025.pdf"
+    },
+    {
+      "date": "2026-01-30",
+      "direction": "强烈看多",
+      "comments": "接受Bloomberg Odd Lots访谈，认为金属出现疯狂上涨，长期看多，多年来一直预测新一轮商品超级周期正在兑现。",
+      "targets": "金属/铜/大宗商品",
+      "source": "https://www.bloomberg.com/news/audio/2026-01-30/odd-lots-jeff-currie-on-the-crazy-surge-in-metals-podcast"
+    },
+    {
+      "date": "2026-01-31",
+      "direction": "强烈看多",
+      "comments": "发布1月末展望，指出金属与关键矿产进入结构性多年上升周期，驱动力为去美元化、地缘风险与供给约束；矿业巨头资本开支较2012峰值少40%。",
+      "targets": "金属/关键矿产/黄金/白银",
+      "source": "https://equityswarm.com/commodities/articles/currie-decade-of-rising-metals-and-minerals/"
+    },
+    {
+      "date": "2026-02-15",
+      "direction": "看多",
+      "comments": "接受Bloomberg TV访谈，称大宗商品处于典型晚周期上涨，预计油价将突破70-90美元区间，并谈及在Carlyle能源路径部门的新角色。",
+      "targets": "原油/大宗商品",
+      "source": "https://www.youtube.com/watch?v=vDv1zIbxq_8"
+    }
+  ]
+}

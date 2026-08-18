@@ -1,1 +1,44 @@
-{"kol":"Andy Schectman","sector":"Precious Metals","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":2,"history":[{"date":"2026-02-01","direction":"强烈看多","comments":"Commodity Culture访谈:称白银是其见过最被低估的资产,认为2月金银抛售系COMEX保证金上调结构性人为制造,长期驱动力未变,坚定长期看多。","targets":"白银/黄金","source":"https://thedeepdive.ca/the-silver-crash-was-orchestrated-andy-schectman/"},{"date":"2026-02-01","direction":"强烈看多","comments":"接受Investing News访谈:强调美国最大资金正以前所未见规模要求实物交割,金银正被重新定价;虽短期调整难免但可与长期看多共存,自称极度长期看多。","targets":"黄金(上破$4000)/白银($60.50峰)","source":"https://investingnews.com/andy-schectman-february-2026/"}]}
+{
+  "kol": "Andy Schectman",
+  "sector": "Precious Metals",
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+  "count": 5,
+  "history": [
+    {
+      "date": "2025-10-16",
+      "direction": "强烈看多",
+      "comments": "资深金银商称金属市场根基出现断裂，直言从未见过这样的局面，强调全球金属市场结构性变化正在发生，长期看多金银。",
+      "targets": "黄金/白银",
+      "source": "https://www.youtube.com/watch?v=vFkpqi_EBrI"
+    },
+    {
+      "date": "2025-11-24",
+      "direction": "强烈看多",
+      "comments": "更新其大胆的金银预测，对2025年末金银维持强烈看多立场。",
+      "targets": "黄金/白银",
+      "source": "https://www.youtube.com/watch?v=IfdbejhNJck"
+    },
+    {
+      "date": "2026-01-14",
+      "direction": "强烈看多",
+      "comments": "在Metals and Miners访谈中谈白银工业需求与投资需求之争，认为全球对金银需求持续升级，白银争夺战将至。",
+      "targets": "白银/黄金",
+      "source": "https://metalsandminers.substack.com/p/andy-schectman-battle-for-silver"
+    },
+    {
+      "date": "2026-05-01",
+      "direction": "强烈看多",
+      "comments": "在NRS 2026 Expo发表主题演讲，阐述金银作为真正财富的意义及全球货币体系转变，坚定看多贵金属。",
+      "targets": "黄金/白银",
+      "source": "https://natural-resource-stocks.castos.com/episodes/andy-schectman-at-nrs-2026-expo-why-gold-and-silver-are-wealth"
+    },
+    {
+      "date": "2026-07-17",
+      "direction": "强烈看多",
+      "comments": "接受Investing News访谈，强调价格是误导工具，真正重要的是央行、中国、Tether持续增持黄金，认为回调洗掉了投机盘，大买家借弱势加仓。",
+      "targets": "黄金/白银",
+      "source": "https://investingnews.com/andy-schectman-gold-silver-forecast/"
+    }
+  ]
+}
