@@ -1,0 +1,841 @@
+{
+ "created": "2026-08-18",
+ "target_window": "past 12 months (2025-08 ~ 2026-08)",
+ "total": 67,
+ "queue": [
+  {
+   "id": "bob_haberkorn",
+   "name": "Bob Haberkorn",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "Bob Haberkorn"
+   ],
+   "reason": "shallow",
+   "existing_count": 1,
+   "existing_span": "2025-12-03~2025-12-03",
+   "done": false
+  },
+  {
+   "id": "marc_chandler",
+   "name": "Marc Chandler",
+   "sector": "Macro",
+   "search_terms": [
+    "Marc Chandler"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2026-01-02~2026-08-15",
+   "done": false
+  },
+  {
+   "id": "david_meger",
+   "name": "David Meger",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "David Meger"
+   ],
+   "reason": "shallow",
+   "existing_count": 1,
+   "existing_span": "2026-01-29~2026-01-29",
+   "done": false
+  },
+  {
+   "id": "dan_loeb",
+   "name": "Dan Loeb",
+   "sector": "Equities",
+   "search_terms": [
+    "Dan Loeb"
+   ],
+   "reason": "shallow",
+   "existing_count": 1,
+   "existing_span": "2026-03-16~2026-03-16",
+   "done": false
+  },
+  {
+   "id": "massimiliano_castelli",
+   "name": "Massimiliano Castelli",
+   "sector": "Macro",
+   "search_terms": [
+    "Massimiliano Castelli"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2025-07-07~2025-08-01",
+   "done": false
+  },
+  {
+   "id": "jeff_currie",
+   "name": "Jeff Currie",
+   "sector": "Energy & Commodities",
+   "search_terms": [
+    "Jeff Currie"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2025-08-12~2026-05-15",
+   "done": false
+  },
+  {
+   "id": "andy_schectman",
+   "name": "Andy Schectman",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "Andy Schectman"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2026-02-01~2026-02-01",
+   "done": false
+  },
+  {
+   "id": "jeff_snider",
+   "name": "Jeff Snider",
+   "sector": "Government Debt",
+   "search_terms": [
+    "Jeff Snider"
+   ],
+   "reason": "shallow",
+   "existing_count": 1,
+   "existing_span": "2025-07-08~2025-07-08",
+   "done": false
+  },
+  {
+   "id": "bill_gross",
+   "name": "Bill Gross",
+   "sector": "Government Debt",
+   "search_terms": [
+    "Bill Gross"
+   ],
+   "reason": "shallow",
+   "existing_count": 1,
+   "existing_span": "2025-06-30~2025-06-30",
+   "done": false
+  },
+  {
+   "id": "kyle_bass",
+   "name": "Kyle Bass",
+   "sector": "Government Debt",
+   "search_terms": [
+    "Kyle Bass"
+   ],
+   "reason": "empty",
+   "existing_count": 0,
+   "existing_span": "",
+   "done": false
+  },
+  {
+   "id": "james_grant",
+   "name": "James Grant",
+   "sector": "Government Debt",
+   "search_terms": [
+    "James Grant"
+   ],
+   "reason": "shallow",
+   "existing_count": 1,
+   "existing_span": "2025-05-03~2025-05-03",
+   "done": false
+  },
+  {
+   "id": "lacy_hunt",
+   "name": "Lacy Hunt",
+   "sector": "Government Debt",
+   "search_terms": [
+    "Lacy Hunt"
+   ],
+   "reason": "shallow",
+   "existing_count": 1,
+   "existing_span": "2026-07-16~2026-07-16",
+   "done": false
+  },
+  {
+   "id": "abhigya_anand",
+   "name": "Abhigya Anand",
+   "sector": "Alternative",
+   "search_terms": [
+    "Abhigya Anand"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2025-11-04~2025-12-23",
+   "done": false
+  },
+  {
+   "id": "plai_navaracha",
+   "name": "Plai Navaracha",
+   "sector": "Alternative",
+   "search_terms": [
+    "Plai Navaracha"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2026-01-16~2026-07-24",
+   "done": false
+  },
+  {
+   "id": "athos_salom",
+   "name": "Athos Salomé",
+   "sector": "Alternative",
+   "search_terms": [
+    "Athos Salomé"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2025-12-28~2026-08-01",
+   "done": false
+  },
+  {
+   "id": "david_icke",
+   "name": "David Icke",
+   "sector": "Alternative",
+   "search_terms": [
+    "David Icke"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2026-08-03~2026-08-16",
+   "done": false
+  },
+  {
+   "id": "amanda_grace",
+   "name": "Amanda Grace",
+   "sector": "Alternative",
+   "search_terms": [
+    "Amanda Grace"
+   ],
+   "reason": "shallow",
+   "existing_count": 1,
+   "existing_span": "2025-12-24~2025-12-24",
+   "done": false
+  },
+  {
+   "id": "brandon_biggs",
+   "name": "Brandon Biggs",
+   "sector": "Alternative",
+   "search_terms": [
+    "Brandon Biggs"
+   ],
+   "reason": "shallow",
+   "existing_count": 1,
+   "existing_span": "2025-01-22~2025-01-22",
+   "done": false
+  },
+  {
+   "id": "fema",
+   "name": "FEMA",
+   "sector": "Alternative",
+   "search_terms": [
+    "FEMA"
+   ],
+   "reason": "empty",
+   "existing_count": 0,
+   "existing_span": "",
+   "done": false
+  },
+  {
+   "id": "ray_kurzweil",
+   "name": "Ray Kurzweil",
+   "sector": "Equities",
+   "search_terms": [
+    "Ray Kurzweil"
+   ],
+   "reason": "empty",
+   "existing_count": 0,
+   "existing_span": "",
+   "done": false
+  },
+  {
+   "id": "ivan_zhao",
+   "name": "Ivan Zhao",
+   "sector": "Equities",
+   "search_terms": [
+    "Ivan Zhao"
+   ],
+   "reason": "empty",
+   "existing_count": 0,
+   "existing_span": "",
+   "done": false
+  },
+  {
+   "id": "dan_ives",
+   "name": "Dan Ives",
+   "sector": "Equities",
+   "search_terms": [
+    "Dan Ives"
+   ],
+   "reason": "short_span",
+   "existing_count": 4,
+   "existing_span": "2025-11-25~2026-03-05",
+   "done": false
+  },
+  {
+   "id": "anu_anand",
+   "name": "Anu Anand",
+   "sector": "Energy & Commodities",
+   "search_terms": [
+    "Anu Anand"
+   ],
+   "reason": "empty",
+   "existing_count": 0,
+   "existing_span": "",
+   "done": false
+  },
+  {
+   "id": "rory_johnston",
+   "name": "Rory Johnston",
+   "sector": "Energy & Commodities",
+   "search_terms": [
+    "Rory Johnston"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2026-03-10~2026-06",
+   "done": false
+  },
+  {
+   "id": "doomberg",
+   "name": "Doomberg / Kuppy",
+   "sector": "Energy & Commodities",
+   "search_terms": [
+    "Doomberg / Kuppy"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2026-06-18~2026-06-23",
+   "done": false
+  },
+  {
+   "id": "chris_vermeulen",
+   "name": "Chris Vermeulen",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "Chris Vermeulen"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2026-01-31~2026-04-26",
+   "done": false
+  },
+  {
+   "id": "ag_thorson",
+   "name": "AG Thorson",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "AG Thorson"
+   ],
+   "reason": "short_span",
+   "existing_count": 4,
+   "existing_span": "2026-06-19~2026-08-12",
+   "done": false
+  },
+  {
+   "id": "robert_gottlieb",
+   "name": "Robert Gottlieb",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "Robert Gottlieb"
+   ],
+   "reason": "short_span",
+   "existing_count": 3,
+   "existing_span": "2025-12-29~2026-06-05",
+   "done": false
+  },
+  {
+   "id": "gareth_soloway",
+   "name": "Gareth Soloway",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "Gareth Soloway"
+   ],
+   "reason": "shallow",
+   "existing_count": 1,
+   "existing_span": "2026-07-24~2026-07-24",
+   "done": false
+  },
+  {
+   "id": "steve_penny",
+   "name": "Steve Penny",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "Steve Penny"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2026-01-22~2026-03-04",
+   "done": false
+  },
+  {
+   "id": "daniel_ghali",
+   "name": "Daniel Ghali",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "Daniel Ghali"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2025-02-25~2025-10-16",
+   "done": false
+  },
+  {
+   "id": "nate_miller",
+   "name": "Nate Miller",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "Nate Miller"
+   ],
+   "reason": "empty",
+   "existing_count": 0,
+   "existing_span": "",
+   "done": false
+  },
+  {
+   "id": "bob_coleman",
+   "name": "Bob Coleman",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "Bob Coleman"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2026-01-23~2026-05-17",
+   "done": false
+  },
+  {
+   "id": "rick_rule",
+   "name": "Rick Rule",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "Rick Rule"
+   ],
+   "reason": "short_span",
+   "existing_count": 3,
+   "existing_span": "2026-03-12~2026-07-16",
+   "done": false
+  },
+  {
+   "id": "keith_neumeyer",
+   "name": "Keith Neumeyer",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "Keith Neumeyer"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2025-02-28~2026-07-08",
+   "done": false
+  },
+  {
+   "id": "peter_krauth",
+   "name": "Peter Krauth",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "Peter Krauth"
+   ],
+   "reason": "short_span",
+   "existing_count": 4,
+   "existing_span": "2025-12-11~2026-03-11",
+   "done": false
+  },
+  {
+   "id": "david_garofalo",
+   "name": "David Garofalo",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "David Garofalo"
+   ],
+   "reason": "short_span",
+   "existing_count": 3,
+   "existing_span": "2025-12-30~2026-01-12",
+   "done": false
+  },
+  {
+   "id": "robert_kiyosaki",
+   "name": "Robert Kiyosaki",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "Robert Kiyosaki"
+   ],
+   "reason": "shallow",
+   "existing_count": 1,
+   "existing_span": "2026-02-01~2026-02-01",
+   "done": false
+  },
+  {
+   "id": "willem_middelkoop",
+   "name": "Willem Middelkoop",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "Willem Middelkoop"
+   ],
+   "reason": "shallow",
+   "existing_count": 1,
+   "existing_span": "2026-08-11~2026-08-11",
+   "done": false
+  },
+  {
+   "id": "stephen_leeb",
+   "name": "Stephen Leeb",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "Stephen Leeb"
+   ],
+   "reason": "shallow",
+   "existing_count": 1,
+   "existing_span": "2026-08-04~2026-08-04",
+   "done": false
+  },
+  {
+   "id": "alasdair_macleod",
+   "name": "Alasdair Macleod",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "Alasdair Macleod"
+   ],
+   "reason": "short_span",
+   "existing_count": 3,
+   "existing_span": "2026-07-10~2026-08-11",
+   "done": false
+  },
+  {
+   "id": "daniel_oliver",
+   "name": "Daniel Oliver",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "Daniel Oliver"
+   ],
+   "reason": "short_span",
+   "existing_count": 3,
+   "existing_span": "2025-12-01~2026-02-26",
+   "done": false
+  },
+  {
+   "id": "carroll_quigley",
+   "name": "Carroll Quigley",
+   "sector": "Macro",
+   "search_terms": [
+    "Carroll Quigley"
+   ],
+   "reason": "empty",
+   "existing_count": 0,
+   "existing_span": "",
+   "done": false
+  },
+  {
+   "id": "s_druckenmiller",
+   "name": "S. Druckenmiller",
+   "sector": "Macro",
+   "search_terms": [
+    "S. Druckenmiller"
+   ],
+   "reason": "short_span",
+   "existing_count": 3,
+   "existing_span": "2025-11-17~2026-02-27",
+   "done": false
+  },
+  {
+   "id": "ted_oakley",
+   "name": "Ted Oakley",
+   "sector": "Macro",
+   "search_terms": [
+    "Ted Oakley"
+   ],
+   "reason": "short_span",
+   "existing_count": 3,
+   "existing_span": "2026-01-15~2026-05-21",
+   "done": false
+  },
+  {
+   "id": "clem_chambers",
+   "name": "Clem Chambers",
+   "sector": "Macro",
+   "search_terms": [
+    "Clem Chambers"
+   ],
+   "reason": "short_span",
+   "existing_count": 3,
+   "existing_span": "2026-05-19~2026-07-12",
+   "done": false
+  },
+  {
+   "id": "david_stockman",
+   "name": "David Stockman",
+   "sector": "Macro",
+   "search_terms": [
+    "David Stockman"
+   ],
+   "reason": "shallow",
+   "existing_count": 1,
+   "existing_span": "2026-08-07~2026-08-07",
+   "done": false
+  },
+  {
+   "id": "larry_mcdonald",
+   "name": "Larry McDonald",
+   "sector": "Macro",
+   "search_terms": [
+    "Larry McDonald"
+   ],
+   "reason": "short_span",
+   "existing_count": 3,
+   "existing_span": "2025-12-12~2025-12-24",
+   "done": false
+  },
+  {
+   "id": "peter_schiff",
+   "name": "Peter Schiff",
+   "sector": "Macro",
+   "search_terms": [
+    "Peter Schiff"
+   ],
+   "reason": "shallow",
+   "existing_count": 1,
+   "existing_span": "2026-08-14~2026-08-14",
+   "done": false
+  },
+  {
+   "id": "stewart_thomson",
+   "name": "Stewart Thomson",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "Stewart Thomson"
+   ],
+   "reason": "shallow",
+   "existing_count": 1,
+   "existing_span": "2026-08-11~2026-08-11",
+   "done": false
+  },
+  {
+   "id": "ray_dalio",
+   "name": "Ray Dalio",
+   "sector": "Macro",
+   "search_terms": [
+    "Ray Dalio"
+   ],
+   "reason": "short_span",
+   "existing_count": 3,
+   "existing_span": "2025-07-28~2025-09-19",
+   "done": false
+  },
+  {
+   "id": "craig_hamilton_parker",
+   "name": "Craig Hamilton-Parker",
+   "sector": "Alternative",
+   "search_terms": [
+    "Craig Hamilton-Parker predictions",
+    "Craig Hamilton Parker world predictions"
+   ],
+   "reason": "short_span",
+   "existing_count": 6,
+   "existing_span": "2025-08-28~2026-02-20",
+   "done": false
+  },
+  {
+   "id": "maria_smirnova",
+   "name": "Maria Smirnova",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "Maria Smirnova Sprott gold",
+    "Maria Smirnova precious metals miners"
+   ],
+   "reason": "shallow",
+   "existing_count": 1,
+   "existing_span": "2026-08-06~2026-08-06",
+   "done": false
+  },
+  {
+   "id": "mervyn_king",
+   "name": "Mervyn King",
+   "sector": "Macro",
+   "search_terms": [
+    "Mervyn King",
+    "Mervyn King Fed",
+    "Mervyn King inflation rates economy"
+   ],
+   "reason": "empty",
+   "existing_count": 0,
+   "existing_span": "",
+   "done": false
+  },
+  {
+   "id": "peter_fisher",
+   "name": "Peter Fisher",
+   "sector": "Macro",
+   "search_terms": [
+    "Peter Fisher",
+    "Peter Fisher Fed",
+    "Peter Fisher inflation rates economy"
+   ],
+   "reason": "empty",
+   "existing_count": 0,
+   "existing_span": "",
+   "done": false
+  },
+  {
+   "id": "arminio_fraga",
+   "name": "Arminio Fraga",
+   "sector": "Macro",
+   "search_terms": [
+    "Arminio Fraga",
+    "Arminio Fraga Fed",
+    "Arminio Fraga inflation rates economy"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2026-01-07~2026-08-11",
+   "done": false
+  },
+  {
+   "id": "raghuram_rajan",
+   "name": "Raghuram Rajan",
+   "sector": "Macro",
+   "search_terms": [
+    "Raghuram Rajan",
+    "Raghuram Rajan Fed",
+    "Raghuram Rajan inflation rates economy"
+   ],
+   "reason": "shallow",
+   "existing_count": 1,
+   "existing_span": "2026-06-11~2026-06-11",
+   "done": false
+  },
+  {
+   "id": "jeremy_stein",
+   "name": "Jeremy Stein",
+   "sector": "Macro",
+   "search_terms": [
+    "Jeremy Stein",
+    "Jeremy Stein Fed",
+    "Jeremy Stein inflation rates economy"
+   ],
+   "reason": "empty",
+   "existing_count": 0,
+   "existing_span": "",
+   "done": false
+  },
+  {
+   "id": "karen_dynan",
+   "name": "Karen Dynan",
+   "sector": "Macro",
+   "search_terms": [
+    "Karen Dynan",
+    "Karen Dynan Fed",
+    "Karen Dynan inflation rates economy"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2025-04-15~2026-04-09",
+   "done": false
+  },
+  {
+   "id": "raj_chetty",
+   "name": "Raj Chetty",
+   "sector": "Macro",
+   "search_terms": [
+    "Raj Chetty",
+    "Raj Chetty Fed",
+    "Raj Chetty inflation rates economy"
+   ],
+   "reason": "empty",
+   "existing_count": 0,
+   "existing_span": "",
+   "done": false
+  },
+  {
+   "id": "marc_andreessen",
+   "name": "Marc Andreessen",
+   "sector": "Macro",
+   "search_terms": [
+    "Marc Andreessen",
+    "Marc Andreessen Fed",
+    "Marc Andreessen inflation rates economy"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2025-11-25~2026-01-01",
+   "done": false
+  },
+  {
+   "id": "chad_jones",
+   "name": "Chad Jones",
+   "sector": "Macro",
+   "search_terms": [
+    "Chad Jones",
+    "Chad Jones Fed",
+    "Chad Jones inflation rates economy"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2025-10-03~2026-02-01",
+   "done": false
+  },
+  {
+   "id": "sarah_bond",
+   "name": "Sarah Bond",
+   "sector": "Macro",
+   "search_terms": [
+    "Sarah Bond",
+    "Sarah Bond Fed",
+    "Sarah Bond inflation rates economy"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2025-11-17~2026-03-02",
+   "done": false
+  },
+  {
+   "id": "greg_mankiw",
+   "name": "Greg Mankiw",
+   "sector": "Macro",
+   "search_terms": [
+    "Greg Mankiw",
+    "Greg Mankiw Fed",
+    "Greg Mankiw inflation rates economy"
+   ],
+   "reason": "shallow",
+   "existing_count": 1,
+   "existing_span": "2026-01-12~2026-01-12",
+   "done": false
+  },
+  {
+   "id": "thomas_sargent",
+   "name": "Thomas Sargent",
+   "sector": "Macro",
+   "search_terms": [
+    "Thomas Sargent",
+    "Thomas Sargent Fed",
+    "Thomas Sargent inflation rates economy"
+   ],
+   "reason": "empty",
+   "existing_count": 0,
+   "existing_span": "",
+   "done": false
+  },
+  {
+   "id": "william_white",
+   "name": "William White",
+   "sector": "Macro",
+   "search_terms": [
+    "William White",
+    "William White Fed",
+    "William White inflation rates economy"
+   ],
+   "reason": "shallow",
+   "existing_count": 2,
+   "existing_span": "2025-06-19~2026-01-07",
+   "done": false
+  },
+  {
+   "id": "nomi_prins",
+   "name": "Nomi Prins",
+   "sector": "Precious Metals",
+   "search_terms": [
+    "Nomi Prins",
+    "Nomi Prins gold silver",
+    "Nomi Prins dollar debt"
+   ],
+   "reason": "missing",
+   "existing_count": 0,
+   "existing_span": "",
+   "done": true
+  }
+ ]
+}

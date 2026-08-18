@@ -1,0 +1,44 @@
+{
+ "kol": "Nomi Prins",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(样板手动)",
+ "count": 5,
+ "history": [
+  {
+   "date": "2025-09-30",
+   "direction": "强烈看多",
+   "comments": "FXStreet/Kitco访谈：上调黄金目标至2026年初$4,500/oz，2027年趋向$5,500；强调白银仍具货币属性（非纯工业），是『带工业影子的货币对冲』。看多逻辑=债务+Fed扭曲。",
+   "targets": "黄金/白银",
+   "source": "https://www.fxstreet.com/analysis/nomi-prins-debt-the-fed-and-the-bullish-case-for-gold-and-silver-video-202509301837"
+  },
+  {
+   "date": "2026-02-13",
+   "direction": "强烈看多",
+   "comments": "Metals and Miners访谈：美国因债务激增/去美元化『迫切需要高金价』，央行正抛售美债换黄金，判断处于数十年商品超级周期。",
+   "targets": "黄金/白银",
+   "source": "https://metalsandminers.substack.com/p/dr-nomi-prins-the-us-needs-higher"
+  },
+  {
+   "date": "2026-07-19",
+   "direction": "强烈看多",
+   "comments": "Rule Symposium访谈：讨论金/银/铀前景、通胀与央行购金，重申实物资产在地缘权力博弈中的定位价值（real asset uprising）。",
+   "targets": "黄金/白银/铀",
+   "source": "https://investingnews.com/nomi-prins-resource-market-forecast/"
+  },
+  {
+   "date": "2026-08-15",
+   "direction": "强烈看多",
+   "comments": "King World News：预测BIS将把白银列为Tier 1资产，推动银价飙升至$180；批各国政府长期摧毁法币、债务激增。",
+   "targets": "白银",
+   "source": "https://kingworldnews.com/nomi-prins-broadcast-interview-available-now-08-15-2026/"
+  },
+  {
+   "date": "2026-07-23",
+   "direction": "强烈看多",
+   "comments": "维持年底目标：金$6,000 / 银$120 / 铜$7.00，理由=央行强劲购金+实物需求压过纸市场抛售。",
+   "targets": "黄金/白银/铜",
+   "source": "https://silvertrade.com/news/precious-metals/silver-news/nomi-prins-sees-silver-at-120-6000-gold-by-the-end-of-2026-heres-why/"
+  }
+ ]
+}
