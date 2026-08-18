@@ -81,13 +81,21 @@ def build():
     fid = create_db("Eco-外资净买入日股(周频,万亿日元)", {
         "Week": {"title": {}}, "Net_Buy_JPY_T": _num_prop(),
     })
-    for k, v in (("DB_YIELDS", yid), ("DB_NIKKEI", nid), ("DB_FOREIGN_FLOW", fid)):
+    # ── DB-4 四国 IIP 国际投资头寸 ──
+    iid = create_db("Eco-四国IIP国际投资头寸(年频,$万亿)", {
+        "Country_Year": {"title": {}},
+        "Country": {"select": {"options": [
+            {"name": "美国", "color": "red"}, {"name": "日本", "color": "blue"},
+            {"name": "德国", "color": "green"}, {"name": "中国", "color": "yellow"}]}},
+        "Year": _num_prop(), "Assets_T": _num_prop(), "Liabilities_T": _num_prop(), "Net_T": _num_prop(),
+    })
+    for k, v in (("DB_YIELDS", yid), ("DB_NIKKEI", nid), ("DB_FOREIGN_FLOW", fid), ("DB_IIP", iid)):
         if v:
             _write_env(k, v)
-    return yid, nid, fid
+    return yid, nid, fid, iid
 
 
-def write_data(yid, nid, fid, recent_days=60):
+def write_data(yid, nid, fid, iid=None, recent_days=60):
     # 美日收益率: 按日期对齐四序列, 写最近 recent_days 天
     yc = ed.fetch_us_jp_yields()
     if yid and yc.get("status") == "ok":
@@ -124,6 +132,28 @@ def write_data(yid, nid, fid, recent_days=60):
             upsert(fid, wk, {"Week": prop_title(wk), "Net_Buy_JPY_T": prop_num(v)}, title_field="Week")
         print(f"[data] 外资流入写入 {len(ff['points'])} 周")
 
+    # 四国 IIP: 每(国,年)一行
+    if iid:
+        iip = ed.fetch_iip_four_countries()
+        if iip.get("status") == "ok":
+            n = 0
+            for k, c in iip["countries"].items():
+                if c.get("status") != "ok":
+                    continue
+                amap = dict(c["assets"]); lmap = dict(c["liab"]); nmap = dict(c["net"])
+                for yr in amap:
+                    title = f"{c['name']}-{yr}"
+                    upsert(iid, title, {
+                        "Country_Year": prop_title(title),
+                        "Country": {"select": {"name": c["name"]}},
+                        "Year": prop_num(int(yr)),
+                        "Assets_T": prop_num(amap[yr]),
+                        "Liabilities_T": prop_num(lmap.get(yr)),
+                        "Net_T": prop_num(nmap.get(yr)),
+                    }, title_field="Country_Year")
+                    n += 1
+            print(f"[data] 四国IIP写入 {n} 行")
+
 
 def write_data_from_env(recent_days=60):
     """从 .env 读三个 db_id 后写入(供每日 cron 调用, DB 已存在时无需重新建库)。
@@ -134,13 +164,13 @@ def write_data_from_env(recent_days=60):
                 if ln.startswith(k + "="):
                     return ln.strip().split("=", 1)[1]
         return os.environ.get(k)
-    yid, nid, fid = _env("DB_YIELDS"), _env("DB_NIKKEI"), _env("DB_FOREIGN_FLOW")
-    if not (yid and nid and fid):
-        yid, nid, fid = build()
-    write_data(yid, nid, fid, recent_days=recent_days)
+    yid, nid, fid, iid = _env("DB_YIELDS"), _env("DB_NIKKEI"), _env("DB_FOREIGN_FLOW"), _env("DB_IIP")
+    if not (yid and nid and fid and iid):
+        yid, nid, fid, iid = build()
+    write_data(yid, nid, fid, iid, recent_days=recent_days)
 
 
 if __name__ == "__main__":
-    yid, nid, fid = build()
-    write_data(yid, nid, fid)
-    print("完成。db_id 已写回 .env (DB_YIELDS/DB_NIKKEI/DB_FOREIGN_FLOW)")
+    yid, nid, fid, iid = build()
+    write_data(yid, nid, fid, iid)
+    print("完成。db_id 已写回 .env (DB_YIELDS/DB_NIKKEI/DB_FOREIGN_FLOW/DB_IIP)")

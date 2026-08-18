@@ -2430,6 +2430,78 @@ def fetch_foreign_flow_japan(cache_path=None):
     return out
 
 
+def _imf_iip_series(country, entry):
+    """IMF SDMX 2.1 拉一国 IIP 资产/负债年度序列(USD)。
+    country: USA/JPN/DEU/CHN; entry: A_P(资产)/L_P(负债)。返回 {year:USD} 。失败{}。绝不编造。"""
+    import requests
+    import xml.etree.ElementTree as ET
+    url = f"https://api.imf.org/external/sdmx/2.1/data/IIP/{country}.{entry}.IIP.USD.A?startPeriod=2014"
+    try:
+        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=60)
+        if r.status_code != 200:
+            return {}
+        root = ET.fromstring(r.text)
+        out = {}
+        for el in root.iter():
+            if el.tag.split("}")[-1] == "Obs":
+                t = el.attrib.get("TIME_PERIOD"); v = el.attrib.get("OBS_VALUE")
+                if t and v:
+                    try:
+                        out[t] = float(v)
+                    except ValueError:
+                        pass
+        return out
+    except Exception:
+        return {}
+
+
+def fetch_iip_four_countries(cache_path=None):
+    """四国(美/日/德/中)国际投资头寸 IIP(过去约10年,年频): 对外总资产/总负债/净头寸。
+    源: IMF SDMX 2.1 (api.imf.org) IIP 数据集, entry A_P(资产)/L_P(负债), INDICATOR=IIP, USD 年频。
+    绝不编造, 缺国留 status。返回 {status,as_of,countries:{US/JP/DE/CN:{name,flag,color,
+      assets:[(yr,$T)],liab:[(yr,$T)],net:[(yr,$T)],latest_*}}}。"""
+    import json
+    if cache_path is None:
+        cache_path = os.path.join(os.path.dirname(__file__), "..", "data", "iip_four.json")
+    cmap = {"US": ("USA", "美国", "🇺🇸", "#c0757d"),
+            "JP": ("JPN", "日本", "🇯🇵", "#6b8fb5"),
+            "DE": ("DEU", "德国", "🇩🇪", "#7fa085"),
+            "CN": ("CN_ISO_PLACEHOLDER", "中国", "🇨🇳", "#e0a92e")}
+    # 中国 ISO 用 CHN
+    cmap["CN"] = ("CHN", "中国", "🇨🇳", "#e0a92e")
+    countries = {}
+    all_years = []
+    for key, (iso, name, flag, color) in cmap.items():
+        a = _imf_iip_series(iso, "A_P")
+        l = _imf_iip_series(iso, "L_P")
+        yrs = sorted(set(a) & set(l))
+        yrs = [y for y in yrs if y >= "2015"]
+        if len(yrs) < 2:
+            countries[key] = {"status": "未获取", "name": name, "flag": flag}
+            continue
+        assets = [(y, round(a[y] / 1e12, 2)) for y in yrs]
+        liab = [(y, round(l[y] / 1e12, 2)) for y in yrs]
+        net = [(y, round((a[y] - l[y]) / 1e12, 2)) for y in yrs]
+        countries[key] = {
+            "status": "ok", "name": name, "flag": flag, "color": color,
+            "assets": assets, "liab": liab, "net": net,
+            "latest_year": yrs[-1], "latest_assets": assets[-1][1],
+            "latest_liab": liab[-1][1], "latest_net": net[-1][1],
+        }
+        all_years += yrs
+    ok = any(c.get("status") == "ok" for c in countries.values())
+    out = {"status": "ok" if ok else "未获取",
+           "as_of": max(all_years) if all_years else "",
+           "source": "IMF International Investment Position (SDMX 2.1, api.imf.org), 年频, USD",
+           "countries": countries}
+    try:
+        with open(cache_path, "w") as f:
+            json.dump(out, f, ensure_ascii=False, default=str)
+    except Exception:
+        pass
+    return out
+
+
 def fetch_oil_inventory(cache_path=None):
     """美国石油库存运营红线三序列。绝不编造,取不到该项 status='未获取'。
       1) Brent-WTI 价差(过去一年,日频): FRED DCOILBRENTEU - DCOILWTICO(同日对齐,$/桶)

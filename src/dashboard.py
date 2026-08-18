@@ -212,7 +212,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
              country_ust=None, kol_views=None, credit_impulse=None, custody_accel=None,
              stress_panels=None, ofr_fsi=None, maturing_treasury=None, bis_latest=None,
-             oil_inventory=None, us_jp_yields=None, nikkei225=None, foreign_flow=None):
+             oil_inventory=None, us_jp_yields=None, nikkei225=None, foreign_flow=None,
+             iip_four=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -388,6 +389,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         oil_inventory=_oil_inventory_html(oil_inventory),
         yield_curves=_yield_curves_html(us_jp_yields),
         nikkei_flow=_nikkei_flow_html(nikkei225, foreign_flow),
+        iip_four=_iip_html(iip_four),
         bis_section=_bis_section_html(bis_latest, "https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/"),
         country_ust=_country_ust_html(country_ust),
         credit_impulse=_credit_impulse_html(credit_impulse),
@@ -1351,6 +1353,136 @@ def _nikkei_flow_html(nk, ff):
         f'<b>红柱(净卖出)＝外资撤离</b>，若指数仍涨则靠内资/自社股回购支撑，行情根基相对脆弱。'
         f'外资流向也与日元汇率、美日利差、全球风险偏好联动——套息交易(carry)活跃期外资倾向流入，平仓期则撤出。'
         f'<br>左轴=日经225 点位(蓝线)，右轴=外资单周净买卖(万亿日元,0 线上下)。数据均为官方公开。</div>'
+        f'</div>'
+    )
+
+
+def _iip_net_svg(countries, w=920, h=280):
+    """四国 IIP 净头寸(资产-负债)过去十年折线。正=净债权国,负=净债务国,0线。"""
+    active = {k: c for k, c in countries.items() if c.get("status") == "ok" and len(c.get("net", [])) >= 2}
+    if not active:
+        return '<div class="cust-chart-na">四国 IIP 数据不足</div>'
+    all_years = sorted({y for c in active.values() for y, _ in c["net"]})
+    all_vals = [v for c in active.values() for _, v in c["net"]]
+    lo, hi = min(all_vals + [0.0]), max(all_vals + [0.0])
+    pad = (hi - lo) * 0.08 or 1
+    lo -= pad; hi += pad
+    rng = (hi - lo) or 1
+    ml, mr, mt, mb = 52, 90, 16, 30
+    pw, ph = w - ml - mr, h - mt - mb
+    n = len(all_years)
+    yidx = {y: i for i, y in enumerate(all_years)}
+    def X(i): return ml + i * pw / (max(n - 1, 1))
+    def Y(v): return mt + (hi - v) / rng * ph
+    parts = [f'<svg viewBox="0 0 {w} {h}" class="cust-chart" preserveAspectRatio="xMidYMid meet" font-family="-apple-system,PingFang SC,sans-serif">']
+    for k in range(5):
+        gv = lo + rng * k / 4; gy = Y(gv)
+        parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" stroke="#d4cdbe" stroke-width="1" stroke-dasharray="3,3"/>')
+        parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" font-size="10" fill="#8a8578" text-anchor="end">{gv:+.0f}</text>')
+    # 0 线加粗
+    zy = Y(0.0)
+    parts.append(f'<line x1="{ml}" y1="{zy:.1f}" x2="{w-mr}" y2="{zy:.1f}" stroke="#8a8578" stroke-width="1.3" opacity="0.6"/>')
+    # x 年份
+    for i, y in enumerate(all_years):
+        if i % 2 == 0 or i == n - 1:
+            anchor = "start" if i == 0 else ("end" if i >= n - 2 else "middle")
+            parts.append(f'<text x="{X(i):.1f}" y="{h-9}" font-size="9" fill="#8a8578" text-anchor="{anchor}">{y}</text>')
+    legend_y = mt + 6
+    for k in ("US", "JP", "DE", "CN"):
+        if k not in active:
+            continue
+        c = active[k]; color = c["color"]
+        line = [f"{X(yidx[y]):.1f},{Y(v):.1f}" for y, v in c["net"] if y in yidx]
+        if len(line) >= 2:
+            parts.append(f'<polyline points="{" ".join(line)}" fill="none" stroke="{color}" stroke-width="2.2" stroke-linejoin="round"/>')
+            ly, lv = c["net"][-1]
+            parts.append(f'<circle cx="{X(yidx[ly]):.1f}" cy="{Y(lv):.1f}" r="3.4" fill="{color}"/>')
+        parts.append(f'<line x1="{w-mr+8}" y1="{legend_y}" x2="{w-mr+24}" y2="{legend_y}" stroke="{color}" stroke-width="2.6"/>')
+        parts.append(f'<text x="{w-mr+28}" y="{legend_y+4}" font-size="10" fill="{color}" font-weight="600">{c["flag"]}{_esc(c["name"])} {c["latest_net"]:+.1f}</text>')
+        legend_y += 18
+    parts.append('</svg>')
+    return "".join(parts)
+
+
+def _iip_assets_liab_svg(countries, w=920, h=230):
+    """最新年四国 对外总资产 vs 总负债 分组柱状(每国两根:资产/负债)。"""
+    active = [(k, c) for k, c in countries.items() if c.get("status") == "ok"]
+    order = [x for x in ("US", "JP", "DE", "CN") if x in dict(active)]
+    if not order:
+        return '<div class="cust-chart-na">数据不足</div>'
+    cd = dict(active)
+    allv = [cd[k]["latest_assets"] for k in order] + [cd[k]["latest_liab"] for k in order]
+    vmax = max(allv) * 1.12
+    ml, mr, mt, mb = 46, 14, 20, 40
+    pw, ph = w - ml - mr, h - mt - mb
+    ng = len(order)
+    gap = pw / ng
+    parts = [f'<svg viewBox="0 0 {w} {h}" class="cust-chart" preserveAspectRatio="xMidYMid meet" font-family="-apple-system,PingFang SC,sans-serif">']
+    for k in range(4):
+        gv = vmax * k / 3; gy = mt + ph - gv / vmax * ph
+        parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" stroke="#d4cdbe" stroke-width="1" stroke-dasharray="3,3"/>')
+        parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" font-size="9" fill="#8a8578" text-anchor="end">{gv:.0f}</text>')
+    bw = gap * 0.28
+    for gi, k in enumerate(order):
+        c = cd[k]
+        cx = ml + gap * gi + gap / 2
+        for off, val, col, lab in ((-bw*0.6, c["latest_assets"], "#7fa085", "资产"),
+                                   (bw*0.6, c["latest_liab"], "#c0757d", "负债")):
+            bh = val / vmax * ph
+            by = mt + ph - bh
+            parts.append(f'<rect x="{cx+off-bw/2:.1f}" y="{by:.1f}" width="{bw:.1f}" height="{bh:.1f}" rx="1.5" fill="{col}" opacity="0.85"/>')
+            parts.append(f'<text x="{cx+off:.1f}" y="{by-3:.1f}" font-size="8.5" fill="{col}" text-anchor="middle">{val:.1f}</text>')
+        parts.append(f'<text x="{cx:.1f}" y="{h-pad_b_iip(mb)+14:.1f}" font-size="10" fill="#4a4a42" text-anchor="middle">{c["flag"]}{_esc(c["name"])}</text>')
+    # 图例
+    parts.append(f'<rect x="{ml}" y="{mt-2}" width="9" height="9" fill="#7fa085"/><text x="{ml+13}" y="{mt+6}" font-size="9" fill="#8a8578">对外总资产</text>')
+    parts.append(f'<rect x="{ml+80}" y="{mt-2}" width="9" height="9" fill="#c0757d"/><text x="{ml+93}" y="{mt+6}" font-size="9" fill="#8a8578">对外总负债</text>')
+    parts.append('</svg>')
+    return "".join(parts)
+
+
+def pad_b_iip(mb):
+    return mb
+
+
+def _iip_html(iip):
+    """四国 IIP section: 净头寸十年折线 + 最新年资产/负债分组柱状。iip: fetch_iip_four_countries()。"""
+    if not iip or iip.get("status") != "ok":
+        return '<p class="empty">四国国际投资头寸(IIP)数据未就绪。</p>'
+    cs = iip.get("countries", {})
+    net_svg = _iip_net_svg(cs)
+    al_svg = _iip_assets_liab_svg(cs)
+    rows = []
+    for k in ("US", "JP", "DE", "CN"):
+        c = cs.get(k, {})
+        if c.get("status") != "ok":
+            continue
+        net = c["latest_net"]
+        col = "#2e9e5b" if net >= 0 else "#d64545"
+        role = "净债权国" if net >= 0 else "净债务国"
+        rows.append(f'<span style="color:{c["color"]};font-weight:600">{c["flag"]}{_esc(c["name"])}</span> '
+                    f'资产${c["latest_assets"]:.1f}T/负债${c["latest_liab"]:.1f}T→'
+                    f'净<b style="color:{col}">{net:+.1f}T</b>（{role}）')
+    meta = " · ".join(rows)
+    asof = iip.get("as_of", "")
+    return (
+        f'<div class="cust-wrap">'
+        f'<div class="cust-chart-col cust-chart-full">'
+        f'<div class="cust-chart-title">四国对外净头寸 NIIP · 过去约十年（对外总资产 − 总负债 · $万亿）'
+        f'<span class="chart-freq freq-w">🔵 年频 · IMF 年度更新</span></div>'
+        f'{net_svg}'
+        f'</div>'
+        f'<div class="cust-chart-col cust-chart-full" style="margin-top:14px;">'
+        f'<div class="cust-chart-title">最新年（{_esc(asof)}）· 四国对外总资产 vs 总负债（$万亿）</div>'
+        f'{al_svg}'
+        f'<div class="oil-meta">{meta}</div>'
+        f'<div class="oil-src">数据源：{_esc(iip.get("source",""))}</div>'
+        f'</div>'
+        f'<div class="cust-how"><b>如何看：</b><b>国际投资头寸(IIP)</b>是一国对外<b>金融资产与负债的存量</b>快照，'
+        f'净头寸(NIIP=资产−负债)＝该国对世界其他地区的<b>净债权(正)或净债务(负)</b>：'
+        f'<b>🇺🇸 美国</b>是全球最大<b>净债务国</b>(净头寸深度为负且持续恶化)——靠美元储备货币地位持续吸收外部资本；'
+        f'<b>🇯🇵 日本 / 🇩🇪 德国 / 🇨🇳 中国</b>是主要<b>净债权国</b>(常年经常账户顺差累积对外资产)。'
+        f'净债务国若外部融资条件收紧(利率↑/避险)会承压；净债权国则在全球动荡时资本回流本国、支撑本币。'
+        f'是判断<b>全球资本流向与外部脆弱性</b>的结构性指标。<br>年频，IMF 官方公开数据。</div>'
         f'</div>'
     )
 
@@ -3177,6 +3309,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title"><span class="part-num">＋</span>日本 / 中国 / 欧盟 持有美债 · 近10年 + 2008长历史 (TIC 分国别口径)<span class="freq-badge freq-monthly">每月更新 · 滞后约2月</span></div>
   <div class="card">{country_ust}</div>
 
+  <!-- ═══ 附三·十：四国国际投资头寸 IIP (对外资产/负债/净头寸) ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>四国国际投资头寸 IIP · 过去十年 (美/日/德/中 对外资产·负债·净债权地位)<span class="freq-badge freq-quarterly">每年更新</span></div>
+  <div class="card">{iip_four}</div>
+
   <!-- ═══ 附四：知名机构持仓 (13F) + Trump ═══ -->
   <div class="part-title"><span class="part-num">＋</span>机构持仓追踪 · 13F + Trump (对比上期变动)<span class="freq-badge freq-quarterly">每季度 · Trump不定期</span></div>
   <div class="h-grid">{holdings}</div>
@@ -3225,7 +3361,7 @@ mkRadar('rLong', RADAR.long);
     {{ name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注'] }},
     {{ name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化'] }},
     {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','BIS','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲'] }},
-    {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日'] }},
+    {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日','国际投资头寸','IIP','净头寸'] }},
     {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent'] }},
     {{ name: '日本市场', match: ['日经225','外资净买入','日本市场'] }},
     {{ name: '机构与政要持仓', match: ['机构持仓','13F','Trump'] }}

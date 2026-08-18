@@ -169,6 +169,16 @@ def main():
     except Exception as e:
         print(f"[dashboard] 外资流入日股 跳过: {e}")
 
+    # ── 四国 IIP 国际投资头寸(IMF SDMX) ──
+    iip_four = {}
+    try:
+        iip_four = ed.fetch_iip_four_countries() or {}
+        _ic = iip_four.get("countries", {})
+        print(f"[dashboard] 四国IIP: status={iip_four.get('status')} as_of={iip_four.get('as_of')} " +
+              " ".join(f"{k}={_ic.get(k,{}).get('latest_net')}T" for k in ("US","JP","DE","CN")))
+    except Exception as e:
+        print(f"[dashboard] 四国IIP 跳过: {e}")
+
     # ── BIS 国际清算银行报告(Quarterly Review 季度综述) ──
     bis_latest = None
     try:
@@ -239,6 +249,7 @@ def main():
         us_jp_yields=us_jp_yields,
         nikkei225=nikkei225,
         foreign_flow=foreign_flow,
+        iip_four=iip_four,
         bis_latest=bis_latest,
     )
     print(f"[dashboard] 生成: {out}")
