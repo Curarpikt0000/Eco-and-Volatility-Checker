@@ -900,10 +900,10 @@ def _custody_html(cust):
         f'{_custody_span_line(hist_long)}'
         f'</div>'
         f'</div>'
-        # === 2008 至今全周期结构图(用户 2026-08 要求) ===
+        # === 2007 至今全周期结构图(用户 2026-08 要求; WMTSECL1 该口径第一个真实非零值2007-07-04) ===
         + (
             f'<div class="cust-chart-col cust-chart-full">'
-            f'<div class="cust-chart-title">2008 至今 · 全周期结构（{len(hist_2008)} 周 · 约{len(hist_2008)//52} 年）</div>'
+            f'<div class="cust-chart-title">2007 至今 · 全周期结构（{len(hist_2008)} 周 · 约{len(hist_2008)//52} 年）</div>'
             f'{_custody_chart_svg(hist_2008, w=920, h=210)}'
             f'{_custody_span_line(hist_2008)}'
             f'</div>'
@@ -916,7 +916,7 @@ def _custody_html(cust):
         f'<div class="cust-how"><b>如何看：</b>外国央行/官方机构在纽约联储托管的美债存量。'
         f'持续下降 = 外国官方减持美债 / 去美元化 / 抛售换汇干预，是主权层面对美债信心的风向标。'
         f'<b>短期图</b>看近期拐点/干预动作，<b>长期图</b>看去美元化大趋势(10年结构性方向)，'
-        f'<b>2008至今全周期图</b>看更长的结构性拐点(如2015-16去美元化起点、疫情后再平衡)。'
+        f'<b>2007至今全周期图</b>看更长的结构性拐点(如2015-16去美元化起点、疫情后再平衡)。'
         f'数据源：FRED <a class="src-lnk" href="https://fred.stlouisfed.org/series/WMTSECL1" target="_blank" rel="noopener">WMTSECL1</a>（Fed H.4.1 custody，每周三口径）。</div>'
         f'</div>'
     )

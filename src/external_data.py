@@ -931,7 +931,7 @@ def fetch_foreign_custody_ust():
     _start_long = (datetime.utcnow() - timedelta(days=3660)).strftime("%Y-%m-%d")   # ~10年前
     hist = _custody_history_fred(start=_start_short)          # 短期(12月)
     hist_long = _custody_history_fred(start=_start_long)       # 长期(10年)
-    hist_2008 = _custody_history_fred(start="2008-01-01")      # 2008至今(全周期结构性)
+    hist_2008 = _custody_history_fred(start="2007-07-04")      # 2007至今全周期(WMTSECL1序列2002-12建库但2007-07-04才第一个真实非零值, 之前237点为0=统计未开始, 起点取真实数据起点避免贴地假横线)
     fred_val = fred_as_of = fred_wow_bn = fred_wow_pct = None
     if len(hist) >= 2:
         fred_as_of, fred_val = hist[-1]
