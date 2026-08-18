@@ -1,16 +1,23 @@
 {
   "kol": "Gareth Soloway",
   "sector": "Precious Metals",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 1,
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+  "count": 2,
   "history": [
     {
-      "date": "2026-07-24",
-      "direction": "分歧",
-      "comments": "VerifiedInvesting首席市场策略师Soloway表示长期看多贵金属,但认为金银尚未见底,短期仍有回调空间;同时对股市偏谨慎,称一旦出现经济走弱或财报不及预期迹象,美股下行空间巨大。",
-      "targets": "黄金,白银,原油",
-      "source": "https://investingnews.com/gareth-soloway-gold-update/"
+      "date": "2025-09-23",
+      "direction": "看多",
+      "comments": "VerifiedInvesting 首席策略师认为黄金处于看多盘整，短期可能先回调至3500美元，长期看向6000美元；白银突破后有望上探50美元；同时对股市健康度存忧，预期约10%回调。",
+      "targets": "黄金/白银/美股",
+      "source": "https://investingnews.com/gareth-soloway-september-2025/"
+    },
+    {
+      "date": "2026-01-28",
+      "direction": "看空",
+      "comments": "认为市场处于'金融危机'区域，对股票、黄金、大宗商品与比特币提示警示；预期标普500持续走弱可能下探6100甚至5600，比特币短期或先反弹。",
+      "targets": "美股/黄金/比特币",
+      "source": "https://wordupnews.com/news-video/financial-crisis-zone-traders-warning-for-gold-stocks-bitcoin-gareth-soloway/"
     }
   ]
 }

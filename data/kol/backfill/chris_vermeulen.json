@@ -1,1 +1,23 @@
-{"kol":"Chris Vermeulen","sector":"Precious Metals","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":2,"history":[{"date":"2026-01-31","direction":"看多","comments":"TheTechnicalTraders 首席市场策略师，接受 Investing News 采访：预计金银短期将有一次'显著回调'，但回调后将开启新一轮上涨，金属从当前位置会'大幅走高'，重大行情时点在一到两年后。近期谨慎、中长期看多。","targets":"黄金/白银","source":"Investing News Network 2026-01-31 (investingnews.com/chris-vermeulen-january-2026)"},{"date":"2026-04-26","direction":"看多","comments":"每周市场展望：技术面判断金银上涨旅程尚未结束（'Buckle Up, The Journey Is Not Over'），维持对贵金属牛市延续的看多技术判断。","targets":"黄金/白银","source":"The Technical Traders 每周展望 2026-04-26 (forextradingnews.us 转载)"}]}
+{
+  "kol": "Chris Vermeulen",
+  "sector": "Precious Metals",
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+  "count": 2,
+  "history": [
+    {
+      "date": "2026-01-31",
+      "direction": "强烈看多",
+      "comments": "The Technical Traders 首席策略师认为金银当前上涨周期仅走到一半，金银价格将大幅走高（Dramatically Higher），中长期维持强上升趋势判断。",
+      "targets": "黄金/白银",
+      "source": "https://news.google.com/stories/CAAqNggKIjBDQklTSGpvSmMzUnZjbmt0TXpZd1NoRUtEd2l6cGVXZUVSRTVBMXlpV1owZHZTZ0FQAQ"
+    },
+    {
+      "date": "2026-04-15",
+      "direction": "看多",
+      "comments": "在播客中拆解金银价格预测，认为市场波动可能先触发一轮回调，随后迎来下一轮重大突破；长期看多但提示短期先有震荡回撤。",
+      "targets": "黄金/白银",
+      "source": "https://ivy.fm/tag/chris-vermeulen"
+    }
+  ]
+}
