@@ -49,6 +49,16 @@
   .sidenav a:hover { background: rgba(140,155,175,.14); }
   .sidenav a.sn-active { background: rgba(140,155,175,.20); border-left-color: var(--dust-blue); font-weight: 700; color: var(--text); }
   .sidenav a .sn-num { display: inline-block; min-width: 18px; color: var(--dust-blue); font-weight: 800; font-family: var(--mono); margin-right: 4px; }
+  /* 侧栏主题分组(可折叠) */
+  .sn-group { margin-bottom: 6px; }
+  .sn-group-hdr { display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 800; color: var(--dust-blue);
+    text-transform: none; letter-spacing: .3px; padding: 7px 8px; cursor: pointer; border-radius: 6px; user-select: none; }
+  .sn-group-hdr:hover { background: rgba(140,155,175,.10); }
+  .sn-caret { font-size: 10px; transition: transform .18s; }
+  .sn-collapsed .sn-caret { transform: rotate(-90deg); }
+  .sn-cnt { margin-left: auto; font-size: 10px; color: var(--muted); background: rgba(140,155,175,.16); padding: 1px 6px; border-radius: 8px; font-family: var(--mono); }
+  .sn-group-list { overflow: hidden; transition: max-height .22s ease; max-height: 600px; padding-left: 4px; }
+  .sn-collapsed .sn-group-list { max-height: 0; }
   /* 宽屏: 主体右移给侧栏留位; 章节标题锚点偏移(避免被顶部遮挡) */
   .part-title { scroll-margin-top: 16px; }
   #sn-toggle { display: none; }
@@ -474,7 +484,7 @@
 </nav>
 <header>
   <h1>宏观风险扫描 · <span>Eco &amp; Volatility Checker</span></h1>
-  <span id="update-time">数据日期 2026-08-18 · 生成 2026-08-18 12:01 JST</span>
+  <span id="update-time">数据日期 2026-08-18 · 生成 2026-08-18 12:15 JST</span>
 </header>
 <div class="container">
 
@@ -1266,43 +1276,77 @@ mkRadar('rShort', RADAR.short);
 mkRadar('rMid', RADAR.mid);
 mkRadar('rLong', RADAR.long);
 
-// ═══ 自动生成左侧模块索引栏(扫描所有 .part-title) ═══
+// ═══ 自动生成左侧模块索引栏(按主题分组 + 可折叠) ═══
 (function() {
   var titles = Array.prototype.slice.call(document.querySelectorAll('.part-title'));
   var box = document.getElementById('sidenav-links');
   if (!titles.length || !box) return;
+
+  var GROUPS = [
+    { name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注'] },
+    { name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化'] },
+    { name: '流动性与央行', match: ['流动性要点','央行资产负债表','货币供应','M2 十年','Credit Impulse','信贷脉冲'] },
+    { name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别'] },
+    { name: '机构与政要持仓', match: ['机构持仓','13F','Trump'] }
+  ];
+  function groupOf(label) {
+    for (var g = 0; g < GROUPS.length; g++) {
+      for (var m = 0; m < GROUPS[g].match.length; m++) {
+        if (label.indexOf(GROUPS[g].match[m]) >= 0) return g;
+      }
+    }
+    return GROUPS.length;
+  }
+
   var links = [];
+  var bucket = {};
   titles.forEach(function(t, i) {
-    // 生成锚点 id
     var id = 'sec-' + i;
     t.id = id;
-    // 侧栏标题文字 = part-title 去掉编号圈的纯文本, 截断过长
     var label = (t.textContent || '').trim();
-    // 取"·"或"("前的主名, 更简洁
     var short = label.split('·')[0].split('（')[0].split('(')[0].trim();
-    if (short.length > 20) short = short.slice(0, 20) + '…';
-    var numEl = t.querySelector('.part-num');
-    var num = numEl ? numEl.textContent.trim() : (i + 1);
+    short = short.replace(/^[0-9０-９＋+\s]+/, '').trim();
+    if (short.indexOf('打开 KOL Dashboard') >= 0) short = short.split('打开')[0].trim();
+    if (short.length > 18) short = short.slice(0, 18) + '…';
     var a = document.createElement('a');
     a.href = '#' + id;
-    a.innerHTML = '<span class="sn-num">' + num + '</span>' + short;
+    a.innerHTML = short;
     a.addEventListener('click', function(e) {
       e.preventDefault();
       document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
-      // 移动端点击后收起
       if (window.innerWidth <= 1100) document.getElementById('sidenav').classList.remove('sn-open');
     });
-    box.appendChild(a);
-    links.push(a);
+    var g = groupOf(label);
+    (bucket[g] = bucket[g] || []).push({ a: a, idx: i });
+    links[i] = a;
   });
-  // 滚动高亮当前板块
+
+  function renderGroup(gIdx, gName) {
+    var items = bucket[gIdx];
+    if (!items || !items.length) return;
+    var wrap = document.createElement('div');
+    wrap.className = 'sn-group';
+    var hdr = document.createElement('div');
+    hdr.className = 'sn-group-hdr';
+    hdr.innerHTML = '<span class="sn-caret">▾</span>' + gName + '<span class="sn-cnt">' + items.length + '</span>';
+    var list = document.createElement('div');
+    list.className = 'sn-group-list';
+    items.forEach(function(it) { list.appendChild(it.a); });
+    hdr.addEventListener('click', function() { wrap.classList.toggle('sn-collapsed'); });
+    wrap.appendChild(hdr);
+    wrap.appendChild(list);
+    box.appendChild(wrap);
+  }
+  GROUPS.forEach(function(g, i) { renderGroup(i, g.name); });
+  renderGroup(GROUPS.length, '其他');
+
   function onScroll() {
     var y = window.scrollY + 80;
     var active = 0;
     for (var i = 0; i < titles.length; i++) {
       if (titles[i].offsetTop <= y) active = i; else break;
     }
-    links.forEach(function(l, i) { l.classList.toggle('sn-active', i === active); });
+    links.forEach(function(l, i) { if (l) l.classList.toggle('sn-active', i === active); });
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
