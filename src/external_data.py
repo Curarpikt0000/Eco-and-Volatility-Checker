@@ -2693,6 +2693,48 @@ def fetch_hf_leverage(cache_path=None):
     return out
 
 
+def fetch_bis_gold_swaps(cache_path=None):
+    """BIS 自营黄金掉期规模(吨)。BIS 机构自己那笔 gold swaps(GATA/Robert Lambourne 追踪)。
+
+    数据由 data/bis_gold_swaps.json 驱动(真值锚点):
+      - 年度值(3/31, kind=annual): BIS 年报明确确认的官方数字(2010 至今连续)。
+      - 月度值(kind=monthly): GATA 顾问 Lambourne 从 BIS 官方月度 Statement of Account
+        (bis.org/banking/balsheet/statofacc{YYMMDD}.pdf)推算, BIS 年报每年验证其准确。
+    绝不编造: BIS 从不主动披露 swaps 行, 也不公开精确勾稽算法, 故本函数只消费已核实的
+    公开真值(年报 + GATA 推算), 不做无法验证的自行换算。月度更新由 cron agent 读 GATA
+    新文章补一个点(只增, 绝不编)。
+    返回 {status, as_of, source, unit, note, latest_t, peak_t, peak_date, points:[{date,tonnes,kind,src}]}。
+    """
+    import json
+    if cache_path is None:
+        cache_path = os.path.join(os.path.dirname(__file__), "..", "data", "bis_gold_swaps.json")
+    try:
+        with open(cache_path, encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return {"status": "未获取", "as_of": "", "source": "BIS 自营黄金掉期(文件缺失)",
+                "unit": "tonnes", "points": []}
+    pts = [p for p in (data.get("points") or []) if p.get("date") and p.get("tonnes") is not None]
+    pts.sort(key=lambda p: p.get("date", ""))
+    if not pts:
+        return {"status": "未获取", "as_of": data.get("as_of", ""),
+                "source": data.get("source", "BIS 自营黄金掉期"), "unit": "tonnes", "points": []}
+    peak = max(pts, key=lambda p: p["tonnes"])
+    latest = pts[-1]
+    return {
+        "status": "ok",
+        "as_of": data.get("as_of", latest["date"]),
+        "source": data.get("source", "BIS 自营黄金掉期 (BIS own-account gold swaps)"),
+        "unit": data.get("unit", "tonnes"),
+        "note": data.get("note", ""),
+        "latest_t": latest["tonnes"],
+        "latest_date": latest["date"],
+        "peak_t": peak["tonnes"],
+        "peak_date": peak["date"],
+        "points": pts,
+    }
+
+
 def fetch_fiscal_news(cache_path=None, limit=20):
     """美日财政政策事件时间线(离散事件文本,非时序数字)。
     数据由 data/fiscal_news.json 驱动: 每日 cron agent 模式 web 检索权威源

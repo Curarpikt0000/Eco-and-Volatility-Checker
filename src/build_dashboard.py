@@ -198,6 +198,16 @@ def main():
     except Exception as e:
         print(f"[dashboard] 对冲基金杠杆 跳过: {e}")
 
+    # ── BIS 自营黄金掉期(BIS 年报 + GATA/Lambourne 月度推算, 吨) ──
+    bis_gold_swaps = {}
+    try:
+        bis_gold_swaps = ed.fetch_bis_gold_swaps() or {}
+        print(f"[dashboard] BIS黄金掉期: status={bis_gold_swaps.get('status')} "
+              f"latest={bis_gold_swaps.get('latest_t')}t@{bis_gold_swaps.get('latest_date')} "
+              f"peak={bis_gold_swaps.get('peak_t')}t points={len(bis_gold_swaps.get('points',[]))}")
+    except Exception as e:
+        print(f"[dashboard] BIS黄金掉期 跳过: {e}")
+
     # ── BIS 国际清算银行报告(Quarterly Review 季度综述) ──
     bis_latest = None
     try:
@@ -271,6 +281,7 @@ def main():
         iip_four=iip_four,
         fiscal_news=fiscal_news,
         hf_leverage=hf_leverage,
+        bis_gold_swaps=bis_gold_swaps,
         bis_latest=bis_latest,
     )
     print(f"[dashboard] 生成: {out}")

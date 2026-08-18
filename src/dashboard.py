@@ -213,7 +213,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              country_ust=None, kol_views=None, credit_impulse=None, custody_accel=None,
              stress_panels=None, ofr_fsi=None, maturing_treasury=None, bis_latest=None,
              oil_inventory=None, us_jp_yields=None, nikkei225=None, foreign_flow=None,
-             iip_four=None, fiscal_news=None, hf_leverage=None):
+             iip_four=None, fiscal_news=None, hf_leverage=None, bis_gold_swaps=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -392,6 +392,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         iip_four=_iip_html(iip_four),
         fiscal_news=_fiscal_news_html(fiscal_news),
         hf_leverage=_hf_leverage_html(hf_leverage),
+        bis_gold_swaps=_bis_gold_swaps_html(bis_gold_swaps),
         bis_section=_bis_section_html(bis_latest, "https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/"),
         country_ust=_country_ust_html(country_ust),
         credit_impulse=_credit_impulse_html(credit_impulse),
@@ -1578,6 +1579,51 @@ def _hf_leverage_html(hf):
         f'高杠杆头寸被迫平仓→抛售美债→收益率跳升→更多平仓，形成<b>去杠杆螺旋</b>(2020年3月「dash for cash」即此机制)。'
         f'敞口越高、回购依赖越重，美债市场对流动性冲击越脆弱。<br>季度更新(SEC Form PF 底层)，OFR 官方公开数据。'
         f'<br><span style="color:#8a8578">注：BIS 原图另有「零折扣(zero haircut)占比」一图，因 OFR/ESRB 仅在报告 PDF 内出静态图、无公开时间序列，本 section 未纳入（绝不用代理冒充）。</span></div>'
+        f'</div>'
+    )
+
+
+def _bis_gold_swaps_html(bg):
+    """BIS 自营黄金掉期 section: 吨数折线(2010→今, 年报锚点 + GATA 月度推算)。
+    bg: fetch_bis_gold_swaps()。绝不编造, BIS 年报 + GATA/Lambourne 公开真值。"""
+    if not bg or bg.get("status") != "ok" or not bg.get("points"):
+        return '<p class="empty">BIS 自营黄金掉期数据未就绪。</p>'
+    pts = bg["points"]
+    # 折线点: (date, tonnes)
+    line_pts = [(p["date"], p["tonnes"]) for p in pts]
+    svg = _yield_curves_svg({
+        "swaps": {"status": "ok", "name": "BIS 自营黄金掉期(吨)", "color": "#c9a94e",
+                  "dash": "none", "points": line_pts, "latest": bg.get("latest_t")},
+    }, yunit="t")
+    latest_t = bg.get("latest_t"); latest_d = bg.get("latest_date", "")
+    peak_t = bg.get("peak_t"); peak_d = bg.get("peak_date", "")
+    # 最近两个月度推算点(若有)做近况
+    monthly = [p for p in pts if p.get("kind") == "monthly"]
+    mo_txt = ""
+    if len(monthly) >= 1:
+        m = monthly[-1]
+        mo_txt = (f' · 最新月度推算 <b>{m["tonnes"]}t</b>（{_esc(m["date"])}，GATA/Lambourne 从 BIS 月报推算）')
+    return (
+        f'<div class="cust-wrap">'
+        f'<div class="cust-chart-col cust-chart-full">'
+        f'<div class="cust-chart-title">BIS 自营黄金掉期规模（吨 · 2010→今）'
+        f'<span class="chart-freq freq-w">🟡 年度确认 + 月度推算 · BIS 年报 / GATA</span></div>'
+        f'{svg}'
+        f'<div class="oil-meta">最新年报（{_esc(latest_d)}）：<b style="color:#c9a94e">{latest_t} 吨</b> · '
+        f'历史峰值 <b>{peak_t} 吨</b>（{_esc(peak_d)}）{mo_txt}</div>'
+        f'<div class="oil-src">数据源：{_esc(bg.get("source",""))} · '
+        f'年度值＝<a class="src-lnk" href="https://www.bis.org/about/areport/index.htm" target="_blank" rel="noopener">BIS Annual Report ↗</a> 官方确认；'
+        f'月度值＝GATA 顾问 Robert Lambourne 从 <a class="src-lnk" href="https://www.bis.org/banking/balsheet/" target="_blank" rel="noopener">BIS 月度 Statement of Account ↗</a> 推算</div>'
+        f'</div>'
+        f'<div class="cust-how"><b>如何看：</b>这是<b>BIS 机构自己那笔黄金掉期</b>（不是全市场黄金衍生品规模）——'
+        f'BIS 通过掉期从<b>商业银行(bullion banks)借入实物黄金</b>，存入其在美联储等央行的黄金活期账户。'
+        f'BIS 从不主动解释目的，GATA 长期追踪，认为其<b>代表成员央行在黄金市场的隐秘干预/头寸调整</b>。<br>'
+        f'<b>为何值得看</b>：掉期<b>骤增</b>(如 2010、2017、2021 冲到 400–490 吨)常对应央行需要<b>动用/腾挪黄金</b>的时点；'
+        f'<b>骤降至近零</b>(2016、近期降至 40–180 吨)则被解读为央行<b>惜售、增持、回运</b>黄金——与近年央行大举购金、黄金价格上行趋势吻合。'
+        f'是<b>央行黄金政策/市场压力的另类信号</b>。<br>'
+        f'<b>数据诚实说明</b>：BIS 不单列 swaps 科目，年度值取自 BIS 年报明确确认，月度值为 GATA 从 BIS 官方月报推算'
+        f'（BIS 年报每年验证其推算准确）；BIS 未公开精确勾稽算法，故本页不做无法验证的自行换算，'
+        f'仅呈现已核实公开真值，月度点由 cron 读 GATA 新披露只增补充，<b>绝不编造</b>。</div>'
         f'</div>'
     )
 
@@ -3530,6 +3576,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·十二：对冲基金美债杠杆监测 (OFR) ═══ -->
   <div class="part-title" id="sec-hf-leverage"><span class="part-num">＋</span>对冲基金美债杠杆监测 · 敞口/GDP + 回购借款 (美债隐性杠杆)<span class="freq-badge freq-quarterly">每季度更新</span></div>
   <div class="card">{hf_leverage}</div>
+
+  <!-- ═══ 附三·十二B：BIS 自营黄金掉期 ═══ -->
+  <div class="part-title" id="sec-bis-gold-swaps"><span class="part-num">＋</span>BIS 自营黄金掉期 · 央行黄金市场隐秘干预信号 (吨 · 2010→今)<span class="freq-badge freq-quarterly">年度确认+月度推算</span></div>
+  <div class="card">{bis_gold_swaps}</div>
 
   <!-- ═══ 附三·十一：美日财政政策事件时间线 ═══ -->
   <div class="part-title" id="sec-fiscal-news"><span class="part-num">＋</span>美日财政政策事件 · 债务上限/CR/补正预算/国债发行 (每日检索)<span class="freq-badge freq-daily">每日更新</span></div>

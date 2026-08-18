@@ -109,14 +109,23 @@ def build():
         "Prime_T": _num_prop(),
         "Other_T": _num_prop(),
     })
+    # ── DB-7 BIS 自营黄金掉期(年度确认+月度推算, 吨) ──
+    bid = create_db("Eco-BIS自营黄金掉期(吨)", {
+        "Date": {"title": {}},
+        "Tonnes": _num_prop(),
+        "Kind": {"select": {"options": [
+            {"name": "annual", "color": "green"}, {"name": "monthly", "color": "yellow"}]}},
+        "Source": {"rich_text": {}},
+    })
     for k, v in (("DB_YIELDS", yid), ("DB_NIKKEI", nid), ("DB_FOREIGN_FLOW", fid),
-                 ("DB_IIP", iid), ("DB_FISCAL_NEWS", gid), ("DB_HF_LEVERAGE", hid)):
+                 ("DB_IIP", iid), ("DB_FISCAL_NEWS", gid), ("DB_HF_LEVERAGE", hid),
+                 ("DB_BIS_GOLD_SWAPS", bid)):
         if v:
             _write_env(k, v)
-    return yid, nid, fid, iid, gid, hid
+    return yid, nid, fid, iid, gid, hid, bid
 
 
-def write_data(yid, nid, fid, iid=None, gid=None, hid=None, recent_days=60):
+def write_data(yid, nid, fid, iid=None, gid=None, hid=None, bid=None, recent_days=60):
     # 美日收益率: 按日期对齐四序列, 写最近 recent_days 天
     yc = ed.fetch_us_jp_yields()
     if yid and yc.get("status") == "ok":
@@ -221,6 +230,23 @@ def write_data(yid, nid, fid, iid=None, gid=None, hid=None, recent_days=60):
                        "Exposure_USD_T": prop_num(ex["latest_usd_t"])}, title_field="Quarter")
             print(f"[data] 对冲基金杠杆写入 {n} 季")
 
+    # BIS 自营黄金掉期: 每点一行(title=日期, 幂等, 只增)
+    if bid:
+        bg = ed.fetch_bis_gold_swaps()
+        if bg.get("status") == "ok":
+            n = 0
+            for p in bg["points"]:
+                d = p.get("date", "")
+                props = {
+                    "Date": prop_title(d),
+                    "Tonnes": prop_num(p.get("tonnes")),
+                    "Kind": prop_select(p.get("kind", "")) if p.get("kind") else {"select": None},
+                    "Source": prop_text(p.get("src", "")),
+                }
+                upsert(bid, d, props, title_field="Date")
+                n += 1
+            print(f"[data] BIS黄金掉期写入 {n} 点")
+
 
 def write_data_from_env(recent_days=60):
     """从 .env 读三个 db_id 后写入(供每日 cron 调用, DB 已存在时无需重新建库)。
@@ -233,12 +259,13 @@ def write_data_from_env(recent_days=60):
         return os.environ.get(k)
     yid, nid, fid, iid, gid = _env("DB_YIELDS"), _env("DB_NIKKEI"), _env("DB_FOREIGN_FLOW"), _env("DB_IIP"), _env("DB_FISCAL_NEWS")
     hid = _env("DB_HF_LEVERAGE")
-    if not (yid and nid and fid and iid and gid and hid):
-        yid, nid, fid, iid, gid, hid = build()
-    write_data(yid, nid, fid, iid, gid, hid, recent_days=recent_days)
+    bid = _env("DB_BIS_GOLD_SWAPS")
+    if not (yid and nid and fid and iid and gid and hid and bid):
+        yid, nid, fid, iid, gid, hid, bid = build()
+    write_data(yid, nid, fid, iid, gid, hid, bid, recent_days=recent_days)
 
 
 if __name__ == "__main__":
-    yid, nid, fid, iid, gid, hid = build()
-    write_data(yid, nid, fid, iid, gid, hid)
-    print("完成。db_id 已写回 .env (DB_YIELDS/DB_NIKKEI/DB_FOREIGN_FLOW/DB_IIP/DB_FISCAL_NEWS/DB_HF_LEVERAGE)")
+    yid, nid, fid, iid, gid, hid, bid = build()
+    write_data(yid, nid, fid, iid, gid, hid, bid)
+    print("完成。db_id 已写回 .env (DB_YIELDS/DB_NIKKEI/DB_FOREIGN_FLOW/DB_IIP/DB_FISCAL_NEWS/DB_HF_LEVERAGE/DB_BIS_GOLD_SWAPS)")
