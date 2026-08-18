@@ -100,14 +100,23 @@ def build():
         "Source_URL": {"url": {}},
         "Source_Name": {"rich_text": {}},
     })
+    # ── DB-6 对冲基金美债杠杆(OFR, 季度) ──
+    hid = create_db("Eco-对冲基金美债杠杆(OFR,季度)", {
+        "Quarter": {"title": {}},
+        "Exposure_GDP_pct": _num_prop(),
+        "Exposure_USD_T": _num_prop(),
+        "Repo_T": _num_prop(),
+        "Prime_T": _num_prop(),
+        "Other_T": _num_prop(),
+    })
     for k, v in (("DB_YIELDS", yid), ("DB_NIKKEI", nid), ("DB_FOREIGN_FLOW", fid),
-                 ("DB_IIP", iid), ("DB_FISCAL_NEWS", gid)):
+                 ("DB_IIP", iid), ("DB_FISCAL_NEWS", gid), ("DB_HF_LEVERAGE", hid)):
         if v:
             _write_env(k, v)
-    return yid, nid, fid, iid, gid
+    return yid, nid, fid, iid, gid, hid
 
 
-def write_data(yid, nid, fid, iid=None, gid=None, recent_days=60):
+def write_data(yid, nid, fid, iid=None, gid=None, hid=None, recent_days=60):
     # 美日收益率: 按日期对齐四序列, 写最近 recent_days 天
     yc = ed.fetch_us_jp_yields()
     if yid and yc.get("status") == "ok":
@@ -187,6 +196,31 @@ def write_data(yid, nid, fid, iid=None, gid=None, recent_days=60):
                 n += 1
             print(f"[data] 美日财政事件写入 {n} 条")
 
+    # 对冲基金美债杠杆: 每季度一行(敞口/GDP% + 三类借款)
+    if hid:
+        hf = ed.fetch_hf_leverage()
+        if hf.get("status") == "ok":
+            ex = hf.get("exposure", {}); bo = hf.get("borrow", {})
+            exp_map = dict(ex.get("points", []))
+            repo_map = dict(bo.get("repo", [])); prime_map = dict(bo.get("prime", [])); other_map = dict(bo.get("other", []))
+            all_q = sorted(set(exp_map) | set(repo_map))
+            n = 0
+            for q in all_q:
+                props = {"Quarter": prop_title(q)}
+                if q in exp_map:
+                    props["Exposure_GDP_pct"] = prop_num(exp_map[q])
+                if q in repo_map:
+                    props["Repo_T"] = prop_num(repo_map[q])
+                    props["Prime_T"] = prop_num(prime_map.get(q))
+                    props["Other_T"] = prop_num(other_map.get(q))
+                upsert(hid, q, props, title_field="Quarter")
+                n += 1
+            # 最新一季补敞口 USD
+            if ex.get("latest_q") and ex.get("latest_usd_t") is not None:
+                upsert(hid, ex["latest_q"], {"Quarter": prop_title(ex["latest_q"]),
+                       "Exposure_USD_T": prop_num(ex["latest_usd_t"])}, title_field="Quarter")
+            print(f"[data] 对冲基金杠杆写入 {n} 季")
+
 
 def write_data_from_env(recent_days=60):
     """从 .env 读三个 db_id 后写入(供每日 cron 调用, DB 已存在时无需重新建库)。
@@ -198,12 +232,13 @@ def write_data_from_env(recent_days=60):
                     return ln.strip().split("=", 1)[1]
         return os.environ.get(k)
     yid, nid, fid, iid, gid = _env("DB_YIELDS"), _env("DB_NIKKEI"), _env("DB_FOREIGN_FLOW"), _env("DB_IIP"), _env("DB_FISCAL_NEWS")
-    if not (yid and nid and fid and iid and gid):
-        yid, nid, fid, iid, gid = build()
-    write_data(yid, nid, fid, iid, gid, recent_days=recent_days)
+    hid = _env("DB_HF_LEVERAGE")
+    if not (yid and nid and fid and iid and gid and hid):
+        yid, nid, fid, iid, gid, hid = build()
+    write_data(yid, nid, fid, iid, gid, hid, recent_days=recent_days)
 
 
 if __name__ == "__main__":
-    yid, nid, fid, iid, gid = build()
-    write_data(yid, nid, fid, iid, gid)
-    print("完成。db_id 已写回 .env (DB_YIELDS/DB_NIKKEI/DB_FOREIGN_FLOW/DB_IIP/DB_FISCAL_NEWS)")
+    yid, nid, fid, iid, gid, hid = build()
+    write_data(yid, nid, fid, iid, gid, hid)
+    print("完成。db_id 已写回 .env (DB_YIELDS/DB_NIKKEI/DB_FOREIGN_FLOW/DB_IIP/DB_FISCAL_NEWS/DB_HF_LEVERAGE)")

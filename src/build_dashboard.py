@@ -188,6 +188,16 @@ def main():
     except Exception as e:
         print(f"[dashboard] 美日财政事件 跳过: {e}")
 
+    # ── 对冲基金美债杠杆监测(OFR Hedge Fund Monitor, 季度) ──
+    hf_leverage = {}
+    try:
+        hf_leverage = ed.fetch_hf_leverage() or {}
+        _hx = hf_leverage.get("exposure", {}); _hb = hf_leverage.get("borrow", {})
+        print(f"[dashboard] 对冲基金杠杆: status={hf_leverage.get('status')} as_of={hf_leverage.get('as_of')} "
+              f"敞口/GDP={_hx.get('latest_pct')}% Repo={_hb.get('latest_repo')}T")
+    except Exception as e:
+        print(f"[dashboard] 对冲基金杠杆 跳过: {e}")
+
     # ── BIS 国际清算银行报告(Quarterly Review 季度综述) ──
     bis_latest = None
     try:
@@ -260,6 +270,7 @@ def main():
         foreign_flow=foreign_flow,
         iip_four=iip_four,
         fiscal_news=fiscal_news,
+        hf_leverage=hf_leverage,
         bis_latest=bis_latest,
     )
     print(f"[dashboard] 生成: {out}")

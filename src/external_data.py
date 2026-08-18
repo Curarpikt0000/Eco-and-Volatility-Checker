@@ -2502,6 +2502,197 @@ def fetch_iip_four_countries(cache_path=None):
     return out
 
 
+def _ofr_hfm_series(mnemonic):
+    """OFR Hedge Fund Monitor 免key JSON API 季度序列。返回 [(date 'YYYY-MM-DD', float)] 升序。失败返回 []。
+    源: https://data.financialresearch.gov/hf/v1/series/timeseries?mnemonic=<code> (SEC Form PF 汇总, 无需key)。"""
+    import requests
+    url = f"https://data.financialresearch.gov/hf/v1/series/timeseries?mnemonic={mnemonic}"
+    try:
+        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=30)
+        if r.status_code != 200:
+            return []
+        data = r.json()
+        out = []
+        for row in data:
+            if isinstance(row, list) and len(row) >= 2 and row[1] is not None:
+                try:
+                    out.append((str(row[0]), float(row[1])))
+                except (ValueError, TypeError):
+                    continue
+        return out
+    except Exception:
+        return []
+
+
+def fetch_hf_leverage(cache_path=None):
+    """对冲基金美债杠杆敞口(季频, 源: OFR Hedge Fund Monitor / SEC Form PF, 免key)。
+    绝不编造, 取不到 status='未获取'。数据本质是【季度】更新(Form PF 滞后发布), 非日频。
+      图A: 对冲基金美债总名义敞口 / 美国GDP (%)。分子=OFR FPF-ASSETCLASS_USGOV_GNE_SUM, 分母=FRED GDP。
+      图B: 对冲基金三类借款规模($万亿): Repo / Prime brokerage / Other secured。
+    (对应 BIS AER 2026 Graph 5。零折扣占比图C无公开结构化源, 不做。)
+    返回 {status, as_of, source, exposure:{points:[(date,pct)], latest_pct, latest_usd_t},
+          borrow:{repo:[(date,$T)], prime:[(date,$T)], other:[(date,$T)], latest_*}}。
+    """
+    import json
+    if cache_path is None:
+        cache_path = os.path.join(os.path.dirname(__file__), "..", "data", "hf_leverage.json")
+    START = "2015-01-01"
+    # 图B 三类借款
+    repo = _ofr_hfm_series("FPF-BORROW_REPO_SUM")
+    prime = _ofr_hfm_series("FPF-BORROW_PRIMEBROKER_SUM")
+    other = _ofr_hfm_series("FPF-BORROW_OTHERSECURED_SUM")
+    # 图A 美债敞口 + GDP
+    gne = _ofr_hfm_series("FPF-ASSETCLASS_USGOV_GNE_SUM")
+    gdp = dict(_fred_series("GDP", START))  # {date: $B annualized}
+
+    def _t(series):
+        return [(d, round(v / 1e12, 3)) for d, v in series if d >= START]
+
+    out = {"status": "未获取", "as_of": "",
+           "source": "OFR Hedge Fund Monitor (SEC Form PF 汇总, 季频, 免key) + FRED GDP",
+           "exposure": {}, "borrow": {}}
+
+    # 借款三类($万亿)
+    if repo and prime and other:
+        rp, pr, ot = _t(repo), _t(prime), _t(other)
+        out["borrow"] = {
+            "repo": rp, "prime": pr, "other": ot,
+            "latest_repo": rp[-1][1] if rp else None,
+            "latest_prime": pr[-1][1] if pr else None,
+            "latest_other": ot[-1][1] if ot else None,
+            "as_of": rp[-1][0] if rp else "",
+        }
+
+    # 美债敞口/GDP (%): GDP 是季度年化十亿美元, 匹配最近季度末
+    if gne and gdp:
+        exp_pts = []
+        latest_usd = None
+        for d, v in gne:
+            if d < START:
+                continue
+            # GDP 用同季或最近的可用值 (FRED GDP 日期是季初 YYYY-01/04/07/10-01)
+            yr, mo = d[:4], int(d[5:7])
+            q_start = f"{yr}-{((mo-1)//3)*3+1:02d}-01"
+            g = gdp.get(q_start)
+            if g is None:
+                # 回退: 取 <= d 的最近 GDP
+                cand = [gd for gd in gdp if gd <= d]
+                g = gdp[max(cand)] if cand else None
+            if g:
+                pct = round(v / (g * 1e9) * 100, 2)  # GDP十亿→美元
+                exp_pts.append((d, pct))
+                latest_usd = round(v / 1e12, 3)
+        if exp_pts:
+            out["exposure"] = {
+                "points": exp_pts, "latest_pct": exp_pts[-1][1],
+                "latest_usd_t": latest_usd, "as_of": exp_pts[-1][0],
+            }
+
+    if out["borrow"] or out["exposure"]:
+        out["status"] = "ok"
+        out["as_of"] = out.get("borrow", {}).get("as_of") or out.get("exposure", {}).get("as_of", "")
+    try:
+        with open(cache_path, "w") as f:
+            json.dump(out, f, ensure_ascii=False, default=str)
+    except Exception:
+        pass
+    return out
+
+
+def fetch_hf_leverage(cache_path=None):
+    """对冲基金杠杆监测(OFR Hedge Fund Monitor, SEC Form PF 底层, 季度)。绝不编造。
+      图A: 对冲基金美国主权债(美债)总名义敞口 GNE 占 US GDP % (2013Q1起, 季度)
+           = FPF-ASSETCLASS_USGOV_GNE_SUM / (FRED GDP 十亿$×1e9) ×100
+      图B: 对冲基金三类借款规模($万亿, 季度): Repo / Prime brokerage / Other secured
+    源: OFR https://data.financialresearch.gov/hf/v1/series/timeseries?mnemonic=<code> (免key)
+        GDP: FRED GDP (免key CSV)
+    返回 {status, as_of, exposure:{points:[(q,%)], latest_pct, latest_usd_t}, borrow:{repo/prime/other:[(q,$T)], latest_*}}。
+    """
+    import json, requests
+    if cache_path is None:
+        cache_path = os.path.join(os.path.dirname(__file__), "..", "data", "hf_leverage.json")
+
+    def _ofr(m):
+        try:
+            r = requests.get(
+                f"https://data.financialresearch.gov/hf/v1/series/timeseries?mnemonic={m}",
+                timeout=30, headers={"User-Agent": "Mozilla/5.0"})
+            d = r.json()
+            s = d if isinstance(d, list) else d.get("timeseries", [])
+            return [(str(x[0]), float(x[1])) for x in s if x and x[1] is not None]
+        except Exception:
+            return []
+
+    def _fred_q(series):
+        """FRED 季度序列 {date:val}(GDP 十亿$)。用 curl 子进程(该端点对 requests 偶发超时)。"""
+        import subprocess
+        url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series}&cosd=2013-01-01"
+        text = ""
+        for _a in range(3):
+            try:
+                p = subprocess.run(["curl", "-s", "--max-time", "20", url],
+                                   capture_output=True, text=True, timeout=25)
+                if p.returncode == 0 and p.stdout and "," in p.stdout:
+                    text = p.stdout
+                    break
+            except Exception:
+                continue
+        out = {}
+        for ln in text.splitlines()[1:]:
+            p = ln.split(",")
+            if len(p) == 2 and p[1] not in ("", "."):
+                out[p[0]] = float(p[1])
+        return out
+
+    repo = _ofr("FPF-BORROW_REPO_SUM")
+    prime = _ofr("FPF-BORROW_PRIMEBROKER_SUM")
+    other = _ofr("FPF-BORROW_OTHERSECURED_SUM")
+    gne = _ofr("FPF-ASSETCLASS_USGOV_GNE_SUM")
+    gdp = _fred_q("GDP")  # 十亿$ 年化, 季度点(月初日期如 2026-01-01)
+
+    def _t(series):  # 转 $万亿
+        return [(q, round(v / 1e12, 3)) for q, v in series]
+
+    # 敞口/GDP%: OFR 季末(如 2026-03-31) 对 FRED 季初(2026-01-01)。按年季匹配。
+    def _gdp_for_q(qdate):
+        yr, mo = qdate[:4], qdate[5:7]
+        qmap = {"03": "01", "06": "04", "09": "07", "12": "10"}
+        key = f"{yr}-{qmap.get(mo, '01')}-01"
+        return gdp.get(key)
+
+    exp_pts = []
+    for q, v in gne:
+        g = _gdp_for_q(q)
+        if g:
+            exp_pts.append((q, round(v / (g * 1e9) * 100, 2)))
+
+    ok = bool(repo and gne)
+    out = {
+        "status": "ok" if ok else "未获取",
+        "as_of": (repo[-1][0] if repo else (gne[-1][0] if gne else "")),
+        "source": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP",
+        "exposure": {
+            "points": exp_pts,
+            "latest_pct": exp_pts[-1][1] if exp_pts else None,
+            "latest_usd_t": round(gne[-1][1] / 1e12, 2) if gne else None,
+            "latest_q": gne[-1][0] if gne else "",
+        },
+        "borrow": {
+            "repo": _t(repo), "prime": _t(prime), "other": _t(other),
+            "latest_repo": round(repo[-1][1] / 1e12, 2) if repo else None,
+            "latest_prime": round(prime[-1][1] / 1e12, 2) if prime else None,
+            "latest_other": round(other[-1][1] / 1e12, 2) if other else None,
+            "latest_q": repo[-1][0] if repo else "",
+        },
+    }
+    try:
+        with open(cache_path, "w") as f:
+            json.dump(out, f, ensure_ascii=False, default=str)
+    except Exception:
+        pass
+    return out
+
+
 def fetch_fiscal_news(cache_path=None, limit=20):
     """美日财政政策事件时间线(离散事件文本,非时序数字)。
     数据由 data/fiscal_news.json 驱动: 每日 cron agent 模式 web 检索权威源

@@ -213,7 +213,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              country_ust=None, kol_views=None, credit_impulse=None, custody_accel=None,
              stress_panels=None, ofr_fsi=None, maturing_treasury=None, bis_latest=None,
              oil_inventory=None, us_jp_yields=None, nikkei225=None, foreign_flow=None,
-             iip_four=None, fiscal_news=None):
+             iip_four=None, fiscal_news=None, hf_leverage=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -391,6 +391,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         nikkei_flow=_nikkei_flow_html(nikkei225, foreign_flow),
         iip_four=_iip_html(iip_four),
         fiscal_news=_fiscal_news_html(fiscal_news),
+        hf_leverage=_hf_leverage_html(hf_leverage),
         bis_section=_bis_section_html(bis_latest, "https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/"),
         country_ust=_country_ust_html(country_ust),
         credit_impulse=_credit_impulse_html(credit_impulse),
@@ -1148,9 +1149,10 @@ def _country_ust_long_svg(series_by_country, w=920, h=250):
     return "".join(parts)
 
 
-def _yield_curves_svg(series, w=920, h=280):
+def _yield_curves_svg(series, w=920, h=280, yunit="%"):
     """美日 10Y/30Y 收益率四线图(过去一年,日频,共%轴)。
-    series: {key:{name,color,dash('none'/'dash'),points:[(date,%)],latest}}。美实线/日虚线。"""
+    series: {key:{name,color,dash('none'/'dash'),points:[(date,%)],latest}}。美实线/日虚线。
+    yunit: Y轴与图例单位后缀(默认'%'; 复用于万亿图时传 'T' 等)。"""
     active = {k: d for k, d in series.items() if d.get("status") == "ok" and len(d.get("points", [])) >= 2}
     if not active:
         return '<div class="cust-chart-na">美日收益率数据不足</div>'
@@ -1172,7 +1174,7 @@ def _yield_curves_svg(series, w=920, h=280):
         gv = lo + rng * k / 4
         gy = Y(gv)
         parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" stroke="#d4cdbe" stroke-width="1" stroke-dasharray="3,3"/>')
-        parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" font-size="10" fill="#8a8578" text-anchor="end">{gv:.1f}%</text>')
+        parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" font-size="10" fill="#8a8578" text-anchor="end">{gv:.1f}{yunit}</text>')
     # X 轴月份标签(每约2月)
     last_ym = None
     for i, d in enumerate(all_dates):
@@ -1184,7 +1186,9 @@ def _yield_curves_svg(series, w=920, h=280):
     # 四条线 + 图例
     legend_y = mt + 6
     order = ["us_10y", "us_30y", "jp_10y", "jp_30y"]
-    for key in [k for k in order if k in active]:
+    # 先按固定顺序, 再补充任何其他 key(通用化: 支持复用于非收益率的多线图)
+    ordered_keys = [k for k in order if k in active] + [k for k in active if k not in order]
+    for key in ordered_keys:
         d = active[key]
         color = d["color"]
         dash = 'stroke-dasharray="5,3"' if d.get("dash") == "dash" else ''
@@ -1196,7 +1200,10 @@ def _yield_curves_svg(series, w=920, h=280):
         # 图例(右侧): 线样 + 名称 + 最新值
         lx1, lx2 = w - mr + 8, w - mr + 26
         parts.append(f'<line x1="{lx1}" y1="{legend_y}" x2="{lx2}" y2="{legend_y}" stroke="{color}" stroke-width="2.4" {dash}/>')
-        parts.append(f'<text x="{lx2+4}" y="{legend_y+4}" font-size="10.5" fill="{color}" font-weight="600">{_esc(d["name"])} {d["latest"]:.2f}%</text>')
+        _lv = d.get("latest")
+        _unit = d.get("unit", yunit)
+        _lvs = (f"{_lv:.2f}{_unit}" if isinstance(_lv, (int, float)) else str(_lv))
+        parts.append(f'<text x="{lx2+4}" y="{legend_y+4}" font-size="10.5" fill="{color}" font-weight="600">{_esc(d["name"])} {_lvs}</text>')
         legend_y += 19
     parts.append('</svg>')
     return "".join(parts)
@@ -1488,6 +1495,93 @@ def _iip_html(iip):
     )
 
 
+def _hf_line_svg(series_list, unit_fmt="{:.1f}", zero_line=False, w=920, h=250):
+    """通用季度折线 SVG。series_list: [(label, color, [(q,v)])]。x 轴按年标注。"""
+    active = [(lb, co, pts) for lb, co, pts in series_list if len(pts) >= 2]
+    if not active:
+        return '<div class="cust-chart-na">数据不足</div>'
+    all_q = sorted({q for _, _, pts in active for q, _ in pts})
+    all_v = [v for _, _, pts in active for _, v in pts]
+    lo, hi = min(all_v + ([0.0] if zero_line else [])), max(all_v + ([0.0] if zero_line else []))
+    pad = (hi - lo) * 0.10 or 1
+    lo -= pad; hi += pad
+    rng = (hi - lo) or 1
+    ml, mr, mt, mb = 54, 150, 16, 28
+    pw, ph = w - ml - mr, h - mt - mb
+    n = len(all_q)
+    qidx = {q: i for i, q in enumerate(all_q)}
+    def X(i): return ml + i * pw / max(n - 1, 1)
+    def Y(v): return mt + (hi - v) / rng * ph
+    parts = [f'<svg viewBox="0 0 {w} {h}" class="cust-chart" preserveAspectRatio="xMidYMid meet" font-family="-apple-system,PingFang SC,sans-serif">']
+    for k in range(5):
+        gv = lo + rng * k / 4; gy = Y(gv)
+        parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" stroke="#d4cdbe" stroke-width="1" stroke-dasharray="3,3"/>')
+        parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" font-size="10" fill="#8a8578" text-anchor="end">{unit_fmt.format(gv)}</text>')
+    # x 年标签(每年第一个季度)
+    seen_yr = set()
+    for i, q in enumerate(all_q):
+        yr = q[:4]
+        if yr not in seen_yr and (int(yr) % 2 == 1 or i == n - 1):
+            seen_yr.add(yr)
+            anchor = "start" if i == 0 else ("end" if i >= n - 2 else "middle")
+            parts.append(f'<text x="{X(i):.1f}" y="{h-8}" font-size="9" fill="#8a8578" text-anchor="{anchor}">{yr[2:]}</text>')
+    legend_y = mt + 6
+    for lb, co, pts in active:
+        line = [f"{X(qidx[q]):.1f},{Y(v):.1f}" for q, v in pts if q in qidx]
+        if len(line) >= 2:
+            parts.append(f'<polyline points="{" ".join(line)}" fill="none" stroke="{co}" stroke-width="2.2" stroke-linejoin="round"/>')
+            lq, lv = pts[-1]
+            parts.append(f'<circle cx="{X(qidx[lq]):.1f}" cy="{Y(lv):.1f}" r="3.4" fill="{co}"/>')
+        parts.append(f'<line x1="{w-mr+8}" y1="{legend_y}" x2="{w-mr+24}" y2="{legend_y}" stroke="{co}" stroke-width="2.6"/>')
+        parts.append(f'<text x="{w-mr+28}" y="{legend_y+3.5}" font-size="10.5" fill="{co}">{_esc(lb)} {unit_fmt.format(pts[-1][1])}</text>')
+        legend_y += 18
+    parts.append("</svg>")
+    return "".join(parts)
+
+
+def _hf_leverage_html(hf):
+    """对冲基金杠杆监测 section: 图A 美债敞口/GDP% 折线 + 图B 三类借款折线。
+    hf: fetch_hf_leverage()。绝不编造, OFR 真数据(季度)。"""
+    if not hf or hf.get("status") != "ok":
+        return '<p class="empty">对冲基金杠杆监测数据未就绪（OFR Hedge Fund Monitor）。</p>'
+    ex = hf.get("exposure", {}); bo = hf.get("borrow", {})
+    # 图A: 敞口/GDP%
+    svgA = _hf_line_svg([("美债敞口/GDP", "#c0757d", ex.get("points", []))], unit_fmt="{:.0f}%")
+    # 图B: 三线借款
+    svgB = _hf_line_svg([
+        ("Repo 回购", "#c0757d", bo.get("repo", [])),
+        ("Prime brokerage 主经纪", "#6b8fb5", bo.get("prime", [])),
+        ("Other secured 其他担保", "#e0a92e", bo.get("other", [])),
+    ], unit_fmt="{:.1f}T")
+    asof = hf.get("as_of", "")
+    return (
+        f'<div class="cust-wrap">'
+        f'<div class="cust-chart-col cust-chart-full">'
+        f'<div class="cust-chart-title">A · 对冲基金美债总名义敞口 / 美国 GDP（2013 起 · 季度）'
+        f'<span class="chart-freq freq-w">🟣 季频 · OFR/SEC Form PF</span></div>'
+        f'{svgA}'
+        f'<div class="oil-meta">最新（{_esc(ex.get("latest_q",""))}）：美债名义敞口 <b>${ex.get("latest_usd_t")}T</b> '
+        f'= 美国 GDP 的 <b style="color:#c0757d">{ex.get("latest_pct")}%</b>（较 2013 年约 5.8% 翻倍多）</div>'
+        f'</div>'
+        f'<div class="cust-chart-col cust-chart-full" style="margin-top:14px;">'
+        f'<div class="cust-chart-title">B · 对冲基金三类借款规模（$万亿 · 季度）</div>'
+        f'{svgB}'
+        f'<div class="oil-meta">最新（{_esc(bo.get("latest_q",""))}）：'
+        f'<b style="color:#c0757d">Repo 回购 ${bo.get("latest_repo")}T</b> · '
+        f'<b style="color:#6b8fb5">Prime 主经纪 ${bo.get("latest_prime")}T</b> · '
+        f'<b style="color:#e0a92e">Other 其他担保 ${bo.get("latest_other")}T</b></div>'
+        f'<div class="oil-src">数据源：{_esc(hf.get("source",""))}</div>'
+        f'</div>'
+        f'<div class="cust-how"><b>如何看：</b>对冲基金通过<b>回购(repo)加杠杆持有美债</b>做基差套利(cash-futures basis trade)等策略，'
+        f'其<b>总名义敞口已达美国 GDP 的 ~12.6%</b>（十年翻倍），<b>回购借款突破 $3.2 万亿</b>——'
+        f'这是<b>美债市场的隐性杠杆</b>。<b>风险</b>：一旦国债波动骤升(MOVE↑)或回购融资成本上升，'
+        f'高杠杆头寸被迫平仓→抛售美债→收益率跳升→更多平仓，形成<b>去杠杆螺旋</b>(2020年3月「dash for cash」即此机制)。'
+        f'敞口越高、回购依赖越重，美债市场对流动性冲击越脆弱。<br>季度更新(SEC Form PF 底层)，OFR 官方公开数据。'
+        f'<br><span style="color:#8a8578">注：BIS 原图另有「零折扣(zero haircut)占比」一图，因 OFR/ESRB 仅在报告 PDF 内出静态图、无公开时间序列，本 section 未纳入（绝不用代理冒充）。</span></div>'
+        f'</div>'
+    )
+
+
 def _fiscal_news_html(fn):
     """美日财政政策事件时间线 section: 离散事件卡片(日期+国旗+分类+标题+摘要+来源链接)。
     fn: fetch_fiscal_news() 返回。绝不编造, 每条带真实来源链接。"""
@@ -1527,6 +1621,71 @@ def _fiscal_news_html(fn):
         f'这些事件直接影响两国<b>国债供给、财政赤字与利率</b>：'
         f'美国关门/债限僵局→短端波动+避险；日本增发赤字国债→JGB 供给压力(与本页日债收益率上行呼应)。'
         f'每条事件均附<b>真实来源链接</b>，可点击核实，绝不编造。<br>每日更新，cron agent 检索官方与权威媒体源。</div>'
+        f'</div>'
+    )
+
+
+def _hf_leverage_html(hf):
+    """对冲基金美债杠杆敞口 section: 图A 美债敞口/GDP 折线 + 图B 三类借款折线。
+    hf: fetch_hf_leverage()。季频(Form PF)。绝不编造。"""
+    if not hf or hf.get("status") != "ok":
+        return '<p class="empty">对冲基金杠杆敞口(OFR/Form PF)数据未就绪。</p>'
+    ex = hf.get("exposure", {})
+    bo = hf.get("borrow", {})
+    parts = []
+    # 图A: 美债敞口/GDP 单线
+    if ex.get("points"):
+        svgA = _yield_curves_svg({
+            "usgov": {"status": "ok", "name": "美债总名义敞口/GDP", "color": "#c0757d",
+                      "dash": "none", "points": ex["points"], "latest": ex["latest_pct"]},
+        })
+        parts.append(
+            f'<div class="cust-chart-col cust-chart-full">'
+            f'<div class="cust-chart-title">A · 对冲基金美债总名义敞口 / 美国GDP（%）· 2015→今'
+            f'<span class="chart-freq freq-q">🟣 季频 · SEC Form PF 滞后发布</span></div>'
+            f'{svgA}'
+            f'<div class="oil-meta">最新 <b style="color:#c0757d">{ex["latest_pct"]}%</b>'
+            f'（约 ${ex.get("latest_usd_t","?")}T 名义敞口，{_esc(ex.get("as_of",""))}）· '
+            f'较 2015 年（6.1%）翻倍——对冲基金国债基差套利(basis trade)杠杆持续累积</div>'
+            f'</div>'
+        )
+    # 图B: 三类借款
+    if bo.get("repo"):
+        svgB = _yield_curves_svg({
+            "repo": {"status": "ok", "name": "Repo 回购", "color": "#c0757d",
+                     "dash": "none", "points": bo["repo"], "latest": bo["latest_repo"]},
+            "prime": {"status": "ok", "name": "Prime brokerage 主经纪", "color": "#6b8fb5",
+                      "dash": "none", "points": bo["prime"], "latest": bo["latest_prime"]},
+            "other": {"status": "ok", "name": "Other secured 其他担保", "color": "#e0a92e",
+                      "dash": "none", "points": bo["other"], "latest": bo["latest_other"]},
+        }, yunit="T")
+        parts.append(
+            f'<div class="cust-chart-col cust-chart-full" style="margin-top:14px;">'
+            f'<div class="cust-chart-title">B · 对冲基金在美三类借款规模（$万亿）· 2015→今'
+            f'<span class="chart-freq freq-q">🟣 季频 · SEC Form PF</span></div>'
+            f'{svgB}'
+            f'<div class="oil-meta">Repo <b style="color:#c0757d">${bo["latest_repo"]}T</b> · '
+            f'Prime brokerage <b style="color:#6b8fb5">${bo["latest_prime"]}T</b> · '
+            f'Other secured <b style="color:#e0a92e">${bo["latest_other"]}T</b>（{_esc(bo.get("as_of",""))}）· '
+            f'回购借款升破 3 万亿=基差套利加杠杆的主渠道</div>'
+            f'</div>'
+        )
+    body = "".join(parts)
+    return (
+        f'<div class="cust-wrap">'
+        f'{body}'
+        f'<div class="oil-src">数据源：{_esc(hf.get("source",""))} · '
+        f'<a class="src-lnk" href="https://www.financialresearch.gov/hedge-fund-monitor/" target="_blank" rel="noopener">OFR Hedge Fund Monitor</a>'
+        f'（对应 BIS《Annual Economic Report 2026》Graph 5）</div>'
+        f'<div class="cust-how"><b>如何看：</b>这两张图刻画<b>对冲基金对美国国债的杠杆敞口</b>——'
+        f'核心是<b>国债基差套利(basis trade)</b>：对冲基金买现券、卖国债期货套微小价差，'
+        f'靠<b>回购(repo)高杠杆</b>放大收益（常 20–50 倍）。<br>'
+        f'<b>图A</b>：对冲基金持有美债的总名义敞口已达 GDP 的 <b>~12.6%</b>（2015 年仅 6%），杠杆持续累积；'
+        f'<b>图B</b>：其中<b>回购借款升破 $3.2 万亿</b>是加杠杆主渠道。<br>'
+        f'<b>为何是风险信号</b>：这类杠杆在<b>回购利率跳升 / 保证金追缴</b>时会被迫平仓，'
+        f'2020 年 3 月「dash for cash」国债闪崩即源于此。敞口越高，一旦货币市场承压（见本页 SOFR−IORB、'
+        f'银行融资利差），去杠杆引发的<b>国债流动性踩踏</b>风险越大。<br>'
+        f'⚠️ 数据源为 SEC Form PF，<b>季度更新且滞后发布</b>（非日频），是结构性中长期风险指标。</div>'
         f'</div>'
     )
 
@@ -3368,6 +3527,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title"><span class="part-num">＋</span>四国国际投资头寸 IIP · 过去十年 (美/日/德/中 对外资产·负债·净债权地位)<span class="freq-badge freq-quarterly">每年更新</span></div>
   <div class="card">{iip_four}</div>
 
+  <!-- ═══ 附三·十二：对冲基金美债杠杆监测 (OFR) ═══ -->
+  <div class="part-title" id="sec-hf-leverage"><span class="part-num">＋</span>对冲基金美债杠杆监测 · 敞口/GDP + 回购借款 (美债隐性杠杆)<span class="freq-badge freq-quarterly">每季度更新</span></div>
+  <div class="card">{hf_leverage}</div>
+
   <!-- ═══ 附三·十一：美日财政政策事件时间线 ═══ -->
   <div class="part-title" id="sec-fiscal-news"><span class="part-num">＋</span>美日财政政策事件 · 债务上限/CR/补正预算/国债发行 (每日检索)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{fiscal_news}</div>
@@ -3420,7 +3583,7 @@ mkRadar('rLong', RADAR.long);
     {{ name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注'] }},
     {{ name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化'] }},
     {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','BIS','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲'] }},
-    {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸'] }},
+    {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款'] }},
     {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent'] }},
     {{ name: '财政政策', match: ['美日财政政策事件','债务上限','补正预算','国债发行'] }},
     {{ name: '日本市场', match: ['日经225','外资净买入','日本市场'] }},

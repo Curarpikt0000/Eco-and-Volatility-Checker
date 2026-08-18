@@ -99,6 +99,18 @@ INDICATORS = [
      "status_labels": {"green": "正常", "yellow": "心绞痛", "red": "心肌梗塞"},
      "note": "货币市场压力核心指标。SOFR(担保隔夜融资利率)冲破IORB(准备金利率)=回购市场承压/准备金稀缺。≤0=正常🟢；7-17bps=心绞痛🟡(流动性趋紧)；>17bps=心肌梗塞🔴(钱荒,如2019年9月回购危机)。派生:(SOFR-IORB)×100 bps。"},
 
+    {"key": "margin_cost", "name_zh": "股票杠杆融资成本", "name_en": "Equity Margin Funding Cost",
+     "group": "short", "source": "fred", "fred_id": "DPRIME", "unit": "%",
+     "direction": "high_bad", "warn": 7.0, "trigger": 8.0,
+     "note": "保证金/杠杆贷款成本代理=美国最优贷款利率(DPRIME,券商保证金贷款多挂钩broker call/prime)。当前约1.4-1.5万亿$保证金债务,抵押品多为高波动AI股→融资成本居高不下。历史上高融资成本常伴市场顶部(杠杆见顶+成本挤压)。配合『FINRA保证金负债』看规模,本卡看成本。≥7%=偏高🟡;≥8%=高企🔴。"},
+
+    {"key": "bank_funding_stress", "name_zh": "银行融资压力 (CP−Tbill)", "name_en": "Bank Funding Stress (CP−Tbill)",
+     "group": "short", "source": "derived", "unit": "bps", "direction": "high_bad",
+     "warn": 20, "trigger": 40,
+     "status_labels": {"green": "宽松", "yellow": "趋紧", "red": "承压"},
+     "note": "银行/机构无担保融资压力预警。派生=(3M金融商业票据DCPF3M − 3M国库券DTB3)×100 bps。银行收缩杠杆供给→无担保融资成本抬升→利差走阔=去杠杆预警,市场易从『减震模式』转『放大模式』(平仓+追保反馈循环)。⚠真swap spread(IRS−国债)无免费源(FRED DSWP2/10已停更2016/OFR无swap曲线/term SOFR swap均商业付费),此为最贴近『银行融资成本上升』语义的免费真数据代理。注意方向:压力下货币市场利差是『走阔』(非IRS的缩窄)。配合短端利率SOFR看:利差走阔+短端升=短期卖出信号。<20bps=宽松🟢;20-40bps=趋紧🟡;>40bps=承压🔴。"},
+
+
     # ═══════════ 🟡 中期指标 (周-月级别，判断趋势转折) ═══════════
     {"key": "margin_debt", "name_zh": "FINRA 保证金负债", "name_en": "FINRA Margin Debt",
      "group": "mid", "source": "web", "url": "https://www.finra.org/rules-guidance/key-topics/margin-accounts/margin-statistics",

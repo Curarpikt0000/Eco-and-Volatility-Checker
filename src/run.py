@@ -85,6 +85,26 @@ def fetch_all():
         results["sofr_iorb"] = {"key": "sofr_iorb", "value": None,
                                 "as_of": None, "status": f"错误:{e}"}
 
+    # bank_funding_stress = (DCPF3M - DTB3) * 100 bps (银行无担保融资压力, 代理 swap spread)
+    try:
+        cp_v, cp_d = fred.fetch_fred_latest("DCPF3M")
+        tb_v, tb_d = fred.fetch_fred_latest("DTB3")
+        sofr_sv, _ = fred.fetch_fred_latest("SOFR")
+        if cp_v is not None and tb_v is not None:
+            bfs_bps = round((cp_v - tb_v) * 100, 1)
+            results["bank_funding_stress"] = {
+                "key": "bank_funding_stress", "value": bfs_bps,
+                "as_of": max(str(cp_d), str(tb_d)), "status": "ok",
+                "extra": {"cp3m": cp_v, "tbill3m": tb_v, "sofr": sofr_sv,
+                          "spread_bps": bfs_bps},
+            }
+        else:
+            results["bank_funding_stress"] = {"key": "bank_funding_stress", "value": None,
+                                              "as_of": None, "status": "CP/Tbill取数失败"}
+    except Exception as e:
+        results["bank_funding_stress"] = {"key": "bank_funding_stress", "value": None,
+                                          "as_of": None, "status": f"错误:{e}"}
+
     # margin_gdp = margin_debt / 名义GDP * 100
     md = results.get("margin_debt", {}).get("value")
     if md is not None:
