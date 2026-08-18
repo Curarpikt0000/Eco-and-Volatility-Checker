@@ -1363,7 +1363,7 @@ def _credit_impulse_html(ci):
     )
 
 
-def _stress_panel_svg(panel, w=940, h=300):
+def _stress_panel_svg(panel, w=1000, h=300):
     """双轴(或单轴)多线折线图, 用于国债市场压力四联图。竖向排列时每张全宽。
     panel: {series:[{name,color,axis(left/right),dash?,width?,points:[{date,v}]}], unit_left, unit_right, single_axis?}。
     左轴/右轴各自独立缩放; 带 x 轴年月标签; 图例在右侧。绝不编: 空序列跳过。"""
@@ -1393,7 +1393,7 @@ def _stress_panel_svg(panel, w=940, h=300):
     r_lo, r_hi = _range(right_vals)
     l_rng = (l_hi - l_lo) or 1.0
     r_rng = (r_hi - r_lo) or 1.0
-    ml, mr, mt, mb = 52, (150 if not single else 150), 18, 30
+    ml, mr, mt, mb = 52, (175 if not single else 175), 18, 30
     pw, ph = w - ml - mr, h - mt - mb
     def X(i): return ml + i * pw / (n - 1)
     def YL(v): return mt + (l_hi - v) / l_rng * ph
@@ -1428,24 +1428,61 @@ def _stress_panel_svg(panel, w=940, h=300):
         color = s["color"]
         axis = s.get("axis", "left")
         Y = YL if axis == "left" else YR
-        pts = [f"{X(didx[p['date']]):.1f},{Y(p['v']):.1f}" for p in s["points"] if p["date"] in didx]
+        spts = [p for p in s["points"] if p["date"] in didx]
+        pts = [f"{X(didx[p['date']]):.1f},{Y(p['v']):.1f}" for p in spts]
+        # ── 关键点位统计: 最高/最低/当前/中位 ──
+        vals = [p["v"] for p in spts]
+        stat = None
+        if vals:
+            sv = sorted(vals)
+            m = len(sv)
+            med = sv[m // 2] if m % 2 else (sv[m // 2 - 1] + sv[m // 2]) / 2
+            hi_p = max(spts, key=lambda p: p["v"])
+            lo_p = min(spts, key=lambda p: p["v"])
+            cur_p = spts[-1]
+            stat = {"cur": cur_p["v"], "hi": hi_p["v"], "lo": lo_p["v"], "med": med}
         if len(pts) >= 2:
             dash = ' stroke-dasharray="5,3"' if s.get("dash") else ""
             width = s.get("width", 1.7)
             parts.append(f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" '
                          f'stroke-width="{width}" stroke-linejoin="round" opacity="0.9"{dash}/>')
-            # 最新点
-            lp = s["points"][-1]
-            parts.append(f'<circle cx="{X(didx[lp["date"]]):.1f}" cy="{Y(lp["v"]):.1f}" r="3" '
-                         f'fill="none" stroke="{color}" stroke-width="1.8"/>')
-        # 图例
+            # 最高点标记(空心小圈 + 数值)
+            hx, hy = X(didx[hi_p["date"]]), Y(hi_p["v"])
+            parts.append(f'<circle cx="{hx:.1f}" cy="{hy:.1f}" r="2.6" fill="{color}" opacity="0.9"/>')
+            _ha = "start" if hx < ml + 40 else ("end" if hx > w - mr - 40 else "middle")
+            parts.append(f'<text x="{hx:.1f}" y="{hy-5:.1f}" class="sp-pt" fill="{color}" '
+                         f'text-anchor="{_ha}">▲{hi_p["v"]:.2f}</text>')
+            # 最低点标记
+            lx, ly = X(didx[lo_p["date"]]), Y(lo_p["v"])
+            parts.append(f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="2.6" fill="{color}" opacity="0.9"/>')
+            _la = "start" if lx < ml + 40 else ("end" if lx > w - mr - 40 else "middle")
+            parts.append(f'<text x="{lx:.1f}" y="{ly+11:.1f}" class="sp-pt" fill="{color}" '
+                         f'text-anchor="{_la}">▼{lo_p["v"]:.2f}</text>')
+            # 中位虚线(该 series 所在轴)
+            mzy = Y(med)
+            parts.append(f'<line x1="{ml}" y1="{mzy:.1f}" x2="{w-mr}" y2="{mzy:.1f}" '
+                         f'stroke="{color}" stroke-width="0.8" stroke-dasharray="2,4" opacity="0.5"/>')
+            # 最新点(实心描边圈, 带当前值)
+            cx0, cy0 = X(didx[cur_p["date"]]), Y(cur_p["v"])
+            parts.append(f'<circle cx="{cx0:.1f}" cy="{cy0:.1f}" r="3.6" '
+                         f'fill="{color}" stroke="#fff" stroke-width="1.2"/>')
+            parts.append(f'<text x="{cx0-6:.1f}" y="{cy0-6:.1f}" class="sp-pt sp-pt-cur" '
+                         f'fill="{color}" text-anchor="end">当前 {cur_p["v"]:.2f}</text>')
+        # 图例(名称 + 轴 + 四点位摘要)
         axtag = "" if single else (" ◂L" if axis == "left" else " R▸")
         leg_dash = ' stroke-dasharray="5,3"' if s.get("dash") else ""
         parts.append(f'<line x1="{w-mr+8}" y1="{legend_y}" x2="{w-mr+26}" y2="{legend_y}" '
                      f'stroke="{color}" stroke-width="2.6"{leg_dash}/>')
         parts.append(f'<text x="{w-mr+30}" y="{legend_y+4}" class="sp-leg" fill="{color}">'
                      f'{_esc(s["name"])}{axtag}</text>')
-        legend_y += 20
+        legend_y += 15
+        if stat:
+            parts.append(
+                f'<text x="{w-mr+8}" y="{legend_y+4}" class="sp-leg-stat" fill="{color}">'
+                f'现{stat["cur"]:.2f} 高{stat["hi"]:.2f} 低{stat["lo"]:.2f} 中{stat["med"]:.2f}</text>')
+            legend_y += 17
+        else:
+            legend_y += 5
     parts.append('</svg>')
     return "".join(parts)
 
@@ -2310,6 +2347,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .sp-src {{ font-size: 10px; color: var(--muted); font-family: var(--mono); margin-top: 5px; opacity: .8; }}
   .src-lnk {{ color: #7fa0b8; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 2px; }}
   .src-lnk:hover {{ color: #a8c4d8; text-decoration-style: solid; }}
+  .sp-pt {{ font-size: 9px; font-family: var(--mono); font-weight: 600; }}
+  .sp-pt-cur {{ font-size: 9.5px; font-weight: 700; }}
+  .sp-leg-stat {{ font-size: 8.5px; font-family: var(--mono); opacity: .92; }}
   .sp-na {{ font-size: 12px; color: var(--muted); padding: 24px; text-align: center; }}
 
   /* 国债拍卖 timeline */

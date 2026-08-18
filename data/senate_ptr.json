@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-17",
+  "as_of": "2026-08-18",
   "senators": [
     {
       "name": "Tommy Tuberville",
@@ -78,6 +78,66 @@
           "filed": "11/15/2025"
         },
         {
+          "ticker": "TSCO",
+          "asset": "Tractor Supply Company",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "02/14/2025"
+        },
+        {
+          "ticker": "CARR",
+          "asset": "Carrier Global Corp",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$1,001 - $15,000",
+          "filed": "02/14/2025"
+        },
+        {
+          "ticker": "TXN",
+          "asset": "Texas Instruments Incorporated - Common Stock",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "02/14/2025"
+        },
+        {
+          "ticker": "DEO",
+          "asset": "Diageo Plc ADR",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "02/14/2025"
+        },
+        {
+          "ticker": "MSFT",
+          "asset": "Microsoft Corp",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "02/14/2025"
+        },
+        {
+          "ticker": "AAPL",
+          "asset": "Apple Inc",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "02/14/2025"
+        },
+        {
           "ticker": "ADBE",
           "asset": "Adobe Inc. - Common Stock",
           "txn_date": "10/29/2024",
@@ -90,66 +150,6 @@
         {
           "ticker": "AAPL",
           "asset": "Apple Inc. - Common Stock",
-          "txn_date": "10/29/2024",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2024"
-        },
-        {
-          "ticker": "CTVA",
-          "asset": "Corteva, Inc. Common Stock",
-          "txn_date": "10/29/2024",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$1,001 - $15,000",
-          "filed": "11/15/2024"
-        },
-        {
-          "ticker": "HON",
-          "asset": "Honeywell International Inc. - Common Stock",
-          "txn_date": "10/29/2024",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2024"
-        },
-        {
-          "ticker": "JNJ",
-          "asset": "Johnson & Johnson Common Stock",
-          "txn_date": "10/29/2024",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2024"
-        },
-        {
-          "ticker": "KMB",
-          "asset": "Kimberly-Clark Corporation Common Stock",
-          "txn_date": "10/29/2024",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2024"
-        },
-        {
-          "ticker": "MCD",
-          "asset": "McDonald's Corporation Common Stock",
-          "txn_date": "10/29/2024",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2024"
-        },
-        {
-          "ticker": "MSFT",
-          "asset": "Microsoft Corporation - Common Stock",
           "txn_date": "10/29/2024",
           "owner": "Joint",
           "direction": "Sale (Full)",
