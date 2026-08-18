@@ -1,9 +1,8 @@
 {
   "kol": "FEMA",
   "sector": "Alternative",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)：FEMA为美国联邦灾害管理机构，非市场类主体，无可追踪的公开市场言论",
   "count": 0,
-  "status": "未找到",
   "history": []
 }

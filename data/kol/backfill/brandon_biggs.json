@@ -1,16 +1,8 @@
 {
   "kol": "Brandon Biggs",
   "sector": "Alternative",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 1,
-  "history": [
-    {
-      "date": "2025-01-22",
-      "direction": "强烈看空",
-      "comments": "灵恩派'预言者',长期发布美国毁灭与灾难类预言。有明确来源确认日期的记录为2025-01其对特朗普就职典礼重大袭击的预言(未应验)。其市场相关预言(美元/欧元崩盘、美元贬值50%、加密取代法币等)多在TikTok/YouTube传播且常删旧视频,缺乏可确认精确日期。整体对美元与美国经济极度看空。",
-      "targets": "美元/美国经济/加密",
-      "source": "Protestia.com (报道其失败预言), 2025-01-22"
-    }
-  ]
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)：其为宗教预言类人物，公开视频多无明确发布日期；2025-08~2026-08区间未检索到带明确日期的可追踪市场言论",
+  "count": 0,
+  "history": []
 }

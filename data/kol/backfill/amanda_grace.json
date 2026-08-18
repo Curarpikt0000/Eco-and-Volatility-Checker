@@ -1,16 +1,8 @@
 {
   "kol": "Amanda Grace",
   "sector": "Alternative",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 1,
-  "history": [
-    {
-      "date": "2025-12-24",
-      "direction": "看空",
-      "comments": "Ark of Grace Ministries的预言者在Charisma专访中发出2026预警,称2026年将'暴露根基','建立在妥协上的将不再稳固','被拖延的将在压力下崩塌'。虽以宗教/属灵语境表达,但传递对机构与经济结构承压崩塌的悲观倾向,呼吁提前准备(其新书《Brace for Impact》)。",
-      "targets": "美国宏观/机构体系",
-      "source": "Charisma Magazine (mycharisma.com), 2025-12-24"
-    }
-  ]
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)：其公开内容以宗教预言为主，2025-08~2026-08区间未检索到带明确日期且含明确市场/资产方向的可追踪言论",
+  "count": 0,
+  "history": []
 }

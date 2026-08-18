@@ -1,9 +1,8 @@
 {
   "kol": "Ray Kurzweil",
   "sector": "Equities",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+  "backfill_date": "2026-08-18",
+  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)：其公开言论以AI/奇点长期科技预言(2029/2045)为主，非市场资产方向判断，无可追踪的过去一年市场言论",
   "count": 0,
-  "status": "未找到",
   "history": []
 }
