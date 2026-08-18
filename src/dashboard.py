@@ -1168,8 +1168,52 @@ def _bis_section_html(bis_latest, page_url):
     )
 
 
+def _bar_chart_svg(points, w=900, h=240, color="#7fa085", unit="T", val_fmt="{:.2f}"):
+    """月度柱状图 SVG。points: [(label, value)] 升序。莫兰迪配色, 顶部标注最新值, 每根柱底 x 轴标签抽稀。
+    最后一根柱高亮(深色+顶端数值)。"""
+    if not points or len(points) < 2:
+        return '<div class="sp-na">柱状图数据不足</div>'
+    vals = [v for _, v in points]
+    vmax, vmin = max(vals), min(vals)
+    # y 轴从 vmin 稍下方起(让柱高差异更明显)
+    lo = vmin - (vmax - vmin) * 0.12 if vmax > vmin else vmin * 0.98
+    hi = vmax + (vmax - vmin) * 0.08 if vmax > vmin else vmax * 1.02
+    span = (hi - lo) or 1.0
+    pad_l, pad_r, pad_t, pad_b = 52, 14, 22, 40
+    plot_w = w - pad_l - pad_r
+    plot_h = h - pad_t - pad_b
+    n = len(points)
+    gap = plot_w / n
+    bw = gap * 0.62
+    parts = [f'<svg viewBox="0 0 {w} {h}" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system,PingFang SC,sans-serif">']
+    # 网格线 + y 标签(4档)
+    for i in range(4):
+        gv = lo + span * i / 3
+        gy = pad_t + plot_h - (gv - lo) / span * plot_h
+        parts.append(f'<line x1="{pad_l}" y1="{gy:.1f}" x2="{w-pad_r}" y2="{gy:.1f}" stroke="#d4cdbe" stroke-width="1" stroke-dasharray="3,3"/>')
+        parts.append(f'<text x="{pad_l-6}" y="{gy+3:.1f}" font-size="10" fill="#8a8578" text-anchor="end">{gv:.2f}</text>')
+    # 柱 + x 标签抽稀(约6个)
+    lbl_step = max(1, n // 6)
+    for i, (lab, v) in enumerate(points):
+        cx = pad_l + gap * i + gap / 2
+        bx = cx - bw / 2
+        bh = (v - lo) / span * plot_h
+        by = pad_t + plot_h - bh
+        last = (i == n - 1)
+        fill = "#5f7a68" if last else color
+        parts.append(f'<rect x="{bx:.1f}" y="{by:.1f}" width="{bw:.1f}" height="{bh:.1f}" rx="2" fill="{fill}" opacity="{0.95 if last else 0.8}"/>')
+        if last:
+            parts.append(f'<text x="{cx:.1f}" y="{by-5:.1f}" font-size="10.5" font-weight="700" fill="#5f7a68" text-anchor="middle">{val_fmt.format(v)}{unit}</text>')
+        if i % lbl_step == 0 or last:
+            # 标签显示 YYYY-MM 的 MM 或短格式
+            short = lab[2:] if len(lab) >= 7 else lab
+            parts.append(f'<text x="{cx:.1f}" y="{h-pad_b+16:.1f}" font-size="9.5" fill="#8a8578" text-anchor="middle">{_esc(short)}</text>')
+    parts.append('</svg>')
+    return "".join(parts)
+
+
 def _maturing_treasury_html(mt):
-    """私营部门(含Fed)1年内到期需展期的【可交易国债】规模: 左近两年 / 右2001至今全周期，两图。
+    """私营部门(含Fed)1年内到期需展期的【可交易国债】规模: 过去一年月度柱状图(主) + 2001至今全周期折线(参考)。
     mt: fetch_maturing_treasury()。数据源 US Treasury MSPD table 3，按到期日筛≤1年加总 outstanding。"""
     if not mt or mt.get("status") != "ok" or not mt.get("history_long"):
         st = (mt or {}).get("status", "数据未就绪")
@@ -1178,19 +1222,33 @@ def _maturing_treasury_html(mt):
     recent = mt.get("history_recent") or []
     val = mt["value"]
     asof = mt.get("as_of", "")
-    # 复用 custody 折线 SVG(接受 [(date,$T)])
-    recent_svg = _custody_chart_svg(recent, w=440, h=210) if len(recent) >= 2 else '<div class="sp-na">近两年数据不足</div>'
-    long_svg = _custody_chart_svg(long, w=440, h=210) if len(long) >= 2 else '<div class="sp-na">长历史数据不足</div>'
+    # 过去一年(最近13个月)月度柱状图(主图)
+    last_year = long[-13:] if len(long) >= 13 else long
+    bar_svg = _bar_chart_svg(last_year, w=900, h=250, color="#7fa085", unit="T")
+    # 全周期折线(参考图,看长趋势)
+    long_svg = _custody_chart_svg(long, w=900, h=190) if len(long) >= 2 else '<div class="sp-na">长历史数据不足</div>'
+    # 过去一年区间统计
+    _yr_lo = min(v for _, v in last_year)
+    _yr_hi = max(v for _, v in last_year)
+    _yr_first = last_year[0]
+    _yr_last = last_year[-1]
+    _delta_b = (_yr_last[1] - _yr_first[1]) * 1000
+    _delta_pct = (_yr_last[1] - _yr_first[1]) / _yr_first[1] * 100 if _yr_first[1] else 0
+    _dcolor = "#2e9e5b" if _delta_b >= 0 else "#d64545"
     return (
         f'<div class="cust-wrap">'
         f'<div class="mt-hero">当前 <b>${val:.2f}T</b> <span class="mt-asof">as of {_esc(asof)}</span> '
         f'<span class="mt-sub">1年内到期需展期的可交易美国国债（Bills + 1年内到期的 Notes/Bonds/TIPS）</span></div>'
-        f'<div class="cust-charts-3" style="grid-template-columns:1fr 1fr;">'
-        f'<div class="cust-chart-col"><div class="cust-chart-title">近两年 · 月末（{len(recent)} 点）</div>'
-        f'{recent_svg}{_custody_span_line(recent)}</div>'
-        f'<div class="cust-chart-col"><div class="cust-chart-title">2001 至今 · 全周期（{len(long)} 月 · 约{len(long)//12} 年）</div>'
-        f'{long_svg}{_custody_span_line(long)}</div>'
+        f'<div class="cust-chart-col cust-chart-full">'
+        f'<div class="cust-chart-title">过去一年 · 月度柱状图（{len(last_year)} 根柱 · 月末口径）</div>'
+        f'{bar_svg}'
+        f'<div class="mt-barmeta">{_esc(_yr_first[0])} → {_esc(_yr_last[0])}：'
+        f'<b style="color:{_dcolor}">{_delta_b:+.0f}B ({_delta_pct:+.1f}%)</b> · '
+        f'高 ${_yr_hi:.3f}T / 低 ${_yr_lo:.3f}T</div>'
         f'</div>'
+        f'<div class="cust-chart-col cust-chart-full" style="margin-top:14px;">'
+        f'<div class="cust-chart-title">2001 至今 · 全周期趋势（{len(long)} 月 · 约{len(long)//12} 年 · 折线参考）</div>'
+        f'{long_svg}{_custody_span_line(long)}</div>'
         f'<div class="cust-how"><b>如何看：</b>这是<b>一年内到期、必须靠新发债滚动展期</b>的可交易国债总规模——'
         f'规模越大，Treasury 每年要在市场上<b>再融资(rollover)的压力越大</b>，对短端利率与货币市场流动性越敏感。'
         f'持续陡升＝债务结构短期化(发短债依赖加深)，若遇利率高企则利息负担与再融资风险同步放大；'
@@ -2359,6 +2417,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .mt-hero b {{ font-size: 20px; color: var(--sage); font-family: var(--mono); }}
   .mt-asof {{ font-size: 11px; color: var(--muted); font-family: var(--mono); margin-left: 6px; }}
   .mt-sub {{ display: block; font-size: 11px; color: var(--muted); margin-top: 3px; }}
+  .mt-barmeta {{ font-size: 12px; color: var(--text); text-align: center; margin-top: 6px; }}
   .cust-lbl {{ font-size: 12px; color: var(--muted); font-weight: 600; }}
   .cust-val {{ font-family: var(--mono); font-size: 34px; font-weight: 800; color: var(--text); line-height: 1.1; }}
   .cust-unit {{ font-size: 18px; color: var(--muted); margin-left: 2px; }}
