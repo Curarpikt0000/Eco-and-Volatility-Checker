@@ -237,6 +237,16 @@ def main():
     except Exception as e:
         print(f"[dashboard] COMEX白银issues参考 跳过: {e}")
 
+    # ── 美国黄金出口(FRED IEAXGG Nonmonetary gold, 去美元化/回流实物金) ──
+    gold_exports = {}
+    try:
+        gold_exports = ed.fetch_gold_exports() or {}
+        print(f"[dashboard] 美国黄金出口: status={gold_exports.get('status')} "
+              f"as_of={gold_exports.get('as_of')} latest={gold_exports.get('latest')}M$ "
+              f"surge={gold_exports.get('surge_x')}x pts={len(gold_exports.get('points',[]))}")
+    except Exception as e:
+        print(f"[dashboard] 美国黄金出口 跳过: {e}")
+
     # ── BIS 国际清算银行报告(Quarterly Review 季度综述) ──
     bis_latest = None
     try:
@@ -314,6 +324,7 @@ def main():
         market_breadth=market_breadth,
         silver_bank_positions=silver_bank_positions,
         comex_silver_issues_ref=comex_silver_issues_ref,
+        gold_exports=gold_exports,
         bis_latest=bis_latest,
     )
     print(f"[dashboard] 生成: {out}")

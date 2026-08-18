@@ -2998,6 +2998,74 @@ def fetch_comex_silver_issues_ref(cache_path=None):
     }
 
 
+def fetch_gold_exports(cache_path=None):
+    """美国黄金出口(Nonmonetary gold) —— FRED IEAXGG 季度真数据(1999→今, Mil USD)。
+
+    ★对应用户图「各国黄金运回家·2025-26 美国出口货币黄金飙升」。图作者原标 Monetary gold,
+    但 FRED 无此序列; 真正对应该暴涨现象的是 **Nonmonetary gold**(非货币黄金 = 民间/商业实物金
+    出口, 非央行储备金)。本函数用 FRED 官方真序列 IEAXGG + 真标题, 诚实标注(不照抄不准的
+    Monetary)。免 key(fredgraph.csv 直连), 可回溯, 每季更新。
+
+    每季从 FRED 拉最新, 与本地缓存合并(只增新点), 抓不到读缓存真值绝不覆盖成空。
+    返回 {status, as_of, source, unit, latest, peak, base_2024_avg, surge_x, points:[{date,value_musd}]}。
+    """
+    import json
+    if cache_path is None:
+        cache_path = os.path.join(os.path.dirname(__file__), "..", "data", "gold_exports.json")
+
+    def _load_cache():
+        try:
+            with open(cache_path, encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            return None
+
+    cached = _load_cache()
+    # 从 FRED 拉最新(免key fredgraph.csv), 与缓存合并
+    fresh = _fred_series("IEAXGG")  # [(date,val)] 升序
+    pts = []
+    if fresh:
+        pts = [{"date": d, "value_musd": round(float(v), 1)} for d, v in fresh]
+    elif cached and cached.get("points"):
+        out = dict(cached)
+        out["status"] = "缓存"
+        return out
+    if not pts:
+        return {"status": "未获取", "as_of": "", "unit": "millions_usd",
+                "source": "FRED IEAXGG 美国黄金出口(未获取)", "points": []}
+
+    pts.sort(key=lambda p: p["date"])
+    vals = [p["value_musd"] for p in pts]
+    peak = max(vals); peak_date = pts[vals.index(peak)]["date"]
+    base_2024 = [p["value_musd"] for p in pts if p["date"].startswith("2024")]
+    base_avg = round(sum(base_2024) / len(base_2024), 0) if base_2024 else None
+    latest = pts[-1]["value_musd"]
+    surge_x = round(latest / base_avg, 1) if base_avg else None
+
+    out = {
+        "status": "ok",
+        "as_of": pts[-1]["date"],
+        "series_id": "IEAXGG",
+        "unit": "millions_usd",
+        "frequency": "quarterly",
+        "source": "FRED / U.S. BEA · Exports of Goods: Nonmonetary gold (IEAXGG)",
+        "source_url": "https://fred.stlouisfed.org/series/IEAXGG",
+        "title_note": (cached or {}).get("title_note",
+                       "图作者原标 Monetary gold, FRED 无此序列; 真正对应暴涨的是 Nonmonetary gold"
+                       "(非货币黄金=民间/商业实物金出口, 非央行储备金)。本 section 用 FRED 官方真标题诚实标注。"),
+        "latest": latest, "latest_date": pts[-1]["date"],
+        "peak": peak, "peak_date": peak_date,
+        "base_2024_avg": base_avg, "surge_x": surge_x,
+        "points": pts,
+    }
+    try:
+        with open(cache_path, "w", encoding="utf-8") as f:
+            json.dump(out, f, ensure_ascii=False, default=str)
+    except Exception:
+        pass
+    return out
+
+
 def fetch_fiscal_news(cache_path=None, limit=20):
     """美日财政政策事件时间线(离散事件文本,非时序数字)。
     数据由 data/fiscal_news.json 驱动: 每日 cron agent 模式 web 检索权威源

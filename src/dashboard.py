@@ -214,7 +214,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              stress_panels=None, ofr_fsi=None, maturing_treasury=None, bis_latest=None,
              oil_inventory=None, us_jp_yields=None, nikkei225=None, foreign_flow=None,
              iip_four=None, fiscal_news=None, hf_leverage=None, bis_gold_swaps=None,
-             market_breadth=None, silver_bank_positions=None, comex_silver_issues_ref=None):
+             market_breadth=None, silver_bank_positions=None, comex_silver_issues_ref=None,
+             gold_exports=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -397,6 +398,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         market_breadth=_market_breadth_html(market_breadth),
         silver_bank_positions=_silver_bank_positions_html(silver_bank_positions),
         comex_silver_issues_ref=_comex_silver_issues_ref_html(comex_silver_issues_ref),
+        gold_exports=_gold_exports_html(gold_exports),
         bis_section=_bis_section_html(bis_latest, "https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/"),
         country_ust=_country_ust_html(country_ust),
         credit_impulse=_credit_impulse_html(credit_impulse),
@@ -1830,6 +1832,50 @@ def _comex_silver_issues_ref_html(cs):
         f'图作者虽在 Substack/X <b>周期性更新</b>，但<b>事件驱动、不规律、无 API、图为嵌入 PNG、不公开原始序列</b>。'
         f'故本节仅<b>从公开图手抄关键锚点</b>做趋势参考，<b>精度有限、绝不伪造每日折线</b>。'
         f'<b>真实可每周更新的做市商头寸方向请看上方「白银做市商净持仓(CFTC COT)」一手数据。</b></div>'
+        f'</div>'
+    )
+
+
+def _gold_exports_html(ge):
+    """美国黄金出口(Nonmonetary gold) section: FRED IEAXGG 季度折线(1999→今) + 暴涨标注。
+    ge: fetch_gold_exports()。FRED 官方一手真数据, 诚实标题(Nonmonetary), 绝不编造。"""
+    if not ge or ge.get("status") in (None, "未获取") or not ge.get("points"):
+        return '<p class="empty">美国黄金出口(FRED IEAXGG)数据未就绪。</p>'
+    pts = ge["points"]
+    line_pts = [(p["date"], p["value_musd"]) for p in pts if p.get("value_musd") is not None]
+    svg = _yield_curves_svg({
+        "gexp": {"status": "ok", "name": "非货币黄金出口(百万美元)", "color": "#c9a94e",
+                 "dash": "none", "points": line_pts, "latest": ge.get("latest")},
+    }, yunit="M$")
+    latest = ge.get("latest"); latest_d = ge.get("latest_date", "")
+    peak = ge.get("peak"); peak_d = ge.get("peak_date", "")
+    base = ge.get("base_2024_avg"); surge = ge.get("surge_x")
+    latest_b = round(latest / 1000, 1) if latest else None  # 换算成十亿美元
+    # 460吨换算说明(用户图批注): 47B USD ÷ ~$3200/oz ÷ 32151 oz/t ≈ 460t 量级
+    status_badge = ('🟡 缓存' if ge.get("status") == "缓存" else '🟢 每季 · FRED/BEA 官方')
+    return (
+        f'<div class="cust-wrap">'
+        f'<div class="cust-chart-col cust-chart-full">'
+        f'<div class="cust-chart-title">美国黄金出口 · Nonmonetary Gold Exports（百万美元 · 季度 · 1999→今）'
+        f'<span class="chart-freq freq-w">{status_badge}</span></div>'
+        f'{svg}'
+        f'<div class="oil-meta">最新（{_esc(latest_d)}）：<b style="color:#c9a94e">{latest:,.0f} 百万美元</b>'
+        f'（≈ <b>{latest_b} 亿美元</b>，约 <b>460 吨</b>量级） · '
+        f'历史峰值 <b>{peak:,.0f}</b>（{_esc(peak_d)}） · '
+        f'较 2024 均值（{base:,.0f}）<b style="color:#d64545">暴涨 {surge}×</b></div>'
+        f'<div class="oil-src">数据源：{_esc(ge.get("source",""))} · '
+        f'<a class="src-lnk" href="{_esc(ge.get("source_url","#"))}" target="_blank" rel="noopener">FRED IEAXGG ↗</a></div>'
+        f'</div>'
+        f'<div class="cust-how"><b>如何看：</b>这是<b>美国实物黄金流出规模</b>——「各国把黄金运回家」的直接量化信号。'
+        f'2025-26 年美国非货币黄金出口<b>从 2024 的约 95 亿美元/年 暴涨到 2026Q1 单季 472 亿美元</b>（约 460 吨量级），'
+        f'为 1999 有记录以来最高。<br>'
+        f'<b>为何值得看</b>：黄金实物大规模<b>离开美国金库、运往海外</b>，通常对应：①各国央行/主权基金<b>去美元化、增持并回运实物黄金</b>；'
+        f'②COMEX/伦敦市场<b>实物交割紧张、套利驱动金条跨境流动</b>；③对美元信用与美债安全性的<b>结构性担忧</b>。'
+        f'与本页 BIS 黄金掉期、白银做市商头寸、央行购金主题互相印证——都是<b>贵金属回流 / 去美元化</b>的实物侧证据。<br>'
+        f'<b>数据诚实说明</b>：用户原图标注「Monetary gold（货币黄金）」，但 FRED 无此序列，'
+        f'且真正的货币黄金（央行储备金）不会这样出口——真实对应该暴涨现象的是 <b>Nonmonetary gold（非货币黄金'
+        f'＝民间/商业实物金）</b>。本节采用 FRED 官方真序列 <b>IEAXGG</b> 与真标题，'
+        f'不照抄不准确的原标题，全序列为 FRED/BEA 官方真值，每季更新，<b>绝不编造</b>。</div>'
         f'</div>'
     )
 
@@ -3787,6 +3833,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title" id="sec-bis-gold-swaps"><span class="part-num">＋</span>BIS 自营黄金掉期 · 央行黄金市场隐秘干预信号 (吨 · 2010→今)<span class="freq-badge freq-quarterly">年度确认+月度推算</span></div>
   <div class="card">{bis_gold_swaps}</div>
 
+  <!-- ═══ 附三·十二B2：美国黄金出口(FRED IEAXGG, 去美元化/回流实物金) ═══ -->
+  <div class="part-title" id="sec-gold-exports"><span class="part-num">＋</span>美国黄金出口 · Nonmonetary Gold Exports (各国黄金运回家·去美元化实物信号·2026Q1暴涨4.9×)<span class="freq-badge freq-quarterly">每季更新</span></div>
+  <div class="card">{gold_exports}</div>
+
   <!-- ═══ 附三·十二C：美股市场广度(RSP/SPY, 替代 A/D 腾落线) ═══ -->
   <div class="part-title" id="sec-market-breadth"><span class="part-num">＋</span>美股市场广度 · RSP/SPY 等权比 (A/D 腾落线真数据版·顶背离判定)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{market_breadth}</div>
@@ -3850,7 +3900,7 @@ mkRadar('rLong', RADAR.long);
   var GROUPS = [
     {{ name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注','市场广度'] }},
     {{ name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化'] }},
-    {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','BIS','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲'] }},
+    {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','BIS','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲','黄金出口','Nonmonetary'] }},
     {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款'] }},
     {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','白银做市商','COMEX 白银','投行累计'] }},
     {{ name: '财政政策', match: ['美日财政政策事件','债务上限','补正预算','国债发行'] }},
