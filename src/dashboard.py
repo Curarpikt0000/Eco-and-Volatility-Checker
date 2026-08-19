@@ -1730,7 +1730,7 @@ def _ad_line_html(ad):
     diverge = ad.get("divergence")
 
     w, h = 920, 260
-    ml, mr, mt, mb_ = 20, 170, 18, 30
+    ml, mr, mt, mb_ = 52, 176, 18, 30
     pw, ph = w - ml - mr, h - mt - mb_
     dates = [d for d, _ in cum_pts]
     n = len(dates)
@@ -1745,12 +1745,22 @@ def _ad_line_html(ad):
     plo, phi, prng = norm(pct_v)
     def Yc(v): return mt + (chi - v) / crng * ph
     def Yp(v): return mt + (phi - v) / prng * ph
+    cum_avg = sum(cum_v) / len(cum_v)  # 累计腾落线均值(平均值横线)
 
     parts = [f'<svg viewBox="0 0 {w} {h}" class="cust-chart" preserveAspectRatio="xMidYMid meet" '
              f'font-family="-apple-system,PingFang SC,sans-serif">']
+    # 5 条水平网格线 + 左轴(累计腾落线, 蓝) + 右轴(参与率%, 琥珀) 刻度
     for k in range(5):
         gy = mt + ph * k / 4
         parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" stroke="#d4cdbe" stroke-width="1" stroke-dasharray="3,3"/>')
+        cv = chi - crng * k / 4
+        parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" font-size="9" fill="#6b8fb5" text-anchor="end">{cv:.0f}</text>')
+        pv = phi - prng * k / 4
+        parts.append(f'<text x="{w-mr+6}" y="{gy+3:.1f}" font-size="9" fill="#c9a94e" text-anchor="start">{pv:.0f}%</text>')
+    # 平均值横线(累计腾落线均值, 蓝色虚线 + 标注)
+    y_avg = Yc(cum_avg)
+    parts.append(f'<line x1="{ml}" y1="{y_avg:.1f}" x2="{w-mr}" y2="{y_avg:.1f}" stroke="#6b8fb5" stroke-width="1.2" stroke-dasharray="6,3" opacity="0.7"/>')
+    parts.append(f'<text x="{ml+4}" y="{y_avg-4:.1f}" font-size="9" fill="#6b8fb5" opacity="0.9">均值 {cum_avg:.0f}</text>')
     # 零参与率(50%)基准线(参与率轴): advance_pct=50 的水平位置
     if plo <= 50 <= phi:
         y50 = Yp(50)
@@ -2111,27 +2121,18 @@ def _comex_silver_issues_ref_html(cs):
     }, yunit="")
     asof = cs.get("as_of", "")
     src = cs.get("source", ""); src_url = cs.get("source_url", "#")
-    ann = cs.get("annotations", [])
-    ann_col = {"red": "#d64545", "blue": "#6b8fb5"}
-    ann_html = "".join(
-        f'<li style="color:{ann_col.get(a.get("color"),"#3a3a3a")}">{_esc(a.get("text",""))}</li>'
-        for a in ann
-    )
     return (
         f'<div class="cust-wrap">'
         f'<div class="cust-chart-col cust-chart-full">'
         f'<div class="cust-chart-title">【静态参考】COMEX 白银 投行累计 issues/stops（千 oz · 2009→2026-04）'
         f'<span class="chart-freq" style="background:#e8e2d5;color:#8a6d3b">⚪ 静态参考 · 非实时 · 事件驱动</span></div>'
         f'{svg}'
-        f'<div class="oil-meta">数据截止 <b>{_esc(asof)}</b> · 累计线走高＝做市商净<b>接货(stop)</b>；走低＝净<b>交货(issue)</b> · '
-        f'2018-20 见顶 ~170K 后回落，2026 回升至 ~100K</div>'
-        f'<ul class="csi-ann">{ann_html}</ul>'
+        f'<div class="oil-meta">数据截止 <b>{_esc(asof)}</b> · 累计线走高＝做市商净<b>接货(stop)</b>；走低＝净<b>交货(issue)</b></div>'
         f'<div class="oil-src">数据源：{_esc(src)} · '
         f'<a class="src-lnk" href="{_esc(src_url)}" target="_blank" rel="noopener">EconAnalytics / @DtDS_WSS ↗</a></div>'
         f'</div>'
         f'<div class="cust-how"><b>如何看 &amp; 为何静态：</b>这张图由 <b>Michael Lynch(@DtDS_WSS)</b> 制作，'
         f'追踪 COMEX 白银<b>各投行(bullion banks)累计与月度 issues/stops</b>——累计净头寸走高＝做市商净接货囤货(看涨)，'
-        f'红字批注为图作者观点（“做市商囤 3200 吨、占库存约 1/3；对策：建国储夺库存打破价格控制”）。<br>'
         f'<b>为何本节静态、不自动每日更新</b>：底层是 <b>CME COMEX 每日 Issues&amp;Stops by firm 报告</b>，'
         f'CME 官方<b>明确封禁脚本抓取</b>（IP block + Data Terms of Use），无免 key、可回溯的每日源；'
         f'图作者虽在 Substack/X <b>周期性更新</b>，但<b>事件驱动、不规律、无 API、图为嵌入 PNG、不公开原始序列</b>。'
@@ -4187,6 +4188,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title"><span class="part-num">6</span>今日最需关注的一条信号<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="focus-box">{focus}</div>
 
+  <!-- ═══ 附三·十二C：美股市场广度(RSP/SPY, A/D 腾落线代理补充) ═══ -->
+  <div class="part-title" id="sec-market-breadth"><span class="part-num">＋</span>美股市场广度 · RSP/SPY 等权比 (广度代理·补充顶背离判定)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{market_breadth}</div>
+
   <!-- ═══ 附一·零：本周 KOL 观点全景(按模块+多空, Eco 独立每日快照) ═══ -->
   <div class="part-title part-title-flex"><span><span class="part-num">＋</span>本周 KOL 观点全景 · 按模块 (多空方向卡片)</span><span class="freq-badge freq-daily" style="margin-left:0">每日更新</span><a class="kol-dash-btn" href="https://curarpikt0000.github.io/kol-dashboard/" target="_blank" rel="noopener">📊 打开 KOL Dashboard →</a></div>
   <div class="card">{kol_views}</div>
@@ -4222,84 +4227,61 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·二·四：国债市场压力四联图 (对齐 Morgan Stanley 三图 + OFR官方压力指数, 竖向) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>国债市场收益率·波动性·压力 · 竖向四联图 (对齐 Morgan Stanley · 过去3年真实公开数据 · 每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{stress_panels}</div>
-
   <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)<span class="freq-badge freq-event">每次拍卖</span></div>
   <div class="card">{auctions}</div>
-
   <!-- ═══ 附三·五：外国官方在纽约联储托管的美债 ═══ -->
   <div class="part-title"><span class="part-num">＋</span>外国官方托管美债 · 纽约联储 (去美元化风向标)<span class="freq-badge freq-weekly">每周更新</span></div>
   <div class="card">{custody}</div>
   <div class="card">{custody_accel}</div>
-
   <!-- ═══ 附三·六：1年内到期需展期的可交易国债(再融资墙) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>1年内到期可交易国债 · 再融资墙 (rollover 压力)<span class="freq-badge freq-monthly">每月更新</span></div>
   <div class="card">{maturing_treasury}</div>
-
-  <!-- ═══ 附三·七：美国石油库存运营红线 (Brent-WTI价差 / Cushing / SPR) ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>美国石油库存运营红线 · 能源安全 (Brent-WTI 价差 / Cushing / SPR · tank bottom)<span class="freq-badge freq-weekly">每周更新 · 价差每日</span></div>
-  <div class="card">{oil_inventory}</div>
-
   <!-- ═══ 附三·八：美日 10Y/30Y 国债收益率四线图 ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美日 10年/30年国债收益率 · 过去一年 (四线同图 · 美日利差与套息)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{yield_curves}</div>
-
   <!-- ═══ 附三·八B：美国国债收益率百年周期(4线, 1934→今) ═══ -->
   <div class="part-title" id="sec-us-yield-century"><span class="part-num">＋</span>美国国债收益率百年周期 · Fed Funds/3M/10Y/30Y (40年长周期·1940大底/1980大顶/2020大底)<span class="freq-badge freq-quarterly">每季更新</span></div>
   <div class="card">{us_yield_century}</div>
-
-  <!-- ═══ 附三·九：日经225 vs 外资净买入日股 ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>日经225 vs 外资净买入日股 · 过去一年 (日本市场 · 外资资金流)<span class="freq-badge freq-weekly">指数每日 · 外资每周</span></div>
-  <div class="card">{nikkei_flow}</div>
-
   <!-- ═══ 附三·六：日本 / 中国 分国别持有美债 (TIC, 近10年) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>日本 / 中国 / 欧盟 持有美债 · 近10年 + 2008长历史 (TIC 分国别口径)<span class="freq-badge freq-monthly">每月更新 · 滞后约2月</span></div>
   <div class="card">{country_ust}</div>
-
   <!-- ═══ 附三·十：四国国际投资头寸 IIP (对外资产/负债/净头寸) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>四国国际投资头寸 IIP · 过去十年 (美/日/德/中 对外资产·负债·净债权地位)<span class="freq-badge freq-quarterly">每年更新</span></div>
   <div class="card">{iip_four}</div>
-
   <!-- ═══ 附三·十二：对冲基金美债杠杆监测 (OFR) ═══ -->
   <div class="part-title" id="sec-hf-leverage"><span class="part-num">＋</span>对冲基金美债杠杆监测 · 敞口/GDP + 回购借款 (美债隐性杠杆)<span class="freq-badge freq-quarterly">每季度更新</span></div>
   <div class="card">{hf_leverage}</div>
-
+  <!-- ═══ 附三·七：美国石油库存运营红线 (Brent-WTI价差 / Cushing / SPR) ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>美国石油库存运营红线 · 能源安全 (Brent-WTI 价差 / Cushing / SPR · tank bottom)<span class="freq-badge freq-weekly">每周更新 · 价差每日</span></div>
+  <div class="card">{oil_inventory}</div>
   <!-- ═══ 附三·十二B：BIS 自营黄金掉期 ═══ -->
   <div class="part-title" id="sec-bis-gold-swaps"><span class="part-num">＋</span>BIS 自营黄金掉期 · 央行黄金市场隐秘干预信号 (吨 · 2010→今)<span class="freq-badge freq-quarterly">年度确认+月度推算</span></div>
   <div class="card">{bis_gold_swaps}</div>
-
   <!-- ═══ 附三·十二B2：美国黄金出口(FRED IEAXGG, 去美元化/回流实物金) ═══ -->
   <div class="part-title" id="sec-gold-exports"><span class="part-num">＋</span>美国黄金出口 · Nonmonetary Gold Exports (各国黄金运回家·去美元化实物信号·2026Q1暴涨4.9×)<span class="freq-badge freq-quarterly">每季更新</span></div>
   <div class="card">{gold_exports}</div>
-
   <!-- ═══ 附三·十二B1：印度/中国黄金 domestic premium (WGC goldhub) ═══ -->
   <div class="part-title" id="sec-gold-premium"><span class="part-num">＋</span>印度 &amp; 中国黄金 Domestic Premium/Discount (亚洲实物黄金需求风向标·WGC 真数据)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{gold_premium}</div>
-
   <!-- ═══ 附三·十二B1b：印度白银月度进口 (UN Comtrade) ═══ -->
   <div class="part-title" id="sec-silver-imports"><span class="part-num">＋</span>印度白银月度进口 · Silver Bullion Imports (全球最大白银进口国·实物需求风向标·UN Comtrade 免费月度)<span class="freq-badge freq-monthly">每月更新</span></div>
   <div class="card">{silver_imports}</div>
-
-  <!-- ═══ 附三·十二C：美股市场广度(RSP/SPY, A/D 腾落线代理补充) ═══ -->
-  <div class="part-title" id="sec-market-breadth"><span class="part-num">＋</span>美股市场广度 · RSP/SPY 等权比 (广度代理·补充顶背离判定)<span class="freq-badge freq-daily">每日更新</span></div>
-  <div class="card">{market_breadth}</div>
-
   <!-- ═══ 附三·十二D：白银做市商头寸(CFTC COT, 一手) ═══ -->
   <div class="part-title" id="sec-silver-bank-positions"><span class="part-num">＋</span>白银做市商头寸 · CFTC COT commercial 净持仓 (做市商接货 vs 压价·一手真数据)<span class="freq-badge freq-weekly">每周更新</span></div>
   <div class="card">{silver_bank_positions}</div>
-
   <!-- ═══ 附三·十二E：COMEX 白银 issues/stops 静态参考(ANONYMIZED_PERSON_0_15) ═══ -->
   <div class="part-title" id="sec-comex-silver-issues"><span class="part-num">＋</span>COMEX 白银 投行累计 issues/stops · 静态参考 (ANONYMIZED_PERSON_0_23 @DtDS_WSS·CME封禁无法自动更新)<span class="freq-badge" style="background:#e8e2d5;color:#8a6d3b">静态参考</span></div>
   <div class="card">{comex_silver_issues_ref}</div>
-
   <!-- ═══ 附三·十二F：COMEX 做市商每周净 issue/stop 柱状图(金+银, 一手) ═══ -->
   <div class="part-title" id="sec-comex-issue-stop"><span class="part-num">＋</span>COMEX 做市商每周净 issue/stop · 金+银 (一手·大行发货vs接货·每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{comex_issue_stop}</div>
-
   <!-- ═══ 附三·十一：美日财政政策事件时间线 ═══ -->
   <div class="part-title" id="sec-fiscal-news"><span class="part-num">＋</span>美日财政政策事件 · 债务上限/CR/补正预算/国债发行 (每日检索)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{fiscal_news}</div>
-
+  <!-- ═══ 附三·九：日经225 vs 外资净买入日股 ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>日经225 vs 外资净买入日股 · 过去一年 (日本市场 · 外资资金流)<span class="freq-badge freq-weekly">指数每日 · 外资每周</span></div>
+  <div class="card">{nikkei_flow}</div>
   <!-- ═══ 附四：知名机构持仓 (13F) + Trump ═══ -->
   <div class="part-title"><span class="part-num">＋</span>机构持仓追踪 · 13F + Trump (对比上期变动)<span class="freq-badge freq-quarterly">每季度 · Trump不定期</span></div>
   <div class="h-grid">{holdings}</div>
@@ -4430,9 +4412,16 @@ mkRadar('rLong', RADAR.long);
         if (grp) grp.classList.remove('sn-collapsed');
         var nav = document.getElementById('sidenav');
         if (nav) {{
+          // 侧栏 menu 跟随: 若高亮项不在侧栏可视区内, 平滑滚动侧栏使其居中偏上
           var lr = l.getBoundingClientRect(), nr = nav.getBoundingClientRect();
-          if (lr.top < nr.top + 10 || lr.bottom > nr.bottom - 10) {{
-            if (l.scrollIntoView) l.scrollIntoView({{ block: 'nearest' }});
+          var margin = 24;
+          if (lr.top < nr.top + margin || lr.bottom > nr.bottom - margin) {{
+            // 高亮项相对侧栏内容顶部的偏移 = 当前scrollTop + (项视口top - 侧栏视口top)
+            var offsetInNav = nav.scrollTop + (lr.top - nr.top);
+            // 目标: 让高亮项出现在侧栏可视区 1/3 处
+            var target = offsetInNav - nr.height * 0.33;
+            if (target < 0) target = 0;
+            nav.scrollTo ? nav.scrollTo({{ top: target, behavior: 'smooth' }}) : (nav.scrollTop = target);
           }}
         }}
       }}
