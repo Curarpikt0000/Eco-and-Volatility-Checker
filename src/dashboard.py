@@ -1291,30 +1291,44 @@ def _yield_curves_html(yc):
 
 
 def _nikkei_flow_svg(nk, ff, w=920, h=300):
-    """日经225指数(折线,左轴) + 外资净买入日股(周频柱状,右轴,正绿负红)双轴同图。
-    nk: fetch_nikkei225(); ff: fetch_foreign_flow_japan()。周对齐: 日经取每周最后一日近似。"""
+    """日经225指数(折线,左轴,完整日频) + 外资净买入日股(周频柱状,右轴,正绿负红)双轴同图。
+    nk: fetch_nikkei225(日频); ff: fetch_foreign_flow_japan(周频,滞后1-2周)。
+    ★时间轴用日经【完整日频】范围,日经线画到最新交易日; 外资柱按各自周日期投影到该轴对应位置
+    (外资滞后→最右侧留空,真实反映发布时滞,不再把日经截断到外资最后一周)。"""
     nk_ok = nk and nk.get("status") == "ok" and len(nk.get("points", [])) >= 2
     ff_ok = ff and ff.get("status") == "ok" and len(ff.get("points", [])) >= 2
     if not nk_ok and not ff_ok:
         return '<div class="cust-chart-na">日经225 / 外资流入数据不足</div>'
     ml, mr, mt, mb = 56, 62, 16, 32
     pw, ph = w - ml - mr, h - mt - mb
-    # x 轴统一用外资流入的周日期(若无则用日经日期)
-    weeks = [d for d, _ in ff["points"]] if ff_ok else [d for d, _ in nk["points"]]
-    n = len(weeks)
-    widx = {d: i for i, d in enumerate(weeks)}
-    def X(i): return ml + i * pw / (max(n - 1, 1))
+    # ── 时间轴: 用日经完整日频日期(若无则退回外资周日期) ──
+    if nk_ok:
+        axis_dates = [d for d, _ in nk["points"]]
+    else:
+        axis_dates = [d for d, _ in ff["points"]]
+    n = len(axis_dates)
+    d0, d1 = axis_dates[0], axis_dates[-1]
+    import datetime as _dt
+    _t0 = _dt.date.fromisoformat(d0)
+    _span = (_dt.date.fromisoformat(d1) - _t0).days or 1
+    # 按日期在总跨度中的比例定位 x(外资周日期即使非交易日也能落位)
+    def XD(dstr):
+        try:
+            days = (_dt.date.fromisoformat(dstr) - _t0).days
+        except Exception:
+            return ml
+        return ml + max(0, min(days, _span)) / _span * pw
     parts = [f'<svg viewBox="0 0 {w} {h}" class="cust-chart" preserveAspectRatio="xMidYMid meet" font-family="-apple-system,PingFang SC,sans-serif">']
-    # ── 右轴: 外资流入柱状(先画,当背景) ──
+    # ── 右轴: 外资流入柱状(先画,当背景; 按周日期投影到日频轴) ──
     if ff_ok:
         fvals = [v for _, v in ff["points"]]
         fmax = max(abs(min(fvals)), abs(max(fvals))) or 1.0
-        # 右轴 0 线居中
         def FY(v): return mt + ph / 2 - (v / fmax) * (ph / 2 * 0.9)
         zero_y = FY(0)
-        bw = pw / n * 0.6
-        for i, (d, v) in enumerate(ff["points"]):
-            cx = X(i)
+        bw = pw / max(n / 5, len(ff["points"])) * 0.9  # 柱宽按周密度估算
+        bw = max(4.0, min(bw, pw / len(ff["points"]) * 0.7))
+        for d, v in ff["points"]:
+            cx = XD(d)
             y = FY(v)
             col = "#5b9e6f" if v >= 0 else "#c0757d"
             top = min(y, zero_y); ht = abs(y - zero_y)
@@ -1326,46 +1340,42 @@ def _nikkei_flow_svg(nk, ff, w=920, h=300):
             yy = FY(fmax * frac * 0.9)
             parts.append(f'<text x="{w-mr+5}" y="{yy+3:.1f}" font-size="9" fill="#8a8578" text-anchor="start">{fmax*frac*0.9:+.1f}</text>')
         parts.append(f'<text x="{w-mr+5}" y="{mt+8}" font-size="8.5" fill="#8a8578">外资¥T</text>')
-    # ── 左轴: 日经225 折线 ──
+        # 外资数据截止标注(最新周 < 日经最新时, 提示滞后)
+        ff_last = ff["points"][-1][0]
+        if nk_ok and ff_last < d1:
+            _lx = XD(ff_last)
+            parts.append(f'<line x1="{_lx:.1f}" y1="{mt}" x2="{_lx:.1f}" y2="{mt+ph}" stroke="#c0757d" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>')
+            parts.append(f'<text x="{_lx-3:.1f}" y="{mt+ph-4:.1f}" font-size="8" fill="#c0757d" text-anchor="end" opacity="0.85">外资数据截至{_esc(ff_last[5:])}</text>')
+    # ── 左轴: 日经225 折线(完整日频, 画到最新交易日) ──
     if nk_ok:
-        # 把日经日频对齐到周(取<=周日期的最后一个)
-        nk_map = {}
+        nvals = [v for _, v in nk["points"]]
+        nlo, nhi = min(nvals), max(nvals)
+        npad = (nhi - nlo) * 0.1 or 1
+        nlo -= npad; nhi += npad
+        nrng = (nhi - nlo) or 1
+        def NY(v): return mt + (nhi - v) / nrng * ph
+        line = [f"{XD(d):.1f},{NY(v):.1f}" for d, v in nk["points"]]
+        parts.append(f'<polyline points="{" ".join(line)}" fill="none" stroke="#3a5a7d" stroke-width="2.3" stroke-linejoin="round"/>')
+        # hover 点(日频, 抽稀避免过密: 每根都放但 r 小)
         for d, v in nk["points"]:
-            nk_map[d] = v
-        nk_dates = sorted(nk_map)
-        aligned = []
-        for wk in weeks:
-            # 取 <= wk 的最近交易日
-            cand = [d for d in nk_dates if d <= wk]
-            if cand:
-                aligned.append((wk, nk_map[cand[-1]]))
-        if len(aligned) >= 2:
-            nvals = [v for _, v in aligned]
-            nlo, nhi = min(nvals), max(nvals)
-            npad = (nhi - nlo) * 0.1 or 1
-            nlo -= npad; nhi += npad
-            nrng = (nhi - nlo) or 1
-            def NY(v): return mt + (nhi - v) / nrng * ph
-            line = [f"{X(widx[wk]):.1f},{NY(v):.1f}" for wk, v in aligned if wk in widx]
-            parts.append(f'<polyline points="{" ".join(line)}" fill="none" stroke="#3a5a7d" stroke-width="2.3" stroke-linejoin="round"/>')
-            for wk, v in aligned:
-                if wk in widx:
-                    parts.append(f'<circle class="tip-hit" cx="{X(widx[wk]):.1f}" cy="{NY(v):.1f}" r="6" data-tip="日经225 · {_esc(wk)}||{v:,.0f}"/>')
-            ld, lv = aligned[-1]
-            parts.append(f'<circle cx="{X(widx[ld]):.1f}" cy="{NY(lv):.1f}" r="3.5" fill="#3a5a7d"/>')
-            # 左轴刻度
-            for k in range(4):
-                gv = nlo + nrng * k / 3
-                gy = NY(gv)
-                parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" font-size="9" fill="#3a5a7d" text-anchor="end">{gv:,.0f}</text>')
-            parts.append(f'<text x="{ml-6}" y="{mt+8}" font-size="8.5" fill="#3a5a7d" text-anchor="end">日经</text>')
-    # x 轴月标签
+            parts.append(f'<circle class="tip-hit" cx="{XD(d):.1f}" cy="{NY(v):.1f}" r="5" data-tip="日经225 · {_esc(d)}||{v:,.0f}"/>')
+        ld, lv = nk["points"][-1]
+        parts.append(f'<circle cx="{XD(ld):.1f}" cy="{NY(lv):.1f}" r="3.5" fill="#3a5a7d"/>')
+        parts.append(f'<text x="{XD(ld)-4:.1f}" y="{NY(lv)-6:.1f}" font-size="8.5" fill="#3a5a7d" text-anchor="end">最新 {lv:,.0f}</text>')
+        # 左轴刻度
+        for k in range(4):
+            gv = nlo + nrng * k / 3
+            gy = NY(gv)
+            parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" font-size="9" fill="#3a5a7d" text-anchor="end">{gv:,.0f}</text>')
+        parts.append(f'<text x="{ml-6}" y="{mt+8}" font-size="8.5" fill="#3a5a7d" text-anchor="end">日经</text>')
+    # x 轴月标签(按日期跨度, 每隔月)
     last_ym = None
-    for i, d in enumerate(weeks):
+    for d in axis_dates:
         if d[:7] != last_ym and int(d[5:7]) % 2 == 1:
             last_ym = d[:7]
-            anchor = "start" if i == 0 else ("end" if i >= n - 2 else "middle")
-            parts.append(f'<text x="{X(i):.1f}" y="{h-9}" font-size="9" fill="#8a8578" text-anchor="{anchor}">{d[:7]}</text>')
+            _x = XD(d)
+            anchor = "start" if d == d0 else ("end" if d >= axis_dates[-2] else "middle")
+            parts.append(f'<text x="{_x:.1f}" y="{h-9}" font-size="9" fill="#8a8578" text-anchor="{anchor}">{d[:7]}</text>')
     parts.append('</svg>')
     return "".join(parts)
 
