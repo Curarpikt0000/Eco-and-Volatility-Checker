@@ -114,31 +114,55 @@ def fetch_all():
                                      "value": round(md / gdp_v * 100, 2),
                                      "as_of": jst_today(), "status": "ok"}
 
-    # ad_line 顶背离 = 用真数据市场广度(RSP/SPY)覆盖旧的无依据 override 布尔
-    # (2026-08 Chao 质疑: 原 ad_line 只有 web_search 主观布尔 True、无图无数据。
-    #  改用东财 RSP/SPY 广度比数值化判定, 可复现、可回溯。抓不到则保留旧值不覆盖成空。)
+    # ad_line 顶背离 = 优先用真 A/D 腾落线(Economic-Dashboard SP500 全成分股 cron),
+    # 东财 RSP/SPY 广度比作 fallback。抓不到则保留旧值不覆盖成空。
+    # (2026-08 Chao: 原 ad_line 只有 web_search 主观布尔; 先改东财 RSP/SPY 代理;
+    #  2026-08 接 Economic-Dashboard 真 A/D 腾落线 job 334572d3e1a7, 501 只成分股逐股统计。)
     try:
         import external_data as _ed
-        mb = _ed.fetch_market_breadth()
-        if mb.get("status") == "ok" and mb.get("divergence") is not None:
-            ev = mb.get("evidence", {})
+        ad = _ed.fetch_ad_line_real()
+        if ad.get("status") == "ok" and ad.get("divergence") is not None:
+            ev = ad.get("evidence", {})
             results["ad_line"] = {
                 "key": "ad_line",
-                "value": bool(mb["divergence"]),  # True=顶背离
-                "as_of": mb.get("as_of", ""),
+                "value": bool(ad["divergence"]),  # True=顶背离
+                "as_of": ad.get("as_of", ""),
                 "status": "ok",
                 "extra": {
-                    "source": "RSP/SPY 广度比(东方财富真数据)",
-                    "spy_lookback_high": ev.get("spy_lookback_high"),
-                    "spy_recent_high": ev.get("spy_recent_high"),
-                    "spy_made_new_high": ev.get("spy_made_new_high"),
-                    "ratio_gap_from_high_pct": ev.get("ratio_gap_from_high_pct"),
+                    "source": "NYSE A/D 腾落线(SP500 全成分股, Economic-Dashboard cron 真数据)",
+                    "cumulative": ad.get("latest_cumulative"),
+                    "advance_pct": ad.get("latest_advance_pct"),
+                    "ad_net": ad.get("latest_ad_net"),
+                    "cum_recent_high": ev.get("cum_recent_high"),
+                    "cum_lookback_high": ev.get("cum_lookback_high"),
+                    "cum_made_new_high": ev.get("cum_made_new_high"),
+                    "recent_advance_pct_avg": ev.get("recent_advance_pct_avg"),
                     "breadth_confirmed": ev.get("breadth_confirmed"),
-                    "rule": ev.get("rule"),
-                    "stale": mb.get("stale", False),
+                    "tickers": ad.get("tickers"),
                 },
             }
-        # 抓不到(status!=ok): 不动 results["ad_line"], 保留 override/旧值(绝不覆盖成空)
+        else:
+            # 真 A/D 拿不到 → 退到东财 RSP/SPY 广度比代理
+            mb = _ed.fetch_market_breadth()
+            if mb.get("status") == "ok" and mb.get("divergence") is not None:
+                ev = mb.get("evidence", {})
+                results["ad_line"] = {
+                    "key": "ad_line",
+                    "value": bool(mb["divergence"]),
+                    "as_of": mb.get("as_of", ""),
+                    "status": "ok",
+                    "extra": {
+                        "source": "RSP/SPY 广度比(东方财富代理, 真A/D源暂不可用时的fallback)",
+                        "spy_lookback_high": ev.get("spy_lookback_high"),
+                        "spy_recent_high": ev.get("spy_recent_high"),
+                        "spy_made_new_high": ev.get("spy_made_new_high"),
+                        "ratio_gap_from_high_pct": ev.get("ratio_gap_from_high_pct"),
+                        "breadth_confirmed": ev.get("breadth_confirmed"),
+                        "rule": ev.get("rule"),
+                        "stale": mb.get("stale", False),
+                    },
+                }
+        # 都抓不到(status!=ok): 不动 results["ad_line"], 保留 override/旧值(绝不覆盖成空)
     except Exception as e:
         pass  # 广度抓取异常不影响主流程, ad_line 保留原值
 

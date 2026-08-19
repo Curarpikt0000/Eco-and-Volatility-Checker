@@ -2735,6 +2735,102 @@ def fetch_bis_gold_swaps(cache_path=None):
     }
 
 
+def fetch_ad_line_real(json_path=None, price_lookback=120, nh_window=20):
+    """真正的 A/D 腾落线(NYSE 广度): 读 Economic-Dashboard 每日 cron 维护的 SP500 全成分股腾落数据。
+
+    数据源: Curarpikt0000/Economic-Dashboard repo 的
+      data/ad_line/ad_line_sp500_history.json (每日 cron job 334572d3e1a7 更新, 501 只成分股)。
+    本地 repo 路径: ~/Projects/Economic-Dashboard (每日 git fetch 保持最新)。
+    每条记录: {date, advance, decline, flat, total, ad_net, ad_ratio, advance_pct, cumulative}。
+    cumulative = 累计 (advance-decline) = 真正的 A/D 腾落线。
+
+    顶背离判定(可复现规则):
+      在最近 nh_window 个交易日内, 若 advance_pct 的近期均值走弱 (广度恶化)
+      但 cumulative 腾落线未同步创近 price_lookback 新高, 判为需警惕。
+      更硬核: 比较 cumulative 近期高点 vs 全窗口高点 —— 若腾落线未创新高即为顶背离预警。
+
+    返回结构兼容 market_breadth (供现有 section 复用),
+      但 spy_points 装 cumulative 腾落线, ratio_points 装 advance_pct(参与率)。
+    绝不编造: 文件缺失/为空 → status='未获取'。
+    """
+    import json as _json
+    if json_path is None:
+        json_path = os.path.expanduser(
+            "~/Projects/Economic-Dashboard/data/ad_line/ad_line_sp500_history.json")
+
+    try:
+        with open(json_path, encoding="utf-8") as f:
+            raw = _json.load(f)
+    except Exception:
+        return {"status": "未获取", "as_of": "",
+                "note": f"A/D 腾落线数据文件未找到: {json_path} (Economic-Dashboard cron 未同步?)"}
+
+    days = raw.get("days", [])
+    # 过滤掉初始占位行 (total=0)
+    days = [d for d in days if d.get("total", 0) > 0 and d.get("cumulative") is not None]
+    if len(days) < 5:
+        return {"status": "未获取", "as_of": "",
+                "note": "A/D 腾落线有效数据点不足 5"}
+
+    dates = [d["date"] for d in days]
+    cum = [d["cumulative"] for d in days]
+    adv_pct = [d.get("advance_pct") for d in days]
+    n = len(days)
+    as_of = dates[-1]
+
+    # spy_points 复用为 cumulative 腾落线; ratio_points 复用为 advance_pct 参与率
+    cum_points = list(zip(dates, [float(c) for c in cum]))
+    pct_points = [(dates[i], float(adv_pct[i])) for i in range(n) if adv_pct[i] is not None]
+
+    # 顶背离判定: 腾落线近 nh_window 是否创近 price_lookback 新高
+    lb = min(price_lookback, n)
+    nw = min(nh_window, n)
+    lookback_high = max(cum[-lb:])
+    recent_high = max(cum[-nw:])
+    cum_made_new_high = recent_high >= lookback_high - 1e-9
+    # 参与率(advance_pct)近 nw 均值 vs 前一段
+    valid_pct = [p for p in adv_pct if p is not None]
+    recent_pct = valid_pct[-nw:] if len(valid_pct) >= nw else valid_pct
+    recent_pct_avg = round(sum(recent_pct) / len(recent_pct), 1) if recent_pct else None
+    # 腾落线绝对趋势: 近 nw 净变化
+    cum_delta_nw = cum[-1] - cum[-nw] if n >= nw else None
+
+    # 顶背离 = 腾落线未创新高 且 参与率低于 50% (多数股走弱)
+    divergence = None
+    if cum_made_new_high:
+        divergence = False  # 广度确认(腾落线跟随创新高)
+    else:
+        # 未创新高: 结合参与率判断是否恶化
+        divergence = (recent_pct_avg is not None and recent_pct_avg < 50.0) or (
+            cum_delta_nw is not None and cum_delta_nw < 0)
+
+    gap_from_high = round((lookback_high - recent_high), 1)
+
+    return {
+        "status": "ok",
+        "as_of": as_of,
+        "source": "Economic-Dashboard A/D 腾落线 (SP500 全成分股, 每日 cron)",
+        "tickers": raw.get("tickers"),
+        "divergence": divergence,
+        "spy_points": cum_points,      # 累计腾落线 (复用字段名保持 section 兼容)
+        "ratio_points": pct_points,    # advance_pct 参与率
+        "latest_cumulative": cum[-1],
+        "latest_advance_pct": adv_pct[-1] if adv_pct else None,
+        "latest_ad_net": days[-1].get("ad_net"),
+        "evidence": {
+            "lookback_days": lb,
+            "nh_window": nw,
+            "cum_lookback_high": round(lookback_high, 0),
+            "cum_recent_high": round(recent_high, 0),
+            "cum_made_new_high": cum_made_new_high,
+            "recent_advance_pct_avg": recent_pct_avg,
+            "cum_delta_recent": cum_delta_nw,
+            "gap_from_high": gap_from_high,
+            "breadth_confirmed": bool(cum_made_new_high),
+        },
+    }
+
+
 def fetch_market_breadth(cache_path=None, lookback_days=250, nh_window=20):
     """美股市场广度: RSP(等权标普)/SPY(市值加权标普) 比值, 替代无数据源的 A/D 布尔判断。
 

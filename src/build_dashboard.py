@@ -218,6 +218,27 @@ def main():
     except Exception as e:
         print(f"[dashboard] 市场广度 跳过: {e}")
 
+    # ── 真 A/D 腾落线(Economic-Dashboard cron, SP500 全成分股) ──
+    ad_line_real = {}
+    try:
+        # 先 git fetch + fast-forward Economic-Dashboard 拿当日 A/D 数据(只读消费方)
+        import subprocess as _sp
+        _ed_repo = os.path.expanduser("~/Projects/Economic-Dashboard")
+        if os.path.isdir(_ed_repo):
+            try:
+                _sp.run(["git", "-C", _ed_repo, "fetch", "origin", "main", "--quiet"],
+                        timeout=40, check=False)
+                _sp.run(["git", "-C", _ed_repo, "reset", "--hard", "origin/main", "--quiet"],
+                        timeout=20, check=False)
+            except Exception as _ge:
+                print(f"[dashboard] A/D git sync 警告(用现有本地文件): {_ge}")
+        ad_line_real = ed.fetch_ad_line_real() or {}
+        print(f"[dashboard] A/D 腾落线(真): status={ad_line_real.get('status')} "
+              f"as_of={ad_line_real.get('as_of')} divergence={ad_line_real.get('divergence')} "
+              f"cum={ad_line_real.get('latest_cumulative')} pts={len(ad_line_real.get('spy_points',[]))}")
+    except Exception as e:
+        print(f"[dashboard] A/D 腾落线 跳过: {e}")
+
     # ── 白银做市商头寸(CFTC COT commercial 净持仓, 一手官方) ──
     silver_bank_positions = {}
     try:
@@ -341,6 +362,7 @@ def main():
         hf_leverage=hf_leverage,
         bis_gold_swaps=bis_gold_swaps,
         market_breadth=market_breadth,
+        ad_line_real=ad_line_real,
         silver_bank_positions=silver_bank_positions,
         comex_silver_issues_ref=comex_silver_issues_ref,
         gold_exports=gold_exports,

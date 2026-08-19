@@ -215,7 +215,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              oil_inventory=None, us_jp_yields=None, nikkei225=None, foreign_flow=None,
              iip_four=None, fiscal_news=None, hf_leverage=None, bis_gold_swaps=None,
              market_breadth=None, silver_bank_positions=None, comex_silver_issues_ref=None,
-             gold_exports=None, us_yield_century=None, comex_issue_stop=None):
+             gold_exports=None, us_yield_century=None, comex_issue_stop=None,
+             ad_line_real=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -396,6 +397,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         hf_leverage=_hf_leverage_html(hf_leverage),
         bis_gold_swaps=_bis_gold_swaps_html(bis_gold_swaps),
         market_breadth=_market_breadth_html(market_breadth),
+        ad_line_real=_ad_line_html(ad_line_real),
         silver_bank_positions=_silver_bank_positions_html(silver_bank_positions),
         comex_silver_issues_ref=_comex_silver_issues_ref_html(comex_silver_issues_ref),
         gold_exports=_gold_exports_html(gold_exports),
@@ -1709,6 +1711,110 @@ def _market_breadth_html(mb):
         f'<b>顶背离判定(可复现数值规则)</b>：当 <b>S&amp;P 创新高、但 RSP/SPY 广度比未同步创高</b>(距其高点 &gt;2%) 时判为顶背离——'
         f'指数只靠少数股撑、内部走弱，历史上是<b>见顶前兆</b>。<br>'
         f'相比旧布尔判断，这里<b>有折线图、有数字、判定规则透明可回溯</b>，绝不靠 AI 主观。每日更新(东财源，间歇限流则用缓存真值兜底)。</div>'
+        f'</div>'
+    )
+
+
+def _ad_line_html(ad):
+    """真正的 NYSE A/D 腾落线 section: SP500 全成分股累计腾落线(cumulative) vs 参与率(advance_pct)。
+    ad: fetch_ad_line_real()。数据源=Economic-Dashboard 每日 cron (501 只成分股)。"""
+    if not ad or ad.get("status") != "ok" or not ad.get("spy_points"):
+        note = (ad or {}).get("note", "")
+        return (f'<p class="empty">A/D 腾落线数据同步中——Economic-Dashboard 每日 cron 维护，'
+                f'读到即填真值，绝不编造。{_esc(note)}</p>')
+    cum_pts = ad["spy_points"]      # (date, cumulative)
+    pct_pts = ad["ratio_points"]    # (date, advance_pct)
+    ev = ad.get("evidence", {})
+    diverge = ad.get("divergence")
+
+    w, h = 920, 260
+    ml, mr, mt, mb_ = 20, 170, 18, 30
+    pw, ph = w - ml - mr, h - mt - mb_
+    dates = [d for d, _ in cum_pts]
+    n = len(dates)
+    def X(i): return ml + i * pw / max(n - 1, 1)
+    cum_v = [v for _, v in cum_pts]
+    pct_map = dict(pct_pts)
+    pct_v = [pct_map[d] for d in dates if d in pct_map]
+    def norm(vals):
+        lo, hi = min(vals), max(vals)
+        return lo, hi, (hi - lo) or 1
+    clo, chi, crng = norm(cum_v)
+    plo, phi, prng = norm(pct_v)
+    def Yc(v): return mt + (chi - v) / crng * ph
+    def Yp(v): return mt + (phi - v) / prng * ph
+
+    parts = [f'<svg viewBox="0 0 {w} {h}" class="cust-chart" preserveAspectRatio="xMidYMid meet" '
+             f'font-family="-apple-system,PingFang SC,sans-serif">']
+    for k in range(5):
+        gy = mt + ph * k / 4
+        parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" stroke="#d4cdbe" stroke-width="1" stroke-dasharray="3,3"/>')
+    # 零参与率(50%)基准线(参与率轴): advance_pct=50 的水平位置
+    if plo <= 50 <= phi:
+        y50 = Yp(50)
+        parts.append(f'<line x1="{ml}" y1="{y50:.1f}" x2="{w-mr}" y2="{y50:.1f}" stroke="#c9a94e" stroke-width="0.8" stroke-dasharray="2,4" opacity="0.5"/>')
+    # x 日期标签(~6个)
+    seen = set()
+    for i, d in enumerate(dates):
+        if i == 0 or i == n - 1 or i % max(n // 5, 1) == 0:
+            key = d[:7]
+            if key in seen and i not in (0, n - 1):
+                continue
+            seen.add(key)
+            anchor = "start" if i == 0 else ("end" if i >= n - 2 else "middle")
+            parts.append(f'<text x="{X(i):.1f}" y="{h-10}" font-size="9" fill="#8a8578" text-anchor="{anchor}">{_esc(d)}</text>')
+    # 累计腾落线(蓝, 主线)
+    cum_line = [f"{X(i):.1f},{Yc(v):.1f}" for i, (_, v) in enumerate(cum_pts)]
+    parts.append(f'<polyline points="{" ".join(cum_line)}" fill="none" stroke="#6b8fb5" stroke-width="2.4" stroke-linejoin="round"/>')
+    # 参与率(琥珀, 细线)
+    didx = {d: i for i, d in enumerate(dates)}
+    pct_line = [f"{X(didx[d]):.1f},{Yp(pct_map[d]):.1f}" for d in dates if d in pct_map]
+    parts.append(f'<polyline points="{" ".join(pct_line)}" fill="none" stroke="#c9a94e" stroke-width="1.6" stroke-linejoin="round" opacity="0.85"/>')
+    # 末点圈
+    parts.append(f'<circle cx="{X(n-1):.1f}" cy="{Yc(cum_v[-1]):.1f}" r="3.6" fill="#6b8fb5"/>')
+    if pct_v:
+        parts.append(f'<circle cx="{X(n-1):.1f}" cy="{Yp(pct_v[-1]):.1f}" r="3.0" fill="#c9a94e"/>')
+    # 图例
+    ly = mt + 6
+    parts.append(f'<line x1="{w-mr+8}" y1="{ly}" x2="{w-mr+24}" y2="{ly}" stroke="#6b8fb5" stroke-width="2.6"/>')
+    parts.append(f'<text x="{w-mr+28}" y="{ly+3.5}" font-size="10" fill="#6b8fb5">累计腾落线 {ad.get("latest_cumulative")}</text>')
+    ly += 18
+    parts.append(f'<line x1="{w-mr+8}" y1="{ly}" x2="{w-mr+24}" y2="{ly}" stroke="#c9a94e" stroke-width="2.6"/>')
+    parts.append(f'<text x="{w-mr+28}" y="{ly+3.5}" font-size="10" fill="#c9a94e">参与率% {ad.get("latest_advance_pct")}</text>')
+    parts.append("</svg>")
+    svg = "".join(parts)
+
+    if diverge is True:
+        badge = '<span style="color:#d64545;font-weight:700">⚠ 顶背离(广度恶化)</span>'
+        verdict = "🔴 顶背离"
+    elif diverge is False:
+        badge = '<span style="color:#2e9e5b;font-weight:700">✓ 广度确认(健康)</span>'
+        verdict = "🟢 广度确认"
+    else:
+        badge = '<span style="color:#8a8578">数据不足</span>'
+        verdict = "⚪ 未判定"
+
+    return (
+        f'<div class="cust-wrap">'
+        f'<div class="cust-chart-col cust-chart-full">'
+        f'<div class="cust-chart-title">NYSE A/D 腾落线：S&amp;P500 全成分股累计腾落 vs 参与率 · 判定：{badge}'
+        f'<span class="chart-freq freq-d">🟢 每日 · Economic-Dashboard cron</span></div>'
+        f'{svg}'
+        f'<div class="oil-meta">最新（{_esc(ad.get("as_of",""))}）：{verdict}　'
+        f'累计腾落线 <b>{ad.get("latest_cumulative")}</b>，当日净腾落 <b>{ad.get("latest_ad_net")}</b>，'
+        f'参与率 <b>{ad.get("latest_advance_pct")}%</b>（{ad.get("tickers")} 只成分股）<br>'
+        f'判定依据：腾落线近 {ev.get("nh_window","?")} 日高点 <b>{ev.get("cum_recent_high","?")}</b>，'
+        f'近 {ev.get("lookback_days","?")} 日高点 <b>{ev.get("cum_lookback_high","?")}</b>'
+        f'（{"创新高" if ev.get("cum_made_new_high") else "未创新高，距高点差 "+str(ev.get("gap_from_high","?"))}）；'
+        f'近期参与率均值 <b>{ev.get("recent_advance_pct_avg","?")}%</b>'
+        f'（{"广度确认" if ev.get("breadth_confirmed") else "广度未跟上"}）</div>'
+        f'<div class="oil-src">数据源：{_esc(ad.get("source",""))}</div>'
+        f'</div>'
+        f'<div class="cust-how"><b>如何看：</b>这是<b>真正的 NYSE A/D 腾落线(Advance/Decline Line)</b>——每日统计 S&amp;P500 全部 500+ 只成分股中<b>上涨家数减下跌家数</b>，累加成「累计腾落线」。'
+        f'<b>蓝线(累计腾落线)</b>：反映市场内部广度——若指数创新高、腾落线也创新高=普涨健康；若指数创新高但腾落线走平/下滑=<b>顶背离</b>(指数靠少数大票撑、多数股已走弱)，历史上是<b>见顶前兆</b>。'
+        f'<b>琥珀线(参与率%)</b>：当日上涨家数占比，&gt;50% 多数股上涨、&lt;50% 多数股下跌。<br>'
+        f'<b>顶背离判定(可复现)</b>：腾落线近 20 日高点是否 ≥ 近 120 日高点。未创新高 + 参与率 &lt;50% = 顶背离预警。<br>'
+        f'相比旧的 RSP/SPY 代理，这是<b>逐股统计的真 A/D 数据</b>(501 只成分股)，由 Economic-Dashboard 每日 cron 自动更新。</div>'
         f'</div>'
     )
 
@@ -3984,8 +4090,12 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title" id="sec-gold-exports"><span class="part-num">＋</span>美国黄金出口 · Nonmonetary Gold Exports (各国黄金运回家·去美元化实物信号·2026Q1暴涨4.9×)<span class="freq-badge freq-quarterly">每季更新</span></div>
   <div class="card">{gold_exports}</div>
 
-  <!-- ═══ 附三·十二C：美股市场广度(RSP/SPY, 替代 A/D 腾落线) ═══ -->
-  <div class="part-title" id="sec-market-breadth"><span class="part-num">＋</span>美股市场广度 · RSP/SPY 等权比 (A/D 腾落线真数据版·顶背离判定)<span class="freq-badge freq-daily">每日更新</span></div>
+  <!-- ═══ 附三·十二B2：NYSE A/D 腾落线(真数据, Economic-Dashboard cron) ═══ -->
+  <div class="part-title" id="sec-ad-line"><span class="part-num">＋</span>NYSE A/D 腾落线 · S&amp;P500 全成分股累计腾落 (真 A/D 数据·顶背离判定)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{ad_line_real}</div>
+
+  <!-- ═══ 附三·十二C：美股市场广度(RSP/SPY, A/D 腾落线代理补充) ═══ -->
+  <div class="part-title" id="sec-market-breadth"><span class="part-num">＋</span>美股市场广度 · RSP/SPY 等权比 (广度代理·补充顶背离判定)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{market_breadth}</div>
 
   <!-- ═══ 附三·十二D：白银做市商头寸(CFTC COT, 一手) ═══ -->
@@ -4049,7 +4159,7 @@ mkRadar('rLong', RADAR.long);
   if (!titles.length || !box) return;
 
   var GROUPS = [
-    {{ name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注','市场广度'] }},
+    {{ name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注','A/D 腾落线','市场广度'] }},
     {{ name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化'] }},
     {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','BIS','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲','黄金出口','Nonmonetary'] }},
     {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
