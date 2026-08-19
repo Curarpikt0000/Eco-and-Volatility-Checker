@@ -827,6 +827,7 @@ def _custody_chart_svg(hist, w=680, h=200):
     def X(i): return ml + i * pw / (n - 1)
     def Y(v): return mt + (hi - v) / rng * ph
     pts = [f"{X(i):.1f},{Y(v):.1f}" for i, v in enumerate(vals)]
+    _hits = "".join(f'<circle class="tip-hit" cx="{X(i):.1f}" cy="{Y(v):.1f}" r="7" data-tip="{_esc(dates[i][:7])}||{v:.3f} $T"/>' for i, v in enumerate(vals))
     # 趋势色: 期末 vs 期初(下降=去美元化风险 clay红 / 上升=回流 sage绿)
     rising = vals[-1] > vals[0]
     color = "#9aab97" if rising else "#c08a7d"
@@ -855,6 +856,7 @@ def _custody_chart_svg(hist, w=680, h=200):
         + f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" stroke-width="2.4" stroke-linejoin="round"/>'
         + f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="4" fill="{color}"/>'
         + f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="8" fill="{color}" opacity="0.18"/>'
+        + _hits
         + "".join(xl)
         + '</svg>'
     )
@@ -990,12 +992,14 @@ def _custody_accel_html(acc):
     # 三条折线
     legend_y = mt + 8
     for key, lbl, color in lines:
-        seg = [(X(i), Y(p[key])) for i, p in enumerate(pts) if p.get(key) is not None]
+        seg = [(X(i), Y(p[key]), p["date"], p[key]) for i, p in enumerate(pts) if p.get(key) is not None]
         if len(seg) >= 2:
-            poly = " ".join(f"{x:.1f},{y:.1f}" for x, y in seg)
+            poly = " ".join(f"{x:.1f},{y:.1f}" for x, y, _, _ in seg)
             parts.append(f'<polyline points="{poly}" fill="none" stroke="{color}" stroke-width="2.1" stroke-linejoin="round" stroke-linecap="round"/>')
+            for _sx, _sy, _sd, _sv in seg:
+                parts.append(f'<circle class="tip-hit" cx="{_sx:.1f}" cy="{_sy:.1f}" r="6" data-tip="{_esc(lbl)} · {_esc(_sd[:7])}||{_sv:+.3f}"/>')
             # 最新点标记
-            lx, ly = seg[-1]
+            lx, ly = seg[-1][0], seg[-1][1]
             parts.append(f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="3.2" fill="{color}"/>')
         # 图例(右侧)
         parts.append(f'<line x1="{w-mr+8}" y1="{legend_y}" x2="{w-mr+26}" y2="{legend_y}" stroke="{color}" stroke-width="2.6"/>')
@@ -1059,6 +1063,7 @@ def _country_ust_svg(series, color, fill, w=680, h=200):
     def X(i): return ml + i * pw / (n - 1)
     def Y(v): return mt + (hi - v) / rng * ph
     pts = [f"{X(i):.1f},{Y(v):.1f}" for i, v in enumerate(vals)]
+    _hits = "".join(f'<circle class="tip-hit" cx="{X(i):.1f}" cy="{Y(v):.1f}" r="7" data-tip="{_esc(dates[i][:7])}||{v:,.0f} $B"/>' for i, v in enumerate(vals))
     area = f"{X(0):.1f},{mt+ph:.1f} " + " ".join(pts) + f" {X(n-1):.1f},{mt+ph:.1f}"
     # Y 轴 4 条网格 + 刻度($B, 无小数)
     yl = []
@@ -1082,6 +1087,7 @@ def _country_ust_svg(series, color, fill, w=680, h=200):
         + f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" stroke-width="2.4" stroke-linejoin="round"/>'
         + f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="4" fill="{color}"/>'
         + f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="8" fill="{color}" opacity="0.18"/>'
+        + _hits
         + "".join(xl)
         + '</svg>'
     )
@@ -1153,6 +1159,9 @@ def _country_ust_long_svg(series_by_country, w=920, h=250):
         if len(pts) >= 2:
             parts.append(f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" '
                          f'stroke-width="2" stroke-linejoin="round" opacity="0.9"/>')
+            for m, v in d["points"]:
+                if m in didx:
+                    parts.append(f'<circle class="tip-hit" cx="{X(didx[m]):.1f}" cy="{Y(v):.1f}" r="6" data-tip="{_esc(k)} · {_esc(m[:7])}||{v:,.0f} $B"/>')
             lm, lv = d["points"][-1]
             parts.append(f'<circle cx="{X(didx[lm]):.1f}" cy="{Y(lv):.1f}" r="3.5" fill="{color}"/>')
         parts.append(f'<line x1="{w-mr+8}" y1="{legend_y}" x2="{w-mr+24}" y2="{legend_y}" stroke="{color}" stroke-width="2.6"/>')
@@ -1226,6 +1235,9 @@ def _yield_curves_svg(series, w=920, h=280, yunit="%"):
         pts = [f"{X(didx[dd]):.1f},{Y(v):.1f}" for dd, v in d["points"] if dd in didx]
         if len(pts) >= 2:
             parts.append(f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" stroke-width="1.9" stroke-linejoin="round" opacity="0.92" {dash}/>')
+            for dd, v in d["points"]:
+                if dd in didx:
+                    parts.append(f'<circle class="tip-hit" cx="{X(didx[dd]):.1f}" cy="{Y(v):.1f}" r="6" data-tip="{_esc(str(key))} · {_esc(dd)}||{v:.2f} %"/>')
             ld, lv = d["points"][-1]
             parts.append(f'<circle cx="{X(didx[ld]):.1f}" cy="{Y(lv):.1f}" r="3.2" fill="{color}"/>')
         # 图例(右侧): 线样 + 名称 + 最新值
@@ -1305,7 +1317,7 @@ def _nikkei_flow_svg(nk, ff, w=920, h=300):
             y = FY(v)
             col = "#5b9e6f" if v >= 0 else "#c0757d"
             top = min(y, zero_y); ht = abs(y - zero_y)
-            parts.append(f'<rect x="{cx-bw/2:.1f}" y="{top:.1f}" width="{bw:.1f}" height="{ht:.1f}" fill="{col}" opacity="0.55"/>')
+            parts.append(f'<rect x="{cx-bw/2:.1f}" y="{top:.1f}" width="{bw:.1f}" height="{ht:.1f}" fill="{col}" opacity="0.55" data-tip="外资净买入 · {_esc(d)}||{v:+.2f} ¥T"/>')
         # 0 线
         parts.append(f'<line x1="{ml}" y1="{zero_y:.1f}" x2="{w-mr}" y2="{zero_y:.1f}" stroke="#8a8578" stroke-width="1" opacity="0.5"/>')
         # 右轴刻度
@@ -1335,6 +1347,9 @@ def _nikkei_flow_svg(nk, ff, w=920, h=300):
             def NY(v): return mt + (nhi - v) / nrng * ph
             line = [f"{X(widx[wk]):.1f},{NY(v):.1f}" for wk, v in aligned if wk in widx]
             parts.append(f'<polyline points="{" ".join(line)}" fill="none" stroke="#3a5a7d" stroke-width="2.3" stroke-linejoin="round"/>')
+            for wk, v in aligned:
+                if wk in widx:
+                    parts.append(f'<circle class="tip-hit" cx="{X(widx[wk]):.1f}" cy="{NY(v):.1f}" r="6" data-tip="日经225 · {_esc(wk)}||{v:,.0f}"/>')
             ld, lv = aligned[-1]
             parts.append(f'<circle cx="{X(widx[ld]):.1f}" cy="{NY(lv):.1f}" r="3.5" fill="#3a5a7d"/>')
             # 左轴刻度
@@ -1434,6 +1449,9 @@ def _iip_net_svg(countries, w=920, h=280):
         line = [f"{X(yidx[y]):.1f},{Y(v):.1f}" for y, v in c["net"] if y in yidx]
         if len(line) >= 2:
             parts.append(f'<polyline points="{" ".join(line)}" fill="none" stroke="{color}" stroke-width="2.2" stroke-linejoin="round"/>')
+            for y, v in c["net"]:
+                if y in yidx:
+                    parts.append(f'<circle class="tip-hit" cx="{X(yidx[y]):.1f}" cy="{Y(v):.1f}" r="6" data-tip="{_esc(c["name"])} · {_esc(str(y))}||{v:+.1f}"/>')
             ly, lv = c["net"][-1]
             parts.append(f'<circle cx="{X(yidx[ly]):.1f}" cy="{Y(lv):.1f}" r="3.4" fill="{color}"/>')
         parts.append(f'<line x1="{w-mr+8}" y1="{legend_y}" x2="{w-mr+24}" y2="{legend_y}" stroke="{color}" stroke-width="2.6"/>')
@@ -1469,7 +1487,7 @@ def _iip_assets_liab_svg(countries, w=920, h=230):
                                    (bw*0.6, c["latest_liab"], "#c0757d", "负债")):
             bh = val / vmax * ph
             by = mt + ph - bh
-            parts.append(f'<rect x="{cx+off-bw/2:.1f}" y="{by:.1f}" width="{bw:.1f}" height="{bh:.1f}" rx="1.5" fill="{col}" opacity="0.85"/>')
+            parts.append(f'<rect x="{cx+off-bw/2:.1f}" y="{by:.1f}" width="{bw:.1f}" height="{bh:.1f}" rx="1.5" fill="{col}" opacity="0.85" data-tip="{_esc(c["name"])} · {lab}||{val:.1f}"/>')
             parts.append(f'<text x="{cx+off:.1f}" y="{by-3:.1f}" font-size="8.5" fill="{col}" text-anchor="middle">{val:.1f}</text>')
         parts.append(f'<text x="{cx:.1f}" y="{h-pad_b_iip(mb)+14:.1f}" font-size="10" fill="#4a4a42" text-anchor="middle">{c["flag"]}{_esc(c["name"])}</text>')
     # 图例
@@ -1561,6 +1579,9 @@ def _hf_line_svg(series_list, unit_fmt="{:.1f}", zero_line=False, w=920, h=250):
         line = [f"{X(qidx[q]):.1f},{Y(v):.1f}" for q, v in pts if q in qidx]
         if len(line) >= 2:
             parts.append(f'<polyline points="{" ".join(line)}" fill="none" stroke="{co}" stroke-width="2.2" stroke-linejoin="round"/>')
+            for q, v in pts:
+                if q in qidx:
+                    parts.append(f'<circle class="tip-hit" cx="{X(qidx[q]):.1f}" cy="{Y(v):.1f}" r="6" data-tip="{_esc(lb)} · {_esc(str(q))}||{unit_fmt.format(v)}"/>')
             lq, lv = pts[-1]
             parts.append(f'<circle cx="{X(qidx[lq]):.1f}" cy="{Y(lv):.1f}" r="3.4" fill="{co}"/>')
         parts.append(f'<line x1="{w-mr+8}" y1="{legend_y}" x2="{w-mr+24}" y2="{legend_y}" stroke="{co}" stroke-width="2.6"/>')
@@ -1662,9 +1683,14 @@ def _market_breadth_html(mb):
     # SP500 线(蓝)
     sp_line = [f"{X(i):.1f},{Ys(v):.1f}" for i, (_, v) in enumerate(spy_pts)]
     parts.append(f'<polyline points="{" ".join(sp_line)}" fill="none" stroke="#6b8fb5" stroke-width="2.2" stroke-linejoin="round"/>')
+    for i, (dd, v) in enumerate(spy_pts):
+        parts.append(f'<circle class="tip-hit" cx="{X(i):.1f}" cy="{Ys(v):.1f}" r="6" data-tip="S&amp;P500 · {_esc(dd)}||{v:,.2f}"/>')
     # 广度比线(琥珀)
     rt_line = [f"{X(didx[d]):.1f},{Yr(rt_map[d]):.1f}" for d in dates if d in rt_map and d in didx]
     parts.append(f'<polyline points="{" ".join(rt_line)}" fill="none" stroke="#c9a94e" stroke-width="2.2" stroke-linejoin="round"/>')
+    for d in dates:
+        if d in rt_map and d in didx:
+            parts.append(f'<circle class="tip-hit" cx="{X(didx[d]):.1f}" cy="{Yr(rt_map[d]):.1f}" r="6" data-tip="广度比 · {_esc(d)}||{rt_map[d]:.1f}%"/>')
     # 末点圈
     parts.append(f'<circle cx="{X(n-1):.1f}" cy="{Ys(spy_v[-1]):.1f}" r="3.4" fill="#6b8fb5"/>')
     parts.append(f'<circle cx="{X(n-1):.1f}" cy="{Yr(rt_v[-1]):.1f}" r="3.4" fill="#c9a94e"/>')
@@ -1778,10 +1804,15 @@ def _ad_line_html(ad):
     # 累计腾落线(蓝, 主线)
     cum_line = [f"{X(i):.1f},{Yc(v):.1f}" for i, (_, v) in enumerate(cum_pts)]
     parts.append(f'<polyline points="{" ".join(cum_line)}" fill="none" stroke="#6b8fb5" stroke-width="2.4" stroke-linejoin="round"/>')
+    for i, (dd, v) in enumerate(cum_pts):
+        parts.append(f'<circle class="tip-hit" cx="{X(i):.1f}" cy="{Yc(v):.1f}" r="6" data-tip="累计腾落 · {_esc(dd)}||{v:+,.0f}"/>')
     # 参与率(琥珀, 细线)
     didx = {d: i for i, d in enumerate(dates)}
     pct_line = [f"{X(didx[d]):.1f},{Yp(pct_map[d]):.1f}" for d in dates if d in pct_map]
     parts.append(f'<polyline points="{" ".join(pct_line)}" fill="none" stroke="#c9a94e" stroke-width="1.6" stroke-linejoin="round" opacity="0.85"/>')
+    for d in dates:
+        if d in pct_map:
+            parts.append(f'<circle class="tip-hit" cx="{X(didx[d]):.1f}" cy="{Yp(pct_map[d]):.1f}" r="6" data-tip="参与率 · {_esc(d)}||{pct_map[d]:.1f}%"/>')
     # 末点圈
     parts.append(f'<circle cx="{X(n-1):.1f}" cy="{Yc(cum_v[-1]):.1f}" r="3.6" fill="#6b8fb5"/>')
     if pct_v:
@@ -1890,12 +1921,18 @@ def _gold_premium_html(gp):
     if ind_pts:
         il = [f"{X(didx[d]):.1f},{Y(ind_map[d]):.1f}" for d in all_dates if d in ind_map]
         parts.append(f'<polyline points="{" ".join(il)}" fill="none" stroke="#c9922e" stroke-width="2.0" stroke-linejoin="round"/>')
+        for d in all_dates:
+            if d in ind_map:
+                parts.append(f'<circle class="tip-hit" cx="{X(didx[d]):.1f}" cy="{Y(ind_map[d]):.1f}" r="6" data-tip="印度金premium · {_esc(d)}||{ind_map[d]:+.1f} $/oz"/>')
         last_d = [d for d in all_dates if d in ind_map][-1]
         parts.append(f'<circle cx="{X(didx[last_d]):.1f}" cy="{Y(ind_map[last_d]):.1f}" r="3.4" fill="#c9922e"/>')
     # 中国线(青灰)
     if chn_pts:
         cl = [f"{X(didx[d]):.1f},{Y(chn_map[d]):.1f}" for d in all_dates if d in chn_map]
         parts.append(f'<polyline points="{" ".join(cl)}" fill="none" stroke="#6b8fb5" stroke-width="1.8" stroke-linejoin="round" opacity="0.9"/>')
+        for d in all_dates:
+            if d in chn_map:
+                parts.append(f'<circle class="tip-hit" cx="{X(didx[d]):.1f}" cy="{Y(chn_map[d]):.1f}" r="6" data-tip="中国金premium · {_esc(d)}||{chn_map[d]:+.1f} $/oz"/>')
         last_c = [d for d in all_dates if d in chn_map][-1]
         parts.append(f'<circle cx="{X(didx[last_c]):.1f}" cy="{Y(chn_map[last_c]):.1f}" r="3.2" fill="#6b8fb5"/>')
     # 图例
@@ -1970,7 +2007,8 @@ def _silver_imports_html(si):
         x = X(i) - bw / 2
         y = Y(vals[i])
         bh = mt + ph - y
-        parts.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{bh:.1f}" fill="#9a958a" opacity="0.85"/>')
+        _tip = f'{_esc(p["date"])}||{vals[i]:.1f} 吨'
+        parts.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{bh:.1f}" fill="#9a958a" opacity="0.85" data-tip="{_tip}"/>')
     # x 标签(~8个)
     for i, p in enumerate(pts):
         if i == 0 or i == n - 1 or i % max(n // 7, 1) == 0:
@@ -2260,7 +2298,7 @@ def _comex_issue_stop_html(cs):
             v = r[field]; x = X(i); y = BY(v)
             col = "#d64545" if v > 0 else ("#2e9e5b" if v < 0 else "#8a8578")
             top = min(y, zero_y); ht = abs(y - zero_y)
-            parts.append(f'<rect x="{x-bw/2:.1f}" y="{top:.1f}" width="{bw:.1f}" height="{ht:.1f}" fill="{col}" opacity="0.82"/>')
+            parts.append(f'<rect x="{x-bw/2:.1f}" y="{top:.1f}" width="{bw:.1f}" height="{ht:.1f}" fill="{col}" opacity="0.82" data-tip="{_esc(r["week"])}||{v:+.0f}"/>')
         step = max(1, round(n/8)); prev=None
         for i in range(0, n, step):
             lbl = rows[i]["week"][:7]
@@ -2477,7 +2515,7 @@ def _bar_chart_svg(points, w=900, h=240, color="#7fa085", unit="T", val_fmt="{:.
         by = pad_t + plot_h - bh
         last = (i == n - 1)
         fill = "#5f7a68" if last else color
-        parts.append(f'<rect x="{bx:.1f}" y="{by:.1f}" width="{bw:.1f}" height="{bh:.1f}" rx="2" fill="{fill}" opacity="{0.95 if last else 0.8}"/>')
+        parts.append(f'<rect x="{bx:.1f}" y="{by:.1f}" width="{bw:.1f}" height="{bh:.1f}" rx="2" fill="{fill}" opacity="{0.95 if last else 0.8}" data-tip="{_esc(lab)}||{val_fmt.format(v)}{unit}"/>')
         if last:
             parts.append(f'<text x="{cx:.1f}" y="{by-5:.1f}" font-size="10.5" font-weight="700" fill="#5f7a68" text-anchor="middle">{val_fmt.format(v)}{unit}</text>')
         if i % lbl_step == 0 or last:
@@ -2577,6 +2615,9 @@ def _oil_line_svg(pts, w=900, h=230, redline=None, redline_label="", zero_line=F
     # 面积 + 折线
     parts.append(f'<polygon points="{fill_area}" fill="{color}" opacity="0.10" stroke="none"/>')
     parts.append(f'<polyline points="{linepts}" fill="none" stroke="{color}" stroke-width="2.2" stroke-linejoin="round"/>')
+    # 每点透明 hover 圈
+    for i, v in enumerate(vals):
+        parts.append(f'<circle class="tip-hit" cx="{X(i):.1f}" cy="{Y(v):.1f}" r="7" data-tip="{_esc(dates[i])}||{val_fmt.format(v)}{unit}"/>')
     # 0 基准线(价差)
     if zero_line:
         zy = Y(0.0)
@@ -2635,7 +2676,7 @@ def _oil_bar_redline_svg(pts, w=900, h=230, redline=None, redline_label="",
         last = (i == n - 1)
         fill = "#d64545" if breached else color
         op = 0.9 if (last or breached) else 0.72
-        parts.append(f'<rect x="{bx:.1f}" y="{by:.1f}" width="{bw:.1f}" height="{bh:.1f}" rx="1.5" fill="{fill}" opacity="{op}"/>')
+        parts.append(f'<rect x="{bx:.1f}" y="{by:.1f}" width="{bw:.1f}" height="{bh:.1f}" rx="1.5" fill="{fill}" opacity="{op}" data-tip="{_esc(lab)}||{val_fmt.format(v)}{unit}"/>')
         if last:
             parts.append(f'<text x="{cx:.1f}" y="{by-4:.1f}" font-size="10.5" font-weight="700" fill="{fill}" text-anchor="middle">{val_fmt.format(v)}{unit}</text>')
         if i % lbl_step == 0 or last:
@@ -2842,6 +2883,7 @@ def _credit_impulse_svg(points, w=360, h=190):
     zy = Y(0.0)  # 零轴
     # 分段折线: 正段绿、负段红(按点着色描边简化为整条中性描边 + 正负填充)
     pts = [f"{X(i):.1f},{Y(v):.1f}" for i, v in enumerate(vals)]
+    _hits = "".join(f'<circle class="tip-hit" cx="{X(i):.1f}" cy="{Y(v):.1f}" r="7" data-tip="{_esc(dates[i][:7])}||{v:+.2f}"/>' for i, v in enumerate(vals))
     # 面积到零轴(正上负下)
     area = f"{X(0):.1f},{zy:.1f} " + " ".join(pts) + f" {X(n-1):.1f},{zy:.1f}"
     # Y 轴刻度(3 条)
@@ -2866,6 +2908,7 @@ def _credit_impulse_svg(points, w=360, h=190):
         + "".join(yl)
         + f'<polygon points="{area}" fill="rgba(140,150,160,0.10)" stroke="none"/>'
         + f'<polyline points="{" ".join(pts)}" fill="none" stroke="#7d8a97" stroke-width="2" stroke-linejoin="round"/>'
+        + _hits
         + f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="7" fill="none" stroke="{lc}" stroke-width="2.4"/>'
         + f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="2.6" fill="{lc}"/>'
         + "".join(xl)
@@ -2940,6 +2983,11 @@ def _credit_impulse_long_svg(series_by_country, w=920, h=240):
         pts = [f"{X(didx[p['date']]):.1f},{Y(p['ci']):.1f}" for p in d["points"] if p["date"] in didx]
         if len(pts) >= 2:
             parts.append(f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" stroke-width="1.6" stroke-linejoin="round" opacity="0.85"/>')
+            for p in d["points"]:
+                _pd = p["date"]
+                if _pd in didx:
+                    _pcx = X(didx[_pd]); _pcy = Y(p["ci"])
+                    parts.append(f'<circle class="tip-hit" cx="{_pcx:.1f}" cy="{_pcy:.1f}" r="6" data-tip="{_esc(str(cc))} · {_esc(_pd[:7])}||{p["ci"]:+.2f}"/>')
         # 图例
         parts.append(f'<line x1="{w-mr+6}" y1="{legend_y}" x2="{w-mr+22}" y2="{legend_y}" stroke="{color}" stroke-width="2.4"/>')
         parts.append(f'<text x="{w-mr+26}" y="{legend_y+3}" class="ci-leg" fill="{color}">{d["flag"]}{_esc(d["name"])}</text>')
@@ -3089,6 +3137,12 @@ def _stress_panel_svg(panel, w=1000, h=300):
             width = s.get("width", 1.7)
             parts.append(f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" '
                          f'stroke-width="{width}" stroke-linejoin="round" opacity="0.9"{dash}/>')
+            # 每点透明 hover 圈 (显示日期+值)
+            _unit = (panel.get("unit_left", "") if axis == "left" else panel.get("unit_right", "")) or ""
+            for p in spts:
+                _hx, _hy = X(didx[p["date"]]), Y(p["v"])
+                _tip = f'{_esc(s["name"])} · {_esc(p["date"])}||{p["v"]:.2f}{_unit}'
+                parts.append(f'<circle class="tip-hit" cx="{_hx:.1f}" cy="{_hy:.1f}" r="7" data-tip="{_tip}"/>')
             # 最高点标记(空心小圈 + 数值)
             hx, hy = X(didx[hi_p["date"]]), Y(hi_p["v"])
             parts.append(f'<circle cx="{hx:.1f}" cy="{hy:.1f}" r="2.6" fill="{color}" opacity="0.9"/>')
@@ -3287,6 +3341,7 @@ def _m2_line_svg(points, w=360, h=150):
     def X(i): return ml + i * pw / (n - 1)
     def Y(v): return mt + (hi - v) / rng * ph
     pts = [f"{X(i):.1f},{Y(v):.1f}" for i, v in enumerate(vals)]
+    _hits = "".join(f'<circle class="tip-hit" cx="{X(i):.1f}" cy="{Y(v):.1f}" r="6" data-tip="{_esc(dates[i][:7])}||{v:,.0f} $B"/>' for i, v in enumerate(vals))
     rising = vals[-1] >= vals[0]
     color = "#9aab97" if rising else "#c08a7d"
     fill = "rgba(154,171,151,0.10)" if rising else "rgba(192,138,125,0.10)"
@@ -3315,6 +3370,7 @@ def _m2_line_svg(points, w=360, h=150):
         + f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" stroke-width="2.2" stroke-linejoin="round"/>'
         + f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="3.5" fill="{color}"/>'
         + f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="7" fill="{color}" opacity="0.18"/>'
+        + _hits
         + "".join(xl)
         + '</svg>'
     )
@@ -4104,6 +4160,26 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .focus-box {{ background: var(--dust-blue-bg); border: 1px solid var(--dust-blue); border-radius: 12px; padding: 18px 20px; font-size: 14px; line-height: 1.7; }}
   .footnote {{ font-size: 11px; color: var(--muted); margin-top: 24px; padding-top: 12px; border-top: 1px solid var(--border); }}
   @media (max-width: 860px) {{ .grid-3, .grid-2 {{ grid-template-columns: 1fr; }} #radar-wrap {{ flex-direction: column; }} }}
+
+  /* 统一 hover tooltip: 折线点/柱子悬停显示 横纵坐标 */
+  #chart-tip {{
+    position: fixed; z-index: 9999; pointer-events: none;
+    background: rgba(58,54,47,0.96); color: #f4efe4;
+    border: 1px solid rgba(192,138,125,0.5); border-radius: 7px;
+    padding: 6px 10px; font-size: 12px; line-height: 1.5;
+    font-family: -apple-system,PingFang SC,sans-serif;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.28);
+    opacity: 0; transition: opacity 0.08s; white-space: nowrap;
+    max-width: 260px;
+  }}
+  #chart-tip.show {{ opacity: 1; }}
+  #chart-tip .tip-d {{ color: #c9c2b2; font-size: 11px; }}
+  #chart-tip .tip-v {{ font-weight: 700; font-size: 13px; }}
+  /* 数据元素 hover 视觉反馈 */
+  [data-tip] {{ cursor: crosshair; }}
+  rect[data-tip]:hover {{ opacity: 1 !important; filter: brightness(1.12); }}
+  circle.tip-hit {{ fill: transparent; stroke: none; }}
+  circle.tip-hit:hover {{ fill: rgba(192,138,125,0.18); }}
 </style>
 </head>
 <body>
@@ -4436,6 +4512,55 @@ mkRadar('rLong', RADAR.long);
   window.addEventListener('scroll', onScroll, {{ passive: true }});
   window.addEventListener('resize', onScroll, {{ passive: true }});
   onScroll();
+}})();
+
+/* ── 统一图表 tooltip: hover 折线点/柱子显示横纵坐标 ── */
+(function() {{
+  var tip = document.getElementById('chart-tip');
+  if (!tip) {{
+    tip = document.createElement('div');
+    tip.id = 'chart-tip';
+    document.body.appendChild(tip);
+  }}
+  function show(el, ev) {{
+    var raw = el.getAttribute('data-tip');
+    if (!raw) return;
+    // 格式: "日期||数值"  (|| 分隔横纵坐标)
+    var parts = raw.split('||');
+    var d = parts[0] || '';
+    var v = parts.length > 1 ? parts[1] : '';
+    var html = '';
+    if (d) html += '<div class="tip-d">' + d + '</div>';
+    if (v) html += '<div class="tip-v">' + v + '</div>';
+    tip.innerHTML = html || raw;
+    tip.classList.add('show');
+    move(ev);
+  }}
+  function move(ev) {{
+    var x = ev.clientX, y = ev.clientY;
+    var tw = tip.offsetWidth, th = tip.offsetHeight;
+    var nx = x + 14, ny = y - th - 10;
+    if (nx + tw > window.innerWidth - 8) nx = x - tw - 14;
+    if (ny < 8) ny = y + 16;
+    tip.style.left = nx + 'px';
+    tip.style.top = ny + 'px';
+  }}
+  function hide() {{ tip.classList.remove('show'); }}
+  // 事件委托: 整个 document 监听, 只对带 data-tip 的元素响应
+  document.addEventListener('mouseover', function(ev) {{
+    var el = ev.target.closest ? ev.target.closest('[data-tip]') : null;
+    if (el) show(el, ev);
+  }});
+  document.addEventListener('mousemove', function(ev) {{
+    if (tip.classList.contains('show')) {{
+      var el = ev.target.closest ? ev.target.closest('[data-tip]') : null;
+      if (el) move(ev); else hide();
+    }}
+  }});
+  document.addEventListener('mouseout', function(ev) {{
+    var el = ev.target.closest ? ev.target.closest('[data-tip]') : null;
+    if (el) hide();
+  }});
 }})();
 </script>
 </body>
