@@ -217,7 +217,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              market_breadth=None, silver_bank_positions=None, comex_silver_issues_ref=None,
              gold_exports=None, us_yield_century=None, comex_issue_stop=None,
              ad_line_real=None, gold_premium=None, silver_imports=None, fiscal_budget=None,
-             basis_trade=None):
+             basis_trade=None, comex_inventory=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -412,6 +412,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         credit_impulse=_credit_impulse_html(credit_impulse),
         stress_panels=_stress_panels_html(stress_panels, ofr_fsi),
         basis_trade=_basis_trade_html(basis_trade),
+        comex_inventory=_comex_inventory_html(comex_inventory),
         auctions=_auctions_html(auctions),
         holdings=_holdings_html(holdings),
     )
@@ -3517,6 +3518,121 @@ def _basis_trade_html(bt):
             f'两侧均为真实公开日频数据，走廊清晰、判定可靠。TONAR 本次未取到时日债 carry 诚实标 n/a(ⓘ)，绝不用近似冒充。</div></div>')
 
 
+def _flow_bars_svg(bars, w=920, h=220, unit="t"):
+    """ETF 周净流量正负柱状图。bars: [{date,v}] 升序。正=流入(绿)/负=流出(红)，含零轴。带 hover。"""
+    bars = [b for b in (bars or []) if isinstance(b.get("v"), (int, float))]
+    if len(bars) < 2:
+        return '<div class="sp-na">资金流数据不足</div>'
+    vals = [b["v"] for b in bars]
+    vmax, vmin = max(vals), min(vals)
+    hi = max(vmax, 0) * 1.12 or 1.0
+    lo = min(vmin, 0) * 1.12 or -1.0
+    span = (hi - lo) or 1.0
+    ml, mr, mt, mb = 52, 14, 18, 34
+    pw, ph = w - ml - mr, h - mt - mb
+    n = len(bars)
+    gap = pw / n
+    bw = gap * 0.6
+    def Y(v): return mt + (hi - v) / span * ph
+    parts = [f'<svg viewBox="0 0 {w} {h}" width="100%" preserveAspectRatio="xMidYMid meet" font-family="-apple-system,PingFang SC,sans-serif">']
+    # y 网格(4档)
+    for i in range(4):
+        gv = lo + span * i / 3
+        gy = Y(gv)
+        parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" stroke="#d4cdbe" stroke-width="1" stroke-dasharray="3,3"/>')
+        parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" font-size="10" fill="#8a8578" text-anchor="end">{gv:+.0f}</text>')
+    # 零轴高亮
+    zy = Y(0.0)
+    parts.append(f'<line x1="{ml}" y1="{zy:.1f}" x2="{w-mr}" y2="{zy:.1f}" stroke="#8a8578" stroke-width="1.2"/>')
+    lbl_step = max(1, n // 8)
+    for i, b in enumerate(bars):
+        v = b["v"]
+        cx = ml + gap * i + gap / 2
+        bx = cx - bw / 2
+        col = "#2e9e5b" if v >= 0 else "#d64545"
+        y0 = Y(max(v, 0)); y1 = Y(min(v, 0))
+        bh = abs(y1 - y0)
+        last = (i == n - 1)
+        parts.append(f'<rect x="{bx:.1f}" y="{y0:.1f}" width="{bw:.1f}" height="{bh:.1f}" rx="1.5" '
+                     f'fill="{col}" opacity="{0.95 if last else 0.72}" '
+                     f'data-tip="{_esc(b["date"])}||{v:+.2f} {unit}"/>')
+        if i % lbl_step == 0 or last:
+            short = b["date"][2:] if len(b["date"]) >= 7 else b["date"]
+            parts.append(f'<text x="{cx:.1f}" y="{h-mb+15:.1f}" font-size="9" fill="#8a8578" text-anchor="middle">{_esc(short)}</text>')
+    parts.append('</svg>')
+    return "".join(parts)
+
+
+def _comex_inventory_html(ci):
+    """COMEX & 上海贵金属库存 + GLD/SLV ETF 资金流。ci: fetch_comex_inventory()。
+    3 库存双轴图(复用 _stress_panel_svg) + 2 ETF 周净流量柱状。绝不编: 缺失显示占位。"""
+    if not ci or ci.get("status") != "ok" or not ci.get("panels"):
+        return ('<p class="empty">COMEX/上海库存 + ETF 资金流数据同步中'
+                '（来源 comex-inventory-charts 公开数据，读到即填真值）。</p>')
+    panels = ci.get("panels", {})
+    flows = ci.get("flows", {})
+    summ = ci.get("summary", {})
+    as_of = ci.get("as_of", "")
+
+    # 库存双轴图(gold/silver/platinum)
+    blocks = []
+    inv_notes = {
+        "gold": "COMEX(左轴)是西方交割库存，上海 SHFE(右轴)是东方实物库存。两地库存背离/共振反映东西方黄金实物流向——COMEX 持续流出而上海累积，往往指向实物东移、逼仓压力。",
+        "silver": "白银 COMEX(左轴) vs 上海 SHFE+SGE(右轴)。白银工业+货币双属性，东西方库存此消彼长是实物紧张的领先信号；COMEX 注册库存骤降 + 上海累积 = 潜在挤兑。",
+        "platinum": "铂金 COMEX 库存(上海无公开库存数据)。铂金库存薄、流动性差，库存快速下降易放大价格波动。",
+    }
+    for key in ("gold", "silver", "platinum"):
+        p = panels.get(key)
+        if not p or not any(s.get("points") for s in p.get("series", [])):
+            continue
+        if p.get("single_axis"):
+            axinfo = f'<span class="sp-axk">{_esc(p.get("unit_left",""))}</span>'
+        else:
+            axinfo = (f'<span class="sp-axk">COMEX ◂ {_esc(p.get("unit_left",""))}</span>'
+                      f'<span class="sp-axk">{_esc(p.get("unit_right",""))} ▸ 上海</span>')
+        blocks.append(
+            f'<div class="sp-panel">'
+            f'<div class="sp-head"><span class="sp-title">{_esc(p["title"])}</span>'
+            f'<span class="sp-sub">{_esc(p.get("subtitle",""))}</span></div>'
+            f'<div class="sp-axrow">{axinfo}</div>'
+            f'{_stress_panel_svg(p)}'
+            f'<div class="sp-note">{inv_notes.get(key,"")}</div>'
+            f'<div class="sp-src">数据源：{_linkify_sources(p.get("source",""))}</div>'
+            f'</div>'
+        )
+
+    # ETF 资金流(GLD/SLV 周净流量)
+    flow_blocks = []
+    for key, meta in (("gld", ("GLD 黄金ETF 周净流量", "gld")), ("slv", ("SLV 白银ETF 周净流量", "slv"))):
+        f = flows.get(key)
+        if not f:
+            continue
+        s = summ.get(key, {})
+        net = s.get("net"); last = s.get("last"); wd = s.get("w_d") or s.get("d")
+        stat = ""
+        if isinstance(net, (int, float)):
+            nc = "#2e9e5b" if net >= 0 else "#d64545"
+            stat = (f'近1年净流量 <b style="color:{nc}">{net:+.0f} t</b>'
+                    + (f' · 最新周 <b>{last:+.2f} t</b>（{_esc(str(wd))}）' if isinstance(last, (int, float)) else ""))
+        flow_blocks.append(
+            f'<div class="sp-panel">'
+            f'<div class="sp-head"><span class="sp-title">{_esc(f["name"])}</span></div>'
+            f'{_flow_bars_svg(f["bars"])}'
+            f'<div class="oil-meta">{stat}</div>'
+            f'</div>'
+        )
+
+    intro = (
+        f'<div class="sp-intro">COMEX 与上海(SHFE/SGE)贵金属<b>实物库存对照</b> + GLD/SLV <b>ETF 资金流</b>。'
+        f'东西方库存背离揭示实物流向与逼仓压力；ETF 资金流反映纸面配置意愿。全部公开数据，每日自动更新。'
+        f'<span class="sp-asof">as of {_esc(str(as_of))} · COMEX 日频 · 上海周频 · 来源 comex-inventory-charts</span></div>'
+    )
+    flow_intro = ('<div class="bt-mtitle">GLD / SLV ETF 周净流量'
+                  '<span class="bt-mtsub">🟢 净流入 · 🔴 净流出（单位：吨）</span></div>')
+    return (f'<div class="sp-wrap">{intro}{"".join(blocks)}'
+            f'{flow_intro}{"".join(flow_blocks)}</div>')
+
+
 def _cb_balance_html(cb):
     """底部四大央行资产负债表板块(US/JP/CN/ECB), 2x2 布局。统一当天汇率折 $B 横向可比。"""
     if not cb:
@@ -4663,6 +4779,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·七：美国石油库存运营红线 (Brent-WTI价差 / Cushing / SPR) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美国石油库存运营红线 · 能源安全 (Brent-WTI 价差 / Cushing / SPR · tank bottom)<span class="freq-badge freq-weekly">每周更新 · 价差每日</span></div>
   <div class="card">{oil_inventory}</div>
+  <!-- ═══ 附三·十二A：COMEX & 上海贵金属库存 + GLD/SLV ETF 资金流 ═══ -->
+  <div class="part-title" id="sec-comex-inventory"><span class="part-num">＋</span>COMEX &amp; 上海贵金属库存 + GLD/SLV ETF 资金流 (金/银/铂 东西方库存对照 · 实物流向/逼仓信号)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{comex_inventory}</div>
   <!-- ═══ 附三·十二B：BIS 自营黄金掉期 ═══ -->
   <div class="part-title" id="sec-bis-gold-swaps"><span class="part-num">＋</span>BIS 自营黄金掉期 · 央行黄金市场隐秘干预信号 (吨 · 2010→今)<span class="freq-badge freq-quarterly">年度确认+月度推算</span></div>
   <div class="card">{bis_gold_swaps}</div>
@@ -4742,7 +4861,7 @@ mkRadar('rLong', RADAR.long);
     {{ name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化'] }},
     {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲'] }},
     {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','基差套利去杠杆预警','SOFR 倒挂','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
-    {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','白银做市商','COMEX 白银','投行累计','做市商每周净','issue/stop','自营黄金掉期','黄金出口','Nonmonetary','黄金 Domestic Premium','Premium/Discount','白银月度进口','Silver Bullion'] }},
+    {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','COMEX & 上海','贵金属库存','ETF 资金流','白银做市商','COMEX 白银','投行累计','做市商每周净','issue/stop','自营黄金掉期','黄金出口','Nonmonetary','黄金 Domestic Premium','Premium/Discount','白银月度进口','Silver Bullion'] }},
     {{ name: '财政政策', match: ['美日财政政策事件','债务上限','补正预算','国债发行','年度财政花费','财政花费','政府总支出'] }},
     {{ name: '日本市场', match: ['日经225','外资净买入','日本市场'] }},
     {{ name: '机构与政要持仓', match: ['机构持仓','13F','Trump'] }}

@@ -3811,6 +3811,116 @@ def fetch_basis_trade_monitor(cache_path=None, years=2):
     return out
 
 
+def fetch_comex_inventory(cache_path=None):
+    """COMEX & 上海(SHFE/SGE)贵金属库存 + GLD/SLV ETF 资金流。
+    数据源: 公开 GitHub Pages comex-inventory-charts(每日自动更新, 内联 CHARTS JSON)。
+    解析页面内 `const CHARTS = {...}` + `const SUMMARY = {...}`。绝不编: 抓不到返回 status='未获取'。
+    返回 {status, as_of, summary, panels:{gold,silver,platinum,gld_flow_weekly,slv_flow_weekly}}。
+    - 库存图: COMEX(左轴) vs 上海(右轴), 双轴折线, 单位吨。
+    - ETF 资金流: 周净流量柱状(正=流入绿/负=流出红), 单位吨。
+    """
+    import json as _json
+    import re as _re
+    import datetime as _dt
+    if cache_path is None:
+        cache_path = os.path.join(os.path.dirname(__file__), "..", "data", "comex_inventory.json")
+    url = "https://curarpikt0000.github.io/comex-inventory-charts/"
+    html = None
+    try:
+        import subprocess
+        r = subprocess.run(["curl", "-s", "--max-time", "30", "-H", "User-Agent: Mozilla/5.0", url],
+                           capture_output=True, text=True, timeout=35)
+        if r.returncode == 0 and r.stdout:
+            html = r.stdout
+    except Exception:
+        html = None
+    if not html:
+        return {"status": "未获取", "as_of": None,
+                "note": "comex-inventory-charts 页面抓取失败"}
+
+    try:
+        mc = _re.search(r'const CHARTS = (\{.*?\});\s*\nconst SUMMARY', html, _re.S)
+        ms = _re.search(r'const SUMMARY = (\{.*?\});', html, _re.S)
+        charts = _json.loads(mc.group(1)) if mc else {}
+        summary = _json.loads(ms.group(1)) if ms else {}
+    except Exception as e:
+        return {"status": "未获取", "as_of": None, "note": f"解析失败: {e}"}
+
+    if not charts:
+        return {"status": "未获取", "as_of": None, "note": "CHARTS 数据为空"}
+
+    # ── 库存双轴 panel: COMEX(左) vs 上海(右) ──
+    inv_colors = {"COMEX 库存 (吨)": "#c0757d", "SHFE 库存 (吨)": "#6b8fb5", "SGE 库存 (吨)": "#7fa085"}
+
+    def _inv_panel(key, title, subtitle):
+        c = charts.get(key)
+        if not c:
+            return None
+        series = []
+        for s in c.get("series", []):
+            data = s.get("data", [])
+            pts = [{"date": d, "v": v} for d, v in data if v is not None]
+            if len(pts) < 2:
+                continue
+            nm = s.get("name", "")
+            is_comex = "COMEX" in nm
+            series.append({
+                "name": nm, "color": inv_colors.get(nm, "#8a8578"),
+                "axis": "left" if is_comex else "right",
+                "width": 2.0 if is_comex else 1.6,
+                "dash": not is_comex,
+                "points": pts,
+            })
+        if not series:
+            return None
+        single = all(s["axis"] == "left" for s in series)
+        return {"id": f"comex_inv_{key}", "title": title, "subtitle": subtitle,
+                "unit_left": "COMEX 吨", "unit_right": "上海 吨", "single_axis": single,
+                "series": series, "source": "comex-inventory-charts（COMEX 日频 · 上海 SHFE/SGE 周频）"}
+
+    panels = {
+        "gold": _inv_panel("gold", "黄金库存：COMEX vs 上海(SHFE)", "Gold Inventory — COMEX vs Shanghai"),
+        "silver": _inv_panel("silver", "白银库存：COMEX vs 上海(SHFE/SGE)", "Silver Inventory — COMEX vs Shanghai"),
+        "platinum": _inv_panel("platinum", "铂金库存：COMEX", "Platinum Inventory — COMEX"),
+    }
+
+    # ── ETF 资金流: 周净流量柱状(正绿负红) ──
+    def _flow_bars(key, name):
+        c = charts.get(key)
+        if not c or not c.get("series"):
+            return None
+        data = c["series"][0].get("data", [])
+        bars = [{"date": d, "v": v} for d, v in data if v is not None]
+        if len(bars) < 2:
+            return None
+        return {"name": name, "bars": bars}
+
+    flows = {
+        "gld": _flow_bars("gld_flow_weekly", "GLD 黄金ETF 周净流量"),
+        "slv": _flow_bars("slv_flow_weekly", "SLV 白银ETF 周净流量"),
+    }
+
+    # as_of
+    asofs = []
+    for p in panels.values():
+        if p:
+            for s in p["series"]:
+                if s["points"]:
+                    asofs.append(s["points"][-1]["date"])
+    as_of = max(asofs) if asofs else None
+
+    out = {"status": "ok", "as_of": as_of, "summary": summary,
+           "panels": {k: v for k, v in panels.items() if v},
+           "flows": {k: v for k, v in flows.items() if v},
+           "source_url": url, "fetched_at": _dt.datetime.now().isoformat()}
+    try:
+        with open(cache_path, "w") as f:
+            _json.dump(out, f, ensure_ascii=False, default=str)
+    except Exception:
+        pass
+    return out
+
+
 if __name__ == "__main__":
     import json
     print("=== Credit Impulse 三国(信贷脉冲) ===")

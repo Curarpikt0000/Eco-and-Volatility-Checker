@@ -360,6 +360,15 @@ def main():
               f"SOFR-IORB={_bl.get('sofr_iorb_gap_bp')}bp min_carry={_bl.get('min_carry_bp')}bp")
     except Exception as e:
         print(f"[dashboard] 基差套利预警 跳过: {e}")
+    # ── COMEX & 上海贵金属库存 + GLD/SLV ETF 资金流(来源: comex-inventory-charts 公开数据) ──
+    comex_inventory = {}
+    try:
+        comex_inventory = ed.fetch_comex_inventory() or {}
+        _ci = comex_inventory
+        print(f"[dashboard] COMEX/上海库存+ETF: status={_ci.get('status')} asof={_ci.get('as_of')} "
+              f"panels={list(_ci.get('panels',{}).keys())} flows={list(_ci.get('flows',{}).keys())}")
+    except Exception as e:
+        print(f"[dashboard] COMEX/上海库存+ETF 跳过: {e}")
     # ★数据落盘 GitHub 副本(完整历史序列进 git)
     try:
         _data_dir = os.path.join(os.path.dirname(__file__), "..", "data", "stress")
@@ -400,6 +409,7 @@ def main():
         stress_panels=stress_panels,
         ofr_fsi=ofr_fsi,
         basis_trade=basis_trade,
+        comex_inventory=comex_inventory,
         maturing_treasury=maturing_treasury,
         oil_inventory=oil_inventory,
         us_jp_yields=us_jp_yields,
