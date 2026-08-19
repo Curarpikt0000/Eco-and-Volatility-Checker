@@ -1,6 +1,6 @@
 {
   "status": "ok",
-  "as_of": "2026-08-18",
+  "as_of": "2026-08-19",
   "source": "美日财政政策事件时间线。每日 cron agent 模式 web 检索权威源(路透/彭博/NHK/财务省/US Treasury/Congress)动态更新。绝不编造,每条带来源链接。",
   "note": "cron 每日抓取最新美日财政举措(债务上限/持续决议CR/政府关门/补充预算/国债发行计划等),按日期倒序保留最近 ~20 条。",
   "events": [
@@ -13,6 +13,26 @@
       "summary": "高市早苗首相表示将编制 2026 年度追加补正预算案,财源拟通过增发特例公债(赤字国债)筹措,规模市场传约 3 万亿日元级,含电气/燃气补贴等物价对策。",
       "source_url": "https://s.japanese.joins.com/JArticle/349573?sectcode=A00&servcode=A00",
       "source_name": "中央日报(引 NHK)"
+    },
+    {
+      "date": "2026-08-01",
+      "country": "US",
+      "flag": "🇺🇸",
+      "category": "政府关门风险",
+      "title": "国会争论是否将政府拨款延至年底,逼近下一个关门期限",
+      "summary": "众议院议长 Johnson 表示留给议员的时间不多;共和党内就是否用又一份持续决议(CR)把 FY2026 拨款推进程序化仍有分歧,市场关注 12 月前的关门期限风险。",
+      "source_url": "https://sg.news.yahoo.com/wrangling-over-whether-punt-government-110000896.html",
+      "source_name": "Yahoo News(引 Politico)"
+    },
+    {
+      "date": "2026-05-29",
+      "country": "JP",
+      "flag": "🇯🇵",
+      "category": "补正预算/国债发行",
+      "title": "日本 2026 年度补正预算全额赤字国债 3 兆 1135 亿日元",
+      "summary": "政府近日拟阁议决定的 2026 年度补正预算歳出总额 3 兆 1135 亿日元,财源全额靠特例公债(赤字国债),但称市中发行额不增加应对。",
+      "source_url": "https://jp.reuters.com/markets/japan/CJZVKOBFUBMWJA3FL255RL6AYU-2026-05-29/",
+      "source_name": "ロイター Reuters"
     },
     {
       "date": "2026-05-15",
@@ -33,16 +53,6 @@
       "summary": "特朗普总统签署 Consolidated Appropriations Act 2026,为 2026 财年联邦政府提供拨款,结束此前因持续决议(CR)引发的关门僵局;含 LIHEAP 等项目资金。",
       "source_url": "https://govtschemes.org/liheap-funding-eligibility-application-guide/",
       "source_name": "GovtSchemes(引法案)"
-    },
-    {
-      "date": "2026-08-01",
-      "country": "US",
-      "flag": "🇺🇸",
-      "category": "政府关门风险",
-      "title": "国会争论是否将政府拨款延至年底,逼近下一个关门期限",
-      "summary": "众议院议长 Johnson 表示留给议员的时间不多;共和党内就是否用又一份持续决议(CR)把 FY2026 拨款推进程序化仍有分歧,市场关注 12 月前的关门期限风险。",
-      "source_url": "https://sg.news.yahoo.com/wrangling-over-whether-punt-government-110000896.html",
-      "source_name": "Yahoo News(引 Politico)"
     },
     {
       "date": "2026-01-28",

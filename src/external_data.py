@@ -2735,6 +2735,22 @@ def fetch_bis_gold_swaps(cache_path=None):
     }
 
 
+def fetch_silver_imports_data(json_path=None):
+    """读印度白银月度进口落盘 JSON (src/fetch_silver_imports.py 生成, UN Comtrade)。
+    绝不编造: 文件缺失 → status='未获取'。"""
+    import json as _json
+    if json_path is None:
+        json_path = os.path.join(os.path.dirname(__file__), "..", "data", "silver_imports_india.json")
+    try:
+        with open(json_path, encoding="utf-8") as f:
+            d = _json.load(f)
+        if d.get("status") == "ok" and d.get("points"):
+            return d
+    except Exception:
+        pass
+    return {"status": "未获取", "as_of": "", "note": "印度白银进口 JSON 未找到"}
+
+
 def fetch_gold_premium(india_path=None, china_path=None):
     """印度 + 中国黄金 domestic premium/discount (US$/oz, 日度)。
     源: World Gold Council goldhub (ICE Benchmark/MCX/RBI/NCDEX; Bloomberg/SGE)。

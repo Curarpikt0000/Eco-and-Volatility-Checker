@@ -216,7 +216,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              iip_four=None, fiscal_news=None, hf_leverage=None, bis_gold_swaps=None,
              market_breadth=None, silver_bank_positions=None, comex_silver_issues_ref=None,
              gold_exports=None, us_yield_century=None, comex_issue_stop=None,
-             ad_line_real=None, gold_premium=None):
+             ad_line_real=None, gold_premium=None, silver_imports=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -399,6 +399,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         market_breadth=_market_breadth_html(market_breadth),
         ad_line_real=_ad_line_html(ad_line_real),
         gold_premium=_gold_premium_html(gold_premium),
+        silver_imports=_silver_imports_html(silver_imports),
         silver_bank_positions=_silver_bank_positions_html(silver_bank_positions),
         comex_silver_issues_ref=_comex_silver_issues_ref_html(comex_silver_issues_ref),
         gold_exports=_gold_exports_html(gold_exports),
@@ -1919,6 +1920,80 @@ def _gold_premium_html(gp):
         f'<b>负值(折价)</b>=本地比国际便宜，反映<b>需求疲软或进口过剩</b>。<br>'
         f'印度是全球第二大黄金消费国，其溢价是<b>亚洲实物黄金需求</b>的重要风向标——大幅溢价常见于婚庆/节庆旺季或进口政策收紧；深度折价常见于金价暴涨抑制需求时。<br>'
         f'注：本图为<b>黄金</b> premium(WGC 真数据，印度可回溯 2012、中国 2003)。白银 premium 数据源(Metals Focus)为付费商业源，待补。</div>'
+        f'</div>'
+    )
+
+
+def _silver_imports_html(si):
+    """印度白银月度进口 section: 灰柱(月度吨) + 12月滚动均线(棕)。
+    si: fetch_silver_imports 落盘的 data/silver_imports_india.json。数据源=UN Comtrade 免费。"""
+    if not si or si.get("status") != "ok" or not si.get("points"):
+        return ('<p class="empty">印度白银进口数据同步中——UN Comtrade 每月发布(约滞后1-2月)，'
+                '读到即填真值，绝不编造。</p>')
+    pts = si["points"]
+    n = len(pts)
+    vals = [p["tonnes"] for p in pts]
+    # 12月滚动均线
+    ma = []
+    for i in range(n):
+        window = vals[max(0, i - 11):i + 1]
+        ma.append(sum(window) / len(window))
+
+    w, h = 920, 280
+    ml, mr, mt, mb_ = 46, 30, 20, 42
+    pw, ph = w - ml - mr, h - mt - mb_
+    vmax = max(max(vals), max(ma)) * 1.08
+    bw = pw / n * 0.66
+    def X(i): return ml + (i + 0.5) * pw / n
+    def Y(v): return mt + (vmax - v) / (vmax or 1) * ph
+
+    parts = [f'<svg viewBox="0 0 {w} {h}" class="cust-chart" preserveAspectRatio="xMidYMid meet" '
+             f'font-family="-apple-system,PingFang SC,sans-serif">']
+    # y 网格+标签
+    for k in range(5):
+        val = vmax * (1 - k / 4)
+        gy = mt + ph * k / 4
+        parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" stroke="#d4cdbe" stroke-width="1" stroke-dasharray="3,3"/>')
+        parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" font-size="9" fill="#8a8578" text-anchor="end">{val:.0f}</text>')
+    # 柱
+    for i, p in enumerate(pts):
+        x = X(i) - bw / 2
+        y = Y(vals[i])
+        bh = mt + ph - y
+        parts.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{bh:.1f}" fill="#9a958a" opacity="0.85"/>')
+    # x 标签(~8个)
+    for i, p in enumerate(pts):
+        if i == 0 or i == n - 1 or i % max(n // 7, 1) == 0:
+            anchor = "start" if i == 0 else ("end" if i >= n - 2 else "middle")
+            parts.append(f'<text x="{X(i):.1f}" y="{h-12}" font-size="8.5" fill="#8a8578" text-anchor="{anchor}">{_esc(p["date"])}</text>')
+    # 12月滚动均线(深棕)
+    ml_line = [f"{X(i):.1f},{Y(ma[i]):.1f}" for i in range(n)]
+    parts.append(f'<polyline points="{" ".join(ml_line)}" fill="none" stroke="#8a5a2e" stroke-width="2.2" stroke-linejoin="round"/>')
+    # 末柱标值
+    parts.append(f'<text x="{X(n-1):.1f}" y="{Y(vals[-1])-4:.1f}" font-size="9" fill="#6b6459" text-anchor="middle">{vals[-1]:.0f}</text>')
+    # 图例
+    parts.append(f'<rect x="{ml+6}" y="{mt+2}" width="12" height="10" fill="#9a958a" opacity="0.85"/>')
+    parts.append(f'<text x="{ml+22}" y="{mt+11}" font-size="10" fill="#6b6459">白银进口(月, 吨)</text>')
+    parts.append(f'<line x1="{ml+140}" y1="{mt+7}" x2="{ml+158}" y2="{mt+7}" stroke="#8a5a2e" stroke-width="2.6"/>')
+    parts.append(f'<text x="{ml+162}" y="{mt+11}" font-size="10" fill="#8a5a2e">12 月滚动均值</text>')
+    parts.append("</svg>")
+    svg = "".join(parts)
+
+    return (
+        f'<div class="cust-wrap">'
+        f'<div class="cust-chart-col cust-chart-full">'
+        f'<div class="cust-chart-title">印度白银月度进口 (Silver Bullion Imports, 吨)'
+        f'<span class="chart-freq freq-m">🟢 每月 · UN Comtrade</span></div>'
+        f'{svg}'
+        f'<div class="oil-meta">最新（{_esc(si.get("as_of",""))}）：<b>{si.get("latest_tonnes")}</b> 吨　'
+        f'历史峰值 <b>{si.get("max_tonnes")}</b> 吨（{si.get("n")} 个月，{_esc(pts[0]["date"])}→{_esc(pts[-1]["date"])}）<br>'
+        f'口径校验：2024 前两月合计 2932 吨，与 LBMA 公开数字完全吻合。</div>'
+        f'<div class="oil-src">数据源：{_esc(si.get("source",""))}</div>'
+        f'</div>'
+        f'<div class="cust-how"><b>如何看：</b>印度是全球最大白银进口国，其月度进口量是<b>全球实物白银需求</b>的关键风向标。'
+        f'<b>灰柱</b>=当月进口量(吨)，<b>棕线</b>=12 个月滚动均值(平滑季节性)。<br>'
+        f'进口<b>激增</b>常见于：投资/工业需求旺盛、本地溢价高吸引进口、节庆备货；进口<b>骤降</b>常见于：金银价暴涨抑制需求、政府上调关税/进口管制(2026 年印度将银关税从 6% 升至 15% 并要求 DGFT 许可证，导致 3-4 月进口锐减至 247/182 吨)。<br>'
+        f'数据源为 UN Comtrade(联合国商品贸易统计，免费、月度、约滞后 1-2 月发布)，逐股口径为印度 HS7106(银)全球进口净重。因免费 API 仅回溯至 2024，均线用 12 月滚动值代替 5 年均线。</div>'
         f'</div>'
     )
 
@@ -4198,6 +4273,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title" id="sec-gold-premium"><span class="part-num">＋</span>印度 &amp; 中国黄金 Domestic Premium/Discount (亚洲实物黄金需求风向标·WGC 真数据)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{gold_premium}</div>
 
+  <!-- ═══ 附三·十二B1b：印度白银月度进口 (UN Comtrade) ═══ -->
+  <div class="part-title" id="sec-silver-imports"><span class="part-num">＋</span>印度白银月度进口 · Silver Bullion Imports (全球最大白银进口国·实物需求风向标·UN Comtrade 免费月度)<span class="freq-badge freq-monthly">每月更新</span></div>
+  <div class="card">{silver_imports}</div>
+
   <!-- ═══ 附三·十二B2：NYSE A/D 腾落线(真数据, Economic-Dashboard cron) ═══ -->
   <div class="part-title" id="sec-ad-line"><span class="part-num">＋</span>NYSE A/D 腾落线 · S&amp;P500 全成分股累计腾落 (真 A/D 数据·顶背离判定)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{ad_line_real}</div>
@@ -4269,7 +4348,7 @@ mkRadar('rLong', RADAR.long);
   var GROUPS = [
     {{ name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注','A/D 腾落线','市场广度'] }},
     {{ name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化'] }},
-    {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','BIS','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲','黄金出口','Nonmonetary','黄金 Domestic Premium','Premium/Discount'] }},
+    {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','BIS','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲','黄金出口','Nonmonetary','黄金 Domestic Premium','Premium/Discount','白银月度进口','Silver Bullion'] }},
     {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
     {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','白银做市商','COMEX 白银','投行累计','做市商每周净','issue/stop'] }},
     {{ name: '财政政策', match: ['美日财政政策事件','债务上限','补正预算','国债发行'] }},

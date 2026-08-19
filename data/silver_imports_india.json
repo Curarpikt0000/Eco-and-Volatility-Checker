@@ -1,0 +1,181 @@
+{
+ "status": "ok",
+ "generated": "2026-08-19T11:20:29",
+ "source": "UN Comtrade (UNSD) 免费 preview API — reporter=India cmd=HS7106(银) flow=进口, partner2=World",
+ "unit": "tonnes",
+ "note": "印度白银(HS7106)月度进口总量。口径=UN Comtrade partner2=World 净重(kg)→吨, 2024前两月=2932t 与 LBMA 公开数字完全吻合。某月未发布则跳过不补0。",
+ "as_of": "2026-04",
+ "latest_tonnes": 182.2,
+ "n": 28,
+ "max_tonnes": 2295.3,
+ "points": [
+  {
+   "period": "202401",
+   "date": "2024-01",
+   "tonnes": 636.8,
+   "value_musd": 483.0
+  },
+  {
+   "period": "202402",
+   "date": "2024-02",
+   "tonnes": 2295.3,
+   "value_musd": 1725.5
+  },
+  {
+   "period": "202403",
+   "date": "2024-03",
+   "tonnes": 1067.6,
+   "value_musd": 816.6
+  },
+  {
+   "period": "202404",
+   "date": "2024-04",
+   "tonnes": 172.6,
+   "value_musd": 134.1
+  },
+  {
+   "period": "202405",
+   "date": "2024-05",
+   "tonnes": 162.4,
+   "value_musd": 137.9
+  },
+  {
+   "period": "202406",
+   "date": "2024-06",
+   "tonnes": 219.7,
+   "value_musd": 210.6
+  },
+  {
+   "period": "202407",
+   "date": "2024-07",
+   "tonnes": 179.5,
+   "value_musd": 165.7
+  },
+  {
+   "period": "202408",
+   "date": "2024-08",
+   "tonnes": 1461.2,
+   "value_musd": 1315.7
+  },
+  {
+   "period": "202409",
+   "date": "2024-09",
+   "tonnes": 349.8,
+   "value_musd": 325.7
+  },
+  {
+   "period": "202410",
+   "date": "2024-10",
+   "tonnes": 330.5,
+   "value_musd": 331.7
+  },
+  {
+   "period": "202411",
+   "date": "2024-11",
+   "tonnes": 488.9,
+   "value_musd": 477.0
+  },
+  {
+   "period": "202412",
+   "date": "2024-12",
+   "tonnes": 421.5,
+   "value_musd": 421.9
+  },
+  {
+   "period": "202501",
+   "date": "2025-01",
+   "tonnes": 911.8,
+   "value_musd": 882.8
+  },
+  {
+   "period": "202502",
+   "date": "2025-02",
+   "tonnes": 454.1,
+   "value_musd": 430.7
+  },
+  {
+   "period": "202503",
+   "date": "2025-03",
+   "tonnes": 129.0,
+   "value_musd": 119.3
+  },
+  {
+   "period": "202504",
+   "date": "2025-04",
+   "tonnes": 166.5,
+   "value_musd": 159.8
+  },
+  {
+   "period": "202505",
+   "date": "2025-05",
+   "tonnes": 534.4,
+   "value_musd": 566.2
+  },
+  {
+   "period": "202506",
+   "date": "2025-06",
+   "tonnes": 220.4,
+   "value_musd": 228.2
+  },
+  {
+   "period": "202507",
+   "date": "2025-07",
+   "tonnes": 476.8,
+   "value_musd": 506.4
+  },
+  {
+   "period": "202508",
+   "date": "2025-08",
+   "tonnes": 410.9,
+   "value_musd": 451.7
+  },
+  {
+   "period": "202509",
+   "date": "2025-09",
+   "tonnes": 1011.8,
+   "value_musd": 1306.9
+  },
+  {
+   "period": "202510",
+   "date": "2025-10",
+   "tonnes": 1784.5,
+   "value_musd": 2719.6
+  },
+  {
+   "period": "202511",
+   "date": "2025-11",
+   "tonnes": 661.8,
+   "value_musd": 1075.0
+  },
+  {
+   "period": "202512",
+   "date": "2025-12",
+   "tonnes": 460.0,
+   "value_musd": 757.8
+  },
+  {
+   "period": "202601",
+   "date": "2026-01",
+   "tonnes": 747.5,
+   "value_musd": 2003.7
+  },
+  {
+   "period": "202602",
+   "date": "2026-02",
+   "tonnes": 613.2,
+   "value_musd": 1659.2
+  },
+  {
+   "period": "202603",
+   "date": "2026-03",
+   "tonnes": 247.0,
+   "value_musd": 616.4
+  },
+  {
+   "period": "202604",
+   "date": "2026-04",
+   "tonnes": 182.2,
+   "value_musd": 411.0
+  }
+ ]
+}

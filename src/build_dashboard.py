@@ -249,6 +249,23 @@ def main():
     except Exception as e:
         print(f"[dashboard] 黄金premium 跳过: {e}")
 
+    # ── 印度白银月度进口 (UN Comtrade 免费, 每月增量) ──
+    silver_imports = {}
+    try:
+        # 先跑 fetch 脚本拉新月(幂等增量; Comtrade 未发布则跳过不覆盖)
+        import subprocess as _sp
+        _si_script = os.path.join(os.path.dirname(__file__), "fetch_silver_imports.py")
+        try:
+            _sp.run(["python3", _si_script], timeout=120, check=False)
+        except Exception as _se:
+            print(f"[dashboard] 白银进口 fetch 警告(用现有JSON): {_se}")
+        silver_imports = ed.fetch_silver_imports_data() or {}
+        print(f"[dashboard] 印度白银进口: status={silver_imports.get('status')} "
+              f"as_of={silver_imports.get('as_of')} 最新={silver_imports.get('latest_tonnes')}t "
+              f"n={silver_imports.get('n')}")
+    except Exception as e:
+        print(f"[dashboard] 印度白银进口 跳过: {e}")
+
     # ── 白银做市商头寸(CFTC COT commercial 净持仓, 一手官方) ──
     silver_bank_positions = {}
     try:
@@ -374,6 +391,7 @@ def main():
         market_breadth=market_breadth,
         ad_line_real=ad_line_real,
         gold_premium=gold_premium,
+        silver_imports=silver_imports,
         silver_bank_positions=silver_bank_positions,
         comex_silver_issues_ref=comex_silver_issues_ref,
         gold_exports=gold_exports,
