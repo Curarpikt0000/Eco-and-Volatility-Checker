@@ -216,7 +216,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              iip_four=None, fiscal_news=None, hf_leverage=None, bis_gold_swaps=None,
              market_breadth=None, silver_bank_positions=None, comex_silver_issues_ref=None,
              gold_exports=None, us_yield_century=None, comex_issue_stop=None,
-             ad_line_real=None):
+             ad_line_real=None, gold_premium=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -398,6 +398,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         bis_gold_swaps=_bis_gold_swaps_html(bis_gold_swaps),
         market_breadth=_market_breadth_html(market_breadth),
         ad_line_real=_ad_line_html(ad_line_real),
+        gold_premium=_gold_premium_html(gold_premium),
         silver_bank_positions=_silver_bank_positions_html(silver_bank_positions),
         comex_silver_issues_ref=_comex_silver_issues_ref_html(comex_silver_issues_ref),
         gold_exports=_gold_exports_html(gold_exports),
@@ -1815,6 +1816,109 @@ def _ad_line_html(ad):
         f'<b>琥珀线(参与率%)</b>：当日上涨家数占比，&gt;50% 多数股上涨、&lt;50% 多数股下跌。<br>'
         f'<b>顶背离判定(可复现)</b>：腾落线近 20 日高点是否 ≥ 近 120 日高点。未创新高 + 参与率 &lt;50% = 顶背离预警。<br>'
         f'相比旧的 RSP/SPY 代理，这是<b>逐股统计的真 A/D 数据</b>(501 只成分股)，由 Economic-Dashboard 每日 cron 自动更新。</div>'
+        f'</div>'
+    )
+
+
+def _gold_premium_html(gp):
+    """印度 + 中国黄金 domestic premium/discount 双线折线 (US$/oz, 零轴分溢价/折价)。
+    gp: fetch_gold_premium()。数据源=World Gold Council goldhub。"""
+    if not gp or gp.get("status") != "ok":
+        note = (gp or {}).get("note", "")
+        return (f'<p class="empty">黄金 domestic premium 数据同步中——从 World Gold Council goldhub 下载 xlsx 后解析，'
+                f'读到即填真值，绝不编造。{_esc(note)}</p>')
+    ind = gp.get("india")
+    chn = gp.get("china")
+    # 只画近 ~3 年(便于看清近期波动), 全量太密
+    def _recent(series, n_keep=780):
+        pts = series["points"]
+        return pts[-n_keep:] if len(pts) > n_keep else pts
+    ind_pts = _recent(ind) if ind else []
+    chn_pts = _recent(chn) if chn else []
+    # 合并日期轴
+    all_dates = sorted(set([p["date"] for p in ind_pts] + [p["date"] for p in chn_pts]))
+    if not all_dates:
+        return '<p class="empty">黄金 premium 无数据点。</p>'
+    n = len(all_dates)
+    didx = {d: i for i, d in enumerate(all_dates)}
+    ind_map = {p["date"]: p["premium"] for p in ind_pts}
+    chn_map = {p["date"]: p["premium"] for p in chn_pts}
+
+    w, h = 920, 280
+    ml, mr, mt, mb_ = 46, 150, 18, 30
+    pw, ph = w - ml - mr, h - mt - mb_
+    def X(i): return ml + i * pw / max(n - 1, 1)
+    allv = list(ind_map.values()) + list(chn_map.values())
+    lo, hi = min(allv), max(allv)
+    # 保证 0 在范围内
+    lo = min(lo, 0); hi = max(hi, 0)
+    rng = (hi - lo) or 1
+    def Y(v): return mt + (hi - v) / rng * ph
+
+    parts = [f'<svg viewBox="0 0 {w} {h}" class="cust-chart" preserveAspectRatio="xMidYMid meet" '
+             f'font-family="-apple-system,PingFang SC,sans-serif">']
+    # y 网格 + 标签
+    for k in range(5):
+        val = hi - rng * k / 4
+        gy = mt + ph * k / 4
+        parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" stroke="#d4cdbe" stroke-width="1" stroke-dasharray="3,3"/>')
+        parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" font-size="9" fill="#8a8578" text-anchor="end">{val:.0f}</text>')
+    # 零轴(粗)
+    y0 = Y(0)
+    parts.append(f'<line x1="{ml}" y1="{y0:.1f}" x2="{w-mr}" y2="{y0:.1f}" stroke="#8a8578" stroke-width="1.3"/>')
+    parts.append(f'<text x="{w-mr+4}" y="{y0+3:.1f}" font-size="9" fill="#8a8578">0 平价</text>')
+    # x 年标签
+    seen = set()
+    for i, d in enumerate(all_dates):
+        yr = d[:4]
+        if yr not in seen and (i == 0 or i == n - 1 or i % max(n // 6, 1) == 0):
+            seen.add(yr)
+            anchor = "start" if i == 0 else ("end" if i >= n - 2 else "middle")
+            parts.append(f'<text x="{X(i):.1f}" y="{h-10}" font-size="9" fill="#8a8578" text-anchor="{anchor}">{_esc(d[:7])}</text>')
+    # 印度线(琥珀/金)
+    if ind_pts:
+        il = [f"{X(didx[d]):.1f},{Y(ind_map[d]):.1f}" for d in all_dates if d in ind_map]
+        parts.append(f'<polyline points="{" ".join(il)}" fill="none" stroke="#c9922e" stroke-width="2.0" stroke-linejoin="round"/>')
+        last_d = [d for d in all_dates if d in ind_map][-1]
+        parts.append(f'<circle cx="{X(didx[last_d]):.1f}" cy="{Y(ind_map[last_d]):.1f}" r="3.4" fill="#c9922e"/>')
+    # 中国线(青灰)
+    if chn_pts:
+        cl = [f"{X(didx[d]):.1f},{Y(chn_map[d]):.1f}" for d in all_dates if d in chn_map]
+        parts.append(f'<polyline points="{" ".join(cl)}" fill="none" stroke="#6b8fb5" stroke-width="1.8" stroke-linejoin="round" opacity="0.9"/>')
+        last_c = [d for d in all_dates if d in chn_map][-1]
+        parts.append(f'<circle cx="{X(didx[last_c]):.1f}" cy="{Y(chn_map[last_c]):.1f}" r="3.2" fill="#6b8fb5"/>')
+    # 图例
+    ly = mt + 6
+    parts.append(f'<line x1="{w-mr+8}" y1="{ly}" x2="{w-mr+24}" y2="{ly}" stroke="#c9922e" stroke-width="2.6"/>')
+    parts.append(f'<text x="{w-mr+28}" y="{ly+3.5}" font-size="10" fill="#c9922e">印度 {ind["latest"] if ind else "-"}</text>')
+    ly += 18
+    parts.append(f'<line x1="{w-mr+8}" y1="{ly}" x2="{w-mr+24}" y2="{ly}" stroke="#6b8fb5" stroke-width="2.6"/>')
+    parts.append(f'<text x="{w-mr+28}" y="{ly+3.5}" font-size="10" fill="#6b8fb5">中国 {chn["latest"] if chn else "-"}</text>')
+    parts.append("</svg>")
+    svg = "".join(parts)
+
+    ind_state = ""
+    if ind and ind.get("latest") is not None:
+        lv = ind["latest"]
+        ind_state = ("溢价🟢(需求旺/供给紧)" if lv > 1 else ("折价🔴(需求弱/进口过剩)" if lv < -1 else "近平价"))
+
+    return (
+        f'<div class="cust-wrap">'
+        f'<div class="cust-chart-col cust-chart-full">'
+        f'<div class="cust-chart-title">印度 &amp; 中国黄金 Domestic Premium/Discount (US$/oz)'
+        f'<span class="chart-freq freq-d">🟢 每日 · World Gold Council goldhub</span></div>'
+        f'{svg}'
+        f'<div class="oil-meta">最新（{_esc(gp.get("as_of",""))}）：'
+        f'印度 <b>{ind["latest"] if ind else "-"}</b> US$/oz（{ind_state}）　'
+        f'中国 <b>{chn["latest"] if chn else "-"}</b> US$/oz<br>'
+        f'印度历史区间 {ind["min"] if ind else "-"} ~ {ind["max"] if ind else "-"}（{ind["n"] if ind else 0} 日，{_esc(ind["points"][0]["date"]) if ind else ""}→今）</div>'
+        f'<div class="oil-src">数据源：{_esc(ind["source"] if ind else "")}（5 日移动平均）</div>'
+        f'</div>'
+        f'<div class="cust-how"><b>如何看：</b><b>Domestic Premium/Discount(本地溢价/折价)</b>=某国黄金<b>本地价格 − 国际价格</b>(US$/oz)。'
+        f'<b>正值(溢价)</b>=本地比国际贵，反映当地<b>实物需求旺盛或供给紧张</b>(如进口受限、关税上调)；'
+        f'<b>负值(折价)</b>=本地比国际便宜，反映<b>需求疲软或进口过剩</b>。<br>'
+        f'印度是全球第二大黄金消费国，其溢价是<b>亚洲实物黄金需求</b>的重要风向标——大幅溢价常见于婚庆/节庆旺季或进口政策收紧；深度折价常见于金价暴涨抑制需求时。<br>'
+        f'注：本图为<b>黄金</b> premium(WGC 真数据，印度可回溯 2012、中国 2003)。白银 premium 数据源(Metals Focus)为付费商业源，待补。</div>'
         f'</div>'
     )
 
@@ -4090,6 +4194,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title" id="sec-gold-exports"><span class="part-num">＋</span>美国黄金出口 · Nonmonetary Gold Exports (各国黄金运回家·去美元化实物信号·2026Q1暴涨4.9×)<span class="freq-badge freq-quarterly">每季更新</span></div>
   <div class="card">{gold_exports}</div>
 
+  <!-- ═══ 附三·十二B1：印度/中国黄金 domestic premium (WGC goldhub) ═══ -->
+  <div class="part-title" id="sec-gold-premium"><span class="part-num">＋</span>印度 &amp; 中国黄金 Domestic Premium/Discount (亚洲实物黄金需求风向标·WGC 真数据)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{gold_premium}</div>
+
   <!-- ═══ 附三·十二B2：NYSE A/D 腾落线(真数据, Economic-Dashboard cron) ═══ -->
   <div class="part-title" id="sec-ad-line"><span class="part-num">＋</span>NYSE A/D 腾落线 · S&amp;P500 全成分股累计腾落 (真 A/D 数据·顶背离判定)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{ad_line_real}</div>
@@ -4161,7 +4269,7 @@ mkRadar('rLong', RADAR.long);
   var GROUPS = [
     {{ name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注','A/D 腾落线','市场广度'] }},
     {{ name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化'] }},
-    {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','BIS','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲','黄金出口','Nonmonetary'] }},
+    {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','BIS','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲','黄金出口','Nonmonetary','黄金 Domestic Premium','Premium/Discount'] }},
     {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
     {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','白银做市商','COMEX 白银','投行累计','做市商每周净','issue/stop'] }},
     {{ name: '财政政策', match: ['美日财政政策事件','债务上限','补正预算','国债发行'] }},

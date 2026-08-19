@@ -2735,6 +2735,44 @@ def fetch_bis_gold_swaps(cache_path=None):
     }
 
 
+def fetch_gold_premium(india_path=None, china_path=None):
+    """印度 + 中国黄金 domestic premium/discount (US$/oz, 日度)。
+    源: World Gold Council goldhub (ICE Benchmark/MCX/RBI/NCDEX; Bloomberg/SGE)。
+    数据由 scratch/parse_gold_premium.py 从 WGC 官方 xlsx 解析落盘 data/gold_premium_{india,china}.json。
+    正=本地溢价(需求旺/供给紧, 看多实物), 负=折价(需求弱/进口过剩)。
+    绝不编造: 文件缺失 → status='未获取'。更新方式: 用户从 WGC goldhub 下新 xlsx → 重跑 parse 脚本。
+    返回 {status, india:{...}, china:{...}}。
+    """
+    import json as _json
+    base = os.path.join(os.path.dirname(__file__), "..", "data")
+    if india_path is None:
+        india_path = os.path.join(base, "gold_premium_india.json")
+    if china_path is None:
+        china_path = os.path.join(base, "gold_premium_china.json")
+
+    def _load(p):
+        try:
+            with open(p, encoding="utf-8") as f:
+                d = _json.load(f)
+            if d.get("status") == "ok" and d.get("points"):
+                return d
+        except Exception:
+            pass
+        return None
+
+    ind = _load(india_path)
+    chn = _load(china_path)
+    if not ind and not chn:
+        return {"status": "未获取", "as_of": "",
+                "note": "黄金 premium 数据未找到 (WGC xlsx 未解析?)"}
+    return {
+        "status": "ok",
+        "as_of": (ind or chn).get("as_of", ""),
+        "india": ind,
+        "china": chn,
+    }
+
+
 def fetch_ad_line_real(json_path=None, price_lookback=120, nh_window=20):
     """真正的 A/D 腾落线(NYSE 广度): 读 Economic-Dashboard 每日 cron 维护的 SP500 全成分股腾落数据。
 

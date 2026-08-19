@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-18",
+  "as_of": "2026-08-19",
   "senators": [
     {
       "name": "Tommy Tuberville",
@@ -7,76 +7,6 @@
       "n_reports": 22,
       "n_parsed": 3,
       "trades": [
-        {
-          "ticker": "PEP",
-          "asset": "Pepsico Inc",
-          "txn_date": "10/07/2025",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2025"
-        },
-        {
-          "ticker": "OC",
-          "asset": "Owens Corning Inc",
-          "txn_date": "10/07/2025",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2025"
-        },
-        {
-          "ticker": "MSFT",
-          "asset": "Microsoft Corp",
-          "txn_date": "10/07/2025",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2025"
-        },
-        {
-          "ticker": "AAPL",
-          "asset": "Apple Inc",
-          "txn_date": "10/07/2025",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2025"
-        },
-        {
-          "ticker": "GOOGL",
-          "asset": "Alphabet Inc. - Class A Common Stock",
-          "txn_date": "10/07/2025",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2025"
-        },
-        {
-          "ticker": "ORCL",
-          "asset": "Oracle Corporation Common Stock",
-          "txn_date": "10/07/2025",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2025"
-        },
-        {
-          "ticker": null,
-          "asset": "BIRMINGHAM ALA GO WTS SER. 2018 B\n                                        \n                                        \n                                        \n                                            Rate/Coupon: 5.0% Matures: 12/01/2043",
-          "txn_date": "10/07/2025",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2025"
-        },
         {
           "ticker": "TSCO",
           "asset": "Tractor Supply Company",
@@ -150,6 +80,76 @@
         {
           "ticker": "AAPL",
           "asset": "Apple Inc. - Common Stock",
+          "txn_date": "10/29/2024",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "11/15/2024"
+        },
+        {
+          "ticker": "CTVA",
+          "asset": "Corteva, Inc. Common Stock",
+          "txn_date": "10/29/2024",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$1,001 - $15,000",
+          "filed": "11/15/2024"
+        },
+        {
+          "ticker": "HON",
+          "asset": "Honeywell International Inc. - Common Stock",
+          "txn_date": "10/29/2024",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "11/15/2024"
+        },
+        {
+          "ticker": "JNJ",
+          "asset": "Johnson & Johnson Common Stock",
+          "txn_date": "10/29/2024",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "11/15/2024"
+        },
+        {
+          "ticker": "KMB",
+          "asset": "Kimberly-Clark Corporation Common Stock",
+          "txn_date": "10/29/2024",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "11/15/2024"
+        },
+        {
+          "ticker": "MCD",
+          "asset": "McDonald's Corporation Common Stock",
+          "txn_date": "10/29/2024",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "11/15/2024"
+        },
+        {
+          "ticker": "MSFT",
+          "asset": "Microsoft Corporation - Common Stock",
+          "txn_date": "10/29/2024",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "11/15/2024"
+        },
+        {
+          "ticker": null,
+          "asset": "Nestle ADR",
           "txn_date": "10/29/2024",
           "owner": "Joint",
           "direction": "Sale (Full)",

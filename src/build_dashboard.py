@@ -239,6 +239,16 @@ def main():
     except Exception as e:
         print(f"[dashboard] A/D 腾落线 跳过: {e}")
 
+    # ── 印度/中国黄金 domestic premium (WGC goldhub xlsx 解析) ──
+    gold_premium = {}
+    try:
+        gold_premium = ed.fetch_gold_premium() or {}
+        gi = (gold_premium.get("india") or {})
+        print(f"[dashboard] 黄金premium: status={gold_premium.get('status')} "
+              f"as_of={gold_premium.get('as_of')} 印度n={gi.get('n')} latest={gi.get('latest')}")
+    except Exception as e:
+        print(f"[dashboard] 黄金premium 跳过: {e}")
+
     # ── 白银做市商头寸(CFTC COT commercial 净持仓, 一手官方) ──
     silver_bank_positions = {}
     try:
@@ -363,6 +373,7 @@ def main():
         bis_gold_swaps=bis_gold_swaps,
         market_breadth=market_breadth,
         ad_line_real=ad_line_real,
+        gold_premium=gold_premium,
         silver_bank_positions=silver_bank_positions,
         comex_silver_issues_ref=comex_silver_issues_ref,
         gold_exports=gold_exports,
