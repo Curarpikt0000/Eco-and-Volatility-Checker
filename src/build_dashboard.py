@@ -350,6 +350,16 @@ def main():
         print(f"[dashboard] OFR FSI: status={ofr_fsi.get('status')} asof={ofr_fsi.get('asof')} latest={ofr_fsi.get('latest',{}).get('OFR FSI 总指数')}")
     except Exception as e:
         print(f"[dashboard] OFR FSI 跳过: {e}")
+    # ── 基差套利去杠杆预警(SOFR倒挂 + Carry空间 + 波动触发, 美债/日债) ──
+    basis_trade = {}
+    try:
+        basis_trade = ed.fetch_basis_trade_monitor(years=2) or {}
+        _bl = basis_trade.get("lights", {})
+        print(f"[dashboard] 基差套利预警: status={basis_trade.get('status')} asof={basis_trade.get('asof')} "
+              f"funding={_bl.get('funding')} carry={_bl.get('carry')} vol={_bl.get('vol')} "
+              f"SOFR-IORB={_bl.get('sofr_iorb_gap_bp')}bp min_carry={_bl.get('min_carry_bp')}bp")
+    except Exception as e:
+        print(f"[dashboard] 基差套利预警 跳过: {e}")
     # ★数据落盘 GitHub 副本(完整历史序列进 git)
     try:
         _data_dir = os.path.join(os.path.dirname(__file__), "..", "data", "stress")
@@ -389,6 +399,7 @@ def main():
         custody_accel=custody_accel,
         stress_panels=stress_panels,
         ofr_fsi=ofr_fsi,
+        basis_trade=basis_trade,
         maturing_treasury=maturing_treasury,
         oil_inventory=oil_inventory,
         us_jp_yields=us_jp_yields,

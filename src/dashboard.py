@@ -216,7 +216,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              iip_four=None, fiscal_news=None, hf_leverage=None, bis_gold_swaps=None,
              market_breadth=None, silver_bank_positions=None, comex_silver_issues_ref=None,
              gold_exports=None, us_yield_century=None, comex_issue_stop=None,
-             ad_line_real=None, gold_premium=None, silver_imports=None, fiscal_budget=None):
+             ad_line_real=None, gold_premium=None, silver_imports=None, fiscal_budget=None,
+             basis_trade=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -410,6 +411,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         country_ust=_country_ust_html(country_ust),
         credit_impulse=_credit_impulse_html(credit_impulse),
         stress_panels=_stress_panels_html(stress_panels, ofr_fsi),
+        basis_trade=_basis_trade_html(basis_trade),
         auctions=_auctions_html(auctions),
         holdings=_holdings_html(holdings),
     )
@@ -3360,6 +3362,161 @@ def _stress_panels_html(sp, ofr=None):
     return f'<div class="sp-wrap">{intro}{"".join(blocks)}</div>'
 
 
+def _bt_sparkline(vals, w=88, h=22, color="#8a8578"):
+    """迷你走势线(状态矩阵内用)。vals: [float]。绝不编: 空则返回占位。"""
+    vals = [v for v in (vals or []) if isinstance(v, (int, float))]
+    if len(vals) < 2:
+        return '<span class="bt-spark-na">—</span>'
+    lo, hi = min(vals), max(vals)
+    rng = (hi - lo) or 1.0
+    n = len(vals)
+    pad = 2
+    def X(i): return pad + i * (w - 2 * pad) / (n - 1)
+    def Y(v): return pad + (hi - v) / rng * (h - 2 * pad)
+    pts = " ".join(f"{X(i):.1f},{Y(v):.1f}" for i, v in enumerate(vals))
+    # 末点方向色: 涨(相对首点)红 / 跌绿(利差走窄=风险↑用红提示 —— 但这里spark只表走势, 用中性描边+末点方向色)
+    up = vals[-1] >= vals[0]
+    end_c = "#c0757d" if up else "#7fa085"
+    ex, ey = X(n - 1), Y(vals[-1])
+    return (f'<svg class="bt-spark" viewBox="0 0 {w} {h}" preserveAspectRatio="none">'
+            f'<polyline points="{pts}" fill="none" stroke="{color}" stroke-width="1.3" '
+            f'stroke-linejoin="round" opacity="0.85"/>'
+            f'<circle cx="{ex:.1f}" cy="{ey:.1f}" r="1.9" fill="{end_c}"/></svg>')
+
+
+def _basis_trade_html(bt):
+    """基差套利去杠杆预警面板(时序化「美债/日债基差套利 + SOFR 倒挂」监控)。
+    bt: fetch_basis_trade_monitor() 结果。3 个双轴 panel(复用 _stress_panel_svg) + 分期限状态矩阵。
+    绝不编: 缺失序列/期限显示占位。"""
+    if not bt or bt.get("status") == "未获取" or not bt.get("panels"):
+        return '<p class="empty">基差套利监控数据未就绪。</p>'
+    panels_d = bt["panels"]
+    lights = bt.get("lights", {})
+    asof = bt.get("asof", "")
+    matrix = bt.get("matrix", [])
+
+    # ── 顶部合成风险灯条 ──
+    def _lampcell(label, light, detail):
+        light = light or "⚪"
+        return (f'<div class="bt-lamp"><div class="bt-lamp-ico">{light}</div>'
+                f'<div class="bt-lamp-lab">{_esc(label)}</div>'
+                f'<div class="bt-lamp-det">{_esc(detail)}</div></div>')
+    gap = lights.get("sofr_iorb_gap_bp")
+    gap_txt = (f'SOFR−IORB {gap:+.0f}bp' if isinstance(gap, (int, float)) else '—')
+    tonar_v = lights.get("tonar")
+    jpc = lights.get("jp_min_carry_bp")
+    jp_txt = (f'TONAR {tonar_v:.2f}% · 日债最紧 {jpc:+.0f}bp' if isinstance(tonar_v, (int, float)) and isinstance(jpc, (int, float))
+              else (f'TONAR {tonar_v:.2f}%' if isinstance(tonar_v, (int, float)) else '—'))
+    mc = lights.get("min_carry_bp")
+    mc_txt = (f'最紧 {mc:+.0f}bp' if isinstance(mc, (int, float)) else '—')
+    mv = lights.get("move")
+    mv_txt = (f'MOVE {mv:.0f}' if isinstance(mv, (int, float)) else '—')
+    lampbar = (
+        f'<div class="bt-lampbar bt-lampbar-4">'
+        f'{_lampcell("美债融资(SOFR触顶?)", lights.get("funding"), gap_txt)}'
+        f'{_lampcell("日债融资(TONAR倒挂?)", lights.get("jp_funding"), jp_txt)}'
+        f'{_lampcell("套利Carry空间", lights.get("carry"), mc_txt)}'
+        f'{_lampcell("债市波动率(强平推手)", lights.get("vol"), mv_txt)}'
+        f'</div>'
+    )
+
+    # ── 3 个双轴/单轴 panel ──
+    order = ["funding", "carry", "trigger"]
+    notes = {
+        "funding": ("<b>怎么看：</b>SOFR(隔夜融资成本，粗红实线)是基差套利头寸的<b>资金成本</b>。"
+                    "正常时 SOFR 应在走廊内(ON RRP 底 ~ IORB 顶)。<b>SOFR 上抬触顶甚至穿越 IORB(深红虚线)= 融资血管收缩</b>——"
+                    "回购市场缺钱、加杠杆成本骤升，是基差套利被挤压的第一信号。2019-09 与 2020-03 强平潮前都出现过 SOFR 冲顶。"
+                    "<br><b>怎么用：</b>SOFR−IORB 由负转 0 甚至转正 = 🔴 预警：融资端已封顶，任何波动都会放大强平压力。"),
+        "carry": ("<b>怎么看：</b>carry = 各期限国债收益率 − 隔夜融资成本（美债用 SOFR，日债用 TONAR），即套利头寸的<b>持有净收益(bp)</b>。"
+                  "carry 为正且宽 = 套利有肉、头寸稳；<b>carry 收窄甚至转负(倒挂)= 借钱持债反而亏损 = 强平动机爆发</b>。"
+                  "短端(2Y/1M)对融资成本最敏感，最先转负。实线=美债(−SOFR)，虚线=日债(−TONAR)。"
+                  "<br><b>怎么用：</b>任一期限 carry 跌破 0(<span style=\"color:#d64545\">红区</span>)= 🔴 该期限套利头寸开始亏损，"
+                  "叠加融资触顶就是去杠杆的直接扳机。日债近端 carry 转负正是 TONAR 融资倒挂预警(对应表6)。"),
+        "trigger": ("<b>怎么看：</b>去杠杆的「火药桶 + 火星」：<b>MOVE 债市波动率(左轴，橙线)</b>是火星——波动飙升直接抬高保证金要求、"
+                    "逼迫降杠杆；<b>Fed 准备金(右轴，蓝线)</b>是缓冲垫——准备金越薄，市场吸收抛盘的能力越弱。"
+                    "<br><b>怎么用：</b>MOVE 突破 120(🔴) + 准备金持续跌向 $2.8T 红线 = 火药桶已满、火星将至，"
+                    "此时若 carry 又转负，三重共振 = 基差套利强平潮高风险，应提前减仓/对冲久期。"),
+    }
+    blocks = []
+    for key in order:
+        p = panels_d.get(key)
+        if not p or not any(s.get("points") for s in p.get("series", [])):
+            continue
+        if p.get("single_axis"):
+            axinfo = f'<span class="sp-axk">{_esc(p.get("unit_left",""))}</span>'
+        else:
+            axinfo = (f'<span class="sp-axk">左轴 ◂ {_esc(p.get("unit_left",""))}</span>'
+                      f'<span class="sp-axk">{_esc(p.get("unit_right",""))} ▸ 右轴</span>')
+        blocks.append(
+            f'<div class="sp-panel">'
+            f'<div class="sp-head"><span class="sp-title">{_esc(p["title"])}</span>'
+            f'<span class="sp-sub">{_esc(p.get("subtitle",""))}</span></div>'
+            f'<div class="sp-axrow">{axinfo}</div>'
+            f'{_stress_panel_svg(p)}'
+            f'<div class="sp-note">{notes.get(key,"")}</div>'
+            f'<div class="sp-src">数据源：{_linkify_sources(p.get("source",""))}</div>'
+            f'</div>'
+        )
+
+    # ── 分期限状态矩阵(美债 2/5/10/30 + 日债 10/30) ──
+    mrows = []
+    for m in matrix:
+        mk, tn = m.get("market", ""), m.get("tenor", "")
+        light = m.get("light", "⚪")
+        carry = m.get("carry_bp")
+        yld = m.get("yield")
+        spark = _bt_sparkline(m.get("spark", []))
+        if m.get("status") != "ok":
+            carry_txt = '<span class="bt-na">未获取</span>'
+            yld_txt = "—"
+        else:
+            if carry is None:
+                carry_txt = '<span class="bt-na">n/a</span>'
+            else:
+                cc = "#d64545" if carry < 0 else ("#e0a92e" if carry < 30 else "#2e9e5b")
+                carry_txt = f'<b style="color:{cc}">{carry:+.0f} bp</b>'
+            yld_txt = (f'{yld:.2f}%' if isinstance(yld, (int, float)) else "—")
+        note = m.get("note", "")
+        note_html = (f'<span class="bt-mnote" title="{_esc(note)}">ⓘ</span>' if note else "")
+        mrows.append(
+            f'<div class="bt-mrow">'
+            f'<span class="bt-mmkt">{_esc(mk)}</span>'
+            f'<span class="bt-mten">{_esc(tn)}</span>'
+            f'<span class="bt-mlight">{light}</span>'
+            f'<span class="bt-mcarry">{carry_txt}</span>'
+            f'<span class="bt-myld">{yld_txt}</span>'
+            f'<span class="bt-mspark">{spark}{note_html}</span>'
+            f'</div>'
+        )
+    matrix_html = (
+        f'<div class="bt-matrix">'
+        f'<div class="bt-mrow bt-mhead">'
+        f'<span class="bt-mmkt">市场</span><span class="bt-mten">期限</span>'
+        f'<span class="bt-mlight">灯</span><span class="bt-mcarry">Carry(收益率−SOFR)</span>'
+        f'<span class="bt-myld">收益率</span><span class="bt-mspark">近30日走势</span>'
+        f'</div>'
+        f'{"".join(mrows)}'
+        f'</div>'
+    )
+
+    intro = (
+        f'<div class="sp-intro">把静态监控表升级为<b>时序预警面板</b>：追踪基差套利对冲基金'
+        f'(买现券/卖期货、回购加 33–99x 杠杆)被迫<b>去杠杆强平</b>的三重触发链——'
+        f'<b>①融资成本触顶 → ②套利 Carry 转负 → ③波动飙升×缓冲枯竭</b>。'
+        f'三者共振 = 强平潮高风险(2020-03 式踩踏)。全部 FRED / 日本 MOF 真实公开数据。'
+        f'<span class="sp-asof">as of {_esc(str(asof))} · 周度降噪 · 每日更新</span></div>'
+    )
+    matrix_intro = (
+        '<div class="bt-mtitle">分期限风险矩阵 · 美债 vs 日债'
+        '<span class="bt-mtsub">🟢 carry&gt;30bp 安全 · 🟡 0–30bp 收窄 · 🔴 &lt;0bp 倒挂(套利亏损)</span></div>'
+    )
+    return (f'<div class="sp-wrap bt-wrap">{intro}{lampbar}'
+            f'{"".join(blocks)}'
+            f'{matrix_intro}{matrix_html}'
+            f'<div class="bt-mfoot">美债 carry = 收益率 − SOFR；日债 carry = 收益率 − TONAR（BoJ 无担保隔夜拆借加权平均，日债侧真实融资成本基准，对应美债 SOFR）。'
+            f'两侧均为真实公开日频数据，走廊清晰、判定可靠。TONAR 本次未取到时日债 carry 诚实标 n/a(ⓘ)，绝不用近似冒充。</div></div>')
+
+
 def _cb_balance_html(cb):
     """底部四大央行资产负债表板块(US/JP/CN/ECB), 2x2 布局。统一当天汇率折 $B 横向可比。"""
     if not cb:
@@ -4235,6 +4392,36 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .sp-leg-stat {{ font-size: 8.5px; font-family: var(--mono); opacity: .92; }}
   .sp-na {{ font-size: 12px; color: var(--muted); padding: 24px; text-align: center; }}
 
+  /* 基差套利去杠杆预警面板 */
+  .bt-lampbar {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 4px 0 10px; }}
+  .bt-lampbar-4 {{ grid-template-columns: repeat(4, 1fr); }}
+  .bt-lamp {{ background: var(--card2); border: 1px solid var(--border); border-radius: 9px; padding: 10px 12px; text-align: center; }}
+  .bt-lamp-ico {{ font-size: 20px; line-height: 1; margin-bottom: 4px; }}
+  .bt-lamp-lab {{ font-size: 11px; color: var(--text); font-weight: 700; }}
+  .bt-lamp-det {{ font-size: 10.5px; color: var(--muted); font-family: var(--mono); margin-top: 2px; }}
+  .bt-mtitle {{ font-size: 13px; font-weight: 800; color: var(--text); margin: 14px 0 8px; display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; }}
+  .bt-mtsub {{ font-size: 10.5px; font-weight: 500; color: var(--muted); }}
+  .bt-matrix {{ border: 1px solid var(--border); border-radius: 9px; overflow: hidden; }}
+  .bt-mrow {{ display: grid; grid-template-columns: 56px 52px 34px 1fr 72px 116px; align-items: center; gap: 6px; padding: 7px 12px; border-bottom: 1px solid rgba(160,160,150,.14); font-size: 12px; }}
+  .bt-mrow:last-child {{ border-bottom: none; }}
+  .bt-mhead {{ background: rgba(140,155,175,.1); font-size: 10.5px; color: var(--muted); font-weight: 700; }}
+  .bt-mmkt {{ color: var(--text); font-weight: 600; }}
+  .bt-mten {{ font-family: var(--mono); color: var(--muted); }}
+  .bt-mlight {{ font-size: 14px; text-align: center; }}
+  .bt-mcarry {{ font-family: var(--mono); }}
+  .bt-myld {{ font-family: var(--mono); color: var(--muted); text-align: right; }}
+  .bt-mspark {{ display: flex; align-items: center; gap: 5px; }}
+  .bt-spark {{ width: 88px; height: 22px; }}
+  .bt-spark-na {{ color: var(--muted); font-size: 11px; }}
+  .bt-na {{ color: var(--muted); font-size: 11px; }}
+  .bt-mnote {{ font-size: 11px; color: var(--dust-blue); cursor: help; }}
+  .bt-mfoot {{ font-size: 10.5px; color: var(--muted); line-height: 1.55; margin-top: 8px; padding: 6px 10px; background: rgba(140,155,175,.07); border-radius: 6px; }}
+  @media (max-width: 560px) {{
+    .bt-lampbar {{ grid-template-columns: 1fr 1fr; }}
+    .bt-mrow {{ grid-template-columns: 44px 40px 28px 1fr 56px; }}
+    .bt-mspark {{ display: none; }}
+  }}
+
   /* 国债拍卖 timeline */
   .auc-wrap {{ display: flex; flex-direction: column; gap: 12px; }}
   .auc-next-banner {{ background: rgba(140,155,175,.14); border: 1px solid var(--border); border-left: 3px solid var(--dust-blue); border-radius: 6px; padding: 8px 12px; font-size: 13px; color: var(--text); }}
@@ -4445,6 +4632,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·二·四：国债市场压力四联图 (对齐 Morgan Stanley 三图 + OFR官方压力指数, 竖向) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>国债市场收益率·波动性·压力 · 竖向四联图 (对齐 Morgan Stanley · 过去3年真实公开数据 · 每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{stress_panels}</div>
+  <!-- ═══ 附三·二B：基差套利去杠杆预警 ═══ -->
+  <div class="part-title"><span class="part-num">＋</span>基差套利去杠杆预警 · 美债/日债 (SOFR 倒挂 + Carry 空间 + 波动触发 · 强平潮尾部风险 · 每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{basis_trade}</div>
   <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)<span class="freq-badge freq-event">每次拍卖</span></div>
   <div class="card">{auctions}</div>
@@ -4551,7 +4741,7 @@ mkRadar('rLong', RADAR.long);
     {{ name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注','A/D 腾落线','市场广度'] }},
     {{ name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化'] }},
     {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲'] }},
-    {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
+    {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','基差套利去杠杆预警','SOFR 倒挂','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
     {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','白银做市商','COMEX 白银','投行累计','做市商每周净','issue/stop','自营黄金掉期','黄金出口','Nonmonetary','黄金 Domestic Premium','Premium/Discount','白银月度进口','Silver Bullion'] }},
     {{ name: '财政政策', match: ['美日财政政策事件','债务上限','补正预算','国债发行','年度财政花费','财政花费','政府总支出'] }},
     {{ name: '日本市场', match: ['日经225','外资净买入','日本市场'] }},

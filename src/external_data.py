@@ -3488,6 +3488,329 @@ def fetch_oil_inventory(cache_path=None):
     return out
 
 
+def _fetch_tonar_history(months=4):
+    """BoJ TONAR(无担保隔夜拆借加权平均利率, 日债隔夜融资成本基准, 对应美债 SOFR)日频时序。
+    数据源: BoJ 官方每工作日 XLSX(md{YYYYMMDD}.xlsx, sheet 'コール', Average 行)。
+    抓最近 N 个月的 final results 索引 → 逐个 XLSX 取 Average。绝不编: 抓不到的日跳过, 全失败返回 []。
+    返回 [(date 'YYYY-MM-DD', rate%), ...] 升序。"""
+    import datetime as _dt
+    import re as _re
+    import subprocess
+    import io as _io
+    try:
+        import openpyxl
+    except Exception:
+        return []
+    today = _dt.date.today()
+    years_needed = sorted({today.year, (today - _dt.timedelta(days=months * 31)).year})
+    # 1) 从各年索引页收集 XLSX 文件名(md{YYYYMMDD}.xlsx)
+    files = []
+    for y in years_needed:
+        url = f"https://www.boj.or.jp/en/statistics/market/short/mutan/d_release/md/{y}/index.htm"
+        try:
+            r = subprocess.run(["curl", "-s", "--max-time", "25", "-H", "User-Agent: Mozilla/5.0", url],
+                               capture_output=True, text=True, timeout=30)
+            for m in _re.findall(r'md(\d{8})\.xlsx', r.stdout or ""):
+                files.append((y, m))
+        except Exception:
+            pass
+    if not files:
+        return []
+    # 去重 + 按日期取最近 months*22 个交易日(约 months 个月)
+    files = sorted(set(files), key=lambda x: x[1])
+    limit_n = int(months * 23)
+    files = files[-limit_n:]
+    # 2) 逐个 XLSX 取 Average(报告日 = 文件名日期的前一交易日, 但文件名 md{报告发布日}; 标题内含真实报告日)
+    out = []
+    for y, ymd in files:
+        fu = f"https://www.boj.or.jp/en/statistics/market/short/mutan/d_release/md/{y}/md{ymd}.xlsx"
+        try:
+            r = subprocess.run(["curl", "-s", "--max-time", "20", "-H", "User-Agent: Mozilla/5.0", fu],
+                               capture_output=True, timeout=25)
+            if r.returncode != 0 or not r.stdout:
+                continue
+            wb = openpyxl.load_workbook(_io.BytesIO(r.stdout), data_only=True)
+            ws = wb.worksheets[0]
+            rep_date = None
+            avg = None
+            for row in ws.iter_rows(values_only=True):
+                cells = [c for c in row if c is not None]
+                for i, c in enumerate(cells):
+                    cs = str(c)
+                    # 报告日: 标题 "Uncollateralized Overnight Call Rate for August 18 ..." 或日文 "8月18日"
+                    if rep_date is None:
+                        mdate = _re.search(r'for\s+([A-Z][a-z]+)\s+(\d{1,2})', cs)
+                        if mdate:
+                            try:
+                                mon = _dt.datetime.strptime(mdate.group(1), "%B").month
+                                day = int(mdate.group(2))
+                                rep_date = _dt.date(y, mon, day).isoformat()
+                            except Exception:
+                                pass
+                    # Average 值
+                    if "Average" in cs or cs.strip() == "平均":
+                        for nxt in cells[i + 1:]:
+                            try:
+                                avg = float(nxt)
+                                break
+                            except (ValueError, TypeError):
+                                continue
+            if rep_date and avg is not None:
+                out.append((rep_date, round(avg, 4)))
+        except Exception:
+            continue
+    # 去重(同报告日取一次)+升序
+    dd = {}
+    for d, v in out:
+        dd[d] = v
+    return sorted(dd.items())
+
+
+def fetch_basis_trade_monitor(cache_path=None, years=2):
+    """基差套利去杠杆预警监控 —— 时序化你的「美债/日债基差套利 + SOFR 倒挂 + TONAR 倒挂」监控表。
+
+    核心风险: 基差套利对冲基金(买现券/卖期货, repo 加 33-99x 杠杆)在
+      「融资成本↑(SOFR 触顶 IORB) + carry 消失(收益率-SOFR 利差收窄/倒挂) + 波动↑(MOVE)」时
+      被迫去杠杆强平 → 抛售美/日债 → 收益率跳升 → 踩踏(2020-03 / 反复出现的尾部风险)。
+
+    产出 3 个双轴 panel(复用 _stress_panel_svg 渲染) + 1 个分期限状态矩阵:
+      panel_funding : 融资成本压力(SOFR/IORB/EFFR/ON-RRP 利率 + 日本 TONAR), 看 SOFR 触顶 IORB
+      panel_carry   : 套利 carry 空间(美债 2/5/10/30Y − SOFR 利差 + 日债 10/30Y − TONAR), 转负=倒挂=红区
+      panel_trigger : 去杠杆触发器(MOVE 波动率 左轴 + Fed 准备金 右轴), 火药桶+火星
+      matrix        : 分期限状态灯矩阵(美债 2/5/10/30Y + 日债 10/30Y), carry/信号灯/30日 sparkline
+
+    全部真实公开数据(FRED / 日本 MOF / Economic-Dashboard Notion 准备金)。绝不编: 缺失序列跳过 + status 反映。
+    周度降采样降噪。返回 {panels:{...}, matrix:[...], asof, status, lights:{...}}。
+    """
+    import json as _json
+    import datetime as _dt
+    if cache_path is None:
+        cache_path = os.path.join(os.path.dirname(__file__), "..", "data", "basis_trade_monitor.json")
+    today = _dt.date.today()
+    start = (today - _dt.timedelta(days=int(365.3 * years) + 15)).isoformat()
+
+    def _wk(pts):
+        """[(date,val)] → 周度降采样 [{date,v}]。"""
+        if not pts:
+            return []
+        wp = _weekly_resample(pts, agg="last")
+        return [{"date": d, "v": round(v, 4)} for d, v in wp]
+
+    def _last(pts):
+        return pts[-1] if pts else None
+
+    # ── 拉核心序列(全 FRED, 日频) ──
+    sofr = _fred_series_hist("SOFR", start)        # 隔夜融资成本(套利头寸的资金成本)
+    iorb = _fred_series_hist("IORB", start)        # 准备金利率(SOFR 的政策上限/走廊顶)
+    effr = _fred_series_hist("EFFR", start)        # 联邦基金有效利率
+    rrp_rate = _fred_series_hist("RRPONTSYAWARD", start)  # ON RRP 利率(走廊底)
+    dgs = {}
+    for t, sid in [("2Y", "DGS2"), ("5Y", "DGS5"), ("10Y", "DGS10"), ("30Y", "DGS30")]:
+        dgs[t] = _fred_series_hist(sid, start)
+
+    # 日债(MOF 日频, 全期限用于 carry): 2Y/5Y/10Y/30Y
+    jgb = {}
+    for t, col in [("2Y", 6), ("5Y", 9), ("10Y", 10), ("30Y", 14)]:
+        d = _mof_jgb_yields(col)
+        jgb[t] = sorted(([k, v] for k, v in d.items() if k >= start), key=lambda x: x[0]) if d else []
+    # 日本隔夜融资成本 TONAR(无担保隔夜拆借加权平均, 对应美债 SOFR): BoJ 官方每日 XLSX 拼近 4 月日频。
+    # 抓不到则日债 carry 回退不做主判定(诚实标注), 绝不用常数近似冒充。
+    try:
+        tonar = _fetch_tonar_history(months=4)
+    except Exception:
+        tonar = []
+    tonar_d = dict(tonar) if tonar else {}
+
+    # ═══ Panel 1: 融资成本压力(SOFR 倒挂监控, 时序化表3) ═══
+    funding_series = []
+    if sofr:
+        funding_series.append({"name": "SOFR 隔夜融资成本", "color": "#c0757d", "axis": "left",
+                               "width": 2.2, "points": _wk(sofr)})
+    if iorb:
+        funding_series.append({"name": "IORB 准备金利率(走廊顶)", "color": "#8a3f47", "axis": "left",
+                               "dash": True, "points": _wk(iorb)})
+    if effr:
+        funding_series.append({"name": "EFFR 联邦基金利率", "color": "#7fa085", "axis": "left",
+                               "points": _wk(effr)})
+    if rrp_rate:
+        funding_series.append({"name": "ON RRP 利率(走廊底)", "color": "#b58a6a", "axis": "left",
+                               "dash": True, "points": _wk(rrp_rate)})
+    if tonar:
+        funding_series.append({"name": "TONAR 日债隔夜融资(BoJ)", "color": "#c17d6a", "axis": "left",
+                               "width": 2.0, "dash": True, "points": _wk(tonar)})
+    panel_funding = {
+        "id": "bt_funding",
+        "title": "① 融资成本压力：SOFR 触顶 IORB + TONAR 走势（美 vs 日）",
+        "subtitle": "Funding Cost Stress — US SOFR vs Corridor + JP TONAR",
+        "unit_left": "%", "unit_right": "%", "single_axis": True,
+        "series": funding_series,
+        "source": "FRED SOFR / IORB / EFFR / RRPONTSYAWARD · BoJ TONAR（日频，周度降采样）",
+    }
+
+    # ═══ Panel 2: 套利 carry 空间(收益率 − SOFR 各期限利差) ═══
+    # carry = 持有该期限国债收益率 − 隔夜融资成本(SOFR)。收窄/转负 = 套利利润消失 → 强平动机。
+    sofr_d = dict(sofr) if sofr else {}
+    carry_series = []
+    carry_colors = {"2Y": "#6b8fb5", "5Y": "#7fa085", "10Y": "#c0757d", "30Y": "#8a3f47"}
+    carry_latest = {}
+    for t in ["2Y", "5Y", "10Y", "30Y"]:
+        yld = dict(dgs.get(t, []))
+        common = sorted(set(yld) & set(sofr_d))
+        spread = [(d, round((yld[d] - sofr_d[d]) * 100, 1)) for d in common]  # bp
+        if len(spread) >= 2:
+            carry_series.append({"name": f"美债 {t}−SOFR carry", "color": carry_colors[t],
+                                 "axis": "left", "points": _wk(spread)})
+            carry_latest[f"US_{t}"] = spread[-1]
+    # 日债 carry (JGB − TONAR): 日债侧真实融资成本基准(对应美债 SOFR)。虚线区分美日。
+    jp_carry_colors = {"10Y": "#c17d6a", "30Y": "#8a5a52"}
+    for t in ["10Y", "30Y"]:
+        yld = dict(jgb.get(t, []))
+        common = sorted(set(yld) & set(tonar_d))
+        spread = [(d, round((yld[d] - tonar_d[d]) * 100, 1)) for d in common]  # bp
+        if len(spread) >= 2:
+            carry_series.append({"name": f"日债 {t}−TONAR carry", "color": jp_carry_colors[t],
+                                 "axis": "left", "dash": True, "points": _wk(spread)})
+            carry_latest[f"JP_{t}"] = spread[-1]
+    panel_carry = {
+        "id": "bt_carry",
+        "title": "② 套利 Carry 空间：收益率 − 隔夜融资成本（各期限利差，美债 vs 日债）",
+        "subtitle": "Basis Trade Carry — Yield minus Overnight Funding by Tenor (US SOFR / JP TONAR)",
+        "unit_left": "bp", "unit_right": "bp", "single_axis": True,
+        "series": carry_series,
+        "source": "FRED DGS2/5/10/30 − SOFR · 日本 MOF JGB − BoJ TONAR（日频，周度降采样，单位 bp；实线=美债，虚线=日债）",
+    }
+
+    # ═══ Panel 3: 去杠杆触发器(MOVE 波动率 + Fed 准备金) ═══
+    move = _fetch_move_history(start)
+    trigger_series = []
+    if move:
+        trigger_series.append({"name": "MOVE 债市波动率", "color": "#c17d6a", "axis": "left",
+                               "width": 2.0, "points": _wk(move)})
+    # Fed 准备金(万亿$) — 从 FRED WRESBAL(周度, 百万$→万亿$)
+    reserves = _fred_series_hist("WRESBAL", start)
+    if reserves:
+        res_t = [(d, round(v / 1_000_000.0, 3)) for d, v in reserves]  # 百万$ → $T
+        trigger_series.append({"name": "Fed 准备金 $T（右轴，缓冲垫）", "color": "#6b8fb5", "axis": "right",
+                               "points": _wk(res_t)})
+    panel_trigger = {
+        "id": "bt_trigger",
+        "title": "③ 去杠杆触发器：波动率飙升 × 流动性缓冲枯竭",
+        "subtitle": "Deleverage Trigger — MOVE Volatility × Fed Reserves",
+        "unit_left": "MOVE", "unit_right": "$T",
+        "series": trigger_series,
+        "source": "FRED（^MOVE via Yahoo · WRESBAL 准备金余额）",
+    }
+
+    # ═══ 状态矩阵: 分期限 carry + 信号灯 + 30日 sparkline ═══
+    # 信号灯规则(基于 carry, 越低越危险): >30bp 🟢 / 0~30bp 🟡 / <0bp(倒挂) 🔴
+    def _light(carry_bp):
+        if carry_bp is None:
+            return "⚪"
+        if carry_bp < 0:
+            return "🔴"
+        if carry_bp < 30:
+            return "🟡"
+        return "🟢"
+
+    matrix = []
+    for t in ["2Y", "5Y", "10Y", "30Y"]:
+        yld = dict(dgs.get(t, []))
+        common = sorted(set(yld) & set(sofr_d))
+        spread = [(d, round((yld[d] - sofr_d[d]) * 100, 1)) for d in common]
+        if not spread:
+            matrix.append({"market": "美债", "tenor": t, "carry_bp": None, "light": "⚪",
+                           "yield": None, "spark": [], "status": "未获取"})
+            continue
+        cur_c = spread[-1][1]
+        spark = [v for _, v in spread[-30:]]
+        matrix.append({
+            "market": "美债", "tenor": t, "carry_bp": cur_c, "light": _light(cur_c),
+            "yield": (yld[spread[-1][0]] if spread[-1][0] in yld else None),
+            "date": spread[-1][0], "spark": spark, "status": "ok",
+        })
+    # 日债行(carry = JGB − TONAR, 真实融资成本基准, 对应美债 SOFR)。TONAR 抓不到才回退不判定。
+    for t in ["2Y", "5Y", "10Y", "30Y"]:
+        pts = jgb.get(t, [])
+        yld = dict(pts)
+        if not pts:
+            matrix.append({"market": "日债", "tenor": t, "carry_bp": None, "light": "⚪",
+                           "yield": None, "spark": [], "status": "未获取"})
+            continue
+        cur_y = pts[-1][1]
+        if tonar_d:
+            common = sorted(set(yld) & set(tonar_d))
+            spread = [(d, round((yld[d] - tonar_d[d]) * 100, 1)) for d in common]
+            if spread:
+                cur_c = spread[-1][1]
+                spark = [v for _, v in spread[-30:]]
+                matrix.append({
+                    "market": "日债", "tenor": t, "carry_bp": cur_c, "light": _light(cur_c),
+                    "yield": (yld[spread[-1][0]] if spread[-1][0] in yld else cur_y),
+                    "date": spread[-1][0], "spark": spark, "status": "ok",
+                })
+                continue
+        # TONAR 抓不到 → 只展示收益率+走势, carry 诚实标 n/a
+        spark = [v for _, v in pts[-30:]]
+        matrix.append({
+            "market": "日债", "tenor": t, "carry_bp": None, "light": "⚪",
+            "yield": cur_y, "date": pts[-1][0], "spark": spark, "status": "ok",
+            "note": "TONAR 隔夜融资序列本次未取到，carry 暂不判定",
+        })
+
+    # ── 合成风险灯(供 dashboard 顶部/简报) ──
+    lights = {}
+    # SOFR 触顶 IORB?
+    s_last, i_last = _last(sofr), _last(iorb)
+    if s_last and i_last:
+        gap = (s_last[1] - i_last[1]) * 100  # bp, SOFR-IORB
+        lights["sofr_iorb_gap_bp"] = round(gap, 1)
+        lights["funding"] = "🔴" if gap >= 0 else ("🟡" if gap >= -5 else "🟢")
+    # carry 最紧期限(美债 + 日债分开统计, 也给总最紧)
+    us_carry = [m["carry_bp"] for m in matrix if m.get("market") == "美债" and m.get("carry_bp") is not None]
+    jp_carry = [m["carry_bp"] for m in matrix if m.get("market") == "日债" and m.get("carry_bp") is not None]
+    valid_carry = [m["carry_bp"] for m in matrix if m.get("carry_bp") is not None]
+    if valid_carry:
+        mn = min(valid_carry)
+        lights["min_carry_bp"] = mn
+        lights["carry"] = _light(mn)
+    if us_carry:
+        lights["us_min_carry_bp"] = min(us_carry)
+    if jp_carry:
+        lights["jp_min_carry_bp"] = min(jp_carry)
+    # TONAR 倒挂灯(日债融资侧, 对应表6): 近端 carry 转负 = 日债去杠杆风险
+    if tonar:
+        lights["tonar"] = round(tonar[-1][1], 3)
+        if jp_carry:
+            jmn = min(jp_carry)
+            lights["jp_funding"] = "🔴" if jmn < 0 else ("🟡" if jmn < 10 else "🟢")
+    # 波动
+    m_last = _last(move)
+    if m_last:
+        lights["move"] = round(m_last[1], 1)
+        lights["vol"] = "🔴" if m_last[1] >= 120 else ("🟡" if m_last[1] >= 100 else "🟢")
+
+    # ── asof / status ──
+    all_last = []
+    for p in (panel_funding, panel_carry, panel_trigger):
+        for s in p["series"]:
+            if s.get("points"):
+                all_last.append(s["points"][-1]["date"])
+    asof = max(all_last) if all_last else today.isoformat()
+    missing = [f'{p["id"]}' for p in (panel_funding, panel_carry, panel_trigger) if not p["series"]]
+    status = "ok" if not missing else ("部分缺失: " + ", ".join(missing))
+
+    out = {
+        "panels": {"funding": panel_funding, "carry": panel_carry, "trigger": panel_trigger},
+        "matrix": matrix, "lights": lights, "asof": asof, "years": years, "status": status,
+    }
+    try:
+        with open(cache_path, "w") as f:
+            _json.dump(out, f, ensure_ascii=False, default=str)
+    except Exception:
+        pass
+    return out
+
+
 if __name__ == "__main__":
     import json
     print("=== Credit Impulse 三国(信贷脉冲) ===")
