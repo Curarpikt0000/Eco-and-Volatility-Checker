@@ -216,7 +216,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              iip_four=None, fiscal_news=None, hf_leverage=None, bis_gold_swaps=None,
              market_breadth=None, silver_bank_positions=None, comex_silver_issues_ref=None,
              gold_exports=None, us_yield_century=None, comex_issue_stop=None,
-             ad_line_real=None, gold_premium=None, silver_imports=None):
+             ad_line_real=None, gold_premium=None, silver_imports=None, fiscal_budget=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -405,6 +405,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         gold_exports=_gold_exports_html(gold_exports),
         us_yield_century=_us_yield_century_html(us_yield_century),
         comex_issue_stop=_comex_issue_stop_html(comex_issue_stop),
+        fiscal_budget=_fiscal_budget_html(fiscal_budget),
         bis_section=_bis_section_html(bis_latest, "https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/"),
         country_ust=_country_ust_html(country_ust),
         credit_impulse=_credit_impulse_html(credit_impulse),
@@ -2526,6 +2527,131 @@ def _bar_chart_svg(points, w=900, h=240, color="#7fa085", unit="T", val_fmt="{:.
     return "".join(parts)
 
 
+def _fiscal_budget_html(fb):
+    """日美年度财政花费双轴分组柱状图。方案A: 每财年一对柱(美国 $T 左轴钢蓝 / 日本 兆円 右轴琥珀)。
+    美国当前财年至今=partial(浅色+斜纹描边区分"进行中"); 其余=confirmed(实色)。带 hover tooltip。
+    fb: fetch_fiscal_budget() 结果 {us:[{fy,value_t,status}], jp:[{fy,value_oku,status}], as_of, source}。"""
+    if not fb or (not fb.get("us") and not fb.get("jp")):
+        return ('<p class="empty">日美财政花费数据同步中——美国 US Treasury MTS / 日本财务省预算，'
+                '读到即填真值，绝不编造。</p>')
+    us = fb.get("us", [])
+    jp = fb.get("jp", [])
+    # 统一财年轴(两国财年并集, 升序)
+    all_fy = sorted({r["fy"] for r in us} | {r["fy"] for r in jp})
+    if not all_fy:
+        return '<p class="empty">日美财政花费数据不足。</p>'
+    us_map = {r["fy"]: r for r in us}
+    jp_map = {r["fy"]: r for r in jp}
+    n = len(all_fy)
+
+    w, h = 920, 340
+    ml, mr, mt, mb_ = 56, 62, 24, 46
+    pw, ph = w - ml - mr, h - mt - mb_
+    # 左轴(美国 $T) / 右轴(日本 兆円) 各自缩放
+    us_vals = [r["value_t"] for r in us] or [1]
+    jp_vals = [r["value_oku"] for r in jp] or [1]
+    us_max = max(us_vals) * 1.15
+    jp_max = max(jp_vals) * 1.15
+    group_w = pw / n
+    bw = group_w * 0.30  # 每根柱宽(一组两根)
+    US_C = "#5b7fa6"   # 钢蓝(美国)
+    JP_C = "#c99a3e"   # 琥珀(日本)
+
+    def GX(i): return ml + (i + 0.5) * group_w
+    def YUS(v): return mt + (us_max - v) / (us_max or 1) * ph
+    def YJP(v): return mt + (jp_max - v) / (jp_max or 1) * ph
+
+    parts = [f'<svg viewBox="0 0 {w} {h}" class="cust-chart" preserveAspectRatio="xMidYMid meet" '
+             f'font-family="-apple-system,PingFang SC,sans-serif">']
+    # 斜纹 pattern(partial 柱用)
+    parts.append(
+        '<defs>'
+        f'<pattern id="fb-hatch-us" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">'
+        f'<rect width="6" height="6" fill="{US_C}" opacity="0.22"/><line x1="0" y1="0" x2="0" y2="6" stroke="{US_C}" stroke-width="2.4"/></pattern>'
+        f'<pattern id="fb-hatch-jp" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">'
+        f'<rect width="6" height="6" fill="{JP_C}" opacity="0.22"/><line x1="0" y1="0" x2="0" y2="6" stroke="{JP_C}" stroke-width="2.4"/></pattern>'
+        '</defs>')
+    # y 网格(左轴刻度 4 档)
+    for k in range(5):
+        gy = mt + ph * k / 4
+        parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" stroke="#d4cdbe" stroke-width="1" stroke-dasharray="3,3"/>')
+        uv = us_max * (1 - k / 4)
+        parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" font-size="9" fill="{US_C}" text-anchor="end">{uv:.1f}</text>')
+        jv = jp_max * (1 - k / 4)
+        parts.append(f'<text x="{w-mr+6}" y="{gy+3:.1f}" font-size="9" fill="{JP_C}" text-anchor="start">{jv:.0f}</text>')
+    # 轴标题
+    parts.append(f'<text x="{ml-6}" y="{mt-8:.1f}" font-size="9.5" fill="{US_C}" text-anchor="end">美国 $T ◀</text>')
+    parts.append(f'<text x="{w-mr+6}" y="{mt-8:.1f}" font-size="9.5" fill="{JP_C}" text-anchor="start">▶ 日本 兆円</text>')
+
+    for i, fy in enumerate(all_fy):
+        gx = GX(i)
+        # 美国柱(左偏)
+        ur = us_map.get(fy)
+        if ur is not None:
+            v = ur["value_t"]; y = YUS(v); bh = mt + ph - y
+            partial = ur.get("status") == "partial"
+            fill = "url(#fb-hatch-us)" if partial else US_C
+            op = "1" if not partial else "0.95"
+            _stat = "进行中(至今)" if partial else "已确定"
+            _asof = f' 截至{_esc(ur.get("as_of",""))}' if partial else ""
+            bx = gx - bw - 1
+            parts.append(f'<rect x="{bx:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{bh:.1f}" rx="1.5" '
+                         f'fill="{fill}" stroke="{US_C}" stroke-width="{1.2 if partial else 0}" opacity="{op}" '
+                         f'data-tip="美国 FY{fy} {_stat}{_asof}||${v:.2f}T"/>')
+            if v == max(us_vals) or partial:
+                parts.append(f'<text x="{bx+bw/2:.1f}" y="{y-3:.1f}" font-size="8" fill="{US_C}" text-anchor="middle">{v:.1f}</text>')
+        # 日本柱(右偏)
+        jr = jp_map.get(fy)
+        if jr is not None:
+            v = jr["value_oku"]; y = YJP(v); bh = mt + ph - y
+            partial = jr.get("status") == "partial"
+            fill = "url(#fb-hatch-jp)" if partial else JP_C
+            _stat = "进行中" if partial else "当初予算(已确定)"
+            bx = gx + 1
+            parts.append(f'<rect x="{bx:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{bh:.1f}" rx="1.5" '
+                         f'fill="{fill}" stroke="{JP_C}" stroke-width="{1.2 if partial else 0}" opacity="0.92" '
+                         f'data-tip="日本 FY{fy} {_stat}||{v:.1f} 兆円"/>')
+            if v == max(jp_vals):
+                parts.append(f'<text x="{bx+bw/2:.1f}" y="{y-3:.1f}" font-size="8" fill="{JP_C}" text-anchor="middle">{v:.0f}</text>')
+        # x 财年标签
+        parts.append(f'<text x="{gx:.1f}" y="{h-26:.1f}" font-size="9" fill="#6b6459" text-anchor="middle">FY{fy}</text>')
+
+    # 图例
+    ly = h - 10
+    parts.append(f'<rect x="{ml}" y="{ly-9}" width="12" height="10" fill="{US_C}"/>')
+    parts.append(f'<text x="{ml+16}" y="{ly}" font-size="10" fill="#6b6459">美国 Total Outlays ($T, 财年累计)</text>')
+    parts.append(f'<rect x="{ml+270}" y="{ly-9}" width="12" height="10" fill="{JP_C}"/>')
+    parts.append(f'<text x="{ml+286}" y="{ly}" font-size="10" fill="#6b6459">日本 一般会计当初予算 (兆円)</text>')
+    parts.append(f'<rect x="{ml+540}" y="{ly-9}" width="12" height="10" fill="url(#fb-hatch-us)" stroke="{US_C}" stroke-width="1"/>')
+    parts.append(f'<text x="{ml+556}" y="{ly}" font-size="10" fill="#6b6459">斜纹=当前财年进行中(至今累计)</text>')
+    parts.append("</svg>")
+    svg = "".join(parts)
+
+    # 摘要
+    us_latest = us[-1] if us else None
+    jp_latest = jp[-1] if jp else None
+    summ = ""
+    if us_latest:
+        _p = "（进行中，截至 %s）" % _esc(us_latest.get("as_of", "")) if us_latest.get("status") == "partial" else ""
+        summ += f'美国 FY{us_latest["fy"]}：<b>${us_latest["value_t"]:.2f}T</b>{_p}　'
+    if jp_latest:
+        summ += f'日本 FY{jp_latest["fy"]}：<b>{jp_latest["value_oku"]:.1f} 兆円</b>（当初予算）'
+
+    return (
+        f'<div class="cust-wrap">'
+        f'<div class="cust-chart-col cust-chart-full">'
+        f'<div class="cust-chart-title">日美年度财政花费 · Annual Fiscal Spending (双轴)'
+        f'<span class="chart-freq freq-m">🟢 年度 · MTS + 财务省</span></div>'
+        f'{svg}'
+        f'<div class="oil-meta">{summ}<br>'
+        f'美国=联邦政府总支出(Total Outlays, 财年 10/1 起, 财年末累计=全年实际)；'
+        f'日本=一般会计当初予算总额(财年 4/1 起, 补正前已确定盘子)。</div>'
+        f'<div class="oil-src">数据源：{_esc(fb.get("source",""))}</div>'
+        f'</div>'
+        f'</div>'
+    )
+
+
 def _maturing_treasury_html(mt):
     """私营部门(含Fed)1年内到期需展期的【可交易国债】规模: 过去一年月度柱状图(主) + 2001至今全周期折线(参考)。
     mt: fetch_maturing_treasury()。数据源 US Treasury MSPD table 3，按到期日筛≤1年加总 outstanding。"""
@@ -4361,6 +4487,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·十一：美日财政政策事件时间线 ═══ -->
   <div class="part-title" id="sec-fiscal-news"><span class="part-num">＋</span>美日财政政策事件 · 债务上限/CR/补正预算/国债发行 (每日检索)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{fiscal_news}</div>
+  <!-- ═══ 附三·十一B：日美年度财政花费(双轴柱状) ═══ -->
+  <div class="part-title" id="sec-fiscal-budget"><span class="part-num">＋</span>日美年度财政花费 · 政府总支出/预算 (双轴 · 已确定vs进行中)<span class="freq-badge freq-monthly">年度</span></div>
+  <div class="card">{fiscal_budget}</div>
   <!-- ═══ 附三·九：日经225 vs 外资净买入日股 ═══ -->
   <div class="part-title"><span class="part-num">＋</span>日经225 vs 外资净买入日股 · 过去一年 (日本市场 · 外资资金流)<span class="freq-badge freq-weekly">指数每日 · 外资每周</span></div>
   <div class="card">{nikkei_flow}</div>
@@ -4414,7 +4543,7 @@ mkRadar('rLong', RADAR.long);
     {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲'] }},
     {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
     {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','白银做市商','COMEX 白银','投行累计','做市商每周净','issue/stop','自营黄金掉期','黄金出口','Nonmonetary','黄金 Domestic Premium','Premium/Discount','白银月度进口','Silver Bullion'] }},
-    {{ name: '财政政策', match: ['美日财政政策事件','债务上限','补正预算','国债发行'] }},
+    {{ name: '财政政策', match: ['美日财政政策事件','债务上限','补正预算','国债发行','年度财政花费','财政花费','政府总支出'] }},
     {{ name: '日本市场', match: ['日经225','外资净买入','日本市场'] }},
     {{ name: '机构与政要持仓', match: ['机构持仓','13F','Trump'] }}
   ];

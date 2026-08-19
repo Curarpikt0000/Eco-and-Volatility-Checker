@@ -825,6 +825,95 @@ def _mspd_maturing_within_1yr(record_date, rows):
     return round(total / 1e6, 4)  # 百万 → 万亿($T)
 
 
+# ── 日本一般会计当初予算总额(官方权威静态值, 兆円) ──
+# 来源: 財務省 各年度予算 / 首相官邸「予算の概要」。当初予算(補正前)=年度启动时已确定盘子。
+# FY2026=122.3兆(令和8年度, +7.1兆, 首相官邸 40621_ext_20_1.pdf 确认)。历年当初予算公开权威值。
+JP_GENERAL_BUDGET = {
+    2016: 96.72, 2017: 97.45, 2018: 97.71, 2019: 101.46, 2020: 102.66,
+    2021: 106.61, 2022: 107.60, 2023: 114.38, 2024: 112.57, 2025: 115.20,
+    2026: 122.30,
+}
+
+
+def fetch_fiscal_budget(cache_path=None):
+    """日美年度财政花费(政府总支出/预算)柱状图数据。方案A: 每财年一柱, 双轴。
+    - 美国: MTS table5 line5691 Total Outlays 财年末累计(9月)=全年实际支出; 当前财年至今=partial。单位 $T。
+      美国财年 10/1 起。历史年=confirmed(已决算), 当前进行中财年=partial(至今累计)。
+    - 日本: 一般会计当初予算总额(官方权威静态表 JP_GENERAL_BUDGET)。日本财年 4/1 起。单位 兆円。
+      当初予算=年度启动已确定盘子(补正前); 全部标 confirmed(已公布的既定预算)。
+    返回 {us:[{fy,value_t,status}], jp:[{fy,value_oku,status}], as_of, status, source}。
+    绝不编: 美国 API 失败则 us 空并标 status; 日本用官方静态值。"""
+    import requests
+    import datetime
+    out = {"us": [], "jp": [], "as_of": None, "status": "ok",
+           "source": "美国 US Treasury MTS Table 5 (Total Outlays, 财年累计) · 日本 財務省 一般会計当初予算"}
+    today = datetime.date.today()
+    # 美国当前财年(10/1 起): 若当前月>=10 则财年=年+1
+    cur_us_fy = today.year + 1 if today.month >= 10 else today.year
+
+    # ── 美国: 财年末(9月)累计 = 全年实际支出 ──
+    us_by_fy = {}
+    try:
+        r = requests.get(
+            "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/mts/mts_table_5",
+            params={"filter": "line_code_nbr:eq:5691,record_calendar_month:eq:09",
+                    "fields": "record_date,record_fiscal_year,current_fytd_net_outly_amt",
+                    "sort": "-record_date", "page[size]": "20"},
+            timeout=45)
+        if r.status_code == 200:
+            for x in r.json().get("data", []):
+                fy = x.get("record_fiscal_year")
+                v = x.get("current_fytd_net_outly_amt")
+                if fy and v not in (None, "", "null"):
+                    try:
+                        us_by_fy[int(fy)] = round(float(v) / 1e12, 3)  # → $T
+                    except (ValueError, TypeError):
+                        pass
+        # 当前进行中财年: 拿最新月的 fytd 累计(partial)
+        r2 = requests.get(
+            "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/mts/mts_table_5",
+            params={"filter": "line_code_nbr:eq:5691",
+                    "fields": "record_date,record_fiscal_year,current_fytd_net_outly_amt",
+                    "sort": "-record_date", "page[size]": "1"},
+            timeout=45)
+        latest_partial = None
+        if r2.status_code == 200 and r2.json().get("data"):
+            row = r2.json()["data"][0]
+            fy = row.get("record_fiscal_year")
+            v = row.get("current_fytd_net_outly_amt")
+            rd = row.get("record_date")
+            if fy and v not in (None, "", "null"):
+                try:
+                    ify = int(fy)
+                    # 只有该财年还没有 9 月末完整值时才算 partial
+                    if ify not in us_by_fy:
+                        latest_partial = (ify, round(float(v) / 1e12, 3), rd)
+                except (ValueError, TypeError):
+                    pass
+        # 组装美国(近10财年 + 当前 partial)
+        us_list = []
+        for fy in sorted(us_by_fy):
+            us_list.append({"fy": fy, "value_t": us_by_fy[fy], "status": "confirmed"})
+        if latest_partial:
+            us_list.append({"fy": latest_partial[0], "value_t": latest_partial[1],
+                            "status": "partial", "as_of": latest_partial[2]})
+        # 只保留近 10 年
+        out["us"] = us_list[-11:]
+        if latest_partial:
+            out["as_of"] = latest_partial[2]
+        elif us_by_fy:
+            out["as_of"] = f"FY{max(us_by_fy)}"
+    except Exception as e:
+        out["status"] = f"美国MTS错误:{e}"
+
+    # ── 日本: 一般会计当初予算(官方静态权威值) ──
+    for fy in sorted(JP_GENERAL_BUDGET):
+        out["jp"].append({"fy": fy, "value_oku": JP_GENERAL_BUDGET[fy], "status": "confirmed"})
+    out["jp"] = out["jp"][-11:]
+
+    return out
+
+
 def fetch_maturing_treasury(cache_path=None):
     """私营部门(含Fed)持有的、1年内到期需展期的【可交易国债】规模, 月末采样。
     ★口径: MSPD table_3(逐券明细) 按 maturity_date 筛"距 record_date ≤366天"的 Marketable 券加总 outstanding。

@@ -129,6 +129,16 @@ def main():
     except Exception as e:
         print(f"[dashboard] 1年内到期国债 跳过: {e}")
 
+    # ── 日美年度财政花费(政府总支出/预算, 双轴柱状) ──
+    fiscal_budget = {}
+    try:
+        fiscal_budget = ed.fetch_fiscal_budget() or {}
+        print(f"[dashboard] 日美财政花费: status={fiscal_budget.get('status')} "
+              f"as_of={fiscal_budget.get('as_of')} us={len(fiscal_budget.get('us',[]))}年 "
+              f"jp={len(fiscal_budget.get('jp',[]))}年")
+    except Exception as e:
+        print(f"[dashboard] 日美财政花费 跳过: {e}")
+
     # ── 美国石油库存运营红线(Brent-WTI价差 / Cushing / SPR, EIA+FRED) ──
     oil_inventory = {}
     try:
@@ -398,6 +408,7 @@ def main():
         us_yield_century=us_yield_century,
         comex_issue_stop=comex_issue_stop,
         bis_latest=bis_latest,
+        fiscal_budget=fiscal_budget,
     )
     print(f"[dashboard] 生成: {out}")
     return out
