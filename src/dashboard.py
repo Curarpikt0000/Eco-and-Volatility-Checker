@@ -3036,12 +3036,18 @@ def _stress_panel_svg(panel, w=1000, h=300):
     def YL(v): return mt + (l_hi - v) / l_rng * ph
     def YR(v): return mt + (r_hi - v) / r_rng * ph
     parts = [f'<svg viewBox="0 0 {w} {h}" class="sp-chart" preserveAspectRatio="xMidYMid meet">']
-    # 左轴刻度(4)
+    # 左轴刻度(4) —— 左轴专属 MOVE 指数, 刻度用 MOVE 红褐色呼应
+    _left_color = None
+    for s in series:
+        if s.get("axis", "left") == "left":
+            _left_color = s.get("color")
+            break
+    _lc = _left_color or "#8a8578"
     for k in range(4):
         gv = l_lo + l_rng * k / 3
         gy = YL(gv)
         parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" class="sp-grid"/>')
-        parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" class="sp-ylab" text-anchor="end">{gv:.2f}</text>')
+        parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" class="sp-ylab" fill="{_lc}" text-anchor="end">{gv:.2f}</text>')
     # 右轴刻度(单轴时不画)
     if not single and right_vals:
         for k in range(4):

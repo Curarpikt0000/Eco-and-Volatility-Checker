@@ -1837,8 +1837,40 @@ def _fred_series_hist(sid, start):
 
 
 def _fetch_move_history(start):
-    """MOVE 指数(ICE BofA, 专有)历史 —— 走 yfinance ^MOVE(Yahoo 免费历史)。
+    """MOVE 指数(ICE BofA, 专有)历史 —— 优先 Yahoo chart API v8 直连(带 UA, 返完整历史),
+    yfinance ^MOVE 作降级(2026-08 起 yfinance 只返当日1点, chart API 仍返完整序列)。
     返回 [(date,val),...]。抓不到返回 []（诚实, 不编）。"""
+    import datetime as _dt
+    # 主源: Yahoo chart API v8 直连
+    try:
+        import requests as _rq
+        try:
+            _sd = _dt.date.fromisoformat(start[:10])
+            _rng_days = (_dt.date.today() - _sd).days
+        except Exception:
+            _rng_days = 1200
+        _rng = "5y" if _rng_days > 1095 else ("3y" if _rng_days > 730 else "2y")
+        url = ("https://query1.finance.yahoo.com/v8/finance/chart/%5EMOVE"
+               f"?range={_rng}&interval=1d")
+        resp = _rq.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=25)
+        if resp.ok:
+            j = resp.json()
+            res = (j.get("chart", {}).get("result") or [None])[0]
+            if res and res.get("timestamp"):
+                ts = res["timestamp"]
+                closes = res["indicators"]["quote"][0]["close"]
+                out = []
+                for t, c in zip(ts, closes):
+                    if c is None:
+                        continue
+                    d = _dt.date.fromtimestamp(t).isoformat()
+                    if d >= start[:10]:
+                        out.append((d, round(float(c), 2)))
+                if len(out) >= 2:
+                    return out
+    except Exception:
+        pass
+    # 降级: yfinance
     try:
         import yfinance as yf
     except Exception:
@@ -1849,7 +1881,6 @@ def _fetch_move_history(start):
         if df is None or len(df) == 0:
             return []
         c = df["Close"]
-        # 多列(MultiIndex)时取第一列
         try:
             if hasattr(c, "columns"):
                 c = c.iloc[:, 0]
