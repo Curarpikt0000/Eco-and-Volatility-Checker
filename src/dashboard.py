@@ -4129,6 +4129,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="mcard-grid">{cards_short}</div>
   <div class="grp-label grp-mid">🟡 中期指标 · 周-月 · 判断趋势转折</div>
   <div class="mcard-grid">{cards_mid}</div>
+  <!-- 中期指标 · A/D 腾落线详情图 (SP500 全成分股真数据, Economic-Dashboard cron) -->
+  <div class="part-title" id="sec-ad-line" style="font-size:15px;margin-top:14px"><span class="part-num">＋</span>NYSE A/D 腾落线详情 · S&amp;P500 全成分股累计腾落 (中期广度·顶背离判定·真数据)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{ad_line_real}</div>
   <div class="grp-label grp-long">🔴 长期指标 · 月-年 · 判断结构性周期顶</div>
   <div class="mcard-grid">{cards_long}</div>
 
@@ -4277,10 +4280,6 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title" id="sec-silver-imports"><span class="part-num">＋</span>印度白银月度进口 · Silver Bullion Imports (全球最大白银进口国·实物需求风向标·UN Comtrade 免费月度)<span class="freq-badge freq-monthly">每月更新</span></div>
   <div class="card">{silver_imports}</div>
 
-  <!-- ═══ 附三·十二B2：NYSE A/D 腾落线(真数据, Economic-Dashboard cron) ═══ -->
-  <div class="part-title" id="sec-ad-line"><span class="part-num">＋</span>NYSE A/D 腾落线 · S&amp;P500 全成分股累计腾落 (真 A/D 数据·顶背离判定)<span class="freq-badge freq-daily">每日更新</span></div>
-  <div class="card">{ad_line_real}</div>
-
   <!-- ═══ 附三·十二C：美股市场广度(RSP/SPY, A/D 腾落线代理补充) ═══ -->
   <div class="part-title" id="sec-market-breadth"><span class="part-num">＋</span>美股市场广度 · RSP/SPY 等权比 (广度代理·补充顶背离判定)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{market_breadth}</div>
@@ -4348,9 +4347,9 @@ mkRadar('rLong', RADAR.long);
   var GROUPS = [
     {{ name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注','A/D 腾落线','市场广度'] }},
     {{ name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化'] }},
-    {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','BIS','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲','黄金出口','Nonmonetary','黄金 Domestic Premium','Premium/Discount','白银月度进口','Silver Bullion'] }},
+    {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲'] }},
     {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
-    {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','白银做市商','COMEX 白银','投行累计','做市商每周净','issue/stop'] }},
+    {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','白银做市商','COMEX 白银','投行累计','做市商每周净','issue/stop','自营黄金掉期','黄金出口','Nonmonetary','黄金 Domestic Premium','Premium/Discount','白银月度进口','Silver Bullion'] }},
     {{ name: '财政政策', match: ['美日财政政策事件','债务上限','补正预算','国债发行'] }},
     {{ name: '日本市场', match: ['日经225','外资净买入','日本市场'] }},
     {{ name: '机构与政要持仓', match: ['机构持仓','13F','Trump'] }}
@@ -4409,14 +4408,38 @@ mkRadar('rLong', RADAR.long);
   renderGroup(GROUPS.length, '其他');
 
   function onScroll() {{
-    var y = window.scrollY + 80;
+    // 用 getBoundingClientRect (相对视口, 不受父元素定位上下文影响) 判定当前章节。
+    // 触发线 = 视口顶部下方 120px; 找最后一个标题顶部已越过触发线的 section。
+    var trigger = 120;
     var active = 0;
     for (var i = 0; i < titles.length; i++) {{
-      if (titles[i].offsetTop <= y) active = i; else break;
+      var top = titles[i].getBoundingClientRect().top;
+      if (top - trigger <= 0) active = i; else break;
     }}
-    links.forEach(function(l, i) {{ if (l) l.classList.toggle('sn-active', i === active); }});
+    // 到达页面底部时高亮最后一项(最后一节可能不够长无法越过触发线)
+    if ((window.innerHeight + window.scrollY) >= (document.body.scrollHeight - 4)) {{
+      active = titles.length - 1;
+    }}
+    links.forEach(function(l, i) {{
+      if (!l) return;
+      var on = (i === active);
+      l.classList.toggle('sn-active', on);
+      if (on) {{
+        // 展开所在分组(若被折叠) + 把激活项滚进侧栏可视区
+        var grp = l.closest ? l.closest('.sn-group') : null;
+        if (grp) grp.classList.remove('sn-collapsed');
+        var nav = document.getElementById('sidenav');
+        if (nav) {{
+          var lr = l.getBoundingClientRect(), nr = nav.getBoundingClientRect();
+          if (lr.top < nr.top + 10 || lr.bottom > nr.bottom - 10) {{
+            if (l.scrollIntoView) l.scrollIntoView({{ block: 'nearest' }});
+          }}
+        }}
+      }}
+    }});
   }}
   window.addEventListener('scroll', onScroll, {{ passive: true }});
+  window.addEventListener('resize', onScroll, {{ passive: true }});
   onScroll();
 }})();
 </script>
