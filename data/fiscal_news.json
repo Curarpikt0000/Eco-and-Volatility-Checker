@@ -1,6 +1,6 @@
 {
   "status": "ok",
-  "as_of": "2026-08-19",
+  "as_of": "2026-08-20",
   "source": "美日财政政策事件时间线。每日 cron agent 模式 web 检索权威源(路透/彭博/NHK/财务省/US Treasury/Congress)动态更新。绝不编造,每条带来源链接。",
   "note": "cron 每日抓取最新美日财政举措(债务上限/持续决议CR/政府关门/补充预算/国债发行计划等),按日期倒序保留最近 ~20 条。",
   "events": [
@@ -13,6 +13,16 @@
       "summary": "高市早苗首相表示将编制 2026 年度追加补正预算案,财源拟通过增发特例公债(赤字国债)筹措,规模市场传约 3 万亿日元级,含电气/燃气补贴等物价对策。",
       "source_url": "https://s.japanese.joins.com/JArticle/349573?sectcode=A00&servcode=A00",
       "source_name": "中央日报(引 NHK)"
+    },
+    {
+      "date": "2026-08-08",
+      "country": "US",
+      "flag": "🇺🇸",
+      "category": "政府关门风险",
+      "title": "参议院通过临时拨款案(CR)至12月,规避10/1停摆",
+      "summary": "参议院8/8凌晨表决通过一揽子临时拨款方案,资金延续至12月,试图在11月中期选举前规避政府关门;皮球踢回众议院,10/1(FY2026财年末)前众院须行动否则部分政府停摆。",
+      "source_url": "https://www.politico.com/news/2026/08/08/senate-government-funding-01030015",
+      "source_name": "Politico"
     },
     {
       "date": "2026-08-01",

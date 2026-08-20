@@ -37,6 +37,7 @@ _FRESH_TOL = {
     "tic": 75,         # TIC 月频但发布滞后约 45 天
     "quarterly": 135,  # 季频
     "semiannual": 250,  # 半年频(如 BIS)
+    "imf_weo": 260,    # IMF WEO 一年发布两次(4月/10月), 且数据本身是年度值
 }
 
 
@@ -275,7 +276,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              market_breadth=None, silver_bank_positions=None, comex_silver_issues_ref=None,
              gold_exports=None, us_yield_century=None, comex_issue_stop=None,
              ad_line_real=None, gold_premium=None, silver_imports=None, fiscal_budget=None,
-             basis_trade=None, comex_inventory=None):
+             basis_trade=None, comex_inventory=None, debt_gdp=None,
+             corp_credit=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -472,6 +474,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         stress_panels=_stress_panels_html(stress_panels, ofr_fsi),
         basis_trade=_basis_trade_html(basis_trade),
         comex_inventory=_comex_inventory_html(comex_inventory),
+        debt_gdp=_debt_gdp_html(debt_gdp),
+        corp_credit=_corp_credit_html(corp_credit),
         auctions=_auctions_html(auctions),
         holdings=_holdings_html(holdings),
     )
@@ -3545,6 +3549,375 @@ def _flow_bars_svg(bars, w=920, h=220, unit="t"):
     return "".join(parts)
 
 
+# ─────────── 世界前十经济体 政府债务/GDP ───────────
+def _debt_gdp_bar_svg(countries, w=940, h=330):
+    """横向条形图: 各国政府债务/GDP。实绩=实心, IMF 预测末年=虚线延伸段。
+    100% 处画警戒竖线(债务超过一年 GDP)。"""
+    ok = [c for c in countries if c.get("status") == "ok"]
+    if not ok:
+        return ""
+    ml, mr, mt, mb = 92, 74, 26, 26
+    n = len(ok)
+    band = (h - mt - mb) / max(n, 1)
+    bh = min(band * 0.62, 20)
+    vmax = max([c["latest"] for c in ok] +
+               [(c.get("forecast") or [(0, 0)])[-1][1] for c in ok]) * 1.08
+    vmax = max(vmax, 100)
+    iw = w - ml - mr
+
+    def x(v):
+        return ml + (v / vmax) * iw
+
+    p = [f'<svg viewBox="0 0 {w} {h}" width="100%" style="max-width:{w}px" '
+         f'xmlns="http://www.w3.org/2000/svg" font-family="ui-sans-serif,system-ui">']
+    # 100% 警戒线
+    x100 = x(100)
+    p.append(f'<line x1="{x100:.1f}" y1="{mt-6}" x2="{x100:.1f}" y2="{h-mb+4}" '
+             f'stroke="#c0757d" stroke-width="1" stroke-dasharray="4 3" opacity="0.75"/>')
+    p.append(f'<text x="{x100:.1f}" y="{mt-10}" font-size="9.5" fill="#c0757d" '
+             f'text-anchor="middle">债务=100% GDP</text>')
+    for i, c in enumerate(ok):
+        cy = mt + band * i + band / 2
+        v = c["latest"]
+        fc = c.get("forecast") or []
+        # 颜色: >150 深红 / >100 陶红 / >60 芥黄 / else 鼠尾草绿
+        col = ("#b4636b" if v > 150 else "#c0757d" if v > 100
+               else "#c9a86a" if v > 60 else "#7fa085")
+        bx = x(v)
+        p.append(f'<text x="{ml-8}" y="{cy+4:.1f}" font-size="11.5" fill="#5a564e" '
+                 f'text-anchor="end">{_esc(c["name"])}</text>')
+        # 预测延伸段(虚线框, 明确区分)
+        if fc:
+            fv = fc[-1][1]
+            if fv > v:
+                p.append(f'<rect x="{bx:.1f}" y="{cy-bh/2:.1f}" width="{x(fv)-bx:.1f}" '
+                         f'height="{bh:.1f}" fill="{col}" opacity="0.16" '
+                         f'stroke="{col}" stroke-width="0.8" stroke-dasharray="3 2">'
+                         f'<title>{_esc(c["name"])} IMF 预测 {fc[-1][0]}: {fv}%</title></rect>')
+        p.append(f'<rect x="{ml}" y="{cy-bh/2:.1f}" width="{bx-ml:.1f}" height="{bh:.1f}" '
+                 f'fill="{col}" rx="2" data-tip="{_esc(c["name"])} {c["latest_year"]} 实绩: {v}% of GDP">'
+                 f'</rect>')
+        # 数值 + 5年变化
+        d5 = c.get("chg_5y")
+        chg = ""
+        if d5 is not None:
+            arw = "▲" if d5 > 0 else ("▼" if d5 < 0 else "→")
+            ccol = "#c0757d" if d5 > 0 else ("#7fa085" if d5 < 0 else "#8a8578")
+            chg = f' <tspan fill="{ccol}" font-size="9.5">{arw}{abs(d5):.1f}pp</tspan>'
+        p.append(f'<text x="{bx+7:.1f}" y="{cy+4:.1f}" font-size="11" fill="#4a463f" '
+                 f'font-weight="600">{v:.1f}%{chg}</text>')
+    p.append(f'<line x1="{ml}" y1="{h-mb:.1f}" x2="{w-mr}" y2="{h-mb:.1f}" stroke="#d8d4cb"/>')
+    p.append('</svg>')
+    return "".join(p)
+
+
+def _debt_gdp_trend_svg(countries, w=940, h=260):
+    """近 15 年实绩折线(多国), 看谁在加杠杆。"""
+    ok = [c for c in countries if c.get("status") == "ok" and len(c.get("series") or []) >= 3]
+    if not ok:
+        return ""
+    ml, mr, mt, mb = 46, 96, 16, 26
+    yrs = sorted({y for c in ok for y, _ in c["series"]})
+    vals = [v for c in ok for _, v in c["series"]]
+    y0, y1 = yrs[0], yrs[-1]
+    vmin, vmax = min(vals) * 0.95, max(vals) * 1.05
+    iw, ih = w - ml - mr, h - mt - mb
+    palette = ["#6b8fb5", "#c08a7d", "#9aab97", "#c9a86a", "#9b8aa6",
+               "#7fa085", "#b4636b", "#8a9bb5", "#c2a06a", "#7d9b96"]
+
+    def X(y):
+        return ml + ((y - y0) / max(y1 - y0, 1)) * iw
+
+    def Y(v):
+        return mt + ih - ((v - vmin) / max(vmax - vmin, 1e-9)) * ih
+
+    p = [f'<svg viewBox="0 0 {w} {h}" width="100%" style="max-width:{w}px" '
+         f'xmlns="http://www.w3.org/2000/svg" font-family="ui-sans-serif,system-ui">']
+    for gv in range(int(vmin // 50) * 50, int(vmax) + 50, 50):
+        if vmin <= gv <= vmax:
+            gy = Y(gv)
+            p.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" stroke="#ece9e2"/>')
+            p.append(f'<text x="{ml-6}" y="{gy+3:.1f}" font-size="9" fill="#a8a49b" '
+                     f'text-anchor="end">{gv}%</text>')
+    for i, c in enumerate(ok):
+        col = palette[i % len(palette)]
+        pts = " ".join(f"{X(y):.1f},{Y(v):.1f}" for y, v in c["series"])
+        p.append(f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="1.7" '
+                 f'stroke-linejoin="round"/>')
+        ly, lv = c["series"][-1]
+        p.append(f'<circle cx="{X(ly):.1f}" cy="{Y(lv):.1f}" r="2.6" fill="{col}"/>')
+        p.append(f'<text x="{w-mr+6}" y="{Y(lv)+3.5:.1f}" font-size="9.5" fill="{col}">'
+                 f'{_esc(c["name"])} {lv:.0f}</text>')
+        for y, v in c["series"]:
+            p.append(f'<circle cx="{X(y):.1f}" cy="{Y(v):.1f}" r="5" fill="transparent" '
+                     f'data-tip="{_esc(c["name"])} {y}: {v}% of GDP"/>')
+    for y in yrs:
+        if (y - y0) % 3 == 0 or y == y1:
+            p.append(f'<text x="{X(y):.1f}" y="{h-mb+15}" font-size="9" fill="#8a8578" '
+                     f'text-anchor="middle">{y}</text>')
+    p.append(f'<line x1="{ml}" y1="{h-mb:.1f}" x2="{w-mr}" y2="{h-mb:.1f}" stroke="#d8d4cb"/>')
+    p.append('</svg>')
+    return "".join(p)
+
+
+def _debt_gdp_html(dg):
+    """世界前十经济体 政府债务/GDP。dg: fetch_debt_to_gdp()。"""
+    if not dg or dg.get("status") != "ok" or not dg.get("countries"):
+        note = (dg or {}).get("note") or ""
+        return (f'<p class="empty">世界前十经济体债务/GDP 数据未就绪。'
+                f'{("（" + _esc(note) + "）") if note else ""}</p>')
+    cs = dg["countries"]
+    ok = [c for c in cs if c.get("status") == "ok"]
+    yr = dg.get("as_of_year")
+    # 徽章按 IMF WEO 年度口径: 用实绩年末作 as_of
+    badge = _stale_badge(f"{yr}-12-31", "imf_weo") if yr else ""
+    rising = [c for c in ok if (c.get("chg_5y") or 0) > 0]
+    rising.sort(key=lambda c: -(c.get("chg_5y") or 0))
+    top_r = "、".join(f'{c["name"]}(+{c["chg_5y"]:.1f}pp)' for c in rising[:3]) or "无"
+    over100 = [c["name"] for c in ok if c["latest"] > 100]
+    fc_yr = None
+    for c in ok:
+        if c.get("forecast"):
+            fc_yr = c["forecast"][-1][0]
+            break
+    return (
+        f'<div class="dg-wrap">'
+        f'<div class="dg-head">🌍 世界前十大经济体 · 政府债务 / GDP'
+        f'<span class="dg-asof">实绩 {yr} 年{badge}</span></div>'
+        f'{_debt_gdp_bar_svg(cs)}'
+        f'<div class="dg-sub">近 15 年走势（实绩）</div>'
+        f'{_debt_gdp_trend_svg(cs)}'
+        f'<div class="ci-how"><b>如何看：</b>政府债务/GDP 衡量一国政府负债相对经济规模的水平，'
+        f'是判断<b>主权债务可持续性</b>与长期利率压力的核心指标。'
+        f'超过 <b>100%</b>（红色虚线）意味着政府债务已超过全年 GDP；'
+        f'当前超过 100% 的有 <b>{_esc("、".join(over100)) if over100 else "无"}</b>。'
+        f'比绝对水平更重要的是<b>方向</b>——近 5 年仍在加杠杆的：<b>{_esc(top_r)}</b>。'
+        f'<br><b>⚠️ 频率与口径诚实说明：</b>该数据源自 <b>IMF WEO，本质是【年度】数据</b>，'
+        f'一年仅发布两次（4 月 / 10 月）。本页每次构建都会重新拉取，'
+        f'但<b>两次 WEO 之间数值不会变化</b>——请勿将其理解为周度/月度更新的指标。'
+        f'条形图中<b>实心段为实绩</b>，'
+        f'{f"<b>虚线段为 IMF 对 {fc_yr} 年的预测</b>（预测非事实，仅供参考）。" if fc_yr else ""}'
+        f'数据源：{_linkify_sources(dg.get("source", ""))}。</div>'
+        f'</div>'
+    )
+
+
+# ─────────── 美国分评级公司债 ───────────
+def _corp_credit_svg(ratings, key="oas_series", w=940, h=280, unit=" %"):
+    """各评级序列多线图(OAS 或 收益率)。CCC 波动极大 → 用对数式压缩不做, 保持真实比例,
+    但把 CCC 单独用粗线+高亮色, 避免其它线被压平到看不见。"""
+    ok = [r for r in ratings if r.get(key)]
+    if not ok:
+        return ""
+    ml, mr, mt, mb = 48, 92, 16, 28
+    alld = sorted({d for r in ok for d, _ in r[key]})
+    if len(alld) < 2:
+        return ""
+    d0, d1 = alld[0], alld[-1]
+    vals = [v for r in ok for _, v in r[key]]
+    vmin, vmax = min(vals), max(vals)
+    pad = (vmax - vmin) * 0.08 or 0.5
+    vmin, vmax = max(0, vmin - pad), vmax + pad
+    iw, ih = w - ml - mr, h - mt - mb
+    t0 = datetime.date.fromisoformat(d0).toordinal()
+    t1 = datetime.date.fromisoformat(d1).toordinal()
+    colors = {"AAA": "#7fa085", "AA": "#8a9bb5", "A": "#6b8fb5", "BBB": "#c9a86a",
+              "BB": "#c08a7d", "B": "#b4636b", "CCC及以下": "#8e3b47"}
+
+    def X(ds):
+        return ml + ((datetime.date.fromisoformat(ds).toordinal() - t0) / max(t1 - t0, 1)) * iw
+
+    def Y(v):
+        return mt + ih - ((v - vmin) / max(vmax - vmin, 1e-9)) * ih
+
+    p = [f'<svg viewBox="0 0 {w} {h}" width="100%" style="max-width:{w}px" '
+         f'xmlns="http://www.w3.org/2000/svg" font-family="ui-sans-serif,system-ui">']
+    step = 2 if (vmax - vmin) > 8 else 1
+    gv = 0
+    while gv <= vmax:
+        if gv >= vmin:
+            gy = Y(gv)
+            p.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" stroke="#ece9e2"/>')
+            p.append(f'<text x="{ml-6}" y="{gy+3:.1f}" font-size="9" fill="#a8a49b" '
+                     f'text-anchor="end">{gv}%</text>')
+        gv += step
+    for r in ok:
+        lab = r["label"]
+        col = colors.get(lab, "#8a8377")
+        wdt = 2.1 if lab == "CCC及以下" else 1.5
+        pts = " ".join(f"{X(d):.1f},{Y(v):.1f}" for d, v in r[key])
+        p.append(f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="{wdt}" '
+                 f'stroke-linejoin="round" opacity="0.92"/>')
+        ld, lv = r[key][-1]
+        p.append(f'<circle cx="{X(ld):.1f}" cy="{Y(lv):.1f}" r="2.6" fill="{col}"/>')
+        p.append(f'<text x="{w-mr+6}" y="{Y(lv)+3.5:.1f}" font-size="9.5" fill="{col}" '
+                 f'font-weight="{600 if lab == "CCC及以下" else 400}">{_esc(lab)} {lv:.2f}</text>')
+        # hit-band tooltip(稀疏采样避免 DOM 爆炸)
+        n = len(r[key])
+        stp = max(1, n // 90)
+        for i in range(0, n, stp):
+            d, v = r[key][i]
+            p.append(f'<circle cx="{X(d):.1f}" cy="{Y(v):.1f}" r="4.5" fill="transparent" '
+                     f'data-tip="{_esc(lab)} {d}: {v:.2f}{_esc(unit)}"/>')
+    # X 轴标签(真实观测日, 绝不外推)
+    for i in range(0, len(alld), max(1, len(alld) // 6)):
+        ds = alld[i]
+        p.append(f'<text x="{X(ds):.1f}" y="{h-mb+16}" font-size="9" fill="#8a8578" '
+                 f'text-anchor="middle">{ds[:7]}</text>')
+    p.append(f'<line x1="{ml}" y1="{h-mb:.1f}" x2="{w-mr}" y2="{h-mb:.1f}" stroke="#d8d4cb"/>')
+    p.append('</svg>')
+    return "".join(p)
+
+
+def _corp_outstanding_svg(rec, w=452, h=200):
+    """季度真实未偿额柱状/面积图。"""
+    s = rec.get("series") or []
+    if len(s) < 2:
+        return ""
+    ml, mr, mt, mb = 58, 14, 16, 26
+    vals = [v for _, v in s]
+    vmin, vmax = min(vals) * 0.97, max(vals) * 1.03
+    iw, ih = w - ml - mr, h - mt - mb
+    n = len(s)
+
+    def X(i):
+        return ml + (i / max(n - 1, 1)) * iw
+
+    def Y(v):
+        return mt + ih - ((v - vmin) / max(vmax - vmin, 1e-9)) * ih
+
+    p = [f'<svg viewBox="0 0 {w} {h}" width="100%" style="max-width:{w}px" '
+         f'xmlns="http://www.w3.org/2000/svg" font-family="ui-sans-serif,system-ui">']
+    area = " ".join(f"{X(i):.1f},{Y(v):.1f}" for i, (_, v) in enumerate(s))
+    p.append(f'<polygon points="{ml},{mt+ih} {area} {ml+iw:.1f},{mt+ih}" '
+             f'fill="#6b8fb5" opacity="0.13"/>')
+    p.append(f'<polyline points="{area}" fill="none" stroke="#6b8fb5" stroke-width="1.8"/>')
+    for gv in (vmin, (vmin + vmax) / 2, vmax):
+        gy = Y(gv)
+        p.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" stroke="#ece9e2"/>')
+        p.append(f'<text x="{ml-6}" y="{gy+3:.1f}" font-size="8.5" fill="#a8a49b" '
+                 f'text-anchor="end">{gv/1000:.1f}T</text>')
+    for i, (d, v) in enumerate(s):
+        p.append(f'<circle cx="{X(i):.1f}" cy="{Y(v):.1f}" r="4.5" fill="transparent" '
+                 f'data-tip="{_esc(rec["label"])} {d}: ${v:,.1f}B"/>')
+    ld, lv = s[-1]
+    p.append(f'<circle cx="{X(n-1):.1f}" cy="{Y(lv):.1f}" r="3" fill="#6b8fb5"/>')
+    for i in (0, n // 2, n - 1):
+        p.append(f'<text x="{X(i):.1f}" y="{h-mb+15}" font-size="8.5" fill="#8a8578" '
+                 f'text-anchor="middle">{s[i][0][:7]}</text>')
+    p.append(f'<line x1="{ml}" y1="{h-mb:.1f}" x2="{w-mr}" y2="{h-mb:.1f}" stroke="#d8d4cb"/>')
+    p.append('</svg>')
+    return "".join(p)
+
+
+def _corp_credit_html(cc):
+    """美国分评级公司债: 收益率/利差(日频) + 真实未偿总额(季频)。"""
+    if not cc or cc.get("status") != "ok":
+        return '<p class="empty">美国公司债数据未就绪。</p>'
+    rs = [r for r in cc.get("ratings") or [] if r.get("status") == "ok"]
+    if not rs:
+        return '<p class="empty">美国公司债数据未就绪。</p>'
+    asof = cc.get("as_of") or ""
+    badge = _stale_badge(asof, "daily")
+
+    # 评级表格
+    rows = []
+    for r in rs:
+        y = r.get("yield_latest")
+        o = r.get("oas_latest")
+        c1 = r.get("chg_1m_bp")
+        oc1 = r.get("oas_chg_1m_bp")
+
+        def _d(v, suf="bp"):
+            if v is None:
+                return '<span class="cc-na">n/a</span>'
+            col = "#c0757d" if v > 0 else ("#7fa085" if v < 0 else "#8a8578")
+            arw = "▲" if v > 0 else ("▼" if v < 0 else "→")
+            return f'<span style="color:{col}">{arw}{abs(v):.0f}{suf}</span>'
+        tier = "投资级" if r["ig"] else "高收益"
+        tcol = "#6b8fb5" if r["ig"] else "#c08a7d"
+        rows.append(
+            f'<tr><td><b>{_esc(r["label"])}</b> '
+            f'<span class="cc-tier" style="color:{tcol}">{tier}</span></td>'
+            f'<td class="cc-num">{y:.2f}%</td><td class="cc-num">{_d(c1)}</td>'
+            f'<td class="cc-num">{o:.2f}%</td><td class="cc-num">{_d(oc1)}</td></tr>'
+            if y is not None and o is not None else
+            f'<tr><td><b>{_esc(r["label"])}</b></td>'
+            f'<td class="cc-num">{f"{y:.2f}%" if y is not None else "n/a"}</td>'
+            f'<td class="cc-num">{_d(c1)}</td>'
+            f'<td class="cc-num">{f"{o:.2f}%" if o is not None else "n/a"}</td>'
+            f'<td class="cc-num">{_d(oc1)}</td></tr>'
+        )
+    table = (
+        '<table class="cc-tbl"><thead><tr><th>评级</th><th>有效收益率</th>'
+        '<th>近1月Δ</th><th>期权调整利差 OAS</th><th>OAS近1月Δ</th></tr></thead>'
+        f'<tbody>{"".join(rows)}</tbody></table>'
+    )
+
+    # 信用分层观察: IG 与 CCC 的 OAS 背离
+    ig_oas = [r["oas_latest"] for r in rs if r["ig"] and r.get("oas_latest") is not None]
+    ccc = next((r for r in rs if r["label"].startswith("CCC")), None)
+    divergence = ""
+    if ig_oas and ccc and ccc.get("oas_chg_1m_bp") is not None:
+        ig_chg = [r.get("oas_chg_1m_bp") for r in rs
+                  if r["ig"] and r.get("oas_chg_1m_bp") is not None]
+        if ig_chg:
+            ig_avg = sum(ig_chg) / len(ig_chg)
+            gap = ccc["oas_chg_1m_bp"] - ig_avg
+            if gap > 25:
+                divergence = (
+                    f'<div class="cc-alert">⚠️ <b>信用分层信号</b>：近 1 个月 '
+                    f'<b>CCC 及以下 OAS 扩大 {ccc["oas_chg_1m_bp"]:.0f}bp</b>，'
+                    f'而投资级平均仅 {ig_avg:+.0f}bp（差 {gap:.0f}bp）。'
+                    f'风险偏好正在<b>最低评级层单点撕裂</b>——这通常是信用周期转折的早期特征，'
+                    f'而非全面risk-off。</div>')
+
+    # 未偿总额
+    outs = [o for o in cc.get("outstanding") or [] if o.get("status") == "ok"]
+    ocards = []
+    for o in outs:
+        yoy = o.get("chg_yoy_pct")
+        ycol = "#c0757d" if (yoy or 0) > 0 else "#7fa085"
+        yarw = "▲" if (yoy or 0) > 0 else "▼"
+        ytxt = (f'<span style="color:{ycol}">{yarw} {abs(yoy):.1f}% YoY</span>'
+                if yoy is not None else '<span class="cc-na">YoY n/a</span>')
+        ocards.append(
+            f'<div class="cc-ocard"><div class="cc-olabel">{_esc(o["label"])}</div>'
+            f'<div class="cc-oval">${o["latest"]/1000:.2f}T <span class="cc-oyoy">{ytxt}</span></div>'
+            f'<div class="cc-odate">as of {_esc(o.get("latest_date", ""))}'
+            f'{_stale_badge(o.get("latest_date"), "quarterly")}</div>'
+            f'{_corp_outstanding_svg(o)}</div>')
+    ohtml = (f'<div class="cc-osec"><div class="dg-sub">真实未偿总额（Fed Z.1 · 季度）</div>'
+             f'<div class="cc-ogrid">{"".join(ocards)}</div></div>') if ocards else ""
+
+    return (
+        f'<div class="cc-wrap">'
+        f'<div class="dg-head">🏦 美国公司债 · 分评级 收益率 / 利差 / 总额'
+        f'<span class="dg-asof">as of {_esc(asof)}{badge}</span></div>'
+        f'{table}{divergence}'
+        f'<div class="dg-sub">期权调整利差 OAS 走势（近 3 年 · 纯信用风险溢价）</div>'
+        f'{_corp_credit_svg(rs, "oas_series", unit=" %")}'
+        f'<div class="dg-sub">有效收益率走势（近 3 年 · 含无风险利率）</div>'
+        f'{_corp_credit_svg(rs, "yield_series", unit=" %")}'
+        f'{ohtml}'
+        f'<div class="ci-how"><b>如何看：</b>'
+        f'<b>有效收益率</b>=投资者实际拿到的总收益率，它同时包含无风险利率与信用风险；'
+        f'国债利率上行时它也会涨，所以<b>不能单看它判断信用风险</b>。'
+        f'<b>OAS（期权调整利差）</b>剔除了国债基准，是<b>纯粹的信用风险溢价</b>——'
+        f'看信用状况是否恶化应以 OAS 为准。'
+        f'OAS 走阔=市场要求更高风险补偿（信用收紧）；收窄=风险偏好回升。'
+        f'评级越低对经济下行越敏感，<b>CCC 通常最先动</b>，是信用周期的先行哨兵。'
+        f'<br><b>⚠️ 口径诚实说明：</b>免费公开源<b>不存在「每日 · 分评级 · 未偿总额」</b>'
+        f'（该数据属 ICE / Bloomberg 商业授权）。'
+        f'FRED 上带 TRIV 的序列是<b>总回报指数</b>（随价格涨跌波动），<b>不是</b>债券余额，'
+        f'本页<b>未</b>将其当作总额使用。'
+        f'因此总量改用 <b>Fed Z.1 官方季度真实未偿额</b>（季频、滞后约 1 季），'
+        f'日频部分只提供收益率与利差。'
+        f'数据源：{_linkify_sources(cc.get("source", ""))}。</div>'
+        f'</div>'
+    )
+
+
 def _comex_inventory_html(ci):
     """COMEX & 上海贵金属库存 + GLD/SLV ETF 资金流。ci: fetch_comex_inventory()。
     3 库存双轴图(复用 _stress_panel_svg) + 2 ETF 周净流量柱状。绝不编: 缺失显示占位。"""
@@ -4463,6 +4836,29 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .ci-zero {{ stroke: rgba(160,160,150,.55); stroke-width: 1.2; }}
   .ci-how {{ font-size: 11px; color: var(--muted); line-height: 1.6; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; }}
   .ci-how b {{ color: var(--text); }}
+  /* ── 世界前十经济体 债务/GDP ── */
+  .dg-wrap {{ display: flex; flex-direction: column; gap: 10px; }}
+  .dg-head {{ font-size: 14px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }}
+  .dg-asof {{ font-size: 11px; font-weight: 400; color: var(--muted); }}
+  .dg-sub {{ font-size: 12px; font-weight: 600; color: var(--text); margin-top: 4px; padding-left: 2px; border-left: 3px solid var(--border); padding-left: 8px; }}
+  /* ── 美国分评级公司债 ── */
+  .cc-wrap {{ display: flex; flex-direction: column; gap: 10px; }}
+  .cc-tbl {{ width: 100%; border-collapse: collapse; font-size: 12px; }}
+  .cc-tbl th {{ text-align: right; font-weight: 600; color: var(--muted); font-size: 10.5px; padding: 5px 8px; border-bottom: 1px solid var(--border); }}
+  .cc-tbl th:first-child {{ text-align: left; }}
+  .cc-tbl td {{ padding: 5px 8px; border-bottom: 1px solid var(--border); color: var(--text); }}
+  .cc-tbl tbody tr:hover {{ background: var(--card2); }}
+  .cc-num {{ text-align: right; font-variant-numeric: tabular-nums; font-family: ui-monospace, monospace; }}
+  .cc-tier {{ font-size: 9.5px; margin-left: 5px; }}
+  .cc-na {{ color: var(--muted); opacity: 0.65; }}
+  .cc-alert {{ font-size: 11.5px; line-height: 1.6; color: var(--text); background: rgba(192,117,125,0.09); border: 1px solid rgba(192,117,125,0.32); border-left: 3px solid #c0757d; border-radius: 8px; padding: 9px 12px; }}
+  .cc-osec {{ display: flex; flex-direction: column; gap: 8px; }}
+  .cc-ogrid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; }}
+  .cc-ocard {{ background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }}
+  .cc-olabel {{ font-size: 11px; color: var(--muted); }}
+  .cc-oval {{ font-size: 19px; font-weight: 600; font-family: ui-monospace, monospace; color: var(--text); margin: 2px 0; }}
+  .cc-oyoy {{ font-size: 11px; font-family: ui-sans-serif, system-ui; font-weight: 400; }}
+  .cc-odate {{ font-size: 10px; color: var(--muted); margin-bottom: 4px; }}
   @media (max-width: 720px) {{ .ci-cols, .ci-cols-4 {{ grid-template-columns: 1fr; }} }}
 
   /* 国债市场压力四联图(竖向, 对齐 Morgan Stanley) */
@@ -4730,6 +5126,12 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·二·三：Credit Impulse 信贷脉冲 (中期领先指标, 领先实体经济6-9月) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>Credit Impulse 信贷脉冲 · 中期领先指标 (美/中/欧 · 季度 · 新增信贷的加速度 · 领先实体经济6-9月)<span class="freq-badge freq-quarterly">每季度更新</span></div>
   <div class="card">{credit_impulse}</div>
+  <!-- ═══ 附三·A1：世界前十经济体 政府债务/GDP ═══ -->
+  <div class="part-title" id="sec-debt-gdp"><span class="part-num">＋</span>世界前十大经济体 · 政府债务 / GDP (主权债务可持续性 · IMF WEO)<span class="freq-badge freq-quarterly">年度 · IMF 一年发布两次</span></div>
+  <div class="card">{debt_gdp}</div>
+  <!-- ═══ 附三·A2：美国分评级公司债 收益率/利差/总额 ═══ -->
+  <div class="part-title" id="sec-corp-credit"><span class="part-num">＋</span>美国公司债 · 分评级 收益率 / OAS 利差 / 未偿总额 (信用周期先行哨兵)<span class="freq-badge freq-daily">利差每日 · 总额季度</span></div>
+  <div class="card">{corp_credit}</div>
 
   <!-- ═══ 附三·二·四：国债市场压力四联图 (对齐 Morgan Stanley 三图 + OFR官方压力指数, 竖向) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>国债市场收益率·波动性·压力 · 竖向四联图 (对齐 Morgan Stanley · 过去3年真实公开数据 · 每日更新)<span class="freq-badge freq-daily">每日更新</span></div>

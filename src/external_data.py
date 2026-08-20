@@ -3931,6 +3931,235 @@ def fetch_comex_inventory(cache_path=None):
     return out
 
 
+# ─────────── 世界前十经济体 政府债务/GDP (IMF WEO) ───────────
+# 源: IMF DataMapper API (官方, 免 key)。指标 GGXWDG_NGDP =
+#   General government gross debt, % of GDP。
+# ★频率诚实说明: IMF WEO 一年发布两次(4月/10月), 本质是【年度】数据。
+#   本 fetcher 每次运行都会重新拉取, 但值在两次 WEO 之间不会变化 ——
+#   dashboard 用 stale 徽章显示"距上次发布 N 天", 绝不假装是周度/月度更新。
+# ★同时含 IMF 【预测年份】(通常未来 5-6 年): 必须与实绩年份区分渲染,
+#   否则会把预测当历史。用 is_forecast 标记。
+IMF_DM_API = "https://www.imf.org/external/datamapper/api/v1"
+# 世界前十大经济体(按名义 GDP, IMF 2025 口径)
+TOP10_ECONOMIES = [
+    ("USA", "美国", "🇺🇸"), ("CHN", "中国", "🇨🇳"), ("DEU", "德国", "🇩🇪"),
+    ("JPN", "日本", "🇯🇵"), ("IND", "印度", "🇮🇳"), ("GBR", "英国", "🇬🇧"),
+    ("FRA", "法国", "🇫🇷"), ("ITA", "意大利", "🇮🇹"), ("CAN", "加拿大", "🇨🇦"),
+    ("BRA", "巴西", "🇧🇷"),
+]
+
+
+def fetch_debt_to_gdp(years=15):
+    """世界前十经济体 政府债务/GDP (%)。IMF WEO 官方, 免 key。
+
+    返回 {"countries":[{iso,name,flag,series:[(year,val)],latest,latest_year,
+                        forecast:[(year,val)], chg_5y, high, low, status}],
+          "as_of_year", "vintage", "status", "source"}
+    ★series 只含【实绩年份】(<= 当前实绩年), forecast 单独放 —— 绝不混。
+    ★抓不到 → status="未找到", countries=[] , 绝不编造。
+    """
+    import datetime as _dt
+    import requests
+    out = {"countries": [], "status": "未找到", "as_of_year": None,
+           "vintage": None,
+           "source": "IMF World Economic Outlook (DataMapper API) · GGXWDG_NGDP"}
+    try:
+        r = requests.get(f"{IMF_DM_API}/GGXWDG_NGDP", timeout=45,
+                         headers={"User-Agent": "Mozilla/5.0 (EcoVolChecker research)"})
+        if r.status_code != 200:
+            out["note"] = f"IMF API HTTP {r.status_code}"
+            return out
+        vals = (r.json().get("values") or {}).get("GGXWDG_NGDP") or {}
+    except Exception as e:
+        out["note"] = f"IMF API 异常: {type(e).__name__}"
+        return out
+    if not vals:
+        out["note"] = "IMF API 返回空"
+        return out
+
+    # ★实绩/预测分界: IMF 当年及以后为预测。用当前年份作界(保守: 当年也算预测,
+    #   因为 WEO 当年数多为估计值 estimate)。
+    this_year = _dt.date.today().year
+    cutoff_year = this_year - 1          # <= cutoff 视为实绩
+    min_year = this_year - years
+
+    max_actual = None
+    for iso, zh, flag in TOP10_ECONOMIES:
+        s = vals.get(iso) or {}
+        pts, fc = [], []
+        for y, v in s.items():
+            try:
+                yi, vf = int(y), float(v)
+            except (TypeError, ValueError):
+                continue
+            if vf is None:
+                continue
+            if yi <= cutoff_year:
+                if yi >= min_year:
+                    pts.append((yi, round(vf, 1)))
+            else:
+                fc.append((yi, round(vf, 1)))
+        pts.sort()
+        fc.sort()
+        if not pts:
+            out["countries"].append({
+                "iso": iso, "name": zh, "flag": flag, "series": [],
+                "forecast": fc, "status": "未找到"})
+            continue
+        ly, lv = pts[-1]
+        max_actual = ly if max_actual is None else max(max_actual, ly)
+        # 5 年变化(实绩内)
+        chg5 = None
+        base = [p for p in pts if p[0] <= ly - 5]
+        if base:
+            chg5 = round(lv - base[-1][1], 1)
+        v_only = [v for _, v in pts]
+        out["countries"].append({
+            "iso": iso, "name": zh, "flag": flag,
+            "series": pts, "forecast": fc,
+            "latest": lv, "latest_year": ly,
+            "chg_5y": chg5,
+            "high": max(v_only), "low": min(v_only),
+            "status": "ok",
+        })
+    ok = [c for c in out["countries"] if c["status"] == "ok"]
+    if ok:
+        out["status"] = "ok"
+        out["as_of_year"] = max_actual
+        # 债务率降序(最高的排前面)
+        out["countries"].sort(key=lambda c: (c.get("latest") is None, -(c.get("latest") or 0)))
+    return out
+
+
+# ─────────── 美国分评级公司债: 收益率 / 利差 / 未偿总额 ───────────
+# ★★口径陷阱(实测确认, 务必不要踩):
+#   FRED 上 ICE BofA 带 "TRIV" 后缀的序列(如 BAMLCC0A0CMTRIV)标题是
+#   "Total Return Index Value" = 【总回报指数】, 单位 Index —— 它随价格涨跌波动,
+#   【不是】债券未偿总额。把它当"公司债总额"画图会得到完全错误的曲线。
+#   真正的未偿总额只有 Fed Z.1 (Flow of Funds) 的【季度】序列。
+#   免费源不存在"每日 + 分评级 + 未偿总额"(该数据属 ICE/Bloomberg 商业授权)。
+# 因此本模块诚实分两层:
+#   ① 日频: 各评级 有效收益率(EY) + 期权调整利差(OAS) —— 看利率与信用风险波动
+#   ② 季频: Fed Z.1 非金融企业债务真实未偿额 —— 看总量是否增加
+CORP_RATINGS = [
+    # (标签, 有效收益率 series, OAS series, 投资级?)
+    ("AAA", "BAMLC0A1CAAAEY", "BAMLC0A1CAAA", True),
+    ("AA",  "BAMLC0A2CAAEY",  "BAMLC0A2CAA",  True),
+    ("A",   "BAMLC0A3CAEY",   "BAMLC0A3CA",   True),
+    ("BBB", "BAMLC0A4CBBBEY", "BAMLC0A4CBBB", True),
+    ("BB",  "BAMLH0A1HYBBEY", "BAMLH0A1HYBB", False),
+    ("B",   "BAMLH0A2HYBEY",  "BAMLH0A2HYB",  False),
+    ("CCC及以下", "BAMLH0A3HYCEY", "BAMLH0A3HYC", False),
+]
+# 未偿总额(季度, Fed Z.1) —— 真实"总量"口径
+CORP_OUTSTANDING = [
+    ("非金融企业·债务证券", "NCBDBIQ027S"),
+    ("非金融企业·债务证券+贷款", "BCNSDODNS"),
+]
+
+
+def _fred_hist(sid, start):
+    """带 key FRED API 优先(项目铁律: CSV 端点在本 VM 偶发超时), 失败回退 CSV。
+    返回 [(date, float)] 升序; 全失败返回 []。"""
+    try:
+        import sys as _sys
+        _d = os.path.dirname(__file__)
+        if _d not in _sys.path:
+            _sys.path.insert(0, _d)
+        from fetchers.fred import fetch_fred_history
+        h = fetch_fred_history(sid, start=start)
+        if h:
+            out = []
+            for d, v in h:
+                try:
+                    out.append((str(d).strip(), float(v)))
+                except (TypeError, ValueError):
+                    continue
+            if out:
+                return sorted(out)
+    except Exception:
+        pass
+    return _fred_series(sid, start=start)
+
+
+def fetch_corporate_credit(years=3):
+    """美国分评级公司债: 日频收益率/利差 + 季频真实未偿总额。
+
+    返回 {
+      "ratings":[{label,ig,yield_latest,yield_date,yield_series:[(d,v)],
+                  oas_latest,oas_date,oas_series:[(d,v)],
+                  chg_1m_bp,chg_3m_bp,oas_chg_1m_bp,status}],
+      "outstanding":[{label,latest,latest_date,series:[(d,v)],chg_yoy_pct,status}],
+      "as_of","status","source","caveat"}
+    ★绝不编: 任一序列抓不到 → 该项 status="未找到" + 空 series。
+    ★单位: 收益率/OAS = %, 未偿额 = 十亿美元($B, 由 FRED 百万美元换算)。
+    """
+    import datetime as _dt
+    start = (_dt.date.today() - _dt.timedelta(days=int(years * 365) + 40)).strftime("%Y-%m-%d")
+    out = {"ratings": [], "outstanding": [], "status": "未找到", "as_of": None,
+           "source": "FRED · ICE BofA US Corporate/High Yield Index (日频) + "
+                     "Fed Z.1 Financial Accounts (季频未偿额)",
+           "caveat": "免费源无“每日·分评级·未偿总额”(属 ICE/Bloomberg 商业授权)。"
+                     "故总量用 Fed Z.1 季度真实未偿额, 日频仅收益率与利差。"}
+
+    def _bp(series, days):
+        """近 N 日变化(基点)。数据不足返回 None, 绝不外推。"""
+        if len(series) < 2:
+            return None
+        last_d, last_v = series[-1]
+        try:
+            d0 = _dt.date.fromisoformat(last_d) - _dt.timedelta(days=days)
+        except Exception:
+            return None
+        prior = [(d, v) for d, v in series if d <= d0.isoformat()]
+        if not prior:
+            return None
+        return round((last_v - prior[-1][1]) * 100, 1)
+
+    dates_seen = []
+    for label, ey_sid, oas_sid, ig in CORP_RATINGS:
+        ys = _fred_hist(ey_sid, start)
+        os_ = _fred_hist(oas_sid, start)
+        rec = {"label": label, "ig": ig,
+               "yield_series": ys, "oas_series": os_,
+               "yield_sid": ey_sid, "oas_sid": oas_sid}
+        if ys:
+            rec["yield_latest"], rec["yield_date"] = ys[-1][1], ys[-1][0]
+            rec["chg_1m_bp"] = _bp(ys, 30)
+            rec["chg_3m_bp"] = _bp(ys, 90)
+            dates_seen.append(ys[-1][0])
+        if os_:
+            rec["oas_latest"], rec["oas_date"] = os_[-1][1], os_[-1][0]
+            rec["oas_chg_1m_bp"] = _bp(os_, 30)
+            dates_seen.append(os_[-1][0])
+        rec["status"] = "ok" if (ys or os_) else "未找到"
+        out["ratings"].append(rec)
+
+    # 季度真实未偿额(FRED 单位: 百万美元 → 换算 $B)
+    q_start = (_dt.date.today() - _dt.timedelta(days=365 * 12)).strftime("%Y-%m-%d")
+    for label, sid in CORP_OUTSTANDING:
+        s = _fred_hist(sid, q_start)
+        rec = {"label": label, "sid": sid,
+               "series": [(d, round(v / 1000.0, 1)) for d, v in s]}
+        if s:
+            rec["latest"] = round(s[-1][1] / 1000.0, 1)
+            rec["latest_date"] = s[-1][0]
+            # 同比(4 个季度前)
+            if len(s) >= 5:
+                prev = s[-5][1]
+                if prev:
+                    rec["chg_yoy_pct"] = round((s[-1][1] - prev) / prev * 100, 1)
+            rec["status"] = "ok"
+        else:
+            rec["status"] = "未找到"
+        out["outstanding"].append(rec)
+
+    if dates_seen:
+        out["as_of"] = max(dates_seen)
+        out["status"] = "ok"
+    return out
+
+
 if __name__ == "__main__":
     import json
     print("=== Credit Impulse 三国(信贷脉冲) ===")

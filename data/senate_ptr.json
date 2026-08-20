@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-19",
+  "as_of": "2026-08-20",
   "senators": [
     {
       "name": "Tommy Tuberville",
@@ -68,94 +68,94 @@
           "filed": "02/14/2025"
         },
         {
-          "ticker": "ADBE",
-          "asset": "Adobe Inc. - Common Stock",
-          "txn_date": "10/29/2024",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2024"
-        },
-        {
           "ticker": "AAPL",
           "asset": "Apple Inc. - Common Stock",
-          "txn_date": "10/29/2024",
+          "txn_date": "08/26/2024",
+          "owner": "Self",
+          "direction": "Sale (Partial)",
+          "dir_cn": "部分卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "08/05/2026"
+        },
+        {
+          "ticker": "MDT",
+          "asset": "Medtronic plc. Ordinary Shares",
+          "txn_date": "08/26/2024",
           "owner": "Joint",
           "direction": "Sale (Full)",
           "dir_cn": "卖出",
           "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2024"
+          "filed": "08/05/2026"
         },
         {
-          "ticker": "CTVA",
-          "asset": "Corteva, Inc. Common Stock",
-          "txn_date": "10/29/2024",
+          "ticker": "CVS",
+          "asset": "CVS Health Corporation Common Stock",
+          "txn_date": "08/26/2024",
           "owner": "Joint",
           "direction": "Sale (Full)",
           "dir_cn": "卖出",
           "amount_range": "$1,001 - $15,000",
-          "filed": "11/15/2024"
+          "filed": "08/05/2026"
         },
         {
-          "ticker": "HON",
-          "asset": "Honeywell International Inc. - Common Stock",
-          "txn_date": "10/29/2024",
+          "ticker": "UPS",
+          "asset": "United Parcel Service, Inc. Common Stock",
+          "txn_date": "08/26/2024",
           "owner": "Joint",
           "direction": "Sale (Full)",
           "dir_cn": "卖出",
           "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2024"
+          "filed": "08/05/2026"
         },
         {
-          "ticker": "JNJ",
-          "asset": "Johnson & Johnson Common Stock",
-          "txn_date": "10/29/2024",
-          "owner": "Joint",
+          "ticker": "EIBLX",
+          "asset": "Eaton Vance Floating Rate Fund Insti Share\n                                        \n                                        \n                                        \n                                            \n                                                \n                                                    Company: EATON VANCE FLOATING RATE CLASS I",
+          "txn_date": "08/26/2024",
+          "owner": "Self",
           "direction": "Sale (Full)",
           "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2024"
+          "amount_range": "$50,001 - $100,000",
+          "filed": "08/05/2026"
         },
         {
-          "ticker": "KMB",
-          "asset": "Kimberly-Clark Corporation Common Stock",
-          "txn_date": "10/29/2024",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2024"
+          "ticker": "ABNFX",
+          "asset": "The Bond Fd of America Class F-2 Shares\n                                        \n                                        \n                                        \n                                            \n                                                \n                                                    Company: AMERICAN BOND FUND OF AMERICA CL F2",
+          "txn_date": "08/26/2024",
+          "owner": "Self",
+          "direction": "Purchase",
+          "dir_cn": "买入",
+          "amount_range": "$50,001 - $100,000",
+          "filed": "08/05/2026"
         },
         {
-          "ticker": "MCD",
-          "asset": "McDonald's Corporation Common Stock",
-          "txn_date": "10/29/2024",
+          "ticker": "WBA",
+          "asset": "Walgreens Boots Alliance, Inc. - Common Stock",
+          "txn_date": "03/21/2024",
           "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
+          "direction": "Purchase",
+          "dir_cn": "买入",
           "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2024"
+          "filed": "08/05/2026"
         },
         {
-          "ticker": "MSFT",
-          "asset": "Microsoft Corporation - Common Stock",
-          "txn_date": "10/29/2024",
+          "ticker": "PARA",
+          "asset": "Paramount Global - Class B Common Stock",
+          "txn_date": "03/21/2024",
           "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
+          "direction": "Purchase",
+          "dir_cn": "买入",
           "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2024"
+          "filed": "08/05/2026"
         },
         {
           "ticker": null,
-          "asset": "Nestle ADR",
-          "txn_date": "10/29/2024",
+          "asset": "ROLLS-ROYCE HOLDINGS PLC SPONSORED ADR",
+          "txn_date": "03/21/2024",
           "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2024"
+          "direction": "Purchase",
+          "dir_cn": "买入",
+          "amount_range": "$1,001 - $15,000",
+          "filed": "08/05/2026"
         }
       ],
       "status": "ok"

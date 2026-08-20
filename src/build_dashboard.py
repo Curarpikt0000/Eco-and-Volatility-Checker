@@ -369,6 +369,25 @@ def main():
               f"panels={list(_ci.get('panels',{}).keys())} flows={list(_ci.get('flows',{}).keys())}")
     except Exception as e:
         print(f"[dashboard] COMEX/上海库存+ETF 跳过: {e}")
+    # ── 世界前十经济体 政府债务/GDP (IMF WEO 官方, 年度) ──
+    debt_gdp = {}
+    try:
+        debt_gdp = ed.fetch_debt_to_gdp() or {}
+        _ok = [c for c in debt_gdp.get("countries", []) if c.get("status") == "ok"]
+        print(f"[dashboard] 债务/GDP: status={debt_gdp.get('status')} "
+              f"实绩年={debt_gdp.get('as_of_year')} 国家={len(_ok)}/10")
+    except Exception as e:
+        print(f"[dashboard] 债务/GDP 跳过: {e}")
+    # ── 美国分评级公司债: 日频收益率/OAS + 季频真实未偿额 ──
+    corp_credit = {}
+    try:
+        corp_credit = ed.fetch_corporate_credit() or {}
+        _rk = [r for r in corp_credit.get("ratings", []) if r.get("status") == "ok"]
+        _ou = [o for o in corp_credit.get("outstanding", []) if o.get("status") == "ok"]
+        print(f"[dashboard] 公司债: status={corp_credit.get('status')} "
+              f"as_of={corp_credit.get('as_of')} 评级={len(_rk)}/7 未偿额={len(_ou)}/2")
+    except Exception as e:
+        print(f"[dashboard] 公司债 跳过: {e}")
     # ★数据落盘 GitHub 副本(完整历史序列进 git)
     try:
         _data_dir = os.path.join(os.path.dirname(__file__), "..", "data", "stress")
@@ -410,6 +429,8 @@ def main():
         ofr_fsi=ofr_fsi,
         basis_trade=basis_trade,
         comex_inventory=comex_inventory,
+        debt_gdp=debt_gdp,
+        corp_credit=corp_credit,
         maturing_treasury=maturing_treasury,
         oil_inventory=oil_inventory,
         us_jp_yields=us_jp_yields,

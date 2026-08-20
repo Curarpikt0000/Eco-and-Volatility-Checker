@@ -6,7 +6,7 @@
   },
   "put_call": {
     "value": 0.61,
-    "as_of": "2026-08-18",
+    "as_of": "2026-08-19",
     "status": "ok"
   },
   "insider": {
@@ -25,10 +25,10 @@
     "status": "ok"
   },
   "ad_line": {
-    "value": null,
-    "as_of": "",
-    "status": "待RSP/SPY真数据(东财源冷却后自动填)",
-    "note": "原web_search主观布尔已弃用, 改用市场广度真数据判定"
+    "value": false,
+    "as_of": "2026-08-19",
+    "status": "ok",
+    "note": "市场广度真数据(RSP/SPY东财API)判定: SPY 8/13创近高但广度确认(ratio距高点<2%), 无顶背离"
   },
   "aaii_bull_bear": {
     "value": -3.2,
