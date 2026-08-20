@@ -3550,13 +3550,13 @@ def _flow_bars_svg(bars, w=920, h=220, unit="t"):
 
 
 # ─────────── 世界前十经济体 政府债务/GDP ───────────
-def _debt_gdp_bar_svg(countries, w=940, h=330):
-    """横向条形图: 各国政府债务/GDP。实绩=实心, IMF 预测末年=虚线延伸段。
+def _debt_gdp_bar_svg(countries, w=940, h=360):
+    """横向条形图: 各国政府债务/GDP。实绩=实心, IMF 预测末年=斜纹延伸段。
     100% 处画警戒竖线(债务超过一年 GDP)。"""
     ok = [c for c in countries if c.get("status") == "ok"]
     if not ok:
         return ""
-    ml, mr, mt, mb = 92, 74, 26, 26
+    ml, mr, mt, mb = 92, 118, 26, 50
     n = len(ok)
     band = (h - mt - mb) / max(n, 1)
     bh = min(band * 0.62, 20)
@@ -3570,6 +3570,18 @@ def _debt_gdp_bar_svg(countries, w=940, h=330):
 
     p = [f'<svg viewBox="0 0 {w} {h}" width="100%" style="max-width:{w}px" '
          f'xmlns="http://www.w3.org/2000/svg" font-family="ui-sans-serif,system-ui">']
+    # 预测段斜纹填充(与实绩实心段视觉区分)
+    p.append('<defs><pattern id="dgFc" width="5" height="5" patternUnits="userSpaceOnUse" '
+             'patternTransform="rotate(45)"><rect width="5" height="5" fill="#fff" '
+             'opacity="0.55"/><line x1="0" y1="0" x2="0" y2="5" stroke="#7a7469" '
+             'stroke-width="2.2" opacity="0.55"/></pattern></defs>')
+    # X 轴刻度网格(让条长可自证, 不只靠端点数字)
+    for gv in range(0, int(vmax) + 1, 50):
+        gx = x(gv)
+        p.append(f'<line x1="{gx:.1f}" y1="{mt-2}" x2="{gx:.1f}" y2="{h-mb:.1f}" '
+                 f'stroke="#ece9e2" stroke-width="1"/>')
+        p.append(f'<text x="{gx:.1f}" y="{h-mb+15}" font-size="9" fill="#a8a49b" '
+                 f'text-anchor="middle">{gv}%</text>')
     # 100% 警戒线
     x100 = x(100)
     p.append(f'<line x1="{x100:.1f}" y1="{mt-6}" x2="{x100:.1f}" y2="{h-mb+4}" '
@@ -3586,27 +3598,69 @@ def _debt_gdp_bar_svg(countries, w=940, h=330):
         bx = x(v)
         p.append(f'<text x="{ml-8}" y="{cy+4:.1f}" font-size="11.5" fill="#5a564e" '
                  f'text-anchor="end">{_esc(c["name"])}</text>')
-        # 预测延伸段(虚线框, 明确区分)
+        # 预测延伸段(斜纹+虚线描边, 与实绩实心段明确区分)
         if fc:
             fv = fc[-1][1]
             if fv > v:
-                p.append(f'<rect x="{bx:.1f}" y="{cy-bh/2:.1f}" width="{x(fv)-bx:.1f}" '
-                         f'height="{bh:.1f}" fill="{col}" opacity="0.16" '
-                         f'stroke="{col}" stroke-width="0.8" stroke-dasharray="3 2">'
-                         f'<title>{_esc(c["name"])} IMF 预测 {fc[-1][0]}: {fv}%</title></rect>')
+                fw = max(x(fv) - bx, 2.0)  # 极小增幅也保证可见
+                p.append(f'<rect x="{bx:.1f}" y="{cy-bh/2:.1f}" width="{fw:.1f}" '
+                         f'height="{bh:.1f}" fill="{col}" opacity="0.45"/>')
+                p.append(f'<rect x="{bx:.1f}" y="{cy-bh/2:.1f}" width="{fw:.1f}" '
+                         f'height="{bh:.1f}" fill="url(#dgFc)" '
+                         f'stroke="{col}" stroke-width="1" stroke-dasharray="3 2" '
+                         f'data-tip="{_esc(c["name"])} IMF 预测 {fc[-1][0]}: {fv}% of GDP（预测非事实）">'
+                         f'</rect>')
+            else:
+                # IMF 预测下降: 在预测位置画回撤刻度, 避免"无预测"与"预测太小看不见"混淆
+                fx = x(fv)
+                p.append(f'<line x1="{fx:.1f}" y1="{cy-bh/2-3:.1f}" x2="{fx:.1f}" '
+                         f'y2="{cy+bh/2+3:.1f}" stroke="#faf8f4" stroke-width="4.5"/>')
+                p.append(f'<line x1="{fx:.1f}" y1="{cy-bh/2-3:.1f}" x2="{fx:.1f}" '
+                         f'y2="{cy+bh/2+3:.1f}" stroke="#4a463f" stroke-width="1.8" '
+                         f'stroke-dasharray="3 2"/>')
+                p.append(f'<rect x="{fx-4:.1f}" y="{cy-bh/2-3:.1f}" width="8" '
+                         f'height="{bh+6:.1f}" fill="transparent" '
+                         f'data-tip="{_esc(c["name"])} IMF 预测 {fc[-1][0]}: {fv}% of GDP'
+                         f'（低于当前实绩 {v}%，预测非事实）"/>')
         p.append(f'<rect x="{ml}" y="{cy-bh/2:.1f}" width="{bx-ml:.1f}" height="{bh:.1f}" '
                  f'fill="{col}" rx="2" data-tip="{_esc(c["name"])} {c["latest_year"]} 实绩: {v}% of GDP">'
                  f'</rect>')
         # 数值 + 5年变化
+        # 数值标签放在"实绩+预测"整体右端外侧, 避免压在斜纹段上
+        lab_x = bx + 7
+        if fc and fc[-1][1] > v:
+            lab_x = x(fc[-1][1]) + 7
         d5 = c.get("chg_5y")
         chg = ""
         if d5 is not None:
             arw = "▲" if d5 > 0 else ("▼" if d5 < 0 else "→")
             ccol = "#c0757d" if d5 > 0 else ("#7fa085" if d5 < 0 else "#8a8578")
             chg = f' <tspan fill="{ccol}" font-size="9.5">{arw}{abs(d5):.1f}pp</tspan>'
-        p.append(f'<text x="{bx+7:.1f}" y="{cy+4:.1f}" font-size="11" fill="#4a463f" '
-                 f'font-weight="600">{v:.1f}%{chg}</text>')
+        p.append(f'<text x="{lab_x:.1f}" y="{cy+4:.1f}" font-size="11" fill="#4a463f" '
+                 f'font-weight="600" stroke="#faf8f4" stroke-width="2.8" '
+                 f'paint-order="stroke" stroke-linejoin="round" '
+                 f'data-tip="{_esc(c["name"])}：{c["latest_year"]} 实绩 {v}% of GDP，'
+                 f'较 5 年前{"上升" if (d5 or 0) > 0 else "下降"} {abs(d5 or 0):.1f}pp'
+                 f'（此箭头为历史变化，与斜纹/刻度所示的 IMF 未来预测方向无关）">'
+                 f'{v:.1f}%{chg}</text>')
     p.append(f'<line x1="{ml}" y1="{h-mb:.1f}" x2="{w-mr}" y2="{h-mb:.1f}" stroke="#d8d4cb"/>')
+    # 图例: 实绩 vs 预测
+    if any(c.get("forecast") for c in ok):
+        fy = (ok[0].get("forecast") or [(None, 0)])[-1][0]
+        lx, ly2 = ml, h - 6
+        p.append(f'<rect x="{lx}" y="{ly2-8}" width="14" height="9" fill="#8a8377" rx="1.5"/>')
+        p.append(f'<text x="{lx+19}" y="{ly2}" font-size="9.5" fill="#7a7469">实绩</text>')
+        p.append(f'<rect x="{lx+56}" y="{ly2-8}" width="14" height="9" fill="#8a8377" '
+                 f'opacity="0.45"/>')
+        p.append(f'<rect x="{lx+56}" y="{ly2-8}" width="14" height="9" fill="url(#dgFc)" '
+                 f'stroke="#8a8377" stroke-width="0.9" stroke-dasharray="3 2"/>')
+        p.append(f'<text x="{lx+75}" y="{ly2}" font-size="9.5" fill="#7a7469">'
+                 f'IMF {fy} 预测(上升)</text>')
+        tx = lx + 172
+        p.append(f'<line x1="{tx}" y1="{ly2-9}" x2="{tx}" y2="{ly2+1}" stroke="#8a8377" '
+                 f'stroke-width="1.4" stroke-dasharray="2 2"/>')
+        p.append(f'<text x="{tx+8}" y="{ly2}" font-size="9.5" fill="#7a7469">'
+                 f'IMF {fy} 预测(下降)</text>')
     p.append('</svg>')
     return "".join(p)
 
@@ -3646,11 +3700,32 @@ def _debt_gdp_trend_svg(countries, w=940, h=260):
                  f'stroke-linejoin="round"/>')
         ly, lv = c["series"][-1]
         p.append(f'<circle cx="{X(ly):.1f}" cy="{Y(lv):.1f}" r="2.6" fill="{col}"/>')
-        p.append(f'<text x="{w-mr+6}" y="{Y(lv)+3.5:.1f}" font-size="9.5" fill="{col}">'
-                 f'{_esc(c["name"])} {lv:.0f}</text>')
         for y, v in c["series"]:
             p.append(f'<circle cx="{X(y):.1f}" cy="{Y(v):.1f}" r="5" fill="transparent" '
                      f'data-tip="{_esc(c["name"])} {y}: {v}% of GDP"/>')
+    # 末端标签防重叠: 按 y 排序后贪心下推(最小间距 11px), 并用引导线连回真实点
+    lbls = []
+    for i, c in enumerate(ok):
+        ly, lv = c["series"][-1]
+        lbls.append({"y0": Y(lv), "x0": X(ly), "txt": f'{c["name"]} {lv:.0f}',
+                     "col": palette[i % len(palette)]})
+    lbls.sort(key=lambda d: d["y0"])
+    minsep, prev = 11.0, -1e9
+    for d in lbls:
+        d["y"] = max(d["y0"], prev + minsep)
+        prev = d["y"]
+    # 整体上移避免溢出底部
+    over = lbls[-1]["y"] - (mt + ih) if lbls else 0
+    if over > 0:
+        for d in lbls:
+            d["y"] -= over
+    for d in lbls:
+        if abs(d["y"] - d["y0"]) > 1.5:
+            p.append(f'<line x1="{d["x0"]:.1f}" y1="{d["y0"]:.1f}" x2="{w-mr+3}" '
+                     f'y2="{d["y"]-3:.1f}" stroke="{d["col"]}" stroke-width="0.7" '
+                     f'opacity="0.45"/>')
+        p.append(f'<text x="{w-mr+6}" y="{d["y"]:.1f}" font-size="9.5" fill="{d["col"]}">'
+                 f'{_esc(d["txt"])}</text>')
     for y in yrs:
         if (y - y0) % 3 == 0 or y == y1:
             p.append(f'<text x="{X(y):.1f}" y="{h-mb+15}" font-size="9" fill="#8a8578" '
@@ -3680,6 +3755,16 @@ def _debt_gdp_html(dg):
         if c.get("forecast"):
             fc_yr = c["forecast"][-1][0]
             break
+    # 找一个"历史去杠杆但 IMF 预测回升"的真实反例(不写死国名, 随数据自适应)
+    _cex = ""
+    for c in cs:
+        if c.get("status") != "ok" or not c.get("forecast"):
+            continue
+        d5c, fvc = c.get("chg_5y"), c["forecast"][-1][1]
+        if d5c is not None and d5c < 0 and fvc > c["latest"]:
+            _cex = (f'（例：{c["name"]}近 5 年 ▼{abs(d5c):.1f}pp 去杠杆，'
+                    f'但 IMF 预测 {fc_yr} 年回升至 {fvc:.1f}%）')
+            break
     return (
         f'<div class="dg-wrap">'
         f'<div class="dg-head">🌍 世界前十大经济体 · 政府债务 / GDP'
@@ -3696,7 +3781,9 @@ def _debt_gdp_html(dg):
         f'一年仅发布两次（4 月 / 10 月）。本页每次构建都会重新拉取，'
         f'但<b>两次 WEO 之间数值不会变化</b>——请勿将其理解为周度/月度更新的指标。'
         f'条形图中<b>实心段为实绩</b>，'
-        f'{f"<b>虚线段为 IMF 对 {fc_yr} 年的预测</b>（预测非事实，仅供参考）。" if fc_yr else ""}'
+        f'{f"<b>斜纹段为 IMF 对 {fc_yr} 年的预测</b>（预测非事实，仅供参考）；预测低于当前实绩时改画<b>虚线刻度</b>。" if fc_yr else ""}'
+        f'注意：条形右侧的 <b>▲/▼ pp 箭头是「近 5 年历史变化」</b>，'
+        f'与斜纹/刻度代表的「IMF 未来预测方向」是两回事，两者可能相反{_esc(_cex)}。'
         f'数据源：{_linkify_sources(dg.get("source", ""))}。</div>'
         f'</div>'
     )
@@ -3750,8 +3837,6 @@ def _corp_credit_svg(ratings, key="oas_series", w=940, h=280, unit=" %"):
                  f'stroke-linejoin="round" opacity="0.92"/>')
         ld, lv = r[key][-1]
         p.append(f'<circle cx="{X(ld):.1f}" cy="{Y(lv):.1f}" r="2.6" fill="{col}"/>')
-        p.append(f'<text x="{w-mr+6}" y="{Y(lv)+3.5:.1f}" font-size="9.5" fill="{col}" '
-                 f'font-weight="{600 if lab == "CCC及以下" else 400}">{_esc(lab)} {lv:.2f}</text>')
         # hit-band tooltip(稀疏采样避免 DOM 爆炸)
         n = len(r[key])
         stp = max(1, n // 90)
@@ -3759,6 +3844,29 @@ def _corp_credit_svg(ratings, key="oas_series", w=940, h=280, unit=" %"):
             d, v = r[key][i]
             p.append(f'<circle cx="{X(d):.1f}" cy="{Y(v):.1f}" r="4.5" fill="transparent" '
                      f'data-tip="{_esc(lab)} {d}: {v:.2f}{_esc(unit)}"/>')
+    # 末端标签防重叠(评级线常挤在一起, 尤其 IG 段)
+    lbls = []
+    for r in ok:
+        ld, lv = r[key][-1]
+        lbls.append({"y0": Y(lv), "x0": X(ld), "txt": f'{r["label"]} {lv:.2f}',
+                     "col": colors.get(r["label"], "#8a8377"),
+                     "bold": r["label"] == "CCC及以下"})
+    lbls.sort(key=lambda d: d["y0"])
+    minsep, prev = 11.0, -1e9
+    for d in lbls:
+        d["y"] = max(d["y0"], prev + minsep)
+        prev = d["y"]
+    over = lbls[-1]["y"] - (mt + ih) if lbls else 0
+    if over > 0:
+        for d in lbls:
+            d["y"] -= over
+    for d in lbls:
+        if abs(d["y"] - d["y0"]) > 1.5:
+            p.append(f'<line x1="{d["x0"]:.1f}" y1="{d["y0"]:.1f}" x2="{w-mr+3}" '
+                     f'y2="{d["y"]-3:.1f}" stroke="{d["col"]}" stroke-width="0.7" '
+                     f'opacity="0.45"/>')
+        p.append(f'<text x="{w-mr+6}" y="{d["y"]:.1f}" font-size="9.5" fill="{d["col"]}" '
+                 f'font-weight="{600 if d["bold"] else 400}">{_esc(d["txt"])}</text>')
     # X 轴标签(真实观测日, 绝不外推)
     for i in range(0, len(alld), max(1, len(alld) // 6)):
         ds = alld[i]
@@ -3872,6 +3980,53 @@ def _corp_credit_html(cc):
                     f'风险偏好正在<b>最低评级层单点撕裂</b>——这通常是信用周期转折的早期特征，'
                     f'而非全面risk-off。</div>')
 
+    # 历史分位: 当前 OAS 在自身可得区间中的位置(判断"贵/便宜", 与1月变化互补)
+    def _pctile(r):
+        ser = r.get("oas_series") or []
+        s = [v for _, v in ser]
+        if len(s) < 30 or r.get("oas_latest") is None:
+            return None
+        cur = r["oas_latest"]
+        # (分位, 样本数, 区间起始"日期", 最小值, 最大值)
+        return (100.0 * sum(1 for v in s if v <= cur) / len(s),
+                len(s), ser[0][0], min(s), max(s))
+
+    pct_bits, ccc_pct, ig_pcts = [], None, []
+    for r in rs:
+        pr = _pctile(r)
+        if not pr:
+            continue
+        p = pr[0]
+        pct_bits.append((r["label"], p, r["oas_latest"], pr[3], pr[4]))
+        if r["label"].startswith("CCC"):
+            ccc_pct = p
+        elif r["ig"]:
+            ig_pcts.append(p)
+    pct_html = ""
+    if pct_bits:
+        span = next((_pctile(r) for r in rs if _pctile(r)), None)
+        yrs_txt = ""
+        if span:
+            yrs_txt = f'（区间起自 {span[2]}，{span[1]} 个交易日）'
+        items = "".join(
+            f'<span class="cc-pchip"><b>{_esc(lb)}</b> {p:.0f}%'
+            f'<i data-tip="{_esc(lb)} 当前 OAS {cur:.2f}%，'
+            f'处于可得区间 [{lo:.2f}%, {hi:.2f}%] 的第 {p:.0f} 百分位">ⓘ</i></span>'
+            for lb, p, cur, lo, hi in pct_bits)
+        note = ""
+        if ccc_pct is not None and ig_pcts:
+            iga = sum(ig_pcts) / len(ig_pcts)
+            if ccc_pct - iga > 30:
+                note = (f'<br>→ <b>CCC 处第 {ccc_pct:.0f} 百分位（接近区间高位）'
+                        f'，投资级平均仅第 {iga:.0f} 百分位</b>：'
+                        f'市场并未整体定价信用紧缩，压力集中在最弱发行人。')
+            elif iga - ccc_pct > 30:
+                note = (f'<br>→ CCC 第 {ccc_pct:.0f} 百分位低于投资级平均第 {iga:.0f} 百分位，'
+                        f'高收益相对投资级偏紧，属risk-on特征。')
+        pct_html = (f'<div class="cc-pct"><b>OAS 历史分位</b>{yrs_txt}：{items}'
+                    f'<span class="cc-pnote">分位越高＝利差越接近该评级自身区间的高位'
+                    f'（越贵/越紧张）。{note}</span></div>')
+
     # 未偿总额
     outs = [o for o in cc.get("outstanding") or [] if o.get("status") == "ok"]
     ocards = []
@@ -3894,7 +4049,7 @@ def _corp_credit_html(cc):
         f'<div class="cc-wrap">'
         f'<div class="dg-head">🏦 美国公司债 · 分评级 收益率 / 利差 / 总额'
         f'<span class="dg-asof">as of {_esc(asof)}{badge}</span></div>'
-        f'{table}{divergence}'
+        f'{table}{divergence}{pct_html}'
         f'<div class="dg-sub">期权调整利差 OAS 走势（近 3 年 · 纯信用风险溢价）</div>'
         f'{_corp_credit_svg(rs, "oas_series", unit=" %")}'
         f'<div class="dg-sub">有效收益率走势（近 3 年 · 含无风险利率）</div>'
@@ -4852,6 +5007,13 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .cc-tier {{ font-size: 9.5px; margin-left: 5px; }}
   .cc-na {{ color: var(--muted); opacity: 0.65; }}
   .cc-alert {{ font-size: 11.5px; line-height: 1.6; color: var(--text); background: rgba(192,117,125,0.09); border: 1px solid rgba(192,117,125,0.32); border-left: 3px solid #c0757d; border-radius: 8px; padding: 9px 12px; }}
+  .cc-pct {{ font-size: 11.5px; line-height: 1.8; color: var(--muted); background: rgba(138,131,119,0.06); border: 1px solid rgba(138,131,119,0.2); border-radius: 8px; padding: 9px 12px; }}
+  .cc-pct > b {{ color: var(--text); }}
+  .cc-pchip {{ display: inline-block; margin: 0 4px; padding: 1px 7px; background: var(--card); border: 1px solid rgba(138,131,119,0.28); border-radius: 999px; font-size: 11px; white-space: nowrap; }}
+  .cc-pchip b {{ color: var(--text); font-weight: 600; }}
+  .cc-pchip i {{ font-style: normal; color: #a8a49b; cursor: help; margin-left: 3px; }}
+  .cc-pnote {{ display: block; margin-top: 5px; font-size: 11px; }}
+  .cc-pnote b {{ color: var(--text); }}
   .cc-osec {{ display: flex; flex-direction: column; gap: 8px; }}
   .cc-ogrid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; }}
   .cc-ocard {{ background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }}
