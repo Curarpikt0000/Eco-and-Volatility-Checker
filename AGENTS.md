@@ -5,7 +5,7 @@
 
 ## 全局规则
 > 本项目遵守 workspace 全局规则：~/uberhermes/Generalrule/antigravity/general-global-rule.md
-> 通用规范与踩坑教训：~/uberhermes/Generalrule/wiki/
+> 通用规范与踩坑教训：~/Projects/ChaoWiki/
 
 ## 项目定位
 **每日宏观风险扫描系统**。18 项关键市场指标（短/中/长期）+ 金银 COT commercial 持仓 →

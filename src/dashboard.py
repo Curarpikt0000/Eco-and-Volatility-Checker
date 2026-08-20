@@ -24,6 +24,54 @@ def _esc(s):
     return html.escape(str(s), quote=True)
 
 
+# ── 数据新鲜度徽章 ────────────────────────────────────────────
+# ★铁律配套设施: 低频源(季度/月度)天然滞后, 但页头写"每日更新"会让读者误以为
+#   每个数字都是今天的。此处按各源的【自然更新频率】给出容忍阈值, 超阈值才标徽章:
+#     绿(不显示) = 正常;  🟡 滞后N天 = 超过 1x 周期;  🔴 疑似断源 = 超过 2x 周期。
+#   徽章只描述"数据有多旧", 绝不修改/伪造数据本身。
+_FRESH_TOL = {
+    "daily": 5,        # 日频(含周末+假日缓冲)
+    "weekly": 12,      # 周频
+    "biweekly": 25,    # 双周(如 CFTC COT)
+    "monthly": 50,     # 月频
+    "tic": 75,         # TIC 月频但发布滞后约 45 天
+    "quarterly": 135,  # 季频
+    "semiannual": 250,  # 半年频(如 BIS)
+}
+
+
+def _stale_badge(as_of, freq="daily", label=None):
+    """按数据源自然频率生成滞后徽章。as_of 可为 'YYYY-MM-DD' 或 'YYYY-MM'。
+    新鲜 → 返回空串(不干扰版面); 滞后 → 🟡; 严重滞后(>2x) → 🔴。"""
+    if not as_of:
+        return ""
+    s = str(as_of)[:10]
+    try:
+        if len(s) == 7:            # YYYY-MM → 视为当月月末
+            y, m = int(s[:4]), int(s[5:7])
+            nm_y, nm_m = (y + 1, 1) if m == 12 else (y, m + 1)
+            d0 = datetime.date(nm_y, nm_m, 1) - datetime.timedelta(days=1)
+        else:
+            d0 = datetime.date.fromisoformat(s)
+    except Exception:
+        return ""
+    days = (datetime.date.today() - d0).days
+    tol = _FRESH_TOL.get(freq, 5)
+    if days <= tol:
+        return ""
+    sev = "red" if days > tol * 2 else "amber"
+    icon = "🔴" if sev == "red" else "🟡"
+    txt = f"{icon} 数据滞后 {days} 天"
+    if sev == "red":
+        # ★措辞诚实: 超阈值只能证明"久未更新", 不能证明抓取端坏了。
+        #   已实测 TIC(mfhhis01.txt, 财政部 2026-07-14 发布)最新列即 2025-12 —— 官方本身未出新月,
+        #   抓取链路完好。故不写"疑似源中断"(会误导), 改为陈述事实 + 提示核对官方。
+        txt += "（远超常规更新周期，请核对官方是否已发布新值）"
+    if label:
+        txt = f"{label} {txt}"
+    return f'<span class="stale-badge sb-{sev}" title="最新数据日期 {_esc(s)}，距今 {days} 天；该源自然更新频率={freq}">{txt}</span>'
+
+
 # ── 数据源代码 → 官方链接映射 ──────────────────────────────────
 # 把 source 字符串里的裸指标代码(FRED series / OFR / TIC 等)渲染成可点击超链接，
 # 点击直达该指标的官方源页面，便于核实。一处逻辑，全 dashboard 复用。
@@ -153,8 +201,10 @@ def load_history(snap_dir, key, days=21):
     return out[-days:] if out else out
 
 
-def sparkline_svg(points, direction="high_bad", w=140, h=36):
-    """生成 mini 折线 SVG。points: [(date,val),...]。莫兰迪色。"""
+def sparkline_svg(points, direction="high_bad", w=140, h=36, unit=""):
+    """生成 mini 折线 SVG。points: [(date,val),...]。莫兰迪色。
+    ★带 tooltip: 每点覆盖一条透明全高 hit-band(rect), 复用全站 data-tip 事件委托机制。
+      用 band 而非 circle, 因该 SVG 用 preserveAspectRatio="none" 横向拉伸, 圆会变椭圆且难命中。"""
     vals = [v for _, v in points]
     if len(vals) < 2:
         return '<span class="spark-na">数据不足</span>'
@@ -174,10 +224,18 @@ def sparkline_svg(points, direction="high_bad", w=140, h=36):
     dot_x, dot_y = pts[-1].split(",")
     fill = "rgba(192,138,125,0.10)" if bad else "rgba(154,171,151,0.12)"
     area = f"{pad},{h-pad} " + " ".join(pts) + f" {w-pad},{h-pad}"
+    # tooltip hit-band: 每个数据点一条透明竖条, 宽度=点间距
+    bw = (w - 2 * pad) / (n - 1)
+    _fmt = "{:,.2f}".format
+    hits = "".join(
+        f'<rect x="{max(0, pad + i * bw - bw / 2):.1f}" y="0" width="{bw:.1f}" height="{h}" '
+        f'fill="transparent" data-tip="{_esc(str(points[i][0])[:10])}||{_fmt(vals[i])}{_esc(unit)}"/>'
+        for i in range(n))
     return (f'<svg viewBox="0 0 {w} {h}" class="spark" preserveAspectRatio="none">'
             f'<polygon points="{area}" fill="{fill}" stroke="none"/>'
             f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" stroke-width="2.2" stroke-linejoin="round"/>'
-            f'<circle cx="{dot_x}" cy="{dot_y}" r="2.8" fill="{color}"/></svg>')
+            f'<circle cx="{dot_x}" cy="{dot_y}" r="2.8" fill="{color}"/>'
+            f'{hits}</svg>')
 
 
 def trend_arrow(points, direction="high_bad"):
@@ -259,7 +317,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
             lt = signals.light(ind, r.get("value"))
             cls = _sig_cls(lt)
             hist = load_history(SNAP_DIR, key, days=28)
-            spark = sparkline_svg(hist, ind.get("direction", "high_bad"))
+            spark = sparkline_svg(hist, ind.get("direction", "high_bad"),
+                                  unit=(" " + ind["unit"]) if ind.get("unit") and ind.get("unit") != "布尔" else "")
             arrow, acls = trend_arrow(hist, ind.get("direction", "high_bad"))
             st = r.get("status", "")
             st_badge = "" if st == "ok" else f'<span class="stwarn">{st}</span>'
@@ -1119,7 +1178,7 @@ def _country_ust_col(c):
         f'<div class="cust-chart-title">{c.get("flag","")} {_esc(c["name"])}持有美债（{len(series)}个月）</div>'
         f'<div class="cu-cur">${last_v:,.0f}<span class="cust-unit">B</span> '
         f'<span class="cust-wow cust-wow-{dcls}">{dtxt}</span> '
-        f'<span class="cu-asof">as of {_esc(last_m)}</span></div>'
+        f'<span class="cu-asof">as of {_esc(last_m)}</span>{_stale_badge(last_m, "tic")}</div>'
         f'{_country_ust_svg(series, color, fill)}'
         f'<div class="cust-chart-span">{_esc(c["first"][0])}→{_esc(last_m)}：'
         f'<b class="cust-{dcls}">{dbn:+.0f}B ({dpct:+.1f}%)</b>'
@@ -1241,7 +1300,12 @@ def _yield_curves_svg(series, w=920, h=280, yunit="%"):
             parts.append(f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" stroke-width="1.9" stroke-linejoin="round" opacity="0.92" {dash}/>')
             for dd, v in d["points"]:
                 if dd in didx:
-                    parts.append(f'<circle class="tip-hit" cx="{X(didx[dd]):.1f}" cy="{Y(v):.1f}" r="6" data-tip="{_esc(str(key))} · {_esc(dd)}||{v:.2f} %"/>')
+                    # ★tooltip 单位必须跟随序列自身单位(优先 series.unit, 回退 yunit),
+                    #   绝不硬编码 '%' —— 本函数被复用于 吨/千oz/百万美元/万亿/合约数 等多种量纲。
+                    _tu = d.get("unit", yunit)
+                    _vs = (f"{v:,.0f}" if abs(v) >= 1000 else f"{v:.2f}")
+                    _tip_val = f"{_vs} {_tu}".strip()
+                    parts.append(f'<circle class="tip-hit" cx="{X(didx[dd]):.1f}" cy="{Y(v):.1f}" r="6" data-tip="{_esc(str(d.get("name") or key))} · {_esc(dd)}||{_esc(_tip_val)}"/>')
             ld, lv = d["points"][-1]
             parts.append(f'<circle cx="{X(didx[ld]):.1f}" cy="{Y(lv):.1f}" r="3.2" fill="{color}"/>')
         # 图例(右侧): 线样 + 名称 + 最新值
@@ -1554,96 +1618,6 @@ def _iip_html(iip):
         f'<b>🇯🇵 日本 / 🇩🇪 德国 / 🇨🇳 中国</b>是主要<b>净债权国</b>(常年经常账户顺差累积对外资产)。'
         f'净债务国若外部融资条件收紧(利率↑/避险)会承压；净债权国则在全球动荡时资本回流本国、支撑本币。'
         f'是判断<b>全球资本流向与外部脆弱性</b>的结构性指标。<br>年频，IMF 官方公开数据。</div>'
-        f'</div>'
-    )
-
-
-def _hf_line_svg(series_list, unit_fmt="{:.1f}", zero_line=False, w=920, h=250):
-    """通用季度折线 SVG。series_list: [(label, color, [(q,v)])]。x 轴按年标注。"""
-    active = [(lb, co, pts) for lb, co, pts in series_list if len(pts) >= 2]
-    if not active:
-        return '<div class="cust-chart-na">数据不足</div>'
-    all_q = sorted({q for _, _, pts in active for q, _ in pts})
-    all_v = [v for _, _, pts in active for _, v in pts]
-    lo, hi = min(all_v + ([0.0] if zero_line else [])), max(all_v + ([0.0] if zero_line else []))
-    pad = (hi - lo) * 0.10 or 1
-    lo -= pad; hi += pad
-    rng = (hi - lo) or 1
-    ml, mr, mt, mb = 54, 150, 16, 28
-    pw, ph = w - ml - mr, h - mt - mb
-    n = len(all_q)
-    qidx = {q: i for i, q in enumerate(all_q)}
-    def X(i): return ml + i * pw / max(n - 1, 1)
-    def Y(v): return mt + (hi - v) / rng * ph
-    parts = [f'<svg viewBox="0 0 {w} {h}" class="cust-chart" preserveAspectRatio="xMidYMid meet" font-family="-apple-system,PingFang SC,sans-serif">']
-    for k in range(5):
-        gv = lo + rng * k / 4; gy = Y(gv)
-        parts.append(f'<line x1="{ml}" y1="{gy:.1f}" x2="{w-mr}" y2="{gy:.1f}" stroke="#d4cdbe" stroke-width="1" stroke-dasharray="3,3"/>')
-        parts.append(f'<text x="{ml-6}" y="{gy+3:.1f}" font-size="10" fill="#8a8578" text-anchor="end">{unit_fmt.format(gv)}</text>')
-    # x 年标签(每年第一个季度)
-    seen_yr = set()
-    for i, q in enumerate(all_q):
-        yr = q[:4]
-        if yr not in seen_yr and (int(yr) % 2 == 1 or i == n - 1):
-            seen_yr.add(yr)
-            anchor = "start" if i == 0 else ("end" if i >= n - 2 else "middle")
-            parts.append(f'<text x="{X(i):.1f}" y="{h-8}" font-size="9" fill="#8a8578" text-anchor="{anchor}">{yr[2:]}</text>')
-    legend_y = mt + 6
-    for lb, co, pts in active:
-        line = [f"{X(qidx[q]):.1f},{Y(v):.1f}" for q, v in pts if q in qidx]
-        if len(line) >= 2:
-            parts.append(f'<polyline points="{" ".join(line)}" fill="none" stroke="{co}" stroke-width="2.2" stroke-linejoin="round"/>')
-            for q, v in pts:
-                if q in qidx:
-                    parts.append(f'<circle class="tip-hit" cx="{X(qidx[q]):.1f}" cy="{Y(v):.1f}" r="6" data-tip="{_esc(lb)} · {_esc(str(q))}||{unit_fmt.format(v)}"/>')
-            lq, lv = pts[-1]
-            parts.append(f'<circle cx="{X(qidx[lq]):.1f}" cy="{Y(lv):.1f}" r="3.4" fill="{co}"/>')
-        parts.append(f'<line x1="{w-mr+8}" y1="{legend_y}" x2="{w-mr+24}" y2="{legend_y}" stroke="{co}" stroke-width="2.6"/>')
-        parts.append(f'<text x="{w-mr+28}" y="{legend_y+3.5}" font-size="10.5" fill="{co}">{_esc(lb)} {unit_fmt.format(pts[-1][1])}</text>')
-        legend_y += 18
-    parts.append("</svg>")
-    return "".join(parts)
-
-
-def _hf_leverage_html(hf):
-    """对冲基金杠杆监测 section: 图A 美债敞口/GDP% 折线 + 图B 三类借款折线。
-    hf: fetch_hf_leverage()。绝不编造, OFR 真数据(季度)。"""
-    if not hf or hf.get("status") != "ok":
-        return '<p class="empty">对冲基金杠杆监测数据未就绪（OFR Hedge Fund Monitor）。</p>'
-    ex = hf.get("exposure", {}); bo = hf.get("borrow", {})
-    # 图A: 敞口/GDP%
-    svgA = _hf_line_svg([("美债敞口/GDP", "#c0757d", ex.get("points", []))], unit_fmt="{:.0f}%")
-    # 图B: 三线借款
-    svgB = _hf_line_svg([
-        ("Repo 回购", "#c0757d", bo.get("repo", [])),
-        ("Prime brokerage 主经纪", "#6b8fb5", bo.get("prime", [])),
-        ("Other secured 其他担保", "#e0a92e", bo.get("other", [])),
-    ], unit_fmt="{:.1f}T")
-    asof = hf.get("as_of", "")
-    return (
-        f'<div class="cust-wrap">'
-        f'<div class="cust-chart-col cust-chart-full">'
-        f'<div class="cust-chart-title">A · 对冲基金美债总名义敞口 / 美国 GDP（2013 起 · 季度）'
-        f'<span class="chart-freq freq-w">🟣 季频 · OFR/SEC Form PF</span></div>'
-        f'{svgA}'
-        f'<div class="oil-meta">最新（{_esc(ex.get("latest_q",""))}）：美债名义敞口 <b>${ex.get("latest_usd_t")}T</b> '
-        f'= 美国 GDP 的 <b style="color:#c0757d">{ex.get("latest_pct")}%</b>（较 2013 年约 5.8% 翻倍多）</div>'
-        f'</div>'
-        f'<div class="cust-chart-col cust-chart-full" style="margin-top:14px;">'
-        f'<div class="cust-chart-title">B · 对冲基金三类借款规模（$万亿 · 季度）</div>'
-        f'{svgB}'
-        f'<div class="oil-meta">最新（{_esc(bo.get("latest_q",""))}）：'
-        f'<b style="color:#c0757d">Repo 回购 ${bo.get("latest_repo")}T</b> · '
-        f'<b style="color:#6b8fb5">Prime 主经纪 ${bo.get("latest_prime")}T</b> · '
-        f'<b style="color:#e0a92e">Other 其他担保 ${bo.get("latest_other")}T</b></div>'
-        f'<div class="oil-src">数据源：{_esc(hf.get("source",""))}</div>'
-        f'</div>'
-        f'<div class="cust-how"><b>如何看：</b>对冲基金通过<b>回购(repo)加杠杆持有美债</b>做基差套利(cash-futures basis trade)等策略，'
-        f'其<b>总名义敞口已达美国 GDP 的 ~12.6%</b>（十年翻倍），<b>回购借款突破 $3.2 万亿</b>——'
-        f'这是<b>美债市场的隐性杠杆</b>。<b>风险</b>：一旦国债波动骤升(MOVE↑)或回购融资成本上升，'
-        f'高杠杆头寸被迫平仓→抛售美债→收益率跳升→更多平仓，形成<b>去杠杆螺旋</b>(2020年3月「dash for cash」即此机制)。'
-        f'敞口越高、回购依赖越重，美债市场对流动性冲击越脆弱。<br>季度更新(SEC Form PF 底层)，OFR 官方公开数据。'
-        f'<br><span style="color:#8a8578">注：BIS 原图另有「零折扣(zero haircut)占比」一图，因 OFR/ESRB 仅在报告 PDF 内出静态图、无公开时间序列，本 section 未纳入（绝不用代理冒充）。</span></div>'
         f'</div>'
     )
 
@@ -2047,7 +2021,7 @@ def _silver_imports_html(si):
         f'<div class="cust-chart-title">印度白银月度进口 (Silver Bullion Imports, 吨)'
         f'<span class="chart-freq freq-m">🟢 每月 · UN Comtrade</span></div>'
         f'{svg}'
-        f'<div class="oil-meta">最新（{_esc(si.get("as_of",""))}）：<b>{si.get("latest_tonnes")}</b> 吨　'
+        f'<div class="oil-meta">最新（{_esc(si.get("as_of",""))}）：<b>{si.get("latest_tonnes")}</b> 吨　{_stale_badge(si.get("as_of"), "monthly")}'
         f'历史峰值 <b>{si.get("max_tonnes")}</b> 吨（{si.get("n")} 个月，{_esc(pts[0]["date"])}→{_esc(pts[-1]["date"])}）<br>'
         f'口径校验：2024 前两月合计 2932 吨，与 LBMA 公开数字完全吻合。</div>'
         f'<div class="oil-src">数据源：{_esc(si.get("source",""))}</div>'
@@ -2086,7 +2060,7 @@ def _bis_gold_swaps_html(bg):
         f'<div class="cust-chart-title">BIS 自营黄金掉期规模（吨 · 2010→今）'
         f'<span class="chart-freq freq-w">🟡 年度确认 + 月度推算 · BIS 年报 / GATA</span></div>'
         f'{svg}'
-        f'<div class="oil-meta">最新年报（{_esc(latest_d)}）：<b style="color:#c9a94e">{latest_t} 吨</b> · '
+        f'<div class="oil-meta">最新年报（{_esc(latest_d)}）：<b style="color:#c9a94e">{latest_t} 吨</b>{_stale_badge(latest_d, "semiannual")} · '
         f'历史峰值 <b>{peak_t} 吨</b>（{_esc(peak_d)}）{mo_txt}</div>'
         f'<div class="oil-src">数据源：{_esc(bg.get("source",""))} · '
         f'年度值＝<a class="src-lnk" href="https://www.bis.org/about/areport/index.htm" target="_blank" rel="noopener">BIS Annual Report ↗</a> 官方确认；'
@@ -2217,7 +2191,7 @@ def _gold_exports_html(ge):
         f'<div class="cust-chart-title">美国黄金出口 · Nonmonetary Gold Exports（百万美元 · 季度 · 1999→今）'
         f'<span class="chart-freq freq-w">{status_badge}</span></div>'
         f'{svg}'
-        f'<div class="oil-meta">最新（{_esc(latest_d)}）：<b style="color:#c9a94e">{latest:,.0f} 百万美元</b>'
+        f'<div class="oil-meta">最新（{_esc(latest_d)}）：<b style="color:#c9a94e">{latest:,.0f} 百万美元</b>{_stale_badge(latest_d, "quarterly")}'
         f'（≈ <b>{latest_b} 亿美元</b>，约 <b>460 吨</b>量级） · '
         f'历史峰值 <b>{peak:,.0f}</b>（{_esc(peak_d)}） · '
         f'较 2024 均值（{base:,.0f}）<b style="color:#d64545">暴涨 {surge}×</b></div>'
@@ -2424,7 +2398,7 @@ def _hf_leverage_html(hf):
             f'<span class="chart-freq freq-q">🟣 季频 · SEC Form PF 滞后发布</span></div>'
             f'{svgA}'
             f'<div class="oil-meta">最新 <b style="color:#c0757d">{ex["latest_pct"]}%</b>'
-            f'（约 ${ex.get("latest_usd_t","?")}T 名义敞口，{_esc(ex.get("as_of",""))}）· '
+            f'（约 ${ex.get("latest_usd_t","?")}T 名义敞口，{_esc(ex.get("latest_q") or hf.get("as_of",""))}）{_stale_badge(ex.get("latest_q") or hf.get("as_of"), "quarterly")} · '
             f'较 2015 年（6.1%）翻倍——对冲基金国债基差套利(basis trade)杠杆持续累积</div>'
             f'</div>'
         )
@@ -2445,7 +2419,7 @@ def _hf_leverage_html(hf):
             f'{svgB}'
             f'<div class="oil-meta">Repo <b style="color:#c0757d">${bo["latest_repo"]}T</b> · '
             f'Prime brokerage <b style="color:#6b8fb5">${bo["latest_prime"]}T</b> · '
-            f'Other secured <b style="color:#e0a92e">${bo["latest_other"]}T</b>（{_esc(bo.get("as_of",""))}）· '
+            f'Other secured <b style="color:#e0a92e">${bo["latest_other"]}T</b>（{_esc(bo.get("latest_q") or hf.get("as_of",""))}）{_stale_badge(bo.get("latest_q") or hf.get("as_of"), "quarterly")} · '
             f'回购借款升破 3 万亿=基差套利加杠杆的主渠道</div>'
             f'</div>'
         )
@@ -3180,7 +3154,7 @@ def _credit_impulse_html(ci):
         f'<span style="color:#2e9e5b">正值=信贷在加速扩张</span>（利好增长/风险资产），'
         f'<span style="color:#d64545">负值=新增信贷放缓/收缩</span>（即使总债务仍在涨）。'
         f'领先实体经济约 <b>6-9 个月</b>——<b>中国信贷脉冲</b>是全球商品、周期股、风险资产最强的领先指标之一。'
-        f'口径为 BIS credit-to-GDP ratio 的二阶差分（美/中/欧/日统一口径、国际可比），<b>季度更新、数据滞后约 1 季</b>（as of {_esc(asof)[:7]}）。'
+        f'口径为 BIS credit-to-GDP ratio 的二阶差分（美/中/欧/日统一口径、国际可比），<b>季度更新、数据滞后约 1 季</b>（as of {_esc(asof)[:7]}）{_stale_badge(asof, "quarterly")}。'
         f'数据源：{_linkify_sources(src)}。</div>'
         f'{long_block}'
         f'</div>'
@@ -3363,8 +3337,9 @@ def _stress_panels_html(sp, ofr=None):
     return f'<div class="sp-wrap">{intro}{"".join(blocks)}</div>'
 
 
-def _bt_sparkline(vals, w=88, h=22, color="#8a8578"):
-    """迷你走势线(状态矩阵内用)。vals: [float]。绝不编: 空则返回占位。"""
+def _bt_sparkline(vals, w=88, h=22, color="#8a8578", dates=None, unit=" bp"):
+    """迷你走势线(状态矩阵内用)。vals: [float]。绝不编: 空则返回占位。
+    ★带 tooltip: 透明 hit-band 复用全站 data-tip 机制; dates 缺失则只显数值(不编造日期)。"""
     vals = [v for v in (vals or []) if isinstance(v, (int, float))]
     if len(vals) < 2:
         return '<span class="bt-spark-na">—</span>'
@@ -3379,10 +3354,17 @@ def _bt_sparkline(vals, w=88, h=22, color="#8a8578"):
     up = vals[-1] >= vals[0]
     end_c = "#c0757d" if up else "#7fa085"
     ex, ey = X(n - 1), Y(vals[-1])
+    dates = dates or []
+    _bw = (w - 2 * pad) / (n - 1)
+    hits = "".join(
+        f'<rect x="{max(0, X(i) - _bw / 2):.1f}" y="0" width="{_bw:.1f}" height="{h}" fill="transparent" '
+        f'data-tip="{_esc(str(dates[i])[:10]) if i < len(dates) else ""}||{vals[i]:+.1f}{_esc(unit)}"/>'
+        for i in range(n))
     return (f'<svg class="bt-spark" viewBox="0 0 {w} {h}" preserveAspectRatio="none">'
             f'<polyline points="{pts}" fill="none" stroke="{color}" stroke-width="1.3" '
             f'stroke-linejoin="round" opacity="0.85"/>'
-            f'<circle cx="{ex:.1f}" cy="{ey:.1f}" r="1.9" fill="{end_c}"/></svg>')
+            f'<circle cx="{ex:.1f}" cy="{ey:.1f}" r="1.9" fill="{end_c}"/>'
+            f'{hits}</svg>')
 
 
 def _basis_trade_html(bt):
@@ -3466,7 +3448,7 @@ def _basis_trade_html(bt):
         light = m.get("light", "⚪")
         carry = m.get("carry_bp")
         yld = m.get("yield")
-        spark = _bt_sparkline(m.get("spark", []))
+        spark = _bt_sparkline(m.get("spark", []), dates=m.get("spark_d", []))
         if m.get("status") != "ok":
             carry_txt = '<span class="bt-na">未获取</span>'
             yld_txt = "—"
@@ -4386,6 +4368,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .dot-r {{ background: var(--lamp-r); box-shadow: 0 0 0 3px rgba(214,69,69,.20); }}
   .dot-n {{ background: transparent; border: 1.5px solid var(--lamp-n); box-shadow: none; opacity: 1; }}
   .stwarn {{ font-size: 10px; color: var(--clay); background: var(--clay-bg); padding: 1px 5px; border-radius: 4px; }}
+  .stale-badge {{ display: inline-block; font-size: 10px; font-weight: 600; padding: 1.5px 6px; border-radius: 4px;
+                  margin-left: 6px; white-space: nowrap; letter-spacing: .2px; vertical-align: middle; }}
+  .sb-amber {{ color: #8a6d1f; background: rgba(224,169,46,.16); border: 1px solid rgba(224,169,46,.38); }}
+  .sb-red   {{ color: #8a3f47; background: rgba(192,117,125,.16); border: 1px solid rgba(192,117,125,.42); }}
   .mc-slabel {{ font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px; margin-left: 4px; }}
   .mc-slabel-g {{ color: #3f5a3f; background: rgba(154,171,151,.30); }}
   .mc-slabel-y {{ color: #8a6a2a; background: rgba(212,178,110,.32); }}

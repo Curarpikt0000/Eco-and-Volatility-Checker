@@ -612,20 +612,34 @@ def fetch_ecb_balance_sheet(to_usd=True, usd_per_eur=None):
     import io as _io
 
     # ── ILM wildcard 一次拉全部分项 (BS_ITEM.COUNT_AREA.CURRENCY_TRANS → (值,期次)) ──
-    got = {}
+    # ★拉最近 2 期(lastNObservations=2)以便算真实周环比 delta/pct。
+    #   曾只拉 1 期导致全站 ECB 分项 delta/pct 恒为 None(渲染成 18 处 n/a)。
+    #   实测 43/43 科目两期齐全; 若某科目缺上期, 该科目 delta 保持 None(诚实留空, 绝不编造)。
+    got = {}          # tail -> 最新值
+    got_prev = {}     # tail -> 上一期值
     period = None
     try:
         r = requests.get("https://data-api.ecb.europa.eu/service/data/ILM/W.U2.C...",
-                         params={"lastNObservations": 1, "format": "csvdata"},
+                         params={"lastNObservations": 2, "format": "csvdata"},
                          headers={"User-Agent": "Mozilla/5.0"}, timeout=35)
         if r.status_code == 200:
+            _by_tail = {}
             for row in _csv.DictReader(_io.StringIO(r.text)):
                 tail = f'{row["BS_ITEM"]}.{row["COUNT_AREA"]}.{row["CURRENCY_TRANS"]}'
                 try:
-                    got[tail] = float(row["OBS_VALUE"])
-                    period = row["TIME_PERIOD"]
+                    _by_tail.setdefault(tail, {})[row["TIME_PERIOD"]] = float(row["OBS_VALUE"])
                 except (ValueError, KeyError):
                     pass
+            # 全局最新期次 = 所有科目中最大的 TIME_PERIOD(形如 2026-W33, 字典序即时间序)
+            _all_p = sorted({p for v in _by_tail.values() for p in v})
+            if _all_p:
+                period = _all_p[-1]
+                prev_p = _all_p[-2] if len(_all_p) > 1 else None
+                for tail, obs in _by_tail.items():
+                    if period in obs:
+                        got[tail] = obs[period]
+                    if prev_p and prev_p in obs:
+                        got_prev[tail] = obs[prev_p]
     except Exception:
         pass
 
@@ -663,8 +677,16 @@ def fetch_ecb_balance_sheet(to_usd=True, usd_per_eur=None):
     def _line(name, tail, sub=False):
         if tail not in got:
             return None
-        return {"name": name, "value": round(got[tail] * factor, 1),
-                "delta": None, "pct": None, "sub": sub}   # 周环比暂无(只拉最新1期)
+        val = round(got[tail] * factor, 1)
+        # 周环比: 仅当上期真实存在才算, 否则诚实留 None(绝不用 0 或估算值冒充)
+        delta = pct = None
+        if tail in got_prev:
+            prev = got_prev[tail] * factor
+            delta = round(val - prev, 1)
+            if prev:
+                pct = round((val - prev) / abs(prev) * 100, 2)
+        return {"name": name, "value": val,
+                "delta": delta, "pct": pct, "sub": sub}
 
     # 政策利率(FRED)
     rates = {}
@@ -938,20 +960,29 @@ def fetch_maturing_treasury(cache_path=None):
             cached = {}
 
     # 2) 按年拉(增量: 已缓存年份的所有月都齐则跳过, 只拉当前年+缺失年)
+    # ★铁律: 分页任一页失败 → 整年返回 None(调用方跳过该年, 保留缓存真值),
+    #   绝不用残缺分页数据算出偏小值去覆盖真实历史(2024=10127行/2025=10372行必然翻页)。
     def _pull_year(year):
         out = {}
         page = 1
+        got_rows = 0
+        total_count = None
         while True:
             # ★Treasury API: filter 的 : 和 , 是语法字符不可编码; 仅 page[] 方括号需编码; page size 上限 10000。
             url = (f"{BASE}?filter=record_date:gte:{year}-01-01,record_date:lte:{year}-12-31"
                    f"&fields={FIELDS}&page%5Bsize%5D=10000&page%5Bnumber%5D={page}")
             try:
                 resp = requests.get(url, timeout=40)
-                data = resp.json().get("data", [])
-            except Exception:
-                break
+                payload = resp.json()
+                data = payload.get("data", [])
+                if total_count is None:
+                    total_count = (payload.get("meta") or {}).get("total-count")
+            except Exception as e:
+                print(f"[maturing_treasury] {year} 第{page}页拉取失败, 放弃整年(保留缓存真值): {e}")
+                return None
             if not data:
                 break
+            got_rows += len(data)
             # 按 record_date 分组
             by_date = {}
             for r in data:
@@ -961,6 +992,18 @@ def fetch_maturing_treasury(cache_path=None):
             if len(data) < 10000:
                 break
             page += 1
+            if page > 50:  # 安全阀: 防 API 异常导致无限翻页
+                print(f"[maturing_treasury] {year} 分页超过50页, 异常中止, 放弃整年")
+                return None
+        # ★完整性校验: 实收行数须等于 API 声明的 total-count, 否则视为残缺, 放弃整年
+        if total_count is not None:
+            try:
+                if int(total_count) != got_rows:
+                    print(f"[maturing_treasury] {year} 行数不符 (API声明{total_count} 实收{got_rows}), "
+                          f"判定残缺, 放弃整年(保留缓存真值)")
+                    return None
+            except (TypeError, ValueError):
+                pass
         return out
 
     now = datetime.utcnow()
@@ -970,12 +1013,17 @@ def fetch_maturing_treasury(cache_path=None):
     cached_years = {}
     for d in cached:
         cached_years[d[:4]] = cached_years.get(d[:4], 0) + 1
+    failed_years = []
     for year in range(start_year, now.year + 1):
         y = str(year)
         # 已有>=11个月且非当前年 → 跳过(历史不变)
         if cached_years.get(y, 0) >= 11 and year < now.year:
             continue
         yr_rows = _pull_year(year)
+        if yr_rows is None:
+            # ★该年拉取残缺/失败: 跳过, 保留缓存中该年的真实历史值, 绝不用残缺值覆盖
+            failed_years.append(y)
+            continue
         for rd, rows in yr_rows.items():
             val = _mspd_maturing_within_1yr(rd, rows)
             if val is not None:
@@ -998,11 +1046,15 @@ def fetch_maturing_treasury(cache_path=None):
     cutoff = (now - timedelta(days=760)).strftime("%Y-%m")
     hist_recent = [(m, v) for m, v in hist_long if m >= cutoff]
     last_d, last_v = items[-1]
+    _status = "ok"
+    if failed_years:
+        _status = f"ok(部分年份拉取失败, 已保留缓存真值: {','.join(failed_years)})"
     return {
         "history_long": hist_long,          # 2001至今月末
         "history_recent": hist_recent,      # 近两年月末
         "value": last_v, "as_of": last_d,
-        "status": "ok",
+        "status": _status,
+        "stale_years": failed_years,
         "source": "US Treasury MSPD table 3 (可交易国债·1年内到期·含Fed+私营)",
     }
 
@@ -1988,7 +2040,10 @@ def _fetch_move_history(start):
 
 
 def _weekly_resample(pts, agg="last"):
-    """把日度 [(date,val)] 降采样到周度(周五 as-of), 减少折线噪声。agg: last|mean|max。
+    """把日度 [(date,val)] 降采样到周度, 减少折线噪声。agg: last|mean|max。
+    ★日期标签用该周【真实观测末日】而非名义周五 —— 名义周五会把当前未完成周
+      (如周一 08-17)标成未来日期 08-21, 造成 as-of 显示未来、图表 X 轴外推。
+      节假日周同理(周四收盘则标周四), 更贴合真实数据。
     返回 [(week_date, val)]。"""
     import datetime as _dt
     from collections import defaultdict
@@ -1998,19 +2053,21 @@ def _weekly_resample(pts, agg="last"):
             dt = _dt.date.fromisoformat(d[:10])
         except Exception:
             continue
-        # 归到该周的周五
+        # 归到该周的周五(仅作分桶键, 不作对外日期标签)
         friday = dt + _dt.timedelta(days=(4 - dt.weekday()))
-        buckets[friday.isoformat()].append(v)
+        buckets[friday.isoformat()].append((dt.isoformat(), v))
     out = []
     for wk in sorted(buckets):
-        vs = buckets[wk]
+        rows = sorted(buckets[wk])          # 按真实日期排序
+        vs = [v for _, v in rows]
+        real_last_date = rows[-1][0]        # ★该周真实观测末日
         if agg == "mean":
             val = sum(vs) / len(vs)
         elif agg == "max":
             val = max(vs)
         else:
             val = vs[-1]
-        out.append((wk, round(val, 4)))
+        out.append((real_last_date, round(val, 4)))
     return out
 
 
@@ -2642,81 +2699,6 @@ def _ofr_hfm_series(mnemonic):
         return out
     except Exception:
         return []
-
-
-def fetch_hf_leverage(cache_path=None):
-    """对冲基金美债杠杆敞口(季频, 源: OFR Hedge Fund Monitor / SEC Form PF, 免key)。
-    绝不编造, 取不到 status='未获取'。数据本质是【季度】更新(Form PF 滞后发布), 非日频。
-      图A: 对冲基金美债总名义敞口 / 美国GDP (%)。分子=OFR FPF-ASSETCLASS_USGOV_GNE_SUM, 分母=FRED GDP。
-      图B: 对冲基金三类借款规模($万亿): Repo / Prime brokerage / Other secured。
-    (对应 BIS AER 2026 Graph 5。零折扣占比图C无公开结构化源, 不做。)
-    返回 {status, as_of, source, exposure:{points:[(date,pct)], latest_pct, latest_usd_t},
-          borrow:{repo:[(date,$T)], prime:[(date,$T)], other:[(date,$T)], latest_*}}。
-    """
-    import json
-    if cache_path is None:
-        cache_path = os.path.join(os.path.dirname(__file__), "..", "data", "hf_leverage.json")
-    START = "2015-01-01"
-    # 图B 三类借款
-    repo = _ofr_hfm_series("FPF-BORROW_REPO_SUM")
-    prime = _ofr_hfm_series("FPF-BORROW_PRIMEBROKER_SUM")
-    other = _ofr_hfm_series("FPF-BORROW_OTHERSECURED_SUM")
-    # 图A 美债敞口 + GDP
-    gne = _ofr_hfm_series("FPF-ASSETCLASS_USGOV_GNE_SUM")
-    gdp = dict(_fred_series("GDP", START))  # {date: $B annualized}
-
-    def _t(series):
-        return [(d, round(v / 1e12, 3)) for d, v in series if d >= START]
-
-    out = {"status": "未获取", "as_of": "",
-           "source": "OFR Hedge Fund Monitor (SEC Form PF 汇总, 季频, 免key) + FRED GDP",
-           "exposure": {}, "borrow": {}}
-
-    # 借款三类($万亿)
-    if repo and prime and other:
-        rp, pr, ot = _t(repo), _t(prime), _t(other)
-        out["borrow"] = {
-            "repo": rp, "prime": pr, "other": ot,
-            "latest_repo": rp[-1][1] if rp else None,
-            "latest_prime": pr[-1][1] if pr else None,
-            "latest_other": ot[-1][1] if ot else None,
-            "as_of": rp[-1][0] if rp else "",
-        }
-
-    # 美债敞口/GDP (%): GDP 是季度年化十亿美元, 匹配最近季度末
-    if gne and gdp:
-        exp_pts = []
-        latest_usd = None
-        for d, v in gne:
-            if d < START:
-                continue
-            # GDP 用同季或最近的可用值 (FRED GDP 日期是季初 YYYY-01/04/07/10-01)
-            yr, mo = d[:4], int(d[5:7])
-            q_start = f"{yr}-{((mo-1)//3)*3+1:02d}-01"
-            g = gdp.get(q_start)
-            if g is None:
-                # 回退: 取 <= d 的最近 GDP
-                cand = [gd for gd in gdp if gd <= d]
-                g = gdp[max(cand)] if cand else None
-            if g:
-                pct = round(v / (g * 1e9) * 100, 2)  # GDP十亿→美元
-                exp_pts.append((d, pct))
-                latest_usd = round(v / 1e12, 3)
-        if exp_pts:
-            out["exposure"] = {
-                "points": exp_pts, "latest_pct": exp_pts[-1][1],
-                "latest_usd_t": latest_usd, "as_of": exp_pts[-1][0],
-            }
-
-    if out["borrow"] or out["exposure"]:
-        out["status"] = "ok"
-        out["as_of"] = out.get("borrow", {}).get("as_of") or out.get("exposure", {}).get("as_of", "")
-    try:
-        with open(cache_path, "w") as f:
-            json.dump(out, f, ensure_ascii=False, default=str)
-    except Exception:
-        pass
-    return out
 
 
 def fetch_hf_leverage(cache_path=None):
@@ -3723,10 +3705,11 @@ def fetch_basis_trade_monitor(cache_path=None, years=2):
             continue
         cur_c = spread[-1][1]
         spark = [v for _, v in spread[-30:]]
+        spark_d = [d for d, _ in spread[-30:]]   # tooltip 用真实日期
         matrix.append({
             "market": "美债", "tenor": t, "carry_bp": cur_c, "light": _light(cur_c),
             "yield": (yld[spread[-1][0]] if spread[-1][0] in yld else None),
-            "date": spread[-1][0], "spark": spark, "status": "ok",
+            "date": spread[-1][0], "spark": spark, "spark_d": spark_d, "status": "ok",
         })
     # 日债行(carry = JGB − TONAR, 真实融资成本基准, 对应美债 SOFR)。TONAR 抓不到才回退不判定。
     for t in ["2Y", "5Y", "10Y", "30Y"]:
@@ -3743,17 +3726,19 @@ def fetch_basis_trade_monitor(cache_path=None, years=2):
             if spread:
                 cur_c = spread[-1][1]
                 spark = [v for _, v in spread[-30:]]
+                spark_d = [d for d, _ in spread[-30:]]   # tooltip 用真实日期
                 matrix.append({
                     "market": "日债", "tenor": t, "carry_bp": cur_c, "light": _light(cur_c),
                     "yield": (yld[spread[-1][0]] if spread[-1][0] in yld else cur_y),
-                    "date": spread[-1][0], "spark": spark, "status": "ok",
+                    "date": spread[-1][0], "spark": spark, "spark_d": spark_d, "status": "ok",
                 })
                 continue
         # TONAR 抓不到 → 只展示收益率+走势, carry 诚实标 n/a
         spark = [v for _, v in pts[-30:]]
+        spark_d = [d for d, _ in pts[-30:]]   # tooltip 用真实日期
         matrix.append({
             "market": "日债", "tenor": t, "carry_bp": None, "light": "⚪",
-            "yield": cur_y, "date": pts[-1][0], "spark": spark, "status": "ok",
+            "yield": cur_y, "date": pts[-1][0], "spark": spark, "spark_d": spark_d, "status": "ok",
             "note": "TONAR 隔夜融资序列本次未取到，carry 暂不判定",
         })
 
@@ -3824,6 +3809,32 @@ def fetch_comex_inventory(cache_path=None):
     import datetime as _dt
     if cache_path is None:
         cache_path = os.path.join(os.path.dirname(__file__), "..", "data", "comex_inventory.json")
+
+    def _fallback(note):
+        """★铁律: 抓取/解析失败绝不返回空壳让 114 点曲线整块消失。
+        有缓存 → 回退缓存真值 + status='ok(缓存)' + stale_since 标滞后天数; 无缓存才认输。"""
+        try:
+            with open(cache_path) as f:
+                cached = _json.load(f)
+            if cached.get("panels") or cached.get("flows"):
+                cached = dict(cached)
+                stale_since = cached.get("fetched_at") or cached.get("as_of")
+                days = None
+                try:
+                    d0 = _dt.datetime.fromisoformat(str(stale_since)[:19]).date()
+                    days = (_dt.date.today() - d0).days
+                except Exception:
+                    pass
+                cached["status"] = "ok(缓存)"
+                cached["stale_since"] = stale_since
+                cached["stale_days"] = days
+                cached["note"] = f"实时源不可用({note}), 展示缓存真值" + (f", 滞后 {days} 天" if days is not None else "")
+                print(f"[comex_inventory] {note} → 回退缓存 (as_of={cached.get('as_of')}, 滞后{days}天)")
+                return cached
+        except Exception as e:
+            print(f"[comex_inventory] 缓存回退也失败: {e}")
+        return {"status": "未获取", "as_of": None, "note": note}
+
     url = "https://curarpikt0000.github.io/comex-inventory-charts/"
     html = None
     try:
@@ -3835,8 +3846,7 @@ def fetch_comex_inventory(cache_path=None):
     except Exception:
         html = None
     if not html:
-        return {"status": "未获取", "as_of": None,
-                "note": "comex-inventory-charts 页面抓取失败"}
+        return _fallback("comex-inventory-charts 页面抓取失败")
 
     try:
         mc = _re.search(r'const CHARTS = (\{.*?\});\s*\nconst SUMMARY', html, _re.S)
@@ -3844,10 +3854,10 @@ def fetch_comex_inventory(cache_path=None):
         charts = _json.loads(mc.group(1)) if mc else {}
         summary = _json.loads(ms.group(1)) if ms else {}
     except Exception as e:
-        return {"status": "未获取", "as_of": None, "note": f"解析失败: {e}"}
+        return _fallback(f"解析失败: {e}")
 
     if not charts:
-        return {"status": "未获取", "as_of": None, "note": "CHARTS 数据为空"}
+        return _fallback("CHARTS 数据为空")
 
     # ── 库存双轴 panel: COMEX(左) vs 上海(右) ──
     inv_colors = {"COMEX 库存 (吨)": "#c0757d", "SHFE 库存 (吨)": "#6b8fb5", "SGE 库存 (吨)": "#7fa085"}
@@ -3916,8 +3926,8 @@ def fetch_comex_inventory(cache_path=None):
     try:
         with open(cache_path, "w") as f:
             _json.dump(out, f, ensure_ascii=False, default=str)
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"[comex_inventory] 缓存写入失败(不影响本次渲染): {e}")
     return out
 
 
