@@ -38,6 +38,8 @@ _FRESH_TOL = {
     "quarterly": 135,  # 季频
     "semiannual": 250,  # 半年频(如 BIS)
     "imf_weo": 260,    # IMF WEO 一年发布两次(4月/10月), 且数据本身是年度值
+    "cips": 75,        # CIPS 月度业务统计, 官方通常次月中下旬发布(留足缓冲)
+    "annual_report": 500,  # 年报(10-K/20-F): 一年一更, 叠加最长约4个月申报期
 }
 
 
@@ -277,7 +279,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              gold_exports=None, us_yield_century=None, comex_issue_stop=None,
              ad_line_real=None, gold_premium=None, silver_imports=None, fiscal_budget=None,
              basis_trade=None, comex_inventory=None, debt_gdp=None,
-             corp_credit=None):
+             corp_credit=None, cips=None, ai_fcf=None, ai_credit=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -476,6 +478,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         comex_inventory=_comex_inventory_html(comex_inventory),
         debt_gdp=_debt_gdp_html(debt_gdp),
         corp_credit=_corp_credit_html(corp_credit),
+        cips=_cips_html(cips),
+        ai_fcf=_ai_fcf_html(ai_fcf, ai_credit),
         auctions=_auctions_html(auctions),
         holdings=_holdings_html(holdings),
     )
@@ -3789,6 +3793,567 @@ def _debt_gdp_html(dg):
     )
 
 
+# ─────────── 中国 CIPS 跨境人民币支付 ───────────
+def _nice_top(v, divs=4):
+    """把轴上限抬到「能被 divs 等分成整齐刻度」且尽量贴合数据的值。
+
+    ★两个坑:
+      ① 只把上限取整不够 —— 刻度是 top/divs, 25/4=6.25 依旧难读;
+      ② 步长吸附太粗会把 21.7 顶到 40, 浪费近半图高。
+      正解: 枚举候选步长, 取「能覆盖 v 的最小整齐步长」。
+    """
+    import math
+    if v <= 0:
+        return 1.0
+    raw = v / divs
+    exp = math.floor(math.log10(raw))
+    for e in (exp, exp + 1):
+        base = 10 ** e
+        for m in (1, 1.5, 2, 2.5, 3, 4, 5, 6, 8):
+            step = m * base
+            if step * divs >= v:
+                return step * divs
+    return 10 ** (exp + 1) * divs
+
+
+# ─────────── AI 产业链: 自由现金流 & 信用维度 ───────────
+# ★颜色按 AI_UNIVERSE 的实际组名顺序分配, 绝不硬编码组名字符串:
+#   曾因手写的组名与数据层不一致(如"芯片/半导体" vs 实际"芯片/加速器"),
+#   导致 13 家静默落到灰色兜底色且图例只剩 1 项。
+_AI_PALETTE = ["#4ea1ff", "#39c07c", "#e0a92e", "#c77dff", "#4fd1c5", "#f08fc0"]
+
+
+def _ai_colors(names):
+    """{组名: 颜色}, 按出现顺序取色。"""
+    seen = []
+    for n in names:
+        if n not in seen:
+            seen.append(n)
+    return {n: _AI_PALETTE[i % len(_AI_PALETTE)] for i, n in enumerate(seen)}
+
+
+def _ai_fcf_svg(groups, w=940, h=380):
+    """AI 产业链 FCF 分组柱状图。正负双向, 零轴居中按数据自适应。"""
+    rows = []
+    for g in groups:
+        for m in g.get("members", []):
+            rows.append((g["name"], m))
+    if not rows:
+        return ""
+    vals = [m["fcf"] / 1e9 for _, m in rows if m.get("fcf") is not None]
+    if not vals:
+        return ""
+    ml, mr, mt, mb = 62, 16, 30, 76
+    pw, ph = w - ml - mr, h - mt - mb
+    vmax, vmin = max(vals + [0]), min(vals + [0])
+    top = _nice_top(vmax * 1.10, 4) if vmax > 0 else 0
+    bot = -_nice_top(-vmin * 1.15, 2) if vmin < 0 else 0
+    span = (top - bot) or 1
+    y0 = mt + ph * top / span          # 零轴像素位置
+    colors = _ai_colors([g for g, _ in rows])
+
+    def py(v):
+        return mt + ph * (top - v) / span
+
+    n = len(rows)
+    step = pw / n
+    bw = step * 0.62
+    p = [f'<svg viewBox="0 0 {w} {h}" class="aifcf-svg" '
+         f'preserveAspectRatio="xMidYMid meet">']
+    # 网格 + 刻度(正负分别等分, 保证 0 一定是一根线)
+    ticks = [top * k / 4 for k in range(5)]
+    if bot < 0:
+        ticks += [bot * k / 2 for k in range(1, 3)]
+    for tv in ticks:
+        yy = py(tv)
+        dash = "" if abs(tv) < 1e-9 else ' stroke-dasharray="3 3"'
+        p.append(f'<line x1="{ml}" y1="{yy:.1f}" x2="{ml+pw}" y2="{yy:.1f}" '
+                 f'stroke="#2a2f3a" stroke-width="1"{dash}/>')
+        p.append(f'<text x="{ml-7}" y="{yy+3.5:.1f}" text-anchor="end" '
+                 f'font-size="10" fill="#8b93a7">{tv:,.0f}</text>')
+    p.append(f'<text x="{ml-52}" y="{mt-12}" font-size="10" '
+             f'fill="#8b93a7">十亿美元</text>')
+
+    for i, (gname, m) in enumerate(rows):
+        cx = ml + step * (i + 0.5)
+        col = colors.get(gname, "#8b93a7")
+        fcf = m.get("fcf")
+        if fcf is None:
+            p.append(f'<text x="{cx:.1f}" y="{y0-6:.1f}" text-anchor="middle" '
+                     f'font-size="9" fill="#6b7280">n/a</text>')
+        else:
+            v = fcf / 1e9
+            yv = py(v)
+            ytop, hh = (yv, y0 - yv) if v >= 0 else (y0, yv - y0)
+            fill = col if v >= 0 else "#e05c5c"
+            tip = (f'{m["ticker"]}·{m["name"]}｜FY{(m.get("fy") or "")[:7]}'
+                   f'｜经营现金流 {m["ocf"]/1e9:,.1f}B｜资本开支 '
+                   f'{m["capex"]/1e9:,.1f}B｜自由现金流 {v:+,.1f}B')
+            p.append(f'<rect x="{cx-bw/2:.1f}" y="{ytop:.1f}" width="{bw:.1f}" '
+                     f'height="{max(hh,0.6):.1f}" fill="{fill}" opacity="0.88">'
+                     f'<title>{_esc(tip)}</title></rect>')
+            lv = f'{v:+,.0f}' if abs(v) >= 1 else f'{v:+,.1f}'
+            ly = (ytop - 3) if v >= 0 else (ytop + hh + 9)
+            p.append(f'<text x="{cx:.1f}" y="{ly:.1f}" text-anchor="middle" '
+                     f'font-size="8.5" fill="#aab3c5">{lv}</text>')
+        p.append(f'<text x="{cx:.1f}" y="{mt+ph+14:.1f}" text-anchor="middle" '
+                 f'font-size="10" fill="#c8cee0">{_esc(m["ticker"])}</text>')
+        fy = (m.get("fy") or "")[:7]
+        if fy:
+            p.append(f'<text x="{cx:.1f}" y="{mt+ph+25:.1f}" '
+                     f'text-anchor="middle" font-size="8.5" fill="#7c8496">'
+                     f'{_esc(fy)}</text>')
+
+    lx = ml
+    for gname, col in colors.items():
+        p.append(f'<rect x="{lx}" y="{h-30}" width="11" height="11" '
+                 f'fill="{col}" opacity="0.88"/>')
+        p.append(f'<text x="{lx+15}" y="{h-21}" font-size="9.5" '
+                 f'fill="#8b93a7">{_esc(gname)}</text>')
+        lx += 26 + len(gname) * 10.5
+    p.append(f'<rect x="{lx}" y="{h-30}" width="11" height="11" '
+             f'fill="#e05c5c" opacity="0.88"/>')
+    p.append(f'<text x="{lx+15}" y="{h-21}" font-size="9.5" fill="#8b93a7">'
+             f'负自由现金流</text>')
+    p.append("</svg>")
+    return "".join(p)
+
+
+def _ai_credit_svg(rows, w=940, h=400):
+    """信用维度散点: X=净债务/EBITDA(杠杆), Y=利息保障倍数(对数轴)。"""
+    import math
+    pts = [r for r in rows
+           if r.get("leverage") is not None and r.get("coverage") is not None
+           and r["coverage"] > 0]
+    if not pts:
+        return ""
+    ml, mr, mt, mb = 62, 18, 20, 74
+    pw, ph = w - ml - mr, h - mt - mb
+    xs = [r["leverage"] for r in pts]
+    xhi = _nice_top(max(xs + [1]), 4)
+    xlo = -_nice_top(-min(xs + [0]), 2) if min(xs) < 0 else 0
+    xspan = (xhi - xlo) or 1
+    ymin, ymax = 1.0, max(r["coverage"] for r in pts) * 1.6
+    colors = _ai_colors([r["group"] for r in rows])
+    placed = []                       # 已放置标签坐标, 用于避让
+
+    def px(v):
+        return ml + pw * (v - xlo) / xspan
+
+    def py(v):
+        v = max(v, ymin)
+        return (mt + ph - ph * (math.log10(v) - math.log10(ymin))
+                / (math.log10(ymax) - math.log10(ymin)))
+
+    p = [f'<svg viewBox="0 0 {w} {h}" class="aicr-svg" '
+         f'preserveAspectRatio="xMidYMid meet">']
+    # Y 轴(对数) 刻度
+    yt = [1, 3, 10, 30, 100, 300, 1000]
+    for tv in yt:
+        if tv > ymax:
+            break
+        yy = py(tv)
+        p.append(f'<line x1="{ml}" y1="{yy:.1f}" x2="{ml+pw}" y2="{yy:.1f}" '
+                 f'stroke="#2a2f3a" stroke-width="1" stroke-dasharray="3 3"/>')
+        p.append(f'<text x="{ml-7}" y="{yy+3.5:.1f}" text-anchor="end" '
+                 f'font-size="10" fill="#8b93a7">{tv:,}x</text>')
+    # X 轴刻度
+    for k in range(5):
+        tv = xlo + (xhi - xlo) * k / 4
+        xx = px(tv)
+        p.append(f'<line x1="{xx:.1f}" y1="{mt}" x2="{xx:.1f}" '
+                 f'y2="{mt+ph}" stroke="#2a2f3a" stroke-width="1" '
+                 f'stroke-dasharray="3 3"/>')
+        p.append(f'<text x="{xx:.1f}" y="{mt+ph+14:.1f}" text-anchor="middle" '
+                 f'font-size="10" fill="#8b93a7">{tv:,.1f}x</text>')
+    # 零杠杆参考线(净现金/净负债分界)
+    if xlo < 0 < xhi:
+        zx = px(0)
+        p.append(f'<line x1="{zx:.1f}" y1="{mt}" x2="{zx:.1f}" y2="{mt+ph}" '
+                 f'stroke="#4a5262" stroke-width="1.4"/>')
+        p.append(f'<text x="{zx-5:.1f}" y="{mt+11}" text-anchor="end" '
+                 f'font-size="8.5" fill="#6b7280">← 净现金</text>')
+        p.append(f'<text x="{zx+5:.1f}" y="{mt+11}" font-size="8.5" '
+                 f'fill="#6b7280">净负债 →</text>')
+    # 利息保障 <3x 警戒带
+    wy = py(3)
+    p.append(f'<rect x="{ml}" y="{wy:.1f}" width="{pw}" '
+             f'height="{mt+ph-wy:.1f}" fill="#e05c5c" opacity="0.07"/>')
+    p.append(f'<text x="{ml+pw-6}" y="{mt+ph-7:.1f}" text-anchor="end" '
+             f'font-size="8.5" fill="#a8646e">利息保障 &lt; 3x 偿息压力区</text>')
+    p.append(f'<text x="{ml-7}" y="{mt-6}" text-anchor="end" font-size="10" '
+             f'fill="#8b93a7">利息保障</text>')
+    p.append(f'<text x="{ml+pw}" y="{mt+ph+30:.1f}" text-anchor="end" '
+             f'font-size="10" fill="#8b93a7">净债务 / EBITDA →</text>')
+
+    for r in sorted(pts, key=lambda z: -z["coverage"]):
+        cx, cy = px(r["leverage"]), py(r["coverage"])
+        col = colors.get(r["group"], "#8b93a7")
+        nd = r.get("net_debt")
+        tip = (f'{r["ticker"]}·{r["name"]}｜FY{(r.get("fy") or "")[:7]}'
+               f'｜净债务/EBITDA {r["leverage"]:+,.2f}x'
+               f'｜利息保障 {r["coverage"]:,.1f}x'
+               f'｜净债务 {nd/1e9:+,.1f}B｜EBITDA {r["ebitda"]/1e9:,.1f}B')
+        p.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="6" fill="{col}" '
+                 f'opacity="0.85" stroke="#11141a" stroke-width="1">'
+                 f'<title>{_esc(tip)}</title></circle>')
+        # 标签避让: 与已放置标签太近则改放下方/左右, 避免糊成一团
+        ly = cy - 10
+        for _ in range(8):
+            if not any(abs(ly - qy) < 11 and abs(cx - qx) < 34
+                       for qx, qy in placed):
+                break
+            ly = (cy + 17) if abs(ly - (cy - 10)) < 0.1 else ly + 11
+        placed.append((cx, ly))
+        p.append(f'<text x="{cx:.1f}" y="{ly:.1f}" text-anchor="middle" '
+                 f'font-size="9" fill="#c8cee0">{_esc(r["ticker"])}</text>')
+
+    lx = ml
+    for gname, col in colors.items():
+        if not any(r["group"] == gname for r in pts):
+            continue
+        p.append(f'<circle cx="{lx+5}" cy="{h-25}" r="5" fill="{col}" '
+                 f'opacity="0.85"/>')
+        p.append(f'<text x="{lx+15}" y="{h-21}" font-size="9.5" '
+                 f'fill="#8b93a7">{_esc(gname)}</text>')
+        lx += 26 + len(gname) * 10.5
+    p.append("</svg>")
+    return "".join(p)
+
+
+def _ai_fcf_html(fc, cr):
+    """AI 产业链自由现金流 + 信用维度。fc: fetch_ai_fcf(), cr: fetch_ai_credit()。"""
+    if not fc or fc.get("status") != "ok":
+        return ('<p class="empty">AI 产业链自由现金流数据未就绪'
+                '（SEC EDGAR 拉取失败）。</p>')
+    rows = [(g["name"], m) for g in fc["groups"] for m in g.get("members", [])]
+    oks = [m for _, m in rows if m.get("fcf") is not None]
+    as_of = fc.get("as_of") or ""
+    badge = _stale_badge(as_of, "annual_report") if as_of else ""
+    pos = [m for m in oks if m["fcf"] > 0]
+    neg = [m for m in oks if m["fcf"] <= 0]
+    tot = sum(m["fcf"] for m in oks) / 1e9
+    capex = sum(m["capex"] for m in oks) / 1e9
+    neg_txt = "、".join(f'{m["ticker"]} {m["fcf"]/1e9:+,.1f}B'
+                       for m in sorted(neg, key=lambda z: z["fcf"])) or "无"
+    ex_txt = "；".join(f'{n}（{why}）' for n, why in fc.get("excluded", []))
+
+    h = [f'<div class="oil-meta">最新财年（{_esc(as_of[:7])}）{badge} · '
+         f'覆盖 <b>{fc.get("ok_count")}/{fc.get("total_count")}</b> 家 · '
+         f'合计自由现金流 <b style="color:'
+         f'{"#39c07c" if tot >= 0 else "#e05c5c"}">{tot:+,.0f}B</b> · '
+         f'合计资本开支 <b style="color:#e0a92e">{capex:,.0f}B</b></div>']
+    h.append(f'<div class="oil-meta">正自由现金流 <b>{len(pos)}</b> 家，'
+             f'负自由现金流 <b>{len(neg)}</b> 家：{_esc(neg_txt)}。</div>')
+    h.append(_ai_fcf_svg(fc["groups"]))
+    h.append(f'<p class="cips-note">口径：标准自由现金流 = 经营现金流 − 资本开支，'
+             f'取自各公司 10-K/20-F 年报官方申报值，未扣融资租赁本金'
+             f'（多家未披露该字段，强行调整会造成口径不可比）。'
+             f'各公司财年截止日不同（柱下已标注实际财年），'
+             f'跨公司比较时须注意期间不完全重合。'
+             f'年报一年更新一次，非日频指标。'
+             f'{("排除：" + _esc(ex_txt) + "。") if ex_txt else ""}</p>')
+
+    # ── 信用维度 ──
+    if cr and cr.get("status") == "ok":
+        crs = cr.get("rows") or []
+        lev = [r for r in crs if r.get("leverage") is not None]
+        na_lev = [r for r in crs if r.get("leverage") is None]
+        hi = sorted([r for r in lev if r["leverage"] > 0],
+                    key=lambda z: -z["leverage"])[:3]
+        cash = [r for r in lev if r["leverage"] < 0]
+        thin = sorted([r for r in crs if r.get("coverage") is not None
+                       and r["coverage"] < 3], key=lambda z: z["coverage"])
+        hi_txt = "、".join(f'{r["ticker"]} {r["leverage"]:,.2f}x'
+                          for r in hi) or "无"
+        thin_txt = "、".join(f'{r["ticker"]} {r["coverage"]:,.1f}x'
+                            for r in thin) or "无"
+        h.append(f'<div class="part-title">信用维度：杠杆与偿息能力</div>')
+        h.append(f'<div class="oil-meta">杠杆覆盖 <b>{cr.get("lev_n")}/'
+                 f'{cr.get("total")}</b> 家 · 利息保障覆盖 <b>{cr.get("cov_n")}/'
+                 f'{cr.get("total")}</b> 家 · 净现金（负杠杆）<b>{len(cash)}</b> 家 · '
+                 f'杠杆最高：{_esc(hi_txt)}</div>')
+        h.append(f'<div class="oil-meta">利息保障低于 3x（偿息压力）：'
+                 f'<b style="color:{"#e05c5c" if thin else "#39c07c"}">'
+                 f'{_esc(thin_txt)}</b></div>')
+        h.append(_ai_credit_svg(crs))
+        na_txt = "；".join(f'{r["ticker"]}（{r["note"]}）'
+                          for r in na_lev if r.get("note"))
+        h.append(f'<p class="cips-note">口径：净债务 = 长期债务 + 短期债务 − '
+                 f'现金及等价物 − 短期投资；EBITDA = 营业利润 + 折旧摊销'
+                 f'（近似值，未加回股权激励等非现金项）；'
+                 f'利息保障倍数 = EBITDA / 利息支出。纵轴为对数刻度。'
+                 f'负杠杆表示净现金（现金及短投多于全部债务）。'
+                 f'★本图为财报偿债能力指标，<b>不是市场信用利差</b>：'
+                 f'免费公开源已无单名企业债成交利差'
+                 f'（FINRA TRACE 公开端点关闭、交易所与财经终端均需付费或拒访），'
+                 f'用股价波动等替代指标凑数会失真，故不采用。'
+                 f'{("未能取得杠杆的公司：" + _esc(na_txt) + "。") if na_txt else ""}'
+                 f'这些公司在其近年年报中未以标准 XBRL 科目申报相应字段，'
+                 f'按项目铁律标注 n/a，不做估算填充。</p>')
+    else:
+        h.append('<p class="empty">信用维度（净债务/EBITDA、利息保障倍数）'
+                 '未就绪。</p>')
+    return "".join(h)
+
+
+def _cips_svg(monthly, w=940, h=330):
+    """月度金额柱(第三方回补月用斜纹) + 日均金额折线(仅官方月有)。
+
+    ★双口径同图: 柱=月度总额(受工作日天数影响), 线=日均(剔除天数效应)。
+    ★第三方回补月无工作日数 → 日均线在该段不画(绝不插值假装连续)。
+    """
+    if not monthly:
+        return ""
+    ml, mr, mt, mb = 74, 78, 22, 46
+    pw, ph = w - ml - mr, h - mt - mb
+    n = len(monthly)
+    amax = max(m["amount_yi"] for m in monthly)
+    if amax <= 0:
+        return ""
+    atop = _nice_top(amax * 1.15)
+    bw = pw / n * 0.62
+    step = pw / n
+
+    def bx(i):
+        return ml + step * i + (step - bw) / 2
+
+    def by(v):
+        return mt + ph - (v / atop) * ph
+
+    parts = [f'<svg viewBox="0 0 {w} {h}" class="cips-svg" '
+             f'preserveAspectRatio="xMidYMid meet">',
+             '<defs><pattern id="cipsHatch" width="6" height="6" '
+             'patternUnits="userSpaceOnUse" patternTransform="rotate(45)">'
+             '<rect width="6" height="6" fill="#2563eb" opacity=".30"/>'
+             '<line x1="0" y1="0" x2="0" y2="6" stroke="#2563eb" '
+             'stroke-width="3" opacity=".75"/></pattern></defs>']
+
+    # 左轴(金额 万亿元) —— 亿元/10000 = 万亿元
+    for k in range(5):
+        v = atop * k / 4
+        y = by(v)
+        parts.append(f'<line x1="{ml}" y1="{y:.1f}" x2="{ml+pw}" y2="{y:.1f}" '
+                     f'stroke="#e5e7eb" stroke-width="1"/>')
+        parts.append(f'<text x="{ml-8}" y="{y+4:.1f}" text-anchor="end" '
+                     f'font-size="11" fill="#6b7280">{v/10000:.1f}</text>')
+    parts.append(f'<text x="{ml-8}" y="{mt-8}" text-anchor="end" font-size="10" '
+                 f'fill="#2563eb" font-weight="600">万亿元/月</text>')
+
+    # 柱: 月度总额
+    for i, m in enumerate(monthly):
+        x, y = bx(i), by(m["amount_yi"])
+        hh = mt + ph - y
+        third = m["src"] == "third_party"
+        fill = "url(#cipsHatch)" if third else "#2563eb"
+        op = "1" if third else ".82"
+        wd = m["workdays"]
+        da = m["avg_amount_yi"]
+        tip = (f'{m["ym"]}｜金额 {m["amount_yi"]:,.0f} 亿元'
+               f'（{m["amount_yi"]/10000:.2f} 万亿）｜笔数 {m["count"]:,}'
+               f'｜工作日 {wd if wd else "n/a"}'
+               f'｜日均 {f"{da:,.0f} 亿元" if da else "n/a"}'
+               f'｜{"第三方回补" if third else "CIPS 官方"}')
+        parts.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" '
+                     f'height="{hh:.1f}" fill="{fill}" opacity="{op}" rx="2">'
+                     f'<title>{_esc(tip)}</title></rect>')
+
+    # 右轴 + 日均折线(仅官方月, 断开处不连)
+    davg = [(i, m["avg_amount_yi"]) for i, m in enumerate(monthly)
+            if m.get("avg_amount_yi")]
+    if davg:
+        dmax = _nice_top(max(v for _, v in davg) * 1.25)
+        segs, cur = [], []
+        for i, m in enumerate(monthly):
+            v = m.get("avg_amount_yi")
+            if v:
+                cur.append((bx(i) + bw / 2,
+                            mt + ph - (v / dmax) * ph, m["ym"], v))
+            elif cur:
+                segs.append(cur)
+                cur = []
+        if cur:
+            segs.append(cur)
+        for seg in segs:
+            if len(seg) > 1:
+                pts = " ".join(f"{x:.1f},{y:.1f}" for x, y, _, _ in seg)
+                parts.append(f'<polyline points="{pts}" fill="none" '
+                             f'stroke="#dc2626" stroke-width="2.4" '
+                             f'stroke-linejoin="round"/>')
+            for x, y, ym, v in seg:
+                parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.6" '
+                             f'fill="#fff" stroke="#dc2626" stroke-width="2">'
+                             f'<title>{_esc(f"{ym}｜日均 {v:,.0f} 亿元")}</title>'
+                             f'</circle>')
+        for k in range(5):
+            v = dmax * k / 4
+            y = mt + ph - (v / dmax) * ph
+            parts.append(f'<text x="{ml+pw+8}" y="{y+4:.1f}" font-size="11" '
+                         f'fill="#dc2626">{v/10000:.2f}</text>')
+        parts.append(f'<text x="{ml+pw+8}" y="{mt-8}" font-size="10" '
+                     f'fill="#dc2626" font-weight="600">万亿元/日</text>')
+
+    # X 轴标签(每 2 个month 标一次, 避免拥挤)
+    lab_every = 1 if n <= 12 else 2
+    for i, m in enumerate(monthly):
+        if i % lab_every and i != n - 1:
+            continue
+        x = bx(i) + bw / 2
+        parts.append(f'<text x="{x:.1f}" y="{mt+ph+16}" text-anchor="middle" '
+                     f'font-size="9.5" fill="#6b7280" '
+                     f'transform="rotate(-38 {x:.1f} {mt+ph+16})">'
+                     f'{m["ym"][2:]}</text>')
+    parts.append(f'<line x1="{ml}" y1="{mt+ph}" x2="{ml+pw}" y2="{mt+ph}" '
+                 f'stroke="#9ca3af" stroke-width="1.2"/>')
+
+    # 图例
+    lx, ly = ml, h - 8
+    parts.append(f'<rect x="{lx}" y="{ly-9}" width="11" height="11" '
+                 f'fill="#2563eb" opacity=".82" rx="2"/>')
+    parts.append(f'<text x="{lx+16}" y="{ly}" font-size="10.5" fill="#374151">'
+                 f'月度总额(官方)</text>')
+    parts.append(f'<rect x="{lx+112}" y="{ly-9}" width="11" height="11" '
+                 f'fill="url(#cipsHatch)" rx="2"/>')
+    parts.append(f'<text x="{lx+128}" y="{ly}" font-size="10.5" fill="#374151">'
+                 f'月度总额(第三方回补)</text>')
+    parts.append(f'<line x1="{lx+272}" y1="{ly-4}" x2="{lx+296}" y2="{ly-4}" '
+                 f'stroke="#dc2626" stroke-width="2.4"/>')
+    parts.append(f'<circle cx="{lx+284}" cy="{ly-4}" r="3.6" fill="#fff" '
+                 f'stroke="#dc2626" stroke-width="2"/>')
+    parts.append(f'<text x="{lx+302}" y="{ly}" font-size="10.5" fill="#374151">'
+                 f'日均金额(仅官方月，剔除工作日天数效应)</text>')
+    parts.append("</svg>")
+    return "".join(parts)
+
+
+def _cips_annual_svg(annual, w=940, h=190):
+    """历年金额柱(官方一手, 2015 至今)。"""
+    if not annual:
+        return ""
+    ml, mr, mt, mb = 74, 24, 18, 30
+    pw, ph = w - ml - mr, h - mt - mb
+    n = len(annual)
+    amax = _nice_top(max(a for _, _, a in annual) * 1.14, divs=3)
+    step, bw = pw / n, pw / n * 0.6
+    parts = [f'<svg viewBox="0 0 {w} {h}" class="cips-svg" '
+             f'preserveAspectRatio="xMidYMid meet">']
+    for k in range(4):
+        v = amax * k / 3
+        y = mt + ph - (v / amax) * ph
+        parts.append(f'<line x1="{ml}" y1="{y:.1f}" x2="{ml+pw}" y2="{y:.1f}" '
+                     f'stroke="#e5e7eb" stroke-width="1"/>')
+        parts.append(f'<text x="{ml-8}" y="{y+4:.1f}" text-anchor="end" '
+                     f'font-size="11" fill="#6b7280">{v/10000:.0f}</text>')
+    parts.append(f'<text x="{ml-8}" y="{mt-6}" text-anchor="end" font-size="10" '
+                 f'fill="#0f766e" font-weight="600">万亿元/年</text>')
+    prev = None
+    for i, (y_, c, a) in enumerate(annual):
+        x = ml + step * i + (step - bw) / 2
+        yy = mt + ph - (a / amax) * ph
+        yoy = f"｜同比 {((a/prev-1)*100):+.1f}%" if prev else ""
+        prev = a
+        parts.append(f'<rect x="{x:.1f}" y="{yy:.1f}" width="{bw:.1f}" '
+                     f'height="{mt+ph-yy:.1f}" fill="#0f766e" opacity=".78" '
+                     f'rx="2"><title>'
+                     f'{_esc(f"{y_} 年｜金额 {a:,.0f} 亿元（{a/10000:.1f} 万亿）｜笔数 {c:,}{yoy}")}'
+                     f'</title></rect>')
+        parts.append(f'<text x="{x+bw/2:.1f}" y="{mt+ph+14}" '
+                     f'text-anchor="middle" font-size="10" fill="#6b7280">'
+                     f'{y_}</text>')
+    parts.append(f'<line x1="{ml}" y1="{mt+ph}" x2="{ml+pw}" y2="{mt+ph}" '
+                 f'stroke="#9ca3af" stroke-width="1.2"/>')
+    parts.append("</svg>")
+    return "".join(parts)
+
+
+def _cips_html(cp):
+    """中国 CIPS 使用量。cp: fetch_cips()。"""
+    if not cp or cp.get("status") != "ok" or not cp.get("monthly"):
+        note = (cp or {}).get("note") or ""
+        return (f'<p class="empty">CIPS 跨境人民币支付数据未就绪。'
+                f'{("（" + _esc(note) + "）") if note else ""}</p>')
+    ms = cp["monthly"]
+    ann = cp.get("annual") or []
+    as_of = cp.get("as_of") or ""
+    badge = _stale_badge(f"{as_of}-28", "cips") if as_of else ""
+    last = ms[-1]
+    off_ms = [m for m in ms if m["src"] == "official"]
+
+    # 同比: 与去年同月比(只在两端都有真实值时算)
+    idx = {m["ym"]: m for m in ms}
+    y, mo = int(as_of[:4]), int(as_of[5:7])
+    prev_ym = f"{y-1}-{mo:02d}"
+    yoy_txt = "n/a（缺去年同月数据）"
+    if prev_ym in idx:
+        p = idx[prev_ym]["amount_yi"]
+        if p:
+            yoy_txt = (f'{(last["amount_yi"]/p-1)*100:+.1f}%'
+                       f'（对比 {prev_ym}）')
+
+    # 日均金额的真实极值(仅官方月)
+    da_txt = "n/a"
+    if off_ms:
+        hi = max(off_ms, key=lambda m: m["avg_amount_yi"] or 0)
+        lo = min(off_ms, key=lambda m: m["avg_amount_yi"] or 9e18)
+        if hi.get("avg_amount_yi") and lo.get("avg_amount_yi"):
+            da_txt = (f'最高 {hi["ym"]} {hi["avg_amount_yi"]:,.0f} 亿元/日，'
+                      f'最低 {lo["ym"]} {lo["avg_amount_yi"]:,.0f} 亿元/日')
+
+    # 年度同比(官方一手)
+    ann_txt = ""
+    if len(ann) >= 2:
+        (py, _, pa), (ly, _, la) = ann[-2], ann[-1]
+        ann_txt = (f'{ly} 年全年 <b>{la/10000:.1f} 万亿元</b>'
+                   f'（较 {py} 年 {((la/pa-1)*100):+.1f}%）；')
+
+    third_n = cp.get("third_months", 0)
+    off_n = cp.get("official_months", 0)
+    _lav = last.get("avg_amount_yi")
+    kpi_avg = f"{_lav:,.0f} 亿元" if _lav else "n/a"
+    src_note = ""
+    if third_n:
+        src_note = (f'图中 <b>{off_n} 个月为 CIPS 官方逐月披露</b>，'
+                    f'<b>{third_n} 个月（斜纹）为第三方 chinadata.live 回补</b>'
+                    f'——官方仅在网站挂当年月度表，往年月度表已下架。'
+                    f'回补数据已用官方重叠月<b>逐月比对验证一致</b>后才采用；'
+                    f'该源不含工作日数，故这些月份<b>不画日均线</b>（标 n/a），'
+                    f'绝不用插值伪造。')
+
+    return (
+        f'<div class="cips-wrap">'
+        f'<div class="cips-head">🇨🇳 中国 CIPS · 跨境人民币支付系统使用量'
+        f'<span class="cips-asof">最新 {_esc(as_of)}{badge}</span></div>'
+        f'<div class="cips-kpis">'
+        f'<div class="cips-kpi"><span>最新月金额</span>'
+        f'<b>{last["amount_yi"]/10000:.2f} 万亿元</b></div>'
+        f'<div class="cips-kpi"><span>最新月笔数</span>'
+        f'<b>{last["count"]:,}</b></div>'
+        f'<div class="cips-kpi"><span>同比(金额)</span>'
+        f'<b>{_esc(yoy_txt)}</b></div>'
+        f'<div class="cips-kpi"><span>最新月日均</span>'
+        f'<b>{kpi_avg}</b>'
+        f'</div></div>'
+        f'{_cips_svg(ms)}'
+        f'<div class="cips-sub">历年全年金额（CIPS 官方一手）</div>'
+        f'{_cips_annual_svg(ann)}'
+        f'<div class="ci-how"><b>如何看：</b>CIPS 是中国人民银行主导的<b>跨境人民币清算基础设施</b>，'
+        f'常被视作观察<b>人民币国际化进程</b>与跨境结算去美元化叙事的一个量化抓手。'
+        f'{ann_txt}近 {len(ms)} 个月区间内，日均金额 {_esc(da_txt)}。'
+        f'<br><b>⚠️ 口径陷阱（重要）：</b>'
+        f'①<b>看日均、别只看月度总额</b>——月度总额受当月<b>工作日天数</b>影响很大'
+        f'（如春节所在月工作日少，总额天然回落，并不代表使用强度下降）；'
+        f'红线的<b>日均金额已剔除天数效应</b>，是更干净的趋势指标。'
+        f'②<b>CIPS 增长 ≠ 去美元化</b>——CIPS 处理的是<b>人民币</b>跨境清算，'
+        f'其增长同时包含中国自身贸易/投资规模扩张、原本走代理行渠道的业务<b>迁移至 CIPS</b>、'
+        f'以及离岸人民币资金调拨，<b>不能直接换算为美元份额的等量流失</b>。'
+        f'③该口径为<b>支付指令处理金额</b>，同一笔跨境交易可能涉及多腿清算，'
+        f'与 SWIFT 人民币报文份额<b>口径不同、不可直接相加或相互替代</b>。'
+        f'{f"<br><b>📌 数据来源构成：</b>{src_note}" if src_note else ""}'
+        f'<br>数据源：{_linkify_sources(cp.get("source", ""))}。</div>'
+        f'</div>'
+    )
+
+
 # ─────────── 美国分评级公司债 ───────────
 def _corp_credit_svg(ratings, key="oas_series", w=940, h=280, unit=" %"):
     """各评级序列多线图(OAS 或 收益率)。CCC 波动极大 → 用对数式压缩不做, 保持真实比例,
@@ -4993,6 +5558,15 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .ci-how b {{ color: var(--text); }}
   /* ── 世界前十经济体 债务/GDP ── */
   .dg-wrap {{ display: flex; flex-direction: column; gap: 10px; }}
+  .cips-wrap {{ display: flex; flex-direction: column; gap: 10px; }}
+  .cips-head {{ font-size: 14px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }}
+  .cips-asof {{ font-size: 11px; font-weight: 400; color: var(--muted); }}
+  .cips-sub {{ font-size: 12px; font-weight: 600; color: var(--text); margin-top: 4px; border-left: 3px solid var(--border); padding-left: 8px; }}
+  .cips-svg {{ width: 100%; height: auto; display: block; }}
+  .cips-kpis {{ display: flex; flex-wrap: wrap; gap: 8px; }}
+  .cips-kpi {{ flex: 1 1 150px; background: var(--bg2, #fafafa); border: 1px solid var(--border); border-radius: 6px; padding: 7px 10px; display: flex; flex-direction: column; gap: 2px; }}
+  .cips-kpi span {{ font-size: 10.5px; color: var(--muted); }}
+  .cips-kpi b {{ font-size: 14px; color: var(--text); }}
   .dg-head {{ font-size: 14px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }}
   .dg-asof {{ font-size: 11px; font-weight: 400; color: var(--muted); }}
   .dg-sub {{ font-size: 12px; font-weight: 600; color: var(--text); margin-top: 4px; padding-left: 2px; border-left: 3px solid var(--border); padding-left: 8px; }}
@@ -5294,6 +5868,12 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·A2：美国分评级公司债 收益率/利差/总额 ═══ -->
   <div class="part-title" id="sec-corp-credit"><span class="part-num">＋</span>美国公司债 · 分评级 收益率 / OAS 利差 / 未偿总额 (信用周期先行哨兵)<span class="freq-badge freq-daily">利差每日 · 总额季度</span></div>
   <div class="card">{corp_credit}</div>
+  <!-- ═══ 附三·A3：中国 CIPS 跨境人民币支付 ═══ -->
+  <div class="part-title" id="sec-cips"><span class="part-num">＋</span>中国 CIPS · 跨境人民币支付系统使用量 (人民币国际化 · 月度总额 / 日均强度)<span class="freq-badge freq-monthly">月度 · 官方次月发布</span></div>
+  <div class="card">{cips}</div>
+
+  <div class="part-title" id="sec-ai-fcf"><span class="part-num">＋</span>AI 产业链 · 自由现金流与信用维度 (资本开支强度 · 杠杆 · 偿息能力)<span class="freq-badge freq-monthly">年度 · 随年报更新</span></div>
+  <div class="card">{ai_fcf}</div>
 
   <!-- ═══ 附三·二·四：国债市场压力四联图 (对齐 Morgan Stanley 三图 + OFR官方压力指数, 竖向) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>国债市场收益率·波动性·压力 · 竖向四联图 (对齐 Morgan Stanley · 过去3年真实公开数据 · 每日更新)<span class="freq-badge freq-daily">每日更新</span></div>

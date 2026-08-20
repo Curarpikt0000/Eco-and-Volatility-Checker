@@ -388,6 +388,31 @@ def main():
               f"as_of={corp_credit.get('as_of')} 评级={len(_rk)}/7 未偿额={len(_ou)}/2")
     except Exception as e:
         print(f"[dashboard] 公司债 跳过: {e}")
+    cips = {}
+    try:
+        cips = ed.fetch_cips() or {}
+        print(f"[dashboard] CIPS: status={cips.get('status')} "
+              f"as_of={cips.get('as_of')} 月度={len(cips.get('monthly', []))} "
+              f"(官方{cips.get('official_months', 0)}+回补{cips.get('third_months', 0)}) "
+              f"年度={len(cips.get('annual', []))}")
+    except Exception as e:
+        print(f"[dashboard] CIPS 跳过: {e}")
+    ai_fcf, ai_credit = {}, {}
+    try:
+        ai_fcf = ed.fetch_ai_fcf() or {}
+        print(f"[dashboard] AI FCF: status={ai_fcf.get('status')} "
+              f"as_of={ai_fcf.get('as_of')} "
+              f"覆盖={ai_fcf.get('ok_count')}/{ai_fcf.get('total_count')}")
+    except Exception as e:
+        print(f"[dashboard] AI FCF 跳过: {e}")
+    try:
+        ai_credit = ed.fetch_ai_credit() or {}
+        print(f"[dashboard] AI 信用: status={ai_credit.get('status')} "
+              f"as_of={ai_credit.get('as_of')} "
+              f"杠杆={ai_credit.get('lev_n')}/{ai_credit.get('total')} "
+              f"利息保障={ai_credit.get('cov_n')}/{ai_credit.get('total')}")
+    except Exception as e:
+        print(f"[dashboard] AI 信用 跳过: {e}")
     # ★数据落盘 GitHub 副本(完整历史序列进 git)
     try:
         _data_dir = os.path.join(os.path.dirname(__file__), "..", "data", "stress")
@@ -431,6 +456,9 @@ def main():
         comex_inventory=comex_inventory,
         debt_gdp=debt_gdp,
         corp_credit=corp_credit,
+        cips=cips,
+        ai_fcf=ai_fcf,
+        ai_credit=ai_credit,
         maturing_treasury=maturing_treasury,
         oil_inventory=oil_inventory,
         us_jp_yields=us_jp_yields,

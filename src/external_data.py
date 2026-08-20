@@ -4160,6 +4160,616 @@ def fetch_corporate_credit(years=3):
     return out
 
 
+# ============ AI 产业链: 自由现金流 + 信用状况 ============
+# 4 类 ≤20 家。CIK 为 SEC 官方标识; 空 CIK = 无 SEC 申报(未上市/外国私有), 显式排除并说明。
+AI_UNIVERSE = [
+    ("AI应用/模型层", [
+        ("MSFT",  "Microsoft",        "0000789019"),
+        ("GOOGL", "Alphabet",         "0001652044"),
+        ("META",  "Meta",             "0001326801"),
+        ("AMZN",  "Amazon",           "0001018724"),
+        ("ORCL",  "Oracle",           "0001341439"),
+    ]),
+    ("芯片/加速器", [
+        ("NVDA",  "NVIDIA",           "0001045810"),
+        ("AMD",   "AMD",              "0000002488"),
+        ("AVGO",  "Broadcom",         "0001730168"),
+        ("TSM",   "TSMC",             "0001046179"),   # IFRS(20-F)
+        ("MU",    "Micron",           "0000723125"),
+    ]),
+    ("算力/数据中心", [
+        ("CRWV",  "CoreWeave",        "0001769628"),
+        ("EQIX",  "Equinix",          "0001101239"),
+        ("DLR",   "Digital Realty",   "0001297996"),
+        ("VRT",   "Vertiv",           "0001674101"),
+    ]),
+    ("电力/能源基建", [
+        ("CEG",   "Constellation",    "0001868275"),
+        ("VST",   "Vistra",           "0001692819"),
+        ("GEV",   "GE Vernova",       "0001996810"),
+        ("ETN",   "Eaton",            "0001551182"),
+    ]),
+]
+
+# 未上市 → 无 FCF/无公开债, 图上不静默省略而是显式列出
+AI_EXCLUDED = [
+    ("OpenAI",    "未上市, 无 SEC 申报, 无公开债"),
+    ("Anthropic", "未上市, 无 SEC 申报, 无公开债"),
+    ("xAI",       "未上市, 无 SEC 申报, 无公开债"),
+    ("NextEra",   "公用事业, CapEx 记于公司自定义扩展标签, us-gaap 无标准字段可取"),
+]
+
+_OCF_TAGS = ["NetCashProvidedByUsedInOperatingActivities",
+             "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations"]
+# CapEx 各公司标签不一, 同财年命中的多个科目求和(如 EQIX 拆 3 个)
+_CAPEX_TAGS = ["PaymentsToAcquirePropertyPlantAndEquipment",
+               "PaymentsToAcquireProductiveAssets",
+               "PaymentsForCapitalImprovements",
+               "PaymentsToAcquireOtherPropertyPlantAndEquipment",
+               "PaymentsToAcquireMachineryAndEquipment",
+               "PaymentsToAcquireBuildings",
+               "PaymentsToDevelopRealEstateAssets",
+               "PaymentsToAcquireRealEstate",
+               "PaymentsForProceedsFromProductiveAssets"]
+_IFRS_OCF = ["CashFlowsFromUsedInOperatingActivities"]
+_IFRS_CAPEX = ["PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities"]
+# 利息保障倍数 = EBIT / 利息支出
+_EBIT_TAGS = ["OperatingIncomeLoss",
+              "IncomeLossFromContinuingOperationsBeforeIncomeTaxes"
+              "ExtraordinaryItemsNoncontrollingInterest"]
+_INT_TAGS = ["InterestExpense", "InterestExpenseDebt",
+             "InterestExpenseNonoperating", "InterestAndDebtExpense"]
+_IFRS_EBIT = ["ProfitLossFromOperatingActivities"]
+_IFRS_INT = ["FinanceCosts"]
+
+# ── 图二 信用维度: 净债务/EBITDA + 利息保障倍数 ──
+# ★锚定铁律: 绝不"每个标签各取最新值"—— 那会把 FY2012 的债务和 FY2026 的
+#   EBIT 混算(实测 DLR 债务停更于 2011, ETN 营业利润停更于 2019)。
+#   必须取【各构件共同存在的最近财年】。
+_CR_EBIT = ["OperatingIncomeLoss", "ProfitLossFromOperatingActivities",
+            "IncomeLossFromContinuingOperationsBeforeIncomeTaxes"
+            "ExtraordinaryItemsNoncontrollingInterest"]
+_CR_DA = ["DepreciationDepletionAndAmortization",
+          "DepreciationAmortizationAndAccretionNet",
+          "DepreciationAndAmortization", "DepreciationAmortizationAndImpairment",
+          "Depreciation", "DepreciationNonproduction",
+          "AmortizationOfIntangibleAssets", "DepreciationExpense"]
+_CR_INT = ["InterestExpense", "InterestExpenseNonoperating",
+           "InterestExpenseDebt", "InterestExpenseBorrowings",
+           "InterestAndDebtExpense", "InterestExpenseNetOfCapitalizedInterest",
+           "InterestCostsIncurred", "FinanceCosts"]
+_CR_LTD = ["LongTermDebtNoncurrent", "LongTermDebt", "LongTermBorrowings",
+           "DebtLongtermAndShorttermCombinedAmount",
+           "LongTermDebtAndCapitalLeaseObligations",
+           "NoncurrentPortionOfNoncurrentBondsIssued",
+           "NoncurrentPortionOfLongtermBorrowings"]
+_CR_STD = ["LongTermDebtCurrent", "DebtCurrent", "ShortTermBorrowings",
+           "OtherShortTermBorrowings",
+           "LongTermDebtAndCapitalLeaseObligationsCurrent",
+           "CurrentPortionOfLongtermBorrowings"]
+_CR_CASH = ["CashAndCashEquivalentsAtCarryingValue",
+            "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+            "CashAndCashEquivalents"]
+_CR_STI = ["ShortTermInvestments", "MarketableSecuritiesCurrent",
+           "AvailableForSaleSecuritiesDebtSecuritiesCurrent",
+           "OtherShortTermInvestments"]
+# 财报滞后容忍: 锚定财年早于「今年-2」视为过期, 标 n/a 而非照画
+_CR_MAX_STALE_YEARS = 2
+
+
+def _cr_series(facts, tags, ns, duration):
+    """合并同类标签的年度序列: 靠前标签优先, 靠后的只补缺失年份。"""
+    out = {}
+    for t in tags:
+        for k, v in (_xbrl_annual(facts, t, ns, duration) or {}).items():
+            out.setdefault(k, v)
+    return out
+
+
+def fetch_ai_credit():
+    """AI 产业链公司 信用维度: 净债务/EBITDA(杠杆) + 利息保障倍数。
+
+    返回 {"rows":[{ticker,name,group,fy,leverage,coverage,ebitda,
+                   net_debt,interest,status,note}],
+          "as_of","status","source","caveat","lev_n","cov_n","total"}
+    ★数据全部来自 10-K/20-F 官方申报值, 不做任何估算/代理/外推。
+    ★拿不到 → 该维度留 None + note 写明原因, 绝不用 0 或行业均值填充。
+    ★为何不用市场信用利差: 免费源全灭(FINRA TRACE 端点 404 /
+      Boerse-Frankfurt 403 / WSJ 401), 用股价波动凑代理会失真, 故改用
+      真实财报偿债能力指标。
+    """
+    import datetime as _dt
+    out = {"rows": [], "as_of": None, "status": "未找到",
+           "source": "SEC EDGAR XBRL companyfacts (10-K/20-F 年报官方申报值)",
+           "caveat": "净债务 = 长期债务 + 短期债务 − 现金及等价物 − 短期投资; "
+                     "EBITDA = 营业利润 + 折旧摊销(近似, 未加回股权激励等非现金项)。"
+                     "各公司财年截止日不同, 图上已标注实际财年。"
+                     "指标源于年报, 每年更新一次, 非日频。"}
+    cur_year = _dt.date.today().year
+    fys, lev_n, cov_n = [], 0, 0
+
+    for gname, members in AI_UNIVERSE:
+        for tk, cname, cik in members:
+            rec = {"ticker": tk, "name": cname, "group": gname, "fy": None,
+                   "leverage": None, "coverage": None, "ebitda": None,
+                   "net_debt": None, "interest": None,
+                   "status": "未找到", "note": ""}
+            facts = _sec_facts(cik)
+            if not facts:
+                rec["note"] = "SEC 拉取失败"
+                out["rows"].append(rec)
+                continue
+            ns = ("ifrs-full" if "ifrs-full" in (facts.get("facts") or {})
+                  else "us-gaap")
+            e_s = _cr_series(facts, _CR_EBIT, ns, True)
+            d_s = _cr_series(facts, _CR_DA, ns, True)
+            i_s = _cr_series(facts, _CR_INT, ns, True)
+            l_s = _cr_series(facts, _CR_LTD, ns, False)
+            s_s = _cr_series(facts, _CR_STD, ns, False)
+            c_s = _cr_series(facts, _CR_CASH, ns, False)
+            t_s = _cr_series(facts, _CR_STI, ns, False)
+            if not e_s or not d_s:
+                rec["note"] = "缺营业利润或折旧摊销年度申报"
+                out["rows"].append(rec)
+                continue
+
+            notes = []
+            lev_fy = max((y for y in e_s if y in d_s and y in l_s and y in c_s),
+                         default=None)
+            cov_fy = max((y for y in e_s if y in d_s and y in i_s and i_s[y]),
+                         default=None)
+
+            def _fresh(y):
+                try:
+                    return int(y[:4]) >= cur_year - _CR_MAX_STALE_YEARS
+                except Exception:
+                    return False
+
+            if lev_fy and not _fresh(lev_fy):
+                notes.append(f"债务科目停更于 FY{lev_fy[:4]}")
+                lev_fy = None
+            if cov_fy and not _fresh(cov_fy):
+                notes.append(f"利息科目停更于 FY{cov_fy[:4]}")
+                cov_fy = None
+
+            if lev_fy:
+                ebitda = e_s[lev_fy] + d_s[lev_fy]
+                if ebitda > 0:
+                    debt = l_s[lev_fy] + (s_s.get(lev_fy) or 0)
+                    liq = c_s[lev_fy] + (t_s.get(lev_fy) or 0)
+                    rec["ebitda"] = ebitda
+                    rec["net_debt"] = debt - liq
+                    rec["leverage"] = round((debt - liq) / ebitda, 2)
+                    lev_n += 1
+                else:
+                    notes.append("EBITDA ≤ 0, 杠杆倍数无经济意义")
+            elif not notes:
+                notes.append("缺债务或现金年度申报")
+
+            if cov_fy:
+                itx = abs(i_s[cov_fy])
+                rec["interest"] = itx
+                rec["coverage"] = round((e_s[cov_fy] + d_s[cov_fy]) / itx, 1)
+                cov_n += 1
+            elif "利息" not in "".join(notes):
+                notes.append("缺利息支出年度申报")
+
+            fy = lev_fy or cov_fy
+            if fy:
+                rec["fy"] = fy
+                fys.append(fy)
+                rec["status"] = "ok"
+            rec["note"] = "; ".join(notes)
+            out["rows"].append(rec)
+
+    if lev_n or cov_n:
+        out["status"] = "ok"
+        out["as_of"] = max(fys) if fys else None
+    out["lev_n"], out["cov_n"] = lev_n, cov_n
+    out["total"] = len(out["rows"])
+    return out
+
+_SEC_UA = {"User-Agent": "EcoVolChecker research (contact: chao.jin)"}
+_FACTS_CACHE = {}
+
+
+def _sec_facts(cik):
+    """SEC companyfacts, 进程内缓存。失败返 None(绝不返空壳冒充成功)。"""
+    if cik in _FACTS_CACHE:
+        return _FACTS_CACHE[cik]
+    import json
+    import time
+    import urllib.request
+    url = f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json"
+    try:
+        req = urllib.request.Request(url, headers=_SEC_UA)
+        with urllib.request.urlopen(req, timeout=45) as r:
+            d = json.loads(r.read().decode())
+    except Exception as e:
+        print(f"    [sec] CIK{cik} 拉取失败: {type(e).__name__} {str(e)[:60]}")
+        d = None
+    _FACTS_CACHE[cik] = d
+    time.sleep(0.15)          # SEC 限速礼貌间隔
+    return d
+
+
+def _xbrl_annual(facts, tag, ns="us-gaap", duration=True):
+    """年报(10-K/20-F)年度口径序列 {end: val}。只认 330~400 天区间, 排除季度。
+
+    ★币种铁律: 同一标签常同时申报 USD 与本币(如 TSM 的 TWD, 差 ~32 倍)。
+      必须【只取 USD】—— 早期实现遍历所有 unit 靠「后者覆盖」, 结果取决于
+      SEC JSON 的 key 顺序, 一旦顺序变化就会静默产生 32 倍错误。
+    """
+    import datetime as _dt
+    node = ((facts.get("facts") or {}).get(ns) or {}).get(tag)
+    if not node:
+        return {}
+    units = node.get("units") or {}
+    key = None
+    for u in units:
+        if u.upper() == "USD":
+            key = u
+            break
+    if key is None:                     # 无 USD 申报 → 币种不可比, 宁缺勿错
+        return {}
+    out = {}
+    for it in units[key]:
+        if it.get("form") not in ("10-K", "10-K/A", "20-F", "20-F/A"):
+            continue
+        end, st = it.get("end"), it.get("start")
+        if not end:
+            continue
+        if duration:
+            if not st:
+                continue
+            try:
+                d1 = _dt.date.fromisoformat(st)
+                d2 = _dt.date.fromisoformat(end)
+            except Exception:
+                continue
+            if not (330 <= (d2 - d1).days <= 400):
+                continue
+        out[end] = it["val"]       # 同 end 后出现者覆盖 = 取修订值
+    return out
+
+
+def _pick(facts, tags, ns="us-gaap", duration=True):
+    for t in tags:
+        s = _xbrl_annual(facts, t, ns, duration)
+        if s:
+            return s
+    return {}
+
+
+def fetch_ai_fcf():
+    """AI 产业链公司 标准自由现金流(FCF = 经营现金流 − 资本开支)。
+
+    返回 {"groups":[{name, members:[{ticker,name,fy,ocf,capex,fcf,
+                                     ebit,interest,coverage,status}]}],
+          "excluded":[...], "as_of", "status", "source", "caveat"}
+    ★口径: 标准 FCF, 不做租赁调整(融资租赁本金 19 家中 7 家缺披露, 口径不可比)。
+    ★绝不编: 任一公司缺 OCF 或 CapEx → status="未找到", 数值留 None, 不估算不近似。
+    ★财年不同: 各公司 FY 截止日不同(如 MSFT 6月/NVDA 1月), 图上须标注实际 FY。
+    """
+    out = {"groups": [], "excluded": list(AI_EXCLUDED), "as_of": None,
+           "status": "未找到",
+           "source": "SEC EDGAR XBRL companyfacts (10-K/20-F 年报官方申报值)",
+           "caveat": "标准 FCF = 经营现金流 − 资本开支, 未扣融资租赁本金"
+                     "(19 家中 7 家未披露该字段, 强行调整会造成口径不可比)。"
+                     "FCF 源于年报, 每年更新一次, 非日频。"
+                     "各公司财年截止日不同, 卡片已标注实际财年。"}
+    fys, ok_n, tot_n = [], 0, 0
+
+    for gname, members in AI_UNIVERSE:
+        grp = {"name": gname, "members": []}
+        for tk, cname, cik in members:
+            tot_n += 1
+            rec = {"ticker": tk, "name": cname, "fy": None, "ocf": None,
+                   "capex": None, "fcf": None, "ebit": None,
+                   "interest": None, "coverage": None, "status": "未找到"}
+            facts = _sec_facts(cik)
+            if not facts:
+                rec["status"] = "SEC 拉取失败"
+                grp["members"].append(rec)
+                continue
+
+            ns_list = [("us-gaap", _OCF_TAGS, _CAPEX_TAGS, _EBIT_TAGS, _INT_TAGS)]
+            if "ifrs-full" in (facts.get("facts") or {}):
+                ns_list.insert(0, ("ifrs-full", _IFRS_OCF, _IFRS_CAPEX,
+                                   _IFRS_EBIT, _IFRS_INT))
+            ocf = capex_map = {}
+            ns_used = None
+            for ns, otags, ctags, etags, itags in ns_list:
+                ocf = _pick(facts, otags, ns)
+                if not ocf:
+                    continue
+                ns_used = (ns, etags, itags)
+                fy = max(ocf)
+                tot = 0.0
+                hit = False
+                for t in ctags:
+                    s = _xbrl_annual(facts, t, ns)
+                    if fy in s:
+                        tot += s[fy]
+                        hit = True
+                if hit:
+                    capex_map = {fy: tot}
+                    break
+                ocf = {}
+            if not ocf or not capex_map:
+                grp["members"].append(rec)
+                continue
+
+            fy = max(ocf)
+            rec.update(fy=fy, ocf=ocf[fy], capex=capex_map[fy],
+                       fcf=ocf[fy] - capex_map[fy], status="ok")
+            # 利息保障倍数(供合成评级用); 拿不到不影响 FCF
+            ns, etags, itags = ns_used
+            eb, itx = _pick(facts, etags, ns), _pick(facts, itags, ns)
+            if fy in eb and fy in itx and itx[fy]:
+                rec["ebit"], rec["interest"] = eb[fy], itx[fy]
+                rec["coverage"] = round(eb[fy] / abs(itx[fy]), 2)
+            ok_n += 1
+            fys.append(fy)
+            grp["members"].append(rec)
+        out["groups"].append(grp)
+
+    if ok_n:
+        out["status"] = "ok"
+        out["as_of"] = max(fys)
+    out["ok_count"], out["total_count"] = ok_n, tot_n
+    return out
+
+
+def fetch_synthetic_spreads():
+    """Damodaran 合成评级利差表(利息保障倍数 → 评级 → 违约利差)。
+
+    返回 {"table":[{lo,hi,rating,spread_pct}], "status", "source", "caveat"}
+    ★这是【模型推导】不是市场成交价: 免费源无单名企业债市场利差
+      (FINRA TRACE 端点全 404 / Boerse-Frankfurt 403 / WSJ 401)。
+    ★静态年度更新, 非日频。使用处必须显著标注"模型估算, 非市场报价"。
+    """
+    import re as _re
+    import urllib.request
+    out = {"table": [], "status": "未找到",
+           "source": "Damodaran (NYU Stern) 合成评级违约利差表",
+           "url": "https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/ratings.htm",
+           "caveat": "★模型估算非市场报价: 由利息保障倍数映射评级再映射利差。"
+                     "免费源无单名企业债市场成交利差(FINRA TRACE 已关闭公开端点)。"
+                     "该表年度更新, 非日频。"}
+    try:
+        req = urllib.request.Request(out["url"], headers=_SEC_UA)
+        with urllib.request.urlopen(req, timeout=35) as r:
+            html = r.read().decode("utf-8", "replace")
+    except Exception as e:
+        out["status"] = f"抓取失败: {type(e).__name__}"
+        return out
+
+    txt = _re.sub(r"<[^>]+>", " ", html)
+    txt = _re.sub(r"&nbsp;?", " ", txt)
+    txt = _re.sub(r"\s+", " ", txt)
+    pat = _re.compile(r"(-?\d+\.?\d*)\s+(-?\d+\.?\d*)\s+"
+                      r"([A-Da-z0-9+\-/]{1,8})\s+(\d+\.\d+)%")
+    seen = set()
+    for lo, hi, rating, spr in pat.findall(txt):
+        key = (rating, spr)
+        if key in seen:
+            continue
+        seen.add(key)
+        try:
+            out["table"].append({"lo": float(lo), "hi": float(hi),
+                                 "rating": rating, "spread_pct": float(spr)})
+        except ValueError:
+            continue
+    if len(out["table"]) >= 10:      # 完整表 15 档; 少于 10 视为解析失败
+        out["status"] = "ok"
+    else:
+        out["status"] = f"解析异常(仅 {len(out['table'])} 档)"
+        out["table"] = []
+    return out
+
+
+def fetch_treasury_curve():
+    """美债各期限收益率(利差基准腿), FRED 官方。返回 {tenor: (date, pct)}。"""
+    out = {"points": {}, "status": "未找到", "as_of": None,
+           "source": "FRED · U.S. Treasury Constant Maturity"}
+    for tenor, sid in [("2Y", "DGS2"), ("5Y", "DGS5"), ("7Y", "DGS7"),
+                       ("10Y", "DGS10"), ("20Y", "DGS20"), ("30Y", "DGS30")]:
+        s = _fred_hist(sid, (datetime.date.today() -
+                             datetime.timedelta(days=30)).strftime("%Y-%m-%d"))
+        if s:
+            out["points"][tenor] = {"date": s[-1][0], "pct": s[-1][1]}
+    if out["points"]:
+        out["status"] = "ok"
+        out["as_of"] = max(v["date"] for v in out["points"].values())
+    return out
+
+
+# ══════════════════════════════════════════════════════════════════
+#  中国 CIPS(人民币跨境支付系统) 使用量
+# ══════════════════════════════════════════════════════════════════
+#  官方一手源(权威, 优先):
+#    · 当年月度 PDF —— 月度 笔数/金额/工作日/日均, 但【只有当年】
+#    · 历年年度 PDF —— 2015 至今 年度 笔数/金额
+#  第三方补充源(chinadata.live) 用于回补官方已下架的往年月度:
+#    ★该源 CSV 列名写 amount_100m_rmb(亿元), 实际值是【十亿元】, 差 10 倍。
+#      本函数用【官方重叠月】实测推断倍率, 绝不硬编码, 对不上就整体弃用。
+CIPS_PDF_CUR = ("https://www.cips.com.cn/kjjqgs/articleFileDir/2025-12/05/"
+                "c1ed77e02af749fb87cfb17484f9efb6.pdf")
+CIPS_PDF_HIST = ("https://www.cips.com.cn/kjjqgs/articleFileDir/2025-12/05/"
+                 "14c90b4ac33f4440b0085632f2c1ee73.pdf")
+CIPS_3P_CSV = ("https://chinadata.live/api/v2/data/"
+               "china-cips-payment-system-monthly?format=csv")
+CIPS_STATS_PAGE = "https://www.cips.com.cn/kjjqgs/cipsfw/ywtj/index.shtml"
+
+
+def _cips_pdf_text(url):
+    """下载并抽取 CIPS PDF 文本。失败返回 None(绝不返空串冒充成功)。"""
+    import urllib.request
+    try:
+        import pymupdf
+    except ImportError:
+        try:
+            import fitz as pymupdf          # 旧版包名
+        except ImportError:
+            return None
+    try:
+        req = urllib.request.Request(
+            url, headers={"User-Agent": "Mozilla/5.0 (EcoVolChecker research)"})
+        with urllib.request.urlopen(req, timeout=60) as r:
+            if r.status != 200:
+                return None
+            blob = r.read()
+        if not blob.startswith(b"%PDF"):
+            return None
+        doc = pymupdf.open(stream=blob, filetype="pdf")
+        return "\n".join(p.get_text() for p in doc)
+    except Exception:
+        return None
+
+
+def fetch_cips(months=36):
+    """中国 CIPS 跨境人民币支付系统 使用量(月度 + 年度)。
+
+    返回 {"monthly":[{ym,count,amount_yi,workdays,avg_count,avg_amount_yi,
+                       src}],
+          "annual":[(year,count,amount_yi)],
+          "as_of","status","source","note","official_months","third_months"}
+
+    ★口径: amount 单位一律【亿元】。日均金额 = 官方直接披露值(非自算),
+      仅第三方回补月自算(= 月度总额 / 工作日, 工作日缺失则留 None)。
+    ★官方值优先; 第三方仅补官方缺失月, 且必须通过重叠月一致性校验。
+    ★抓不到 → status 说明原因, 绝不编造/补零。
+    """
+    import csv as _csv
+    import io as _io
+    import re as _re
+    import urllib.request
+
+    out = {"monthly": [], "annual": [], "as_of": None, "status": "未找到",
+           "source": "CIPS 跨境银行间支付清算有限责任公司 官方业务统计",
+           "note": "", "official_months": 0, "third_months": 0,
+           "page": CIPS_STATS_PAGE}
+
+    # ---------- 1) 官方【当年】月度 ----------
+    off = {}
+    txt = _cips_pdf_text(CIPS_PDF_CUR)
+    year_cur = None
+    if txt:
+        # 标题/正文里找年份; 找不到则不猜, 留 None 并跳过该源
+        ym = _re.search(r"(20\d\d)\s*年", txt)
+        if ym:
+            year_cur = int(ym.group(1))
+        else:
+            # 当年表通常无年份字样 → 用历年表推断(见下), 先暂存原始行
+            year_cur = -1
+        rows = _re.findall(
+            r"(\d{1,2})月\s+([\d,]+)\s+([\d,\.]+)\s+(\d+)\s+([\d,]+)\s+([\d,\.]+)",
+            txt)
+        for mo, cnt, amt, wd, dc, da in rows:
+            off[int(mo)] = (int(cnt.replace(",", "")),
+                            float(amt.replace(",", "")),
+                            int(wd), int(dc.replace(",", "")),
+                            float(da.replace(",", "")))
+
+    # ---------- 2) 官方【历年】年度 ----------
+    txt2 = _cips_pdf_text(CIPS_PDF_HIST)
+    annual = []
+    if txt2:
+        for y, cnt, amt in _re.findall(r"(20\d\d)年\s+([\d,]+)\s+([\d,\.]+)", txt2):
+            annual.append((int(y), int(cnt.replace(",", "")),
+                           float(amt.replace(",", ""))))
+        annual.sort()
+    out["annual"] = annual
+
+    # 当年月度表的年份 = 历年表最后一年 + 1 (历年表只收已完结年度)
+    if off and year_cur == -1:
+        year_cur = (annual[-1][0] + 1) if annual else None
+    if off and not year_cur:
+        off = {}
+        out["note"] = "当年月度表年份无法确定, 已弃用该表(不猜年份)"
+
+    monthly = {}
+    if off and year_cur:
+        for mo, (cnt, amt, wd, dc, da) in off.items():
+            monthly[f"{year_cur}-{mo:02d}"] = {
+                "ym": f"{year_cur}-{mo:02d}", "count": cnt, "amount_yi": amt,
+                "workdays": wd, "avg_count": dc, "avg_amount_yi": da,
+                "src": "official"}
+    out["official_months"] = len(monthly)
+
+    # ---------- 3) 第三方回补往年月度(需通过重叠月校验) ----------
+    try:
+        req = urllib.request.Request(
+            CIPS_3P_CSV, headers={"User-Agent": "Mozilla/5.0 (EcoVolChecker research)",
+                                  "Accept": "text/csv,*/*"})
+        with urllib.request.urlopen(req, timeout=45) as r:
+            csv_txt = r.read().decode("utf-8", "replace") if r.status == 200 else None
+    except Exception:
+        csv_txt = None
+
+    if csv_txt:
+        third = {}
+        for row in _csv.DictReader(_io.StringIO(csv_txt)):
+            d = (row.get("date") or "").strip()
+            if not _re.fullmatch(r"20\d\d-\d{2}", d):
+                continue
+            try:
+                third[d] = (int(float(row["transactions"])),
+                            float(row["amount_100m_rmb"]))
+            except (KeyError, TypeError, ValueError):
+                continue
+
+        # ★倍率校验: 用官方重叠月推断第三方金额单位, 不硬编码
+        ratios, cnt_ok, overlap = [], 0, 0
+        for k, v in monthly.items():
+            if k in third:
+                overlap += 1
+                if third[k][0] == v["count"]:
+                    cnt_ok += 1
+                if third[k][1]:
+                    ratios.append(v["amount_yi"] / third[k][1])
+        if overlap >= 3 and cnt_ok == overlap and ratios:
+            mult = round(sum(ratios) / len(ratios), 4)
+            spread = max(ratios) - min(ratios)
+            # 倍率必须稳定(离散<1%)且接近整数倍, 否则不可信
+            if spread < 0.01 * mult and abs(mult - round(mult)) < 0.02:
+                mult = float(round(mult))
+                added = 0
+                for k, (c, a) in sorted(third.items()):
+                    if k in monthly:
+                        continue
+                    monthly[k] = {"ym": k, "count": c,
+                                  "amount_yi": round(a * mult, 1),
+                                  "workdays": None, "avg_count": None,
+                                  "avg_amount_yi": None, "src": "third_party"}
+                    added += 1
+                out["third_months"] = added
+                out["source"] += (" ; 往年月度经第三方 chinadata.live 回补"
+                                  f"(重叠 {overlap} 月与官方逐月一致, "
+                                  f"金额单位换算 ×{mult:g})")
+            else:
+                out["note"] += (f" 第三方金额倍率不稳定(mult={mult:.3f}, "
+                                f"离散={spread:.3f}), 已弃用第三方回补。")
+        elif overlap:
+            out["note"] += (f" 第三方与官方重叠 {overlap} 月中仅 {cnt_ok} 月笔数"
+                            "一致, 未通过校验, 已弃用第三方回补。")
+
+    if not monthly:
+        out["status"] = "未找到"
+        out["note"] = (out["note"] or "CIPS 官方 PDF 与第三方源均不可用").strip()
+        return out
+
+    ser = sorted(monthly.values(), key=lambda d: d["ym"])
+    if months:
+        ser = ser[-months:]
+    # 第三方回补月无工作日数 → 日均金额留 None(不假装有), 前端标 n/a
+    out["monthly"] = ser
+    out["as_of"] = ser[-1]["ym"]
+    out["status"] = "ok"
+    return out
+
+
 if __name__ == "__main__":
     import json
     print("=== Credit Impulse 三国(信贷脉冲) ===")

@@ -13,7 +13,8 @@ Notion 3 时序 DB → 莫兰迪配色 dashboard（雷达图 + 仪表盘 + 6 部
 判断市场过热/趋势转折/结构性周期顶，追踪 7 项硬性卖出触发（≥3 触发 = 开始分批卖出）。
 
 ## 技术栈
-- Python venv (`.venv/`: requests/pandas/xlrd/openpyxl)
+- Python venv (`.venv/`: requests/pandas/xlrd/openpyxl/**pymupdf**)
+  - `pymupdf` 供 CIPS 官方 PDF 解析（`fetch_cips`）使用；缺失时该指标降级为「未就绪」，不影响其他板块。
 - 数据源：FRED API(VIX/HY/收益率曲线/TIPS/DXY) · CNN F&G JSON API · CFTC Socrata(金银COT) ·
   AAII/CBOE/GuruFocus/ConferenceBoard/Renaissance/Buffett/multpl(web，Jina/web_extract 绕反爬)
 - Notion REST v1 直连(token 复用 Economic-Dashboard) · 幂等 upsert + 写后读回
@@ -116,3 +117,16 @@ Notion 3 时序 DB → 莫兰迪配色 dashboard（雷达图 + 仪表盘 + 6 部
 
 ## 时区
 所有时间默认 Asia/Tokyo (JST, UTC+9)
+
+## SEC XBRL（AI 产业链 FCF / 信用维度）踩坑铁律
+- **币种必须显式过滤 USD**：同一标签常同时申报 USD 与本币（TSM 同时报 TWD，差约 32 倍）。
+  `_xbrl_annual` 早期实现遍历 `units` 全部币种、后写覆盖先写，取到哪个纯看 SEC JSON 的键序——
+  一旦顺序变化就会静默放大 32 倍。现已硬性只取 `USD`。
+- **绝不"每个标签各取最新值"**：会把不同财年的构件混算出假比率。
+  实测 DLR 的 `LongTermDebtNoncurrent` 停更于 2011、ETN 的 `OperatingIncomeLoss` 停更于 2019；
+  正解是取「各构件都存在的最近共同财年」（`_common_fy`）。
+- **只认 10-K/20-F 年报**：GEV 的债务仅在 10-Q 申报，annual-only 过滤后为空 → 按铁律标 n/a，不用季报凑。
+- **DLR 杠杆无解**：近年 10-K 无总债务年度标签，10-Q 分项（Secured/Unsecured）加总会低估 → 标 n/a。
+- **单名企业债市场利差免费源已全灭**（FINRA TRACE 公开端点关闭、交易所/终端付费或 403）。
+  故图二用财报口径（净债务/EBITDA、利息保障），并在图注明确声明「不是市场信用利差」。
+  严禁用股价波动等替代指标冒充利差。
