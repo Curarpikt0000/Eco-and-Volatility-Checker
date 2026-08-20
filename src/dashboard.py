@@ -279,7 +279,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              gold_exports=None, us_yield_century=None, comex_issue_stop=None,
              ad_line_real=None, gold_premium=None, silver_imports=None, fiscal_budget=None,
              basis_trade=None, comex_inventory=None, debt_gdp=None,
-             corp_credit=None, cips=None, ai_fcf=None, ai_credit=None):
+             corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
+             kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
     daily_notes: {key: 当日一句话短评}(每卡片底部,AI生成)。
@@ -446,6 +447,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         concl_long=ai_conclusions.get("long", ""),
         kol_changes=_kol_changes_html(kol_changes),
         kol_views=_kol_views_html(kol_views),
+        cycle_kol=_cycle_kol_html(kol_views, kol_history),
+        kol_history_json=_kol_history_payload(kol_history),
         liquidity=_liquidity_html(liquidity),
         cb_balance=_cb_balance_html(cb_balance),
         money_supply=_money_supply_html(money_supply),
@@ -498,6 +501,173 @@ def _sig_cls(lt):
     return {"🟢": "g", "🟡": "y", "🔴": "r", "⚪": "n"}.get(lt, "n")
 
 
+_CYCLE_SECTOR = "周期与术数预测"
+
+
+def _cycle_kol_html(kol_views, kol_history=None):
+    """★周期与术数预测派 专属 section。
+    把 sector=周期与术数预测 的 KOL 从常规板块中单独拎出来, 按【更新频率】分成
+    「每日/每周预测」与「月度·不定期预测」两块, 便于按节奏对账。
+
+    数据全部来自名册(data/kol_registry.json)与当日快照; 无观点的人显示"待采集",
+    绝不编造方向或言论。
+    """
+    import os as _os
+    import json as _json
+    # 1) 名册: 取出该 sector 的全部成员及其元信息
+    reg = []
+    try:
+        p = _os.path.join(_os.path.dirname(__file__), "..", "data", "kol_registry.json")
+        with open(p, encoding="utf-8") as f:
+            for k in (_json.load(f).get("kols") or []):
+                if not k.get("active"):
+                    continue
+                sec = (k.get("sector") or "").strip()
+                if sec in ("Cycles & Esoteric Forecasting", _CYCLE_SECTOR):
+                    reg.append(k)
+    except Exception:
+        return ""
+    if not reg:
+        return ""
+
+    # 2) 当日观点: 从 kol_views 各模块里按名字捞(该 sector 的模块 + 兜底全模块)
+    views = {}
+    for m in (kol_views or {}).get("modules", []):
+        for v in m.get("views", []):
+            nm = (v.get("kol") or "").strip()
+            if nm:
+                views[nm] = v
+
+    hist = kol_history or {}
+
+    # 3) 按更新频率分组: 高频(daily/weekly) vs 低频(biweekly/monthly/irregular)
+    FREQ_LABEL = {"daily": "每日", "weekly": "每周", "biweekly": "每两周",
+                  "monthly": "每月", "irregular": "不定期"}
+    hi, lo = [], []
+    for k in reg:
+        (hi if (k.get("forecast_cadence") or "").lower() in ("daily", "weekly") else lo).append(k)
+    # 组内排序: 有当日观点的排前, 再按频率(日>周>两周>月>不定期)
+    _ford = {"daily": 0, "weekly": 1, "biweekly": 2, "monthly": 3, "irregular": 4}
+    for grp in (hi, lo):
+        grp.sort(key=lambda k: (0 if (k.get("display_name") or "").strip() in views else 1,
+                                _ford.get((k.get("forecast_cadence") or "").lower(), 9),
+                                k.get("display_name") or ""))
+
+    n_view = sum(1 for k in reg if (k.get("display_name") or "").strip() in views)
+    head = (
+        '<div class="cyc-head">'
+        f'<span class="cyc-count">{len(reg)} 位 · 周期理论 / 金融占星 / 易经术数</span>'
+        f'<span class="cyc-sub">当日已采集观点 {n_view} / {len(reg)}</span>'
+        '</div>'
+        '<div class="cyc-note">⚠️ 本板块收录的是<b>非常规方法论</b>（长周期模型、金融占星、艾略特波浪、'
+        '奇门遁甲、六爻卦象等）的市场预测者。收录只代表其预测<b>可被追踪与复盘</b>，'
+        '不代表本报告认可其方法或结论。请与前述基本面/量化板块严格区分对待。</div>'
+    )
+
+    def _block(title, sub, items):
+        if not items:
+            return ""
+        cards = ""
+        for k in items:
+            nm = (k.get("display_name") or "").strip()
+            v = views.get(nm)
+            freq = FREQ_LABEL.get((k.get("forecast_cadence") or "").lower(), "—")
+            school = _esc(k.get("forecast_school") or k.get("detail_sector") or "")
+            region = (k.get("forecast_region") or "").strip()
+            inst = (k.get("institution") or k.get("bio") or "").strip()
+            url = (k.get("source_url") or "").strip()
+            focus = _esc(k.get("focus") or "")
+            # 方向 / 言论: 有才显示, 没有明确标"待采集"
+            if v:
+                d = (v.get("direction") or "").strip() or "—"
+                cls = _kol_dir_class(d)
+                body = _esc((v.get("comments") or "").strip()) or "—"
+                tg = _esc((v.get("targets") or "").strip())
+                dir_html = f'<span class="kol-dir {cls}">{_esc(d)}</span>'
+                tg_html = f'<div class="kol-targets">🎯 {tg}</div>' if tg else ""
+            else:
+                dir_html = '<span class="kol-dir cyc-pending">待采集</span>'
+                body = '<span class="cyc-muted">该 KOL 已入名册，下一轮每日采集后显示其最新预测。</span>'
+                tg_html = ""
+            link = (f'<a class="cyc-link" href="{_esc(url)}" target="_blank" rel="noopener">🔗 原始频道</a>'
+                    if url.startswith("http") else "")
+            nhist = len(hist.get(nm) or [])
+            hint = f'<span class="cyc-hist">📚 {nhist} 条历史</span>' if nhist else ""
+            rg = f'<span class="cyc-region">{_esc(region)}</span>' if region else ""
+            fc = f'<div class="cyc-focus">🎯 关注：{focus}</div>' if (focus and not v) else ""
+            drill = ' kol-drill" tabindex="0" role="button"' if nhist else '"'
+            cards += (
+                f'<div class="kol-item cyc-item{drill} data-kol="{_esc(nm)}">'
+                f'<div class="kol-item-head"><span class="kol-name">{_esc(nm)}</span>{dir_html}</div>'
+                f'<div class="cyc-meta">{rg}<span class="cyc-freq">{freq}更新</span>'
+                f'<span class="cyc-school">{school}</span>{hint}</div>'
+                f'<div class="kol-comment">{body}</div>{tg_html}{fc}'
+                + (f'<div class="kol-standing">🏛 {_esc(inst)}</div>' if inst else "")
+                + link + '</div>'
+            )
+        return (f'<div class="cyc-block"><div class="cyc-block-title">{title}'
+                f'<span class="cyc-block-sub">{sub}</span></div>'
+                f'<div class="kol-grid">{cards}</div></div>')
+
+    body = _block("每日 / 每周预测", "更新节奏快，可做短周期对账", hi)
+    body += _block("月度 / 不定期预测", "长周期与节气/节点式预测", lo)
+    return head + body
+
+
+def _kol_history_payload(kol_history):
+    """把 kol_full_history() 结果压成内嵌 JSON(供前端两层展开钻取)。
+    结构精简: {kol: {"s": 背景介绍, "f": 关注领域, "h": [[first,last,dir,comments,targets,source],...]}}
+    数组形式而非对象, 省掉每条重复的键名(2600+ 条能省约 40% 体积)。
+    无历史数据返回 '{}' —— 前端据此禁用钻取, 绝不显示假数据。"""
+    if not kol_history:
+        return "{}"
+    meta = _kol_meta()
+    out = {}
+    for kol, recs in kol_history.items():
+        if not recs:
+            continue
+        m = meta.get(kol, {})
+        out[kol] = {
+            "s": m.get("standing", ""),
+            "f": m.get("focus", ""),
+            "h": [[r.get("first_date", ""), r.get("last_date", ""),
+                   r.get("direction", ""), r.get("comments", ""),
+                   r.get("targets", ""), r.get("source", "")] for r in recs],
+        }
+    # </ 会提前闭合 <script> 标签 → 转义(XSS/断标签双重防护)
+    return json.dumps(out, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+
+
+def _kol_meta():
+    """KOL 名册元信息(业界地位/机构声誉 + 关注领域), 供状态变化与观点全景两个板块共用。
+    返回 {display_name: {"standing": institution或bio, "focus": focus}}。读不到返回 {}。"""
+    out = {}
+    try:
+        import os as _os
+        _reg_path = _os.path.join(_os.path.dirname(__file__), "..", "data", "kol_registry.json")
+        _reg = json.load(open(_reg_path))
+        for _k in _reg.get("kols", []):
+            _nm = (_k.get("display_name") or "").strip()
+            if not _nm:
+                continue
+            out[_nm] = {
+                "standing": (_k.get("institution") or _k.get("bio") or "").strip(),
+                "focus": (_k.get("focus") or "").strip(),
+            }
+    except Exception:
+        return {}
+    return out
+
+
+def _kol_standing_html(meta, kol):
+    """渲染 KOL 背景介绍块(业界地位 + 关注领域)。无资料返回空串, 绝不编造。"""
+    m = meta.get((kol or "").strip()) or {}
+    standing = m.get("standing", "")
+    if not standing:
+        return ""
+    return f'<div class="kol-standing">🏛 {_esc(standing)}</div>'
+
+
 def _kol_changes_html(kol_changes):
     """KOL 状态变化板块(模块化, 仿 13F 报告)。
     接收 kol_stance_changes_grouped() 的结果 {since,days,total,modules:[...]};
@@ -535,6 +705,7 @@ def _kol_changes_html(kol_changes):
             f'<span class="kol-ov-note">↑转多(变乐观) · ↓转空(变谨慎/逆向买点)</span></div>')
 
     html = head
+    _meta = _kol_meta()
     for m in modules:
         color = m.get("color", "#8a8377")
         sector = m.get("sector", "其他")
@@ -553,10 +724,13 @@ def _kol_changes_html(kol_changes):
                 extra += f'<div class="kol-cmt">{_esc(comment)}</div>'
             if targets:
                 extra += f'<div class="kol-tgt">标的：{_esc(targets)}</div>'
-            cards += f"""<div class="kol-item">
+            # Bug1 修复: 状态变化卡片补背景介绍(与"观点全景"板块口径一致, 均取名册 institution/bio)
+            extra += _kol_standing_html(_meta, ch.get("kol", ""))
+            cards += f"""<div class="kol-item kol-drill" data-kol="{_esc(ch['kol'])}" tabindex="0" role="button">
               <div class="kol-line"><b>{_esc(ch['kol'])}</b> {_shift_badge(ch['prev_dir'], ch['new_dir'])} <span class="kol-date">{_esc(ch['date'])}</span></div>
               <div class="kol-shift"><span class="kdir kdir-{pc}">{_esc(ch['prev_dir'])}</span> → <span class="kdir kdir-{nc}">{_esc(ch['new_dir'])}</span></div>
               {extra}
+              <div class="kol-more">点击查看该 KOL 全部观点 →</div>
             </div>"""
         html += (
             f'<div class="h-module" style="border-color:{color}">'
@@ -583,19 +757,8 @@ def _kol_views_html(views):
     date = views.get("date", "")
     total = views.get("total", 0)
     modules = views["modules"]
-    # 加载 KOL 名册的业界地位/机构声誉(institution 字段), 按名字匹配渲染到卡片底部
-    _kol_standing = {}
-    try:
-        import os as _os
-        _reg_path = _os.path.join(_os.path.dirname(__file__), "..", "data", "kol_registry.json")
-        _reg = json.load(open(_reg_path))
-        for _k in _reg.get("kols", []):
-            _nm = (_k.get("display_name") or "").strip()
-            _st = (_k.get("institution") or _k.get("bio") or "").strip()
-            if _nm and _st:
-                _kol_standing[_nm] = _st
-    except Exception:
-        _kol_standing = {}
+    # 加载 KOL 名册的业界地位/机构声誉, 按名字匹配渲染到卡片底部(与"状态变化"板块共用同一口径)
+    _meta = _kol_meta()
     head = (f'<div class="kol-overview">本周 KOL 观点全景（截至 <b>{_esc(date)}</b>）：'
             f'共 <b>{total}</b> 位 KOL 有实质观点，覆盖 <b>{len(modules)}</b> 个模块。'
             f'<span class="kol-ov-note">卡片按多空方向标色 · 强烈看多→强烈看空</span></div>')
@@ -626,12 +789,13 @@ def _kol_views_html(views):
                 extra += f'<div class="kol-cmt">{_esc(comment)}</div>'
             if targets:
                 extra += f'<div class="kol-tgt">标的：{_esc(targets)}</div>'
-            _standing = _kol_standing.get((v.get("kol") or "").strip(), "")
+            _standing = _kol_standing_html(_meta, v.get("kol", ""))
             if _standing:
-                extra += f'<div class="kol-standing">🏛 {_esc(_standing)}</div>'
-            cards += f"""<div class="kol-item">
+                extra += _standing
+            cards += f"""<div class="kol-item kol-drill" data-kol="{_esc(v['kol'])}" tabindex="0" role="button">
               <div class="kol-line"><b>{_esc(v['kol'])}</b> <span class="kv-badge {bcls}">{_esc(btxt)}</span> {since_html}</div>
               {extra}
+              <div class="kol-more">点击查看该 KOL 全部观点 →</div>
             </div>"""
         html += (
             f'<div class="h-module" style="border-color:{color}">'
@@ -5297,6 +5461,74 @@ _TEMPLATE = r"""<!DOCTYPE html>
   /* KOL 观点首现日期标注 */
   .kol-since {{ font-size: 9.5px; color: var(--muted); margin-left: 6px; font-family: var(--mono); }}
   .kol-since-new {{ color: #8a3a2c; font-weight: 700; }}
+  /* ── 周期与术数预测 独立板块 ── */
+  .cyc-head {{ display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:8px; }}
+  .cyc-count {{ font-size:13px; font-weight:700; color:#6d5f80; }}
+  .cyc-sub {{ font-size:11px; color:var(--muted); font-family:var(--mono); }}
+  .cyc-note {{ font-size:11.5px; line-height:1.65; color:#6b6357; background:#f6f3f9;
+               border-left:3px solid #9d8bb0; padding:8px 11px; border-radius:0 4px 4px 0;
+               margin-bottom:14px; }}
+  .cyc-block {{ margin-bottom:18px; }}
+  .cyc-block-title {{ font-size:12.5px; font-weight:700; color:#5f5468;
+                      border-bottom:1px solid #e2dced; padding-bottom:5px; margin-bottom:10px;
+                      display:flex; align-items:baseline; gap:8px; }}
+  .cyc-block-sub {{ font-size:10.5px; font-weight:400; color:var(--muted); }}
+  .cyc-item {{ border-left:3px solid #9d8bb0; }}
+  .cyc-meta {{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:3px 0 5px; }}
+  .cyc-freq {{ font-size:9.5px; font-family:var(--mono); background:#ece6f2; color:#6d5f80;
+               padding:1px 6px; border-radius:3px; font-weight:700; }}
+  .cyc-school {{ font-size:10.5px; color:#7a7266; }}
+  .cyc-region {{ font-size:9.5px; font-family:var(--mono); background:#e6ecf0; color:#4f6272;
+                 padding:1px 6px; border-radius:3px; font-weight:700; }}
+  .cyc-focus {{ font-size:10.5px; color:#7a7266; margin-top:4px; }}
+  .cyc-hist {{ font-size:9.5px; font-family:var(--mono); color:#8a8377; }}
+  .cyc-pending {{ background:#eee9e1 !important; color:#8a8377 !important; }}
+  .cyc-muted {{ color:var(--muted); font-style:italic; }}
+  .cyc-link {{ display:inline-block; margin-top:6px; font-size:10.5px; color:#6d5f80;
+               text-decoration:none; border-bottom:1px dotted #9d8bb0; }}
+  .cyc-link:hover {{ color:#4d4159; }}
+  /* ── KOL 两层展开钻取(卡片 → 时间列表 → 单条详情) ── */
+  .kol-drill {{ cursor: pointer; transition: box-shadow .15s, transform .15s; }}
+  .kol-drill:hover {{ box-shadow: 0 3px 12px rgba(0,0,0,.10); transform: translateY(-1px); }}
+  .kol-drill:focus-visible {{ outline: 2px solid var(--dust-blue); outline-offset: 2px; }}
+  .kol-more {{ font-size: 10px; color: var(--dust-blue); margin-top: 6px; opacity: .75; }}
+  .kol-drill:hover .kol-more {{ opacity: 1; }}
+  .kd-mask {{ position: fixed; inset: 0; background: rgba(30,28,25,.52); z-index: 900;
+              display: none; align-items: flex-start; justify-content: center; padding: 40px 16px; overflow-y: auto; }}
+  .kd-mask.on {{ display: flex; }}
+  .kd-panel {{ background: var(--bg); border-radius: 12px; max-width: 860px; width: 100%;
+               box-shadow: 0 18px 50px rgba(0,0,0,.28); padding: 0 0 18px 0; }}
+  .kd-head {{ position: sticky; top: 0; background: var(--bg); border-bottom: 1px solid var(--line);
+              padding: 16px 22px 12px; border-radius: 12px 12px 0 0; z-index: 2; }}
+  .kd-name {{ font-size: 19px; font-weight: 700; color: var(--ink); }}
+  .kd-close {{ float: right; cursor: pointer; font-size: 22px; line-height: 1; color: var(--muted);
+               background: none; border: none; padding: 0 4px; }}
+  .kd-close:hover {{ color: var(--ink); }}
+  .kd-bio {{ font-size: 11.5px; color: var(--muted); line-height: 1.6; margin-top: 8px; }}
+  .kd-bio b {{ color: var(--ink); font-weight: 600; }}
+  .kd-count {{ font-size: 11px; color: var(--dust-blue); margin-top: 8px; font-family: var(--mono); }}
+  .kd-body {{ padding: 6px 22px 0; }}
+  .kd-grp {{ font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: .06em;
+             margin: 16px 0 8px; padding-bottom: 4px; border-bottom: 1px dashed var(--line); }}
+  .kd-row {{ border-left: 3px solid var(--border); padding: 8px 12px; margin-bottom: 6px;
+             background: var(--card2); border-radius: 0 8px 8px 0; cursor: pointer; }}
+  .kd-row:hover {{ background: var(--card); }}
+  .kd-row-hd {{ display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }}
+  .kd-date {{ font-size: 11px; font-family: var(--mono); color: var(--muted); white-space: nowrap; }}
+  .kd-one {{ font-size: 12px; color: var(--ink); line-height: 1.5; flex: 1 1 260px;
+             overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
+  .kd-row.open .kd-one {{ white-space: normal; overflow: visible; }}
+  .kd-caret {{ font-size: 10px; color: var(--muted); }}
+  .kd-detail {{ display: none; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--line); }}
+  .kd-row.open .kd-detail {{ display: block; }}
+  .kd-full {{ font-size: 12.5px; color: var(--ink); line-height: 1.7; white-space: pre-wrap; }}
+  .kd-kv {{ font-size: 11px; color: var(--muted); margin-top: 6px; }}
+  .kd-kv a {{ color: var(--dust-blue); }}
+  .kd-empty {{ font-size: 12px; color: var(--muted); padding: 18px 0; }}
+  @media (max-width: 640px) {{
+    .kd-mask {{ padding: 12px 8px; }}
+    .kd-one {{ white-space: normal; }}
+  }}
   /* 流动性板块 */
   .liq-row {{ font-size: 13px; margin-bottom: 8px; line-height: 1.7; }}
   .liq-k {{ color: var(--muted); }}
@@ -5839,6 +6071,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title"><span class="part-num">＋</span>本周 KOL 状态变化 · 按模块 (态度转向 call-out)<span class="freq-badge freq-weekly">每周更新</span></div>
   <div class="card">{kol_changes}</div>
 
+  <!-- ═══ 附一·二：周期与术数预测派(独立 section, 非常规方法论) ═══ -->
+  <div class="part-title" id="sec-cycle-kol"><span class="part-num">＋</span>周期与术数预测 · 独立板块 (周期理论 / 金融占星 / 易经术数)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{cycle_kol}</div>
+
   <!-- ═══ 附二：流动性要点(联动 Economic Dashboard) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>流动性要点 · 央行/国债<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card liq-wrap">{liquidity}</div>
@@ -6138,6 +6374,146 @@ mkRadar('rLong', RADAR.long);
   document.addEventListener('mouseout', function(ev) {{
     var el = ev.target.closest ? ev.target.closest('[data-tip]') : null;
     if (el) hide();
+  }});
+}})();
+
+/* ── KOL 两层展开钻取: 卡片 → 全部历史观点列表 → 单条完整详情 ── */
+(function() {{
+  var DATA = {kol_history_json};
+  // 弹层骨架运行时注入(避免污染静态模板结构)
+  var mask = document.createElement('div');
+  mask.className = 'kd-mask';
+  mask.id = 'kd-mask';
+  mask.setAttribute('role', 'dialog');
+  mask.setAttribute('aria-modal', 'true');
+  mask.innerHTML = '<div class="kd-panel">' +
+      '<div class="kd-head">' +
+        '<button class="kd-close" type="button" aria-label="关闭">&times;</button>' +
+        '<div class="kd-name" id="kd-name"></div>' +
+        '<div class="kd-bio" id="kd-bio"></div>' +
+        '<div class="kd-count" id="kd-count"></div>' +
+      '</div>' +
+      '<div class="kd-body" id="kd-body"></div>' +
+    '</div>';
+  document.body.appendChild(mask);
+  var elName = mask.querySelector('#kd-name');
+  var elBio = mask.querySelector('#kd-bio');
+  var elCount = mask.querySelector('#kd-count');
+  var elBody = mask.querySelector('#kd-body');
+
+  function esc(s) {{
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }}
+  // 本周 = 本周一(含) 之后; 与页面其它板块"本周"口径一致(周一为周首日)
+  function mondayStr() {{
+    var d = new Date();
+    var wd = (d.getDay() + 6) % 7;           // 周一=0
+    d.setDate(d.getDate() - wd);
+    var m = String(d.getMonth() + 1), day = String(d.getDate());
+    return d.getFullYear() + '-' + (m.length < 2 ? '0' + m : m) + '-' + (day.length < 2 ? '0' + day : day);
+  }}
+  var MON = mondayStr();
+
+  function rowHtml(r, idx) {{
+    // r = [first, last, direction, comments, targets, source]
+    var first = r[0] || '', last = r[1] || '', dir = r[2] || '', cmt = r[3] || '';
+    var tgt = r[4] || '', src = r[5] || '';
+    // 日期区间: 同一言论连续多日持有 → 显示 "起 ~ 止"; 单日 → 只显一个日期
+    var dateTxt = (first && last && first !== last) ? (first + ' ~ ' + last) : (last || first);
+    var kv = '';
+    if (dir) kv += '<span class="kd-kv-i">方向：<b>' + esc(dir) + '</b></span>';
+    if (tgt) kv += (kv ? ' · ' : '') + '标的：' + esc(tgt);
+    if (first && last && first !== last) {{
+      kv += (kv ? ' · ' : '') + '该观点连续见于 ' + esc(first) + ' 至 ' + esc(last);
+    }}
+    var srcHtml = src
+      ? '<div class="kd-kv">原文出处：<a href="' + esc(src) + '" target="_blank" rel="noopener">' + esc(src) + '</a></div>'
+      : '<div class="kd-kv">出处：每日快照汇总（无单条原文链接）</div>';
+    return '<div class="kd-row" data-i="' + idx + '">' +
+             '<div class="kd-row-hd">' +
+               '<span class="kd-date">' + esc(dateTxt) + '</span>' +
+               (dir ? '<span class="kd-date">[' + esc(dir) + ']</span>' : '') +
+               '<span class="kd-one">' + esc(cmt) + '</span>' +
+               '<span class="kd-caret">▸</span>' +
+             '</div>' +
+             '<div class="kd-detail">' +
+               '<div class="kd-full">' + esc(cmt) + '</div>' +
+               (kv ? '<div class="kd-kv">' + kv + '</div>' : '') +
+               srcHtml +
+             '</div>' +
+           '</div>';
+  }}
+
+  function open(kol) {{
+    var d = DATA[kol];
+    elName.textContent = kol;
+    if (!d || !d.h || !d.h.length) {{
+      elBio.innerHTML = '';
+      elCount.textContent = '';
+      elBody.innerHTML = '<div class="kd-empty">该 KOL 暂无已归档的历史观点记录。</div>';
+    }} else {{
+      var bio = '';
+      if (d.s) bio += '<div><b>业界地位：</b>' + esc(d.s) + '</div>';
+      if (d.f) bio += '<div style="margin-top:5px"><b>关注领域：</b>' + esc(d.f) + '</div>';
+      elBio.innerHTML = bio;
+      var hs = d.h;
+      // 分组: 本周 / 更早(均按时间倒序, 数据层已排好)
+      var wk = [], older = [];
+      for (var i = 0; i < hs.length; i++) {{
+        ((hs[i][1] || '') >= MON ? wk : older).push([hs[i], i]);
+      }}
+      var html = '';
+      if (wk.length) {{
+        html += '<div class="kd-grp">本周观点 · ' + wk.length + ' 条</div>';
+        for (var a = 0; a < wk.length; a++) html += rowHtml(wk[a][0], wk[a][1]);
+      }}
+      if (older.length) {{
+        html += '<div class="kd-grp">更早观点 · ' + older.length + ' 条（时间倒序）</div>';
+        for (var b = 0; b < older.length; b++) html += rowHtml(older[b][0], older[b][1]);
+      }}
+      elBody.innerHTML = html;
+      elCount.textContent = '共 ' + hs.length + ' 条归档观点 · 最早 ' + (hs[hs.length - 1][0] || '—') +
+                            ' · 数据源：Eco 每日快照 + 历史回填';
+    }}
+    mask.classList.add('on');
+    document.body.style.overflow = 'hidden';
+  }}
+  function close() {{
+    mask.classList.remove('on');
+    document.body.style.overflow = '';
+  }}
+
+  // 卡片点击 → 打开钻取层(事件委托, 兼容动态渲染)
+  document.addEventListener('click', function(ev) {{
+    var card = ev.target.closest ? ev.target.closest('.kol-drill') : null;
+    if (card) {{
+      var kol = card.getAttribute('data-kol');
+      if (kol) {{ ev.preventDefault(); open(kol); }}
+      return;
+    }}
+    // 第二层: 点某条记录 → 展开完整内容
+    var row = ev.target.closest ? ev.target.closest('.kd-row') : null;
+    if (row) {{
+      row.classList.toggle('open');
+      var c = row.querySelector('.kd-caret');
+      if (c) c.textContent = row.classList.contains('open') ? '▾' : '▸';
+      return;
+    }}
+    if (ev.target.closest && ev.target.closest('.kd-close')) {{ close(); return; }}
+    // 点遮罩空白处关闭(点面板内部不关)
+    if (ev.target === mask) close();
+  }});
+  // 键盘可达性: Enter/Space 打开, Esc 关闭
+  document.addEventListener('keydown', function(ev) {{
+    if (ev.key === 'Escape' && mask.classList.contains('on')) {{ close(); return; }}
+    if ((ev.key === 'Enter' || ev.key === ' ') && document.activeElement &&
+        document.activeElement.classList && document.activeElement.classList.contains('kol-drill')) {{
+      ev.preventDefault();
+      var k = document.activeElement.getAttribute('data-kol');
+      if (k) open(k);
+    }}
   }});
 }})();
 </script>

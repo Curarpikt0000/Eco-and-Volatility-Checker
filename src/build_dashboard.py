@@ -55,6 +55,7 @@ def main():
     # 可选: 联网读的板块(失败不阻塞)
     kol_changes, liquidity, cb_balance, custody, auctions = {}, {}, {}, {}, {}
     kol_views = {}
+    kol_history = {}
     try:
         import external_data as ed
         # ★先把当日全量方向落盘为 Eco 独立快照(data/kol/daily/), 供周对比累积
@@ -66,6 +67,13 @@ def main():
             print(f"[dashboard] KOL 快照保存跳过: {se}")
         kol_changes = ed.kol_stance_changes_grouped() or {}
         kol_views = ed.kol_weekly_views() or {}
+        # ★全量历史观点(供卡片两层展开钻取): 每日快照 + 历史回填, 连续同言论合并成区间
+        try:
+            kol_history = ed.kol_full_history() or {}
+            _n = sum(len(v) for v in kol_history.values())
+            print(f"[dashboard] KOL 历史观点: {len(kol_history)} 人 / {_n} 条")
+        except Exception as he:
+            print(f"[dashboard] KOL 历史观点跳过: {he}")
     except Exception as e:
         print(f"[dashboard] KOL 变化跳过: {e}")
     try:
@@ -445,6 +453,7 @@ def main():
         snap, checks, hit, gstats, overall,
         holdings=holdings, kol_changes=kol_changes,
         kol_views=kol_views,
+        kol_history=kol_history,
         liquidity=liquidity, cb_balance=cb_balance, custody=custody,
         auctions=auctions, money_supply=money_supply, m2_history=m2_history,
         country_ust=country_ust,

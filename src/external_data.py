@@ -16,6 +16,7 @@ KOL_REGISTRY = os.path.join(os.path.dirname(__file__), "..", "data", "kol_regist
 KOL_INDEPENDENT = os.path.join(os.path.dirname(__file__), "..", "data", "kol_independent.json")
 # Eco 自己的每日 KOL 全量方向快照仓库(独立副本, 进 git, 供周度对比用, 不依赖任何 agent 的 Notion DB)
 KOL_DAILY_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "kol", "daily")
+KOL_BACKFILL_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "kol", "backfill")
 
 
 def load_registry():
@@ -193,6 +194,80 @@ def load_kol_daily_snapshots():
                 by_kol[x["kol"]] = x
         if by_kol:
             out[ds] = by_kol
+    return out
+
+
+def kol_full_history():
+    """★每个 KOL 的【全量历史观点】, 按时间倒序, 供 dashboard 两层展开钻取。
+
+    数据源(两路合并, 均为真实落盘数据, 绝不编造):
+      1) data/kol/daily/*.json  —— Eco 每日独立快照(每天全量 KOL 方向+言论)
+      2) data/kol/backfill/*.json —— 逐 KOL 历史回填(带 source 原文链接)
+
+    去重规则: 每日快照里【连续相同】的 (direction, comments) 合并成一条区间记录,
+    避免同一句话因连跑 N 天而出现 N 次。区间用 first_date/last_date 表达。
+
+    返回 {kol_name: [{first_date,last_date,direction,comments,targets,source,origin}, ...]}
+    列表按 last_date 倒序(最新在前)。无数据返回 {}。
+    """
+    import json
+    import glob
+    out = {}
+
+    # ── 路 1: 每日快照 → 连续同内容合并成区间 ──
+    snaps = load_kol_daily_snapshots()
+    for ds in sorted(snaps.keys()):                       # 升序遍历便于合并连续段
+        for kol, x in snaps[ds].items():
+            cmt = (x.get("comments") or "").strip()
+            if not cmt:
+                continue
+            direction = (x.get("direction") or "").strip()
+            targets = (x.get("targets") or "").strip()
+            lst = out.setdefault(kol, [])
+            if lst and lst[-1]["direction"] == direction and lst[-1]["comments"] == cmt:
+                lst[-1]["last_date"] = ds                 # 延长区间
+            else:
+                lst.append({"first_date": ds, "last_date": ds,
+                            "direction": direction, "comments": cmt,
+                            "targets": targets, "source": "", "origin": "snapshot"})
+
+    # ── 路 2: 历史回填(带原文链接) ──
+    if os.path.isdir(KOL_BACKFILL_DIR):
+        for p in glob.glob(os.path.join(KOL_BACKFILL_DIR, "*.json")):
+            try:
+                d = json.load(open(p))
+            except Exception:
+                continue
+            kol = (d.get("kol") or "").strip()
+            if not kol:
+                continue
+            for h in d.get("history", []):
+                cmt = (h.get("comments") or "").strip()
+                dt = (h.get("date") or "").strip()
+                if not cmt or not dt:
+                    continue
+                out.setdefault(kol, []).append({
+                    "first_date": dt, "last_date": dt,
+                    "direction": (h.get("direction") or "").strip(),
+                    "comments": cmt,
+                    "targets": (h.get("targets") or "").strip(),
+                    "source": (h.get("source") or "").strip(),
+                    "origin": "backfill",
+                })
+
+    # ── 跨路去重(同日同言论可能两路都有) + 倒序 ──
+    for kol, lst in out.items():
+        seen = set()
+        dedup = []
+        # backfill 优先(带 source), 故先排 origin
+        for r in sorted(lst, key=lambda r: (r["last_date"], r["origin"] != "backfill")):
+            key = (r["last_date"], r["comments"][:80])
+            if key in seen:
+                continue
+            seen.add(key)
+            dedup.append(r)
+        dedup.sort(key=lambda r: r["last_date"], reverse=True)
+        out[kol] = dedup
     return out
 
 
@@ -374,6 +449,9 @@ _KOL_SECTOR_MAP = {
     "预测": ("预测与周期", "Forecast & Cycle"),
     "科技与未来趋势": ("科技与未来趋势", "Tech & Future"),
     "交易与市场微观结构": ("交易与市场微观结构", "Trading & Microstructure"),
+    # ★2026-08-20 新增: 周期理论/金融占星/易经术数等"非常规"预测派系, 单独成一个 section
+    "Cycles & Esoteric Forecasting": ("周期与术数预测", "Cycles & Esoteric Forecasting"),
+    "周期与术数预测": ("周期与术数预测", "Cycles & Esoteric Forecasting"),
 }
 _KOL_SECTOR_COLOR = {
     "贵金属": "#bfa06a", "贵金属与商品周期": "#bfa06a",
@@ -381,6 +459,7 @@ _KOL_SECTOR_COLOR = {
     "加密资产": "#c9ac6b", "资源与能源安全": "#9aab97",
     "国债利率与债券市场": "#c08a7d", "预测与周期": "#8a8377",
     "科技与未来趋势": "#8ea1ad", "交易与市场微观结构": "#a693a0",
+    "周期与术数预测": "#9d8bb0",
 }
 
 
