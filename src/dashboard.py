@@ -580,7 +580,8 @@ def _cycle_kol_html(kol_views, kol_history=None):
             # 方向 / 言论: 有才显示, 没有明确标"待采集"
             if v:
                 d = (v.get("direction") or "").strip() or "—"
-                cls = _kol_dir_class(d)
+                cls = {"强烈看多":"kv-bull2","看多":"kv-bull","分歧":"kv-mixed","中性":"kv-mixed",
+                       "看空":"kv-bear","强烈看空":"kv-bear2","另类预言":"kv-mixed"}.get(d, "kv-mixed")
                 body = _esc((v.get("comments") or "").strip()) or "—"
                 tg = _esc((v.get("targets") or "").strip())
                 dir_html = f'<span class="kol-dir {cls}">{_esc(d)}</span>'

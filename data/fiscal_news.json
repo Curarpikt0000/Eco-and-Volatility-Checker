@@ -1,9 +1,19 @@
 {
   "status": "ok",
-  "as_of": "2026-08-20",
+  "as_of": "2026-08-21",
   "source": "美日财政政策事件时间线。每日 cron agent 模式 web 检索权威源(路透/彭博/NHK/财务省/US Treasury/Congress)动态更新。绝不编造,每条带来源链接。",
   "note": "cron 每日抓取最新美日财政举措(债务上限/持续决议CR/政府关门/补充预算/国债发行计划等),按日期倒序保留最近 ~20 条。",
   "events": [
+    {
+      "date": "2026-08-19",
+      "country": "US",
+      "flag": "🇺🇸",
+      "category": "债务上限/国债规模",
+      "title": "美国国债总额首破40万亿美元创历史纪录",
+      "summary": "美财政部每日数据显示,联邦债务8/19达40.047万亿美元,为史上首次突破40万亿,过去十年翻倍,利息支出持续累积推高总额。",
+      "source_url": "https://www.npr.org/2026/08/19/nx-s1-5937552/the-u-s-debt-tops-a-record-shattering-40-trillion-yes-with-a-t",
+      "source_name": "NPR/Treasury"
+    },
     {
       "date": "2026-08-14",
       "country": "JP",

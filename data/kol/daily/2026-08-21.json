@@ -1,0 +1,861 @@
+{
+ "date": "2026-08-21",
+ "count": 122,
+ "source": "Eco independent daily crawl (web_search 全量 KOL)",
+ "kols": [
+  {
+   "kol": "Jim Curry",
+   "sector": "Precious Metals",
+   "direction": "分歧",
+   "targets": "黄金",
+   "comments": "周期分析:黄金72日周期低点后走强,当前处中期顶部形成窗口,短期谨慎"
+  },
+  {
+   "kol": "James Turk",
+   "sector": "Precious Metals",
+   "direction": "强烈看多",
+   "targets": "金/银",
+   "comments": "大牛市中,上下摆动都是暂时的;金银重估继续"
+  },
+  {
+   "kol": "Jordan Roy-Byrne",
+   "sector": "Precious Metals",
+   "direction": "看多",
+   "targets": "金/银/矿",
+   "comments": "金银矿短期反弹发展中,若持大量现金现在有3个买入首选"
+  },
+  {
+   "kol": "Jesse Colombo",
+   "sector": "Precious Metals",
+   "direction": "强烈看多",
+   "targets": "白银",
+   "comments": "白银仅走完牛市约20%,非泡沫,历史周期看仍很早"
+  },
+  {
+   "kol": "Larry Lepard",
+   "sector": "Precious Metals",
+   "direction": "强烈看多",
+   "targets": "金/银/BTC",
+   "comments": "2026比特币或翻倍至$200k,金$7000银$200 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Frank Giustra",
+   "sector": "Precious Metals",
+   "direction": "强烈看多",
+   "targets": "黄金",
+   "comments": "这不是最后一波拉升;纸黄金50年定价主导正走向终结,结构性牛市"
+  },
+  {
+   "kol": "Alex Kuptsikevich",
+   "sector": "Macro",
+   "direction": "中性",
+   "targets": "BTC/大宗",
+   "comments": "FxPro技术分析,BTC 50日均线走平,机构转向AI数据中心 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Bob Haberkorn",
+   "sector": "Precious Metals",
+   "direction": "看多",
+   "targets": "金/银",
+   "comments": "白银上半年或破$70,黄金奔$5000"
+  },
+  {
+   "kol": "Marc Chandler",
+   "sector": "Macro",
+   "direction": "看空",
+   "targets": "美元(空)/大宗",
+   "comments": "长期美元看空,软数据削弱Fed加息押注,拐点临近 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "David Meger",
+   "sector": "Precious Metals",
+   "direction": "分歧",
+   "targets": "黄金",
+   "comments": "若能源推升通胀、Fed少降息则黄金承压;近期长仓清算主导"
+  },
+  {
+   "kol": "Dan Loeb",
+   "sector": "Equities",
+   "direction": "分歧",
+   "targets": "美股",
+   "comments": "组合活跃调整,减持亚马逊、退出多只股,防守与进攻并存"
+  },
+  {
+   "kol": "Todd \"Bubba\" Horowitz",
+   "sector": "Precious Metals",
+   "direction": "强烈看多",
+   "targets": "金/银",
+   "comments": "长期$6000黄金/$100+白银;短期见基,$4000金/$55银为极佳长线水平"
+  },
+  {
+   "kol": "Ronny Stoeferle",
+   "sector": "Precious Metals",
+   "direction": "强烈看多",
+   "targets": "黄金",
+   "comments": "In Gold We Trust 2026'回到货币未来',长期看多金 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Massimiliano Castelli",
+   "sector": "Macro",
+   "direction": "看多",
+   "targets": "黄金",
+   "comments": "UBS储备经理调查:黄金仍受强需求,预期未来5年最佳风险调整回报"
+  },
+  {
+   "kol": "Timothy Arcuri",
+   "sector": "Equities",
+   "direction": "强烈看多",
+   "targets": "半导体/AI",
+   "comments": "UBS半导体AI,Micron目标$1625(+204%) [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Jeff Currie",
+   "sector": "Energy & Commodities",
+   "direction": "看多",
+   "targets": "商品/金属",
+   "comments": "'做多并系好安全带',商品牛市进入下一段;AI+长期投资不足=十年商品超级周期"
+  },
+  {
+   "kol": "Andy Schectman",
+   "sector": "Precious Metals",
+   "direction": "强烈看多",
+   "targets": "金/银",
+   "comments": "白银突破,大多数人仍未看清大局;创纪录COMEX交割=世代级买入窗口"
+  },
+  {
+   "kol": "Jeff Snider",
+   "sector": "Government Debt",
+   "direction": "看空",
+   "targets": "流动性(空)",
+   "comments": "全球流动性约束/信贷紧缩,私人信贷危机预警 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Bill Gross",
+   "sector": "Government Debt",
+   "direction": "中性",
+   "targets": "国债",
+   "comments": "无最新明确方向表态"
+  },
+  {
+   "kol": "Kyle Bass",
+   "sector": "Government Debt",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "James Grant",
+   "sector": "Government Debt",
+   "direction": "看空",
+   "targets": "利率(升)",
+   "comments": "利率更高更久,历史多十年周期,货币购买力质疑 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Lacy Hunt",
+   "sector": "Government Debt",
+   "direction": "看空",
+   "targets": "长债",
+   "comments": "放弃坚持44年的通缩论,大幅削减债券久期转投国库券,预期通胀4.5%+"
+  },
+  {
+   "kol": "Abhigya Anand",
+   "sector": "Alternative",
+   "direction": "另类预言",
+   "targets": "另类/情绪",
+   "comments": "吠陀占星:2026为深度转型年,预言中东反恐战争(2025.11–2026.4)"
+  },
+  {
+   "kol": "Plai Navaracha",
+   "sector": "Alternative",
+   "direction": "另类预言",
+   "targets": "另类/情绪",
+   "comments": "泰国灵媒类世界预言,未见新明确市场指向"
+  },
+  {
+   "kol": "Athos Salomé",
+   "sector": "Alternative",
+   "direction": "另类预言",
+   "targets": "另类/情绪",
+   "comments": "'活体诺斯特拉达姆士'类末日/科技预言"
+  },
+  {
+   "kol": "David Icke",
+   "sector": "Alternative",
+   "direction": "另类预言",
+   "targets": "另类/情绪",
+   "comments": "阴谋论/体系崩塌类叙事"
+  },
+  {
+   "kol": "Amanda Grace",
+   "sector": "Alternative",
+   "direction": "另类预言",
+   "targets": "另类/情绪",
+   "comments": "先知预言类,未见新明确市场指向"
+  },
+  {
+   "kol": "Brandon Biggs",
+   "sector": "Alternative",
+   "direction": "另类预言",
+   "targets": "另类/情绪",
+   "comments": "经济崩盘/美元预警类预言"
+  },
+  {
+   "kol": "FEMA",
+   "sector": "Alternative",
+   "direction": "未找到",
+   "targets": "-",
+   "comments": "无可核实的市场方向信号"
+  },
+  {
+   "kol": "Ray Kurzweil",
+   "sector": "Equities",
+   "direction": "看多",
+   "targets": "科技/AI",
+   "comments": "AI指数级增长/奇点临近,科技长期乐观"
+  },
+  {
+   "kol": "Michael Saylor",
+   "sector": "Crypto",
+   "direction": "看多",
+   "targets": "比特币",
+   "comments": "坚持长期比特币多头('永不卖出'),尽管年内曾三度卖币"
+  },
+  {
+   "kol": "Ivan Zhao",
+   "sector": "Equities",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "Raoul Pal",
+   "sector": "Crypto",
+   "direction": "强烈看多",
+   "targets": "加密/BTC",
+   "comments": "加密周期类似2017,或于2026见顶;流动性驱动"
+  },
+  {
+   "kol": "Cathie Wood",
+   "sector": "Equities",
+   "direction": "强烈看多",
+   "targets": "成长股/科技",
+   "comments": "颠覆式创新长期主题,继续买入"
+  },
+  {
+   "kol": "Dan Ives",
+   "sector": "Equities",
+   "direction": "强烈看多",
+   "targets": "科技/AI",
+   "comments": "科技股还有12-15%上行空间,AI非软件死刑;加仓AI股"
+  },
+  {
+   "kol": "Anu Anand",
+   "sector": "Energy & Commodities",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "Rory Johnston",
+   "sector": "Energy & Commodities",
+   "direction": "中性",
+   "targets": "原油",
+   "comments": "Commodity Context油市数据派,$200油预测(霍尔木兹关闭)未应验,数据驱动 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Doomberg / Kuppy",
+   "sector": "Energy & Commodities",
+   "direction": "看多",
+   "targets": "能源/商品",
+   "comments": "能源/大宗横向思维,结构性看多能源商品"
+  },
+  {
+   "kol": "Eric Nuttall",
+   "sector": "Energy & Commodities",
+   "direction": "看多",
+   "targets": "油气",
+   "comments": "油气结构性看多,下轮牛市种子已埋,$150油可能 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Chris Vermeulen",
+   "sector": "Precious Metals",
+   "direction": "分歧",
+   "targets": "金/银/股",
+   "comments": "2026'过山车';白银可看$106但警示关键转折点临近"
+  },
+  {
+   "kol": "AG Thorson",
+   "sector": "Precious Metals",
+   "direction": "看多",
+   "targets": "黄金",
+   "comments": "黄金技术派,长期看多 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Robert Gottlieb",
+   "sector": "Precious Metals",
+   "direction": "看多",
+   "targets": "金/银",
+   "comments": "贵金属交易,看多金银 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Vince Lanci",
+   "sector": "Precious Metals",
+   "direction": "看多",
+   "targets": "金/银",
+   "comments": "金银牛旗,耐心为要,秋季拐点,Comex定价机制'已坏' [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Gareth Soloway",
+   "sector": "Precious Metals",
+   "direction": "看多",
+   "targets": "金/BTC/S&P",
+   "comments": "弱就业引发反弹,收益率崩落,金/BTC突破,双情景 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Steve Penny",
+   "sector": "Precious Metals",
+   "direction": "看多",
+   "targets": "银/铀/金",
+   "comments": "长期高得多但近中期或更多回调,银/铀 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Daniel Ghali",
+   "sector": "Precious Metals",
+   "direction": "看多",
+   "targets": "金/铂",
+   "comments": "TD黄金新纪元/'战时经济',金铂看多,金追踪美霸权认知 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Nate Miller",
+   "sector": "Precious Metals",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "Bob Coleman",
+   "sector": "Precious Metals",
+   "direction": "看多",
+   "targets": "白银",
+   "comments": "白银物理市场是驱动,相较其他市场仍被低估 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Bob Moriarty",
+   "sector": "Precious Metals",
+   "direction": "强烈看多",
+   "targets": "金/银",
+   "comments": "保护自己,金银+食物燃料,世界日益危险 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Jay Martin",
+   "sector": "Precious Metals",
+   "direction": "看多",
+   "targets": "金/铜/银",
+   "comments": "商品supercycle,金铜银,央行买入+货币贬值早期 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Adrian Day",
+   "sector": "Precious Metals",
+   "direction": "强烈看多",
+   "targets": "金矿",
+   "comments": "加仓矿股,对矿股比金属本身更看多;高质量生产商仍便宜"
+  },
+  {
+   "kol": "Jeff Clark",
+   "sector": "Precious Metals",
+   "direction": "看多",
+   "targets": "金/银",
+   "comments": "贵金属长期看多 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Rick Rule",
+   "sector": "Precious Metals",
+   "direction": "看多",
+   "targets": "金/银/铀/铜",
+   "comments": "牛市仍处早-中段,回调即机会;偏好白银矿/优质生产商"
+  },
+  {
+   "kol": "Keith Neumeyer",
+   "sector": "Precious Metals",
+   "direction": "强烈看多",
+   "targets": "白银",
+   "comments": "大型科技将触发白银供给冲击"
+  },
+  {
+   "kol": "Peter Krauth",
+   "sector": "Precious Metals",
+   "direction": "强烈看多",
+   "targets": "白银",
+   "comments": "三位数银或早于预期回归,回调是bear trap [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Craig Hemke",
+   "sector": "Precious Metals",
+   "direction": "强烈看多",
+   "targets": "金/银/铜",
+   "comments": "2026金银铜强劲开局;$120白银/$6000黄金"
+  },
+  {
+   "kol": "David Garofalo",
+   "sector": "Precious Metals",
+   "direction": "看多",
+   "targets": "金矿",
+   "comments": "黄金生产商结构性看多"
+  },
+  {
+   "kol": "Robert Kiyosaki",
+   "sector": "Precious Metals",
+   "direction": "强烈看多",
+   "targets": "金/银/BTC",
+   "comments": "2026崩盘预警=建仓机会,金银BTC/ETH,实物 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Willem Middelkoop",
+   "sector": "Precious Metals",
+   "direction": "强烈看多",
+   "targets": "黄金",
+   "comments": "黄金重置已悄然发生,中国主导金市逢跌买入"
+  },
+  {
+   "kol": "Stephen Leeb",
+   "sector": "Precious Metals",
+   "direction": "强烈看多",
+   "targets": "黄金/白银",
+   "comments": "黄金被严重低估,新黄金货币体系已就位;中国5万吨黄金"
+  },
+  {
+   "kol": "Matthew Piepenburg",
+   "sector": "Precious Metals",
+   "direction": "强烈看多",
+   "targets": "黄金",
+   "comments": "Von Greyerz,黄金非价格是驱动,长期强看多 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Alasdair Macleod",
+   "sector": "Precious Metals",
+   "direction": "强烈看多",
+   "targets": "金/银",
+   "comments": "'一代人中最强买入信号';央行/中国悄然囤积实物"
+  },
+  {
+   "kol": "Daniel Oliver",
+   "sector": "Precious Metals",
+   "direction": "强烈看多",
+   "targets": "金矿",
+   "comments": "黄金衡量其他资产真实价值;信用崩溃将扩大金矿利润率"
+  },
+  {
+   "kol": "Carroll Quigley",
+   "sector": "Macro",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "S. Druckenmiller",
+   "sector": "Macro",
+   "direction": "看多",
+   "targets": "美股/科技",
+   "comments": "Duquesne 13F,GOOGL/Natera,美经济强将更强 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Jeffrey Gundlach",
+   "sector": "Government Debt",
+   "direction": "看空",
+   "targets": "长债",
+   "comments": "30年美债收益率突破多年底部→将带来显著更高收益率(看空债券)"
+  },
+  {
+   "kol": "Michael Hartnett",
+   "sector": "Macro",
+   "direction": "分歧",
+   "targets": "美股/宏观",
+   "comments": "双轨:战术上近期减仓风险,战略上维持长期配置;B&B指标9.3高位"
+  },
+  {
+   "kol": "Ted Oakley",
+   "sector": "Macro",
+   "direction": "看空",
+   "targets": "美股/宏观",
+   "comments": "警告'世代级熊市'将至,投资者已忘记真正崩盘的感觉"
+  },
+  {
+   "kol": "Clem Chambers",
+   "sector": "Macro",
+   "direction": "中性",
+   "targets": "",
+   "comments": "市场评论,无强方向 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "David Hunter",
+   "sector": "Macro",
+   "direction": "强烈看多",
+   "targets": "股(短多)",
+   "comments": "最后melt-up:S&P $10000道$70000,之后全球崩盘 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "David Stockman",
+   "sector": "Macro",
+   "direction": "看空",
+   "targets": "美股",
+   "comments": "'Trump Crash 2026';AI股占标普45%市值=泡沫"
+  },
+  {
+   "kol": "Larry McDonald",
+   "sector": "Macro",
+   "direction": "看多",
+   "targets": "国债/宏观",
+   "comments": "债券开始更具吸引力(看多债券),提醒小心风险资产;全球性故事"
+  },
+  {
+   "kol": "Peter Schiff",
+   "sector": "Macro",
+   "direction": "强烈看多",
+   "targets": "金/银/美元(空)",
+   "comments": "比2008更糟,主权债/储备货币危机,金>$4400银>$66 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "James Rickards",
+   "sector": "Macro",
+   "direction": "强烈看多",
+   "targets": "黄金/白银",
+   "comments": "黄金$10000/白银$200;央行抛美元囤实物"
+  },
+  {
+   "kol": "Stewart Thomson",
+   "sector": "Precious Metals",
+   "direction": "看多",
+   "targets": "黄金/矿股",
+   "comments": "Sell America买黄金,金&利率新现实 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Zoltan Pozsar",
+   "sector": "Macro",
+   "direction": "看多",
+   "targets": "黄金/商品",
+   "comments": "布雷顿森林III;低通胀时代结束,商品/黄金货币化"
+  },
+  {
+   "kol": "Torsten Sløk",
+   "sector": "Macro",
+   "direction": "中性",
+   "targets": "宏观/美股",
+   "comments": "经济承压下仍有韧性;警告AI资本开支回报若晚于预期或成全市场问题"
+  },
+  {
+   "kol": "Ray Dalio",
+   "sector": "Macro",
+   "direction": "看空",
+   "targets": "警告",
+   "comments": "债务危机'心脏病',资本战争,五力同时到临界点 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Jeremy Grantham",
+   "sector": "Macro",
+   "direction": "看空",
+   "targets": "股(空)",
+   "comments": "AI'显然是泡沫',不破概率'微乎其微',或拖垮股市 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Luke Gromen",
+   "sector": "Macro",
+   "direction": "看多",
+   "targets": "黄金/美元",
+   "comments": "美元体系正在破裂,黄金被主权实时重定价"
+  },
+  {
+   "kol": "Craig Hamilton-Parker",
+   "sector": "Alternative",
+   "direction": "另类预言",
+   "targets": "另类/情绪",
+   "comments": "2026世界预言:崩溃/重置主题(通灵'新诺查丹玛斯')"
+  },
+  {
+   "kol": "Maria Smirnova",
+   "sector": "Precious Metals",
+   "direction": "看多",
+   "targets": "金/银",
+   "comments": "Sprott,2026是修正巩固年,金银回升,基本面完整,估值吸引 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Robert Kientz",
+   "sector": "Precious Metals",
+   "direction": "强烈看多",
+   "targets": "金/银",
+   "comments": "白银供给冲击;纸化掩盖真实供给,重大金融冲击将令投资者抢金银"
+  },
+  {
+   "kol": "Mervyn King",
+   "sector": "Macro",
+   "direction": "中性",
+   "targets": "央行政策",
+   "comments": "前BoE行长,货币政策评论,无明确市场方向 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Peter Fisher",
+   "sector": "Macro",
+   "direction": "中性",
+   "targets": "债券/Fed",
+   "comments": "前财政部/BlackRock,财政部压收益率,Fed资负表关注久期 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Arminio Fraga",
+   "sector": "Macro",
+   "direction": "中性",
+   "targets": "新兴市场",
+   "comments": "'全球秩序已终结',新兴市场脆弱,后美元世界?(偏谨慎) [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Raghuram Rajan",
+   "sector": "Macro",
+   "direction": "中性",
+   "targets": "Fed政策",
+   "comments": "Fed 2026或1次降息,经济有强动能 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Jeremy Stein",
+   "sector": "Macro",
+   "direction": "中性",
+   "targets": "Fed政策",
+   "comments": "Fed资负表task force,关注久期非规模 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Karen Dynan",
+   "sector": "Macro",
+   "direction": "中性",
+   "targets": "全球经济",
+   "comments": "2026全球增长放缓,战争等不确定笼罩(偏谨慎) [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Raj Chetty",
+   "sector": "Macro",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "Doug McMillon",
+   "sector": "Macro",
+   "direction": "中性",
+   "targets": "消费",
+   "comments": "Walmart前CEO(1月退休),通胀驱动消费行为变化 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Marc Andreessen",
+   "sector": "Macro",
+   "direction": "强烈看多",
+   "targets": "AI/科技",
+   "comments": "a16z:AI是经历过最大技术转变,智能成本崩落,市场仍早期 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Chad Jones",
+   "sector": "Macro",
+   "direction": "看多",
+   "targets": "AI/增长",
+   "comments": "斯坦福:AI或使增长加速超5%/年(双刃剑) [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Sarah Bond",
+   "sector": "Macro",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "Greg Mankiw",
+   "sector": "Macro",
+   "direction": "中性",
+   "targets": "宏观",
+   "comments": "哈佛宏观,数据完整性/货币政策评论 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Thomas Sargent",
+   "sector": "Macro",
+   "direction": "中性",
+   "targets": "财政/债务",
+   "comments": "理性预期,质疑r<g'免费午餐'债务论 [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "William White",
+   "sector": "Macro",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "Nomi Prins",
+   "sector": "Precious Metals",
+   "direction": "强烈看多",
+   "targets": "黄金",
+   "comments": "债务破$40万亿,金融再对齐;中国黄金重货币化"
+  },
+  {
+   "kol": "Amos Hochstein",
+   "sector": "Energy & Commodities",
+   "direction": "看多",
+   "targets": "油/能源",
+   "comments": "能源:油价未反映现实,最大能源危机,供应风险(偏能源看多) [沿用上次读数,今日未获新信号]"
+  },
+  {
+   "kol": "Martin Armstrong",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "Raymond A. Merriman",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "Charles Nenner",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "Robert Prechter / Elliott Wave International",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "分歧",
+   "targets": "美股/周期",
+   "comments": "艾略特波浪:识别市场极强setup,周期为本(方向依波浪结构)"
+  },
+  {
+   "kol": "Harry S. Dent Jr.",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "Neil Howe",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "Eric Hadik",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "Andrew Pancholi",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "Foundation for the Study of Cycles",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "Tom McClellan",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "Glenn Neely",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "Avi Gilburt",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "Peter Goodburn / WaveTrack International",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "David Hickson / Sentient Trader",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "Bo Polny",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "另类预言",
+   "targets": "金/银/BTC",
+   "comments": "圣经周期timing:8/24、9/11 2026为重大转折窗口,金/银/BTC/XRP将变动"
+  },
+  {
+   "kol": "吳昌燁 · 太一研究院",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "六爻佔卦之狼眼看世界",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "小夏易經視角",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "秋潤金融玄學 / 秋润易道",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "易經交易攻守道",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "丙午易说天下",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "天遁财局",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  },
+  {
+   "kol": "JingHongNews 景宏资讯",
+   "sector": "Cycles & Esoteric Forecasting",
+   "direction": "未找到",
+   "targets": "",
+   "comments": "今日 web_search 未获可核实的明确方向"
+  }
+ ]
+}

@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-20",
+  "as_of": "2026-08-21",
   "senators": [
     {
       "name": "Tommy Tuberville",
@@ -7,6 +7,76 @@
       "n_reports": 22,
       "n_parsed": 3,
       "trades": [
+        {
+          "ticker": "PEP",
+          "asset": "Pepsico Inc",
+          "txn_date": "10/07/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "11/15/2025"
+        },
+        {
+          "ticker": "OC",
+          "asset": "Owens Corning Inc",
+          "txn_date": "10/07/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "11/15/2025"
+        },
+        {
+          "ticker": "MSFT",
+          "asset": "Microsoft Corp",
+          "txn_date": "10/07/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "11/15/2025"
+        },
+        {
+          "ticker": "AAPL",
+          "asset": "Apple Inc",
+          "txn_date": "10/07/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "11/15/2025"
+        },
+        {
+          "ticker": "GOOGL",
+          "asset": "Alphabet Inc. - Class A Common Stock",
+          "txn_date": "10/07/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "11/15/2025"
+        },
+        {
+          "ticker": "ORCL",
+          "asset": "Oracle Corporation Common Stock",
+          "txn_date": "10/07/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "11/15/2025"
+        },
+        {
+          "ticker": null,
+          "asset": "BIRMINGHAM ALA GO WTS SER. 2018 B\n                                        \n                                        \n                                        \n                                            Rate/Coupon: 5.0% Matures: 12/01/2043",
+          "txn_date": "10/07/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "11/15/2025"
+        },
         {
           "ticker": "TSCO",
           "asset": "Tractor Supply Company",
@@ -68,94 +138,24 @@
           "filed": "02/14/2025"
         },
         {
+          "ticker": "ADBE",
+          "asset": "Adobe Inc. - Common Stock",
+          "txn_date": "10/29/2024",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "11/15/2024"
+        },
+        {
           "ticker": "AAPL",
           "asset": "Apple Inc. - Common Stock",
-          "txn_date": "08/26/2024",
-          "owner": "Self",
-          "direction": "Sale (Partial)",
-          "dir_cn": "部分卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "08/05/2026"
-        },
-        {
-          "ticker": "MDT",
-          "asset": "Medtronic plc. Ordinary Shares",
-          "txn_date": "08/26/2024",
+          "txn_date": "10/29/2024",
           "owner": "Joint",
           "direction": "Sale (Full)",
           "dir_cn": "卖出",
           "amount_range": "$15,001 - $50,000",
-          "filed": "08/05/2026"
-        },
-        {
-          "ticker": "CVS",
-          "asset": "CVS Health Corporation Common Stock",
-          "txn_date": "08/26/2024",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$1,001 - $15,000",
-          "filed": "08/05/2026"
-        },
-        {
-          "ticker": "UPS",
-          "asset": "United Parcel Service, Inc. Common Stock",
-          "txn_date": "08/26/2024",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "08/05/2026"
-        },
-        {
-          "ticker": "EIBLX",
-          "asset": "Eaton Vance Floating Rate Fund Insti Share\n                                        \n                                        \n                                        \n                                            \n                                                \n                                                    Company: EATON VANCE FLOATING RATE CLASS I",
-          "txn_date": "08/26/2024",
-          "owner": "Self",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$50,001 - $100,000",
-          "filed": "08/05/2026"
-        },
-        {
-          "ticker": "ABNFX",
-          "asset": "The Bond Fd of America Class F-2 Shares\n                                        \n                                        \n                                        \n                                            \n                                                \n                                                    Company: AMERICAN BOND FUND OF AMERICA CL F2",
-          "txn_date": "08/26/2024",
-          "owner": "Self",
-          "direction": "Purchase",
-          "dir_cn": "买入",
-          "amount_range": "$50,001 - $100,000",
-          "filed": "08/05/2026"
-        },
-        {
-          "ticker": "WBA",
-          "asset": "Walgreens Boots Alliance, Inc. - Common Stock",
-          "txn_date": "03/21/2024",
-          "owner": "Joint",
-          "direction": "Purchase",
-          "dir_cn": "买入",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "08/05/2026"
-        },
-        {
-          "ticker": "PARA",
-          "asset": "Paramount Global - Class B Common Stock",
-          "txn_date": "03/21/2024",
-          "owner": "Joint",
-          "direction": "Purchase",
-          "dir_cn": "买入",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "08/05/2026"
-        },
-        {
-          "ticker": null,
-          "asset": "ROLLS-ROYCE HOLDINGS PLC SPONSORED ADR",
-          "txn_date": "03/21/2024",
-          "owner": "Joint",
-          "direction": "Purchase",
-          "dir_cn": "买入",
-          "amount_range": "$1,001 - $15,000",
-          "filed": "08/05/2026"
+          "filed": "11/15/2024"
         }
       ],
       "status": "ok"
