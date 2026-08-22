@@ -2525,12 +2525,15 @@ def _comex_firms_top10_html(cf):
         for n, r in enumerate(rows, 1):
             w = r["lots"] / mx * 100
             tag = "" if r.get("is_bank") else '<span class="tf-nb">非银</span>'
+            # ★2026-08-22(Chao): 主显**吨**便于直接口算, 手数放小字括号保留可追溯性
+            t = r.get("tonnes")
+            t_txt = f'{t:,.2f}' if isinstance(t, (int, float)) else "—"
             out.append(
                 f'<div class="tf-row">'
                 f'<span class="tf-rk">{n}</span>'
                 f'<span class="tf-nm">{_esc(r["firm"])}{tag}</span>'
                 f'<span class="tf-bar"><i style="width:{w:.1f}%;background:{col}"></i></span>'
-                f'<span class="tf-lot">{r["lots"]:,}</span>'
+                f'<span class="tf-lot">{t_txt}<span class="tf-lots">({r["lots"]:,}手)</span></span>'
                 f'<span class="tf-sh">{r["share"]:.1f}%</span>'
                 f'</div>')
         return "".join(out)
@@ -2555,7 +2558,7 @@ def _comex_firms_top10_html(cf):
                         f'data-k="{k}">{w["label"]}</button>')
             panes.append(
                 f'<div class="tf-pane{act}" data-tf="{slug}" data-k="{k}">'
-                f'<div class="tf-sub">{sub} · 总交割 {d["total_i"]:,} 手</div>'
+                f'<div class="tf-sub">{sub} · 总交割 {d.get("total_i_t", 0):,.2f} 吨（{d["total_i"]:,} 手）</div>'
                 f'<div class="tf-cols">'
                 f'<div class="tf-col"><div class="tf-ct tf-ci">▲ Top10 交货方（Issued）</div>'
                 f'{_rank_list(d["issuers"], "i")}</div>'
@@ -2579,16 +2582,81 @@ def _comex_firms_top10_html(cf):
         f'<div class="cust-how"><b>如何看：</b><b style="color:#d64545">交货方(Issued)</b>＝'
         f'开出交割通知、把实物交出去的一方；<b style="color:#2e9e5b">接货方(Stopped)</b>＝'
         f'接下通知、拿走实物的一方。二者总量恒等（每手交割必有一发一接）。<br>'
+        f'<b>单位</b>：主数字为<b>吨</b>（便于与库存/产量口径直接对比），括号内为原始<b>合约手数</b>。'
+        f'换算依据 CME 官方合约规格：黄金 100 oz/手、白银 5,000 oz/手、铂金 50 oz/手，'
+        f'1 金衡盎司 = 31.1034768 克。<br>'
         f'<b>排名口径</b>：按该窗口内<b>累计总量</b>排（非净额）——净额会让大进大出的做市商掉榜，'
         f'不符合「谁交货最多」的直觉。同一家可同时进两个榜（既发又接属正常做市行为）。<br>'
         f'<b>怎么用</b>：某家<b>持续霸榜接货方</b>＝在囤实物（看涨/逼空）；'
-        f'<b>持续霸榜交货方</b>＝在放实物（压价/去库存）。标<span class="tf-nb">非银</span>的是'
-        f'自营/经纪商（StoneX、Marex、Advantage 等），其行为逻辑与 bullion bank 不同，需分开读。'
-        f'<b>CME</b> 是清算所自身席位，非市场参与者。<br>'
+        f'<b>持续霸榜交货方</b>＝在放实物（压价/去库存）。<br>'
         f'<b>数据诚实说明</b>：archive 段为 CME 官方 PDF 的 per-firm 精确解析'
         f'（133/133 份全解析成功，席位加总与 PDF TOTAL 逐日自洽校验，0 处不符）；'
         f'近期段来自 Notion 每日交割明细增量。<b>铂金交割极稀疏</b>（常整周无交割），'
         f'短窗口内榜单为空属真实情况，不用其它窗口数字填充。</div>'
+        f'{_comex_firms_who_html()}'
+        f'</div>')
+
+
+def _comex_firms_who_html():
+    """★2026-08-22(Chao): 「不同的机构代表哪些利益集团」——交割席位的阵营背景说明。
+
+    ★纪律: 只写**本数据集中真实出现过的机构**(已核对归一后的 34 家名单), 不凑不编;
+      阵营归类基于机构公开身份(LBMA 做市商资格 / 清算所 / FCM 经纪商等公开事实),
+      对其交割动机的解读**明确标注为一般性行为逻辑, 不是对某家的指控**。
+    """
+    groups = [
+        ("清算所自身", "#8a8578",
+         ["CME"],
+         "交易所清算机构的自有席位，<b>不是市场参与者</b>。出现在榜上多为交割流程的中转/代位，"
+         "占比高不代表有人在大举交货 —— 读榜时应先把它排除再看真实机构排序。"),
+        ("LBMA 核心做市商（美系）", "#7d6b8a",
+         ["JP Morgan", "BofA", "Citi", "Goldman", "Morgan Stanley", "Wells Fargo"],
+         "伦敦金银市场协会做市商与美国大行自营。<b>同时是最大的库房运营方与 COMEX 主力做市商</b>，"
+         "既为客户代持也为自营账户操作，双向巨量收发属常态。其<b>净方向</b>（而非总量）"
+         "才是判断压价 vs 囤货的关键信号。"),
+        ("LBMA 做市商（欧系）", "#6b7d8a",
+         ["HSBC", "Barclays", "Deutsche Bank", "BNP Paribas", "Std Chartered", "SG", "ABN AMRO"],
+         "欧洲跨国行。HSBC 与 Std Chartered 在亚洲实物需求链上参与度高；"
+         "BNP Paribas、Deutsche Bank 近年在贵金属交割端明显活跃。"
+         "这一组的动向常与<b>亚洲/中东实物流向</b>相关。"),
+        ("加拿大 / 日本 / 澳洲银行", "#6b8a7d",
+         ["Scotia", "BMO", "RBC", "Mizuho", "Macquarie"],
+         "Scotia（原 ScotiaMocatta）曾是全球最老的黄金交易行之一；BMO、RBC 为加系资源型银行；"
+         "Mizuho 代表日系；Macquarie 是澳洲资源系投行。"
+         "这一组常服务<b>矿业生产商的套保盘</b>，交货方向偏向生产端出货。"),
+        ("非银 FCM / 自营商", "#a08a6b",
+         ["StoneX", "Advantage", "Marex", "ADM", "Dorman", "PTG", "RJ O'Brien",
+          "Interactive Brokers", "Wedbush", "Straits Financial", "Ironbeam",
+          "Phillip", "Plus500", "Nanhua USA-HK"],
+         "期货经纪商（FCM）与自营交易商，<b>多数是代客户清算</b>而非自有头寸。"
+         "其席位背后可能是对冲基金、家族办公室、实物商或散户，"
+         "<b>因此不能把它们的方向直接读成机构观点</b>——这是与 bullion bank 最大的区别。"
+         "ADM 与 StoneX 亦有实物商品业务背景。"),
+        ("对冲基金 / 其他", "#8a6b6b",
+         ["Citadel"],
+         "以自有资金参与的交易机构。在贵金属交割端出现频率低、量级小，"
+         "偶发上榜多为特定策略的实物腿，不构成趋势信号。"),
+    ]
+    cards = []
+    for name, color, firms, desc in groups:
+        chips = "".join(f'<span class="fw-chip">{_esc(f)}</span>' for f in firms)
+        cards.append(
+            f'<div class="fw-grp">'
+            f'<div class="fw-hd" style="border-left-color:{color}">'
+            f'<b style="color:{color}">{name}</b>'
+            f'<span class="fw-cnt">{len(firms)} 家</span></div>'
+            f'<div class="fw-chips">{chips}</div>'
+            f'<div class="fw-desc">{desc}</div>'
+            f'</div>')
+    return (
+        f'<div class="cust-how fw-wrap">'
+        f'<b>各机构代表哪些利益集团？</b>（按公开身份归类，覆盖本数据集出现过的全部机构）'
+        f'<div class="fw-grid">{"".join(cards)}</div>'
+        f'<div class="fw-note">★ 上表的<b>行为解读是一般性逻辑</b>，非对任何机构的指控。'
+        f'交割席位反映的是<b>清算通道</b>，不等于最终受益人——'
+        f'大行席位下既有自营也有代客，单看某日某家的方向容易过度解读，'
+        f'应看<b>多窗口的持续性</b>（切换上方日/周/月/全期对比同一家的方向是否稳定）。'
+        f'标<span class="tf-nb">非银</span>的机构尤其如此。</div>'
         f'</div>')
 
 
@@ -3808,11 +3876,22 @@ def _basis_trade_html(bt):
                     "正常时 SOFR 应在走廊内(ON RRP 底 ~ IORB 顶)。<b>SOFR 上抬触顶甚至穿越 IORB(深红虚线)= 融资血管收缩</b>——"
                     "回购市场缺钱、加杠杆成本骤升，是基差套利被挤压的第一信号。2019-09 与 2020-03 强平潮前都出现过 SOFR 冲顶。"
                     "<br><b>怎么用：</b>SOFR−IORB 由负转 0 甚至转正 = 🔴 预警：融资端已封顶，任何波动都会放大强平压力。"),
-        "carry": ("<b>怎么看：</b>carry = 各期限国债收益率 − 隔夜融资成本（美债用 SOFR，日债用 TONAR），即套利头寸的<b>持有净收益(bp)</b>。"
-                  "carry 为正且宽 = 套利有肉、头寸稳；<b>carry 收窄甚至转负(倒挂)= 借钱持债反而亏损 = 强平动机爆发</b>。"
+        "carry": ("<b>怎么看：</b>carry = 各期限国债收益率 − 隔夜融资成本（美债用 SOFR，日债用 TONAR），即"
+                  "<b>回购融资买入并持有现券的净收益(bp)</b>。carry 为正且宽 = 持券吃息差有肉、头寸稳；"
+                  "<b>carry 收窄甚至转负(倒挂)= 借钱持债反而亏损 = 强平动机爆发</b>。"
                   "短端(2Y/1M)对融资成本最敏感，最先转负。实线=美债(−SOFR)，虚线=日债(−TONAR)。"
-                  "<br><b>怎么用：</b>任一期限 carry 跌破 0(<span style=\"color:#d64545\">红区</span>)= 🔴 该期限套利头寸开始亏损，"
-                  "叠加融资触顶就是去杠杆的直接扳机。日债近端 carry 转负正是 TONAR 融资倒挂预警(对应表6)。"),
+                  "<br><b>⚠️ 口径说明(2026-08-22 修正)：</b>本图是<b>现券持有 carry（单腿）</b>，"
+                  "<b>不是</b>对冲基金的「期现基差套利(cash-futures basis trade)」。后者是<b>双腿</b>："
+                  "回购融资买入 CTD 现券 + 同时卖空对应国债期货，收益 = "
+                  "<b>隐含回购利率(IRR) − 实际回购利率</b>，其中 IRR =［(发票价格 − 债券脏价) / 债券脏价］×(年天数 / 距交割天数)，"
+                  "发票价格 = 期货价 × 转换因子 + 交割日应计利息（依据 Fed FEDS Notes 2024-03-08、"
+                  "ScienceDirect《Hedge funds and the Treasury cash-futures basis trade》）。"
+                  "两者关键差异：真 basis trade 的<b>久期风险被期货腿对冲掉</b>，本图的现券 carry <b>仍暴露久期风险</b>。"
+                  "真 net basis 需 CME 期货结算价 + 转换因子 + CTD 判定（商业授权/反爬），本项目免费源不可得，"
+                  "<b>故只做现券 carry 并如实标注，绝不冒充 basis trade</b>。"
+                  "<br><b>怎么用：</b>任一期限 carry 跌破 0(<span style=\"color:#d64545\">红区</span>)= 🔴 该期限持券头寸开始亏损，"
+                  "叠加融资触顶就是去杠杆的直接扳机——这与真 basis trade 的强平压力<b>同向</b>（融资成本是两者共同的分母），"
+                  "故仍是有效的预警代理。日债近端 carry 转负正是 TONAR 融资倒挂预警(对应表6)。"),
         "trigger": ("<b>怎么看：</b>去杠杆的「火药桶 + 火星」：<b>MOVE 债市波动率(左轴，橙线)</b>是火星——波动飙升直接抬高保证金要求、"
                     "逼迫降杠杆；<b>Fed 准备金(右轴，蓝线)</b>是缓冲垫——准备金越薄，市场吸收抛盘的能力越弱。"
                     "<br><b>怎么用：</b>MOVE 突破 120(🔴) + 准备金持续跌向 $2.8T 红线 = 火药桶已满、火星将至，"
@@ -4997,19 +5076,28 @@ def _corp_credit_html(cc):
             f'<div class="cc-odate">as of {_esc(o.get("latest_date", ""))}'
             f'{_stale_badge(o.get("latest_date"), "quarterly")}</div>'
             f'{_corp_outstanding_svg(o)}</div>')
-    ohtml = (f'<div class="cc-osec"><div class="dg-sub">真实未偿总额（Fed Z.1 · 季度）</div>'
-             f'<div class="cc-ogrid">{"".join(ocards)}</div></div>') if ocards else ""
+    ohtml = (f'<div class="cc-osec"><div class="dg-sub">真实未偿总额（Fed Z.1 · 季度）'
+             f'<span class="cc-oscope">全市场口径 · 非分评级</span></div>'
+             f'<div class="cc-ogrid">{"".join(ocards)}</div>'
+             f'<div class="cc-onote"><b>为什么这里没有 AAA/BBB/CCC 各自的总量？</b>'
+             f'「按评级拆分的未偿余额」属 ICE / Bloomberg 指数成分数据，'
+             f'<b>商业授权、无免费源</b>。已实测确认：SIFMA 公开统计（US Fixed Income Securities）'
+             f'的 Corporates 亦<b>只有单一合计</b>（最新 1Q26 约 $11.74T），同样不分评级；'
+             f'FRED 上带 TRIV 后缀的分评级序列是<b>总回报指数</b>（随价格波动的指数点位），'
+             f'<b>不是</b>债券余额，用它冒充总量会得出完全错误的量级。'
+             f'故本节总量只给<b>能验证的全市场口径</b>，分评级层面只提供收益率与 OAS。</div>'
+             f'</div>') if ocards else ""
 
     return (
         f'<div class="cc-wrap">'
         f'<div class="dg-head">🏦 美国公司债 · 分评级 收益率 / 利差 / 总额'
         f'<span class="dg-asof">as of {_esc(asof)}{badge}</span></div>'
         f'{table}{divergence}{pct_html}'
+        f'{ohtml}'
         f'<div class="dg-sub">期权调整利差 OAS 走势（近 3 年 · 纯信用风险溢价）</div>'
         f'{_corp_credit_svg(rs, "oas_series", unit=" %")}'
         f'<div class="dg-sub">有效收益率走势（近 3 年 · 含无风险利率）</div>'
         f'{_corp_credit_svg(rs, "yield_series", unit=" %")}'
-        f'{ohtml}'
         f'<div class="ci-how"><b>如何看：</b>'
         f'<b>有效收益率</b>=投资者实际拿到的总收益率，它同时包含无风险利率与信用风险；'
         f'国债利率上行时它也会涨，所以<b>不能单看它判断信用风险</b>。'
@@ -6258,6 +6346,25 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .bis-span {{ font-size: 10px; color: var(--muted); margin-left: 4px; }}
   .bis-pane {{ display: none; }}
   .bis-pane.bis-on {{ display: block; }}
+  /* ★2026-08-22 COMEX 交割席位 阵营背景说明 */
+  .tf-lots {{ font-size: 9.5px; color: var(--muted); margin-left: 3px; font-weight: 400; }}
+  .fw-wrap {{ margin-top: 10px; }}
+  .fw-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+              gap: 10px; margin: 10px 0 8px; }}
+  .fw-grp {{ background: rgba(140,155,175,.06); border-radius: 6px; padding: 9px 11px; }}
+  .fw-hd {{ display: flex; align-items: center; gap: 6px; border-left: 3px solid var(--dust-blue);
+            padding-left: 7px; margin-bottom: 6px; font-size: 12px; }}
+  .fw-cnt {{ margin-left: auto; font-size: 9.5px; color: var(--muted); font-family: var(--mono); }}
+  .fw-chips {{ display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }}
+  .fw-chip {{ font-family: var(--mono); font-size: 9.5px; background: var(--card);
+              border: 1px solid var(--border); border-radius: 3px; padding: 1px 5px; color: var(--text); }}
+  .fw-desc {{ font-size: 11px; line-height: 1.65; color: var(--muted); }}
+  .fw-note {{ font-size: 10.5px; line-height: 1.6; color: var(--muted);
+              border-top: 1px dashed var(--border); padding-top: 7px; }}
+  .cc-oscope {{ font-size: 10px; color: var(--muted); font-weight: 400; margin-left: 6px; }}
+  .cc-onote {{ font-size: 10.5px; line-height: 1.65; color: var(--muted);
+               background: rgba(140,155,175,.07); border-radius: 5px;
+               padding: 8px 10px; margin-top: 8px; }}
 </style>
 </head>
 <body>
@@ -6407,7 +6514,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title"><span class="part-num">＋</span>国债市场收益率·波动性·压力 · 竖向四联图 (对齐 Morgan Stanley · 过去3年真实公开数据 · 每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{stress_panels}</div>
   <!-- ═══ 附三·二B：基差套利去杠杆预警 ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>基差套利去杠杆预警 · 美债/日债 (SOFR 倒挂 + Carry 空间 + 波动触发 · 强平潮尾部风险 · 每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="part-title"><span class="part-num">＋</span>基差套利去杠杆预警 · 美债/日债 (SOFR 倒挂 + 持券 Carry + 波动触发 · 强平潮尾部风险 · 每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{basis_trade}</div>
   <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)<span class="freq-badge freq-event">每次拍卖</span></div>

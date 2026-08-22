@@ -412,6 +412,26 @@ def main():
               f"as_of={corp_credit.get('as_of')} 评级={len(_rk)}/7 未偿额={len(_ou)}/2")
     except Exception as e:
         print(f"[dashboard] 公司债 跳过: {e}")
+
+    # ── ★2026-08-22(Chao): vintage 存档 —— 让「只有最新一期」的板块积累出历史 ──
+    # IMF debt/GDP 与公司债 fetcher 都是实时抓、不落盘, 没有历史期次可做 filter。
+    # 这里每次 build 存一期快照, 攒够 2 期后 dashboard 可出「上一期」按钮。
+    # ★纪律: 只存 status==ok 的期; 今天只有 1 期就诚实显示 1 期, 绝不编造历史凑按钮。
+    try:
+        from src import vintage_store as _vs
+        for _ds, _payload, _keyfn, _lblfn in (
+            ("debt_gdp", debt_gdp, _vs.period_key_debt_gdp, _vs.label_debt_gdp),
+            ("corp_credit", corp_credit, _vs.period_key_corp_credit, None),
+        ):
+            if not _payload:
+                continue
+            _k = _keyfn(_payload)
+            _lbl = _lblfn(_payload, _k) if _lblfn else _k
+            _okv, _why = _vs.save_vintage(_ds, _k, _payload, label=_lbl)
+            print(f"[dashboard] vintage[{_ds}]: key={_k} {'存档' if _okv else '跳过'}({_why}) "
+                  f"· 已积累 {_vs.vintage_count(_ds)} 期")
+    except Exception as e:
+        print(f"[dashboard] vintage 存档跳过: {type(e).__name__}: {e}")
     cips = {}
     try:
         cips = ed.fetch_cips() or {}

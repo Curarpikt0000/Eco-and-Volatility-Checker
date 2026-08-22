@@ -3519,6 +3519,17 @@ def fetch_us_yield_century(cache_path=None):
     return data
 
 
+# ★2026-08-22(Chao): COMEX 交割量「手 → 吨」换算常量。
+# 合约规格来自 CME Group 官方规则手册, 已联网核对:
+#   Gold     — Chapter 113 Gold Futures:     100 troy oz / 手
+#   Silver   — Chapter 112 Silver Futures: 5,000 troy oz / 手
+#   Platinum — NYMEX Platinum Futures (PL):    50 troy oz / 手
+# 1 troy ounce = 31.1034768 g (国际标准, 精确值)
+# → 吨 = 手数 × oz/手 × 31.1034768 / 1e6
+_TROY_OZ_G = 31.1034768
+_LOT_OZ = {"Gold": 100, "Silver": 5000, "Platinum": 50}
+
+
 def fetch_comex_issue_stop_firms(cache_path=None):
     """需求B(Chao 2026-08-22): COMEX 三金属 per-firm top10 交货方/接货方。
 
@@ -3595,6 +3606,7 @@ def fetch_comex_issue_stop_firms(cache_path=None):
                 rows = [(f, v[field]) for f, v in agg.items() if v[field] > 0]
                 rows.sort(key=lambda x: (-x[1], x[0]))
                 return [{"firm": f, "lots": n,
+                         "tonnes": round(n * _LOT_OZ.get(metal, 0) * _TROY_OZ_G / 1e6, 3),
                          "share": round(n / total * 100, 1) if total else 0.0,
                          "is_bank": f in banks}
                         for f, n in rows[:10]]
@@ -3604,6 +3616,8 @@ def fetch_comex_issue_stop_firms(cache_path=None):
                 "days": len(sel),
                 "range": [sel[0], sel[-1]] if sel else ["", ""],
                 "total_i": ti, "total_s": ts,
+                "total_i_t": round(ti * _LOT_OZ.get(metal, 0) * _TROY_OZ_G / 1e6, 3),
+                "total_s_t": round(ts * _LOT_OZ.get(metal, 0) * _TROY_OZ_G / 1e6, 3),
                 "issuers": _rank("i", ti),
                 "stoppers": _rank("s", ts),
             }
@@ -3933,8 +3947,8 @@ def fetch_basis_trade_monitor(cache_path=None, years=2):
             carry_latest[f"JP_{t}"] = spread[-1]
     panel_carry = {
         "id": "bt_carry",
-        "title": "② 套利 Carry 空间：收益率 − 隔夜融资成本（各期限利差，美债 vs 日债）",
-        "subtitle": "Basis Trade Carry — Yield minus Overnight Funding by Tenor (US SOFR / JP TONAR)",
+        "title": "② 持券 Carry：国债收益率 − 隔夜融资成本（各期限利差，美债 vs 日债）",
+        "subtitle": "Cash Carry — Yield minus Overnight Funding by Tenor (US SOFR / JP TONAR) · 注: 非期现 basis trade",
         "unit_left": "bp", "unit_right": "bp", "single_axis": True,
         "series": carry_series,
         "source": "FRED DGS2/5/10/30 − SOFR · 日本 MOF JGB − BoJ TONAR（日频，周度降采样，单位 bp；实线=美债，虚线=日债）",
