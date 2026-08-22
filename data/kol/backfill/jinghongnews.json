@@ -1,0 +1,9 @@
+{
+  "kol": "JingHongNews 景宏资讯",
+  "sector": "Cycles & Esoteric Forecasting",
+  "backfill_date": "2026-08-22",
+  "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
+  "count": 0,
+  "history": [],
+  "note": "两次 web_search 只命中两条属于本人的结果：①频道页 https://www.youtube.com/@JingHongNews（简介「港美股 Web3 虚拟货币 Polymarket Kalshi 爱好者交流平台，通过易经天干地支等分析方法预测资产走向」，但无任何日期或具体观点）；②《奇门遁甲预测美元指数未来几年走势—景宏资讯 中岛经济研究社》https://www.youtube.com/watch?v=hv3k1ZuL5lk，标题命题明确（美元指数未来数年走势），但搜索结果的 description 只有话题标签串，未给出发布日期、也无相对时间可换算。按规范「完全无法确定日期的条目 → 丢弃该条」，故不收录，记 count:0。该频道订阅规模极小，其余单集未被搜索引擎索引。"
+}

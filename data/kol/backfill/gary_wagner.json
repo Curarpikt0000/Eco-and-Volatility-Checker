@@ -1,0 +1,44 @@
+{
+  "kol": "Gary Wagner",
+  "sector": "贵金属",
+  "backfill_date": "2026-08-22",
+  "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
+  "count": 5,
+  "history": [
+    {
+      "date": "2025-12-09",
+      "direction": "看多",
+      "comments": "Investing News Network 访谈《Gold, Silver Price Calls for 2026, Plus Key Drivers to Watch》。TheGoldForecast.com 主编 Gary Wagner 给出 2026 年金银展望：承认期间可能出现大幅回调，但长期立场明确看多，原话是「一两年、三年之后，我相信黄金会更高、白银也会更高，这类资产在历史上不会长期下跌并停在低位」。同时列举需要盯住的关键驱动（美联储、通胀、地缘）。",
+      "targets": "黄金/白银",
+      "source": "https://investingnews.com/gary-wagner-gold-price-forecast"
+    },
+    {
+      "date": "2026-02-06",
+      "direction": "看多",
+      "comments": "Kitco News 技术解盘：当日现货白银遭遇大规模「清算式抛售」（liquidation event），单日跌幅达两位数，测试 70 美元出头的关键结构支撑。Wagner 把 71 美元定为必须守住的「沙线」，只要不破，多头趋势仍成立。他强调银的波动率与金的相对强势之间存在巨大分化，形容白银是「烧得比金亮一倍、但只烧一半时间的蜡烛」。尽管当日惨烈，他维持看多并更新了目标位。",
+      "targets": "白银/黄金",
+      "source": "https://www.youtube.com/watch?v=Rs1gJTb8OQY"
+    },
+    {
+      "date": "2026-03-11",
+      "direction": "分歧",
+      "comments": "Kitco 视频《Gary Wagner says gold's real body shows the true support level》。Wagner 讨论黄金出现「A-B-C 三浪回调」的可能性，方法上刻意忽略他认为不可持续的日线上下影线，只看 K 线实体来定位真实支撑。同时指出白银的内部技术动能强于黄金，短期金银强弱分化明显。对黄金短线偏谨慎、对白银偏强，属方向分歧。",
+      "targets": "黄金/白银",
+      "source": "https://www.kitco.com/news/video/2026-03-11/gary-wagner-says-gold-s-real-body-shows-the-true-support-level"
+    },
+    {
+      "date": "2026-08-11",
+      "direction": "看多",
+      "comments": "Kitco 专栏：Wagner 指出黄金录得五个交易日以来最大的单日涨幅，方向仍系于美联储政策路径，而技术研究显示强劲的多头动能已经确立。属于短周期趋势跟随型的明确看多。",
+      "targets": "黄金",
+      "source": "https://www.kitco.com/author/gary-wagner"
+    },
+    {
+      "date": "2026-08-17",
+      "direction": "分歧",
+      "comments": "Kitco 视频《The $6,000 gold target is dead, but gold has hit its bottom, says Gary Wagner》。Wagner 一方面宣告此前市场热议的 6,000 美元/盎司黄金目标已经作废（上行空间被大幅压缩），另一方面判断金价本轮下跌已经见底。看空目标位、看多底部，属典型的方向分歧表述。",
+      "targets": "黄金",
+      "source": "https://www.kitco.com/news/video/2026-08-17/the-6-000-gold-target-is-dead-but-gold-has-hit-its-bottom-says-gary-wagner"
+    }
+  ]
+}

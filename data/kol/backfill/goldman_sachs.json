@@ -1,0 +1,37 @@
+{
+  "kol": "Goldman Sachs",
+  "sector": "宏观货币与金融体系",
+  "backfill_date": "2026-08-22",
+  "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
+  "count": 4,
+  "history": [
+    {
+      "date": "2025-10-07",
+      "direction": "看多",
+      "comments": "高盛上调黄金目标价：将 2026 年底金价预测从此前水平上调至 4,900 美元/盎司。核心逻辑是各国央行（尤其新兴市场央行）持续增持黄金做储备多元化，加上西方 ETF 在降息周期中的资金回流。高盛同时强调，若出现私人部门加速配置或对美联储独立性的担忧升温，金价存在进一步超预期上行的风险情景。这是当时华尔街最激进的黄金目标之一。",
+      "targets": "黄金",
+      "source": "https://www.investing.com/news/commodities-news/goldman-sachs-raises-its-gold-price-target-to-4900-by-end2026-4274295"
+    },
+    {
+      "date": "2026-01-22",
+      "direction": "强烈看多",
+      "comments": "路透报道：高盛再次上调 2026 年底黄金目标价 500 美元，从 4,900 美元升至 5,400 美元/盎司，理由是私人部门与新兴市场央行的黄金多元化配置持续。报道当时现货金已在周三触及 4,887.82 美元/盎司的高点，2026 年内累计涨幅超过 11%，延续前一年的强势。同一 Factbox 中列出同业目标价对比：Citi Research 于 2026-01-13 将 0–3 个月目标上调至 5,000 美元，HSBC 于 2026-01-08 给出 2026 年底 4,450 美元，摩根士丹利 2025-10-31 给出 2026 年中 4,500 美元，摩根大通预计 2026 年四季度均价 5,055 美元。",
+      "targets": "黄金",
+      "source": "https://www.marketscreener.com/news/goldman-sachs-raises-2026-end-gold-price-forecast-by-500-to-5-400-oz-ce7e58d2dc89f621"
+    },
+    {
+      "date": "2026-04-02",
+      "direction": "看多",
+      "comments": "高盛研究部给出 2026 年底标普 500 目标位 7,600 点，对应约 6% 的涨幅，驱动来自约 12% 的指数盈利增长预期。首席美股策略师 David Kostin 团队认为盈利扩张而非估值扩张是本轮上涨主力，AI 资本开支相关板块贡献显著的每股收益增量。属于温和看多的基准情景。",
+      "targets": "美股/标普500",
+      "source": "https://markets.financialcontent.com/wss/article/marketminute-2026-4-2-goldman-sachs-projects-s-and-p-500-to-hit-7600-by-year-end-2026-on-robust-12-earnings-growth"
+    },
+    {
+      "date": "2026-05-27",
+      "direction": "看多",
+      "comments": "路透：高盛把 2026 年底标普 500 目标位从 7,600 上调至 8,000 点，理由是企业盈利持续超预期。高盛研究部随后（5 月 28 日）发布的说明称，该目标对应约 6% 的剩余回报；Business Insider 引述其全年指数 EPS 增速预测高达 24%，判断这是一轮由盈利驱动而非估值驱动的上涨。",
+      "targets": "美股/标普500",
+      "source": "https://www.reuters.com/business/goldman-sachs-lifts-sp-500-year-end-target-8000-strong-earnings-outlook-2026-05-27/"
+    }
+  ]
+}

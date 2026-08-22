@@ -1,0 +1,30 @@
+{
+  "kol": "Daron Acemoglu",
+  "sector": "宏观货币与金融体系",
+  "backfill_date": "2026-08-22",
+  "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
+  "count": 3,
+  "history": [
+    {
+      "date": "2026-02-24",
+      "direction": "看空",
+      "comments": "MIT Sloan Management Review 播客《Me, Myself, and AI》特别集《AI Is Not Improving Productivity》。MIT 学院教授、诺贝尔经济学奖得主 Daron Acemoglu 挑战关于 AI 未来的主流假设：AI 的扩散其实很慢，虽然很多人在用 ChatGPT / Claude / Gemini，但除编程外几乎没有任何职业被真正改变，因此生产率提升非常小、就业影响也有限。他援引《Power and Progress》的论点强调技术走向不是注定的。对 AI 驱动的宏观增长叙事明确看空。",
+      "targets": "美国宏观/AI/生产率",
+      "source": "https://sloanreview.mit.edu/audio/ai-is-not-improving-productivity-nobel-laureate-daron-acemoglu"
+    },
+    {
+      "date": "2026-02-18",
+      "direction": "看空",
+      "comments": "Cicero Institute 政策综述引用 Acemoglu 的宏观预测（《The Simple Macroeconomics of AI》，NBER Working Paper 32487）：他预计未来十年由 AI 带来的生产率年增速仅为 0.55%–0.71%，属于「不可忽视但温和」的量级，远低于业界与科技媒体的承诺。Acemoglu 本人后来补充说「十年 0.5% 也不该被轻视，总比零好，但相对于业界的许诺是令人失望的」。这一数字与部分乐观派（如认为 GenAI 可带来 15% 劳动生产率提升的机构预测）形成鲜明反差。(日期取该综述的引用访问/发布日 2026-02-18)",
+      "targets": "美国宏观/AI/生产率",
+      "source": "https://ciceroinstitute.org/blog/ai-and-the-future-of-work-policy-lessons-from-acemoglu-and-restrepo"
+    },
+    {
+      "date": "2026-08-15",
+      "direction": "中性",
+      "comments": "Fortune 报道：Acemoglu 就其新书接受访谈，提出 AI 与自由民主面临同一种危机——「凡事都有升级化（escalate everything）的倾向」，即讨论被推向极端、缺乏中间地带的理性辩论。他批评关于 AI 的公共辩论被两极叙事绑架。这一条偏制度与社会层面的判断，不含直接可交易的多空方向，记为中性。",
+      "targets": "AI/制度与政策",
+      "source": "https://fortune.com/2026/08/15/nobel-laureate-daron-acemoglu-liberal-democracy-book-stupid-ai-debate"
+    }
+  ]
+}

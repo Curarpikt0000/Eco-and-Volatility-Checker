@@ -1317,6 +1317,80 @@ def write_custody_notion(cust=None):
 #   ★注意 Publish/mfh.txt 是旧缓存(停在2023-01), 历史+最新都在 mfhhisNN.txt 系列。
 # 单位: 十亿美元($B)。绝不编: 抓不到标 status。
 TIC_MFH_HIST_URL = "https://ticdata.treasury.gov/Publish/mfhhis01.txt"
+# ★2026-08-21 修复(Chao 报"图上说滞后233天,右上角却写每月更新"):
+# mfhhis01.txt 是**历史存档表**, 只到上一自然年年末(2026-07 更新时内容仍止于 2025-12),
+# 当年月度必须另取 slt_table5(13 个月滚动窗口)。只用存档表会让数据永远落后半年以上,
+# 且 2026 全年真值缺失 —— 属"静默陈旧", 违反项目铁律。两源合并, 当期表优先。
+TIC_SLT_T5_URL = ("https://ticdata.treasury.gov/resource-center/"
+                  "data-chart-center/tic/Documents/slt_table5.html")
+
+
+def _parse_tic_slt_table5(raw_html, key):
+    """解析 TIC Table 5(当期 13 个月滚动窗口) -> {'YYYY-MM': float}。
+    表头形如 ['Country','2026-06','2026-05',...]; 国家行首列为国名。
+    解析失败一律返回 {} (由调用方回退到历史存档表), 绝不编造。"""
+    import re as _re
+    import html as _html
+
+    def _cells(row):
+        cs = _re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", row, _re.S | _re.I)
+        return [_html.unescape(_re.sub(r"<[^>]+>", "", c)).replace("\xa0", " ").strip()
+                for c in cs]
+
+    rows = _re.findall(r"<tr[^>]*>(.*?)</tr>", raw_html, _re.S | _re.I)
+    tab = [_cells(r) for r in rows]
+    months, out = [], {}
+    for t in tab:
+        if t and t[0].strip().lower() == "country":
+            months = [c.strip() for c in t[1:]]
+            break
+    if not months:
+        return {}
+    # 目标国家在 Table 5 中的行名
+    aliases = {"Japan": ["japan"],
+               "China": ["china, mainland", "china,mainland", "china mainland"]}
+    # ★EU 在 TIC 无合计行, 与 _parse_tic_country 保持完全一致的 9 国口径逐月加总,
+    #   否则两源(存档表/当期表)口径不一致会造成序列跳变。
+    EU_MEMBERS = {"germany", "france", "italy", "netherlands", "belgium",
+                  "luxembourg", "ireland", "spain", "finland"}
+    if key == "EU":
+        acc = {}
+        seen = set()
+        for t in tab:
+            if not t:
+                continue
+            nm = t[0].strip().lower()
+            if nm in EU_MEMBERS and nm not in seen:
+                seen.add(nm)
+                for m, v in zip(months, t[1:]):
+                    if not _re.fullmatch(r"\d{4}-\d{2}", m or ""):
+                        continue
+                    v = (v or "").replace(",", "").strip()
+                    try:
+                        acc[m] = acc.get(m, 0.0) + float(v)
+                    except ValueError:
+                        continue
+        # 成员国缺失过多则判定解析不可靠, 宁可回退存档表也不给半截加总
+        if len(seen) < len(EU_MEMBERS):
+            return {}
+        return acc
+    names = aliases.get(key)
+    if not names:
+        return {}
+    for t in tab:
+        if not t:
+            continue
+        if t[0].strip().lower() in names:
+            for m, v in zip(months, t[1:]):
+                if not _re.fullmatch(r"\d{4}-\d{2}", m or ""):
+                    continue
+                v = (v or "").replace(",", "").strip()
+                try:
+                    out[m] = float(v)
+                except ValueError:
+                    continue
+            break
+    return out
 _TIC_MON = {"Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4, "May": 5, "Jun": 6,
             "Jul": 7, "Aug": 8, "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12}
 
@@ -1399,12 +1473,28 @@ def fetch_country_ust_holdings(years=10):
             raw = r.text
     except Exception:
         raw = None
+    # ★当期表(slt_table5): 补 2026 年以来的月度, 覆盖存档表的滞后。抓不到就仅用存档表。
+    cur_html = None
+    try:
+        r5 = requests.get(TIC_SLT_T5_URL,
+                          headers={"User-Agent": "Mozilla/5.0 (EcoVolChecker research)"},
+                          timeout=40)
+        if r5.status_code == 200 and "Major Foreign Holders" in r5.text:
+            cur_html = r5.text
+    except Exception:
+        cur_html = None
     for key, (zh, flag) in meta.items():
         if not raw:
             out[key] = {"name": zh, "flag": flag, "series": [], "series_long": [],
                         "status": "未找到", "source": "US Treasury TIC MFH"}
             continue
         s = _parse_tic_country(raw, key)
+        cur_ok = False
+        if cur_html:
+            cur = _parse_tic_slt_table5(cur_html, key)
+            if cur:
+                s.update(cur)          # 当期表优先(含官方修订值)
+                cur_ok = True
         pts = sorted((m, round(v, 1)) for m, v in s.items() if m >= cutoff)
         pts_long = sorted((m, round(v, 1)) for m, v in s.items() if m >= long_cutoff)
         if len(pts) < 2:
@@ -1422,6 +1512,13 @@ def fetch_country_ust_holdings(years=10):
             "high": round(max(vals), 1), "low": round(min(vals), 1),
             "status": "ok",
             "source": "US Treasury TIC Major Foreign Holders (monthly)",
+            # ★口径说明: EU=9国加总, 但 TIC Table 5(当期表)只列前20大持有国,
+            #   德/意/荷/西/芬 落在 "All Other" 无法还原 → EU 只能用年度存档表,
+            #   因而天然比日/中滞后约半年。这是**口径限制**, 不是抓取失败, 页面须如实说明。
+            "lag_reason": (None if cur_ok else
+                           "TIC 当期表(Table 5)仅列前20大持有国，欧元区多数成员国归入 All Other，"
+                           "无法还原9国加总口径；故欧盟数据只能取自年度存档表，滞后至上一年年末。"),
+            "cadence_note": ("月度更新 · 滞后约2月" if cur_ok else "年度存档表 · 滞后至上年末"),
         }
     return out
 

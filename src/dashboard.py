@@ -36,6 +36,11 @@ _FRESH_TOL = {
     "monthly": 50,     # 月频
     "tic": 75,         # TIC 月频但发布滞后约 45 天
     "quarterly": 135,  # 季频
+    # ★2026-08-21: BIS credit-to-GDP(FRED QUSPAM770A/QCNPAM770A) 虽是季度序列,
+    #   但 BIS 汇编+FRED 转载的实际发布延迟长达 9-10 个月(已实测: 今日 2026-08-21,
+    #   官方最新一期即 2025-10-01, 抓取链路正常)。套用 quarterly=135 会恒定误报红标,
+    #   属"阈值设错"而非"数据陈旧" —— 与 §8.1 的存档表陷阱相反, 此处应改阈值不是改数据源。
+    "bis_quarterly": 330,
     "semiannual": 250,  # 半年频(如 BIS)
     "imf_weo": 260,    # IMF WEO 一年发布两次(4月/10月), 且数据本身是年度值
     "cips": 75,        # CIPS 月度业务统计, 官方通常次月中下旬发布(留足缓冲)
@@ -43,9 +48,11 @@ _FRESH_TOL = {
 }
 
 
-def _stale_badge(as_of, freq="daily", label=None):
+def _stale_badge(as_of, freq="daily", label=None, known_reason=False):
     """按数据源自然频率生成滞后徽章。as_of 可为 'YYYY-MM-DD' 或 'YYYY-MM'。
-    新鲜 → 返回空串(不干扰版面); 滞后 → 🟡; 严重滞后(>2x) → 🔴。"""
+    新鲜 → 返回空串(不干扰版面); 滞后 → 🟡; 严重滞后(>2x) → 🔴。
+    known_reason=True 表示滞后原因已查明并在图上另行说明(如口径限制),
+    此时不再提示"请核对官方"(否则误导读者以为抓取坏了)。"""
     if not as_of:
         return ""
     s = str(as_of)[:10]
@@ -66,10 +73,14 @@ def _stale_badge(as_of, freq="daily", label=None):
     icon = "🔴" if sev == "red" else "🟡"
     txt = f"{icon} 数据滞后 {days} 天"
     if sev == "red":
-        # ★措辞诚实: 超阈值只能证明"久未更新", 不能证明抓取端坏了。
-        #   已实测 TIC(mfhhis01.txt, 财政部 2026-07-14 发布)最新列即 2025-12 —— 官方本身未出新月,
-        #   抓取链路完好。故不写"疑似源中断"(会误导), 改为陈述事实 + 提示核对官方。
-        txt += "（远超常规更新周期，请核对官方是否已发布新值）"
+        # ★2026-08-21 更正: 此处原注释断言"TIC 官方本身未出新月, 抓取链路完好" —— **是错的**。
+        #   实测 mfhhis01.txt 只是**历史存档表**(内容止于上一年年末), 当年月度在 slt_table5,
+        #   官方 2026-08-17 已发 2026-06。教训: 红标超阈值时**先去官网核实最新一期**,
+        #   绝不假设"源就是这么慢"(详见 ChaoWiki frontend/data-dashboard-publishing §8.1)。
+        if known_reason:
+            txt += "（原因见下方说明）"
+        else:
+            txt += "（远超常规更新周期，请核对官方是否已发布新值）"
     if label:
         txt = f"{label} {txt}"
     return f'<span class="stale-badge sb-{sev}" title="最新数据日期 {_esc(s)}，距今 {days} 天；该源自然更新频率={freq}">{txt}</span>'
@@ -294,6 +305,24 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
     date_str = snap["date"]
     ai_reads = ai_reads or {}
     daily_notes = daily_notes or {}
+
+    # ★2026-08-21 修复(Chao 报: 弹层点开显示"暂无已归档的历史观点记录"):
+    # cron 走的是内联 `python -c "...dashboard.build(...)"`, 并未传 kol_history,
+    # 导致内嵌 payload 恒为 {} —— 卡片有当日观点、弹层却空。
+    # 这里做兜底自动加载: 调用方没传就自己从磁盘快照合并, 保证两个入口(build_dashboard.py
+    # 与 cron 内联命令)行为一致。失败只降级为空, 绝不阻断整页构建。
+    if not kol_history:
+        try:
+            from . import external_data as _ed
+        except ImportError:
+            import external_data as _ed
+        try:
+            kol_history = _ed.kol_full_history() or {}
+            _n = sum(len(v) for v in kol_history.values())
+            print(f"[dashboard] KOL 历史观点(自动加载): {len(kol_history)} 人 / {_n} 条")
+        except Exception as e:
+            print(f"[dashboard] KOL 历史观点自动加载失败, 弹层将无历史: {e}")
+            kol_history = {}
     kol_changes = kol_changes or []
     liquidity = liquidity or {}
     cb_balance = cb_balance or {}
@@ -682,7 +711,10 @@ def _kol_changes_html(kol_changes):
         kol_changes = {"since": "", "days": 0, "total": len(kol_changes),
                        "modules": [{"sector": "全部", "en": "", "color": "#8a8377", "changes": kol_changes}]}
     modules = kol_changes.get("modules", [])
-    if not modules or kol_changes.get("total", 0) == 0:
+    # ★2026-08-21 去重: 与 _kol_views_html 同理, 周期/术数派归入独立 section。
+    modules = [m for m in modules if m.get("sector") != _CYCLE_SECTOR]
+    _tot = sum(len(m.get("changes") or []) for m in modules)
+    if not modules or _tot == 0:
         return '<p class="empty">本周暂无 KOL 主导方向变化（或快照尚在累积中）。</p>'
 
     # 方向 → 色 + 强弱排序(用于判断转多/转空)
@@ -758,6 +790,12 @@ def _kol_views_html(views):
     date = views.get("date", "")
     total = views.get("total", 0)
     modules = views["modules"]
+    # ★2026-08-21 去重: 周期/术数派已有独立 section(_cycle_kol_html), 常规板块须剔除,
+    #   否则同一人在页面出现两次。剔除后重算 total, 保证文案与实际卡片数一致。
+    modules = [m for m in modules if m.get("sector") != _CYCLE_SECTOR]
+    total = sum(len(m.get("views") or []) for m in modules)
+    if not modules or total == 0:
+        return '<p class="empty">本周暂无 KOL 观点数据（快照未就绪）。</p>'
     # 加载 KOL 名册的业界地位/机构声誉, 按名字匹配渲染到卡片底部(与"状态变化"板块共用同一口径)
     _meta = _kol_meta()
     head = (f'<div class="kol-overview">本周 KOL 观点全景（截至 <b>{_esc(date)}</b>）：'
@@ -1346,12 +1384,18 @@ def _country_ust_col(c):
     dcls = "r" if down else "g"
     darrow = "▼" if down else "▲"
     dtxt = f"{darrow} {dbn:+.0f}B ({dpct:+.1f}%)" if dbn is not None else "—"
+    # ★2026-08-21: 滞后原因若已知(如 EU 受 TIC 前20大口径限制), 如实写明,
+    #   不要只甩一个"请核对官方"的红标让人以为是抓取坏了。
+    _reason = c.get("lag_reason")
+    reason_html = (f'<div class="cu-lagnote">ℹ️ {_esc(_reason)}</div>'
+                   if _reason else "")
     return (
         f'<div class="cust-chart-col">'
         f'<div class="cust-chart-title">{c.get("flag","")} {_esc(c["name"])}持有美债（{len(series)}个月）</div>'
         f'<div class="cu-cur">${last_v:,.0f}<span class="cust-unit">B</span> '
         f'<span class="cust-wow cust-wow-{dcls}">{dtxt}</span> '
-        f'<span class="cu-asof">as of {_esc(last_m)}</span>{_stale_badge(last_m, "tic")}</div>'
+        f'<span class="cu-asof">as of {_esc(last_m)}</span>{_stale_badge(last_m, "tic", known_reason=bool(_reason))}</div>'
+        f'{reason_html}'
         f'{_country_ust_svg(series, color, fill)}'
         f'<div class="cust-chart-span">{_esc(c["first"][0])}→{_esc(last_m)}：'
         f'<b class="cust-{dcls}">{dbn:+.0f}B ({dpct:+.1f}%)</b>'
@@ -3327,7 +3371,7 @@ def _credit_impulse_html(ci):
         f'<span style="color:#2e9e5b">正值=信贷在加速扩张</span>（利好增长/风险资产），'
         f'<span style="color:#d64545">负值=新增信贷放缓/收缩</span>（即使总债务仍在涨）。'
         f'领先实体经济约 <b>6-9 个月</b>——<b>中国信贷脉冲</b>是全球商品、周期股、风险资产最强的领先指标之一。'
-        f'口径为 BIS credit-to-GDP ratio 的二阶差分（美/中/欧/日统一口径、国际可比），<b>季度更新、数据滞后约 1 季</b>（as of {_esc(asof)[:7]}）{_stale_badge(asof, "quarterly")}。'
+        f'口径为 BIS credit-to-GDP ratio 的二阶差分（美/中/欧/日统一口径、国际可比），<b>季度序列、BIS 汇编发布滞后约 3 季</b>（as of {_esc(asof)[:7]}）{_stale_badge(asof, "bis_quarterly")}。'
         f'数据源：{_linkify_sources(src)}。</div>'
         f'{long_block}'
         f'</div>'
@@ -5758,6 +5802,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   /* 分国别持有美债(TIC) 列头当前值 */
   .cu-cur {{ font-family: var(--mono); font-size: 20px; font-weight: 800; color: var(--text); line-height: 1.2; margin: 2px 0 6px; }}
   .cu-asof {{ font-size: 10px; color: var(--muted); font-weight: 400; margin-left: 6px; }}
+  .cu-lagnote {{ font-size: 10.5px; color: #c9a227; background: rgba(201,162,39,.08);
+                 border-left: 2px solid rgba(201,162,39,.5); border-radius: 3px;
+                 padding: 4px 7px; margin: 4px 0 2px; line-height: 1.5; }}
 
   /* Credit Impulse 信贷脉冲(中期领先指标, 三国) */
   .ci-wrap {{ display: flex; flex-direction: column; gap: 10px; }}
@@ -6135,7 +6182,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title" id="sec-us-yield-century"><span class="part-num">＋</span>美国国债收益率百年周期 · Fed Funds/3M/10Y/30Y (40年长周期·1940大底/1980大顶/2020大底)<span class="freq-badge freq-quarterly">每季更新</span></div>
   <div class="card">{us_yield_century}</div>
   <!-- ═══ 附三·六：日本 / 中国 分国别持有美债 (TIC, 近10年) ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>日本 / 中国 / 欧盟 持有美债 · 近10年 + 2008长历史 (TIC 分国别口径)<span class="freq-badge freq-monthly">每月更新 · 滞后约2月</span></div>
+  <div class="part-title"><span class="part-num">＋</span>日本 / 中国 / 欧盟 持有美债 · 近10年 + 2008长历史 (TIC 分国别口径)<span class="freq-badge freq-monthly">日/中 每月更新·滞后约2月 · 欧盟受口径限制滞后至上年末</span></div>
   <div class="card">{country_ust}</div>
   <!-- ═══ 附三·十：四国国际投资头寸 IIP (对外资产/负债/净头寸) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>四国国际投资头寸 IIP · 过去十年 (美/日/德/中 对外资产·负债·净债权地位)<span class="freq-badge freq-quarterly">每年更新</span></div>
