@@ -284,6 +284,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
              country_ust=None, kol_views=None, credit_impulse=None, custody_accel=None,
              stress_panels=None, ofr_fsi=None, maturing_treasury=None, bis_latest=None,
+             bis_all=None,
              oil_inventory=None, us_jp_yields=None, nikkei225=None, foreign_flow=None,
              iip_four=None, fiscal_news=None, hf_leverage=None, bis_gold_swaps=None,
              market_breadth=None, silver_bank_positions=None, comex_silver_issues_ref=None,
@@ -506,7 +507,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         comex_issue_stop=_comex_issue_stop_html(comex_issue_stop),
         comex_firms_top10=_comex_firms_top10_html(comex_firms_top10),
         fiscal_budget=_fiscal_budget_html(fiscal_budget),
-        bis_section=_bis_section_html(bis_latest, "https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/"),
+        bis_section=_bis_section_html(bis_latest, "https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/", bis_all),
         country_ust=_country_ust_html(country_ust),
         credit_impulse=_credit_impulse_html(credit_impulse),
         stress_panels=_stress_panels_html(stress_panels, ofr_fsi),
@@ -2807,29 +2808,62 @@ def _hf_leverage_html(hf):
     )
 
 
-def _bis_section_html(bis_latest, page_url):
-    """BIS(国际清算银行)报告 section: 只放最新一份的摘要要点 + 跳转独立页 button。
-    bis_latest: bis_reports.latest_report() 返回的单份报告 dict(或 None)。
-    page_url: 独立页公开地址。"""
-    if not bis_latest or bis_latest.get("summary_status") != "ok" or not bis_latest.get("summary"):
-        # 无摘要: 仍给 button, 提示待更新
-        pts = '<div class="bis-na">最新 BIS 报告摘要待更新（daily cron 扫描中，抓不到不编造）。</div>'
-        meta = ""
-    else:
-        pts = "".join(f'<li>{_esc(p)}</li>' for p in bis_latest["summary"])
-        pts = f'<ul class="bis-pts">{pts}</ul>'
-        pdf = bis_latest.get("pdf_url", "")
+def _bis_section_html(bis_latest, page_url, bis_all=None):
+    """BIS(国际清算银行)报告 section。
+
+    ★2026-08-22(Chao): 从「只显示最新一期」改为「过去 4 个季度可切换」——
+    顶部一排 filter button(2026-06 / 2026-03 / 2025-12 / 2025-09), 点击切换要点。
+    数据本来就已在 data/bis/reports.json 里(4 期各 6 条中文要点), 之前只是没渲染出来。
+
+    bis_all:  bis_reports.load_reports() 的 reports 列表(按 date 降序)。传 None 时
+              退回只渲染 bis_latest(向后兼容)。
+    bis_latest: 最新一期(用于无 bis_all 时的兜底 / 决定默认选中项)。
+    page_url: 独立页公开地址。
+    只渲染 summary_status == 'ok' 且确有要点的期; pending 的不显示假内容。
+    """
+    # 归一成列表: 优先用全量, 否则退回单份
+    reports = [r for r in (bis_all or []) if r.get("summary_status") == "ok" and r.get("summary")]
+    if not reports and bis_latest and bis_latest.get("summary_status") == "ok" and bis_latest.get("summary"):
+        reports = [bis_latest]
+    # 按 date 降序(最新在左), 只取最近 4 期
+    reports = sorted(reports, key=lambda r: r.get("date", ""), reverse=True)[:4]
+
+    if not reports:
+        return (
+            f'<div class="card bis-card">'
+            f'<div class="bis-na">最新 BIS 报告摘要待更新（daily cron 扫描中，抓不到不编造）。</div>'
+            f'<div class="bis-how"><b>如何看：</b>BIS(国际清算银行)是"央行的央行"，其 Quarterly Review 每季'
+            f'(3/6/9/12月)综述全球金融市场、银行体系、流动性、信用与系统性风险，是最权威的跨国央行视角。</div>'
+            f'</div>')
+
+    tabs, panes = [], []
+    for i, r in enumerate(reports):
+        act = " bis-on" if i == 0 else ""      # 默认最新一期
+        date = r.get("date", "")
+        # button 上只放年月(紧凑), 具体标题在 pane 里
+        tabs.append(f'<button class="bis-tab{act}" data-bis="{i}">{_esc(date)}</button>')
+        pdf = r.get("pdf_url", "")
         pdf_link = (f'　·　<a class="src-lnk" href="{_esc(pdf)}" target="_blank" rel="noopener">原文 PDF</a>'
                     if pdf else "")
-        meta = (f'<div class="bis-meta"><b>{_esc(bis_latest.get("title",""))}</b>'
-                f'（{_esc(bis_latest.get("date",""))}）{pdf_link}</div>')
+        pts = "".join(f'<li>{_esc(p)}</li>' for p in r["summary"])
+        panes.append(
+            f'<div class="bis-pane{act}" data-bis="{i}">'
+            f'<div class="bis-meta"><b>{_esc(r.get("title",""))}</b>'
+            f'（{_esc(date)}）{pdf_link}</div>'
+            f'<ul class="bis-pts">{pts}</ul>'
+            f'</div>')
+
+    span = (f'{_esc(reports[-1].get("date",""))} → {_esc(reports[0].get("date",""))}'
+            if len(reports) > 1 else _esc(reports[0].get("date", "")))
     return (
         f'<div class="card bis-card">'
-        f'{meta}'
-        f'{pts}'
+        f'<div class="bis-tabs">{"".join(tabs)}'
+        f'<span class="bis-span">近 {len(reports)} 期 · {span}</span></div>'
+        f'{"".join(panes)}'
         f'<div class="bis-how"><b>如何看：</b>BIS(国际清算银行)是"央行的央行"，其 Quarterly Review 每季'
         f'(3/6/9/12月)综述全球金融市场、银行体系、流动性、信用与系统性风险，是最权威的跨国央行视角。'
-        f'点右上按钮查看过去一年全部报告要点。</div>'
+        f'上方按钮切换季度，可对比同一议题(如外汇结算风险、准备金充裕度、NBFI 流动性)在各季的表述变化。'
+        f'点右上按钮查看全库报告。</div>'
         f'</div>'
     )
 
@@ -6211,6 +6245,19 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .tf-sh {{ text-align: right; font-size: 10px; color: var(--muted);
             font-variant-numeric: tabular-nums; }}
   .tf-none {{ font-size: 11px; color: var(--muted); padding: 10px 0; font-style: italic; }}
+  /* ★2026-08-22 BIS 季度切换 filter(近 4 期 Quarterly Review) */
+  .bis-tabs {{ display: flex; gap: 6px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }}
+  .bis-tab {{
+    font: 600 11.5px/1 var(--mono),-apple-system,PingFang SC,sans-serif;
+    padding: 5px 12px; border-radius: 5px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--card); color: var(--muted);
+    transition: all .12s;
+  }}
+  .bis-tab:hover {{ border-color: var(--dust-blue); color: var(--text); }}
+  .bis-tab.bis-on {{ background: var(--dust-blue); border-color: var(--dust-blue); color: #fff; }}
+  .bis-span {{ font-size: 10px; color: var(--muted); margin-left: 4px; }}
+  .bis-pane {{ display: none; }}
+  .bis-pane.bis-on {{ display: block; }}
 </style>
 </head>
 <body>
@@ -6827,6 +6874,25 @@ mkRadar('rLong', RADAR.long);
       var panes = document.querySelectorAll('.tf-pane[data-tf="' + slug + '"]');
       for (var b = 0; b < panes.length; b++) {{
         panes[b].classList.toggle('tf-on', panes[b].getAttribute('data-k') === k);
+      }}
+    }});
+  }}
+}})();
+
+/* ★2026-08-22 BIS 季度切换(近 4 期 Quarterly Review)。
+   4 期要点已全部内嵌为 .bis-pane, 点 button 只切 display。 */
+(function() {{
+  var tabs = document.querySelectorAll('.bis-tab');
+  if (!tabs.length) return;
+  for (var i = 0; i < tabs.length; i++) {{
+    tabs[i].addEventListener('click', function() {{
+      var k = this.getAttribute('data-bis');
+      var all = document.querySelectorAll('.bis-tab');
+      for (var a = 0; a < all.length; a++) all[a].classList.remove('bis-on');
+      this.classList.add('bis-on');
+      var panes = document.querySelectorAll('.bis-pane');
+      for (var b = 0; b < panes.length; b++) {{
+        panes[b].classList.toggle('bis-on', panes[b].getAttribute('data-bis') === k);
       }}
     }});
   }}

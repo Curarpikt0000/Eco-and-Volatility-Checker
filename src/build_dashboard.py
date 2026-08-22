@@ -346,12 +346,16 @@ def main():
 
     # ── BIS 国际清算银行报告(Quarterly Review 季度综述) ──
     bis_latest = None
+    bis_all = []
     try:
         from src import bis_reports as bisr
         added, _store = bisr.sync_quarterly(5)   # 幂等: 发现最新几季 Quarterly, 不覆盖已有摘要
         bis_latest = bisr.latest_report()
+        bis_all = bisr.all_reports() or []
         _bn = len((bis_latest or {}).get("summary", []))
-        print(f"[dashboard] BIS: 新增{added}份, 最新={(bis_latest or {}).get('date','?')} 摘要{_bn}条")
+        _bok = len([r for r in bis_all if r.get("summary_status") == "ok" and r.get("summary")])
+        print(f"[dashboard] BIS: 新增{added}份, 最新={(bis_latest or {}).get('date','?')} 摘要{_bn}条 "
+              f"| 可切换季度={_bok}期 {[r.get('date') for r in bis_all if r.get('summary_status')=='ok'][:4]}")
         _bp = bisr.build_standalone_page()   # 生成独立页 docs/bis/index.html
         print(f"[dashboard] BIS 独立页: {_bp}")
     except Exception as e:
@@ -500,6 +504,7 @@ def main():
         comex_issue_stop=comex_issue_stop,
         comex_firms_top10=comex_firms_top10,
         bis_latest=bis_latest,
+        bis_all=bis_all,
         fiscal_budget=fiscal_budget,
     )
     print(f"[dashboard] 生成: {out}")
