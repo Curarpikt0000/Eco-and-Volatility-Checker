@@ -1,0 +1,76 @@
+{
+  "removed_date": "2026-08-22",
+  "reason": "不在 Notion KOL List(唯一真源)中; backfill 历史文件一律保留未删",
+  "count": 3,
+  "kols": [
+    {
+      "id": "fema",
+      "display_name": "FEMA",
+      "notion_select_name": "FEMA",
+      "domain": "预测",
+      "sector": "Alternative",
+      "detail_sector": "预测",
+      "kol_or_ib": "KOL",
+      "institution": "美国联邦紧急事务管理局",
+      "x_handle": "",
+      "search_terms": [
+        "FEMA"
+      ],
+      "active": true,
+      "added_date": "2026-06-20",
+      "notion_list_page_id": "35947eb5-fd3c-8099-b42b-c8356baf994f",
+      "list_num": "52",
+      "bio": "美国联邦紧急事务管理局",
+      "focus": "极端系统风险、供应链中断预案、生存安全性基准"
+    },
+    {
+      "id": "sarah_bond",
+      "display_name": "Sarah Bond",
+      "notion_select_name": "Sarah Bond",
+      "domain": "宏观货币与金融体系",
+      "sector": "Macro",
+      "detail_sector": "Fed政策/央行",
+      "kol_or_ib": "KOL",
+      "institution": "Executive Vice President & CEO of Xbox, Microsoft Corp. Fed Productivity and Jobs (AI) task force.",
+      "x_handle": "",
+      "search_terms": [
+        "Sarah Bond",
+        "Sarah Bond Fed",
+        "Sarah Bond inflation rates economy"
+      ],
+      "active": true,
+      "added_date": "2026-08-17",
+      "notion_list_page_id": "",
+      "list_num": "105",
+      "bio": "Kevin Warsh 美联储主席 2026-07-09 任命的五个改革 task force 外部顾问之一（Productivity and Jobs task force）。Executive Vice President & CEO of Xbox, Microsoft Corp. Fed Productivity and Jobs (AI) task force.",
+      "focus": "美联储货币政策/利率/通胀/资产负债表/AI生产力等宏观政策方向的公开立场与观点（作为 Fed 顾问，其表态对市场利率预期有指示意义）。",
+      "_source_note": "Kevin Warsh Fed task force advisor, added from user-provided infographic 2026-08-17; Fed official task-forces.htm 2026-07-09."
+    },
+    {
+      "id": "harrysdentjr",
+      "display_name": "Harry S. Dent Jr.",
+      "notion_select_name": "Harry S. Dent Jr.",
+      "domain": "技术分析与周期",
+      "sector": "Technical & Cycle Analysis",
+      "detail_sector": "人口周期 / 消费支出波（Spending Wave）",
+      "kol_or_ib": "KOL",
+      "institution": "哈佛 MBA、前贝恩顾问，《The Great Boom Ahead》(1992) 成功押注90年代大牛市；此后道指崩至3800等极端崩盘预言反复落空，是可复盘性最强但错误率也最高的样本。",
+      "bio": "哈佛 MBA、前贝恩顾问，《The Great Boom Ahead》(1992) 成功押注90年代大牛市；此后道指崩至3800等极端崩盘预言反复落空，是可复盘性最强但错误率也最高的样本。",
+      "focus": "美股指数/房地产/债券/通缩情景",
+      "x_handle": "",
+      "search_terms": [
+        "Harry S. Dent Jr.",
+        "哈里·丹特"
+      ],
+      "active": true,
+      "added_date": "2026-08-20",
+      "forecast_school": "人口周期 / 消费支出波（Spending Wave）",
+      "forecast_region": "西方",
+      "forecast_cadence": "weekly",
+      "source_url": "https://harrydent.com/",
+      "youtube_channel_id": "UCDkLCChDIvIKLaxIAqkhjuQ",
+      "_source_note": "2026-08-20 新增: 周期/术数派金融预测者, URL 经实访验证",
+      "_reclass_note": "2026-08-22 Chao: 取消独立 section, 归回常规 KOL 板块"
+    }
+  ]
+}

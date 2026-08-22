@@ -1,0 +1,50 @@
+{
+  "US": {
+    "name": "美国 Fed",
+    "flag": "🇺🇸",
+    "unit": "$B",
+    "m0_label": "基础货币 Monetary Base",
+    "source": "FRED (M1SL/M2SL/BOGMBASE), 月度",
+    "m1": 19831.5,
+    "m2": 23155.2,
+    "m0": 5488.4,
+    "as_of": "2026-06"
+  },
+  "JP": {
+    "name": "日本 BoJ",
+    "flag": "🇯🇵",
+    "unit": "$B",
+    "as_of": "2026-07",
+    "m0": 3485.3,
+    "m0_label": "基础货币 Monetary Base",
+    "m1": 6849.4,
+    "m2": 8146.5,
+    "m3": 10308.4,
+    "source": "BOJ 官方 PDF (Money Stock 速报 2026-08-12 发布; Monetary Base 2026-08-04 发布)",
+    "orig_m0": 554.9,
+    "orig_m1": 1090.5,
+    "orig_m2": 1297.0,
+    "orig_m3": 1641.2,
+    "orig_unit": "万亿円"
+  },
+  "CN": {
+    "name": "中国 PBoC",
+    "flag": "🇨🇳",
+    "unit": "$B",
+    "as_of": "2026-07",
+    "m0": 2198.4,
+    "m0_label": "流通中现金 M0",
+    "m1": 17127.5,
+    "m2": 52736.9,
+    "m3": null,
+    "source": "PBoC 2026年7月金融统计数据报告 (2026-08-14 发布, M2同比+7.7%/M1同比+4%); 新华网/人民网/证券时报交叉印证",
+    "orig_m0": 14.82,
+    "orig_m1": 115.46,
+    "orig_m2": 355.51,
+    "orig_unit": "万亿元"
+  },
+  "_fx": {
+    "USDJPY": 159.21,
+    "USDCNY": 6.7412
+  }
+}
