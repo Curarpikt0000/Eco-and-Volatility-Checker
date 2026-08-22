@@ -476,7 +476,9 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         concl_long=ai_conclusions.get("long", ""),
         kol_changes=_kol_changes_html(kol_changes),
         kol_views=_kol_views_html(kol_views),
-        cycle_kol=_cycle_kol_html(kol_views, kol_history),
+        cycle_kol="",  # ★2026-08-22 Chao: 玄学/术数派已迁往 Forecast-Checker,
+                       # 技术分析派归回常规 KOL 板块, 本独立 section 停用(不再渲染)。
+                       # _cycle_kol_html 保留未删, 便于日后需要时恢复。
         kol_history_json=_kol_history_payload(kol_history),
         liquidity=_liquidity_html(liquidity),
         cb_balance=_cb_balance_html(cb_balance),
@@ -652,9 +654,16 @@ def _kol_history_payload(kol_history):
     if not kol_history:
         return "{}"
     meta = _kol_meta()
+    # ★2026-08-22: payload 只收名册在册的人。kol_full_history() 是直接扫
+    #   data/kol/backfill/ 目录的, 不看名册 —— 从名册移出的人(如迁往
+    #   Forecast-Checker 的玄学派)其 backfill 文件仍保留在磁盘(留痕不删),
+    #   若不在此过滤, 他们的历史会继续内嵌进页面, 造成"卡片没了但数据还在"。
+    _roster = set(meta.keys())
     out = {}
     for kol, recs in kol_history.items():
         if not recs:
+            continue
+        if _roster and kol not in _roster:
             continue
         m = meta.get(kol, {})
         out[kol] = {
@@ -711,8 +720,15 @@ def _kol_changes_html(kol_changes):
         kol_changes = {"since": "", "days": 0, "total": len(kol_changes),
                        "modules": [{"sector": "全部", "en": "", "color": "#8a8377", "changes": kol_changes}]}
     modules = kol_changes.get("modules", [])
-    # ★2026-08-21 去重: 与 _kol_views_html 同理, 周期/术数派归入独立 section。
-    modules = [m for m in modules if m.get("sector") != _CYCLE_SECTOR]
+    # ★2026-08-22: 独立 section 已停用, 不再从常规板块剔除任何 sector。
+    #   (原为配合「周期与术数预测」独立板块做的去重; 现玄学派已迁走、
+    #    技术分析派归回常规板块, 若继续过滤会把这 12 人挡在页面外。)
+    #   但同样须按名册过滤掉已移出的人(快照可能早于名册变更)。
+    _roster = set(_kol_meta().keys())
+    if _roster:
+        for m in modules:
+            m["changes"] = [c for c in (m.get("changes") or []) if c.get("kol") in _roster]
+        modules = [m for m in modules if m.get("changes")]
     _tot = sum(len(m.get("changes") or []) for m in modules)
     if not modules or _tot == 0:
         return '<p class="empty">本周暂无 KOL 主导方向变化（或快照尚在累积中）。</p>'
@@ -790,9 +806,14 @@ def _kol_views_html(views):
     date = views.get("date", "")
     total = views.get("total", 0)
     modules = views["modules"]
-    # ★2026-08-21 去重: 周期/术数派已有独立 section(_cycle_kol_html), 常规板块须剔除,
-    #   否则同一人在页面出现两次。剔除后重算 total, 保证文案与实际卡片数一致。
-    modules = [m for m in modules if m.get("sector") != _CYCLE_SECTOR]
+    # ★2026-08-22: 同上, 独立 section 停用后不再剔除。
+    #   但必须按名册过滤: kol_weekly_views() 数据源是每日快照(抓取时的名册),
+    #   名册变更后旧快照仍含已移出的人 → 不过滤会渲染出"卡片在但点开空白"。
+    _roster = set(_kol_meta().keys())
+    if _roster:
+        for m in modules:
+            m["views"] = [v for v in (m.get("views") or []) if v.get("kol") in _roster]
+        modules = [m for m in modules if m.get("views")]
     total = sum(len(m.get("views") or []) for m in modules)
     if not modules or total == 0:
         return '<p class="empty">本周暂无 KOL 观点数据（快照未就绪）。</p>'
@@ -6119,9 +6140,12 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title"><span class="part-num">＋</span>本周 KOL 状态变化 · 按模块 (态度转向 call-out)<span class="freq-badge freq-weekly">每周更新</span></div>
   <div class="card">{kol_changes}</div>
 
-  <!-- ═══ 附一·二：周期与术数预测派(独立 section, 非常规方法论) ═══ -->
+  <!-- ═══ 附一·二：周期与术数预测派 —— 2026-08-22 Chao 决定停用 ═══
+       玄学/术数/占星派已迁往 Forecast-Checker 项目;
+       技术分析/周期理论派归回上方常规 KOL 板块。整段不再渲染。
   <div class="part-title" id="sec-cycle-kol"><span class="part-num">＋</span>周期与术数预测 · 独立板块 (周期理论 / 金融占星 / 易经术数)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{cycle_kol}</div>
+  -->
 
   <!-- ═══ 附二：流动性要点(联动 Economic Dashboard) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>流动性要点 · 央行/国债<span class="freq-badge freq-daily">每日更新</span></div>
