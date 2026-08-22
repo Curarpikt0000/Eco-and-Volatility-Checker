@@ -322,6 +322,18 @@ def main():
     except Exception as e:
         print(f"[dashboard] 百年收益率 跳过: {e}")
 
+    # ── COMEX 三金属 per-firm top10 交货/接货方(需求B, Chao 2026-08-22) ──
+    comex_firms_top10 = {}
+    try:
+        comex_firms_top10 = ed.fetch_comex_issue_stop_firms() or {}
+        _cov = comex_firms_top10.get("coverage", {})
+        print(f"[dashboard] COMEX交割前十名: status={comex_firms_top10.get('status')} "
+              f"as_of={comex_firms_top10.get('as_of')} "
+              f"覆盖={_cov.get('days','?')}天 "
+              f"金属={list(comex_firms_top10.get('metals', {}).keys())}")
+    except Exception as e:
+        print(f"[dashboard] COMEX交割前十名 跳过: {e}")
+
     # ── COMEX 做市商每周净 issue/stop(图1, 金+银两口径) ──
     comex_issue_stop = {}
     try:
@@ -486,6 +498,7 @@ def main():
         gold_exports=gold_exports,
         us_yield_century=us_yield_century,
         comex_issue_stop=comex_issue_stop,
+        comex_firms_top10=comex_firms_top10,
         bis_latest=bis_latest,
         fiscal_budget=fiscal_budget,
     )

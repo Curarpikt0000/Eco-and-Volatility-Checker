@@ -3519,6 +3519,108 @@ def fetch_us_yield_century(cache_path=None):
     return data
 
 
+def fetch_comex_issue_stop_firms(cache_path=None):
+    """需求B(Chao 2026-08-22): COMEX 三金属 per-firm top10 交货方/接货方。
+
+    数据由 Comex-Daily-Report/data/comex_issue_stop_firms.json 驱动
+    (src/build_issue_stop_firms.py 生成: archive PDF 133份 per-firm 精确解析
+     + Notion「Daily auto tracking」增量, 覆盖 2026-01-06 起)。
+
+    与 fetch_comex_issue_stop_weekly 的区别: 那个是大行汇总的周度净值曲线;
+    这个保留 **每家机构** 明细(含 StoneX/Marex 等非银)且含 **铂金**,
+    用于排 top10 榜单。
+
+    ★排名口径(Chao 2026-08-22 定): 按 **总量** 排, 不按净额。
+      「top10 发货方」= 该窗口内 issued 累计最大的十家;
+      「top10 接货方」= stopped 累计最大的十家。
+      净额会让大进大出的做市商掉榜, 不符合"谁交货最多"的直觉。
+
+    返回 {status, as_of, coverage, bullion_banks,
+          windows:[{key,label,days}],
+          metals:{Gold:{window_key:{issuers:[...], stoppers:[...], total_i, total_s}}}}
+    每条 = {firm, lots, share, is_bank}。抓不到 status='未获取', 绝不编造。
+    """
+    import json
+    import datetime as _dt
+    from collections import defaultdict
+
+    if cache_path is None:
+        cache_path = "/home/user/Projects/Comex-Daily-Report/data/comex_issue_stop_firms.json"
+    try:
+        with open(cache_path, encoding="utf-8") as f:
+            raw = json.load(f)
+    except Exception:
+        return {"status": "未获取", "as_of": "",
+                "source": "COMEX per-firm 交割明细(文件缺失)", "metals": {}}
+    if raw.get("status") != "ok" or not raw.get("metals"):
+        return {"status": "未获取", "as_of": raw.get("coverage", {}).get("end", ""),
+                "source": raw.get("source", ""), "metals": {}}
+
+    cov = raw.get("coverage", {})
+    end = cov.get("end", "")
+    try:
+        last = _dt.date.fromisoformat(end)
+    except Exception:
+        last = None
+
+    # 日/周/月三个粒度 + 全期。日=最后一个有交割的日子(非自然日, 交割不是每天都有)
+    wins = [("d", "最新交割日", 1), ("w", "近一周", 7),
+            ("m", "近一个月", 30), ("all", "全期", None)]
+    banks = set(raw.get("bullion_banks", []))
+
+    out_metals = {}
+    for metal, bydate in raw["metals"].items():
+        if not bydate:
+            continue
+        dates = sorted(bydate)
+        per_win = {}
+        for key, label, days in wins:
+            if days is None or last is None:
+                sel = dates
+            elif key == "d":
+                sel = dates[-1:]                     # 最后一个有数据的交割日
+            else:
+                cut = last - _dt.timedelta(days=days - 1)
+                sel = [d for d in dates
+                       if _dt.date.fromisoformat(d) >= cut] or dates[-1:]
+            agg = defaultdict(lambda: {"i": 0, "s": 0})
+            for d in sel:
+                for firm, v in bydate[d].items():
+                    agg[firm]["i"] += v.get("i", 0)
+                    agg[firm]["s"] += v.get("s", 0)
+            ti = sum(v["i"] for v in agg.values())
+            ts = sum(v["s"] for v in agg.values())
+
+            def _rank(field, total):
+                rows = [(f, v[field]) for f, v in agg.items() if v[field] > 0]
+                rows.sort(key=lambda x: (-x[1], x[0]))
+                return [{"firm": f, "lots": n,
+                         "share": round(n / total * 100, 1) if total else 0.0,
+                         "is_bank": f in banks}
+                        for f, n in rows[:10]]
+
+            per_win[key] = {
+                "label": label,
+                "days": len(sel),
+                "range": [sel[0], sel[-1]] if sel else ["", ""],
+                "total_i": ti, "total_s": ts,
+                "issuers": _rank("i", ti),
+                "stoppers": _rank("s", ts),
+            }
+        out_metals[metal] = per_win
+
+    return {
+        "status": "ok" if out_metals else "未获取",
+        "as_of": end,
+        "source": raw.get("source", ""),
+        "unit": raw.get("unit", "合约手数"),
+        "coverage": cov,
+        "bullion_banks": sorted(banks),
+        "windows": [{"key": k, "label": l} for k, l, _ in wins],
+        "metals": out_metals,
+    }
+
+
 def fetch_comex_issue_stop_weekly(cache_path=None):
     """图1: COMEX 做市商每周净 issue/stop(金+银, 两口径: 全投行/核心做市商)。
 

@@ -288,6 +288,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              iip_four=None, fiscal_news=None, hf_leverage=None, bis_gold_swaps=None,
              market_breadth=None, silver_bank_positions=None, comex_silver_issues_ref=None,
              gold_exports=None, us_yield_century=None, comex_issue_stop=None,
+             comex_firms_top10=None,
              ad_line_real=None, gold_premium=None, silver_imports=None, fiscal_budget=None,
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
@@ -503,6 +504,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         gold_exports=_gold_exports_html(gold_exports),
         us_yield_century=_us_yield_century_html(us_yield_century),
         comex_issue_stop=_comex_issue_stop_html(comex_issue_stop),
+        comex_firms_top10=_comex_firms_top10_html(comex_firms_top10),
         fiscal_budget=_fiscal_budget_html(fiscal_budget),
         bis_section=_bis_section_html(bis_latest, "https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/"),
         country_ust=_country_ust_html(country_ust),
@@ -2497,6 +2499,98 @@ def _us_yield_century_html(yc):
     )
 
 
+def _comex_firms_top10_html(cf):
+    """需求B(Chao 2026-08-22): 三金属 × top10 发货方/接货方 × 日/周/月/全期。
+
+    cf: fetch_comex_issue_stop_firms()。排名按**总量**(非净额)。
+    每个金属一块, 块内左右两栏(发货榜/接货榜), 顶部时间粒度 tab 切换。
+    铂金交割极稀疏(常常整周无交割), 窗口内无数据时如实显示"该窗口无交割",
+    绝不用其它窗口的数字充数。
+    """
+    if not cf or cf.get("status") != "ok" or not cf.get("metals"):
+        return '<p class="empty">COMEX per-firm 交割明细未就绪（数据文件缺失，不编造）。</p>'
+
+    CN = {"Gold": "黄金 Gold", "Silver": "白银 Silver", "Platinum": "铂金 Platinum"}
+    wins = cf.get("windows", [])
+    cov = cf.get("coverage", {})
+
+    def _rank_list(rows, kind):
+        """一栏榜单。kind: 'i'=发货(红) / 's'=接货(绿)。"""
+        if not rows:
+            return '<div class="tf-none">该窗口无交割记录</div>'
+        mx = max(r["lots"] for r in rows) or 1
+        col = "#d64545" if kind == "i" else "#2e9e5b"
+        out = []
+        for n, r in enumerate(rows, 1):
+            w = r["lots"] / mx * 100
+            tag = "" if r.get("is_bank") else '<span class="tf-nb">非银</span>'
+            out.append(
+                f'<div class="tf-row">'
+                f'<span class="tf-rk">{n}</span>'
+                f'<span class="tf-nm">{_esc(r["firm"])}{tag}</span>'
+                f'<span class="tf-bar"><i style="width:{w:.1f}%;background:{col}"></i></span>'
+                f'<span class="tf-lot">{r["lots"]:,}</span>'
+                f'<span class="tf-sh">{r["share"]:.1f}%</span>'
+                f'</div>')
+        return "".join(out)
+
+    blocks = []
+    for metal in ("Gold", "Silver", "Platinum"):
+        per = cf["metals"].get(metal)
+        if not per:
+            continue
+        slug = {"Gold": "au", "Silver": "ag", "Platinum": "pt"}[metal]
+        tabs, panes = [], []
+        for i, w in enumerate(wins):
+            k = w["key"]
+            d = per.get(k)
+            if not d:
+                continue
+            act = " tf-on" if k == "m" else ""       # 默认「近一个月」
+            rng = d.get("range", ["", ""])
+            sub = (f'{rng[0]} → {rng[1]}（{d["days"]} 个交割日）'
+                   if rng[0] != rng[1] else f'{rng[0]}（单日）')
+            tabs.append(f'<button class="tf-tab{act}" data-tf="{slug}" '
+                        f'data-k="{k}">{w["label"]}</button>')
+            panes.append(
+                f'<div class="tf-pane{act}" data-tf="{slug}" data-k="{k}">'
+                f'<div class="tf-sub">{sub} · 总交割 {d["total_i"]:,} 手</div>'
+                f'<div class="tf-cols">'
+                f'<div class="tf-col"><div class="tf-ct tf-ci">▲ Top10 交货方（Issued）</div>'
+                f'{_rank_list(d["issuers"], "i")}</div>'
+                f'<div class="tf-col"><div class="tf-ct tf-cs">▼ Top10 接货方（Stopped）</div>'
+                f'{_rank_list(d["stoppers"], "s")}</div>'
+                f'</div></div>')
+        blocks.append(
+            f'<div class="tf-metal"><div class="tf-mt">{CN[metal]}</div>'
+            f'<div class="tf-tabs">{"".join(tabs)}</div>{"".join(panes)}</div>')
+
+    return (
+        f'<div class="cust-wrap"><div class="cust-chart-col cust-chart-full">'
+        f'<div class="cust-chart-title">COMEX 交割前十名 · 金 / 银 / 铂'
+        f'<span class="chart-freq freq-d">🟢 每日更新 · 数据截至 {_esc(cf.get("as_of",""))}</span></div>'
+        f'{"".join(blocks)}'
+        f'<div class="oil-src">数据源：{_esc(cf.get("source",""))} · '
+        f'覆盖 {_esc(cov.get("start",""))} → {_esc(cov.get("end",""))}'
+        f'（{cov.get("days","?")} 个交割日 = archive PDF {cov.get("archive_days","?")} + '
+        f'Notion 增量 {cov.get("notion_days","?")}）· 单位：合约手数</div>'
+        f'</div>'
+        f'<div class="cust-how"><b>如何看：</b><b style="color:#d64545">交货方(Issued)</b>＝'
+        f'开出交割通知、把实物交出去的一方；<b style="color:#2e9e5b">接货方(Stopped)</b>＝'
+        f'接下通知、拿走实物的一方。二者总量恒等（每手交割必有一发一接）。<br>'
+        f'<b>排名口径</b>：按该窗口内<b>累计总量</b>排（非净额）——净额会让大进大出的做市商掉榜，'
+        f'不符合「谁交货最多」的直觉。同一家可同时进两个榜（既发又接属正常做市行为）。<br>'
+        f'<b>怎么用</b>：某家<b>持续霸榜接货方</b>＝在囤实物（看涨/逼空）；'
+        f'<b>持续霸榜交货方</b>＝在放实物（压价/去库存）。标<span class="tf-nb">非银</span>的是'
+        f'自营/经纪商（StoneX、Marex、Advantage 等），其行为逻辑与 bullion bank 不同，需分开读。'
+        f'<b>CME</b> 是清算所自身席位，非市场参与者。<br>'
+        f'<b>数据诚实说明</b>：archive 段为 CME 官方 PDF 的 per-firm 精确解析'
+        f'（133/133 份全解析成功，席位加总与 PDF TOTAL 逐日自洽校验，0 处不符）；'
+        f'近期段来自 Notion 每日交割明细增量。<b>铂金交割极稀疏</b>（常整周无交割），'
+        f'短窗口内榜单为空属真实情况，不用其它窗口数字填充。</div>'
+        f'</div>')
+
+
 def _comex_issue_stop_html(cs):
     """图1: COMEX 做市商每周净 issue/stop 柱状图(金+银, 两口径)。cs: fetch_comex_issue_stop_weekly()。"""
     if not cs or cs.get("status") != "ok" or not (cs.get("gold") or cs.get("silver")):
@@ -2534,19 +2628,51 @@ def _comex_issue_stop_html(cs):
         parts.append('</svg>')
         return "".join(parts)
 
-    def _metal_block(metal_name, rows):
+    def _metal_block(metal_name, rows, slug):
+        """★2026-08-22 需求A: 同一张图加时间窗口 filter(当周/过去一个月/过去三个月/全部)。
+        数据一次性全量内嵌, 切换纯前端重绘, 不重新请求。窗口不足的诚实显示实际周数。"""
         if not rows:
             return f'<div class="cust-chart-na">{metal_name} 无数据</div>'
         latest = rows[-1]
         cn = latest["core_net"]
-        cdir = "净发货(交货/压价)" if cn>0 else ("净接货(囤货/看涨)" if cn<0 else "持平")
+        cdir = "净发货(交货/压价)" if cn > 0 else ("净接货(囤货/看涨)" if cn < 0 else "持平")
+
+        import datetime as _dt
+        try:
+            _last = _dt.date.fromisoformat(rows[-1]["week"])
+        except Exception:
+            _last = None
+        # (标签, 回看天数); None = 全部
+        _wins = [("当周", 7), ("过去一个月", 30), ("过去三个月", 92), ("全部", None)]
+        _views = []
+        for _lbl, _days in _wins:
+            if _days is None or _last is None:
+                _sub = rows
+            else:
+                _cut = _last - _dt.timedelta(days=_days - 7)
+                _sub = [r for r in rows
+                        if _dt.date.fromisoformat(r["week"]) >= _cut] or rows[-1:]
+            _views.append((_lbl, _sub))
+
+        _tabs, _panes = [], []
+        for _i, (_lbl, _sub) in enumerate(_views):
+            _act = " cis-on" if _i == 2 else ""      # 默认「过去三个月」
+            _tabs.append(
+                f'<button class="cis-tab{_act}" data-cis="{slug}" data-idx="{_i}">'
+                f'{_lbl}<span class="cis-n">{len(_sub)}周</span></button>')
+            _panes.append(
+                f'<div class="cis-pane{_act}" data-cis="{slug}" data-idx="{_i}">'
+                f'{_bars_svg(_sub, "core_net")}'
+                f'<div class="cust-chart-title" style="margin-top:8px;font-size:12px;color:#8a8578">'
+                f'{metal_name} · 全投行(17家)对照</div>'
+                f'{_bars_svg(_sub, "all_net")}</div>')
+
         return (
             f'<div style="margin-bottom:18px">'
             f'<div class="cust-chart-title">{metal_name} · 核心做市商每周净 issue/stop（合约）'
             f'<span class="chart-freq freq-d">最新周 {_esc(latest["week"])}：净 {cn:+d}（{cdir}）</span></div>'
-            f'{_bars_svg(rows, "core_net")}'
-            f'<div class="cust-chart-title" style="margin-top:8px;font-size:12px;color:#8a8578">{metal_name} · 全投行(17家)对照</div>'
-            f'{_bars_svg(rows, "all_net")}'
+            f'<div class="cis-tabs">{"".join(_tabs)}</div>'
+            f'{"".join(_panes)}'
             f'</div>'
         )
 
@@ -2556,8 +2682,8 @@ def _comex_issue_stop_html(cs):
         f'<div class="cust-chart-col cust-chart-full">'
         f'<div class="cust-chart-title">COMEX 做市商每周净 issue/stop · 金 + 银（{_esc(cs.get("archive_range",""))}，{cs.get("archive_pdfs_parsed","?")} 个交易日）'
         f'<span class="chart-freq freq-d">🟢 每日更新 · CME 交割报告</span></div>'
-        f'{_metal_block("白银 Silver", cs.get("silver", []))}'
-        f'{_metal_block("黄金 Gold", cs.get("gold", []))}'
+        f'{_metal_block("白银 Silver", cs.get("silver", []), "ag")}'
+        f'{_metal_block("黄金 Gold", cs.get("gold", []), "au")}'
         f'<div class="oil-src">数据源：CME 每日 Issues &amp; Stops 交割报告（ScraperAPI/Jina/Wayback 三层兜底采集，x坐标精确解析）· '
         f'核心做市商(10家)：{_esc(banks_core)}</div>'
         f'</div>'
@@ -6038,6 +6164,53 @@ _TEMPLATE = r"""<!DOCTYPE html>
   rect[data-tip]:hover {{ opacity: 1 !important; filter: brightness(1.12); }}
   circle.tip-hit {{ fill: transparent; stroke: none; }}
   circle.tip-hit:hover {{ fill: rgba(192,138,125,0.18); }}
+  /* ★2026-08-22 需求A: COMEX issue/stop 图的时间窗口 filter(当周/月/三月/全部) */
+  .cis-tabs {{ display: flex; gap: 6px; margin: 6px 0 8px; flex-wrap: wrap; }}
+  .cis-tab {{
+    font: 600 11.5px/1 -apple-system,PingFang SC,sans-serif;
+    padding: 5px 11px; border-radius: 5px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--card); color: var(--muted);
+    transition: all .12s;
+  }}
+  .cis-tab:hover {{ border-color: var(--clay); color: #8a3a2c; }}
+  .cis-tab.cis-on {{ background: var(--clay); border-color: var(--clay); color: #fff; }}
+  .cis-n {{ font-size: 9.5px; opacity: .72; margin-left: 5px; font-weight: 500; }}
+  .cis-pane {{ display: none; }}
+  .cis-pane.cis-on {{ display: block; }}
+  /* ★2026-08-22 需求B: COMEX 三金属 top10 交货/接货方榜单 */
+  .tf-metal {{ margin: 0 0 22px; }}
+  .tf-mt {{ font-size: 13.5px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }}
+  .tf-tabs {{ display: flex; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }}
+  .tf-tab {{
+    font: 600 11px/1 -apple-system,PingFang SC,sans-serif; padding: 4px 10px;
+    border-radius: 5px; cursor: pointer; border: 1px solid var(--border);
+    background: var(--card); color: var(--muted); transition: all .12s;
+  }}
+  .tf-tab:hover {{ border-color: var(--clay); color: #8a3a2c; }}
+  .tf-tab.tf-on {{ background: var(--clay); border-color: var(--clay); color: #fff; }}
+  .tf-pane {{ display: none; }}
+  .tf-pane.tf-on {{ display: block; }}
+  .tf-sub {{ font-size: 10.5px; color: var(--muted); margin-bottom: 7px; }}
+  .tf-cols {{ display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }}
+  @media (max-width: 860px) {{ .tf-cols {{ grid-template-columns: 1fr; }} }}
+  .tf-ct {{ font-size: 11.5px; font-weight: 700; margin-bottom: 5px; padding-bottom: 3px;
+            border-bottom: 1px solid var(--border); }}
+  .tf-ci {{ color: #d64545; }}
+  .tf-cs {{ color: #2e9e5b; }}
+  .tf-row {{ display: grid; grid-template-columns: 18px 132px 1fr 58px 42px;
+             align-items: center; gap: 6px; padding: 2.5px 0; font-size: 11px; }}
+  .tf-rk {{ color: var(--muted); font-size: 10px; text-align: right; }}
+  .tf-nm {{ color: var(--ink); font-weight: 600; overflow: hidden;
+            text-overflow: ellipsis; white-space: nowrap; }}
+  .tf-nb {{ font-size: 8.5px; color: var(--muted); border: 1px solid var(--border);
+            border-radius: 3px; padding: 0 3px; margin-left: 4px; font-weight: 500; }}
+  .tf-bar {{ background: rgba(0,0,0,0.045); border-radius: 2px; height: 9px;
+             display: block; overflow: hidden; }}
+  .tf-bar i {{ display: block; height: 100%; opacity: .8; border-radius: 2px; }}
+  .tf-lot {{ text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); }}
+  .tf-sh {{ text-align: right; font-size: 10px; color: var(--muted);
+            font-variant-numeric: tabular-nums; }}
+  .tf-none {{ font-size: 11px; color: var(--muted); padding: 10px 0; font-style: italic; }}
 </style>
 </head>
 <body>
@@ -6241,6 +6414,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·十二F：COMEX 做市商每周净 issue/stop 柱状图(金+银, 一手) ═══ -->
   <div class="part-title" id="sec-comex-issue-stop"><span class="part-num">＋</span>COMEX 做市商每周净 issue/stop · 金+银 (一手·大行发货vs接货·每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{comex_issue_stop}</div>
+  <!-- ═══ 附三·十二G：COMEX 交割前十名 金/银/铂 per-firm (需求B, Chao 2026-08-22) ═══ -->
+  <div class="part-title" id="sec-comex-firms-top10"><span class="part-num">＋</span>COMEX 交割前十名 · 金/银/铂 (top10 交货方 vs 接货方·日/周/月切换·每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{comex_firms_top10}</div>
   <!-- ═══ 附三·十一：美日财政政策事件时间线 ═══ -->
   <div class="part-title" id="sec-fiscal-news"><span class="part-num">＋</span>美日财政政策事件 · 债务上限/CR/补正预算/国债发行 (每日检索)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{fiscal_news}</div>
@@ -6294,15 +6470,24 @@ mkRadar('rLong', RADAR.long);
   var box = document.getElementById('sidenav-links');
   if (!titles.length || !box) return;
 
+  // ★2026-08-22(Chao): 左侧菜单顺序必须与右侧内容 DOM 顺序**完全一致**。
+  // 旧实现按 GROUPS 数组的固定顺序渲染分组, 与页面实际排布脱节 ——
+  // 往下 browse 时高亮会在分组间来回跳(实测 3 次向上跳跃), 且 7 个 section
+  // 未命中任何关键词掉进「其他」, 而「其他」渲染在最底部 → 读到页面中部
+  // 高亮突然窜到菜单最下面。
+  // 现在改为: 分组按其**首个成员在 DOM 中的位置**排序(首次出现即建组),
+  // 组内成员也按 DOM 顺序 → 菜单自上而下 === 页面自上而下。
+  // 「机构与政要持仓」由 Chao 指定固定放最后(在「其他」之下), 用 pinLast 标记。
   var GROUPS = [
     {{ name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注','A/D 腾落线','市场广度'] }},
-    {{ name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化'] }},
+    {{ name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化','周期与术数预测'] }},
     {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲'] }},
+    {{ name: '债务与信用', match: ['政府债务','世界前十大经济体','公司债','OAS 利差','CIPS','跨境人民币','AI 产业链','自由现金流','信用维度'] }},
     {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','基差套利去杠杆预警','SOFR 倒挂','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
-    {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','COMEX & 上海','贵金属库存','ETF 资金流','白银做市商','COMEX 白银','投行累计','做市商每周净','issue/stop','自营黄金掉期','黄金出口','Nonmonetary','黄金 Domestic Premium','Premium/Discount','白银月度进口','Silver Bullion'] }},
+    {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','COMEX & 上海','贵金属库存','ETF 资金流','白银做市商','COMEX 白银','投行累计','做市商每周净','issue/stop','COMEX 交割前十名','交货方','自营黄金掉期','黄金出口','Nonmonetary','黄金 Domestic Premium','Premium/Discount','白银月度进口','Silver Bullion'] }},
     {{ name: '财政政策', match: ['美日财政政策事件','债务上限','补正预算','国债发行','年度财政花费','财政花费','政府总支出'] }},
     {{ name: '日本市场', match: ['日经225','外资净买入','日本市场'] }},
-    {{ name: '机构与政要持仓', match: ['机构持仓','13F','Trump'] }}
+    {{ name: '机构与政要持仓', match: ['机构持仓','13F','Trump'], pinLast: true }}
   ];
   function groupOf(label) {{
     for (var g = 0; g < GROUPS.length; g++) {{
@@ -6354,9 +6539,25 @@ mkRadar('rLong', RADAR.long);
     wrap.appendChild(list);
     box.appendChild(wrap);
   }}
-  GROUPS.forEach(function(g, i) {{ renderGroup(i, g.name); }});
-  renderGroup(GROUPS.length, '其他');
-
+  // ★按「首个成员在 DOM 中的位置」排序分组, 使菜单顺序 === 页面顺序。
+  // pinLast 的组(机构与政要持仓)无论其成员在哪, 一律排到最后(Chao 指定)。
+  var order = [];
+  for (var gi = 0; gi <= GROUPS.length; gi++) {{
+    var it = bucket[gi];
+    if (!it || !it.length) continue;
+    var pinned = (gi < GROUPS.length && GROUPS[gi].pinLast) ? 1 : 0;
+    order.push({{
+      gIdx: gi,
+      gName: (gi < GROUPS.length) ? GROUPS[gi].name : '其他',
+      first: it[0].idx,      // 该组第一个 section 在页面中的位置
+      pinned: pinned
+    }});
+  }}
+  order.sort(function(a, b) {{
+    if (a.pinned !== b.pinned) return a.pinned - b.pinned;   // pinLast 沉底
+    return a.first - b.first;                                 // 否则按 DOM 首现位置
+  }});
+  order.forEach(function(o) {{ renderGroup(o.gIdx, o.gName); }});
   function onScroll() {{
     // 用 getBoundingClientRect (相对视口, 不受父元素定位上下文影响) 判定当前章节。
     // 触发线 = 视口顶部下方 120px; 找最后一个标题顶部已越过触发线的 section。
@@ -6587,6 +6788,48 @@ mkRadar('rLong', RADAR.long);
       if (k) open(k);
     }}
   }});
+}})();
+
+/* ★2026-08-22 需求A: COMEX issue/stop 时间窗口 filter。
+   数据全量已内嵌为多个 .cis-pane, 点击 tab 只切 display, 不重新请求。
+   data-cis 区分金属(au/ag), data-idx 区分窗口, 两者组合定位唯一 pane。 */
+(function() {{
+  var tabs = document.querySelectorAll('.cis-tab');
+  if (!tabs.length) return;
+  for (var i = 0; i < tabs.length; i++) {{
+    tabs[i].addEventListener('click', function() {{
+      var slug = this.getAttribute('data-cis');
+      var idx  = this.getAttribute('data-idx');
+      // 同一金属的 tab 与 pane 一起切换, 不影响另一金属
+      var sibTabs = document.querySelectorAll('.cis-tab[data-cis="' + slug + '"]');
+      for (var a = 0; a < sibTabs.length; a++) sibTabs[a].classList.remove('cis-on');
+      this.classList.add('cis-on');
+      var panes = document.querySelectorAll('.cis-pane[data-cis="' + slug + '"]');
+      for (var b = 0; b < panes.length; b++) {{
+        panes[b].classList.toggle('cis-on', panes[b].getAttribute('data-idx') === idx);
+      }}
+    }});
+  }}
+}})();
+
+/* ★2026-08-22 需求B: COMEX top10 榜单的时间粒度切换(日/周/月/全期)。
+   data-tf 区分金属(au/ag/pt), data-k 区分窗口。三个金属各自独立切换。 */
+(function() {{
+  var tabs = document.querySelectorAll('.tf-tab');
+  if (!tabs.length) return;
+  for (var i = 0; i < tabs.length; i++) {{
+    tabs[i].addEventListener('click', function() {{
+      var slug = this.getAttribute('data-tf');
+      var k    = this.getAttribute('data-k');
+      var sibTabs = document.querySelectorAll('.tf-tab[data-tf="' + slug + '"]');
+      for (var a = 0; a < sibTabs.length; a++) sibTabs[a].classList.remove('tf-on');
+      this.classList.add('tf-on');
+      var panes = document.querySelectorAll('.tf-pane[data-tf="' + slug + '"]');
+      for (var b = 0; b < panes.length; b++) {{
+        panes[b].classList.toggle('tf-on', panes[b].getAttribute('data-k') === k);
+      }}
+    }});
+  }}
 }})();
 </script>
 </body>
