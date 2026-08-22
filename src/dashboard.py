@@ -6408,8 +6408,8 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·十二D：白银做市商头寸(CFTC COT, 一手) ═══ -->
   <div class="part-title" id="sec-silver-bank-positions"><span class="part-num">＋</span>白银做市商头寸 · CFTC COT commercial 净持仓 (做市商接货 vs 压价·一手真数据)<span class="freq-badge freq-weekly">每周更新</span></div>
   <div class="card">{silver_bank_positions}</div>
-  <!-- ═══ 附三·十二E：COMEX 白银 issues/stops 静态参考(ANONYMIZED_PERSON_0_15) ═══ -->
-  <div class="part-title" id="sec-comex-silver-issues"><span class="part-num">＋</span>COMEX 白银 投行累计 issues/stops · 静态参考 (ANONYMIZED_PERSON_0_23 @DtDS_WSS·CME封禁无法自动更新)<span class="freq-badge" style="background:#e8e2d5;color:#8a6d3b">静态参考</span></div>
+  <!-- ═══ 附三·十二E：COMEX 白银 issues/stops 静态参考(Michael Lynch) ═══ -->
+  <div class="part-title" id="sec-comex-silver-issues"><span class="part-num">＋</span>COMEX 白银 投行累计 issues/stops · 静态参考 (Michael Lynch @DtDS_WSS·CME封禁无法自动更新)<span class="freq-badge" style="background:#e8e2d5;color:#8a6d3b">静态参考</span></div>
   <div class="card">{comex_silver_issues_ref}</div>
   <!-- ═══ 附三·十二F：COMEX 做市商每周净 issue/stop 柱状图(金+银, 一手) ═══ -->
   <div class="part-title" id="sec-comex-issue-stop"><span class="part-num">＋</span>COMEX 做市商每周净 issue/stop · 金+银 (一手·大行发货vs接货·每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
