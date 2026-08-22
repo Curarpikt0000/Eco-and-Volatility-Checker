@@ -55,7 +55,34 @@ Notion 3 时序 DB → 莫兰迪配色 dashboard（雷达图 + 仪表盘 + 6 部
 - eco-vol-selfheal 每小时 :20 自愈 watchdog(no_agent)
 
 ## 数据联动 (2026-08 扩展)
-- **KOL 独立数据源**：从 KOL 项目 GitHub 拉名册 data/kol_registry.json(92 KOL)，Eco **每日自己 web_search 全量 active KOL** 判方向→写 data/kol_independent.json(不共用另一 agent 的 Notion 结论,准确性独立)。★**cron prompt 不写死 KOL 数量**(2026-08-14 Chao 加 Craig Hamilton-Parker 时踩坑:prompt 曾硬编码"88个KOL"4处,新增会漏抓)——已改为"读名册取 active==true 的全部",新增 KOL 自动纳入,增减名册无需改 cron。★**另类预言类 KOL(domain=预测/sector=Alternative)**:如 Craig Hamilton-Parker(英国通灵预言家)/Abhigya Anand/David Icke 等通灵/占星/末日预言者,cron 用其 search_terms(如"world predictions")抓,**不按可交易方向严格归类**,作民间预期/情绪传播度信号,不与其他分析师 KOL 混同判断标准。名册铁律:只增不减,SSOT=Notion KOL List DB。★**2026-08 完全独立化(Chao要求)**: 每日 crawl 后 `save_kol_daily_snapshot()` 把全量 all(91条方向)落盘 data/kol/daily/YYYY-MM-DD.json(进 git, Eco 自己的数据仓库副本), `kol_weekly_changes()` 读这些快照做**本周最新 vs 上周最后**对比算转向, `kol_stance_changes_grouped()` 数据源=这些快照, **彻底不碰另一 agent 的 by_day DB**(fetch_kol_recent/kol_stance_changes 已弃用不再是主源)。快照不足跨周时诚实回退最新vs最早; 只1天时返回空(绝不编转向)。dashboard 标题=**"本周 KOL 状态变化"**。
+- **KOL 独立数据源**：名册 `data/kol_registry.json`，Eco **每日自己 web_search 全量 active KOL** 判方向→写 data/kol_independent.json(不共用另一 agent 的 Notion 结论,准确性独立)。★**cron prompt 不写死 KOL 数量**(2026-08-14 Chao 加 Craig Hamilton-Parker 时踩坑:prompt 曾硬编码"88个KOL"4处,新增会漏抓)——已改为"读名册取 active==true 的全部",新增 KOL 自动纳入,增减名册无需改 cron。
+- ★★★**名册铁律(Chao 2026-08-22 重申，最高优先级)**：
+  **SSOT = Notion「KOL List」DB** = `35947eb5-fd3c-800d-b852-cef31f9de6a5`
+  （位于 page「KOL Research Daily Update」`31447eb5fd3c8064a531c43b177cdc41` 内，同页还有 KOL By Week / KOL By Day 两个 DB）。
+  **本 agent 绝不自行增删任何 KOL** —— 增删一律由 Chao / 另一 agent 在 Notion 侧操作，
+  本项目只跑 `tools/sync_kol_from_notion.py --apply` 做**单向镜像**到 GitHub。
+  已挂进每日 cron 的**步骤 0**（在所有抓取之前），Notion 改动次日自动生效。
+  - **教训**：2026-08-20 我未经指令自行往名册加了 23 人、且只写本地未同步 Notion，
+    造成两边不一致，还把本属 Forecast-Checker 的玄学/术数类塞进了 Eco。
+  - **同步保护**：本地独有采集配置(search_terms / youtube_channel_id / source_url)保留不被覆盖；
+    移出者落盘 `data/kol_removed_<date>.json` 留痕，其 `data/kol/backfill/` 历史文件**一律保留不删**
+    （日后在 Notion 加回来，历史立即可用）。
+  - **★匹配坑**：Notion 名常带机构后缀，如「Nomi Prins（… 前 Goldman Sachs MD）」。
+    若用双向子串模糊匹配，本地「Goldman Sachs」会抢先吃掉这一行，导致 Nomi Prins 被误判为
+    "Notion 无"而错误移出。正解：**先全量精确匹配 → 模糊只认「本地名 ⊂ Notion 名」单方向 →
+    取最短候选 → 已配对者不再参与模糊**。
+  - **★名册变更后必须同步过滤下游**：`kol_full_history()` 直接扫 `data/kol/backfill/` 目录、
+    `kol_weekly_views()/kol_stance_changes_grouped()` 读的是每日快照，**两者都不看名册**。
+    移出人后若不在 dashboard 渲染层按名册过滤，会出现「卡片没了但历史仍内嵌在 payload」或
+    「卡片还在但点开空白」。已在 `_kol_history_payload` / `_kol_views_html` / `_kol_changes_html` 三处加过滤。
+- ★★**项目边界(Chao 2026-08-22 裁定)**：**玄学 / 术数 / 占星 / 通灵 / 末日预言类不属本项目**
+  （易经 / 六爻 / 奇门遁甲 / 八字 / 金融占星 / 圣经周期择时）→ 归 **Forecast-Checker** 项目
+  （见 `~/Projects/Forecast-Checker/AGENTS.md`，其源文件为 `data/batch_esoteric_finance.json`，
+  已挂进该项目 `scripts/merge_backfill.py` 白名单）。
+  本项目只留**可交易的金融判断**；技术分析 / 量化周期派（艾略特波浪 / 市场宽度 McClellan /
+  ECM 经济信心模型 / Hurst 周期 / 世代长周期）归**常规 KOL 板块**，**不设独立 section**
+  （`_cycle_kol_html` 已停用但函数保留，模板整段注释）。
+- **2026-08 完全独立化(Chao要求)**: 每日 crawl 后 `save_kol_daily_snapshot()` 把全量方向落盘 data/kol/daily/YYYY-MM-DD.json(进 git, Eco 自己的数据仓库副本), `kol_weekly_changes()` 读这些快照做**本周最新 vs 上周最后**对比算转向, `kol_stance_changes_grouped()` 数据源=这些快照, **彻底不碰另一 agent 的 by_day DB**(fetch_kol_recent/kol_stance_changes 已弃用不再是主源)。快照不足跨周时诚实回退最新vs最早; 只1天时返回空(绝不编转向)。dashboard 标题=**"本周 KOL 状态变化"**。
 - **Economic Dashboard 流动性**：external_data.fetch_liquidity_points() 读 Fed准备金/RRP/TGA(A5)+收益率(A1)+风控灯/关键变动(A6 750f9b46...)
 - **三大央行资产负债表(US/JP/CN)**：external_data.fetch_cb_balance_sheets() 读 Economic Dashboard 已维护的 B7(Fed周度 dea7e939)/B6(BoJ旬报 481f6e19)/B5(PBoC月度 20b0eb37) 最新两行,每科目算环比(Fed=WoW / BoJ=较上期 / PBoC=MoM)。dashboard 底部 bs-grid 三 view:左资产/右负债,每值带涨跌箭头+%
 - **机构持仓 13F + Trump**：holdings_13f.py 走 SEC EDGAR 官方(免费,可查历史)。9个有活跃13F的机构(Berkshire/Bridgewater/Scion/Soros/ARK/Pershing/Appaloosa/Duquesne + Oxbow[Ted Oakley,KOL名册里唯一有活跃13F的])最新vs上期13F,按issuer聚合算变动(🆕新建/▲加仓/▼减仓/❌清仓/→持平)。★单位自适应:部分旧式filer(如Druckenmiller)value填千美元,用中位数隐含股价<$1判定×1000。写 Notion DB_HOLDINGS(title字段"机构-期",非Date→upsert传title_field) + dashboard 底部 h-grid 卡片
