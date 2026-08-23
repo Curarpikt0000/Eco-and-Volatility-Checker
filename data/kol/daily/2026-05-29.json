@@ -8,126 +8,162 @@
    "sector": "大宗商品周期",
    "direction": "看多",
    "targets": "🟢 USO/GLD/SLV | 🔴 TLT",
-   "comments": "Jeff Currie 认为伊朗与美国谈判立场为47年来最强，且随时间推移杠杆效应递增 → 暗示地缘政治风险难以快速消除，供应端不确定性持续 → 同时指出亚洲石油市场已处于‘油罐底部’，欧洲也接近该状态 → 意味着实物需求相对供应偏紧，库存低位支撑油价 → 整体逻辑指向原油及大宗商品供应紧张，价格上行风险大于下行风险\n\n来源: https://www.cnbc.com/2026/05/25/oil-prices-iran-war-carlyle-currie.html | https://www.youtube.com/watch?v=IvHJSRiSp_E"
+   "comments": "Jeff Currie 认为伊朗与美国谈判立场为47年来最强，且随时间推移杠杆效应递增 → 暗示地缘政治风险难以快速消除，供应端不确定性持续 → 同时指出亚洲石油市场已处于‘油罐底部’，欧洲也接近该状态 → 意味着实物需求相对供应偏紧，库存低位支撑油价 → 整体逻辑指向原油及大宗商品供应紧张，价格上行风险大于下行风险\n\n来源: https://www.cnbc.com/2026/05/25/oil-prices-iran-war-carlyle-currie.html | https://www.youtube.com/watch?v=IvHJSRiSp_E",
+   "detail": "▸ 核心论点：地缘与库存双重支撑，原油及大宗价格上行风险大于下行\n▸ 关键依据：认为伊朗与美国谈判立场为47年来最强，且杠杆效应随时间递增，供应端不确定性持续；同时亚洲石油市场已处于油罐底部，欧洲也接近该状态，低库存支撑油价\n▸ 时间与位置：未给出具体时间窗口与油价目标\n▸ 标的与操作：涉及USO、GLD、SLV（看多）与TLT（看空）",
+   "detail_status": "ok"
   },
   {
    "kol": "Andy Schectman",
    "sector": "实物贵金属",
    "direction": "强烈看多",
    "targets": "🟢 GLD, SLV, PHYS(金17250) | 🔴 美元(储备地位削弱)",
-   "comments": "全球金融架构正在经历结构性变革 → 美元作为储备货币的地位被削弱 → 黄金将取代美元成为“最后储备货币” → 亚洲市场对黄金和白银的需求激增 → 贵金属市场面临数十年来最大转型 → 金价可能达到17250美元/盎司 → 当前是贵金属市场突破的关键时刻\n\n来源: https://www.youtube.com/watch?v=IMCUgGplYLs | https://www.kitco.com/news"
+   "comments": "全球金融架构正在经历结构性变革 → 美元作为储备货币的地位被削弱 → 黄金将取代美元成为“最后储备货币” → 亚洲市场对黄金和白银的需求激增 → 贵金属市场面临数十年来最大转型 → 金价可能达到17250美元/盎司 → 当前是贵金属市场突破的关键时刻\n\n来源: https://www.youtube.com/watch?v=IMCUgGplYLs | https://www.kitco.com/news",
+   "detail": "▸ 核心论点：全球金融架构结构性变革，黄金将取代美元成为最后储备货币\n▸ 关键依据：美元储备地位被削弱，亚洲市场对金银需求激增，贵金属市场面临数十年来最大转型；判断当前是贵金属突破的关键时刻\n▸ 时间与位置：金价目标17250美元/盎司，未给出时间窗口\n▸ 标的与操作：涉及GLD、SLV、PHYS（强烈看多）与美元（看空）",
+   "detail_status": "ok"
   },
   {
    "kol": "Martin Armstrong",
    "sector": "经济周期",
    "direction": "中性",
    "targets": "🟡 无明确方向(短期波动)",
-   "comments": "Martin Armstrong 近期市场评论未给出明确方向性判断 → 仅列出商品涨跌数据，其中白银在5月27日下跌3.07%，但在5月28日上涨2.02%，显示短期波动 → 铜、天然气等商品上涨，原油、橙汁下跌，缺乏统一趋势 → 整体观点不明确，无法提炼出多空逻辑链条\n\n来源: https://www.armstrongeconomics.com/market-talk/market-talk-may-22-2026/ | https://www.armstrongeconomics.com/market-talk/market-talk-may-28-2026/"
+   "comments": "Martin Armstrong 近期市场评论未给出明确方向性判断 → 仅列出商品涨跌数据，其中白银在5月27日下跌3.07%，但在5月28日上涨2.02%，显示短期波动 → 铜、天然气等商品上涨，原油、橙汁下跌，缺乏统一趋势 → 整体观点不明确，无法提炼出多空逻辑链条\n\n来源: https://www.armstrongeconomics.com/market-talk/market-talk-may-22-2026/ | https://www.armstrongeconomics.com/market-talk/market-talk-may-28-2026/",
+   "detail": "公开信息有限，仅检索到：近期市场评论未给出明确方向性判断，仅列出商品涨跌数据：白银5月27日下跌3.07%、5月28日上涨2.02%，铜与天然气上涨，原油与橙汁下跌，缺乏统一趋势。",
+   "detail_status": "thin"
   },
   {
    "kol": "Michael Widmer",
    "sector": "黄金白银",
    "direction": "分歧",
    "targets": "🟡 SLV(短多中期回调) | 🟢 GLD(目标6000)",
-   "comments": "Michael Widmer 认为白银在工业需求与投资情绪推动下，2025年第四季度有望触及100美元/盎司 → 但警告涨势不可持续，因2026年可能出现工业需求风险与供应过剩 → 黄金方面，基于美国结构性驱动因素（如财政扩张、去美元化等），设定12个月目标价6000美元/盎司 → 整体对贵金属短期看多，但中期存在回调压力\n\n来源: https://www.kitco.com/news/article/2026-05-27/silver-can-reach-100-ounce-year-momentum-wont-last-bank-america | https://goldsilver.com/industry-news/article/bank-of-americas-6000-gold-forecast-isnt-a-price-call-its-a-system-call/"
+   "comments": "Michael Widmer 认为白银在工业需求与投资情绪推动下，2025年第四季度有望触及100美元/盎司 → 但警告涨势不可持续，因2026年可能出现工业需求风险与供应过剩 → 黄金方面，基于美国结构性驱动因素（如财政扩张、去美元化等），设定12个月目标价6000美元/盎司 → 整体对贵金属短期看多，但中期存在回调压力\n\n来源: https://www.kitco.com/news/article/2026-05-27/silver-can-reach-100-ounce-year-momentum-wont-last-bank-america | https://goldsilver.com/industry-news/article/bank-of-americas-6000-gold-forecast-isnt-a-price-call-its-a-system-call/",
+   "detail": "▸ 核心论点：对贵金属短期看多、中期存在回调压力，立场分歧。\n▸ 关键依据：白银在工业需求与投资情绪推动下，2025 年第四季度有望触及 100 美元/盎司，但警告涨势不可持续，因 2026 年可能出现工业需求风险与供应过剩；黄金方面基于美国结构性驱动因素（财政扩张、去美元化等）设定 12 个月目标价 6000 美元/盎司。\n▸ 时间与位置：白银 100 美元（2025Q4）、黄金 6000 美元（12 个月）。\n▸ 标的与操作：标的为 SLV（短多中期回调）与 GLD（目标 6000）；操作取向为多金、对银谨慎。",
+   "detail_status": "ok"
   },
   {
    "kol": "Stewart Thomson",
    "sector": "黄金白银",
    "direction": "看多",
    "targets": "🟢 GLD/PHYS(央行购金) | 🔴 TLT",
-   "comments": "全球央行在2026年第一季度净购入244吨黄金，显示官方持续增储趋势 → 美国仍持有8133.5吨黄金，但新兴市场央行买入加速 → 央行购金为金价提供坚实底部支撑 → 结合长期供需结构，黄金价格在2026年及2030-2040年有望持续上行\n\n来源: https://www.goldrepublic.com/en-us/gold-price/forecast | https://goldsilver.com/industry-news/"
+   "comments": "全球央行在2026年第一季度净购入244吨黄金，显示官方持续增储趋势 → 美国仍持有8133.5吨黄金，但新兴市场央行买入加速 → 央行购金为金价提供坚实底部支撑 → 结合长期供需结构，黄金价格在2026年及2030-2040年有望持续上行\n\n来源: https://www.goldrepublic.com/en-us/gold-price/forecast | https://goldsilver.com/industry-news/",
+   "detail": "▸ 核心论点：看多黄金，认为央行购金为金价提供坚实底部支撑。\n▸ 关键依据：依据是全球央行在2026年第一季度净购入244吨黄金、显示官方持续增储；美国仍持有8133.5吨黄金，但新兴市场央行买入加速。\n▸ 时间与位置：时间指向2026年及2030-2040年的持续上行，未给出具体目标价。\n▸ 标的与操作：看多GLD/PHYS；看空TLT。",
+   "detail_status": "ok"
   },
   {
    "kol": "Torsten Sløk",
    "sector": "利率与信贷",
    "direction": "看空",
    "targets": "🔴 GLD, SLV(美元走强,短期承压)",
-   "comments": "搜索内容中未直接包含 Torsten Sløk 的明确观点或分析，仅有一条宏观展望提及黄金价格触及20日低点，美元走强，黄金承压，但缺乏其个人逻辑链条。因此无法推断其核心论点，仅能基于市场数据判断短期黄金偏弱。\n\n来源: https://www.goldrepublic.com/en-us/gold-price/forecast | https://notes.hurstcycles.com/macro-outlook/macro-outlook-26-may-2026/"
+   "comments": "搜索内容中未直接包含 Torsten Sløk 的明确观点或分析，仅有一条宏观展望提及黄金价格触及20日低点，美元走强，黄金承压，但缺乏其个人逻辑链条。因此无法推断其核心论点，仅能基于市场数据判断短期黄金偏弱。\n\n来源: https://www.goldrepublic.com/en-us/gold-price/forecast | https://notes.hurstcycles.com/macro-outlook/macro-outlook-26-may-2026/",
+   "detail": "▸ 核心论点：无法确认其个人观点，仅能基于市场数据判断短期黄金偏弱。\n▸ 关键依据：诚实说明：搜索内容中未直接包含其明确观点或分析，仅有一条宏观展望提及黄金价格触及 20 日低点、美元走强、黄金承压，缺乏其个人逻辑链条。\n▸ 时间与位置：位置参照为黄金触及 20 日低点，未给出目标价或时间窗口。\n▸ 标的与操作：标的记为 GLD、SLV（美元走强下短期承压）；操作取向为短期谨慎。",
+   "detail_status": "ok"
   },
   {
    "kol": "Jeremy Grantham",
    "sector": "均值回归",
    "direction": "强烈看空",
    "targets": "🟢 GLD, PHYS | 🔴 SPY, QQQ(AI泡沫,预测跌50%)",
-   "comments": "Jeremy Grantham 认为当前市场存在 AI 驱动的泡沫 → 泡沫本质是过度炒作的美好故事 → 历史表明此类狂热会将估值推至远超基本面可支撑的水平 → 他预测市场可能下跌50% → 作为长期价值投资者和泡沫专家，他坚持看空立场\n\n来源: https://acquirersmultiple.com/category/jeremy-grantham/ | https://stockcircle.com/portfolio/jeremy-grantham"
+   "comments": "Jeremy Grantham 认为当前市场存在 AI 驱动的泡沫 → 泡沫本质是过度炒作的美好故事 → 历史表明此类狂热会将估值推至远超基本面可支撑的水平 → 他预测市场可能下跌50% → 作为长期价值投资者和泡沫专家，他坚持看空立场\n\n来源: https://acquirersmultiple.com/category/jeremy-grantham/ | https://stockcircle.com/portfolio/jeremy-grantham",
+   "detail": "▸ 核心论点：认为存在AI驱动的泡沫，强烈看空美股。\n▸ 关键依据：依据为泡沫本质是过度炒作的美好故事，历史表明此类狂热会将估值推至远超基本面可支撑的水平；作为长期价值投资者与泡沫专家坚持看空立场。\n▸ 时间与位置：预测市场可能下跌50%；原文未给出具体时间窗口。\n▸ 标的与操作：看空SPY、QQQ，看多GLD、PHYS；操作为规避美股、转向黄金。",
+   "detail_status": "ok"
   },
   {
    "kol": "Jeff Snider",
    "sector": "欧洲美元/回购市场",
    "direction": "分歧",
    "targets": "🟡 GLD, PHYS(短期承压,长期通胀支撑)",
-   "comments": "Jeff Snider关注货币科学和欧元美元市场，强调从货币体系深层理解市场信号 → 当前黄金接近两个月低点，受能源价格上涨推升通胀担忧影响 → 美联储官员维持谨慎，Cook支持暂不降息但保留加息可能，Williams警告通胀可能升至4% → 利率预期分化，市场对降息预期减弱 → 黄金短期承压，但通胀若持续上升可能强化黄金避险需求 → 整体多空因素交织，方向不明确\n\n来源: https://podcasts.apple.com/us/podcast/eurodollar-university/id1506469669 | https://www.cmegroup.com/markets/interest-rates.html"
+   "comments": "Jeff Snider关注货币科学和欧元美元市场，强调从货币体系深层理解市场信号 → 当前黄金接近两个月低点，受能源价格上涨推升通胀担忧影响 → 美联储官员维持谨慎，Cook支持暂不降息但保留加息可能，Williams警告通胀可能升至4% → 利率预期分化，市场对降息预期减弱 → 黄金短期承压，但通胀若持续上升可能强化黄金避险需求 → 整体多空因素交织，方向不明确\n\n来源: https://podcasts.apple.com/us/podcast/eurodollar-university/id1506469669 | https://www.cmegroup.com/markets/interest-rates.html",
+   "detail": "▸ 核心论点：多空因素交织，黄金短期承压但通胀可能构成长期支撑。\n▸ 关键依据：当前黄金接近两个月低点，受能源价格上涨推升通胀担忧影响；美联储官员维持谨慎，Cook支持暂不降息但保留加息可能，Williams警告通胀可能升至4%；利率预期分化、降息预期减弱，黄金短期承压，但通胀若持续上升可能强化避险需求。\n▸ 时间与位置：位置为黄金接近两个月低点；通胀警戒值为4%。\n▸ 标的与操作：标的为GLD、PHYS；操作取向为方向不明确，短期观望。",
+   "detail_status": "ok"
   },
   {
    "kol": "Bill Gross",
    "sector": "全球债券市场",
    "direction": "中性",
    "targets": "🟡 美债(无最新观点)",
-   "comments": "搜索内容仅提供了美国10年期国债收益率和收益率曲线的数据来源链接，未包含Bill Gross本人的最新观点或评论。因此无法判断其具体立场。通常Bill Gross关注收益率曲线形态和通胀预期，若曲线陡化可能看空长债，若经济衰退风险上升则可能看多长债。当前缺乏明确信号，故判断为中性/混合。\n\n来源: https://fred.stlouisfed.org/series/DGS10 | https://www.investing.com/rates-bonds/usa-government-bonds"
+   "comments": "搜索内容仅提供了美国10年期国债收益率和收益率曲线的数据来源链接，未包含Bill Gross本人的最新观点或评论。因此无法判断其具体立场。通常Bill Gross关注收益率曲线形态和通胀预期，若曲线陡化可能看空长债，若经济衰退风险上升则可能看多长债。当前缺乏明确信号，故判断为中性/混合。\n\n来源: https://fred.stlouisfed.org/series/DGS10 | https://www.investing.com/rates-bonds/usa-government-bonds",
+   "detail": "公开信息有限，仅检索到：搜索内容仅提供美国 10 年期国债收益率与收益率曲线的数据来源链接，未包含本人最新观点或评论，无法判断其具体立场，方向记为中性，涉及标的为美债。",
+   "detail_status": "thin"
   },
   {
    "kol": "Kyle Bass",
    "sector": "日债/主权危机",
    "direction": "看空",
    "targets": "🔴 TLT/日债(收益率飙升) | 🔴 美元 | 🟢 GLD/SLV",
-   "comments": "日本利率维持高位且通胀压力上升 → 日本债券收益率飙升 → 引发全球债券市场连锁反应 → 美国国债收益率同步走高 → 美国债务危机风险加剧 → 美元信用受损 → 避险需求推动黄金和白银上涨 → 长期看多贵金属\n\n来源: https://www.itmtrading.com/blog/japan-us-debt-crisis-yields-2007-highs/ | https://www.kavout.com/market-lens/why-are-gold-and-silver-underperforming-amid-geopolitical-turmoil"
+   "comments": "日本利率维持高位且通胀压力上升 → 日本债券收益率飙升 → 引发全球债券市场连锁反应 → 美国国债收益率同步走高 → 美国债务危机风险加剧 → 美元信用受损 → 避险需求推动黄金和白银上涨 → 长期看多贵金属\n\n来源: https://www.itmtrading.com/blog/japan-us-debt-crisis-yields-2007-highs/ | https://www.kavout.com/market-lens/why-are-gold-and-silver-underperforming-amid-geopolitical-turmoil",
+   "detail": "▸ 核心论点：日债收益率飙升将引发全球债市连锁反应，长期看多贵金属\n▸ 关键依据：传导链：日本利率维持高位且通胀压力上升→日本债券收益率飙升→引发全球债券市场连锁反应→美国国债收益率同步走高→美国债务危机风险加剧→美元信用受损→避险需求推动黄金和白银上涨\n▸ 时间与位置：时点 2026-05-29；未给出具体收益率数值或金银点位\n▸ 标的与操作：看空 TLT/日债、美元；看多 GLD/SLV",
+   "detail_status": "ok"
   },
   {
    "kol": "James Grant",
    "sector": "利率史与债券",
    "direction": "分歧",
    "targets": "🟡 30Y国债(机会与风险并存) | 🟢 GLD",
-   "comments": "30年期国债收益率突破5%为2007年以来首次，反映债券市场对长期利率上行和通胀持续性的担忧 → 但高收益率本身可能吸引买家，形成机会与风险并存的局面 → James Grant作为利率观察者，通常关注市场极端情绪和逆向机会，当前债券收益率处于历史高位可能暗示价值机会，但短期信号矛盾 → 整体逻辑链条指向市场在危险与机会之间摇摆，方向不明确\n\n来源: https://fred.stlouisfed.org/series/DGS10 | https://streetstats.finance/rates/treasuries/"
+   "comments": "30年期国债收益率突破5%为2007年以来首次，反映债券市场对长期利率上行和通胀持续性的担忧 → 但高收益率本身可能吸引买家，形成机会与风险并存的局面 → James Grant作为利率观察者，通常关注市场极端情绪和逆向机会，当前债券收益率处于历史高位可能暗示价值机会，但短期信号矛盾 → 整体逻辑链条指向市场在危险与机会之间摇摆，方向不明确\n\n来源: https://fred.stlouisfed.org/series/DGS10 | https://streetstats.finance/rates/treasuries/",
+   "detail": "▸ 核心论点：认为30年期国债收益率突破5%后机会与风险并存，方向不明确。\n▸ 关键依据：依据为30年期收益率突破5%为2007年以来首次，反映债市对长期利率上行与通胀持续性的担忧；但高收益率本身可能吸引买家；作为利率观察者通常关注市场极端情绪和逆向机会，当前收益率处历史高位可能暗示价值机会但短期信号矛盾。\n▸ 时间与位置：点位为30年期收益率突破5%，为2007年以来首次。\n▸ 标的与操作：涉及30Y国债（机会与风险并存）与GLD；操作为谨慎观察、不做单边。",
+   "detail_status": "ok"
   },
   {
    "kol": "Lacy Hunt",
    "sector": "美债长端利率",
    "direction": "中性",
    "targets": "🟡 美债, GLD(数据矛盾,方向不明)",
-   "comments": "当前搜索内容未直接包含Lacy Hunt的最新观点，仅显示美国10年期国债收益率市场预期PCE数据，且市场定价12月加息概率约50% → 缺乏明确的多空信号 → 无法确认Lacy Hunt的具体立场，需结合其历史观点（长期看空经济、看多债券）推断，但近期数据矛盾，故判断为中性/混合。\n\n来源: https://www.treasurydirect.gov/ | https://tradingeconomics.com/united-states/government-bond-yield"
+   "comments": "当前搜索内容未直接包含Lacy Hunt的最新观点，仅显示美国10年期国债收益率市场预期PCE数据，且市场定价12月加息概率约50% → 缺乏明确的多空信号 → 无法确认Lacy Hunt的具体立场，需结合其历史观点（长期看空经济、看多债券）推断，但近期数据矛盾，故判断为中性/混合。\n\n来源: https://www.treasurydirect.gov/ | https://tradingeconomics.com/united-states/government-bond-yield",
+   "detail": "▸ 核心论点：当前数据矛盾、缺乏明确多空信号，判断为中性。\n▸ 关键依据：诚实说明：搜索内容未直接包含其最新观点，仅显示美国 10 年期国债收益率与市场预期 PCE 数据，且市场定价 12 月加息概率约 50%；需结合其历史观点（长期看空经济、看多债券）推断，但近期数据矛盾。\n▸ 时间与位置：位置参照为市场定价 12 月加息概率约 50%；未给出收益率目标。\n▸ 标的与操作：标的为美债与 GLD；操作取向为观望。",
+   "detail_status": "ok"
   },
   {
    "kol": "Abhigya Anand",
    "sector": "末日情景",
    "direction": "分歧",
    "targets": "🟡 GLD(占星,多空交织)",
-   "comments": "搜索内容中未直接包含Abhigya Anand的观点，但综合近期市场分析：地缘政治紧张与美联储政策可能转向→限制黄金短期上行空间→但通胀、汇率波动及央行购金需求支撑长期看涨→部分专家预期持续上涨，另有观点认为美元走强和经济放缓将引发回调→多空因素交织，方向不明确\n\n来源: https://timesofindia.indiatimes.com/business/india-business/gold-price-prediction-today-india-where-is-gold-silver-rate-headed-on-may-27-2026-mcx-gold-futures-outlook-us-iran-war-middle-east-tensions/articleshow/131343002.cms | https://www.bajajfinserv.in/expecte"
+   "comments": "搜索内容中未直接包含Abhigya Anand的观点，但综合近期市场分析：地缘政治紧张与美联储政策可能转向→限制黄金短期上行空间→但通胀、汇率波动及央行购金需求支撑长期看涨→部分专家预期持续上涨，另有观点认为美元走强和经济放缓将引发回调→多空因素交织，方向不明确\n\n来源: https://timesofindia.indiatimes.com/business/india-business/gold-price-prediction-today-india-where-is-gold-silver-rate-headed-on-may-27-2026-mcx-gold-futures-outlook-us-iran-war-middle-east-tensions/articleshow/131343002.cms | https://www.bajajfinserv.in/expecte",
+   "detail": "公开信息有限，仅检索到：搜索内容中未直接包含其本人观点，仅有综合市场分析：地缘紧张与美联储政策转向限制黄金短期上行，而通胀、汇率波动与央行购金支撑长期看涨，多空因素交织、方向不明确。",
+   "detail_status": "thin"
   },
   {
    "kol": "Plai Navaracha",
    "sector": "末日情景",
    "direction": "中性",
    "targets": "🟡 无方向(区域天气)",
-   "comments": "泰国进入雨季 → 全国预防山洪命令下达 → 自然灾害风险上升 → 可能影响当地经济活动与供应链 → 短期避险情绪或升温 → 但信息仅限泰国区域，未涉及全球宏观或贵金属市场 → 对贵金属价格影响有限且间接 → 整体判断为中性\n\n来源: https://www.nationthailand.com/news/general/40066502 | https://www.bangkokpost.com/"
+   "comments": "泰国进入雨季 → 全国预防山洪命令下达 → 自然灾害风险上升 → 可能影响当地经济活动与供应链 → 短期避险情绪或升温 → 但信息仅限泰国区域，未涉及全球宏观或贵金属市场 → 对贵金属价格影响有限且间接 → 整体判断为中性\n\n来源: https://www.nationthailand.com/news/general/40066502 | https://www.bangkokpost.com/",
+   "detail": "▸ 核心论点：泰国雨季与山洪风险上升，但对贵金属影响有限且间接，整体中性。\n▸ 关键依据：链条：泰国进入雨季→全国预防山洪命令下达→自然灾害风险上升→可能影响当地经济活动与供应链→短期避险情绪或升温；但信息仅限泰国区域，未涉及全球宏观或贵金属市场。\n▸ 时间与位置：信息时点2026-05-29；无具体点位或时间窗口。\n▸ 标的与操作：无明确方向标的（区域天气），中性观望。",
+   "detail_status": "ok"
   },
   {
    "kol": "Athos Salomé",
    "sector": "末日情景",
    "direction": "中性",
    "targets": "🟡 GLD, SLV(预言类无明确观点)",
-   "comments": "搜索内容显示NOAA在2026年1月23日完成太阳观测卫星轨道部署，可能预示太阳活动增强→太阳活动影响地磁暴和电子设备，但未直接关联贵金属价格→同时出现黄金2026年预测可能触及6000美元的信息，但缺乏Athos Salomé本人的明确观点或预言文本→无法确定其看多或看空逻辑，仅能基于搜索内容中性混合判断\n\n来源: https://www.swpc.noaa.gov/ | https://www.spaceweatherlive.com/"
+   "comments": "搜索内容显示NOAA在2026年1月23日完成太阳观测卫星轨道部署，可能预示太阳活动增强→太阳活动影响地磁暴和电子设备，但未直接关联贵金属价格→同时出现黄金2026年预测可能触及6000美元的信息，但缺乏Athos Salomé本人的明确观点或预言文本→无法确定其看多或看空逻辑，仅能基于搜索内容中性混合判断\n\n来源: https://www.swpc.noaa.gov/ | https://www.spaceweatherlive.com/",
+   "detail": "公开信息有限，仅检索到：该条为预言类内容，搜索仅显示NOAA在2026年1月23日完成太阳观测卫星轨道部署、以及黄金2026年可能触及6000美元的零散信息，缺乏本人的明确观点文本，无法判断多空。",
+   "detail_status": "thin"
   },
   {
    "kol": "David Icke",
    "sector": "经济重置叙事",
    "direction": "看多",
    "targets": "🟢 SLV, GLD, PHYS(实物贵金属叙事)",
-   "comments": "David Icke 近期内容主要讨论货币本质（货币只存在于我们的思想中）→ 同时提及迪拜房产投资广告 → 未直接对贵金属价格走势发表明确观点 → 但美国参议院引入SILVER法案要求各时区设立金银存储设施 → 该法案可能提升白银实物需求与基础设施价值 → 整体信息偏向长期持有实物贵金属的叙事，但缺乏短期价格判断依据\n\n来源: https://goldsilver.com/industry-news/ | https://www.youtube.com/watch?v=5T5w_eoG-8Y"
+   "comments": "David Icke 近期内容主要讨论货币本质（货币只存在于我们的思想中）→ 同时提及迪拜房产投资广告 → 未直接对贵金属价格走势发表明确观点 → 但美国参议院引入SILVER法案要求各时区设立金银存储设施 → 该法案可能提升白银实物需求与基础设施价值 → 整体信息偏向长期持有实物贵金属的叙事，但缺乏短期价格判断依据\n\n来源: https://goldsilver.com/industry-news/ | https://www.youtube.com/watch?v=5T5w_eoG-8Y",
+   "detail": "▸ 核心论点：内容偏向长期持有实物贵金属的叙事，但缺乏短期价格判断依据。\n▸ 关键依据：近期内容主要讨论货币本质（货币只存在于我们的思想中），并提及迪拜房产投资广告，未直接对贵金属价格走势发表明确观点；另提到美国参议院引入 SILVER 法案要求各时区设立金银存储设施，可能提升白银实物需求与基础设施价值。\n▸ 时间与位置：未给出任何点位、目标价或时间窗口。\n▸ 标的与操作：SLV、GLD、PHYS；偏长期持有实物贵金属，短期无操作指引。",
+   "detail_status": "ok"
   },
   {
    "kol": "Amanda Grace",
    "sector": "财富转移预言",
    "direction": "中性",
    "targets": "🟡 无方向(宗教预言)",
-   "comments": "搜索内容中Amanda Grace的预言性言论主要涉及对特朗普的宗教性警示，未直接关联贵金属市场基本面或技术面分析 → 其他搜索结果仅提供常规黄金价格预测和短期技术分析，缺乏与Amanda Grace观点的直接联系 → 无法从现有信息中提取明确的贵金属多空逻辑链条 → 整体判断为中性/混合\n\n来源: https://www.goldrepublic.com/en-us/gold-price/forecast | https://www.youtube.com/watch?v=RjPTpy8NwqI"
+   "comments": "搜索内容中Amanda Grace的预言性言论主要涉及对特朗普的宗教性警示，未直接关联贵金属市场基本面或技术面分析 → 其他搜索结果仅提供常规黄金价格预测和短期技术分析，缺乏与Amanda Grace观点的直接联系 → 无法从现有信息中提取明确的贵金属多空逻辑链条 → 整体判断为中性/混合\n\n来源: https://www.goldrepublic.com/en-us/gold-price/forecast | https://www.youtube.com/watch?v=RjPTpy8NwqI",
+   "detail": "公开信息有限，仅检索到：该条为宗教预言类内容，其言论主要涉及对特朗普的宗教性警示，未关联贵金属基本面或技术面，无法提取明确的多空逻辑。",
+   "detail_status": "thin"
   },
   {
    "kol": "Brandon Biggs",
    "sector": "财富转移预言",
    "direction": "中性",
    "targets": "🟡 预言类无明确方向",
-   "comments": "Brandon Biggs近期内容主要为预言总结和推广其付费社群，未直接给出贵金属或宏观经济明确观点 → 其内容与黄金价格预测、金融市场分析无直接关联 → 同时搜索到黄金价格预测文章和财经新闻，但未与Biggs观点结合 → 整体缺乏可推导的看多或看空逻辑\n\n来源: https://www.youtube.com/watch?v=hGfkVAT69xw | https://www.litefinance.org/blog/analysts-opinions/gold-price-prediction-forecast/"
+   "comments": "Brandon Biggs近期内容主要为预言总结和推广其付费社群，未直接给出贵金属或宏观经济明确观点 → 其内容与黄金价格预测、金融市场分析无直接关联 → 同时搜索到黄金价格预测文章和财经新闻，但未与Biggs观点结合 → 整体缺乏可推导的看多或看空逻辑\n\n来源: https://www.youtube.com/watch?v=hGfkVAT69xw | https://www.litefinance.org/blog/analysts-opinions/gold-price-prediction-forecast/",
+   "detail": "公开信息有限，仅检索到：Biggs 近期内容主要为预言总结与其付费社群推广，未直接给出贵金属或宏观经济的明确观点，缺乏可推导的多空逻辑。",
+   "detail_status": "thin"
   },
   {
    "kol": "FEMA",
@@ -141,350 +177,450 @@
    "sector": "科技/AI",
    "direction": "分歧",
    "targets": "🟢 AI科技(奇点叙事) | 🟡 GLD(长期利好,短期不明)",
-   "comments": "Ray Kurzweil 预测2029年AI达到人类智能水平→2045年技术奇点到来→纳米机器人将进入人体改善健康与认知→技术突破可能推动生产力与医疗革命→长期利好贵金属需求（如医疗与电子用银）→但短期宏观不确定性（利率、通胀）与AI对传统经济结构的冲击并存→市场情绪复杂，贵金属方向不明确\n\n来源: https://en.wikipedia.org/wiki/Technological_singularity | https://en.wikipedia.org/wiki/Ray_Kurzweil"
+   "comments": "Ray Kurzweil 预测2029年AI达到人类智能水平→2045年技术奇点到来→纳米机器人将进入人体改善健康与认知→技术突破可能推动生产力与医疗革命→长期利好贵金属需求（如医疗与电子用银）→但短期宏观不确定性（利率、通胀）与AI对传统经济结构的冲击并存→市场情绪复杂，贵金属方向不明确\n\n来源: https://en.wikipedia.org/wiki/Technological_singularity | https://en.wikipedia.org/wiki/Ray_Kurzweil",
+   "detail": "▸ 核心论点：AI奇点叙事长期利好，但对贵金属的短期方向不明确。\n▸ 关键依据：预测2029年AI达到人类智能水平、2045年技术奇点到来，纳米机器人将进入人体改善健康与认知；技术突破可能推动生产力与医疗革命，长期利好医疗与电子用银等贵金属需求；但短期宏观不确定性（利率、通胀）与AI对传统经济结构的冲击并存。\n▸ 时间与位置：时间节点为2029年与2045年，未给出价格点位。\n▸ 标的与操作：标的为AI科技（看多）与GLD（长期利好、短期不明）；操作取向为长期主题配置。",
+   "detail_status": "ok"
   },
   {
    "kol": "Ivan Zhao",
    "sector": "科技/AI",
    "direction": "中性",
    "targets": "🟡 无市场方向(谈管理哲学)",
-   "comments": "Ivan Zhao 近期讨论焦点为 Notion 的 AI 转型与创始人思维模式，提出‘爵士模式’作为管理哲学，未直接涉及贵金属或宏观经济。其内容反映科技行业对 AI 的持续投入与创业心态的调整，但缺乏对通胀、利率、地缘风险等宏观因素的明确判断，无法推导出贵金属市场方向。\n\n来源: https://tracxn.com/d/companies/notion/__LQ8wyN9zLT-OwulhqbMYvw0Ayznneiugbu_OaKuGD4U | https://www.startuphub.ai/ai-news/startup-news/2026/notion-s-ivan-zhao-the-refounder-s-ai-journey"
+   "comments": "Ivan Zhao 近期讨论焦点为 Notion 的 AI 转型与创始人思维模式，提出‘爵士模式’作为管理哲学，未直接涉及贵金属或宏观经济。其内容反映科技行业对 AI 的持续投入与创业心态的调整，但缺乏对通胀、利率、地缘风险等宏观因素的明确判断，无法推导出贵金属市场方向。\n\n来源: https://tracxn.com/d/companies/notion/__LQ8wyN9zLT-OwulhqbMYvw0Ayznneiugbu_OaKuGD4U | https://www.startuphub.ai/ai-news/startup-news/2026/notion-s-ivan-zhao-the-refounder-s-ai-journey",
+   "detail": "▸ 核心论点：讨论焦点为Notion的AI转型与创始人思维模式，未涉及市场方向。\n▸ 关键依据：提出「爵士模式」作为管理哲学；内容反映科技行业对AI的持续投入与创业心态调整，但缺乏对通胀、利率、地缘风险等宏观因素的明确判断。\n▸ 时间与位置：信息时点2026-05-29；无点位或时间窗口。\n▸ 标的与操作：无市场方向标的，中性。",
+   "detail_status": "ok"
   },
   {
    "kol": "Cathie Wood",
    "sector": "科技/AI",
    "direction": "看多",
    "targets": "🟢 ARKK, COIN, TSLA(颠覆性创新)",
-   "comments": "Cathie Wood 认为传统科技增长放缓 → 资金应转向更具颠覆性的创新领域 → 数字资产、电商和人工智能是未来核心增长引擎 → 其持仓调整和‘Big Ideas 2026’报告均支持这一长期看多逻辑 → 对贵金属等传统避险资产未明确表态，但整体风险偏好提升利好风险资产而非黄金。\n\n来源: https://www.kavout.com/market-lens/what-s-driving-cathie-wood-s-latest-portfolio-moves | https://finance.yahoo.com/quote/ARKK/"
+   "comments": "Cathie Wood 认为传统科技增长放缓 → 资金应转向更具颠覆性的创新领域 → 数字资产、电商和人工智能是未来核心增长引擎 → 其持仓调整和‘Big Ideas 2026’报告均支持这一长期看多逻辑 → 对贵金属等传统避险资产未明确表态，但整体风险偏好提升利好风险资产而非黄金。\n\n来源: https://www.kavout.com/market-lens/what-s-driving-cathie-wood-s-latest-portfolio-moves | https://finance.yahoo.com/quote/ARKK/",
+   "detail": "▸ 核心论点：看多颠覆性创新资产，认为资金应从放缓的传统科技转向新增长引擎。\n▸ 关键依据：依据是她判断数字资产、电商和人工智能是未来核心增长引擎；其持仓调整与「Big Ideas 2026」报告均支持这一长期看多逻辑。\n▸ 时间与位置：未给出具体点位与目标价，也未给出明确时间窗口。\n▸ 标的与操作：ARKK、COIN、TSLA；风险偏好提升利好风险资产而非黄金，对贵金属未明确表态。",
+   "detail_status": "ok"
   },
   {
    "kol": "Dan Ives",
    "sector": "科技/AI",
    "direction": "看多",
    "targets": "🟢 IVES, SMH(AI第三局,DRAM回升) | 🔴 GLD, SLV",
-   "comments": "Dan Ives 认为AI革命正处于“第三局”，长期增长空间广阔 → 他管理的Wedbush AI Revolution ETF聚焦AI主题，显示对AI产业链的持续看好 → 其最新纳入Datadog和SK Hynix，强调内存（DRAM/NAND）价格将在2026下半年显著回升，半导体需求强劲 → 整体逻辑指向AI基础设施和半导体上游受益，贵金属未直接提及，但AI扩张带动科技股和风险偏好，间接压制避险资产需求\n\n来源: https://finance.yahoo.com/quote/IVES/ | https://www.morningstar.com/etfs/arcx/ives/quote"
+   "comments": "Dan Ives 认为AI革命正处于“第三局”，长期增长空间广阔 → 他管理的Wedbush AI Revolution ETF聚焦AI主题，显示对AI产业链的持续看好 → 其最新纳入Datadog和SK Hynix，强调内存（DRAM/NAND）价格将在2026下半年显著回升，半导体需求强劲 → 整体逻辑指向AI基础设施和半导体上游受益，贵金属未直接提及，但AI扩张带动科技股和风险偏好，间接压制避险资产需求\n\n来源: https://finance.yahoo.com/quote/IVES/ | https://www.morningstar.com/etfs/arcx/ives/quote",
+   "detail": "▸ 核心论点：AI 革命正处于「第三局」，AI 基础设施与半导体上游长期受益。\n▸ 关键依据：其管理的 Wedbush AI Revolution ETF 聚焦 AI 主题，最新纳入 Datadog 与 SK Hynix；强调内存（DRAM/NAND）价格将在 2026 下半年显著回升，半导体需求强劲。\n▸ 时间与位置：内存价格回升时点指向 2026 年下半年，未给出具体点位。\n▸ 标的与操作：看多 IVES、SMH（AI/半导体）；贵金属（GLD/SLV）相对承压。",
+   "detail_status": "ok"
   },
   {
    "kol": "Michael Saylor",
    "sector": "比特币",
    "direction": "看空",
    "targets": "🔴 BTC/MSTR(可能卖出信号) | 🟢 GLD/PHYS",
-   "comments": "Michael Saylor 此前坚持永不卖出比特币，但近期公开讨论2026年可能出售比特币以维护长期价值 → 微策略股价30日内下跌10.9%，比特币价格在75000美元附近波动，显示市场对其策略信心动摇 → 公司已进行24,869 BTC增持和15亿美元债务回购，但出售信号表明其比特币囤积策略可能转向变现 → 作为最大公开比特币持有者，其态度转变可能引发市场对比特币流动性和价格支撑的担忧 → 整体信号偏空，比特币及相关资产面临抛售预期压力\n\n来源: https://finance.yahoo.com/quote/MSTR/ | https://www.cryptobreaking.com/saylor-signals-possible-2026-bitcoin/"
+   "comments": "Michael Saylor 此前坚持永不卖出比特币，但近期公开讨论2026年可能出售比特币以维护长期价值 → 微策略股价30日内下跌10.9%，比特币价格在75000美元附近波动，显示市场对其策略信心动摇 → 公司已进行24,869 BTC增持和15亿美元债务回购，但出售信号表明其比特币囤积策略可能转向变现 → 作为最大公开比特币持有者，其态度转变可能引发市场对比特币流动性和价格支撑的担忧 → 整体信号偏空，比特币及相关资产面临抛售预期压力\n\n来源: https://finance.yahoo.com/quote/MSTR/ | https://www.cryptobreaking.com/saylor-signals-possible-2026-bitcoin/",
+   "detail": "▸ 核心论点：此前坚持永不卖出比特币，近期公开讨论2026年可能出售，信号偏空。\n▸ 关键依据：微策略股价30日内下跌10.9%，比特币价格在75000美元附近波动，显示市场对其策略信心动摇；公司已进行24,869 BTC增持和15亿美元债务回购，但出售信号表明囤积策略可能转向变现；作为最大公开比特币持有者，其态度转变可能引发流动性与价格支撑担忧。\n▸ 时间与位置：2026-05-29；MSTR 30日跌10.9%，BTC约$75,000，增持24,869 BTC、回购$15亿债务。\n▸ 标的与操作：看空BTC/MSTR；相对看多GLD/PHYS。",
+   "detail_status": "ok"
   },
   {
    "kol": "Raoul Pal",
    "sector": "山寨币周期",
    "direction": "强烈看多",
    "targets": "🟢 ETH/SOL/BTC(加密) | 🟢 GLD",
-   "comments": "全球流动性上升是核心驱动力 → 加密货币牛市结构未因横盘而破坏 → AI基础设施需求与区块链采用加速形成完美风暴 → 以太坊和Solana作为主要替代币选择，最坏时期已过 → 加密资产是长期网络采用故事，受流动性和商业周期驱动\n\n来源: https://www.benzinga.com/crypto/cryptocurrency/26/05/52858458/look-past-xrp-raoul-pal-sees-ethereum-solana-as-main-altcoin-picks-because-the-worst-is-over | https://www.youtube.com/watch?v=Y1a4lXqHHGo"
+   "comments": "全球流动性上升是核心驱动力 → 加密货币牛市结构未因横盘而破坏 → AI基础设施需求与区块链采用加速形成完美风暴 → 以太坊和Solana作为主要替代币选择，最坏时期已过 → 加密资产是长期网络采用故事，受流动性和商业周期驱动\n\n来源: https://www.benzinga.com/crypto/cryptocurrency/26/05/52858458/look-past-xrp-raoul-pal-sees-ethereum-solana-as-main-altcoin-picks-because-the-worst-is-over | https://www.youtube.com/watch?v=Y1a4lXqHHGo",
+   "detail": "▸ 核心论点：全球流动性上升是核心驱动力，加密牛市结构未被横盘破坏，强烈看多加密。\n▸ 关键依据：AI 基础设施需求与区块链采用加速形成完美风暴；以太坊和 Solana 为主要替代币选择，最坏时期已过；加密资产是长期网络采用故事，受流动性和商业周期驱动。\n▸ 时间与位置：位置判断为「最坏时期已过」；未给出具体点位或目标价。\n▸ 标的与操作：ETH、SOL、BTC 与 GLD；强烈看多并持有。",
+   "detail_status": "ok"
   },
   {
    "kol": "Jim Rogers",
    "sector": "大宗商品周期",
    "direction": "中性",
    "targets": "🟡 GLD, SLV(无本人观点)",
-   "comments": "搜索内容未直接引用Jim Rogers的言论，仅包含贵金属行业新闻和白银价格波动信息。白银价格从2026年低点反弹但仍低于伊朗战争前水平，分析师警告需求破坏风险。缺乏Rogers本人的明确观点或逻辑链条，无法推断其具体立场。\n\n来源: https://goldsilver.com/industry-news/ | https://www.cnbc.com/2026/05/28/silver-demand-destruction-analysts-metals-precious.html"
+   "comments": "搜索内容未直接引用Jim Rogers的言论，仅包含贵金属行业新闻和白银价格波动信息。白银价格从2026年低点反弹但仍低于伊朗战争前水平，分析师警告需求破坏风险。缺乏Rogers本人的明确观点或逻辑链条，无法推断其具体立场。\n\n来源: https://goldsilver.com/industry-news/ | https://www.cnbc.com/2026/05/28/silver-demand-destruction-analysts-metals-precious.html",
+   "detail": "公开信息有限，仅检索到：搜索未直接引用其言论，仅含贵金属行业新闻与白银价格波动信息：银价自2026年低点反弹但仍低于伊朗战争前水平，分析师警告需求破坏风险，无法推断其立场。",
+   "detail_status": "thin"
   },
   {
    "kol": "Larry McDonald",
    "sector": "美联储政策",
    "direction": "分歧",
    "targets": "🟢 GLD | 🔴 AI股(收益率上升承压)",
-   "comments": "Larry McDonald近期关注AI热潮面临收益率上升和IPO热潮的压力 → 市场情绪与利率环境存在矛盾 → 同时提及SpaceX IPO风险及市场整体情绪 → 未明确表达对贵金属或宏观资产的单边看多或看空 → 整体观点偏向谨慎混合\n\n来源: https://www.linkedin.com/in/convertbond | https://www.cnbc.com/video/2026/05/21/morning-call-sheet-ai-rally-faces-pressure-from-rising-yields-and-ipo-boom.html"
+   "comments": "Larry McDonald近期关注AI热潮面临收益率上升和IPO热潮的压力 → 市场情绪与利率环境存在矛盾 → 同时提及SpaceX IPO风险及市场整体情绪 → 未明确表达对贵金属或宏观资产的单边看多或看空 → 整体观点偏向谨慎混合\n\n来源: https://www.linkedin.com/in/convertbond | https://www.cnbc.com/video/2026/05/21/morning-call-sheet-ai-rally-faces-pressure-from-rising-yields-and-ipo-boom.html",
+   "detail": "▸ 核心论点：观点分歧偏谨慎：关注AI股在收益率上升下的压力，相对偏好黄金。\n▸ 关键依据：近期关注AI热潮面临收益率上升和IPO热潮的压力，认为市场情绪与利率环境存在矛盾；同时提及SpaceX IPO风险及市场整体情绪。\n▸ 时间与位置：未给出具体点位与时间窗口。\n▸ 标的与操作：标的为GLD（相对偏多）与AI股（承压），操作上未明确单边，整体谨慎混合。",
+   "detail_status": "ok"
   },
   {
    "kol": "Rory Johnston",
    "sector": "原油/天然气",
    "direction": "看空",
    "targets": "🔴 USO, OIL(供应过剩,伊朗和谈)",
-   "comments": "Rory Johnston 指出原油价格因伊朗和谈乐观情绪再度下跌 → 尽管主要外交障碍仍存，但市场已预期供应恢复 → 同时石油市场持续出现供应过剩（hemorrhage supply）→ 叠加OPEC内部需求评估偏弱，产量决策可能维持高位 → 整体原油基本面偏空，压制通胀预期和贵金属避险需求\n\n来源: https://www.commoditycontext.com/p/global-oil-data-deck-may-2026 | https://www.commoditycontext.com/p/ocw21w26"
+   "comments": "Rory Johnston 指出原油价格因伊朗和谈乐观情绪再度下跌 → 尽管主要外交障碍仍存，但市场已预期供应恢复 → 同时石油市场持续出现供应过剩（hemorrhage supply）→ 叠加OPEC内部需求评估偏弱，产量决策可能维持高位 → 整体原油基本面偏空，压制通胀预期和贵金属避险需求\n\n来源: https://www.commoditycontext.com/p/global-oil-data-deck-may-2026 | https://www.commoditycontext.com/p/ocw21w26",
+   "detail": "▸ 核心论点：看空原油，认为伊朗和谈与供应过剩共同压制油价。\n▸ 关键依据：依据为原油价格因伊朗和谈乐观情绪再度下跌，尽管主要外交障碍仍存但市场已预期供应恢复；同时石油市场持续出现供应过剩，叠加OPEC内部需求评估偏弱、产量决策可能维持高位。\n▸ 时间与位置：原文未给出具体点位与时间窗口。\n▸ 标的与操作：涉及USO、OIL；操作为看空原油，并注意其压制通胀预期与贵金属避险需求。",
+   "detail_status": "ok"
   },
   {
    "kol": "Eric Nuttall",
    "sector": "原油/天然气",
    "direction": "强烈看多",
    "targets": "🟢 SU, CNQ, CVE, XLE, 原油(目标150)",
-   "comments": "Eric Nuttall认为能源股有120%上涨空间 → 预测油价将快速升至150美元 → 当前是多年最佳买入机会，但多数投资者仍在观望 → 供需紧张及地缘因素推动油价上行 → 能源股将受益于油价飙升\n\n来源: https://financialpost.com/tag/eric-nuttall/ | https://podcasts.apple.com/ca/podcast/market-call/id1608619956"
+   "comments": "Eric Nuttall认为能源股有120%上涨空间 → 预测油价将快速升至150美元 → 当前是多年最佳买入机会，但多数投资者仍在观望 → 供需紧张及地缘因素推动油价上行 → 能源股将受益于油价飙升\n\n来源: https://financialpost.com/tag/eric-nuttall/ | https://podcasts.apple.com/ca/podcast/market-call/id1608619956",
+   "detail": "▸ 核心论点：强烈看多能源股与原油，认为是多年最佳买入机会。\n▸ 关键依据：认为能源股有120%的上涨空间；供需紧张及地缘因素推动油价上行；当前多数投资者仍在观望。\n▸ 时间与位置：给出油价将快速升至150美元的目标位，未给出明确到达时间。\n▸ 标的与操作：标的为SU、CNQ、CVE、XLE与原油，操作方向为买入。",
+   "detail_status": "ok"
   },
   {
    "kol": "Chris Vermeulen",
    "sector": "技术分析",
    "direction": "看多",
    "targets": "🟢 GLD, PHYS(技术突破)",
-   "comments": "Chris Vermeulen 基于技术分析认为黄金已突破关键阻力位，当前价格回升至4500美元上方，确认了看涨趋势延续。其主要交易策略为在价格突破4792.05美元阻力或回调至4159.72美元支撑后做多，目标区间为5076.94至6616.64美元，表明中期至长期看涨结构稳固。\n\n来源: https://www.litefinance.org/blog/analysts-opinions/gold-price-prediction-forecast/ | https://www.fxstreet.com/markets/commodities/metals/gold"
+   "comments": "Chris Vermeulen 基于技术分析认为黄金已突破关键阻力位，当前价格回升至4500美元上方，确认了看涨趋势延续。其主要交易策略为在价格突破4792.05美元阻力或回调至4159.72美元支撑后做多，目标区间为5076.94至6616.64美元，表明中期至长期看涨结构稳固。\n\n来源: https://www.litefinance.org/blog/analysts-opinions/gold-price-prediction-forecast/ | https://www.fxstreet.com/markets/commodities/metals/gold",
+   "detail": "▸ 核心论点：黄金已突破关键阻力位，中期至长期看涨结构稳固。\n▸ 关键依据：技术分析依据：当前价格回升至4500美元上方确认看涨趋势延续；交易策略为突破4792.05美元阻力或回调至4159.72美元支撑后做多。\n▸ 时间与位置：关键位：现价上方$4,500、阻力$4,792.05、支撑$4,159.72；目标区间$5,076.94–$6,616.64。\n▸ 标的与操作：看多GLD、PHYS，操作为突破或回踩后做多。",
+   "detail_status": "ok"
   },
   {
    "kol": "AG Thorson",
    "sector": "技术分析",
    "direction": "中性",
    "targets": "🟡 GLD(无明确观点)",
-   "comments": "搜索内容未直接包含AG Thorson的近期观点，仅提供通用黄金价格预测链接 → 缺乏具体周期分析依据 → 无法确认其当前多空立场 → 综合判断为中性/混合\n\n来源: https://www.goldrepublic.com/en-us/gold-price/forecast | https://www.litefinance.org/blog/analysts-opinions/gold-price-prediction-forecast/daily-and-weekly/"
+   "comments": "搜索内容未直接包含AG Thorson的近期观点，仅提供通用黄金价格预测链接 → 缺乏具体周期分析依据 → 无法确认其当前多空立场 → 综合判断为中性/混合\n\n来源: https://www.goldrepublic.com/en-us/gold-price/forecast | https://www.litefinance.org/blog/analysts-opinions/gold-price-prediction-forecast/daily-and-weekly/",
+   "detail": "公开信息有限，仅检索到：搜索内容未直接包含其近期观点，仅有通用黄金价格预测链接，缺乏周期分析依据，无法确认多空立场，综合判断为中性/混合。",
+   "detail_status": "thin"
   },
   {
    "kol": "Robert Gottlieb",
    "sector": "实物需求",
    "direction": "中性",
    "targets": "🟡 无最新方向",
-   "comments": "Robert Gottlieb 曾预测黄金对全球法币的压制将在2026年4月左右暂停 → 当前搜索内容仅包含银期货价格、贵金属现货报价及CME黄金概览等常规市场数据 → 无最新观点或交易信号更新 → 无法确认其当前多空立场\n\n来源: https://www.investing.com/commodities/silver | http://www.kitco.com/price/precious-metals"
+   "comments": "Robert Gottlieb 曾预测黄金对全球法币的压制将在2026年4月左右暂停 → 当前搜索内容仅包含银期货价格、贵金属现货报价及CME黄金概览等常规市场数据 → 无最新观点或交易信号更新 → 无法确认其当前多空立场\n\n来源: https://www.investing.com/commodities/silver | http://www.kitco.com/price/precious-metals",
+   "detail": "公开信息有限，仅检索到：Robert Gottlieb 曾预测黄金对全球法币的压制将在 2026 年 4 月左右暂停，但本次搜索仅含银期货价格、贵金属现货报价及 CME 黄金概览等常规市场数据，无最新观点或交易信号更新，无法确认其当前多空立场。",
+   "detail_status": "thin"
   },
   {
    "kol": "Vince Lanci",
    "sector": "COMEX仓位",
    "direction": "中性",
    "targets": "🟡 无明确观点",
-   "comments": "搜索内容仅包含CME集团和COMEX黄金期货的通用市场信息页面，以及CNBC的黄金期货报价链接，未提供Vince Lanci本人的具体观点或交易逻辑。因此无法提取其核心论点或推理过程，仅能基于现有信息判断为中性。\n\n来源: https://www.cmegroup.com/markets/metals/precious/gold.html | https://www.cnbc.com/quotes/@GC.1"
+   "comments": "搜索内容仅包含CME集团和COMEX黄金期货的通用市场信息页面，以及CNBC的黄金期货报价链接，未提供Vince Lanci本人的具体观点或交易逻辑。因此无法提取其核心论点或推理过程，仅能基于现有信息判断为中性。\n\n来源: https://www.cmegroup.com/markets/metals/precious/gold.html | https://www.cnbc.com/quotes/@GC.1",
+   "detail": "公开信息有限，仅检索到：检索结果仅为 CME/COMEX 黄金期货通用市场页面与行情链接，未提供 Vince Lanci 本人观点，无法提取其论点与逻辑，暂记为中性。",
+   "detail_status": "thin"
   },
   {
    "kol": "Gareth Soloway",
    "sector": "技术分析",
    "direction": "中性",
    "targets": "🟡 无明确方向",
-   "comments": "搜索内容仅包含黄金价格数据（2026年5月28日涨至4501.77美元/盎司，月跌0.97%但年涨35.67%）以及Gareth Soloway关于半导体板块（SOXX、SMH、NVDA）的技术分析视频标题，未提供其明确黄金或贵金属观点。黄金短期震荡但长期强势，半导体分析可能隐含科技股与贵金属的轮动逻辑，但缺乏直接关联和完整推理链。\n\n来源: https://tradingeconomics.com/commodity/gold | https://www.economies.com/commodities/gold-analysis"
+   "comments": "搜索内容仅包含黄金价格数据（2026年5月28日涨至4501.77美元/盎司，月跌0.97%但年涨35.67%）以及Gareth Soloway关于半导体板块（SOXX、SMH、NVDA）的技术分析视频标题，未提供其明确黄金或贵金属观点。黄金短期震荡但长期强势，半导体分析可能隐含科技股与贵金属的轮动逻辑，但缺乏直接关联和完整推理链。\n\n来源: https://tradingeconomics.com/commodity/gold | https://www.economies.com/commodities/gold-analysis",
+   "detail": "公开信息有限，仅检索到：搜索仅提供黄金价格数据（2026年5月28日涨至4501.77美元/盎司，月跌0.97%、年涨35.67%）与其半导体技术分析视频标题，未给出明确贵金属观点，缺乏完整推理链。",
+   "detail_status": "thin"
   },
   {
    "kol": "Steve Penny",
    "sector": "技术分析",
    "direction": "分歧",
    "targets": "🟡 SLV(短期回调,长期强势)",
-   "comments": "Steve Penny 曾预测黄金对全球法币的压制将在2026年4月左右暂停 → 当前白银价格在2026年5月27日跌至74.60美元/盎司，单日下跌3.05% → 但过去一个月白银仍上涨2.14%，同比涨幅高达126.26% → 短期回调与长期强势并存，缺乏明确方向性信号 → 整体观点偏中性，需等待更多确认信号\n\n来源: https://tradingeconomics.com/commodity/silver | https://www.investing.com/commodities/silver"
+   "comments": "Steve Penny 曾预测黄金对全球法币的压制将在2026年4月左右暂停 → 当前白银价格在2026年5月27日跌至74.60美元/盎司，单日下跌3.05% → 但过去一个月白银仍上涨2.14%，同比涨幅高达126.26% → 短期回调与长期强势并存，缺乏明确方向性信号 → 整体观点偏中性，需等待更多确认信号\n\n来源: https://tradingeconomics.com/commodity/silver | https://www.investing.com/commodities/silver",
+   "detail": "▸ 核心论点：白银短期回调与长期强势并存，缺乏明确方向性信号，观点偏中性。\n▸ 关键依据：曾预测黄金对全球法币的压制将在 2026 年 4 月左右暂停；当前白银价格在 2026 年 5 月 27 日跌至 74.60 美元/盎司、单日下跌 3.05%；但过去一个月白银仍上涨 2.14%，同比涨幅高达 126.26%。\n▸ 时间与位置：银价 74.60 美元（5/27）、单日 -3.05%、月涨 2.14%、同比 +126.26%。\n▸ 标的与操作：SLV；短期回调、长期强势，需等待更多确认信号再行动。",
+   "detail_status": "ok"
   },
   {
    "kol": "Daniel Ghali",
    "sector": "COMEX仓位",
    "direction": "中性",
    "targets": "🟡 GLD, PHYS(央行购金长期支撑,短期不明)",
-   "comments": "搜索内容未直接引用Daniel Ghali的原话或近期观点 → 仅从第三方文章和宏观数据推断 → 全球央行在2026年一季度净购金244吨，显示官方持续增持黄金 → 美国仍持有8133.5吨黄金储备，但新兴市场央行买入加速 → 央行购金行为通常支撑金价长期看多 → 但缺乏Ghali本人对短期利率、美元或技术面的明确判断 → 综合判断为中性/混合\n\n来源: https://www.goldrepublic.com/en-us/gold-price/forecast | https://www.kitco.com/"
+   "comments": "搜索内容未直接引用Daniel Ghali的原话或近期观点 → 仅从第三方文章和宏观数据推断 → 全球央行在2026年一季度净购金244吨，显示官方持续增持黄金 → 美国仍持有8133.5吨黄金储备，但新兴市场央行买入加速 → 央行购金行为通常支撑金价长期看多 → 但缺乏Ghali本人对短期利率、美元或技术面的明确判断 → 综合判断为中性/混合\n\n来源: https://www.goldrepublic.com/en-us/gold-price/forecast | https://www.kitco.com/",
+   "detail": "▸ 核心论点：缺乏本人明确表态，基于央行购金数据给出中性判断。\n▸ 关键依据：依据为搜索内容未直接引用其原话，仅从第三方文章与宏观数据推断：全球央行2026年一季度净购金244吨，美国仍持有8133.5吨黄金储备，新兴市场央行买入加速；央行购金通常支撑金价长期看多，但缺乏其对短期利率、美元或技术面的明确判断。\n▸ 时间与位置：时间为2026年一季度；数据为净购金244吨、美国储备8133.5吨。\n▸ 标的与操作：涉及GLD、PHYS；操作为中性观望，长期支撑但短期不明。",
+   "detail_status": "ok"
   },
   {
    "kol": "Nate Miller",
    "sector": "矿业股",
    "direction": "中性",
    "targets": "🟡 SILJ(无明确观点)",
-   "comments": "搜索内容仅提供了Amplify Junior Silver Miners ETF (SILJ)的基本信息、价格、持仓和新闻链接，未包含Nate Miller本人的具体观点或分析逻辑。因此无法推断其看多或看空立场，只能基于SILJ作为白银矿业ETF的属性，推测其可能关注白银价格走势与矿业股表现，但缺乏明确论点支撑。\n\n来源: https://www.marketbeat.com/stocks/NYSEARCA/SILJ/ | https://seekingalpha.com/symbol/SILJ"
+   "comments": "搜索内容仅提供了Amplify Junior Silver Miners ETF (SILJ)的基本信息、价格、持仓和新闻链接，未包含Nate Miller本人的具体观点或分析逻辑。因此无法推断其看多或看空立场，只能基于SILJ作为白银矿业ETF的属性，推测其可能关注白银价格走势与矿业股表现，但缺乏明确论点支撑。\n\n来源: https://www.marketbeat.com/stocks/NYSEARCA/SILJ/ | https://seekingalpha.com/symbol/SILJ",
+   "detail": "公开信息有限，仅检索到：搜索结果仅提供SILJ（Amplify Junior Silver Miners ETF）的基本信息、价格、持仓与新闻链接，未包含本人观点或分析逻辑，无法判断多空立场。",
+   "detail_status": "thin"
   },
   {
    "kol": "Bob Coleman",
    "sector": "实物需求",
    "direction": "中性",
    "targets": "🟡 GLD, SLV(法案影响有限)",
-   "comments": "美国参议院引入SILVER法案要求各时区至少两个贵金属存储设施→反映当前实物贵金属市场供应中断暴露基础设施不足→立法推动扩容旨在增强系统韧性→可能提升市场对实物金银储备安全的信心→但法案尚在立法阶段，短期对价格影响有限→整体信号偏中性，需观察后续进展\n\n来源: https://www.kitco.com/news/article/2026-05-22/us-senators-introduce-bipartisan-silver-act-expand-precious-metals-vault | https://www.cmegroup.com/markets/metals/precious/gold.html"
+   "comments": "美国参议院引入SILVER法案要求各时区至少两个贵金属存储设施→反映当前实物贵金属市场供应中断暴露基础设施不足→立法推动扩容旨在增强系统韧性→可能提升市场对实物金银储备安全的信心→但法案尚在立法阶段，短期对价格影响有限→整体信号偏中性，需观察后续进展\n\n来源: https://www.kitco.com/news/article/2026-05-22/us-senators-introduce-bipartisan-silver-act-expand-precious-metals-vault | https://www.cmegroup.com/markets/metals/precious/gold.html",
+   "detail": "▸ 核心论点：SILVER法案反映实物基础设施不足，但短期价格影响有限。\n▸ 关键依据：美国参议院引入SILVER法案，要求各时区至少两个贵金属存储设施；这反映当前实物贵金属市场供应中断暴露基础设施不足；立法扩容旨在增强系统韧性，可能提升市场对实物金银储备安全的信心；但法案尚在立法阶段。\n▸ 时间与位置：法案处于立法阶段，未给出具体点位或时间表。\n▸ 标的与操作：标的为GLD、SLV；操作取向为中性观望，需观察后续进展。",
+   "detail_status": "ok"
   },
   {
    "kol": "Bob Moriarty",
    "sector": "矿业股",
    "direction": "强烈看多",
    "targets": "🟢 GLD/GDX/NEM(长期牛市)",
-   "comments": "黄金突破十年通道上沿 → 2024年初2050美元涨至2026年1月5600美元 → 确认长期牛市延续数年 → 黄金矿业股具有高上行潜力 → 当前是布局贵金属及矿业股的时机\n\n来源: https://seekingalpha.com/article/4906426-gold-miners-with-high-upside-potential | https://www.theaureport.com/"
+   "comments": "黄金突破十年通道上沿 → 2024年初2050美元涨至2026年1月5600美元 → 确认长期牛市延续数年 → 黄金矿业股具有高上行潜力 → 当前是布局贵金属及矿业股的时机\n\n来源: https://seekingalpha.com/article/4906426-gold-miners-with-high-upside-potential | https://www.theaureport.com/",
+   "detail": "▸ 核心论点：黄金突破十年通道上沿，确认长期牛市将延续数年。\n▸ 关键依据：关键数据：黄金自 2024 年初的 2,050 美元涨至 2026 年 1 月的 5,600 美元，技术上突破十年通道上沿；由此判断黄金矿业股具有高上行潜力。\n▸ 时间与位置：位置参照：$2,050（2024 年初）→$5,600（2026 年 1 月）；牛市延续时间为「数年」。\n▸ 标的与操作：标的为 GLD/GDX/NEM；操作为看多、布局贵金属及矿业股。",
+   "detail_status": "ok"
   },
   {
    "kol": "Jay Martin",
    "sector": "矿业股",
    "direction": "看多",
    "targets": "🟢 GLD, PHYS, GDX(长期看涨)",
-   "comments": "CME Group黄金概述显示市场持续关注黄金 → GoldRepublic预测基于年均7%回报率，2026年底金价可达6000美元/盎司，2040年升至15000美元/盎司 → Kitco报道涵盖黄金价格、矿业新闻及ETF动态，反映市场活跃度 → 综合多家机构长期看涨预期及历史回报率支撑，黄金价格呈上升趋势\n\n来源: https://www.cmegroup.com/markets/metals/precious/gold.html | https://www.goldrepublic.com/en-us/gold-price/forecast"
+   "comments": "CME Group黄金概述显示市场持续关注黄金 → GoldRepublic预测基于年均7%回报率，2026年底金价可达6000美元/盎司，2040年升至15000美元/盎司 → Kitco报道涵盖黄金价格、矿业新闻及ETF动态，反映市场活跃度 → 综合多家机构长期看涨预期及历史回报率支撑，黄金价格呈上升趋势\n\n来源: https://www.cmegroup.com/markets/metals/precious/gold.html | https://www.goldrepublic.com/en-us/gold-price/forecast",
+   "detail": "▸ 核心论点：长期看多黄金及金矿股。\n▸ 关键依据：CME Group 黄金概述显示市场持续关注黄金；GoldRepublic 基于年均 7% 回报率预测 2026 年底金价可达 6000 美元/盎司、2040 年升至 15000 美元/盎司；Kitco 报道涵盖价格、矿业新闻与 ETF 动态，反映市场活跃度。\n▸ 时间与位置：目标价 2026 年底 6000 美元、2040 年 15000 美元。\n▸ 标的与操作：标的为 GLD、PHYS、GDX；操作取向为长期看涨、持有。",
+   "detail_status": "ok"
   },
   {
    "kol": "Adrian Day",
    "sector": "矿业股",
    "direction": "看多",
    "targets": "🟢 GLD, PHYS, SLV(避险,目标6300-8500)",
-   "comments": "地缘政治紧张局势持续升级 → 避险需求推动黄金作为安全资产 → 摩根大通预测黄金2026年底目标价6300美元，若战争恶化可达8500美元 → 白银同样受益于避险和工业需求 → 黄金长期趋势向上，不会显著贬值 → Adrian Day 认同黄金和白银在当前宏观环境下的上涨潜力\n\n来源: https://www.kitco.com/ | https://www.kavout.com/market-lens/why-are-gold-and-silver-underperforming-amid-geopolitical-turmoil"
+   "comments": "地缘政治紧张局势持续升级 → 避险需求推动黄金作为安全资产 → 摩根大通预测黄金2026年底目标价6300美元，若战争恶化可达8500美元 → 白银同样受益于避险和工业需求 → 黄金长期趋势向上，不会显著贬值 → Adrian Day 认同黄金和白银在当前宏观环境下的上涨潜力\n\n来源: https://www.kitco.com/ | https://www.kavout.com/market-lens/why-are-gold-and-silver-underperforming-amid-geopolitical-turmoil",
+   "detail": "▸ 核心论点：地缘政治紧张升级推动避险需求，黄金作为安全资产长期趋势向上。\n▸ 关键依据：摩根大通预测黄金 2026 年底目标价 6300 美元，若战争恶化可达 8500 美元；白银同样受益于避险与工业需求。\n▸ 时间与位置：目标价 6300 美元（2026 年底），战争恶化情景 8500 美元。\n▸ 标的与操作：黄金（GLD/PHYS）、白银（SLV）；看多、避险配置。",
+   "detail_status": "ok"
   },
   {
    "kol": "Jeff Clark",
    "sector": "实物需求",
    "direction": "看多",
    "targets": "🟢 GLD/PHYS/SLV/GDX",
-   "comments": "Jeff Clark 警告美联储持续印钞将引发最终余震 → 央行在2026年一季度净购入244吨黄金，显示全球避险需求强劲 → 黄金作为对抗货币贬值和系统性风险的核心资产，价格有望继续上行 → 贵金属市场处于长期牛市格局中，短期回调是买入机会\n\n来源: https://goldsilver.com/industry-news/ | https://www.bullionvault.com/gold-price-chart.do"
+   "comments": "Jeff Clark 警告美联储持续印钞将引发最终余震 → 央行在2026年一季度净购入244吨黄金，显示全球避险需求强劲 → 黄金作为对抗货币贬值和系统性风险的核心资产，价格有望继续上行 → 贵金属市场处于长期牛市格局中，短期回调是买入机会\n\n来源: https://goldsilver.com/industry-news/ | https://www.bullionvault.com/gold-price-chart.do",
+   "detail": "▸ 核心论点：Jeff Clark 警告美联储持续印钞将引发最终余震，看多贵金属。\n▸ 关键依据：央行在 2026 年一季度净购入 244 吨黄金，显示全球避险需求强劲；黄金作为对抗货币贬值与系统性风险的核心资产，价格有望继续上行。\n▸ 时间与位置：数据窗口为 2026 年一季度；未给出具体目标价。\n▸ 标的与操作：看多 GLD/PHYS/SLV/GDX；认为贵金属处于长期牛市，短期回调是买入机会。",
+   "detail_status": "ok"
   },
   {
    "kol": "Rick Rule",
    "sector": "矿业股",
    "direction": "看多",
    "targets": "🟢 GLD/SLV/GDXJ/SILJ(小盘矿业) | 🟢 铀",
-   "comments": "Rick Rule 当前投资组合对市值低于2.5亿美元的小型矿业股配置不足 → 暗示他看好小盘矿业股的未来表现 → 黄金、白银、铀等大宗商品价格存在触发上涨的因素 → 他计划调整仓位增加小盘矿业股配置 → 整体对贵金属及矿业板块持积极态度\n\n来源: https://investingnews.com/rick-rule-gold-market-forecast/ | https://www.juniorminingnetwork.com/"
+   "comments": "Rick Rule 当前投资组合对市值低于2.5亿美元的小型矿业股配置不足 → 暗示他看好小盘矿业股的未来表现 → 黄金、白银、铀等大宗商品价格存在触发上涨的因素 → 他计划调整仓位增加小盘矿业股配置 → 整体对贵金属及矿业板块持积极态度\n\n来源: https://investingnews.com/rick-rule-gold-market-forecast/ | https://www.juniorminingnetwork.com/",
+   "detail": "▸ 核心论点：看好小盘矿业股与贵金属，计划调整仓位增加小盘配置\n▸ 关键依据：依据：当前投资组合对市值低于 2.5 亿美元的小型矿业股配置不足→暗示看好其未来表现；黄金、白银、铀等大宗商品价格存在触发上涨的因素\n▸ 时间与位置：市值门槛 2.5 亿美元；时点 2026-05-29，未给出目标价\n▸ 标的与操作：看多 GLD/SLV/GDXJ/SILJ（小盘矿业）与铀；操作为增加小盘矿业股配置",
+   "detail_status": "ok"
   },
   {
    "kol": "Keith Neumeyer",
    "sector": "矿业股",
    "direction": "中性",
    "targets": "🟡 AG(无明确观点)",
-   "comments": "搜索内容仅提供了First Majestic Silver的股价、新闻和分析页面链接，未包含Keith Neumeyer本人近48小时内的具体言论或观点。因此无法提取其核心逻辑或市场判断。\n\n来源: https://seekingalpha.com/symbol/AG | https://www.google.com/finance/beta/quote/AG:NYSE"
+   "comments": "搜索内容仅提供了First Majestic Silver的股价、新闻和分析页面链接，未包含Keith Neumeyer本人近48小时内的具体言论或观点。因此无法提取其核心逻辑或市场判断。\n\n来源: https://seekingalpha.com/symbol/AG | https://www.google.com/finance/beta/quote/AG:NYSE",
+   "detail": "公开信息有限，仅检索到：搜索仅返回First Majestic Silver的股价、新闻与分析页面链接，未包含其本人近48小时内的具体言论，无法提取核心逻辑或市场判断。",
+   "detail_status": "thin"
   },
   {
    "kol": "Peter Krauth",
    "sector": "白银走势",
    "direction": "中性",
    "targets": "🟡 GLD, SLV(短期调整,长期未定)",
-   "comments": "Peter Krauth 认为黄金对全球法币的压制将在2026年4月左右暂停 → 暗示金价可能进入阶段性调整或盘整 → 但未明确给出长期方向性判断 → 结合其《银之道》作者身份，可能对白银有独立观点 → 整体观点偏中性，短期看调整，长期未定\n\n来源: https://www.goldrepublic.com/en-us/gold-price/forecast | https://coincodex.com/precious-metal/silver/forecast/"
+   "comments": "Peter Krauth 认为黄金对全球法币的压制将在2026年4月左右暂停 → 暗示金价可能进入阶段性调整或盘整 → 但未明确给出长期方向性判断 → 结合其《银之道》作者身份，可能对白银有独立观点 → 整体观点偏中性，短期看调整，长期未定\n\n来源: https://www.goldrepublic.com/en-us/gold-price/forecast | https://coincodex.com/precious-metal/silver/forecast/",
+   "detail": "公开信息有限，仅检索到：Krauth 认为黄金对全球法币的压制将在 2026 年 4 月左右暂停，暗示金价可能进入阶段性调整或盘整，但未明确长期方向，整体偏中性。",
+   "detail_status": "thin"
   },
   {
    "kol": "Craig Hemke",
    "sector": "COMEX仓位",
    "direction": "看多",
    "targets": "🟢 GLD, SLV, GDX(底部支撑,健康调整)",
-   "comments": "黄金价格被紧密拉向4500美元水平，与Comex期权到期日大量未平仓合约集中有关，显示市场操纵痕迹 → 白银在1月28日触及120美元后暴跌30%，但3月20日已从67.60美元低点反弹，表明底部支撑强劲 → 白银尚未出现真正的狂热阶段，当前回调是健康调整 → 贵金属矿业估值仍处于低位，未来宏观驱动将推动下一轮上涨\n\n来源: https://kereport.substack.com/p/technical-frustrations-vs-fundamental | https://www.cnbc.com/2026/05/28/silver-demand-destruction-analysts-metals-precious.html"
+   "comments": "黄金价格被紧密拉向4500美元水平，与Comex期权到期日大量未平仓合约集中有关，显示市场操纵痕迹 → 白银在1月28日触及120美元后暴跌30%，但3月20日已从67.60美元低点反弹，表明底部支撑强劲 → 白银尚未出现真正的狂热阶段，当前回调是健康调整 → 贵金属矿业估值仍处于低位，未来宏观驱动将推动下一轮上涨\n\n来源: https://kereport.substack.com/p/technical-frustrations-vs-fundamental | https://www.cnbc.com/2026/05/28/silver-demand-destruction-analysts-metals-precious.html",
+   "detail": "▸ 核心论点：贵金属当前回调是健康调整、底部支撑强劲，看多金银与矿业股。\n▸ 关键依据：金价被紧密拉向 4500 美元水平，与 Comex 期权到期日大量未平仓合约集中有关，显示操纵痕迹；白银 1 月 28 日触及 120 美元后暴跌 30%，但 3 月 20 日已从 67.60 美元低点反弹；白银尚未出现真正的狂热阶段；矿业估值仍处低位。\n▸ 时间与位置：金 4500 美元、银高点 120 美元（1/28）、低点 67.60 美元（3/20）、跌幅 30%。\n▸ 标的与操作：GLD、SLV、GDX；看多，视回调为健康调整。",
+   "detail_status": "ok"
   },
   {
    "kol": "David Garofalo",
    "sector": "矿业股",
    "direction": "中性",
    "targets": "🟡 GROY, VZLA(无明确信号)",
-   "comments": "搜索内容未直接包含David Garofalo的近期观点，仅提及Vizsla Silver的Panuco项目拥有2-3.5%的净冶炼厂回报率特许权使用费，以及黄金矿业股存在公司特定风险，而黄金特许权公司表现与商品本身更接近。缺乏明确的多空信号，故判断为中性。\n\n来源: https://investingnews.com/top-stock-market-news/ | https://ca.finance.yahoo.com/quote/GLDG/"
+   "comments": "搜索内容未直接包含David Garofalo的近期观点，仅提及Vizsla Silver的Panuco项目拥有2-3.5%的净冶炼厂回报率特许权使用费，以及黄金矿业股存在公司特定风险，而黄金特许权公司表现与商品本身更接近。缺乏明确的多空信号，故判断为中性。\n\n来源: https://investingnews.com/top-stock-market-news/ | https://ca.finance.yahoo.com/quote/GLDG/",
+   "detail": "公开信息有限，仅检索到：搜索内容未直接包含本人的近期观点，仅提及Vizsla Silver的Panuco项目拥有2%至3.5%的净冶炼厂回报率特许权使用费，以及黄金特许权公司表现与商品本身更接近，缺乏明确多空信号。",
+   "detail_status": "thin"
   },
   {
    "kol": "Robert Kiyosaki",
    "sector": "实物需求",
    "direction": "强烈看多",
    "targets": "🟢 GLD/SLV/PHYS/BTC | 🔴 股市崩盘",
-   "comments": "全球债务与通胀风险上升 → 传统法定货币面临挑战 → 市场崩盘即将来临 → 投资者应转向硬资产避险 → 黄金和白银价格将大幅上涨（金价目标10000美元，银价目标200美元）→ 同时比特币也可作为对冲工具\n\n来源: https://hdfcsky.com/news/rich-dad-poor-dad-author-robert-kiyosaki-warns-of-imminent-market-crash-tips-silver-at-200-gold-at-100k | https://www.livemint.com/market/stock-market-news/gold-price-at-10-000-silver-rate-at-200-rich-dad-poor-dad-author-robert-kiyosaki-says-stock-market-crash-is-imm"
+   "comments": "全球债务与通胀风险上升 → 传统法定货币面临挑战 → 市场崩盘即将来临 → 投资者应转向硬资产避险 → 黄金和白银价格将大幅上涨（金价目标10000美元，银价目标200美元）→ 同时比特币也可作为对冲工具\n\n来源: https://hdfcsky.com/news/rich-dad-poor-dad-author-robert-kiyosaki-warns-of-imminent-market-crash-tips-silver-at-200-gold-at-100k | https://www.livemint.com/market/stock-market-news/gold-price-at-10-000-silver-rate-at-200-rich-dad-poor-dad-author-robert-kiyosaki-says-stock-market-crash-is-imm",
+   "detail": "▸ 核心论点：警告市场崩盘即将来临，投资者应转向硬资产避险\n▸ 关键依据：逻辑链：全球债务与通胀风险上升→传统法定货币面临挑战→市场崩盘即将来临；给出价格目标——金价 10000 美元、银价 200 美元；同时认为比特币也可作为对冲工具\n▸ 时间与位置：目标价：黄金 $10,000、白银 $200；时点 2026-05-29，未给出实现时间\n▸ 标的与操作：强烈看多 GLD/SLV/PHYS/BTC；看空股市（崩盘）",
+   "detail_status": "ok"
   },
   {
    "kol": "Willem Middelkoop",
    "sector": "货币体系重构",
    "direction": "强烈看多",
    "targets": "🟢 GLD, PHYS, GDX(大重置,货币复位) | 🔴 TLT",
-   "comments": "Willem Middelkoop 认为金融系统崩溃已非遥远幻想而是迫在眉睫的危险 → 未来几年将进入‘大重置’加速期，即重大变革阶段 → 同时，黄金的货币功能正在被六股可量化的力量逐步恢复，如去美元化、央行购金等 → 这强化了黄金作为避险资产和货币锚的地位 → 综合判断，黄金将受益于系统性风险与货币体系重塑的双重驱动。\n\n来源: https://www.ninefornews.nl/financiele-systeemcrash-nadert-de-big-reset-een-periode-van-grote-veranderingen-komt-de-komende-jaren-in-hogere-versnelling/ | https://goldsilver.com/industry-news/article/gold-remonetization-six-forces-res"
+   "comments": "Willem Middelkoop 认为金融系统崩溃已非遥远幻想而是迫在眉睫的危险 → 未来几年将进入‘大重置’加速期，即重大变革阶段 → 同时，黄金的货币功能正在被六股可量化的力量逐步恢复，如去美元化、央行购金等 → 这强化了黄金作为避险资产和货币锚的地位 → 综合判断，黄金将受益于系统性风险与货币体系重塑的双重驱动。\n\n来源: https://www.ninefornews.nl/financiele-systeemcrash-nadert-de-big-reset-een-periode-van-grote-veranderingen-komt-de-komende-jaren-in-hogere-versnelling/ | https://goldsilver.com/industry-news/article/gold-remonetization-six-forces-res",
+   "detail": "▸ 核心论点：金融系统崩溃已非遥远幻想，未来几年将进入「大重置」加速期。\n▸ 关键依据：黄金的货币功能正在被六股可量化的力量逐步恢复，如去美元化、央行购金等，强化黄金作为避险资产与货币锚的地位；系统性风险与货币体系重塑双重驱动。\n▸ 时间与位置：时间描述为「未来几年」加速，未给出具体点位。\n▸ 标的与操作：看多 GLD/PHYS/GDX；看空 TLT。",
+   "detail_status": "ok"
   },
   {
    "kol": "Stephen Leeb",
    "sector": "央行购金",
    "direction": "看多",
    "targets": "🟢 GLD, SLV, GDX(银破100)",
-   "comments": "地缘政治因素将持续支撑黄金需求至2026年及以后 → 央行强劲购金与地缘不稳定共同推动黄金上行趋势 → 白银因稀缺性被多数分析师预测2026年突破100美元 → 贵金属整体受避险与供需双重驱动，中长期看涨\n\n来源: https://www.litefinance.org/blog/analysts-opinions/gold-price-prediction-forecast/daily-and-weekly/ | https://www.litefinance.org/blog/analysts-opinions/gold-price-prediction-forecast/"
+   "comments": "地缘政治因素将持续支撑黄金需求至2026年及以后 → 央行强劲购金与地缘不稳定共同推动黄金上行趋势 → 白银因稀缺性被多数分析师预测2026年突破100美元 → 贵金属整体受避险与供需双重驱动，中长期看涨\n\n来源: https://www.litefinance.org/blog/analysts-opinions/gold-price-prediction-forecast/daily-and-weekly/ | https://www.litefinance.org/blog/analysts-opinions/gold-price-prediction-forecast/",
+   "detail": "▸ 核心论点：地缘政治与央行购金共同支撑贵金属中长期上行。\n▸ 关键依据：地缘政治因素将持续支撑黄金需求至2026年及以后；央行强劲购金与地缘不稳定共同推动黄金上行趋势；白银因稀缺性被多数分析师预测2026年突破100美元。\n▸ 时间与位置：时间窗口为2026年及以后；点位为白银突破100美元。\n▸ 标的与操作：标的为GLD、SLV、GDX；操作取向为看多买入。",
+   "detail_status": "ok"
   },
   {
    "kol": "Matthew Piepenburg",
    "sector": "黄金走势",
    "direction": "强烈看多",
    "targets": "🟢 GLD/PHYS/SLV(系统断裂避险)",
-   "comments": "全球金融体系日益脆弱 → 黄金波动性上升但属于风险期正常现象 → 白银长期上行趋势未受短期波动影响 → 贵金属作为避险资产将受益于系统性风险加剧 → 市场可能即将出现“断裂”事件 → 黄金和白银价格长期看涨\n\n来源: https://vongreyerz.gold/one-chart-says-it-all-something-is-about-to-snap | https://www.goldrepublic.com/en-us/gold-price/forecast"
+   "comments": "全球金融体系日益脆弱 → 黄金波动性上升但属于风险期正常现象 → 白银长期上行趋势未受短期波动影响 → 贵金属作为避险资产将受益于系统性风险加剧 → 市场可能即将出现“断裂”事件 → 黄金和白银价格长期看涨\n\n来源: https://vongreyerz.gold/one-chart-says-it-all-something-is-about-to-snap | https://www.goldrepublic.com/en-us/gold-price/forecast",
+   "detail": "▸ 核心论点：全球金融体系日益脆弱，市场可能即将出现「断裂」事件。\n▸ 关键依据：论据：黄金波动性上升但属于风险期正常现象；白银长期上行趋势未受短期波动影响；贵金属作为避险资产将受益于系统性风险加剧。\n▸ 时间与位置：信息时点2026-05-29；原文未给出具体点位或目标价。\n▸ 标的与操作：强烈看多GLD/PHYS/SLV（系统断裂避险）。",
+   "detail_status": "ok"
   },
   {
    "kol": "Alasdair Macleod",
    "sector": "黄金走势",
    "direction": "强烈看多",
    "targets": "🟢 GLD, PHYS, SLV(破8000) | 🔴 股市泡沫, TLT",
-   "comments": "大型银行囤积黄金而西方投资者忽视 → 表明市场对系统性风险有深刻担忧 → 黄金价格有望突破8000美元 → 白银波动性急剧放大，反映其货币属性回归 → 股票市场泡沫破裂风险加剧 → 贵金属成为避险核心资产\n\n来源: https://www.youtube.com/watch?v=C3PUUzKaju8 | https://www.youtube.com/watch?v=DB_E1uMf9mk"
+   "comments": "大型银行囤积黄金而西方投资者忽视 → 表明市场对系统性风险有深刻担忧 → 黄金价格有望突破8000美元 → 白银波动性急剧放大，反映其货币属性回归 → 股票市场泡沫破裂风险加剧 → 贵金属成为避险核心资产\n\n来源: https://www.youtube.com/watch?v=C3PUUzKaju8 | https://www.youtube.com/watch?v=DB_E1uMf9mk",
+   "detail": "▸ 核心论点：大型银行囤积黄金而西方投资者忽视，贵金属成为避险核心。\n▸ 关键依据：大行囤金表明市场对系统性风险有深刻担忧；白银波动性急剧放大，反映其货币属性回归；同时判断股票市场泡沫破裂风险加剧。\n▸ 时间与位置：给出黄金价格有望突破8000美元的目标位，未给出时间窗口。\n▸ 标的与操作：标的为GLD、PHYS、SLV（强烈看多，看破8000美元）与股市泡沫、TLT（看空）；操作取向为买入贵金属。",
+   "detail_status": "ok"
   },
   {
    "kol": "Daniel Oliver",
    "sector": "矿业股",
    "direction": "看多",
    "targets": "🟢 SLV/GLD(牛市延续,提示阶段高点)",
-   "comments": "Daniel Oliver 认为黄金对全球法定货币的压制将在2026年4月前后暂停 → 白银名义历史新高已出现在2026年1月29日，达121.67美元 → 暗示贵金属牛市仍在延续，但可能接近阶段性高点 → 当前价格仍处于高位，但未来走势需关注2026年4月时间节点 → 整体维持看多贵金属，但提示短期风险\n\n来源: https://www.investing.com/commodities/silver | https://www.apmex.com/silver-price"
+   "comments": "Daniel Oliver 认为黄金对全球法定货币的压制将在2026年4月前后暂停 → 白银名义历史新高已出现在2026年1月29日，达121.67美元 → 暗示贵金属牛市仍在延续，但可能接近阶段性高点 → 当前价格仍处于高位，但未来走势需关注2026年4月时间节点 → 整体维持看多贵金属，但提示短期风险\n\n来源: https://www.investing.com/commodities/silver | https://www.apmex.com/silver-price",
+   "detail": "▸ 核心论点：贵金属牛市仍在延续，但提示可能接近阶段性高点。\n▸ 关键依据：认为黄金对全球法定货币的压制将在2026年4月前后暂停；白银名义历史新高已出现在2026年1月29日，达121.67美元；当前价格仍处于高位。\n▸ 时间与位置：关键时间节点为2026年4月；点位为白银历史新高121.67美元（2026年1月29日）。\n▸ 标的与操作：标的为SLV、GLD；操作取向为维持看多，但提示短期阶段性风险。",
+   "detail_status": "ok"
   },
   {
    "kol": "Judy Shelton",
    "sector": "货币体系重构",
    "direction": "看多",
    "targets": "🟢 GLD, PHYS | 🔴 美元购买力, TLT(批评美联储扩张)",
-   "comments": "Judy Shelton 主张回归金本位并批评美联储的货币扩张政策 → 她提出发行50年期黄金挂钩的“财政部信托债券”，赋予投资者黄金赎回选择权 → 该机制旨在恢复黄金的货币功能，对冲美元信用风险 → 若市场预期美元购买力下降或通胀加剧，黄金将因货币属性重估而上涨 → 因此黄金及实物金支持资产将受益。\n\n来源: https://en.wikipedia.org/wiki/Judy_Shelton | https://goldsilver.com/industry-news/article/gold-remonetization-six-forces-restoring-golds-monetary-role/"
+   "comments": "Judy Shelton 主张回归金本位并批评美联储的货币扩张政策 → 她提出发行50年期黄金挂钩的“财政部信托债券”，赋予投资者黄金赎回选择权 → 该机制旨在恢复黄金的货币功能，对冲美元信用风险 → 若市场预期美元购买力下降或通胀加剧，黄金将因货币属性重估而上涨 → 因此黄金及实物金支持资产将受益。\n\n来源: https://en.wikipedia.org/wiki/Judy_Shelton | https://goldsilver.com/industry-news/article/gold-remonetization-six-forces-restoring-golds-monetary-role/",
+   "detail": "▸ 核心论点：主张回归金本位并批评美联储的货币扩张政策，看多黄金。\n▸ 关键依据：提出发行 50 年期黄金挂钩的「财政部信托债券」，赋予投资者黄金赎回选择权，旨在恢复黄金的货币功能、对冲美元信用风险；若市场预期美元购买力下降或通胀加剧，黄金将因货币属性重估而上涨。\n▸ 时间与位置：债券期限 50 年；未给出金价点位或目标价。\n▸ 标的与操作：看多 GLD、PHYS 与实物金支持资产；看空美元购买力与 TLT。",
+   "detail_status": "ok"
   },
   {
    "kol": "S. Druckenmiller",
    "sector": "美元指数",
    "direction": "分歧",
    "targets": "🟢 AMD, MRVL(AI基础设施) | 🔴 NVDA, GOOGL(减持巨头)",
-   "comments": "Druckenmiller在2026年一季度大幅调仓，卖出Alphabet和Nvidia，同时加仓定制芯片与CPU等AI基础设施股，表明他并未放弃AI交易，而是从集中持仓的科技巨头转向传统经济驱动和AI基础设施细分领域，认为定制芯片和CPU将在推理负载中成为GPU的耐用替代品。整体逻辑是AI主题延续但内部轮动，宏观上市场领导力从Magnificent Seven转向传统增长板块。\n\n来源: https://www.kavout.com/market-lens/has-stanley-druckenmiller-signaled-a-new-opportunity-in-goldman-sachs | https://www.fool.com/investing/2026/05/25/billionaire-stanley-druckenmiller-just-dumped-alph/"
+   "comments": "Druckenmiller在2026年一季度大幅调仓，卖出Alphabet和Nvidia，同时加仓定制芯片与CPU等AI基础设施股，表明他并未放弃AI交易，而是从集中持仓的科技巨头转向传统经济驱动和AI基础设施细分领域，认为定制芯片和CPU将在推理负载中成为GPU的耐用替代品。整体逻辑是AI主题延续但内部轮动，宏观上市场领导力从Magnificent Seven转向传统增长板块。\n\n来源: https://www.kavout.com/market-lens/has-stanley-druckenmiller-signaled-a-new-opportunity-in-goldman-sachs | https://www.fool.com/investing/2026/05/25/billionaire-stanley-druckenmiller-just-dumped-alph/",
+   "detail": "▸ 核心论点：AI 主题延续但内部轮动：从科技巨头转向 AI 基础设施细分与传统经济。\n▸ 关键依据：关键数据：2026 年一季度大幅调仓，卖出 Alphabet 和 Nvidia，同时加仓定制芯片与 CPU 等 AI 基础设施股；认为定制芯片和 CPU 将在推理负载中成为 GPU 的耐用替代品；宏观上市场领导力从 Magnificent Seven 转向传统增长板块。\n▸ 时间与位置：调仓期为 2026 年 Q1；未给出目标价。\n▸ 标的与操作：看多 AMD、MRVL（AI 基础设施），减持 NVDA、GOOGL；操作为内部轮动而非离场。",
+   "detail_status": "ok"
   },
   {
    "kol": "Jeffrey Gundlach",
    "sector": "美债收益率",
    "direction": "中性",
    "targets": "🟡 美债(无明确观点)",
-   "comments": "搜索内容仅提供了美国国债收益率曲线和10年期收益率的数据来源链接，未包含Jeffrey Gundlach本人近期的具体言论或观点。因此无法提取其核心逻辑链条。\n\n来源: https://www.investing.com/rates-bonds/usa-government-bonds | https://fred.stlouisfed.org/series/DGS10"
+   "comments": "搜索内容仅提供了美国国债收益率曲线和10年期收益率的数据来源链接，未包含Jeffrey Gundlach本人近期的具体言论或观点。因此无法提取其核心逻辑链条。\n\n来源: https://www.investing.com/rates-bonds/usa-government-bonds | https://fred.stlouisfed.org/series/DGS10",
+   "detail": "公开信息有限，仅检索到：搜索内容仅提供美国国债收益率曲线与 10 年期收益率的数据来源链接，未包含 Jeffrey Gundlach 近期具体言论，无法提取其核心逻辑链条，方向记为中性，标的为美债。",
+   "detail_status": "thin"
   },
   {
    "kol": "Citi / UBS",
    "sector": "流动性周期",
    "direction": "看空",
    "targets": "🔴 GLD, GDX(下调目标,收益率/美元逆风)",
-   "comments": "UBS下调2026年黄金价格预测至5500美元/盎司 → 核心原因是美债收益率上升和美元持续走强带来的持续逆风 → 短期目标5200美元/盎司，低于当前现货价 → 分析师认为“轻松赚钱的阶段可能已经过去” → 高实际收益率和油价上涨进一步压制黄金吸引力 → 整体观点偏向谨慎看空\n\n来源: https://www.kitco.com/news/article/2026-05-27/ubs-lowers-2026-gold-price-forecast-5500oz-markets-are-rediscovering | https://www.thestreet.com/investing/ubs-cuts-gold-price-target-for-the-rest-of-2026"
+   "comments": "UBS下调2026年黄金价格预测至5500美元/盎司 → 核心原因是美债收益率上升和美元持续走强带来的持续逆风 → 短期目标5200美元/盎司，低于当前现货价 → 分析师认为“轻松赚钱的阶段可能已经过去” → 高实际收益率和油价上涨进一步压制黄金吸引力 → 整体观点偏向谨慎看空\n\n来源: https://www.kitco.com/news/article/2026-05-27/ubs-lowers-2026-gold-price-forecast-5500oz-markets-are-rediscovering | https://www.thestreet.com/investing/ubs-cuts-gold-price-target-for-the-rest-of-2026",
+   "detail": "▸ 核心论点：谨慎看空黄金，下调价格预测，认为轻松赚钱的阶段可能已经过去。\n▸ 关键依据：依据是美债收益率上升和美元持续走强带来的持续逆风，高实际收益率与油价上涨进一步压制黄金吸引力。\n▸ 时间与位置：UBS下调2026年黄金预测至5500美元/盎司，短期目标5200美元/盎司（低于当前现货价）；时点为2026-05-27。\n▸ 标的与操作：GLD、GDX；下调目标、偏向谨慎减配。",
+   "detail_status": "ok"
   },
   {
    "kol": "Morgan Stanley",
    "sector": "美联储政策",
    "direction": "分歧",
    "targets": "🔴 市场(资产负债表脆弱,涨幅集中) | 🟡 GLD",
-   "comments": "Morgan Stanley指出市场虽在反弹，但家庭资产负债表脆弱、长期利率上升及股市涨幅集中构成风险 → 同时美国成屋签约销售环比增长1.4%显示经济韧性 → 对黄金的长期看多观点主要来自J.P. Morgan的预测而非Morgan Stanley自身 → 综合来看，Morgan Stanley对短期市场持谨慎态度，但未明确看空黄金，整体信号混合\n\n来源: https://am.jpmorgan.com/content/dam/jpm-am-aem/americas/us/en/insights/market-insights/wmr/weekly_market_recap.pdf | https://www.goldrepublic.com/en-us/gold-price/forecast"
+   "comments": "Morgan Stanley指出市场虽在反弹，但家庭资产负债表脆弱、长期利率上升及股市涨幅集中构成风险 → 同时美国成屋签约销售环比增长1.4%显示经济韧性 → 对黄金的长期看多观点主要来自J.P. Morgan的预测而非Morgan Stanley自身 → 综合来看，Morgan Stanley对短期市场持谨慎态度，但未明确看空黄金，整体信号混合\n\n来源: https://am.jpmorgan.com/content/dam/jpm-am-aem/americas/us/en/insights/market-insights/wmr/weekly_market_recap.pdf | https://www.goldrepublic.com/en-us/gold-price/forecast",
+   "detail": "▸ 核心论点：信号混合——对短期市场谨慎，但未明确看空黄金。\n▸ 关键依据：指出市场虽在反弹，但家庭资产负债表脆弱、长期利率上升及股市涨幅集中构成风险；同时美国成屋签约销售环比增长 1.4% 显示经济韧性；对黄金的长期看多观点主要来自 J.P. Morgan 的预测而非其自身。\n▸ 时间与位置：数据点为成屋签约销售环比 +1.4%，未给出具体点位。\n▸ 标的与操作：标的为整体市场（谨慎）与 GLD（中性）；操作取向为防御观望。",
+   "detail_status": "ok"
   },
   {
    "kol": "Goldman Sachs",
    "sector": "美联储政策",
    "direction": "看多",
    "targets": "🟢 GLD, PHYS(结构性看多) | 🔴 TLT",
-   "comments": "Goldman Sachs 预测黄金2026年目标价高于3500美元/盎司 → 核心逻辑是通胀持续高于央行预期 → 实际收益率保持低位或负值 → 这是历史上最有利于黄金上涨的宏观环境 → 同时美元走弱和央行购金需求提供额外支撑 → 因此结构性看多黄金\n\n来源: https://www.goldrepublic.com/en-us/gold-price/forecast | https://discoveryalert.com.au/goldman-sachs-gold-price-forecast-central-bank-demand-2026/"
+   "comments": "Goldman Sachs 预测黄金2026年目标价高于3500美元/盎司 → 核心逻辑是通胀持续高于央行预期 → 实际收益率保持低位或负值 → 这是历史上最有利于黄金上涨的宏观环境 → 同时美元走弱和央行购金需求提供额外支撑 → 因此结构性看多黄金\n\n来源: https://www.goldrepublic.com/en-us/gold-price/forecast | https://discoveryalert.com.au/goldman-sachs-gold-price-forecast-central-bank-demand-2026/",
+   "detail": "▸ 核心论点：结构性看多黄金，认为当前宏观环境历史上最有利于金价。\n▸ 关键依据：核心逻辑是通胀持续高于央行预期、实际收益率保持低位或负值；美元走弱与央行购金需求提供额外支撑。\n▸ 时间与位置：2026 年目标价高于 3500 美元/盎司。\n▸ 标的与操作：看多 GLD、PHYS；看空 TLT。",
+   "detail_status": "ok"
   },
   {
    "kol": "Michael Hartnett",
    "sector": "流动性周期",
    "direction": "看空",
    "targets": "🔴 SPX(卖出信号,可跌1000点), TLT | 🟢 GLD, PHYS",
-   "comments": "美银Hartnett认为当前市场已触发牛熊指标卖出信号 → 市场呈现三大泡沫特征：强价格动量、散户狂热、低波动 → 集中度超过1929年泡沫峰值 → 但投资者因预期IPO浪潮而不急于削减多头 → 若收益率和油价重新主导市场定价 → 标普500可能下跌超1000点 → 整体偏向风险资产卖出信号\n\n来源: https://www.investing.com/news/stock-market-news/bofas-hartnett-sees-sell-signal-for-risk-assets-but-no-rush-to-cut-exposure-4706152 | https://finance.biggo.com/news/UadwU54BtCxy99G5q-03"
+   "comments": "美银Hartnett认为当前市场已触发牛熊指标卖出信号 → 市场呈现三大泡沫特征：强价格动量、散户狂热、低波动 → 集中度超过1929年泡沫峰值 → 但投资者因预期IPO浪潮而不急于削减多头 → 若收益率和油价重新主导市场定价 → 标普500可能下跌超1000点 → 整体偏向风险资产卖出信号\n\n来源: https://www.investing.com/news/stock-market-news/bofas-hartnett-sees-sell-signal-for-risk-assets-but-no-rush-to-cut-exposure-4706152 | https://finance.biggo.com/news/UadwU54BtCxy99G5q-03",
+   "detail": "▸ 核心论点：认为牛熊指标已触发卖出信号，风险资产面临回调。\n▸ 关键依据：依据是市场呈现三大泡沫特征——强价格动量、散户狂热、低波动，集中度超过1929年泡沫峰值；但投资者因预期IPO浪潮而不急于削减多头。\n▸ 时间与位置：若收益率和油价重新主导定价，标普500可能下跌超1000点。\n▸ 标的与操作：看空SPX与TLT；看多GLD、PHYS。",
+   "detail_status": "ok"
   },
   {
    "kol": "Ted Oakley",
    "sector": "流动性周期",
    "direction": "看空",
    "targets": "🟢 GLD/SLV/PHYS | 🔴 SPY(AI债务陷阱) | 🔴 TLT",
-   "comments": "Ted Oakley警告华尔街正在‘门口跳舞’→ 指出AI债务陷阱和消费者枯竭是核心风险→ 认为高收益环境下投资者应优先财富保值→ 暗示当前市场估值过高且脆弱→ 结合SILVER法案推动实物贵金属储备，强化避险需求→ 整体偏向防御和看空风险资产。\n\n来源: https://www.kitco.com/news/article/2026-05-21/wall-street-dancing-door-ted-oakley-warns-ai-debt-trap-and-tapped-out | https://goldsilver.com/industry-news/"
+   "comments": "Ted Oakley警告华尔街正在‘门口跳舞’→ 指出AI债务陷阱和消费者枯竭是核心风险→ 认为高收益环境下投资者应优先财富保值→ 暗示当前市场估值过高且脆弱→ 结合SILVER法案推动实物贵金属储备，强化避险需求→ 整体偏向防御和看空风险资产。\n\n来源: https://www.kitco.com/news/article/2026-05-21/wall-street-dancing-door-ted-oakley-warns-ai-debt-trap-and-tapped-out | https://goldsilver.com/industry-news/",
+   "detail": "▸ 核心论点：警告华尔街正在「门口跳舞」，偏向防御、看空风险资产。\n▸ 关键依据：依据：指出 AI 债务陷阱和消费者枯竭是核心风险→认为高收益环境下投资者应优先财富保值→暗示当前市场估值过高且脆弱→结合 SILVER 法案推动实物贵金属储备，强化避险需求。来源 kitco.com（2026-05-21）。\n▸ 时间与位置：未给出具体点位或时间窗口。\n▸ 标的与操作：看多 GLD/SLV/PHYS，看空 SPY（AI 债务陷阱）与 TLT；操作为防御、优先保值。",
+   "detail_status": "ok"
   },
   {
    "kol": "Clem Chambers",
    "sector": "流动性周期",
    "direction": "中性",
    "targets": "🟡 GLD(谨慎观望)",
-   "comments": "Clem Chambers 指出伊朗战争爆发后市场环境已变 → 正常时期的投资策略不再适用 → 他调整了自身策略以应对地缘政治风险 → 但具体调整方向未明确说明 → 结合贵金属价格近期承压及矿业并购活跃的背景 → 整体观点偏向谨慎观望，未给出明确多空信号\n\n来源: https://www.cmegroup.com/markets/metals/precious/silver.html | https://www.cmegroup.com/markets/metals/precious/gold.html"
+   "comments": "Clem Chambers 指出伊朗战争爆发后市场环境已变 → 正常时期的投资策略不再适用 → 他调整了自身策略以应对地缘政治风险 → 但具体调整方向未明确说明 → 结合贵金属价格近期承压及矿业并购活跃的背景 → 整体观点偏向谨慎观望，未给出明确多空信号\n\n来源: https://www.cmegroup.com/markets/metals/precious/silver.html | https://www.cmegroup.com/markets/metals/precious/gold.html",
+   "detail": "▸ 核心论点：伊朗战争爆发后市场环境已变，正常时期的投资策略不再适用，整体谨慎观望\n▸ 关键依据：依据：他表示已调整自身策略以应对地缘政治风险，但具体调整方向未明确说明；结合贵金属价格近期承压及矿业并购活跃的背景\n▸ 时间与位置：时点 2026-05-29；未给出具体点位或时间窗口\n▸ 标的与操作：标的为 GLD；操作为谨慎观望，未给出明确多空信号",
+   "detail_status": "ok"
   },
   {
    "kol": "David Hunter",
    "sector": "流动性周期",
    "direction": "强烈看多",
    "targets": "🟢 GLD, PHYS, SLV(熔涨,金6800银180) | 🔴 市场(崩80%), TLT",
-   "comments": "全球债务数学失衡将导致市场崩盘80% → 美联储被迫大规模宽松 → 通胀飙升至25% → 黄金和白银进入熔涨阶段 → 黄金目标6800美元，白银目标180美元甚至更高 → 当前不是正常反弹而是极端行情前奏\n\n来源: https://www.kitco.com/news/article/2026-05-20/macro-strategist-david-hunter-warns-80-market-bust-25-inflation-global-debt | https://www.pcn-channel.com/6800-gold-160-silver-the-unthinkable-is-about-to-happen-to-gold-silver-prices-david-hunter/"
+   "comments": "全球债务数学失衡将导致市场崩盘80% → 美联储被迫大规模宽松 → 通胀飙升至25% → 黄金和白银进入熔涨阶段 → 黄金目标6800美元，白银目标180美元甚至更高 → 当前不是正常反弹而是极端行情前奏\n\n来源: https://www.kitco.com/news/article/2026-05-20/macro-strategist-david-hunter-warns-80-market-bust-25-inflation-global-debt | https://www.pcn-channel.com/6800-gold-160-silver-the-unthinkable-is-about-to-happen-to-gold-silver-prices-david-hunter/",
+   "detail": "▸ 核心论点：全球债务数学失衡将导致市场崩盘 80%，随后贵金属进入熔涨阶段。\n▸ 关键依据：逻辑链与数值：债务失衡→市场崩盘 80%→美联储被迫大规模宽松→通胀飙升至 25%→黄金和白银进入熔涨（melt-up）阶段；强调当前不是正常反弹而是极端行情前奏。\n▸ 时间与位置：目标价：黄金 6,800 美元、白银 180 美元甚至更高；崩盘幅度 80%、通胀 25%，未给出具体时间窗口。\n▸ 标的与操作：看多 GLD、PHYS、SLV，看空整体市场与 TLT；操作为持有贵金属迎接熔涨。",
+   "detail_status": "ok"
   },
   {
    "kol": "David Stockman",
    "sector": "财政赤字",
    "direction": "分歧",
    "targets": "🟡 GLD, PHYS(多空交织)",
-   "comments": "全球衰退与地缘冲击可能推升金价15%-30% → 但财政政策、美元走强和高利率环境可能导致金价下跌5%-20% → 同时有观点认为黄金泡沫即将破裂 → 而IMF指出全球债务上升和财政压力增强非货币资产需求，黄金受益于债务可持续性担忧 → 多空因素交织，方向不明\n\n来源: https://www.goldrepublic.com/en-us/gold-price/forecast | https://www.litefinance.org/blog/analysts-opinions/gold-price-prediction-forecast/"
+   "comments": "全球衰退与地缘冲击可能推升金价15%-30% → 但财政政策、美元走强和高利率环境可能导致金价下跌5%-20% → 同时有观点认为黄金泡沫即将破裂 → 而IMF指出全球债务上升和财政压力增强非货币资产需求，黄金受益于债务可持续性担忧 → 多空因素交织，方向不明\n\n来源: https://www.goldrepublic.com/en-us/gold-price/forecast | https://www.litefinance.org/blog/analysts-opinions/gold-price-prediction-forecast/",
+   "detail": "▸ 核心论点：对金价多空因素交织，方向不明。\n▸ 关键依据：依据为全球衰退与地缘冲击可能推升金价15%-30%，但财政政策、美元走强和高利率环境可能导致金价下跌5%-20%；同时有观点认为黄金泡沫即将破裂，而IMF指出全球债务上升与财政压力增强非货币资产需求。\n▸ 时间与位置：上行幅度15%-30%、下行幅度5%-20%；原文未给出具体时间窗口。\n▸ 标的与操作：涉及GLD、PHYS；操作为多空交织下保持谨慎、不做单边。",
+   "detail_status": "ok"
   },
   {
    "kol": "Peter Schiff",
    "sector": "黄金走势",
    "direction": "强烈看多",
    "targets": "🟢 GLD, SLV, GDX(银目标125) | 🔴 美元, TLT, BTC(停滞)",
-   "comments": "美国债务逼近40万亿美元且通胀持续高企 → 美元危机数字化加剧 → 投资者低估黄金和白银价格 → 黄金和白银矿业股表现强劲而比特币停滞 → 贵金属牛市远未结束，白银125美元仅是首站\n\n来源: https://www.youtube.com/watch?v=fSkNQ_Ho9mI | https://www.youtube.com/watch?v=D52mVpNt_QE"
+   "comments": "美国债务逼近40万亿美元且通胀持续高企 → 美元危机数字化加剧 → 投资者低估黄金和白银价格 → 黄金和白银矿业股表现强劲而比特币停滞 → 贵金属牛市远未结束，白银125美元仅是首站\n\n来源: https://www.youtube.com/watch?v=fSkNQ_Ho9mI | https://www.youtube.com/watch?v=D52mVpNt_QE",
+   "detail": "▸ 核心论点：强烈看多金银，认为贵金属牛市远未结束。\n▸ 关键依据：依据是美国债务逼近40万亿美元且通胀持续高企，美元危机加剧，投资者低估金银价格；金银矿业股表现强劲而比特币停滞。\n▸ 时间与位置：白银目标125美元，且称125美元仅是首站。\n▸ 标的与操作：买入GLD、SLV、GDX；看空美元、TLT，认为BTC处于停滞。",
+   "detail_status": "ok"
   },
   {
    "kol": "James Rickards",
    "sector": "货币体系重构",
    "direction": "强烈看多",
    "targets": "🟢 GLD/SLV/PHYS | 🔴 TLT | 🔴 美元(货币贬值)",
-   "comments": "James Rickards 认为全球货币体系面临三大风险：过度债务创造、货币贬值和地缘政治碎片化 → 这些风险将导致金融市场崩溃 → 投资者寻求避险资产 → 黄金和白银作为硬资产将大幅升值 → 黄金目标价10万美元/盎司，白银目标价200美元/盎司\n\n来源: https://www.livemint.com/market/stock-market-news/gold-price-at-10-000-silver-rate-at-200-rich-dad-poor-dad-author-robert-kiyosaki-says-stock-market-crash-is-imminent-11779523354858.html | https://www.coingabbar.com/en/crypto-currency-news/crypto-crash-ahead-gold-to-10"
+   "comments": "James Rickards 认为全球货币体系面临三大风险：过度债务创造、货币贬值和地缘政治碎片化 → 这些风险将导致金融市场崩溃 → 投资者寻求避险资产 → 黄金和白银作为硬资产将大幅升值 → 黄金目标价10万美元/盎司，白银目标价200美元/盎司\n\n来源: https://www.livemint.com/market/stock-market-news/gold-price-at-10-000-silver-rate-at-200-rich-dad-poor-dad-author-robert-kiyosaki-says-stock-market-crash-is-imminent-11779523354858.html | https://www.coingabbar.com/en/crypto-currency-news/crypto-crash-ahead-gold-to-10",
+   "detail": "▸ 核心论点：强烈看多金银、看空美元与长债，认为全球货币体系面临三大风险。\n▸ 关键依据：过度债务创造、货币贬值与地缘政治碎片化三大风险将导致金融市场崩溃，投资者转向避险，黄金与白银作为硬资产将大幅升值。\n▸ 时间与位置：给出黄金目标价 10 万美元/盎司、白银 200 美元/盎司，未给出到达时点。\n▸ 标的与操作：标的为 GLD/SLV/PHYS（多）与 TLT、美元（空）；操作取向为重仓贵金属。",
+   "detail_status": "ok"
   },
   {
    "kol": "Zoltan Pozsar",
    "sector": "欧洲美元",
    "direction": "中性",
    "targets": "🟡 GLD(无本人逻辑,市场偏多)",
-   "comments": "搜索内容未直接提及Zoltan Pozsar的观点，仅包含一般性黄金价格预测和高盛目标价。高盛预测金价可能升至5400美元，暗示看多方向，但缺乏Zoltan Pozsar本人的具体逻辑链条。因此无法确认其核心论点，仅能从市场普遍预期推断黄金存在上行潜力，但需结合地缘政治、美元信用及央行购金等宏观因素综合判断。\n\n来源: https://www.goldrepublic.com/en-us/gold-price/forecast | https://goldsilver.com/industry-news/"
+   "comments": "搜索内容未直接提及Zoltan Pozsar的观点，仅包含一般性黄金价格预测和高盛目标价。高盛预测金价可能升至5400美元，暗示看多方向，但缺乏Zoltan Pozsar本人的具体逻辑链条。因此无法确认其核心论点，仅能从市场普遍预期推断黄金存在上行潜力，但需结合地缘政治、美元信用及央行购金等宏观因素综合判断。\n\n来源: https://www.goldrepublic.com/en-us/gold-price/forecast | https://goldsilver.com/industry-news/",
+   "detail": "公开信息有限，仅检索到：搜索内容未直接提及本人观点，仅有一般性黄金价格预测与高盛 5400 美元目标价，无法确认其核心论点。",
+   "detail_status": "thin"
   },
   {
    "kol": "Ray Dalio",
    "sector": "流动性周期",
    "direction": "分歧",
    "targets": "🟢 GLD, PHYS | 🔴 TLT, 风险资产(防御配置)",
-   "comments": "Ray Dalio近期未发表明确市场观点，但根据其长期框架：通胀仍高于目标（CPI 2.4%）→ 关税争端持续 → 经济不确定性高 → 黄金作为避险资产应占组合5%-15% → 同时桥水历史报告指出全球金融机构坏账风险高达8390亿美元 → 暗示债务危机可能压制风险资产 → 整体呈现多空交织的防御性配置逻辑\n\n来源: https://en.wikipedia.org/wiki/Ray_Dalio | https://en.wikipedia.org/wiki/Bridgewater_Associates"
+   "comments": "Ray Dalio近期未发表明确市场观点，但根据其长期框架：通胀仍高于目标（CPI 2.4%）→ 关税争端持续 → 经济不确定性高 → 黄金作为避险资产应占组合5%-15% → 同时桥水历史报告指出全球金融机构坏账风险高达8390亿美元 → 暗示债务危机可能压制风险资产 → 整体呈现多空交织的防御性配置逻辑\n\n来源: https://en.wikipedia.org/wiki/Ray_Dalio | https://en.wikipedia.org/wiki/Bridgewater_Associates",
+   "detail": "▸ 核心论点：Dalio 近期未发表明确市场观点，按其长期框架呈现多空交织的防御性配置。\n▸ 关键依据：通胀仍高于目标（CPI 2.4%）、关税争端持续、经济不确定性高，故黄金作为避险资产应占组合 5%–15%；桥水历史报告并指出全球金融机构坏账风险高达 8390 亿美元，暗示债务危机可能压制风险资产。\n▸ 时间与位置：配置比例 5%–15%，未给出具体点位或时间窗口。\n▸ 标的与操作：看多 GLD、PHYS，看空 TLT 与风险资产，整体防御。",
+   "detail_status": "ok"
   },
   {
    "kol": "Luke Gromen",
    "sector": "财政赤字",
    "direction": "中性",
    "targets": "🟡 黄金(无本人明确观点,方向不明)",
-   "comments": "搜索内容未直接包含Luke Gromen的观点，但综合当前黄金市场信息：金价接近两个月低点，受能源价格上涨推升通胀担忧及美联储官员鹰派表态影响，降息预期减弱，短期压制金价。同时，通胀若持续走高可能迫使美联储维持高利率，进一步利空黄金。但长期通胀风险及地缘不确定性仍为黄金提供支撑，方向不明确。\n\n来源: https://www.goldrepublic.com/en-us/gold-price/forecast | https://www.investing.com/commodities/gold"
+   "comments": "搜索内容未直接包含Luke Gromen的观点，但综合当前黄金市场信息：金价接近两个月低点，受能源价格上涨推升通胀担忧及美联储官员鹰派表态影响，降息预期减弱，短期压制金价。同时，通胀若持续走高可能迫使美联储维持高利率，进一步利空黄金。但长期通胀风险及地缘不确定性仍为黄金提供支撑，方向不明确。\n\n来源: https://www.goldrepublic.com/en-us/gold-price/forecast | https://www.investing.com/commodities/gold",
+   "detail": "▸ 核心论点：对黄金方向不明确，未能提取到本人的明确观点。\n▸ 关键依据：依据是综合的市场信息：金价接近两个月低点，受能源价格上涨推升通胀担忧及美联储官员鹰派表态影响，降息预期减弱；但长期通胀风险与地缘不确定性仍提供支撑。\n▸ 时间与位置：未给出具体点位与目标价；短期承压、长期有支撑，方向不明。\n▸ 标的与操作：黄金；无明确本人观点，暂作观望。",
+   "detail_status": "ok"
   }
  ]
 }
