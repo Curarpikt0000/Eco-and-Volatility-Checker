@@ -10,6 +10,42 @@
   "_count": 133,
   "kols": [
     {
+      "id": "goldman_sachs",
+      "display_name": "Goldman Sachs",
+      "notion_select_name": "Goldman Sachs",
+      "domain": "宏观货币与金融体系",
+      "sector": "宏观货币与金融体系",
+      "detail_sector": "宏观货币与金融体系",
+      "kol_or_ib": "KOL",
+      "institution": "Goldman Sachs Research 高级大宗商品分析师（senior commodities analyst），黄金/白银专家。长期发布黄金预测研报并接受 Goldman 官方播客 The Markets 访谈，观点视作 Goldman 贵金属研究团队官方向。",
+      "monitor_dimensions": "利润驱动型牛市分析、电力竞赛投资框架",
+      "notion_num": "12",
+      "_added": "2026-08-12 (from Notion KOL List DB sync to 88)",
+      "notion_domain": "贵金属与商品周期",
+      "notion_list_num": "122",
+      "focus": "黄金目标价与周期判断（央行购金需求、Fed 货币政策与 ETF 资金流）、投机多单集中引发的战术回调风险、白银跟随黄金走势。",
+      "active": true,
+      "_sot": "Notion KOL List (mirror)"
+    },
+    {
+      "id": "andrew_maguire_kinesis_money",
+      "display_name": "Andrew Maguire（Kinesis Money 总监 / 贵金属市场吹哨人）",
+      "notion_select_name": "Andrew Maguire（Kinesis Money 总监 / 贵金属市场吹哨人）",
+      "domain": "贵金属与商品周期",
+      "notion_domain": "贵金属与商品周期",
+      "notion_list_num": "121",
+      "institution": "英国大宗商品交易员、贵金属市场吹哨人。2010 年向 CFTC 举报 JPMorgan/HSBC 操纵金银市场并提前预测白银操纵事件；近 50 年大宗交易经验。现任 Kinesis Money 总监，主持 Live From the Vault (LFTV) 播客。",
+      "bio": "英国大宗商品交易员、贵金属市场吹哨人。2010 年向 CFTC 举报 JPMorgan/HSBC 操纵金银市场并提前预测白银操纵事件；近 50 年大宗交易经验。现任 Kinesis Money 总监，主持 Live From the Vault (LFTV) 播客。",
+      "focus": "COMEX 纸金/纸银 vs 实物、银行操纵与空头压制、央行购金与去美元化、白银挤仓与金银比、金价长期目标 (如 $8000)。",
+      "search_terms": [
+        "Andrew Maguire（Kinesis Money 总监 / 贵金属市场吹哨人）"
+      ],
+      "active": true,
+      "added_date": "2026-08-23",
+      "_sot": "Notion KOL List (mirror)",
+      "_note": "由 Notion 同步新建; search_terms 仅含姓名, 可后续在本地补充别名"
+    },
+    {
       "id": "neilhowe",
       "display_name": "Neil Howe",
       "notion_select_name": "Neil Howe",
@@ -39,35 +75,6 @@
       "_sot": "Notion KOL List (mirror)"
     },
     {
-      "id": "foundationforthestudyofcycles",
-      "display_name": "Foundation for the Study of Cycles",
-      "notion_select_name": "Foundation for the Study of Cycles",
-      "domain": "技术分析与周期",
-      "sector": "Technical & Cycle Analysis",
-      "detail_sector": "周期理论学术机构（1941年创立）",
-      "kol_or_ib": "KOL",
-      "institution": "1941 年创立的周期研究学术机构",
-      "bio": "美国501(c)(3)非营利研究机构，85年历史，是整个周期派的学术枢纽；Market Cycles Report 直播每周更新，适合作为派系聚合源订阅。",
-      "focus": "跨资产周期研究、历史周期数据库",
-      "x_handle": "",
-      "search_terms": [
-        "Foundation for the Study of Cycles",
-        "周期研究基金会"
-      ],
-      "active": true,
-      "added_date": "2026-08-20",
-      "forecast_school": "周期理论学术机构（1941年创立）",
-      "forecast_region": "西方",
-      "forecast_cadence": "weekly",
-      "source_url": "https://cycles.org/",
-      "youtube_channel_id": "UClPmOWEi49CnLBWgl_ju7xw",
-      "_source_note": "2026-08-20 新增: 周期/术数派金融预测者, URL 经实访验证",
-      "_reclass_note": "2026-08-22 Chao: 取消独立 section, 归回常规 KOL 板块",
-      "notion_domain": "周期研究",
-      "notion_list_num": "124",
-      "_sot": "Notion KOL List (mirror)"
-    },
-    {
       "id": "davidhicksonsentienttrader",
       "display_name": "David Hickson / Sentient Trader",
       "notion_select_name": "David Hickson / Sentient Trader",
@@ -93,7 +100,7 @@
       "_source_note": "2026-08-20 新增: 周期/术数派金融预测者, URL 经实访验证",
       "_reclass_note": "2026-08-22 Chao: 取消独立 section, 归回常规 KOL 板块",
       "notion_domain": "周期理论",
-      "notion_list_num": "123",
+      "notion_list_num": "120",
       "_sot": "Notion KOL List (mirror)"
     },
     {
@@ -122,7 +129,7 @@
       "_source_note": "2026-08-20 新增: 周期/术数派金融预测者, URL 经实访验证",
       "_reclass_note": "2026-08-22 Chao: 取消独立 section, 归回常规 KOL 板块",
       "notion_domain": "周期理论",
-      "notion_list_num": "122",
+      "notion_list_num": "119",
       "_sot": "Notion KOL List (mirror)"
     },
     {
@@ -151,7 +158,7 @@
       "_source_note": "2026-08-20 新增: 周期/术数派金融预测者, URL 经实访验证",
       "_reclass_note": "2026-08-22 Chao: 取消独立 section, 归回常规 KOL 板块",
       "notion_domain": "周期理论",
-      "notion_list_num": "121",
+      "notion_list_num": "118",
       "_sot": "Notion KOL List (mirror)"
     },
     {
@@ -180,7 +187,7 @@
       "_source_note": "2026-08-20 新增: 周期/术数派金融预测者, URL 经实访验证",
       "_reclass_note": "2026-08-22 Chao: 取消独立 section, 归回常规 KOL 板块",
       "notion_domain": "技术分析",
-      "notion_list_num": "120",
+      "notion_list_num": "117",
       "_sot": "Notion KOL List (mirror)"
     },
     {
@@ -209,7 +216,7 @@
       "_source_note": "2026-08-20 新增: 周期/术数派金融预测者, URL 经实访验证",
       "_reclass_note": "2026-08-22 Chao: 取消独立 section, 归回常规 KOL 板块",
       "notion_domain": "技术分析",
-      "notion_list_num": "119",
+      "notion_list_num": "116",
       "_sot": "Notion KOL List (mirror)"
     },
     {
@@ -238,7 +245,7 @@
       "_source_note": "2026-08-20 新增: 周期/术数派金融预测者, URL 经实访验证",
       "_reclass_note": "2026-08-22 Chao: 取消独立 section, 归回常规 KOL 板块",
       "notion_domain": "技术分析",
-      "notion_list_num": "118",
+      "notion_list_num": "115",
       "_sot": "Notion KOL List (mirror)"
     },
     {
@@ -267,7 +274,7 @@
       "_source_note": "2026-08-20 新增: 周期/术数派金融预测者, URL 经实访验证",
       "_reclass_note": "2026-08-22 Chao: 取消独立 section, 归回常规 KOL 板块",
       "notion_domain": "技术分析",
-      "notion_list_num": "117",
+      "notion_list_num": "114",
       "_sot": "Notion KOL List (mirror)"
     },
     {
@@ -296,7 +303,7 @@
       "_source_note": "2026-08-20 新增: 周期/术数派金融预测者, URL 经实访验证",
       "_reclass_note": "2026-08-22 Chao: 取消独立 section, 归回常规 KOL 板块",
       "notion_domain": "技术分析",
-      "notion_list_num": "116",
+      "notion_list_num": "113",
       "_sot": "Notion KOL List (mirror)"
     },
     {
@@ -322,7 +329,7 @@
       "bio": "美国外交官/能源专家。2025年3月起任 TWG Global 管理合伙人(主管 AI/能源/基础设施投资);拜登政府高级国家与经济安全顾问、白宫总统高级顾问(2021-2025),曾任国务院高级能源安全顾问兼中东能源谈判代表(黎巴嫩-以色列海上边界、对俄油价上限、欧洲能源安全);奥巴马政府时期任国务院国际能源事务特别代表。Columbia SIPA Carnegie Distinguished Fellow。以能源地缘政治、全球油市供需与战略石油储备(SPR)政策见长。",
       "focus": "全球能源安全；石油天然气价格与供给；俄乌/中东地缘冲突对能源影响；LNG 与能源投资；制裁与能源外交",
       "notion_domain": "资源与能源安全",
-      "notion_list_num": "115",
+      "notion_list_num": "112",
       "_sot": "Notion KOL List (mirror)"
     },
     {
@@ -331,7 +338,7 @@
       "notion_select_name": "Michael Widmer",
       "domain": "贵金属",
       "notion_domain": "贵金属",
-      "notion_list_num": "114",
+      "notion_list_num": "111",
       "institution": "美国银行（BofA）金属研究主管。聚焦黄金白银供需、目标价与工业需求。",
       "bio": "美国银行（BofA）金属研究主管。聚焦黄金白银供需、目标价与工业需求。",
       "focus": "黄金白银目标价；供应下降与成本上升；白银工业属性与投资情绪",
@@ -369,7 +376,7 @@
       "_source_note": "2026-08-20 新增: 周期/术数派金融预测者, URL 经实访验证",
       "_reclass_note": "2026-08-22 Chao: 取消独立 section, 归回常规 KOL 板块",
       "notion_domain": "贵金属",
-      "notion_list_num": "113",
+      "notion_list_num": "110",
       "_sot": "Notion KOL List (mirror)"
     },
     {
@@ -378,7 +385,7 @@
       "notion_select_name": "Jim Rogers",
       "domain": "贵金属与商品周期",
       "notion_domain": "贵金属与商品周期",
-      "notion_list_num": "112",
+      "notion_list_num": "109",
       "institution": "传奇投资人，量子基金联合创始人（与索罗斯）。长期看多大宗商品与白银，警告全球印钞引发资产泡沫。",
       "bio": "传奇投资人，量子基金联合创始人（与索罗斯）。长期看多大宗商品与白银，警告全球印钞引发资产泡沫。",
       "focus": "大宗商品周期；白银与贵金属；全球央行印钞与资产泡沫",
@@ -396,7 +403,7 @@
       "notion_select_name": "Judy Shelton",
       "domain": "宏观货币与金融体系",
       "notion_domain": "宏观货币与金融体系",
-      "notion_list_num": "111",
+      "notion_list_num": "108",
       "institution": "经济学家，特朗普政府时期曾任美联储理事提名人。主张回归金本位、批评美联储货币政策政治化。",
       "bio": "经济学家，特朗普政府时期曾任美联储理事提名人。主张回归金本位、批评美联储货币政策政治化。",
       "focus": "金本位与货币体系改革；美联储政策批评；50年期黄金挂钩国债（TTB）提案",
@@ -407,60 +414,6 @@
       "added_date": "2026-08-22",
       "_sot": "Notion KOL List (mirror)",
       "_note": "由 Notion 同步新建; search_terms 仅含姓名, 可后续在本地补充别名"
-    },
-    {
-      "id": "citi_ubs",
-      "display_name": "Citi / UBS",
-      "notion_select_name": "Citi / UBS",
-      "domain": "宏观货币与金融体系",
-      "sector": "宏观货币与金融体系",
-      "detail_sector": "宏观货币与金融体系",
-      "kol_or_ib": "KOL",
-      "institution": "花旗与瑞银贵金属研究团队合并监控。两行对金价目标与路径常有分歧（Citi看涨情景5000美元 vs UBS利率逆风）。",
-      "monitor_dimensions": "全球高净值资产配置、新兴市场宏观溢价",
-      "notion_num": "14",
-      "_added": "2026-08-12 (from Notion KOL List DB sync to 88)",
-      "notion_domain": "贵金属",
-      "notion_list_num": "110",
-      "focus": "金价目标价与情景分析；美债收益率与美元对黄金影响；央行购金与投资需求",
-      "active": true,
-      "_sot": "Notion KOL List (mirror)"
-    },
-    {
-      "id": "goldman_sachs",
-      "display_name": "Goldman Sachs",
-      "notion_select_name": "Goldman Sachs",
-      "domain": "宏观货币与金融体系",
-      "sector": "宏观货币与金融体系",
-      "detail_sector": "宏观货币与金融体系",
-      "kol_or_ib": "KOL",
-      "institution": "全球顶级投行，大宗商品研究团队（含贵金属）。聚焦黄金、工业金属、能源及宏观驱动。",
-      "monitor_dimensions": "利润驱动型牛市分析、电力竞赛投资框架",
-      "notion_num": "12",
-      "_added": "2026-08-12 (from Notion KOL List DB sync to 88)",
-      "notion_domain": "贵金属",
-      "notion_list_num": "109",
-      "focus": "黄金目标价与央行购金；大宗商品回报；中美AI与地缘竞争对商品需求影响",
-      "active": true,
-      "_sot": "Notion KOL List (mirror)"
-    },
-    {
-      "id": "morgan_stanley",
-      "display_name": "Morgan Stanley",
-      "notion_select_name": "Morgan Stanley",
-      "domain": "宏观货币与金融体系",
-      "sector": "宏观货币与金融体系",
-      "detail_sector": "宏观货币与金融体系",
-      "kol_or_ib": "KOL",
-      "institution": "全球顶级投行，宏观与跨资产策略团队。聚焦全球股市（尤其日股）、企业盈利、资本流动与宏观风险。",
-      "monitor_dimensions": "日本市场复苏、银行利差修复、亚洲供应链安全",
-      "notion_num": "13",
-      "_added": "2026-08-12 (from Notion KOL List DB sync to 88)",
-      "notion_domain": "股权市场",
-      "notion_list_num": "108",
-      "focus": "全球股市方向；日本企业治理改革与ROE；宏观风险与资产配置",
-      "active": true,
-      "_sot": "Notion KOL List (mirror)"
     },
     {
       "id": "nomi_prins",

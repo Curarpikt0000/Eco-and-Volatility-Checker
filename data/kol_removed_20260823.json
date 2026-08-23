@@ -1,0 +1,72 @@
+{
+  "removed_date": "2026-08-23",
+  "reason": "不在 Notion KOL List(唯一真源)中; backfill 历史文件一律保留未删",
+  "count": 3,
+  "kols": [
+    {
+      "id": "foundationforthestudyofcycles",
+      "display_name": "Foundation for the Study of Cycles",
+      "notion_select_name": "Foundation for the Study of Cycles",
+      "domain": "技术分析与周期",
+      "sector": "Technical & Cycle Analysis",
+      "detail_sector": "周期理论学术机构（1941年创立）",
+      "kol_or_ib": "KOL",
+      "institution": "1941 年创立的周期研究学术机构",
+      "bio": "美国501(c)(3)非营利研究机构，85年历史，是整个周期派的学术枢纽；Market Cycles Report 直播每周更新，适合作为派系聚合源订阅。",
+      "focus": "跨资产周期研究、历史周期数据库",
+      "x_handle": "",
+      "search_terms": [
+        "Foundation for the Study of Cycles",
+        "周期研究基金会"
+      ],
+      "active": true,
+      "added_date": "2026-08-20",
+      "forecast_school": "周期理论学术机构（1941年创立）",
+      "forecast_region": "西方",
+      "forecast_cadence": "weekly",
+      "source_url": "https://cycles.org/",
+      "youtube_channel_id": "UClPmOWEi49CnLBWgl_ju7xw",
+      "_source_note": "2026-08-20 新增: 周期/术数派金融预测者, URL 经实访验证",
+      "_reclass_note": "2026-08-22 Chao: 取消独立 section, 归回常规 KOL 板块",
+      "notion_domain": "周期研究",
+      "notion_list_num": "124",
+      "_sot": "Notion KOL List (mirror)"
+    },
+    {
+      "id": "citi_ubs",
+      "display_name": "Citi / UBS",
+      "notion_select_name": "Citi / UBS",
+      "domain": "宏观货币与金融体系",
+      "sector": "宏观货币与金融体系",
+      "detail_sector": "宏观货币与金融体系",
+      "kol_or_ib": "KOL",
+      "institution": "花旗与瑞银贵金属研究团队合并监控。两行对金价目标与路径常有分歧（Citi看涨情景5000美元 vs UBS利率逆风）。",
+      "monitor_dimensions": "全球高净值资产配置、新兴市场宏观溢价",
+      "notion_num": "14",
+      "_added": "2026-08-12 (from Notion KOL List DB sync to 88)",
+      "notion_domain": "贵金属",
+      "notion_list_num": "110",
+      "focus": "金价目标价与情景分析；美债收益率与美元对黄金影响；央行购金与投资需求",
+      "active": true,
+      "_sot": "Notion KOL List (mirror)"
+    },
+    {
+      "id": "morgan_stanley",
+      "display_name": "Morgan Stanley",
+      "notion_select_name": "Morgan Stanley",
+      "domain": "宏观货币与金融体系",
+      "sector": "宏观货币与金融体系",
+      "detail_sector": "宏观货币与金融体系",
+      "kol_or_ib": "KOL",
+      "institution": "全球顶级投行，宏观与跨资产策略团队。聚焦全球股市（尤其日股）、企业盈利、资本流动与宏观风险。",
+      "monitor_dimensions": "日本市场复苏、银行利差修复、亚洲供应链安全",
+      "notion_num": "13",
+      "_added": "2026-08-12 (from Notion KOL List DB sync to 88)",
+      "notion_domain": "股权市场",
+      "notion_list_num": "108",
+      "focus": "全球股市方向；日本企业治理改革与ROE；宏观风险与资产配置",
+      "active": true,
+      "_sot": "Notion KOL List (mirror)"
+    }
+  ]
+}

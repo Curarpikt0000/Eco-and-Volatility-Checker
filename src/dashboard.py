@@ -508,6 +508,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         comex_firms_top10=_comex_firms_top10_html(comex_firms_top10),
         fiscal_budget=_fiscal_budget_html(fiscal_budget),
         bis_section=_bis_section_html(bis_latest, "https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/", bis_all),
+        kol_roster=_kol_roster_table_html(),
         country_ust=_country_ust_html(country_ust),
         credit_impulse=_credit_impulse_html(credit_impulse),
         stress_panels=_stress_panels_html(stress_panels, ofr_fsi),
@@ -2947,6 +2948,142 @@ def _hf_leverage_html(hf):
         f'⚠️ 数据源为 SEC Form PF，<b>季度更新且滞后发布</b>（非日频），是结构性中长期风险指标。</div>'
         f'</div>'
     )
+
+
+def _kol_roster_table_html():
+    """★2026-08-23(Chao): KOL 全量名录 —— 每人一张 Wiki 式档案卡, 放页面最底部备查。
+
+    Chao 指定的 13 个维度(一个都不能少):
+      姓名 / 编号 / 领域 / 在世年份 / 现任头衔 / 代表性成就 / 荣誉 /
+      主要活动范围 / 观点 / 追踪价值 / 机构名称 / 书籍 / 代表性言论(仅当年)
+    缺失处理(Chao 明确): 年龄查不到 → 标「未公开」;已故者 → **必须特别标出「已故」**。
+
+    ★自动同步: 直接读 data/kol_registry.json 的 active 全量, **不写死人数**。
+      名册由每日 cron 步骤 0 从 Notion「KOL List」单向镜像 ——
+      Notion 侧新增 KOL, 次日自动多一张卡, 无需改代码。
+    ★档案正文取自 data/kol_profiles.json(逐人联网检索撰写);
+      该文件缺某人时, 卡片只显示名册已有字段并标「档案待补」, **绝不用模型猜写**。
+    """
+    import os as _os
+    _dir = _os.path.dirname(__file__)
+    try:
+        reg = json.load(open(_os.path.join(_dir, "..", "data", "kol_registry.json"),
+                             encoding="utf-8"))
+    except Exception:
+        return '<div class="tf-none">名册读取失败，本表跳过（绝不显示占位数据）</div>'
+    ks = [k for k in reg.get("kols", []) if k.get("active")]
+    if not ks:
+        return '<div class="tf-none">名册为空</div>'
+
+    prof = {}
+    try:
+        _pf = json.load(open(_os.path.join(_dir, "..", "data", "kol_profiles.json"),
+                             encoding="utf-8"))
+        for _x in (_pf.get("profiles") if isinstance(_pf, dict) else _pf) or []:
+            if _x.get("id"):
+                prof[_x["id"]] = _x
+    except Exception:
+        prof = {}
+
+    def _num(k):
+        for f in ("notion_list_num", "list_num", "notion_num"):
+            v = k.get(f)
+            if isinstance(v, (int, float)):
+                return int(v)
+            if isinstance(v, str) and v.strip().isdigit():
+                return int(v.strip())
+        return 9999
+
+    # 领域配色(莫兰迪同系, 10 类)
+    PAL = ["#8ea1ad", "#c08a7d", "#9aa88f", "#b3a08c", "#8c93a8",
+           "#a8998c", "#7d9c9c", "#b09a9a", "#93a396", "#a3969f"]
+    doms = []
+    for k in ks:
+        d = k.get("domain") or "未分类"
+        if d not in doms:
+            doms.append(d)
+    dcol = {d: PAL[i % len(PAL)] for i, d in enumerate(sorted(doms))}
+
+    groups = {}
+    for k in ks:
+        groups.setdefault(k.get("domain") or "未分类", []).append(k)
+    for g in groups.values():
+        g.sort(key=lambda k: (_num(k), k.get("display_name") or ""))
+
+    n_prof = sum(1 for k in ks if k.get("id") in prof)
+    n_dead = sum(1 for k in ks if (prof.get(k.get("id")) or {}).get("deceased"))
+
+    chips = "".join(
+        f'<span class="kr-chip" style="border-color:{dcol[d]};color:{dcol[d]}">'
+        f'{_esc(d)} <b>{len(g)}</b></span>'
+        for d, g in sorted(groups.items(), key=lambda x: -len(x[1])))
+
+    def _row(label, val, cls=""):
+        if not val:
+            return ""
+        return (f'<div class="kp-r{cls}"><span class="kp-k">{label}</span>'
+                f'<span class="kp-v">{_esc(val)}</span></div>')
+
+    blocks = []
+    for d, g in sorted(groups.items(), key=lambda x: -len(x[1])):
+        col = dcol[d]
+        cards = []
+        for k in g:
+            p = prof.get(k.get("id")) or {}
+            num = _num(k)
+            num_txt = str(num) if num != 9999 else "—"
+            life = p.get("lifespan") or "未公开"
+            dead = bool(p.get("deceased"))
+            dead_tag = '<span class="kp-dead">已故</span>' if dead else ""
+            title = p.get("title") or k.get("institution") or ""
+            inst = p.get("institution") or k.get("institution") or ""
+            body = (
+                _row("在世年份", life)
+                + _row("现任头衔", title)
+                + _row("机构名称", inst)
+                + _row("代表性成就", p.get("achievements") or "")
+                + _row("荣誉", p.get("honors") or "")
+                + _row("书籍", p.get("books") or "")
+                + _row("活动范围", p.get("scope") or "")
+                + _row("观点", p.get("viewpoint") or k.get("focus") or "")
+                + _row("追踪价值", p.get("track_value") or "")
+                + _row("2026 代表言论", p.get("quote_2026") or "", " kp-q")
+            )
+            if not p:
+                body += ('<div class="kp-todo">档案待补 —— 名册已收录，'
+                         '但尚未逐人检索撰写完整档案（不猜写）</div>')
+            cards.append(
+                f'<div class="kp-card" style="border-left-color:{col}">'
+                f'<div class="kp-hd"><span class="kp-num">#{num_txt}</span>'
+                f'<span class="kp-nm">{_esc(k.get("display_name") or "")}</span>'
+                f'{dead_tag}</div>'
+                f'{body}</div>')
+        blocks.append(
+            f'<div class="kp-grp">'
+            f'<div class="kp-gt" style="background:{col}">{_esc(d)}'
+            f'<span class="kp-gn">{len(g)} 位</span></div>'
+            f'<div class="kp-grid">{"".join(cards)}</div></div>')
+
+    gap = ""
+    if n_prof < len(ks):
+        gap = (f'<div class="kr-gap">⚠ 档案完成度：<b>{n_prof}/{len(ks)}</b>。'
+               f'未完成者卡片标「档案待补」，只显示名册已有字段 —— '
+               f'<b>缺的信息一律留白，不用模型猜写</b>。</div>')
+
+    return (
+        f'<div class="kr-head"><span class="kr-total">在册 <b>{len(ks)}</b> 位</span>'
+        f'<span class="kr-total">档案 <b>{n_prof}</b></span>'
+        + (f'<span class="kr-total">已故 <b>{n_dead}</b></span>' if n_dead else "")
+        + f'</div><div class="kr-chips">{chips}</div>'
+        f'<div class="cust-how"><b>说明：</b>每人一张档案卡，含 13 个维度：'
+        f'姓名 / 编号 / 领域 / 在世年份 / 现任头衔 / 代表性成就 / 荣誉 / 活动范围 / '
+        f'观点 / 追踪价值 / 机构 / 书籍 / 当年代表性言论。按领域分色成组。<br>'
+        f'<b>本表读名册 active 全量生成，不写死人数</b> —— 名册每日从 Notion「KOL List」'
+        f'单向镜像，<b>Notion 侧新增一位，次日自动多一张卡</b>。<br>'
+        f'<b>缺失口径</b>：年龄/生年查不到标「未公开」；'
+        f'<b>已故者卡片右上角标红色「已故」徽章</b>；机构类条目非自然人，在世年份栏据实说明；'
+        f'未写过书写「无公开著作」。<b>所有空缺一律留白或标注，绝不用模型猜写。</b></div>'
+        f'{gap}{"".join(blocks)}')
 
 
 def _bis_section_html(bis_latest, page_url, bis_all=None):
@@ -6465,6 +6602,38 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .kd-deep-badge {{ flex: none; font-size: 8.5px; font-weight: 700; margin-left: 5px;
                     background: rgba(122,90,140,.18); color: #7d5a8c;
                     border-radius: 2px; padding: 0 3px; line-height: 1.6; }}
+  /* ★2026-08-23 KOL 全量名录档案卡(13 维度, 按领域分色) */
+  .kr-head {{ display: flex; gap: 10px; align-items: baseline; margin-bottom: 6px; }}
+  .kr-total {{ font-size: 12px; color: var(--text); }}
+  .kr-total b {{ font-family: var(--mono); font-size: 15px; color: var(--dust-rose); }}
+  .kr-chips {{ display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 9px; }}
+  .kr-chip {{ font-size: 10px; padding: 1px 7px; border: 1px solid; border-radius: 9px; }}
+  .kr-chip b {{ font-family: var(--mono); }}
+  .kr-gap {{ font-size: 11px; color: #8a6d3b; background: rgba(200,170,110,.13);
+             border-radius: 5px; padding: 7px 10px; margin: 8px 0; }}
+  .kp-grp {{ margin-top: 16px; }}
+  .kp-gt {{ color: #fff; font-size: 12.5px; font-weight: 700; padding: 5px 11px;
+            border-radius: 5px 5px 0 0; display: flex; justify-content: space-between; }}
+  .kp-gn {{ font-family: var(--mono); font-weight: 400; opacity: .85; }}
+  .kp-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+              gap: 9px; padding: 9px; background: rgba(140,155,175,.06);
+              border-radius: 0 0 5px 5px; }}
+  .kp-card {{ background: var(--card); border-radius: 5px; padding: 9px 11px;
+              border-left: 3px solid; box-shadow: 0 1px 2px rgba(0,0,0,.05); }}
+  .kp-hd {{ display: flex; align-items: baseline; gap: 6px; margin-bottom: 6px;
+            padding-bottom: 5px; border-bottom: 1px dashed var(--border); }}
+  .kp-num {{ font-family: var(--mono); font-size: 10px; color: var(--muted); }}
+  .kp-nm {{ font-size: 13px; font-weight: 700; color: var(--text); flex: 1; }}
+  .kp-dead {{ font-size: 9px; font-weight: 700; color: #fff; background: #b0574f;
+              border-radius: 3px; padding: 1px 5px; }}
+  .kp-r {{ display: flex; gap: 6px; font-size: 10.5px; line-height: 1.6; margin-bottom: 3px; }}
+  .kp-k {{ flex: none; width: 62px; color: var(--muted); text-align: right; }}
+  .kp-v {{ flex: 1; color: var(--text); }}
+  .kp-q {{ margin-top: 5px; padding-top: 5px; border-top: 1px dashed var(--border); }}
+  .kp-q .kp-v {{ font-style: italic; color: #6b5f52; }}
+  .kp-todo {{ font-size: 10px; color: var(--muted); font-style: italic;
+              background: rgba(140,155,175,.10); border-radius: 4px;
+              padding: 5px 7px; margin-top: 5px; }}
 </style>
 </head>
 <body>
@@ -6683,6 +6852,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附四：知名机构持仓 (13F) + Trump ═══ -->
   <div class="part-title"><span class="part-num">＋</span>机构持仓追踪 · 13F + Trump (对比上期变动)<span class="freq-badge freq-quarterly">每季度 · Trump不定期</span></div>
   <div class="h-grid">{holdings}</div>
+
+  <!-- ═══ 附五：KOL 全量名录档案卡(Chao 2026-08-23 要求, 13 维度, 页面最底部备查) ═══ -->
+  <div class="part-title" id="sec-kol-roster"><span class="part-num">＋</span>KOL 全量名录 · 13 维度档案卡 (编号/领域/在世/头衔/成就/荣誉/书籍/当年言论 · 名册镜像 Notion·新增自动入表)<span class="freq-badge freq-daily">随名册更新</span></div>
+  <div class="card">{kol_roster}</div>
 
   <div class="footnote">
     数据源：<a class="src-lnk" href="https://fred.stlouisfed.org/" target="_blank" rel="noopener">FRED</a> (VIX/HY/收益率曲线) · CNN F&amp;G · CBOE · AAII · GuruFocus · Conference Board · Renaissance · currentmarketvaluation · multpl · <a class="src-lnk" href="https://www.cftc.gov/dea/futures/deacmxsf.htm" target="_blank" rel="noopener">CFTC COT</a> (金银 commercial)。<br>
