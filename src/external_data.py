@@ -164,6 +164,11 @@ def save_kol_daily_snapshot(date_str=None):
                 "direction": x.get("direction", ""),
                 "targets": (x.get("targets") or "")[:150],
                 "comments": (x.get("comments") or "")[:300],
+                # ★2026-08-22(Chao): 快照必须带 detail/sources, 否则 dashboard 从快照
+                #   渲染详情层时又会退回「只有一句话」。detail 是 100-300 字结构化摘要。
+                "detail": (x.get("detail") or "")[:1200],
+                "detail_status": x.get("detail_status") or "",
+                "sources": (x.get("sources") or [])[:5],
             }
             for x in all_dirs if x.get("kol")
         ],
@@ -3599,17 +3604,37 @@ def fetch_comex_issue_stop_firms(cache_path=None):
                 for firm, v in bydate[d].items():
                     agg[firm]["i"] += v.get("i", 0)
                     agg[firm]["s"] += v.get("s", 0)
+                    # ★2026-08-22(Chao): 账户类型分项 C(客户)/H(自营)/U(未知)
+                    for _k in ("i_c", "i_h", "i_u", "s_c", "s_h", "s_u"):
+                        if v.get(_k):
+                            agg[firm][_k] = agg[firm].get(_k, 0) + v[_k]
             ti = sum(v["i"] for v in agg.values())
             ts = sum(v["s"] for v in agg.values())
 
             def _rank(field, total):
                 rows = [(f, v[field]) for f, v in agg.items() if v[field] > 0]
                 rows.sort(key=lambda x: (-x[1], x[0]))
-                return [{"firm": f, "lots": n,
-                         "tonnes": round(n * _LOT_OZ.get(metal, 0) * _TROY_OZ_G / 1e6, 3),
-                         "share": round(n / total * 100, 1) if total else 0.0,
-                         "is_bank": f in banks}
-                        for f, n in rows[:10]]
+                out_rows = []
+                for f, n in rows[:10]:
+                    v = agg[f]
+                    c = v.get(field + "_c", 0)
+                    hh = v.get(field + "_h", 0)
+                    u = v.get(field + "_u", 0)
+                    out_rows.append({
+                        "firm": f, "lots": n,
+                        "tonnes": round(n * _LOT_OZ.get(metal, 0) * _TROY_OZ_G / 1e6, 3),
+                        "share": round(n / total * 100, 1) if total else 0.0,
+                        "is_bank": f in banks,
+                        # ★账户类型: C=客户盘(清算通道) / H=自营盘(机构自有资金判断) / U=未知
+                        "c": c, "h": hh, "u": u,
+                        "h_pct": round(hh / n * 100, 1) if n else 0.0,
+                    })
+                return out_rows
+
+            # 窗口级 C/H 汇总(供板块顶部一行概览)
+            def _org_tot(field):
+                return {k: sum(v.get(field + "_" + k, 0) for v in agg.values())
+                        for k in ("c", "h", "u")}
 
             per_win[key] = {
                 "label": label,
@@ -3618,6 +3643,7 @@ def fetch_comex_issue_stop_firms(cache_path=None):
                 "total_i": ti, "total_s": ts,
                 "total_i_t": round(ti * _LOT_OZ.get(metal, 0) * _TROY_OZ_G / 1e6, 3),
                 "total_s_t": round(ts * _LOT_OZ.get(metal, 0) * _TROY_OZ_G / 1e6, 3),
+                "org_i": _org_tot("i"), "org_s": _org_tot("s"),
                 "issuers": _rank("i", ti),
                 "stoppers": _rank("s", ts),
             }

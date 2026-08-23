@@ -651,8 +651,11 @@ def _cycle_kol_html(kol_views, kol_history=None):
 
 def _kol_history_payload(kol_history):
     """把 kol_full_history() 结果压成内嵌 JSON(供前端两层展开钻取)。
-    结构精简: {kol: {"s": 背景介绍, "f": 关注领域, "h": [[first,last,dir,comments,targets,source],...]}}
+    结构精简: {kol: {"s": 背景介绍, "f": 关注领域,
+                     "h": [[first,last,dir,comments,targets,source,detail,srcs],...]}}
     数组形式而非对象, 省掉每条重复的键名(2600+ 条能省约 40% 体积)。
+    ★2026-08-22(Chao): 新增第 7 位 detail(100-300 字结构化深度摘要)与第 8 位 srcs
+      (来源链接数组)。此前展开层复用同一个 comments, 导致「点开第二层和默认值没区别」。
     无历史数据返回 '{}' —— 前端据此禁用钻取, 绝不显示假数据。"""
     if not kol_history:
         return "{}"
@@ -662,6 +665,20 @@ def _kol_history_payload(kol_history):
     #   Forecast-Checker 的玄学派)其 backfill 文件仍保留在磁盘(留痕不删),
     #   若不在此过滤, 他们的历史会继续内嵌进页面, 造成"卡片没了但数据还在"。
     _roster = set(meta.keys())
+    # ★深度摘要索引: 从当日 kol_independent.json 取 detail/sources, 按 KOL 名匹配。
+    #   只有「最新一条」记录能配到 detail(历史条目本来就没有深度摘要, 不伪造)。
+    _deep = {}
+    try:
+        import os as _os
+        _ip = _os.path.join(_os.path.dirname(__file__), "..", "data", "kol_independent.json")
+        for _x in (json.load(open(_ip, encoding="utf-8")).get("all") or []):
+            _n = (_x.get("kol") or "").strip()
+            if _n and _x.get("detail"):
+                _deep[_n] = {"d": _x.get("detail") or "",
+                             "src": [s for s in (_x.get("sources") or []) if s.get("url")][:4],
+                             "date": _x.get("date") or ""}
+    except Exception:
+        _deep = {}
     out = {}
     for kol, recs in kol_history.items():
         if not recs:
@@ -669,13 +686,20 @@ def _kol_history_payload(kol_history):
         if _roster and kol not in _roster:
             continue
         m = meta.get(kol, {})
-        out[kol] = {
-            "s": m.get("standing", ""),
-            "f": m.get("focus", ""),
-            "h": [[r.get("first_date", ""), r.get("last_date", ""),
-                   r.get("direction", ""), r.get("comments", ""),
-                   r.get("targets", ""), r.get("source", "")] for r in recs],
-        }
+        dp = _deep.get(kol)
+        rows = []
+        for r in recs:
+            last = r.get("last_date", "")
+            # 仅当该条是「深度摘要对应的那一天」时才挂 detail, 避免把今天的
+            # 摘要错误地贴到历史观点上(那会是伪造)。
+            if dp and last and dp.get("date") and last >= dp["date"]:
+                det, srcs = dp["d"], dp["src"]
+            else:
+                det, srcs = "", []
+            rows.append([r.get("first_date", ""), last,
+                         r.get("direction", ""), r.get("comments", ""),
+                         r.get("targets", ""), r.get("source", ""), det, srcs])
+        out[kol] = {"s": m.get("standing", ""), "f": m.get("focus", ""), "h": rows}
     # </ 会提前闭合 <script> 标签 → 转义(XSS/断标签双重防护)
     return json.dumps(out, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 
@@ -2528,10 +2552,27 @@ def _comex_firms_top10_html(cf):
             # ★2026-08-22(Chao): 主显**吨**便于直接口算, 手数放小字括号保留可追溯性
             t = r.get("tonnes")
             t_txt = f'{t:,.2f}' if isinstance(t, (int, float)) else "—"
+            # ★账户类型徽章 C(客户盘)/H(自营盘)/U(未知) —— 按占比标注主导类型
+            lots = r.get("lots") or 0
+            c, hh, u = r.get("c", 0), r.get("h", 0), r.get("u", 0)
+            if lots and (c or hh or u):
+                parts = []
+                if hh:
+                    parts.append(f'<span class="tf-oh" title="House 自营盘 {hh:,} 手'
+                                 f'（机构自有资金，代表其真实判断）">H {hh/lots*100:.0f}%</span>')
+                if c:
+                    parts.append(f'<span class="tf-oc" title="Customer 客户盘 {c:,} 手'
+                                 f'（代客户清算，非该机构自身观点）">C {c/lots*100:.0f}%</span>')
+                if u:
+                    parts.append(f'<span class="tf-ou" title="账户类型未知 {u:,} 手'
+                                 f'（Notion 增量段无 ORG 字段，不臆测归类）">? {u/lots*100:.0f}%</span>')
+                org_html = '<span class="tf-org">' + "".join(parts) + "</span>"
+            else:
+                org_html = ""
             out.append(
                 f'<div class="tf-row">'
                 f'<span class="tf-rk">{n}</span>'
-                f'<span class="tf-nm">{_esc(r["firm"])}{tag}</span>'
+                f'<span class="tf-nm">{_esc(r["firm"])}{tag}{org_html}</span>'
                 f'<span class="tf-bar"><i style="width:{w:.1f}%;background:{col}"></i></span>'
                 f'<span class="tf-lot">{t_txt}<span class="tf-lots">({r["lots"]:,}手)</span></span>'
                 f'<span class="tf-sh">{r["share"]:.1f}%</span>'
@@ -2556,9 +2597,27 @@ def _comex_firms_top10_html(cf):
                    if rng[0] != rng[1] else f'{rng[0]}（单日）')
             tabs.append(f'<button class="tf-tab{act}" data-tf="{slug}" '
                         f'data-k="{k}">{w["label"]}</button>')
+            # ★窗口级 C/H 概览条: 一眼看出该窗口整体是客户盘还是自营盘主导
+            def _org_bar(od, tot, lbl):
+                if not tot or not od:
+                    return ""
+                c, hh, u = od.get("c", 0), od.get("h", 0), od.get("u", 0)
+                seg = []
+                for val, cls, nm in ((hh, "tfo-h", "H自营"), (c, "tfo-c", "C客户"), (u, "tfo-u", "?未知")):
+                    if val:
+                        seg.append(f'<i class="{cls}" style="width:{val/tot*100:.1f}%" '
+                                   f'title="{nm} {val:,} 手（{val/tot*100:.1f}%）"></i>')
+                return (f'<div class="tfo-row"><span class="tfo-lbl">{lbl}</span>'
+                        f'<span class="tfo-bar">{"".join(seg)}</span>'
+                        f'<span class="tfo-txt">H {hh/tot*100:.0f}% · C {c/tot*100:.0f}%'
+                        + (f' · ? {u/tot*100:.0f}%' if u else "") + '</span></div>')
+
+            org_html = (_org_bar(d.get("org_i"), d.get("total_i"), "交货")
+                        + _org_bar(d.get("org_s"), d.get("total_s"), "接货"))
             panes.append(
                 f'<div class="tf-pane{act}" data-tf="{slug}" data-k="{k}">'
                 f'<div class="tf-sub">{sub} · 总交割 {d.get("total_i_t", 0):,.2f} 吨（{d["total_i"]:,} 手）</div>'
+                f'{org_html}'
                 f'<div class="tf-cols">'
                 f'<div class="tf-col"><div class="tf-ct tf-ci">▲ Top10 交货方（Issued）</div>'
                 f'{_rank_list(d["issuers"], "i")}</div>'
@@ -2585,6 +2644,17 @@ def _comex_firms_top10_html(cf):
         f'<b>单位</b>：主数字为<b>吨</b>（便于与库存/产量口径直接对比），括号内为原始<b>合约手数</b>。'
         f'换算依据 CME 官方合约规格：黄金 100 oz/手、白银 5,000 oz/手、铂金 50 oz/手，'
         f'1 金衡盎司 = 31.1034768 克。<br>'
+        f'<b>★账户类型 C / H（CME 原始 PDF 的 ORG 列）</b>：'
+        f'<span class="tf-oh">H</span> = <b>House 自营盘</b>，机构用自有资金交割，'
+        f'<b>代表该机构自己的真实判断</b>；'
+        f'<span class="tf-oc">C</span> = <b>Customer 客户盘</b>，代客户清算，'
+        f'背后是基金/实物商/散户，<b>不等于该机构的观点</b>。'
+        f'同一家常同时有 C 与 H 两笔（如 Marex 同日 C 接 1 手、H 发 52 手）。'
+        f'<b>读榜时应优先看 H 占比高的机构</b>——那才是机构在用自己的钱表态。'
+        f'<span class="tf-ou">?</span> = 账户类型未知：'
+        f'{cov.get("notion_days","?")} 天的 Notion 增量段原始记录中<b>没有 ORG 字段</b>，'
+        f'如实标注为未知，<b>绝不臆测归到 C 或 H</b>（archive PDF 段 '
+        f'{cov.get("archive_days","?")} 天有精确 C/H）。<br>'
         f'<b>排名口径</b>：按该窗口内<b>累计总量</b>排（非净额）——净额会让大进大出的做市商掉榜，'
         f'不符合「谁交货最多」的直觉。同一家可同时进两个榜（既发又接属正常做市行为）。<br>'
         f'<b>怎么用</b>：某家<b>持续霸榜接货方</b>＝在囤实物（看涨/逼空）；'
@@ -6365,6 +6435,33 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .cc-onote {{ font-size: 10.5px; line-height: 1.65; color: var(--muted);
                background: rgba(140,155,175,.07); border-radius: 5px;
                padding: 8px 10px; margin-top: 8px; }}
+  /* ★2026-08-22 COMEX 账户类型 C(客户)/H(自营)/U(未知) */
+  .tf-org {{ display: inline-flex; gap: 3px; margin-left: 5px; vertical-align: middle; }}
+  .tf-oh, .tf-oc, .tf-ou {{ font-family: var(--mono); font-size: 8.5px; font-weight: 700;
+    padding: 0 3px; border-radius: 2px; line-height: 1.5; cursor: help; }}
+  .tf-oh {{ background: rgba(122,90,140,.20); color: #7d5a8c; }}
+  .tf-oc {{ background: rgba(140,155,175,.20); color: #6b7d8a; }}
+  .tf-ou {{ background: rgba(160,150,130,.18); color: #8a8578; }}
+  .tfo-row {{ display: flex; align-items: center; gap: 6px; margin: 3px 0; font-size: 10px; }}
+  .tfo-lbl {{ width: 26px; color: var(--muted); flex: none; }}
+  .tfo-bar {{ flex: 1; height: 7px; border-radius: 3px; overflow: hidden;
+              display: flex; background: rgba(140,155,175,.10); }}
+  .tfo-bar i {{ display: block; height: 100%; }}
+  .tfo-h {{ background: #7d5a8c; }}
+  .tfo-c {{ background: #8fa3b5; }}
+  .tfo-u {{ background: #c4bcae; }}
+  .tfo-txt {{ font-family: var(--mono); font-size: 9.5px; color: var(--muted);
+              width: 130px; text-align: right; flex: none; }}
+  /* ★2026-08-22 KOL 深度摘要(展开层四段式) */
+  .kd-deep {{ margin-bottom: 6px; }}
+  .kd-seg {{ display: flex; gap: 8px; margin-bottom: 5px; line-height: 1.75; }}
+  .kd-seg-k {{ flex: none; width: 62px; font-size: 11px; font-weight: 700;
+               color: var(--dust-blue); text-align: right; }}
+  .kd-seg-k::before {{ content: "▸ "; }}
+  .kd-seg-v {{ flex: 1; font-size: 11.5px; color: var(--text); }}
+  .kd-deep-badge {{ flex: none; font-size: 8.5px; font-weight: 700; margin-left: 5px;
+                    background: rgba(122,90,140,.18); color: #7d5a8c;
+                    border-radius: 2px; padding: 0 3px; line-height: 1.6; }}
 </style>
 </head>
 <body>
@@ -6844,9 +6941,9 @@ mkRadar('rLong', RADAR.long);
   var MON = mondayStr();
 
   function rowHtml(r, idx) {{
-    // r = [first, last, direction, comments, targets, source]
+    // r = [first, last, direction, comments, targets, source, detail, srcs]
     var first = r[0] || '', last = r[1] || '', dir = r[2] || '', cmt = r[3] || '';
-    var tgt = r[4] || '', src = r[5] || '';
+    var tgt = r[4] || '', src = r[5] || '', det = r[6] || '', srcs = r[7] || [];
     // 日期区间: 同一言论连续多日持有 → 显示 "起 ~ 止"; 单日 → 只显一个日期
     var dateTxt = (first && last && first !== last) ? (first + ' ~ ' + last) : (last || first);
     var kv = '';
@@ -6855,18 +6952,46 @@ mkRadar('rLong', RADAR.long);
     if (first && last && first !== last) {{
       kv += (kv ? ' · ' : '') + '该观点连续见于 ' + esc(first) + ' 至 ' + esc(last);
     }}
-    var srcHtml = src
-      ? '<div class="kd-kv">原文出处：<a href="' + esc(src) + '" target="_blank" rel="noopener">' + esc(src) + '</a></div>'
-      : '<div class="kd-kv">出处：每日快照汇总（无单条原文链接）</div>';
+    // ★2026-08-22(Chao): 展开层优先显示 detail(100-300字结构化深度摘要)。
+    //   detail 用「▸ 小标题：内容」四段式, 按 \n 拆成多行渲染。
+    //   没有 detail 的历史条目仍退回 comments —— 不伪造。
+    var body;
+    if (det) {{
+      var segs = det.split('\\n').filter(function(s) {{ return s.trim(); }});
+      body = '<div class="kd-deep">' + segs.map(function(s) {{
+        s = s.trim();
+        var mm = s.match(/^▸\\s*([^：:]{{2,12}})[：:]([\\s\\S]*)$/);
+        return mm
+          ? '<div class="kd-seg"><span class="kd-seg-k">' + esc(mm[1]) + '</span>'
+            + '<span class="kd-seg-v">' + esc(mm[2].trim()) + '</span></div>'
+          : '<div class="kd-seg"><span class="kd-seg-v">' + esc(s) + '</span></div>';
+      }}).join('') + '</div>';
+    }} else {{
+      body = '<div class="kd-full">' + esc(cmt) + '</div>';
+    }}
+    // 来源: 优先用深度抓取带回的多条链接, 否则退回单条 source
+    var srcHtml;
+    if (srcs && srcs.length) {{
+      srcHtml = '<div class="kd-kv">原文出处：' + srcs.map(function(s) {{
+        var t = (s.title || s.url || '').slice(0, 46);
+        return '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">'
+             + esc(t) + (s.date ? ' (' + esc(s.date) + ')' : '') + '</a>';
+      }}).join(' · ') + '</div>';
+    }} else if (src) {{
+      srcHtml = '<div class="kd-kv">原文出处：<a href="' + esc(src) + '" target="_blank" rel="noopener">' + esc(src) + '</a></div>';
+    }} else {{
+      srcHtml = '<div class="kd-kv">出处：每日快照汇总（无单条原文链接）</div>';
+    }}
     return '<div class="kd-row" data-i="' + idx + '">' +
              '<div class="kd-row-hd">' +
                '<span class="kd-date">' + esc(dateTxt) + '</span>' +
                (dir ? '<span class="kd-date">[' + esc(dir) + ']</span>' : '') +
                '<span class="kd-one">' + esc(cmt) + '</span>' +
+               (det ? '<span class="kd-deep-badge" title="含深度摘要">详</span>' : '') +
                '<span class="kd-caret">▸</span>' +
              '</div>' +
              '<div class="kd-detail">' +
-               '<div class="kd-full">' + esc(cmt) + '</div>' +
+               body +
                (kv ? '<div class="kd-kv">' + kv + '</div>' : '') +
                srcHtml +
              '</div>' +

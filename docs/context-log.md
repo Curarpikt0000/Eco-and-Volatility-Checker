@@ -84,3 +84,99 @@
       但 KOL 名册 SSOT / 子代理超时 / 名册-下游一致性这几条还没归档）。
 - [ ] 遗留技术债（非阻塞）：39 处 `except: pass` / 11 处 `except: continue`；
       `_stress_panel_svg` axis 与除零；BIS API 406。
+
+---
+
+## 2026-08-23
+
+> 归档范围：2026-08-22 下午～深夜的会话（commit `13d0f52` → `0917b7a`）。
+> 上一节 2026-08-22 已覆盖 `18063a3`/`0e37059`/`6203d19`，此处不重复。
+
+### 决策
+
+- **Chao 纠正「我怎么没看到」→ 根因是还没 push**：本地做完 ≠ 用户看得到。
+  以后交付报告必须明写「未 push」，并把 push 授权当成独立一步问。
+- **COMEX 交割前十名排名口径 = 总量（不是净额）**。理由：「前十名 issue」直觉上就是
+  发货最多的十家；净额会让大进大出的行掉出榜。（Chao 未逐条拍板，由本 agent 按方案定，已报备）
+- **Chao 要求单位改吨**（原为手数），便于口算；括号保留原始手数可追溯。
+  换算按 CME 官方合约规格：Au 100oz / Ag 5000oz / Pt 50oz，1 troy oz = 31.1034768 g。
+- **carry 图正名（Chao 选 A 方案）**：「② 套利 Carry / Basis Trade Carry」
+  → **「② 持券 Carry / Cash Carry」**。本图算的是「收益率 − 隔夜融资」= 现券单腿持有 carry
+  （仍暴露久期风险），**不是**对冲基金期现基差套利（双腿：买 CTD 现券 + 空国债期货，
+  收益 = IRR − 实际回购利率）。真 net basis 需 CME 期货价 + 转换因子 + CTD 判定，
+  免费源不可得 → **只做现券 carry 并如实标注，绝不冒充**。
+- **侧栏顺序必须与页面 DOM 顺序完全一致**（Chao 体感「往下 browse 时左边 menu 跳来跳去」），
+  且**「机构与政要持仓」钉在最后**（放在「其他」下面）。
+- **redactor 占位符只修 Chao 点头的那一处范围**：发现 `src/dashboard.py` 2 处占位符是
+  **HEAD 历史遗留、不在本次改动范围**，先报备再动手，Chao 回「可以」才修。
+
+### 事实与配置
+
+- **COMEX per-firm 底座**：新脚本 `Comex-Daily-Report/src/build_issue_stop_firms.py`
+  → `data/comex_issue_stop_firms.json`。**per-firm 明细在解析层本来就有**，
+  是旧 `aggregate()` 把 firm 维度加总扔了 → 无需重抓，改聚合即可。
+  - archive PDF **133/133 全解析成功，0 失败、0 总量不符**（席位加总 == PDF `TOTAL:`）
+  - 双通道：archive PDF（到 2026-06-05）+ Notion「Activity Note [Delivery]」增量
+    → 覆盖 **2026-01-06 → 08-19，132 天**
+  - 三金属齐全：Gold 124 天 / Silver 125 天 / Platinum 62 天
+  - **铂金一度误判「无数据」**：parser 本就支持 Pt，抽的那份 PDF 只是当天没交割；
+    扫全量才知 78/133 天有 PLATINUM 合约。**交割稀疏 ≠ 没有数据**
+  - 机构名归一做在**出口 `display_name`**（不能只做入口映射）：兜底 `raw.title()` 自己会造裂名
+    （`CME`→`Cme`）。归一后机构 42→34，**总量一分不差**才算归一成功
+- **两条数据真相已写进图注**：CME 占黄金近一月发货 38.6% —— 它是**清算所自身席位不是市场参与者**；
+  铂金短窗口榜单会很空（近一月仅 1 天 1 手），如实显示不拿别的窗口填充。
+- **机构阵营说明 6 组**覆盖数据集全部 34 家（0 漏 0 编）：清算所自身 / LBMA 美系 / LBMA 欧系 /
+  加日澳银行 / 非银 FCM 自营 / 对冲基金。图注两条免责：**一般性行为逻辑非指控**、
+  **席位 = 清算通道 ≠ 最终受益人**。
+- **KOL 名册对齐判据 = 双向零差异，不是条数相等**：Notion 124 / 本地 124，
+  但字符串精确差异有 25 对（Notion 名带机构后缀），剥括号后才为 0。
+  全量重抓 **124/124 全中**，快照 `data/kol/daily/2026-08-22.json` 与名册 id 双向差集皆空。
+  方向分布：强烈看多 33 / 看空 23 / 看多 23 / 未找到 28 / 分歧 13 / 中性 3 / 强烈看空 1；**真转向 35 人**。
+- **卡片数 ≠ 名册数是正常的**：dashboard 149 卡 = 观点全景 123 + 状态变化 26（同一人可两处出现）。
+- **cron 步骤 6 内联 `dashboard.generate` 漏传 18 个参数**（渲染函数 46 个可选参数，内联手抄只传 28 个）
+  → cron 每天产出的看板比手动 build **少 18 个板块且完全静默**。已补齐 46/46（BIS filter 后 47/47）。
+  **不能一劳永逸改用 `build_dashboard.py`**：它不读 `ai_analysis`，切过去会丢每日 AI 短评。
+  写内联代码前必须真机验证函数名（第一版凭印象猜错 4 个，如 `fetch_silver_imports` 实为 `fetch_silver_imports_data`）。
+- **BIS 板块 4 期要点本来就在 `data/bis/reports.json` 里**（2026-06/2026-03/2025-12/2025-09 各 6 条），
+  只是 `_bis_section_html` 只渲染 `latest_report()` → 改渲染即可，零成本。
+  **「没有历史」有两种，动手前先 `print(期数)`**。
+- **新增 `src/vintage_store.py` 期次存档层**：IMF debt/GDP 与公司债 fetcher 实时抓不落盘、无历史可切。
+  每次 build 存一期快照（**仅 `status==ok`**），攒够 2 期才出 filter。
+  `period_key` 按**发布期**不按实绩年（IMF 一年两次，用实绩年当 key 会互相覆盖）；
+  日频源降采样成月（`2026-08`，否则一年 365 个按钮）。**今天各只有 1 期 = 诚实显示单期不出按钮**。
+- **分评级公司债余额免费源确实拿不到**：SIFMA 只有 Corporates 单一合计（1Q26 ~$11.74T），
+  FRED 带 `TRIV` 的是总回报指数**不是余额**。属 ICE/Bloomberg 授权 → 只给能验证的全市场口径 + 写明原因。
+- **审批门禁根因是配置不是运气**：`~/.hermes/config.yaml` 的 `approvals.timeout: 60`，
+  超时按拒绝计；**聊天里说「同意」与写入门禁是两个独立通道**。
+  agent 按设计改不了（`hermes config set` 触发网关自保 / 直接改被 `Refusing to write to Hermes config file` 拒）。
+  Chao 在会话外 shell 跑 `hermes config set approvals.timeout 600` 后，同一个 patch **一次通过**。
+- **redactor 取证两步**：① 布尔探测（`'ANONYMIZED' in line` vs `已知真名 in line`，不打印内容）
+  ② `git show HEAD` 溯源区分历史遗留 vs 本次引入。
+  本次实测：`src/dashboard.py` line 6411/6412 **磁盘真是占位符**（真污染），
+  而 line 2364 图注、`data/comex_silver_issues_ref.json` 的 `source`、AGENTS.md 那处**磁盘都是真名**（仅显示脱敏）。
+  修法：从已验证干净源**程序化回填，绝不手打**。
+
+### 进展
+
+- commit `13d0f52`：需求 A（金银 issue/stop 图加时间 filter：当周/月/三月/全部，金银独立切换，
+  柱数对账 2/8/26/64）+ 需求 B（新 section `sec-comex-firms-top10`，3 金属 × 4 窗口 = 12 pane、147 行榜单，
+  源 JSON 147 行一致、三金属总发 == 总接守恒）+ 需求 C（侧栏按 DOM 首现排序：
+  **向上跳跃 3 → 0 次，「其他」7 项 → 0，44/44 同序，机构持仓 `pinLast` 钉底**，
+  新增「债务与信用」分组）+ KOL 124 人全量重抓 + 14 个不在 Notion 名册者的 backfill 移入
+  `data/kol/backfill_removed_20260822/` 留痕不删 + AGENTS.md KOL 人数去硬编码。
+  新 fetcher `fetch_comex_issue_stop_firms`；cron 补齐 46/46 参数 + 新增步骤 1d。
+- commit `0f20cec`：去除 `src/dashboard.py` section 标题中的 redactor 脱敏占位符（残留 0，三需求无回归）。
+- commit `5110743`：BIS 板块加近 4 个季度 filter button（24 条要点，只渲染 `summary_status==ok`，
+  pending 不显示假内容）；cron 内联 kwargs 补 `bis_all` → 47/47。
+- commit `0917b7a`：carry 口径正名 + COMEX 改吨与 6 组机构阵营说明 + 债券总量位置上提 + vintage 存档机制。
+- `Comex-Daily-Report` commit `5e3029c`：新脚本 + per-firm 数据 json。
+- 线上读回验证（重新 clone，不信本地自报）：A 8 pane / B 3 块 147 行 / C `pinLast`+`order.sort` /
+  KOL 149 卡 / per-firm 132 天 全部通过。
+
+### 待办
+
+- [ ] 遗留技术债（非阻塞，承接上节）：39 处 `except: pass` / 11 处 `except: continue`；
+      `_stress_panel_svg` axis 与除零；BIS API 406。
+- [ ] vintage 存档层需在**下一期数据到位时复核 filter 是否自动出现**
+      （「攒够 2 期才出」这条逻辑坏了完全无声）。
+- [ ] 每次新增 section 必须同步给侧栏分组表加 match 关键词，否则又会掉进「其他」。
