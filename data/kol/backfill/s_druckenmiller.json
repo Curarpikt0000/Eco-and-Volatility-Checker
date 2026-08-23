@@ -1,1 +1,55 @@
-{"kol":"S. Druckenmiller","sector":"Macro","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":3,"history":[{"date":"2025-11-17","direction":"看多","comments":"据SEC 13F披露,Druckenmiller最新持仓显示重新增配科技股,布局AI相关趋势,此前曾于2024年底清仓英伟达、2025年初清仓Palantir。","targets":"科技股/AI","source":"https://www.thestreet.com/investing/stanley-druckenmillers-latest-buys-suggest-shifting-tech-trend"},{"date":"2026-01-02","direction":"看多","comments":"13F显示Druckenmiller全面押注AI股票,尽管此前退出英伟达和Palantir,再次回归科技与AI主题布局。","targets":"AI科技股","source":"https://www.fool.com/investing/2026/01/02/billionaire-stanley-druckenmiller-buys-ai-stocks/"},{"date":"2026-02-27","direction":"分歧","comments":"与摩根士丹利对谈'Hard Lessons',讨论当前市场如何构建组合及后悔过早卖出的个股,强调保本与择机重仓的投资哲学。","targets":"美股","source":"https://www.morganstanley.com/insights/videos/hard-lessons/duquesne-stan-druckenmiller-iliana-bouzali"}]}
+{
+ "kol": "S. Druckenmiller",
+ "sector": "Macro",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2025-11-17",
+   "direction": "看多",
+   "comments": "据SEC 13F披露,Druckenmiller最新持仓显示重新增配科技股,布局AI相关趋势,此前曾于2024年底清仓英伟达、2025年初清仓Palantir。",
+   "targets": "科技股/AI",
+   "source": "https://www.thestreet.com/investing/stanley-druckenmillers-latest-buys-suggest-shifting-tech-trend",
+   "detail": "▸ 核心论点：最新持仓显示重新增配科技股，布局AI相关趋势。\n▸ 关键依据：据SEC 13F披露的持仓变动；此前他曾于2024年底清仓英伟达、2025年初清仓Palantir，本次属立场回摆。\n▸ 时间与位置：披露窗口为最新一期13F；未给出具体点位或目标价。\n▸ 标的与操作：科技股/AI相关标的，看多，已实际加仓。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "S. Druckenmiller",
+     "url": "https://www.thestreet.com/investing/stanley-druckenmillers-latest-buys-suggest-shifting-tech-trend",
+     "date": "2025-11-17"
+    }
+   ]
+  },
+  {
+   "date": "2026-01-02",
+   "direction": "看多",
+   "comments": "13F显示Druckenmiller全面押注AI股票,尽管此前退出英伟达和Palantir,再次回归科技与AI主题布局。",
+   "targets": "AI科技股",
+   "source": "https://www.fool.com/investing/2026/01/02/billionaire-stanley-druckenmiller-buys-ai-stocks/",
+   "detail": "▸ 核心论点：再次回归科技与 AI 主题布局，全面押注 AI 股票。\n▸ 关键依据：13F 持仓显示全面加码 AI 股票，尽管此前曾退出英伟达和 Palantir。\n▸ 时间与位置：2026-01-02 依据最新 13F 披露；未给出具体点位或目标价。\n▸ 标的与操作：AI 科技股；看多、已建仓。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://www.fool.com/investing/2026/01/02/billionaire-stanley-druckenmiller-buys-ai-stocks/"
+    }
+   ]
+  },
+  {
+   "date": "2026-02-27",
+   "direction": "分歧",
+   "comments": "与摩根士丹利对谈'Hard Lessons',讨论当前市场如何构建组合及后悔过早卖出的个股,强调保本与择机重仓的投资哲学。",
+   "targets": "美股",
+   "source": "https://www.morganstanley.com/insights/videos/hard-lessons/duquesne-stan-druckenmiller-iliana-bouzali",
+   "detail": "▸ 核心论点：讨论当前市场如何构建组合，强调保本与择机重仓的投资哲学，并反思过早卖出个股的遗憾。\n▸ 关键依据：与摩根士丹利对谈《Hard Lessons》，以自身交易经验为依据，核心是资本保全优先、机会来临时集中下注，而非持续满仓。\n▸ 时间与位置：未给出具体点位或目标价。\n▸ 标的与操作：美股，方向不明确（记为分歧）；操作上强调组合构建纪律而非明确多空。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "S. Druckenmiller",
+     "url": "https://www.morganstanley.com/insights/videos/hard-lessons/duquesne-stan-druckenmiller-iliana-bouzali",
+     "date": "2026-02-27"
+    }
+   ]
+  }
+ ]
+}

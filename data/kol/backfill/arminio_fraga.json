@@ -1,1 +1,41 @@
-{"kol":"Arminio Fraga","sector":"Macro","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":2,"history":[{"date":"2026-01-07","direction":"看空","comments":"巴西央行前行长Fraga警告Banco Master事件并非孤例,而是深层制度问题的症状。指出巴西同时承受15%利率与4%通胀,财政状况'完全不可持续',形成高借贷成本与不可持续债务的恶性循环。尽管过去三年增长尚可、失业下降,但缺乏实质财政进展令成果面临风险,呼吁结构性改革。","targets":"巴西经济/财政/利率","source":"https://www.mixvale.com.br/2026/01/07/former-bc-president-arminio-fraga-warns-banco-master-signals-deeper-institutional-rot-in-brazil/"},{"date":"2026-08-11","direction":"看空","comments":"Fraga就Banco Master案表示,问题不在于银行监管制度的设计,而在于其执行上存在'荒谬的失误',反映监管应用层面的制度薄弱,进一步印证其对巴西制度与金融稳定的担忧。","targets":"巴西银行业/监管","source":"https://oglobo.globo.com/economia/noticia/2026/08/11/arminio-fraga-ve-falha-grotesca-na-aplicacao-da-regulacao-no-caso-master.ghtml"}]}
+{
+ "kol": "Arminio Fraga",
+ "sector": "Macro",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 2,
+ "history": [
+  {
+   "date": "2026-01-07",
+   "direction": "看空",
+   "comments": "巴西央行前行长Fraga警告Banco Master事件并非孤例,而是深层制度问题的症状。指出巴西同时承受15%利率与4%通胀,财政状况'完全不可持续',形成高借贷成本与不可持续债务的恶性循环。尽管过去三年增长尚可、失业下降,但缺乏实质财政进展令成果面临风险,呼吁结构性改革。",
+   "targets": "巴西经济/财政/利率",
+   "source": "https://www.mixvale.com.br/2026/01/07/former-bc-president-arminio-fraga-warns-banco-master-signals-deeper-institutional-rot-in-brazil/",
+   "detail": "▸ 核心论点：Banco Master 事件并非孤例，而是巴西深层制度问题的症状，财政状况完全不可持续。\n▸ 关键依据：巴西同时承受 15% 的利率与 4% 的通胀，形成高借贷成本与不可持续债务的恶性循环；过去三年增长尚可、失业下降，但缺乏实质财政进展令成果面临风险。\n▸ 时间与位置：关键数据为利率 15%、通胀 4%；未给出具体时间窗口或市场点位。\n▸ 标的与操作：巴西资产/财政看空，呼吁结构性改革。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.mixvale.com.br/2026/01/07/former-bc-president-arminio-fraga-warns-banco-master-signals-deeper-institutional-rot-in-brazil/",
+     "date": "2026-01-07"
+    }
+   ]
+  },
+  {
+   "date": "2026-08-11",
+   "direction": "看空",
+   "comments": "Fraga就Banco Master案表示,问题不在于银行监管制度的设计,而在于其执行上存在'荒谬的失误',反映监管应用层面的制度薄弱,进一步印证其对巴西制度与金融稳定的担忧。",
+   "targets": "巴西银行业/监管",
+   "source": "https://oglobo.globo.com/economia/noticia/2026/08/11/arminio-fraga-ve-falha-grotesca-na-aplicacao-da-regulacao-no-caso-master.ghtml",
+   "detail": "▸ 核心论点：Banco Master 案暴露的不是巴西银行监管制度设计问题，而是执行层面的荒谬失误，制度薄弱令人担忧。\n▸ 关键依据：Fraga 明确区分制度设计与制度执行，指出问题出在监管应用环节；该案进一步印证他对巴西制度质量与金融稳定的长期担忧。\n▸ 时间与位置：就 Banco Master 个案发声，未给出具体点位或时间窗口。\n▸ 标的与操作：巴西金融体系/银行业，立场看空，属制度风险提示而非具体交易建议。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://oglobo.globo.com/economia/noticia/2026/08/11/arminio-fraga-ve-falha-grotesca-na-aplicacao-da-regulacao-no-caso-master.ghtml",
+     "date": "2026-08-11"
+    }
+   ]
+  }
+ ]
+}

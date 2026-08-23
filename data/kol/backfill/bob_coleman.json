@@ -1,37 +1,71 @@
 {
-  "kol": "Bob Coleman",
-  "sector": "Precious Metals",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
-  "count": 4,
-  "history": [
+ "kol": "Bob Coleman",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+ "count": 4,
+ "history": [
+  {
+   "date": "2025-04-16",
+   "direction": "看多",
+   "comments": "Idaho Armored Vaults创始人Coleman在Metals and Miners节目讨论金银市场剧烈波动，认为金价飙升是经济警示信号，看好实物贵金属。",
+   "targets": "黄金/白银",
+   "source": "https://metalsandminers.substack.com/p/gold-surge-economys-warning-sign",
+   "detail": "▸ 核心论点：金价飙升是经济的警示信号，看好实物贵金属。\n▸ 关键依据：Idaho Armored Vaults 创始人在 Metals and Miners 节目中讨论金银市场的剧烈波动，认为价格异动反映的是经济体系的深层问题而非单纯投机。\n▸ 时间与位置：未给出具体点位或时间窗口。\n▸ 标的与操作：黄金、白银看多，偏好实物贵金属持有（金库/实物交割视角）。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-04-16",
-      "direction": "看多",
-      "comments": "Idaho Armored Vaults创始人Coleman在Metals and Miners节目讨论金银市场剧烈波动，认为金价飙升是经济警示信号，看好实物贵金属。",
-      "targets": "黄金/白银",
-      "source": "https://metalsandminers.substack.com/p/gold-surge-economys-warning-sign"
-    },
-    {
-      "date": "2025-04-25",
-      "direction": "看多",
-      "comments": "Coleman分析黄金上涨是否只是短暂喘息，讨论特朗普政策及推动金银价格走高的新因素，认为涨势未结束。",
-      "targets": "黄金/白银",
-      "source": "https://www.youtube.com/watch?v=snb1FsXG_yU"
-    },
-    {
-      "date": "2025-07-25",
-      "direction": "强烈看多",
-      "comments": "Coleman在Financial Sense圆桌与Dave Morgan深入讨论白银短缺挤压，认为结构性供应赤字和投资者心理转变将推动白银非凡上涨。",
-      "targets": "白银",
-      "source": "https://www.financialsense.com/podcast/21347/preparing-silvers-short-squeeze-depth-bob-coleman-dave-morgan"
-    },
-    {
-      "date": "2025-12-15",
-      "direction": "中性",
-      "comments": "Coleman在Natural Resource Stocks访谈中拆解零售贵金属世界的隐藏风险，提醒买家尽职调查，警惕社媒炒作与现实脱节。",
-      "targets": "黄金/白银",
-      "source": "https://naturalresourcestocks.net/podcast/social-media-metals-hype-vs-reality-bob-coleman-on-buyer-due-diligence/"
+     "title": "",
+     "url": "https://metalsandminers.substack.com/p/gold-surge-economys-warning-sign",
+     "date": "2025-04-16"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2025-04-25",
+   "direction": "看多",
+   "comments": "Coleman分析黄金上涨是否只是短暂喘息，讨论特朗普政策及推动金银价格走高的新因素，认为涨势未结束。",
+   "targets": "黄金/白银",
+   "source": "https://www.youtube.com/watch?v=snb1FsXG_yU",
+   "detail": "▸ 核心论点：黄金上涨并非只是短暂喘息，涨势尚未结束。\n▸ 关键依据：讨论特朗普政策及推动金银价格走高的新因素；访谈同时覆盖金银比、Comex 交割与纸货/实物市场脱节、零售与机构是否已进场、央行会否获利了结等驱动。\n▸ 时间与位置：录制于 2025 年 4 月 24 日；提到白银在 35 美元一带存在阻力，能否突破是关键观察点。\n▸ 标的与操作：黄金、白银（及矿业股与其他商品）看多，认为回调不改上行趋势。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.youtube.com/watch?v=snb1FsXG_yU",
+     "date": "2025-04-25"
+    }
+   ]
+  },
+  {
+   "date": "2025-07-25",
+   "direction": "强烈看多",
+   "comments": "Coleman在Financial Sense圆桌与Dave Morgan深入讨论白银短缺挤压，认为结构性供应赤字和投资者心理转变将推动白银非凡上涨。",
+   "targets": "白银",
+   "source": "https://www.financialsense.com/podcast/21347/preparing-silvers-short-squeeze-depth-bob-coleman-dave-morgan",
+   "detail": "▸ 核心论点：白银存在短缺挤压（short squeeze）条件，将推动白银出现非凡上涨。\n▸ 关键依据：公开信息有限，仅检索到：Financial Sense 圆桌与 Dave Morgan 讨论，认为结构性供应赤字与投资者心理转变是核心驱动。\n▸ 时间与位置：未给出具体点位与时间窗口。\n▸ 标的与操作：白银，强烈看多、买入。",
+   "detail_status": "thin",
+   "sources": [
+    {
+     "title": "Bob Coleman",
+     "url": "https://www.financialsense.com/podcast/21347/preparing-silvers-short-squeeze-depth-bob-coleman-dave-morgan",
+     "date": "2025-07-25"
+    }
+   ]
+  },
+  {
+   "date": "2025-12-15",
+   "direction": "中性",
+   "comments": "Coleman在Natural Resource Stocks访谈中拆解零售贵金属世界的隐藏风险，提醒买家尽职调查，警惕社媒炒作与现实脱节。",
+   "targets": "黄金/白银",
+   "source": "https://naturalresourcestocks.net/podcast/social-media-metals-hype-vs-reality-bob-coleman-on-buyer-due-diligence/",
+   "detail": "▸ 核心论点：零售贵金属市场存在被忽视的隐藏风险，买家需做尽职调查。\n▸ 关键依据：在访谈中拆解零售贵金属世界的风险点，警惕社交媒体炒作与现实脱节。\n▸ 时间与位置：2025-12-15 Natural Resource Stocks 访谈；未给出具体点位。\n▸ 标的与操作：黄金、白银；立场中性，重在购买渠道与交易对手风险的防范。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://naturalresourcestocks.net/podcast/social-media-metals-hype-vs-reality-bob-coleman-on-buyer-due-diligence/"
+    }
+   ]
+  }
+ ]
 }

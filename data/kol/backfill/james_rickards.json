@@ -1,30 +1,57 @@
 {
-  "kol": "James Rickards",
-  "sector": "Macro",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 3,
-  "history": [
+ "kol": "James Rickards",
+ "sector": "Macro",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2025-05-01",
+   "direction": "强烈看多",
+   "comments": "预测黄金在央行抢购与全球法币贬值的推动下,将于2026年突破27,000美元/盎司,核心逻辑是各国央行在法币贬值背景下集中抢购黄金。",
+   "targets": "黄金",
+   "source": "news.bitcoin.com (Jim Rickards: Gold Might Avoid Crypto Substituting the US Dollar)",
+   "detail": "▸ 核心论点：黄金将在央行抢购与全球法币贬值推动下大幅重估。\n▸ 关键依据：核心逻辑是各国央行在法币贬值背景下集中抢购黄金，需求集中而供给刚性，推动价格远超常规估值。\n▸ 时间与位置：预测黄金于 2026 年突破 27,000 美元/盎司。\n▸ 标的与操作：黄金强烈看多，属极端目标价的长期配置观点。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-05-01",
-      "direction": "强烈看多",
-      "comments": "预测黄金在央行抢购与全球法币贬值的推动下,将于2026年突破27,000美元/盎司,核心逻辑是各国央行在法币贬值背景下集中抢购黄金。",
-      "targets": "黄金",
-      "source": "news.bitcoin.com (Jim Rickards: Gold Might Avoid Crypto Substituting the US Dollar)"
-    },
-    {
-      "date": "2026-08-13",
-      "direction": "强烈看多",
-      "comments": "警告霍尔木兹海峡与红海中断叠加战略石油储备枯竭,全球经济或将停摆;预计美国严重衰退、通胀走高、伊朗战争升级。黄金可能先跌向3,600美元再加速冲向10,000美元,白银随后跟涨。",
-      "targets": "黄金、白银",
-      "source": "silvertrade.com / GoldRepublic 访谈"
-    },
-    {
-      "date": "2026-08-05",
-      "direction": "强烈看多",
-      "comments": "认为当前市场是史上最大泡沫,终将破裂;届时现金将变得极其宝贵,投资者应重视真正的分散配置,并坚信黄金可达10,000美元/盎司。",
-      "targets": "黄金、现金",
-      "source": "YouTube (Jim Rickards | The Biggest Bubble in History Is About to Pop)"
+     "title": "",
+     "url": "news.bitcoin.com (Jim Rickards: Gold Might Avoid Crypto Substituting the US Dollar)",
+     "date": "2025-05-01"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-08-13",
+   "direction": "强烈看多",
+   "comments": "警告霍尔木兹海峡与红海中断叠加战略石油储备枯竭,全球经济或将停摆;预计美国严重衰退、通胀走高、伊朗战争升级。黄金可能先跌向3,600美元再加速冲向10,000美元,白银随后跟涨。",
+   "targets": "黄金、白银",
+   "source": "silvertrade.com / GoldRepublic 访谈",
+   "detail": "▸ 核心论点：霍尔木兹海峡与红海中断叠加战略石油储备枯竭，全球经济或将停摆，因此强烈看多贵金属。\n▸ 关键依据：预计美国出现严重衰退、通胀走高、伊朗战争升级；供应链与能源冲击叠加，构成对法币资产的系统性压力。\n▸ 时间与位置：黄金路径为先跌向3,600美元、再加速冲向10,000美元；白银随后跟涨，未给出明确时间窗口。\n▸ 标的与操作：黄金、白银，强烈看多；对「先回落后加速」的两段式路径有明确预期。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "James Rickards",
+     "url": "silvertrade.com / GoldRepublic 访谈",
+     "date": "2026-08-13"
+    }
+   ]
+  },
+  {
+   "date": "2026-08-05",
+   "direction": "强烈看多",
+   "comments": "认为当前市场是史上最大泡沫,终将破裂;届时现金将变得极其宝贵,投资者应重视真正的分散配置,并坚信黄金可达10,000美元/盎司。",
+   "targets": "黄金、现金",
+   "source": "YouTube (Jim Rickards | The Biggest Bubble in History Is About to Pop)",
+   "detail": "▸ 核心论点：当前市场是史上最大的泡沫，终将破裂；届时现金极其宝贵，黄金是核心避险配置。\n▸ 关键依据：基于泡沫终将出清的判断，强调破裂之后流动性稀缺、现金为王，投资者需要真正意义上的分散配置而非表面分散。\n▸ 时间与位置：坚信黄金可达 10,000 美元/盎司；泡沫破裂的具体时间窗口未给出。\n▸ 标的与操作：黄金强烈看多、提高现金比重；对整体风险资产/股市持看空立场。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "YouTube (Jim Rickards | The Biggest Bubble in History Is About to Pop)",
+     "date": "2026-08-05"
+    }
+   ]
+  }
+ ]
 }

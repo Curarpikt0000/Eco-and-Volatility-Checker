@@ -1,30 +1,57 @@
 {
-  "kol": "Larry McDonald",
-  "sector": "Macro",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 3,
-  "history": [
+ "kol": "Larry McDonald",
+ "sector": "Macro",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2025-12-12",
+   "direction": "看多",
+   "comments": "Bear Traps Report创始人在MoneyShow论坛判断硬资产将在2026跑赢金融资产,通缩时代已终结,资本将大规模轮动进入硬资产与价值股。",
+   "targets": "硬资产/价值股/大宗商品",
+   "source": "https://seekingalpha.com/article/4852910-hard-assets-vs-financial-larry-mcdonald-what-leads-in-2026",
+   "detail": "▸ 核心论点：硬资产将在2026年跑赢金融资产，通缩时代已经终结。\n▸ 关键依据：Bear Traps Report创始人在MoneyShow论坛判断资本将大规模轮动进入硬资产与价值股，理由是通缩环境结束、定价权向实物资产转移。\n▸ 时间与位置：时间窗口为2026年；未给出具体点位。\n▸ 标的与操作：硬资产、价值股与大宗商品，看多；金融资产相对减配。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-12-12",
-      "direction": "看多",
-      "comments": "Bear Traps Report创始人在MoneyShow论坛判断硬资产将在2026跑赢金融资产,通缩时代已终结,资本将大规模轮动进入硬资产与价值股。",
-      "targets": "硬资产/价值股/大宗商品",
-      "source": "https://seekingalpha.com/article/4852910-hard-assets-vs-financial-larry-mcdonald-what-leads-in-2026"
-    },
-    {
-      "date": "2025-12-18",
-      "direction": "看多",
-      "comments": "在Kitco Outlook 2026警告信贷与流动性信号预示大轮动:美联储在核心CPI约2.8%下重启QE,私募信贷是2026最大风险'已经开始破裂'。长期看多金银,认为美联储将被迫降息+QE+弱美元,大宗商品将像疫后一样爆发。比特币对流动性极敏感、非传统避险。",
-      "targets": "黄金/白银/大宗商品/私募信贷(风险)",
-      "source": "https://www.kitco.com/news/article/2025-12-18/larry-mcdonald-says-credit-stress-and-liquidity-signals-are-setting-major"
-    },
-    {
-      "date": "2025-12-24",
-      "direction": "看多",
-      "comments": "认为2026将是价值股之年,一场庞大的资本转移将定义2026,'反通胀格局已彻底成为过去',强调向硬资产与价值板块的巨大轮动。",
-      "targets": "价值股/硬资产",
-      "source": "https://themarket.ch/english/2026-is-set-to-be-the-year-of-value-stocks-ld.15676"
+     "title": "Larry McDonald",
+     "url": "https://seekingalpha.com/article/4852910-hard-assets-vs-financial-larry-mcdonald-what-leads-in-2026",
+     "date": "2025-12-12"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2025-12-18",
+   "direction": "看多",
+   "comments": "在Kitco Outlook 2026警告信贷与流动性信号预示大轮动:美联储在核心CPI约2.8%下重启QE,私募信贷是2026最大风险'已经开始破裂'。长期看多金银,认为美联储将被迫降息+QE+弱美元,大宗商品将像疫后一样爆发。比特币对流动性极敏感、非传统避险。",
+   "targets": "黄金/白银/大宗商品/私募信贷(风险)",
+   "source": "https://www.kitco.com/news/article/2025-12-18/larry-mcdonald-says-credit-stress-and-liquidity-signals-are-setting-major",
+   "detail": "▸ 核心论点：信贷与流动性信号预示一场大轮动，长期看多金银与大宗商品，同时警告私募信贷风险。\n▸ 关键依据：美联储在核心CPI约2.8%的情况下重启QE；私募信贷是2026年最大风险且「已经开始破裂」；认为美联储将被迫降息＋QE＋弱美元，大宗商品将像疫后一样爆发；比特币对流动性极敏感、并非传统避险资产。\n▸ 时间与位置：核心CPI约2.8%；时间窗口为2026年；未给出具体目标价。\n▸ 标的与操作：黄金、白银、大宗商品看多；私募信贷规避；比特币视为流动性敏感资产而非避险。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Larry McDonald",
+     "url": "https://www.kitco.com/news/article/2025-12-18/larry-mcdonald-says-credit-stress-and-liquidity-signals-are-setting-major",
+     "date": "2025-12-18"
+    }
+   ]
+  },
+  {
+   "date": "2025-12-24",
+   "direction": "看多",
+   "comments": "认为2026将是价值股之年,一场庞大的资本转移将定义2026,'反通胀格局已彻底成为过去',强调向硬资产与价值板块的巨大轮动。",
+   "targets": "价值股/硬资产",
+   "source": "https://themarket.ch/english/2026-is-set-to-be-the-year-of-value-stocks-ld.15676",
+   "detail": "▸ 核心论点：2026 年将是价值股之年，一场庞大的资本转移将定义 2026。\n▸ 关键依据：其判断依据是「反通胀格局已彻底成为过去」，资金将向硬资产与价值板块发生巨大轮动。\n▸ 时间与位置：时间指向 2026 全年；未给出具体点位。\n▸ 标的与操作：价值股、硬资产，买入 / 超配。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Larry McDonald",
+     "url": "https://themarket.ch/english/2026-is-set-to-be-the-year-of-value-stocks-ld.15676",
+     "date": "2025-12-24"
+    }
+   ]
+  }
+ ]
 }

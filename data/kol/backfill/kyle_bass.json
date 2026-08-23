@@ -1,23 +1,39 @@
 {
-  "kol": "Kyle Bass",
-  "sector": "Government Debt",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
-  "count": 2,
-  "history": [
+ "kol": "Kyle Bass",
+ "sector": "Government Debt",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+ "count": 2,
+ "history": [
+  {
+   "date": "2025-06-27",
+   "direction": "看空",
+   "comments": "在American Thought Leaders访谈中判断中国经济陷入螺旋式下行、无任何因素能拯救，并警示台海战争风险上升，对中国资产与地缘风险高度悲观。",
+   "targets": "中国资产/风险资产",
+   "source": "https://podscan.fm/podcasts/american-thought-leaders/episodes/kyle-bass-chinas-economic-spiral-and-the-coming-taiwan-war",
+   "detail": "▸ 核心论点：中国经济陷入螺旋式下行、无任何因素能够扭转，并警示台海战争风险上升。\n▸ 关键依据：在American Thought Leaders访谈中对中国的债务、地产与人口结构问题给出高度悲观评估，并把地缘冲突风险作为额外的尾部变量。\n▸ 时间与位置：未给出具体点位或时间窗口。\n▸ 标的与操作：中国资产与风险资产，看空/规避。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-06-27",
-      "direction": "看空",
-      "comments": "在American Thought Leaders访谈中判断中国经济陷入螺旋式下行、无任何因素能拯救，并警示台海战争风险上升，对中国资产与地缘风险高度悲观。",
-      "targets": "中国资产/风险资产",
-      "source": "https://podscan.fm/podcasts/american-thought-leaders/episodes/kyle-bass-chinas-economic-spiral-and-the-coming-taiwan-war"
-    },
-    {
-      "date": "2026-06-04",
-      "direction": "看空",
-      "comments": "在CNBC Squawk Box谈伊朗战事、美国对伊朗加密交易所制裁及中美芯片-稀土协议（称为人质交换/与魔鬼交易），认为地缘与供应链风险持续，维持台海现状对世界最有利。",
-      "targets": "风险资产/稀土/地缘",
-      "source": "https://www.cnbc.com/video/2026/06/04/kyle-bass-on-china-taiwan-tensions-the-status-quo-is-whats-best-for-the-world.html"
+     "title": "Kyle Bass",
+     "url": "https://podscan.fm/podcasts/american-thought-leaders/episodes/kyle-bass-chinas-economic-spiral-and-the-coming-taiwan-war",
+     "date": "2025-06-27"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-06-04",
+   "direction": "看空",
+   "comments": "在CNBC Squawk Box谈伊朗战事、美国对伊朗加密交易所制裁及中美芯片-稀土协议（称为人质交换/与魔鬼交易），认为地缘与供应链风险持续，维持台海现状对世界最有利。",
+   "targets": "风险资产/稀土/地缘",
+   "source": "https://www.cnbc.com/video/2026/06/04/kyle-bass-on-china-taiwan-tensions-the-status-quo-is-whats-best-for-the-world.html",
+   "detail": "▸ 核心论点：地缘与供应链风险持续，风险资产承压；维持台海现状对世界最有利。\n▸ 关键依据：谈伊朗战事、美国对伊朗加密交易所的制裁，以及中美芯片-稀土协议——他称之为「人质交换」/「与魔鬼做交易」。\n▸ 时间与位置：2026-06-04 在 CNBC《Squawk Box》；未给出具体点位。\n▸ 标的与操作：风险资产(看空)、稀土与地缘相关标的；提示风险，未给出具体买卖指令。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://www.cnbc.com/video/2026/06/04/kyle-bass-on-china-taiwan-tensions-the-status-quo-is-whats-best-for-the-world.html"
+    }
+   ]
+  }
+ ]
 }

@@ -1,16 +1,25 @@
 {
-  "kol": "David Stockman",
-  "sector": "Macro",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 1,
-  "history": [
+ "kol": "David Stockman",
+ "sector": "Macro",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 1,
+ "history": [
+  {
+   "date": "2026-08-07",
+   "direction": "看空",
+   "comments": "前里根政府预算主任,在其Contra Corner持续活跃撰文,一贯抨击美联储制造的'万物泡沫'与失控财政赤字/国债,认为特朗普时代股市创新高是不可持续的泡沫,并反对无休止的战争与货币扩张。整体维持结构性看空美股立场。",
+   "targets": "美股/美债",
+   "source": "https://www.davidstockmanscontracorner.com/ (Contra Corner, 2026-08-07活跃发文)",
+   "detail": "▸ 核心论点：美联储制造的「万物泡沫」与失控的财政赤字不可持续，特朗普时代股市创新高属泡沫，维持结构性看空。\n▸ 关键依据：前里根政府预算主任身份，在其Contra Corner持续撰文抨击美联储货币扩张、失控赤字与国债规模，并反对无休止的战争开支。\n▸ 时间与位置：未给出具体点位或时间窗口，属长期结构性立场。\n▸ 标的与操作：美股、美债，看空；对风险资产维持规避态度。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2026-08-07",
-      "direction": "看空",
-      "comments": "前里根政府预算主任,在其Contra Corner持续活跃撰文,一贯抨击美联储制造的'万物泡沫'与失控财政赤字/国债,认为特朗普时代股市创新高是不可持续的泡沫,并反对无休止的战争与货币扩张。整体维持结构性看空美股立场。",
-      "targets": "美股/美债",
-      "source": "https://www.davidstockmanscontracorner.com/ (Contra Corner, 2026-08-07活跃发文)"
+     "title": "David Stockman",
+     "url": "https://www.davidstockmanscontracorner.com/ (Contra Corner, 2026-08-07活跃发文)",
+     "date": "2026-08-07"
     }
-  ]
+   ]
+  }
+ ]
 }

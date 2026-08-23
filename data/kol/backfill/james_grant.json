@@ -1,37 +1,73 @@
 {
-  "kol": "James Grant",
-  "sector": "Government Debt",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
-  "count": 4,
-  "history": [
+ "kol": "James Grant",
+ "sector": "Government Debt",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+ "count": 4,
+ "history": [
+  {
+   "date": "2025-03-24",
+   "direction": "看空",
+   "comments": "Grant's Current Yield 播客中以历史视角讨论当下金融，语气忧虑，延续其对债券长期熊市与货币无序的担忧基调。",
+   "targets": "美债/黄金",
+   "source": "https://northstationmedia.com/portfolio/grants-current-yield-podcast/",
+   "detail": "▸ 核心论点：在 Grant’s Current Yield 播客中以历史视角讨论当下金融，语气忧虑，延续其对债券长期熊市与货币无序的担忧基调。\n▸ 关键依据：公开信息有限，仅检索到该期播客的节目形式（Jim Grant 与 Evan Lorenz 主持）与其一贯的历史类比式论述，未见具体数据引述。\n▸ 时间与位置：未给出具体时间窗口或点位。\n▸ 标的与操作：美债偏空、黄金为对冲，未给出明确操作指令。",
+   "detail_status": "thin",
+   "sources": [
     {
-      "date": "2025-03-24",
-      "direction": "看空",
-      "comments": "Grant's Current Yield 播客中以历史视角讨论当下金融，语气忧虑，延续其对债券长期熊市与货币无序的担忧基调。",
-      "targets": "美债/黄金",
-      "source": "https://northstationmedia.com/portfolio/grants-current-yield-podcast/"
-    },
-    {
-      "date": "2026-04-13",
-      "direction": "看空",
-      "comments": "在 Excess Returns 播客中重申观点：一场多年期的债券熊市正在展开，利率将呈现长周期上行，看空长久期美债。",
-      "targets": "美债",
-      "source": "https://marketsanity.com/category/investment-gurus/others/jim-grant-others/"
-    },
-    {
-      "date": "2026-05-02",
-      "direction": "看空",
-      "comments": "深访指出美债突破GDP 100%、30年期收益率逼近5%，债市正倒逼华盛顿；称Fed视黄金为'生存威胁'，看空美债、隐含看多黄金。",
-      "targets": "美债/黄金",
-      "source": "https://dinarrecaps.com/our-blog/why-the-fed-regards-gold-as-an-existential-threat-james-grant"
-    },
-    {
-      "date": "2026-06-18",
-      "direction": "看空",
-      "comments": "'On War, Inflation, and What Comes Next'访谈中警示战争与通胀前景，延续对通胀长期化与债券熊市的判断。",
-      "targets": "美债/通胀",
-      "source": "https://marketsanity.com/category/investment-gurus/others/jim-grant-others/"
+     "title": "",
+     "url": "https://northstationmedia.com/portfolio/grants-current-yield-podcast/",
+     "date": "2025-03-24"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-04-13",
+   "direction": "看空",
+   "comments": "在 Excess Returns 播客中重申观点：一场多年期的债券熊市正在展开，利率将呈现长周期上行，看空长久期美债。",
+   "targets": "美债",
+   "source": "https://marketsanity.com/category/investment-gurus/others/jim-grant-others/",
+   "detail": "▸ 核心论点：一场多年期的债券熊市正在展开，利率将呈现长周期上行。\n▸ 关键依据：在 Excess Returns 播客中重申其一贯判断，认为利率处于长周期上行通道，债市熊市是多年而非阶段性的。\n▸ 时间与位置：时间跨度为多年期；未给出具体收益率点位。\n▸ 标的与操作：看空长久期美国国债，规避久期风险。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://marketsanity.com/category/investment-gurus/others/jim-grant-others/",
+     "date": "2026-04-13"
+    }
+   ]
+  },
+  {
+   "date": "2026-05-02",
+   "direction": "看空",
+   "comments": "深访指出美债突破GDP 100%、30年期收益率逼近5%，债市正倒逼华盛顿；称Fed视黄金为'生存威胁'，看空美债、隐含看多黄金。",
+   "targets": "美债/黄金",
+   "source": "https://dinarrecaps.com/our-blog/why-the-fed-regards-gold-as-an-existential-threat-james-grant",
+   "detail": "▸ 核心论点：债券市场正在倒逼华盛顿，美债不可持续，隐含看多黄金。\n▸ 关键依据：美国国债规模突破 GDP 的 100%；30 年期国债收益率逼近 5%；并称美联储把黄金视为对自身的生存威胁。\n▸ 时间与位置：关键点位为债务/GDP 100%、30 年期收益率 5%；未给出黄金目标价。\n▸ 标的与操作：看空美国国债（尤其长久期），隐含看多黄金。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://dinarrecaps.com/our-blog/why-the-fed-regards-gold-as-an-existential-threat-james-grant",
+     "date": "2026-05-02"
+    }
+   ]
+  },
+  {
+   "date": "2026-06-18",
+   "direction": "看空",
+   "comments": "'On War, Inflation, and What Comes Next'访谈中警示战争与通胀前景，延续对通胀长期化与债券熊市的判断。",
+   "targets": "美债/通胀",
+   "source": "https://marketsanity.com/category/investment-gurus/others/jim-grant-others/",
+   "detail": "▸ 核心论点：延续对通胀长期化与债券熊市的判断，警示战争与通胀前景。\n▸ 关键依据：在《On War, Inflation, and What Comes Next》访谈中，把地缘冲突与财政扩张视为通胀持续的结构性来源，进而推导长期利率上行、债券承压。\n▸ 时间与位置：未给出具体点位或时间窗口。\n▸ 标的与操作：美债看空、通胀看升。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "James Grant",
+     "url": "https://marketsanity.com/category/investment-gurus/others/jim-grant-others/",
+     "date": "2026-06-18"
+    }
+   ]
+  }
+ ]
 }

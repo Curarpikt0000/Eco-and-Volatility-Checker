@@ -1,1 +1,57 @@
-{"kol":"Matthew Piepenburg","sector":"Precious Metals","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":3,"history":[{"date":"2025-01-14","direction":"强烈看多","comments":"VON GREYERZ合伙人与Egon von Greyerz在2025开年Gold Matters讨论中列举全年主要风险:市场风险、政治风险、货币/通胀风险与银行风险,认为2025风险极高,黄金是对冲核心。","targets":"黄金","source":"gold-eagle.com"},{"date":"2026-06-06","direction":"强烈看多","comments":"在GoldFix Competent Investor访谈中讨论黄金中期展望,基于货币贬值与债务不可持续论述,重申金价中期将继续走高。","targets":"黄金","source":"youtube.com GoldFix"},{"date":"2026-08-02","direction":"强烈看多","comments":"审视黄金2026展望,剖析COMEX操纵、债市警讯、货币贬值、中国因素与股市风险,总结'7个信号,1个黄金方向',坚定看多黄金。","targets":"黄金","source":"vongreyerz.gold"}]}
+{
+ "kol": "Matthew Piepenburg",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2025-01-14",
+   "direction": "强烈看多",
+   "comments": "VON GREYERZ合伙人与Egon von Greyerz在2025开年Gold Matters讨论中列举全年主要风险:市场风险、政治风险、货币/通胀风险与银行风险,认为2025风险极高,黄金是对冲核心。",
+   "targets": "黄金",
+   "source": "gold-eagle.com",
+   "detail": "▸ 核心论点：2025 年开年判断全年风险极高，黄金是对冲核心。\n▸ 关键依据：VON GREYERZ 合伙人与 Egon von Greyerz 在 Gold Matters 讨论中列举全年四类主要风险：市场风险、政治风险、货币/通胀风险与银行风险。\n▸ 时间与位置：展望窗口为 2025 全年；未给出具体点位或目标价。\n▸ 标的与操作：黄金，强烈看多，作为核心对冲资产持有。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "gold-eagle.com",
+     "date": "2025-01-14"
+    }
+   ]
+  },
+  {
+   "date": "2026-06-06",
+   "direction": "强烈看多",
+   "comments": "在GoldFix Competent Investor访谈中讨论黄金中期展望,基于货币贬值与债务不可持续论述,重申金价中期将继续走高。",
+   "targets": "黄金",
+   "source": "youtube.com GoldFix",
+   "detail": "▸ 核心论点：黄金中期展望依然向上，金价将继续走高。\n▸ 关键依据：基于货币贬值（currency debasement）与债务不可持续两条主线论述，认为法币购买力侵蚀是金价的长期驱动。\n▸ 时间与位置：定性为中期展望，未给出具体点位或目标价。\n▸ 标的与操作：黄金强烈看多，在 GoldFix Competent Investor 访谈中重申持有立场。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "youtube.com GoldFix",
+     "date": "2026-06-06"
+    }
+   ]
+  },
+  {
+   "date": "2026-08-02",
+   "direction": "强烈看多",
+   "comments": "审视黄金2026展望,剖析COMEX操纵、债市警讯、货币贬值、中国因素与股市风险,总结'7个信号,1个黄金方向',坚定看多黄金。",
+   "targets": "黄金",
+   "source": "vongreyerz.gold",
+   "detail": "▸ 核心论点：审视黄金 2026 展望，坚定看多黄金，总结为「7 个信号，1 个黄金方向」。\n▸ 关键依据：剖析 COMEX 操纵、债市警讯、货币贬值、中国因素与股市风险等结构性驱动，认为均指向同一方向。\n▸ 时间与位置：面向 2026 全年展望；未给出具体点位。\n▸ 标的与操作：黄金，买入 / 持有。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Matthew Piepenburg",
+     "url": "vongreyerz.gold",
+     "date": "2026-08-02"
+    }
+   ]
+  }
+ ]
+}

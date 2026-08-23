@@ -1,44 +1,87 @@
 {
-  "kol": "Tom McClellan",
-  "sector": "Cycles & Esoteric Forecasting",
-  "backfill_date": "2026-08-22",
-  "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
-  "history": [
+ "kol": "Tom McClellan",
+ "sector": "Cycles & Esoteric Forecasting",
+ "backfill_date": "2026-08-22",
+ "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
+ "history": [
+  {
+   "date": "2025-10-09",
+   "direction": "看空",
+   "comments": "Chart In Focus《Treasury-Bund Divergence》。McClellan 指出股市的广度背离此时才刚刚开始出现，但另一个看空背离已经运行了数月：美国 10 年期国债与德国同期限「bund」收益率之利差与股市之间存在的领先关系正在发出警告。他用这一美德利差走势对照股指，认为其背离是对当时股市涨势的负面信号。属典型的以指标背离为依据的偏空提示。",
+   "targets": "美股/美债/德债",
+   "source": "https://www.mcoscillator.com/learning_center/weekly_chart/treasury-bund_divergence/",
+   "detail": "▸ 核心论点：Chart In Focus《Treasury-Bund Divergence》——美德利差与股市之间的领先关系正在发出看空警告。\n▸ 关键依据：股市的广度背离此时才刚刚开始出现，但另一个看空背离已经运行了数月：美国 10 年期国债与德国同期限 bund 收益率之利差与股市之间存在领先关系，其背离对当时股市涨势构成负面信号。\n▸ 时间与位置：该利差背离已持续数月；未给出具体点位或目标时间。\n▸ 标的与操作：美股偏空提示，涉及美债与德债利差指标，未给出明确买卖指令。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-10-09",
-      "direction": "看空",
-      "comments": "Chart In Focus《Treasury-Bund Divergence》。McClellan 指出股市的广度背离此时才刚刚开始出现，但另一个看空背离已经运行了数月：美国 10 年期国债与德国同期限「bund」收益率之利差与股市之间存在的领先关系正在发出警告。他用这一美德利差走势对照股指，认为其背离是对当时股市涨势的负面信号。属典型的以指标背离为依据的偏空提示。",
-      "targets": "美股/美债/德债",
-      "source": "https://www.mcoscillator.com/learning_center/weekly_chart/treasury-bund_divergence/"
-    },
-    {
-      "date": "2026-04-09",
-      "direction": "中性",
-      "comments": "Chart In Focus《Stock Market Matching The Year Ago Pattern》。McClellan 认同若干他尊重的分析师的观察：2026 年的股价结构与 2025 年高度相似。他自述在做价格形态类比（analog）时会力求连细小波动都能对得上，以此验证类比是否成立；本期做了少量位移调整以取得最佳拟合。结论是当年走势可参照去年的路径推演后市节奏，属方法论/路径推演，未给出明确多空。",
-      "targets": "美股",
-      "source": "https://www.mcoscillator.com/learning_center/weekly_chart/stock_market_matching_the_year_ago_pattern/"
-    },
-    {
-      "date": "2026-06-26",
-      "direction": "看空",
-      "comments": "Chart In Focus《Fosback Absolute Breadth Shows a Quiet Market》。McClellan 援引分析师 ANONYMIZED_PERSON_0_11 的绝对广度指标（取每日涨跌家数差的绝对值、丢弃方向，用 21 日均线平滑）：其原理是市场底部时数据往往喧嚣剧烈，而当前读数极低，说明市场异常安静。低读数在历史上与「顶部状态（topping condition）」一致，因此他把这视为对价格的警示信号。",
-      "targets": "美股/市场广度",
-      "source": "https://www.mcoscillator.com/learning_center/weekly_chart/fosback_absolute_breadth_shows_a_quiet_market/"
-    },
-    {
-      "date": "2026-07-10",
-      "direction": "看空",
-      "comments": "Chart In Focus《McClellan Oscillator Quietest in Years》。承接上周对 Fosback 绝对广度低读数的讨论，本期以 NYSE 麦克莱伦 A-D 摆动指标给出同样信息：该指标长期贴近零轴，其 15 日区间读数创下多年来最低。极端安静的广度数据与顶部形成条件相符，他借此再次提示当前股市处于筑顶状态而非健康上涨。",
-      "targets": "美股/市场广度",
-      "source": "https://www.mcoscillator.com/learning_center/weekly_chart/mcclellan_oscillator_quietest_in_years/"
-    },
-    {
-      "date": "2026-07-23",
-      "direction": "中性",
-      "comments": "Chart In Focus《Gold's 20-1/2 Month Leading Indication for Yields》。McClellan 展示他在双月刊 McClellan Market Report 几乎每期都会用的一张图：金价的波动往往会在约 20.5 个月之后被长期利率的波动（不完美地）复制。图中的 Treasury Yield Index 代表最新发行的 30 年期国债到期收益率，他称换成 20 年期收益率图形也类似。属跨市场领先指标的时间关系推演，用于预判长端利率路径。",
-      "targets": "黄金/美债长端利率",
-      "source": "https://www.mcoscillator.com/learning_center/weekly_chart/golds_20-1_2_month_leading_indication_for_yields/"
+     "title": "",
+     "url": "https://www.mcoscillator.com/learning_center/weekly_chart/treasury-bund_divergence/",
+     "date": "2025-10-09"
     }
-  ],
-  "count": 5
+   ]
+  },
+  {
+   "date": "2026-04-09",
+   "direction": "中性",
+   "comments": "Chart In Focus《Stock Market Matching The Year Ago Pattern》。McClellan 认同若干他尊重的分析师的观察：2026 年的股价结构与 2025 年高度相似。他自述在做价格形态类比（analog）时会力求连细小波动都能对得上，以此验证类比是否成立；本期做了少量位移调整以取得最佳拟合。结论是当年走势可参照去年的路径推演后市节奏，属方法论/路径推演，未给出明确多空。",
+   "targets": "美股",
+   "source": "https://www.mcoscillator.com/learning_center/weekly_chart/stock_market_matching_the_year_ago_pattern/",
+   "detail": "▸ 核心论点：Chart In Focus《Stock Market Matching The Year Ago Pattern》——2026 年的股价结构与 2025 年高度相似，可参照去年路径推演后市节奏。\n▸ 关键依据：认同若干他尊重的分析师的观察；自述做价格形态类比（analog）时会力求连细小波动都能对得上，以此验证类比是否成立，本期做了少量位移调整以取得最佳拟合。\n▸ 时间与位置：以 2025 年同期路径作为 2026 年的时间参照；未给出具体点位。\n▸ 标的与操作：美股，属方法论/路径推演，未给出明确多空与操作。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.mcoscillator.com/learning_center/weekly_chart/stock_market_matching_the_year_ago_pattern/",
+     "date": "2026-04-09"
+    }
+   ]
+  },
+  {
+   "date": "2026-06-26",
+   "direction": "看空",
+   "comments": "Chart In Focus《Fosback Absolute Breadth Shows a Quiet Market》。McClellan 援引分析师 ANONYMIZED_PERSON_0_11 的绝对广度指标（取每日涨跌家数差的绝对值、丢弃方向，用 21 日均线平滑）：其原理是市场底部时数据往往喧嚣剧烈，而当前读数极低，说明市场异常安静。低读数在历史上与「顶部状态（topping condition）」一致，因此他把这视为对价格的警示信号。",
+   "targets": "美股/市场广度",
+   "source": "https://www.mcoscillator.com/learning_center/weekly_chart/fosback_absolute_breadth_shows_a_quiet_market/",
+   "detail": "▸ 核心论点：Chart In Focus《Fosback Absolute Breadth Shows a Quiet Market》——绝对广度指标读数极低，市场异常安静，与历史上的顶部状态一致，构成对价格的警示。\n▸ 关键依据：援引分析师 Fosback 的绝对广度指标（取每日涨跌家数差的绝对值、丢弃方向，用 21 日均线平滑）：市场底部时数据往往喧嚣剧烈，而当前读数极低。\n▸ 时间与位置：以 21 日均线平滑的当期读数为准，属 topping condition 判断；未给出具体点位或时间窗口。\n▸ 标的与操作：美股/市场广度，偏空警示，未给出具体买卖指令。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.mcoscillator.com/learning_center/weekly_chart/fosback_absolute_breadth_shows_a_quiet_market/",
+     "date": "2026-06-26"
+    }
+   ]
+  },
+  {
+   "date": "2026-07-10",
+   "direction": "看空",
+   "comments": "Chart In Focus《McClellan Oscillator Quietest in Years》。承接上周对 Fosback 绝对广度低读数的讨论，本期以 NYSE 麦克莱伦 A-D 摆动指标给出同样信息：该指标长期贴近零轴，其 15 日区间读数创下多年来最低。极端安静的广度数据与顶部形成条件相符，他借此再次提示当前股市处于筑顶状态而非健康上涨。",
+   "targets": "美股/市场广度",
+   "source": "https://www.mcoscillator.com/learning_center/weekly_chart/mcclellan_oscillator_quietest_in_years/",
+   "detail": "▸ 核心论点：市场广度数据极端安静，与顶部形成条件相符，判断当前股市处于筑顶状态而非健康上涨。\n▸ 关键依据：NYSE 麦克莱伦 A-D 摆动指标长期贴近零轴，其15日区间读数创下多年来最低；与上周讨论的 Fosback 绝对广度低读数指向同一信息。\n▸ 时间与位置：2026-07-10 Chart In Focus《McClellan Oscillator Quietest in Years》；未给出具体点位。\n▸ 标的与操作：美股/市场广度；看空，提示筑顶风险。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://www.mcoscillator.com/learning_center/weekly_chart/mcclellan_oscillator_quietest_in_years/"
+    }
+   ]
+  },
+  {
+   "date": "2026-07-23",
+   "direction": "中性",
+   "comments": "Chart In Focus《Gold's 20-1/2 Month Leading Indication for Yields》。McClellan 展示他在双月刊 McClellan Market Report 几乎每期都会用的一张图：金价的波动往往会在约 20.5 个月之后被长期利率的波动（不完美地）复制。图中的 Treasury Yield Index 代表最新发行的 30 年期国债到期收益率，他称换成 20 年期收益率图形也类似。属跨市场领先指标的时间关系推演，用于预判长端利率路径。",
+   "targets": "黄金/美债长端利率",
+   "source": "https://www.mcoscillator.com/learning_center/weekly_chart/golds_20-1_2_month_leading_indication_for_yields/",
+   "detail": "▸ 核心论点：金价波动往往在约20.5个月之后被长期利率波动（不完美地）复制，可用于预判长端利率路径。\n▸ 关键依据：Chart In Focus《Gold's 20-1/2 Month Leading Indication for Yields》展示其双月刊McClellan Market Report几乎每期都用的一张图；图中Treasury Yield Index代表最新发行的30年期国债收益率，换成20年期图形也类似。\n▸ 时间与位置：领先时间约20.5个月；未给出具体点位或目标价。\n▸ 标的与操作：黄金与美债长端利率，属跨市场领先指标的时间关系推演，不含明确多空操作，记为中性。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Tom McClellan",
+     "url": "https://www.mcoscillator.com/learning_center/weekly_chart/golds_20-1_2_month_leading_indication_for_yields/",
+     "date": "2026-07-23"
+    }
+   ]
+  }
+ ],
+ "count": 5
 }

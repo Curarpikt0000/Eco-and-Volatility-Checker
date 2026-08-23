@@ -1,37 +1,73 @@
 {
-  "kol": "Avi Gilburt",
-  "sector": "Cycles & Esoteric Forecasting",
-  "backfill_date": "2026-08-22",
-  "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
-  "history": [
+ "kol": "Avi Gilburt",
+ "sector": "Cycles & Esoteric Forecasting",
+ "backfill_date": "2026-08-22",
+ "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
+ "history": [
+  {
+   "date": "2025-12-16",
+   "direction": "看空",
+   "comments": "Kitco News 专访《Gold and silver appear to be entering the final act in 2026; years-long bear market looms》（记者 Neils Christensen，发布 2025-12-16）。ElliottWaveTrader 创始人 Gilburt 认为贵金属自 2015–2016 年低点以来的这轮强势上涨已接近尾声：金银在未来数月仍可能磨顶走高，但 2026 年很可能构筑这一轮的周期性大顶，此后将进入以年计的熊市。他提醒投资者据此重新审视贵金属仓位。",
+   "targets": "黄金/白银",
+   "source": "https://www.kitco.com/news/article/2025-12-16/gold-and-silver-appear-be-entering-final-act-2026-years-long-bear-market",
+   "detail": "▸ 核心论点：贵金属自 2015–2016 年低点以来的这轮强势上涨已接近尾声，2026 年很可能构筑周期性大顶。\n▸ 关键依据：Kitco 专访《Gold and silver appear to be entering the final act in 2026; years-long bear market looms》中，ElliottWaveTrader 创始人以波浪结构判断本轮上涨进入终章。\n▸ 时间与位置：金银在未来数月仍可能磨顶走高，大顶大概率落在 2026 年，此后进入以年计的熊市；未给出具体点位。\n▸ 标的与操作：黄金、白银，看空，提醒投资者据此重新审视贵金属仓位。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-12-16",
-      "direction": "看空",
-      "comments": "Kitco News 专访《Gold and silver appear to be entering the final act in 2026; years-long bear market looms》（记者 Neils Christensen，发布 2025-12-16）。ElliottWaveTrader 创始人 Gilburt 认为贵金属自 2015–2016 年低点以来的这轮强势上涨已接近尾声：金银在未来数月仍可能磨顶走高，但 2026 年很可能构筑这一轮的周期性大顶，此后将进入以年计的熊市。他提醒投资者据此重新审视贵金属仓位。",
-      "targets": "黄金/白银",
-      "source": "https://www.kitco.com/news/article/2025-12-16/gold-and-silver-appear-be-entering-final-act-2026-years-long-bear-market"
-    },
-    {
-      "date": "2026-01-01",
-      "direction": "看空",
-      "comments": "CoinArticle 报道《Avi Gilburt Projects 2026 Peak for Gold and Silver: A Cautionary Note》（2026-01-01）。转述并总结 Gilburt 的核心警告：黄金与白银可能在 2026 年触及本轮周期高点，是贵金属投资者的关键转折时刻，其后可能出现下行；文章据此提示交易者与投资者重新思考策略。文中给出的标签为 Bearish。",
-      "targets": "黄金/白银",
-      "source": "https://www.coinarticle.com/article/avi-gilburt-2026-peak-gold-silver"
-    },
-    {
-      "date": "2026-08-05",
-      "direction": "中性",
-      "comments": "ElliottWaveTrader 官网视频《Avi's Market Minute - August 5th, 2026: Update on Gold, Silver & GDX》（站内标注 Aug 5, 2026 12:22 PM EDT）。Gilburt 例行更新黄金、白银与金矿股 ETF（GDX）的波浪计数与关键位。相关同期报道显示其框架是：金银与 GDX 在更大级别反弹之前仍可能进一步回落，但矿业股最终有望创历史新高、GDX 目标 130–150。视频正文为付费内容，仅能确认更新主题与日期，故方向记为中性。",
-      "targets": "黄金/白银/GDX金矿股",
-      "source": "https://www.elliottwavetrader.net/videos/Avis-Market-Minute-August-5th-2026-Update-on-Gold-Silver-GDX-2026080525114.html"
-    },
-    {
-      "date": "2026-08-17",
-      "direction": "看多",
-      "comments": "ElliottWaveTrader 文章《Interesting Potential - Market Analysis for Aug 17th, 2026》。Gilburt 回顾称在贵金属见底之前他就表示会对「自低点起的 5 浪上涨」保持开放态度；当前该数浪结构成立，但需要很快看到一轮反弹启动，否则计数面临失效（invalidation）风险。他同时表示从多个角度看，目前展示的这套计数仍是最合理的。属带条件的偏多波浪推演。",
-      "targets": "黄金/白银/贵金属",
-      "source": "https://www.elliottwavetrader.net/news/Avi-Gilburt"
+     "title": "",
+     "url": "https://www.kitco.com/news/article/2025-12-16/gold-and-silver-appear-be-entering-final-act-2026-years-long-bear-market",
+     "date": "2025-12-16"
     }
-  ],
-  "count": 4
+   ]
+  },
+  {
+   "date": "2026-01-01",
+   "direction": "看空",
+   "comments": "CoinArticle 报道《Avi Gilburt Projects 2026 Peak for Gold and Silver: A Cautionary Note》（2026-01-01）。转述并总结 Gilburt 的核心警告：黄金与白银可能在 2026 年触及本轮周期高点，是贵金属投资者的关键转折时刻，其后可能出现下行；文章据此提示交易者与投资者重新思考策略。文中给出的标签为 Bearish。",
+   "targets": "黄金/白银",
+   "source": "https://www.coinarticle.com/article/avi-gilburt-2026-peak-gold-silver",
+   "detail": "▸ 核心论点：黄金与白银可能在2026年触及本轮周期高点，是贵金属投资者的关键转折时刻，其后可能出现下行。\n▸ 关键依据：CoinArticle报道《Avi Gilburt Projects 2026 Peak for Gold and Silver: A Cautionary Note》转述其核心警告，文中给出的标签为Bearish，并据此提示交易者与投资者重新思考策略。\n▸ 时间与位置：时间窗口指向2026年见顶；未给出具体点位。\n▸ 标的与操作：黄金、白银，看空（周期见顶警告），建议重估持仓策略。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Avi Gilburt",
+     "url": "https://www.coinarticle.com/article/avi-gilburt-2026-peak-gold-silver",
+     "date": "2026-01-01"
+    }
+   ]
+  },
+  {
+   "date": "2026-08-05",
+   "direction": "中性",
+   "comments": "ElliottWaveTrader 官网视频《Avi's Market Minute - August 5th, 2026: Update on Gold, Silver & GDX》（站内标注 Aug 5, 2026 12:22 PM EDT）。Gilburt 例行更新黄金、白银与金矿股 ETF（GDX）的波浪计数与关键位。相关同期报道显示其框架是：金银与 GDX 在更大级别反弹之前仍可能进一步回落，但矿业股最终有望创历史新高、GDX 目标 130–150。视频正文为付费内容，仅能确认更新主题与日期，故方向记为中性。",
+   "targets": "黄金/白银/GDX金矿股",
+   "source": "https://www.elliottwavetrader.net/videos/Avis-Market-Minute-August-5th-2026-Update-on-Gold-Silver-GDX-2026080525114.html",
+   "detail": "▸ 核心论点：例行更新黄金、白银与 GDX 的波浪计数与关键位；短期仍可能回落、长期矿业股看多，故方向记为中性。\n▸ 关键依据：ElliottWaveTrader 视频《Avi's Market Minute - August 5th, 2026》；同期报道显示其框架是金银与 GDX 在更大级别反弹之前仍可能进一步回落。视频正文为付费内容，仅能确认更新主题与日期。\n▸ 时间与位置：矿业股最终有望创历史新高，GDX 目标 130–150；短期回落幅度未给出具体点位。\n▸ 标的与操作：黄金、白银、GDX 金矿股，短线观望、等待更大级别反弹启动。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Avi Gilburt",
+     "url": "https://www.elliottwavetrader.net/videos/Avis-Market-Minute-August-5th-2026-Update-on-Gold-Silver-GDX-2026080525114.html",
+     "date": "2026-08-05"
+    }
+   ]
+  },
+  {
+   "date": "2026-08-17",
+   "direction": "看多",
+   "comments": "ElliottWaveTrader 文章《Interesting Potential - Market Analysis for Aug 17th, 2026》。Gilburt 回顾称在贵金属见底之前他就表示会对「自低点起的 5 浪上涨」保持开放态度；当前该数浪结构成立，但需要很快看到一轮反弹启动，否则计数面临失效（invalidation）风险。他同时表示从多个角度看，目前展示的这套计数仍是最合理的。属带条件的偏多波浪推演。",
+   "targets": "黄金/白银/贵金属",
+   "source": "https://www.elliottwavetrader.net/news/Avi-Gilburt",
+   "detail": "▸ 核心论点：贵金属自低点起的「5 浪上涨」数浪结构目前成立，维持带条件的偏多波浪推演。\n▸ 关键依据：Gilburt 回顾称在贵金属见底之前他就表示会对自低点起的 5 浪上涨保持开放态度；他同时表示从多个角度看，目前展示的这套计数仍是最合理的。\n▸ 时间与位置：需要很快看到一轮反弹启动，否则计数面临失效（invalidation）风险；未给出具体点位。\n▸ 标的与操作：黄金、白银等贵金属，偏多，但以波浪计数不失效为前提。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Avi Gilburt",
+     "url": "https://www.elliottwavetrader.net/news/Avi-Gilburt",
+     "date": "2026-08-17"
+    }
+   ]
+  }
+ ],
+ "count": 4
 }

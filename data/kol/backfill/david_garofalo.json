@@ -1,1 +1,57 @@
-{"kol":"David Garofalo","sector":"Precious Metals","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":3,"history":[{"date":"2025-12-30","direction":"强烈看多","comments":"Gold Royalty(GROY)董事长兼CEO在Bloor Street访谈中讨论2025年末金银铜大涨及2026展望,称基于$4,000金价公司预计逾$7,500万税后自由现金流,黄金上涨将直接转化为盈利。","targets":"黄金/Gold Royalty","source":"youtube.com Bloor Street Capital"},{"date":"2026-01-12","direction":"强烈看多","comments":"接受Kitco Mining访谈,阐述推动黄金走高的宏观力量依然稳固,勾勒Gold Royalty从组合建设期迈向自由现金流业务,零负债、约90%利润率,预期未来五年归属黄金当量增长约360%。","targets":"黄金/Gold Royalty","source":"youtube.com Kitco Mining"},{"date":"2026-01-04","direction":"看多","comments":"围绕债务与货币贬值论述黄金2026年仍将胜出;公司近期以$7,000万从Blackrock World Mining Trust收购巴西Pedra Branca铜金矿特许权,扩张现金生成资产。","targets":"黄金/铜","source":"podchaser.com Bloor Street"}]}
+{
+ "kol": "David Garofalo",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2025-12-30",
+   "direction": "强烈看多",
+   "comments": "Gold Royalty(GROY)董事长兼CEO在Bloor Street访谈中讨论2025年末金银铜大涨及2026展望,称基于$4,000金价公司预计逾$7,500万税后自由现金流,黄金上涨将直接转化为盈利。",
+   "targets": "黄金/Gold Royalty",
+   "source": "youtube.com Bloor Street Capital",
+   "detail": "▸ 核心论点：Gold Royalty（GROY）董事长兼 CEO 认为金价上涨将直接转化为公司盈利，对 2026 年展望乐观。\n▸ 关键依据：基于 4000 美元金价假设，公司预计产生逾 7500 万美元税后自由现金流；2025 年末金银铜同步大涨提供背景支撑。\n▸ 时间与位置：以 2025 年末回顾与 2026 年展望为窗口，测算基准金价 4000 美元；未给出金价目标。\n▸ 标的与操作：黄金及 Gold Royalty（GROY），强烈看多（Bloor Street Capital 访谈）。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "youtube.com Bloor Street Capital",
+     "date": "2025-12-30"
+    }
+   ]
+  },
+  {
+   "date": "2026-01-12",
+   "direction": "强烈看多",
+   "comments": "接受Kitco Mining访谈,阐述推动黄金走高的宏观力量依然稳固,勾勒Gold Royalty从组合建设期迈向自由现金流业务,零负债、约90%利润率,预期未来五年归属黄金当量增长约360%。",
+   "targets": "黄金/Gold Royalty",
+   "source": "youtube.com Kitco Mining",
+   "detail": "▸ 核心论点：推动黄金走高的宏观力量依然稳固，同时公司层面从组合建设期迈向自由现金流阶段。\n▸ 关键依据：Kitco Mining 访谈中给出的公司数据：Gold Royalty 零负债、约90%利润率，预期未来五年归属黄金当量增长约360%。\n▸ 时间与位置：时间窗口为未来五年，增长目标约360%的归属黄金当量；未给出金价点位。\n▸ 标的与操作：黄金与 Gold Royalty；操作上强烈看多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "youtube.com Kitco Mining",
+     "url": "",
+     "date": "2026-01-12"
+    }
+   ]
+  },
+  {
+   "date": "2026-01-04",
+   "direction": "看多",
+   "comments": "围绕债务与货币贬值论述黄金2026年仍将胜出;公司近期以$7,000万从Blackrock World Mining Trust收购巴西Pedra Branca铜金矿特许权,扩张现金生成资产。",
+   "targets": "黄金/铜",
+   "source": "podchaser.com Bloor Street",
+   "detail": "▸ 核心论点：围绕债务与货币贬值论述黄金 2026 年仍将胜出。\n▸ 关键依据：公司近期以 7,000 万美元从 Blackrock World Mining Trust 收购巴西 Pedra Branca 铜金矿特许权，扩张现金生成资产，以行动印证其看多判断。\n▸ 时间与位置：收购发生于近期；未给出具体金价点位。\n▸ 标的与操作：黄金、铜及矿业资产，看多并以并购方式扩张。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "David Garofalo",
+     "url": "podchaser.com Bloor Street",
+     "date": "2026-01-04"
+    }
+   ]
+  }
+ ]
+}

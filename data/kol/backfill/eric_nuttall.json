@@ -1,1 +1,55 @@
-{"kol":"Eric Nuttall","sector":"Energy & Commodities","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":3,"history":[{"date":"2026-01-20","direction":"看多","comments":"Ninepoint Partners 高级组合经理，接受 Investing News 采访明确表示对2026年油气双双看多：天然气是更即时的机会，原油预计下半年发力。强调'无论气还是油，我们都对2026前景保持看多'。","targets":"油气股/天然气/原油","source":"Investing News Network (investingnews.com/eric-nuttall-oil-forecast)"},{"date":"2025-11-17","direction":"看多","comments":"BNN Bloomberg Top Picks 时段推荐能源股 Whitecap Resources、Expand Energy、Antero Resources，延续对油气板块的建设性看多立场（Whitecap 后续回报约48-53%）。","targets":"WCP/EXE/AR 油气股","source":"BNN Bloomberg Top Picks 2025-11-17"},{"date":"2026-08-10","direction":"强烈看多","comments":"BNN Top Picks 称'我们一生中最严重的能源危机仍在持续'：判断伊朗永不主动交出霍尔木兹海峡控制权，中东产量减约700万桶/日、全球库存创纪录去化、SPR逼近最低操作水平；认为油价底部较战前至少高10美元/桶，能源股上行空间显著。推荐 Cenovus、Strathcona、Ovintiv。","targets":"CVE/SCR/OVV 加拿大能源股/原油","source":"BNN Bloomberg Top Picks 2026-08-10 (bnnbloomberg.ca/markets/2026/08/10)"}]}
+{
+ "kol": "Eric Nuttall",
+ "sector": "Energy & Commodities",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2026-01-20",
+   "direction": "看多",
+   "comments": "Ninepoint Partners 高级组合经理，接受 Investing News 采访明确表示对2026年油气双双看多：天然气是更即时的机会，原油预计下半年发力。强调'无论气还是油，我们都对2026前景保持看多'。",
+   "targets": "油气股/天然气/原油",
+   "source": "Investing News Network (investingnews.com/eric-nuttall-oil-forecast)",
+   "detail": "▸ 核心论点：对2026年油气双双看多：天然气是更即时的机会，原油预计下半年发力。\n▸ 关键依据：Ninepoint Partners 高级组合经理，接受 Investing News 采访明确表示无论气还是油都对2026前景保持看多，并给出先气后油的节奏排序。\n▸ 时间与位置：时间节奏：天然气机会更即时，原油看下半年发力；未给出具体点位。\n▸ 标的与操作：油气股、天然气、原油；操作上看多，优先配置天然气敞口。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Investing News Network (investingnews.com/eric-nuttall-oil-forecast)",
+     "url": "",
+     "date": "2026-01-20"
+    }
+   ]
+  },
+  {
+   "date": "2025-11-17",
+   "direction": "看多",
+   "comments": "BNN Bloomberg Top Picks 时段推荐能源股 Whitecap Resources、Expand Energy、Antero Resources，延续对油气板块的建设性看多立场（Whitecap 后续回报约48-53%）。",
+   "targets": "WCP/EXE/AR 油气股",
+   "source": "BNN Bloomberg Top Picks 2025-11-17",
+   "detail": "▸ 核心论点：延续对油气板块的建设性看多立场。\n▸ 关键依据：在 BNN Bloomberg Top Picks 时段给出三只能源股推荐；其中 Whitecap 后续回报约48-53%。\n▸ 时间与位置：2025-11-17 节目当日；未给出具体目标价。\n▸ 标的与操作：推荐买入 Whitecap Resources(WCP)、Expand Energy(EXE)、Antero Resources(AR)。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "BNN Bloomberg Top Picks 2025-11-17"
+    }
+   ]
+  },
+  {
+   "date": "2026-08-10",
+   "direction": "强烈看多",
+   "comments": "BNN Top Picks 称'我们一生中最严重的能源危机仍在持续'：判断伊朗永不主动交出霍尔木兹海峡控制权，中东产量减约700万桶/日、全球库存创纪录去化、SPR逼近最低操作水平；认为油价底部较战前至少高10美元/桶，能源股上行空间显著。推荐 Cenovus、Strathcona、Ovintiv。",
+   "targets": "CVE/SCR/OVV 加拿大能源股/原油",
+   "source": "BNN Bloomberg Top Picks 2026-08-10 (bnnbloomberg.ca/markets/2026/08/10)",
+   "detail": "▸ 核心论点：我们一生中最严重的能源危机仍在持续，油价底部被系统性抬高，能源股上行空间显著。\n▸ 关键依据：判断伊朗永不会主动交出霍尔木兹海峡控制权；中东产量减少约 700 万桶/日；全球库存创纪录去化；美国 SPR 逼近最低可操作水平。\n▸ 时间与位置：认为油价底部较战前水平至少高出 10 美元/桶；未给出具体油价目标点位。\n▸ 标的与操作：原油及能源股强烈看多，BNN Top Picks 推荐 Cenovus、Strathcona、Ovintiv 三只加拿大能源股。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "BNN Bloomberg Top Picks 2026-08-10 (bnnbloomberg.ca/markets/2026/08/10)",
+     "date": "2026-08-10"
+    }
+   ]
+  }
+ ]
+}

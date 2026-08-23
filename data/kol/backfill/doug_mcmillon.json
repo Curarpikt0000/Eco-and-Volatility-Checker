@@ -1,30 +1,57 @@
 {
-  "kol": "Doug McMillon",
-  "sector": "Macro",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 3,
-  "history": [
+ "kol": "Doug McMillon",
+ "sector": "Macro",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2025-05-15",
+   "direction": "看空",
+   "comments": "在沃尔玛Q1 FY26财报电话会上警告更高关税将导致更高价格,尽管公司努力减轻对消费者的冲击。指出对哥斯达黎加、秘鲁、哥伦比亚等国关税正推高香蕉、牛油果、咖啡等进口食品成本,但承诺不让一般商品关税压力传导至食品价格。",
+   "targets": "美国消费/零售/食品通胀",
+   "source": "https://corporate.walmart.com/content/dam/corporate/documents/newsroom/2025/05/15/walmart-releases-q1-fy26-earnings/q1-fy26-earnings-call-transcript.pdf",
+   "detail": "▸ 核心论点：更高关税将导致更高价格，尽管公司努力减轻对消费者的冲击。\n▸ 关键依据：在沃尔玛Q1 FY26财报电话会上指出，对哥斯达黎加、秘鲁、哥伦比亚等国的关税正推高香蕉、牛油果、咖啡等进口食品成本；但承诺不让一般商品的关税压力传导至食品价格。\n▸ 时间与位置：时间点为Q1 FY26财报电话会；未给出具体点位。\n▸ 标的与操作：美国消费/零售与食品通胀，看空消费、看升物价。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-05-15",
-      "direction": "看空",
-      "comments": "在沃尔玛Q1 FY26财报电话会上警告更高关税将导致更高价格,尽管公司努力减轻对消费者的冲击。指出对哥斯达黎加、秘鲁、哥伦比亚等国关税正推高香蕉、牛油果、咖啡等进口食品成本,但承诺不让一般商品关税压力传导至食品价格。",
-      "targets": "美国消费/零售/食品通胀",
-      "source": "https://corporate.walmart.com/content/dam/corporate/documents/newsroom/2025/05/15/walmart-releases-q1-fy26-earnings/q1-fy26-earnings-call-transcript.pdf"
-    },
-    {
-      "date": "2025-08-21",
-      "direction": "看空",
-      "comments": "在Q2 FY26财报会上表示关税影响渐进但成本每周都在上升,中低收入家庭已在改变购买习惯,观察到消费者出现'一点压力'。同时销售增长由交易量与件数驱动而非通胀,公司小幅上调全年调整后EPS指引。",
-      "targets": "美国消费/沃尔玛/零售",
-      "source": "https://abcnews.com/Business/earnings-walmart-target-reveal-tariff-driven-price-hikes/story?id=124876075"
-    },
-    {
-      "date": "2026-01-31",
-      "direction": "中性",
-      "comments": "于2026年1月31日退休卸任沃尔玛CEO(2014-2026在任),继续留任董事会。任内经历关税推动的成本上升与消费者购买行为转变的零售周期。",
-      "targets": "沃尔玛/零售业",
-      "source": "https://corporate.walmart.com/about/leadership/doug-mcmillon"
+     "title": "Doug McMillon",
+     "url": "https://corporate.walmart.com/content/dam/corporate/documents/newsroom/2025/05/15/walmart-releases-q1-fy26-earnings/q1-fy26-earnings-call-transcript.pdf",
+     "date": "2025-05-15"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2025-08-21",
+   "direction": "看空",
+   "comments": "在Q2 FY26财报会上表示关税影响渐进但成本每周都在上升,中低收入家庭已在改变购买习惯,观察到消费者出现'一点压力'。同时销售增长由交易量与件数驱动而非通胀,公司小幅上调全年调整后EPS指引。",
+   "targets": "美国消费/沃尔玛/零售",
+   "source": "https://abcnews.com/Business/earnings-walmart-target-reveal-tariff-driven-price-hikes/story?id=124876075",
+   "detail": "▸ 核心论点：在 Q2 FY26 财报会上指出关税影响渐进但成本每周都在上升，消费者出现「一点压力」。\n▸ 关键依据：中低收入家庭已在改变购买习惯；同时销售增长由交易量与件数驱动而非通胀，显示需求结构而非价格拉动。\n▸ 时间与位置：口径为 FY26 第二季度及全年指引；未给出具体点位。\n▸ 标的与操作：美国消费/零售景气偏空，但沃尔玛自身小幅上调全年调整后 EPS 指引。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://abcnews.com/Business/earnings-walmart-target-reveal-tariff-driven-price-hikes/story?id=124876075",
+     "date": "2025-08-21"
+    }
+   ]
+  },
+  {
+   "date": "2026-01-31",
+   "direction": "中性",
+   "comments": "于2026年1月31日退休卸任沃尔玛CEO(2014-2026在任),继续留任董事会。任内经历关税推动的成本上升与消费者购买行为转变的零售周期。",
+   "targets": "沃尔玛/零售业",
+   "source": "https://corporate.walmart.com/about/leadership/doug-mcmillon",
+   "detail": "▸ 核心论点：沃尔玛 CEO 退休卸任的人事变动，非市场方向判断，属中性。\n▸ 关键依据：2026年1月31日退休卸任沃尔玛 CEO（2014-2026在任），继续留任董事会；任内经历关税推动的成本上升与消费者购买行为转变的零售周期。\n▸ 时间与位置：卸任日期2026年1月31日；未给出具体点位。\n▸ 标的与操作：沃尔玛/零售业；无操作建议。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://corporate.walmart.com/about/leadership/doug-mcmillon",
+     "date": "2026-01-31"
+    }
+   ]
+  }
+ ]
 }

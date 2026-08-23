@@ -1,1 +1,73 @@
-{"kol":"Timothy Arcuri","sector":"Equities","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":4,"history":[{"date":"2025-01-27","direction":"看多","comments":"UBS分析师Arcuri维持NVIDIA买入评级、目标价$185,尽管市场对DeepSeek冲击存疑,仍看好AI芯片需求主线。","targets":"NVDA(目标$185)","source":"https://www.investing.com/news/analyst-ratings/ubs-maintains-nvidia-stock-buy-rating-185-price-target-93CH-3833010"},{"date":"2025-08-21","direction":"看多","comments":"重申NVIDIA买入评级并上调目标价至$205,AI系统需求持续强劲支撑估值上修。","targets":"NVDA(目标$205)","source":"https://price-target.com/2025/08/21/163103/"},{"date":"2025-09-08","direction":"看多","comments":"UBS看好NVIDIA买入,认为AI增长故事稳固延续,重申$205目标价(8月28日重申)。","targets":"NVDA(目标$205)","source":"https://finance.yahoo.com/news/ubs-calls-nvidia-nvda-buy-035937618.html"},{"date":"2026-03-03","direction":"看多","comments":"更新对NVDA/MU/AMD三大美国芯片股看法,长期仍看多全部三家,但基于近期展望调整各自目标价。","targets":"NVDA/MU/AMD","source":"https://www.tipranks.com/news/nvda-vs-mu-vs-amd-top-ubs-analyst-picks-the-best-ai-chip-stock"}]}
+{
+ "kol": "Timothy Arcuri",
+ "sector": "Equities",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 4,
+ "history": [
+  {
+   "date": "2025-01-27",
+   "direction": "看多",
+   "comments": "UBS分析师Arcuri维持NVIDIA买入评级、目标价$185,尽管市场对DeepSeek冲击存疑,仍看好AI芯片需求主线。",
+   "targets": "NVDA(目标$185)",
+   "source": "https://www.investing.com/news/analyst-ratings/ubs-maintains-nvidia-stock-buy-rating-185-price-target-93CH-3833010",
+   "detail": "▸ 核心论点：UBS 分析师维持 NVIDIA 买入评级，看好 AI 芯片需求主线。\n▸ 关键依据：尽管市场对 DeepSeek 带来的冲击存疑，仍认为 AI 芯片需求逻辑不变。\n▸ 时间与位置：目标价 185 美元；未给出明确时间窗口。\n▸ 标的与操作：NVDA，买入评级、看多（Investing.com 报道）。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.investing.com/news/analyst-ratings/ubs-maintains-nvidia-stock-buy-rating-185-price-target-93CH-3833010",
+     "date": "2025-01-27"
+    }
+   ]
+  },
+  {
+   "date": "2025-08-21",
+   "direction": "看多",
+   "comments": "重申NVIDIA买入评级并上调目标价至$205,AI系统需求持续强劲支撑估值上修。",
+   "targets": "NVDA(目标$205)",
+   "source": "https://price-target.com/2025/08/21/163103/",
+   "detail": "▸ 核心论点：重申 NVIDIA 买入评级并上调目标价，看多 AI 系统需求驱动的估值上修。\n▸ 关键依据：公开信息有限，仅检索到：AI 系统需求持续强劲支撑估值上修；原文链接已失效（404），未能补充更多论证细节。\n▸ 时间与位置：目标价上调至 205 美元，未给出达成时间窗口。\n▸ 标的与操作：NVDA，买入。",
+   "detail_status": "thin",
+   "sources": [
+    {
+     "title": "Timothy Arcuri",
+     "url": "https://price-target.com/2025/08/21/163103/",
+     "date": "2025-08-21"
+    }
+   ]
+  },
+  {
+   "date": "2025-09-08",
+   "direction": "看多",
+   "comments": "UBS看好NVIDIA买入,认为AI增长故事稳固延续,重申$205目标价(8月28日重申)。",
+   "targets": "NVDA(目标$205)",
+   "source": "https://finance.yahoo.com/news/ubs-calls-nvidia-nvda-buy-035937618.html",
+   "detail": "▸ 核心论点：UBS 看好 NVIDIA，给予买入评级，认为 AI 增长故事稳固延续。\n▸ 关键依据：Arcuri 判断 AI 相关需求与增长叙事没有出现动摇，是维持买入评级与目标价的核心理由。\n▸ 时间与位置：重申 205 美元目标价（8 月 28 日重申）。\n▸ 标的与操作：NVIDIA（NVDA）看多，评级买入。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://finance.yahoo.com/news/ubs-calls-nvidia-nvda-buy-035937618.html",
+     "date": "2025-09-08"
+    }
+   ]
+  },
+  {
+   "date": "2026-03-03",
+   "direction": "看多",
+   "comments": "更新对NVDA/MU/AMD三大美国芯片股看法,长期仍看多全部三家,但基于近期展望调整各自目标价。",
+   "targets": "NVDA/MU/AMD",
+   "source": "https://www.tipranks.com/news/nvda-vs-mu-vs-amd-top-ubs-analyst-picks-the-best-ai-chip-stock",
+   "detail": "▸ 核心论点：对 NVDA、MU、AMD 长期仍全面看多，一致维持 Buy 评级，仅按近期展望微调目标价。\n▸ 关键依据：与英伟达 CFO Colette Kress 交流后对其网络业务增长与长期利润率转乐观；超大规模厂商已在规划2027年算力扩建，资产负债表稳健，可在收入兑现前先行大额资本开支。\n▸ 时间与位置：2026-03-03；NVDA 目标价维持245美元，MU 由450上调至475美元，AMD 由330下调至310美元。\n▸ 标的与操作：NVDA/MU/AMD 全部维持买入评级。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "NVDA vs. MU vs. AMD – Top UBS Analyst Picks the Best AI Chip Stock",
+     "url": "https://www.tipranks.com/news/nvda-vs-mu-vs-amd-top-ubs-analyst-picks-the-best-ai-chip-stock",
+     "date": "2026-03-03"
+    }
+   ]
+  }
+ ]
+}

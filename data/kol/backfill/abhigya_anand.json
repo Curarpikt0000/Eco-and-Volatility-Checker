@@ -1,30 +1,53 @@
 {
-  "kol": "Abhigya Anand",
-  "sector": "Alternative",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)；另类预言类KOL作民间预期/情绪信号，不按可交易方向严格归类",
-  "count": 3,
-  "history": [
+ "kol": "Abhigya Anand",
+ "sector": "Alternative",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)；另类预言类KOL作民间预期/情绪信号，不按可交易方向严格归类",
+ "count": 3,
+ "history": [
+  {
+   "date": "2025-01-02",
+   "direction": "未找到",
+   "comments": "印度吠陀占星少年发布2025世界预测，含对俄罗斯与全球趋势的星象解读，属地缘/灾害类预言，无明确市场方向。",
+   "targets": "地缘/全球",
+   "source": "https://www.dkscore.com/jyotishmedium/discover-vedic-astrology-insights-on-predictions-and-global-events-1551",
+   "detail": "▸ 核心论点：发布 2025 世界预测，属地缘 / 灾害类星象预言，无明确市场方向。\n▸ 关键依据：公开信息有限，仅检索到：印度吠陀占星少年对俄罗斯与全球趋势的星象解读，不涉及可验证的市场数据或资产逻辑。\n▸ 时间与位置：预测面向 2025 年全年；未给出具体点位。\n▸ 标的与操作：地缘 / 全球，无可执行的资产操作建议。",
+   "detail_status": "thin",
+   "sources": [
     {
-      "date": "2025-01-02",
-      "direction": "未找到",
-      "comments": "印度吠陀占星少年发布2025世界预测，含对俄罗斯与全球趋势的星象解读，属地缘/灾害类预言，无明确市场方向。",
-      "targets": "地缘/全球",
-      "source": "https://www.dkscore.com/jyotishmedium/discover-vedic-astrology-insights-on-predictions-and-global-events-1551"
-    },
-    {
-      "date": "2025-12-25",
-      "direction": "未找到",
-      "comments": "发布2026年预测，标注具体地理风险区（东亚/朝鲜半岛等），称对应星象压力点，警示环境与安全脆弱性，属灾害预警非市场判断。",
-      "targets": "地缘/灾害",
-      "source": "https://www.dkscore.com/jyotishmedium/2026-predictions-by-abhigya-anand-2176"
-    },
-    {
-      "date": "2026-01-23",
-      "direction": "强烈看多",
-      "comments": "2026年预言：太平洋巨型地震、黄金价格暴涨4倍、AI叛乱危机，强调极端自然灾害与经济地缘剧变，对黄金极度看多（民间预期信号）。",
-      "targets": "黄金",
-      "source": "https://www.gate.com/news/detail/15524685"
+     "title": "Abhigya Anand",
+     "url": "https://www.dkscore.com/jyotishmedium/discover-vedic-astrology-insights-on-predictions-and-global-events-1551",
+     "date": "2025-01-02"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2025-12-25",
+   "direction": "未找到",
+   "comments": "发布2026年预测，标注具体地理风险区（东亚/朝鲜半岛等），称对应星象压力点，警示环境与安全脆弱性，属灾害预警非市场判断。",
+   "targets": "地缘/灾害",
+   "source": "https://www.dkscore.com/jyotishmedium/2026-predictions-by-abhigya-anand-2176",
+   "detail": "▸ 核心论点：2026年多个地理区域面临环境与安全脆弱性风险，属灾害预警而非市场方向判断。\n▸ 关键依据：标注具体地理风险区(东亚/朝鲜半岛等)，称其对应星象压力点。\n▸ 时间与位置：2025-12-25 发布，针对2026年；未给出具体点位。\n▸ 标的与操作：地缘/灾害主题；无市场多空判断与操作建议。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://www.dkscore.com/jyotishmedium/2026-predictions-by-abhigya-anand-2176"
+    }
+   ]
+  },
+  {
+   "date": "2026-01-23",
+   "direction": "强烈看多",
+   "comments": "2026年预言：太平洋巨型地震、黄金价格暴涨4倍、AI叛乱危机，强调极端自然灾害与经济地缘剧变，对黄金极度看多（民间预期信号）。",
+   "targets": "黄金",
+   "source": "https://www.gate.com/news/detail/15524685",
+   "detail": "▸ 核心论点：2026年将出现极端自然灾害与经济地缘剧变，其中黄金价格暴涨4倍，对黄金极度看多。\n▸ 关键依据：预言内容包括太平洋巨型地震、黄金暴涨4倍、AI叛乱危机；属民间预期信号而非分析性论证。\n▸ 时间与位置：2026-01-23 发布，针对2026全年；除「涨4倍」外未给出具体点位。\n▸ 标的与操作：黄金；强烈看多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://www.gate.com/news/detail/15524685"
+    }
+   ]
+  }
+ ]
 }

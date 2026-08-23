@@ -1,23 +1,41 @@
 {
-  "kol": "Gareth Soloway",
-  "sector": "Precious Metals",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
-  "count": 2,
-  "history": [
+ "kol": "Gareth Soloway",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+ "count": 2,
+ "history": [
+  {
+   "date": "2025-09-23",
+   "direction": "看多",
+   "comments": "VerifiedInvesting 首席策略师认为黄金处于看多盘整，短期可能先回调至3500美元，长期看向6000美元；白银突破后有望上探50美元；同时对股市健康度存忧，预期约10%回调。",
+   "targets": "黄金/白银/美股",
+   "source": "https://investingnews.com/gareth-soloway-september-2025/",
+   "detail": "▸ 核心论点：黄金处于看多盘整，短期或先回调、长期空间巨大；同时对股市健康度存忧。\n▸ 关键依据：VerifiedInvesting 首席策略师从技术形态判断金价属多头整理结构；股市方面对内部健康度提出质疑。\n▸ 时间与位置：黄金短期可能先回调至 3,500 美元，长期看向 6,000 美元；白银突破后有望上探 50 美元；预期股市约 10% 回调。\n▸ 标的与操作：黄金、白银看多（回调即买点）；美股谨慎、预留回调空间。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-09-23",
-      "direction": "看多",
-      "comments": "VerifiedInvesting 首席策略师认为黄金处于看多盘整，短期可能先回调至3500美元，长期看向6000美元；白银突破后有望上探50美元；同时对股市健康度存忧，预期约10%回调。",
-      "targets": "黄金/白银/美股",
-      "source": "https://investingnews.com/gareth-soloway-september-2025/"
-    },
-    {
-      "date": "2026-01-28",
-      "direction": "看空",
-      "comments": "认为市场处于'金融危机'区域，对股票、黄金、大宗商品与比特币提示警示；预期标普500持续走弱可能下探6100甚至5600，比特币短期或先反弹。",
-      "targets": "美股/黄金/比特币",
-      "source": "https://wordupnews.com/news-video/financial-crisis-zone-traders-warning-for-gold-stocks-bitcoin-gareth-soloway/"
+     "title": "",
+     "url": "https://investingnews.com/gareth-soloway-september-2025/",
+     "date": "2025-09-23"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-01-28",
+   "direction": "看空",
+   "comments": "认为市场处于'金融危机'区域，对股票、黄金、大宗商品与比特币提示警示；预期标普500持续走弱可能下探6100甚至5600，比特币短期或先反弹。",
+   "targets": "美股/黄金/比特币",
+   "source": "https://wordupnews.com/news-video/financial-crisis-zone-traders-warning-for-gold-stocks-bitcoin-gareth-soloway/",
+   "detail": "▸ 核心论点：认为市场处于「金融危机」区域，对股票、黄金、大宗商品与比特币全面提示警示。\n▸ 关键依据：判断依据为对多资产的整体风险评估，预期标普500持续走弱；比特币短期或先出现反弹后再走弱。\n▸ 时间与位置：标普500下行目标6100，甚至可能下探5600；未给出黄金与商品的具体点位。\n▸ 标的与操作：美股、黄金、比特币；操作上看空/防守，比特币短期可能有反弹但不改警示立场。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://wordupnews.com/news-video/financial-crisis-zone-traders-warning-for-gold-stocks-bitcoin-gareth-soloway/",
+     "date": "2026-01-28"
+    }
+   ]
+  }
+ ]
 }

@@ -1,23 +1,41 @@
 {
-  "kol": "Philippe Laffont（Coatue Management 创始人 / 首席投资官）",
-  "sector": "股权市场",
-  "backfill_date": "2026-08-22",
-  "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
-  "count": 2,
-  "history": [
+ "kol": "Philippe Laffont（Coatue Management 创始人 / 首席投资官）",
+ "sector": "股权市场",
+ "backfill_date": "2026-08-22",
+ "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
+ "count": 2,
+ "history": [
+  {
+   "date": "2026-06-23",
+   "direction": "看多",
+   "comments": "CNBC《Squawk Box》专访 Coatue Management 创始人兼组合经理 Philippe Laffont（同日 Squawk Pod 播出加长版）。他讨论 AI 热潮现状、AI 带来的电力需求、SpaceX IPO、芯片股与比特币。对「是不是泡沫」的问题，他反问的是估值而非方向：以英伟达为例，按明年盈利只有约 13 倍市盈率，「问题不是该不该买，而是什么价位买——它已经这么便宜了」。同时说明自己重仓半导体设备（semi cap）股，因为它们提供制造 AI 芯片所需的材料与设备。",
+   "targets": "美股/AI/英伟达/半导体设备/比特币",
+   "source": "https://www.cnbc.com/video/2026/06/23/billionaire-investor-philippe-laffont-on-why-he-owns-semi-cap-stocks.html",
+   "detail": "▸ 核心论点：AI 热潮尚未泡沫化，该争论的是买入价位而非方向，看多 AI 产业链。\n▸ 关键依据：以英伟达为例，按明年盈利只有约 13 倍市盈率，他反问「问题不是该不该买，而是什么价位买——它已经这么便宜了」；访谈同时讨论 AI 带来的电力需求、SpaceX IPO、芯片股与比特币。\n▸ 时间与位置：估值以明年盈利为基准；未给出具体目标价。\n▸ 标的与操作：重仓半导体设备（semi cap）股，因其提供制造 AI 芯片所需的材料与设备；看多美股 AI 与英伟达。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2026-06-23",
-      "direction": "看多",
-      "comments": "CNBC《Squawk Box》专访 Coatue Management 创始人兼组合经理 Philippe Laffont（同日 Squawk Pod 播出加长版）。他讨论 AI 热潮现状、AI 带来的电力需求、SpaceX IPO、芯片股与比特币。对「是不是泡沫」的问题，他反问的是估值而非方向：以英伟达为例，按明年盈利只有约 13 倍市盈率，「问题不是该不该买，而是什么价位买——它已经这么便宜了」。同时说明自己重仓半导体设备（semi cap）股，因为它们提供制造 AI 芯片所需的材料与设备。",
-      "targets": "美股/AI/英伟达/半导体设备/比特币",
-      "source": "https://www.cnbc.com/video/2026/06/23/billionaire-investor-philippe-laffont-on-why-he-owns-semi-cap-stocks.html"
-    },
-    {
-      "date": "2026-07-23",
-      "direction": "看多",
-      "comments": "24/7 Wall St 梳理 Laffont 的科技持仓五大重点标的。除 AI 芯片链外，最出人意料的名字是 GE Vernova（NYSE: GEV）——它位于芯片的上游一层，生产燃气轮机、电网设备与电气化硬件，而超大规模云厂商正在以吉瓦为单位下单。文章的逻辑是「没有电子就没有 AI 加速器」，Laffont 因此把电力基础设施当作 AI 主题的延伸下注。文中亦提到台积电已承诺 560 亿美元用于 AI 芯片产能。",
-      "targets": "美股/AI/GE Vernova/台积电/半导体",
-      "source": "https://247wallst.com/investing/2026/07/23/billionaire-investor-philippe-laffonts-top-5-tech-picks"
+     "title": "Philippe Laffont（Coatue Management 创始人 / 首席投资官）",
+     "url": "https://www.cnbc.com/video/2026/06/23/billionaire-investor-philippe-laffont-on-why-he-owns-semi-cap-stocks.html",
+     "date": "2026-06-23"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-07-23",
+   "direction": "看多",
+   "comments": "24/7 Wall St 梳理 Laffont 的科技持仓五大重点标的。除 AI 芯片链外，最出人意料的名字是 GE Vernova（NYSE: GEV）——它位于芯片的上游一层，生产燃气轮机、电网设备与电气化硬件，而超大规模云厂商正在以吉瓦为单位下单。文章的逻辑是「没有电子就没有 AI 加速器」，Laffont 因此把电力基础设施当作 AI 主题的延伸下注。文中亦提到台积电已承诺 560 亿美元用于 AI 芯片产能。",
+   "targets": "美股/AI/GE Vernova/台积电/半导体",
+   "source": "https://247wallst.com/investing/2026/07/23/billionaire-investor-philippe-laffonts-top-5-tech-picks",
+   "detail": "▸ 核心论点：把电力基础设施当作 AI 主题的延伸下注：没有电子就没有 AI 加速器。\n▸ 关键依据：24/7 Wall St 梳理其科技持仓五大重点标的，最出人意料的是 GE Vernova（NYSE: GEV）——位于芯片上游一层，生产燃气轮机、电网设备与电气化硬件，而超大规模云厂商正在以吉瓦为单位下单；文中亦提到台积电已承诺560亿美元用于 AI 芯片产能。\n▸ 时间与位置：未给出具体点位与目标价。\n▸ 标的与操作：美股 AI 链：GE Vernova、台积电、AI 芯片与半导体；操作上看多并向上游电力基础设施延伸配置。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://247wallst.com/investing/2026/07/23/billionaire-investor-philippe-laffonts-top-5-tech-picks",
+     "date": "2026-07-23"
+    }
+   ]
+  }
+ ]
 }

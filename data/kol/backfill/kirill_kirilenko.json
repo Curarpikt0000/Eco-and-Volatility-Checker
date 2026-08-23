@@ -1,23 +1,41 @@
 {
-  "kol": "Kirill Kirilenko",
-  "sector": "贵金属",
-  "backfill_date": "2026-08-22",
-  "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
-  "count": 2,
-  "history": [
+ "kol": "Kirill Kirilenko",
+ "sector": "贵金属",
+ "backfill_date": "2026-08-22",
+ "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
+ "count": 2,
+ "history": [
+  {
+   "date": "2025-08-14",
+   "direction": "看多",
+   "comments": "CNBC 金价报道引述 CRU 高级贵金属分析师 Kirill Kirilenko 的判断：当日美国经济数据偏热推升美元与收益率，冲淡了市场对美联储大幅降息的预期，金价随之走弱；但 Kirilenko 认为「降息才是重新点燃这轮涨势的关键」，并预计黄金很可能在年底或次年年初重新测试 3,500 美元/盎司的历史高点。属于回调中的明确看多表述。",
+   "targets": "黄金",
+   "source": "https://www.cnbc.com/2025/08/14/gold-extends-rise-on-fed-rate-cut-hopes-softer-dollar.html",
+   "detail": "▸ 核心论点：回调中的明确看多：降息才是重新点燃这轮涨势的关键。\n▸ 关键依据：当日美国经济数据偏热推升美元与收益率，冲淡了市场对美联储大幅降息的预期，金价随之走弱；CRU 高级贵金属分析师认为这只是降息预期错位造成的短期压制。\n▸ 时间与位置：预计黄金很可能在年底或次年年初重新测试3500美元/盎司的历史高点。\n▸ 标的与操作：黄金；操作上逢回调看多、等待降息催化。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-08-14",
-      "direction": "看多",
-      "comments": "CNBC 金价报道引述 CRU 高级贵金属分析师 Kirill Kirilenko 的判断：当日美国经济数据偏热推升美元与收益率，冲淡了市场对美联储大幅降息的预期，金价随之走弱；但 Kirilenko 认为「降息才是重新点燃这轮涨势的关键」，并预计黄金很可能在年底或次年年初重新测试 3,500 美元/盎司的历史高点。属于回调中的明确看多表述。",
-      "targets": "黄金",
-      "source": "https://www.cnbc.com/2025/08/14/gold-extends-rise-on-fed-rate-cut-hopes-softer-dollar.html"
-    },
-    {
-      "date": "2026-03-16",
-      "direction": "看多",
-      "comments": "CRU Thought Leadership 专文《How high can gold prices rise?》，作者 Kirill Kirilenko（CRU 贵金属市场服务负责人）。他指出一年前金价还在 3,000 美元/盎司附近，撰文时已升至约 5,200 美元/盎司，并认为如此量级的涨幅往往会引来「老一套」的解释，需要重新审视真正的驱动力（央行购金、去美元化储备再配置、实际利率与财政风险）。文章的核心问题是金价还能涨多高，整体基调延续对结构性驱动的多头论证。",
-      "targets": "黄金",
-      "source": "https://www.crugroup.com/en/communities/thought-leadership/2026/how-high-can-gold-prices-rise"
+     "title": "",
+     "url": "https://www.cnbc.com/2025/08/14/gold-extends-rise-on-fed-rate-cut-hopes-softer-dollar.html",
+     "date": "2025-08-14"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-03-16",
+   "direction": "看多",
+   "comments": "CRU Thought Leadership 专文《How high can gold prices rise?》，作者 Kirill Kirilenko（CRU 贵金属市场服务负责人）。他指出一年前金价还在 3,000 美元/盎司附近，撰文时已升至约 5,200 美元/盎司，并认为如此量级的涨幅往往会引来「老一套」的解释，需要重新审视真正的驱动力（央行购金、去美元化储备再配置、实际利率与财政风险）。文章的核心问题是金价还能涨多高，整体基调延续对结构性驱动的多头论证。",
+   "targets": "黄金",
+   "source": "https://www.crugroup.com/en/communities/thought-leadership/2026/how-high-can-gold-prices-rise",
+   "detail": "▸ 核心论点：金价的量级涨幅需要重新审视真正驱动力，整体延续对结构性驱动的多头论证。\n▸ 关键依据：一年前金价还在约 3,000 美元 / 盎司，撰文时已升至约 5,200 美元 / 盎司；作者认为这种涨幅常引来「老一套」解释，真正驱动是央行购金、去美元化储备再配置、实际利率与财政风险。\n▸ 时间与位置：参照点为 3,000 → 5,200 美元 / 盎司；文章主题是金价还能涨多高，未给出具体目标价。\n▸ 标的与操作：黄金，看多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Kirill Kirilenko",
+     "url": "https://www.crugroup.com/en/communities/thought-leadership/2026/how-high-can-gold-prices-rise",
+     "date": "2026-03-16"
+    }
+   ]
+  }
+ ]
 }

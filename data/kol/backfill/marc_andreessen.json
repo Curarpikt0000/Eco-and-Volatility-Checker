@@ -1,23 +1,41 @@
 {
-  "kol": "Marc Andreessen",
-  "sector": "Macro",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 2,
-  "history": [
+ "kol": "Marc Andreessen",
+ "sector": "Macro",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 2,
+ "history": [
+  {
+   "date": "2025-11-25",
+   "direction": "强烈看多",
+   "comments": "在a16z播客发布2026展望,围绕AI时间线、美中竞争与'AI的价格'展开,延续其对AI技术乐观的强烈看多立场,其firm激进押注AI初创(2025年7月领投Thinking Machines Lab创纪录20亿美元种子轮,估值120亿)。",
+   "targets": "AI/科技股/风险投资",
+   "source": "https://a16z.com/podcasts/a16z-show/",
+   "detail": "▸ 核心论点：延续对 AI 技术的强烈乐观，发布 2026 年展望。\n▸ 关键依据：播客围绕 AI 时间线、美中竞争与「AI 的价格」展开；其 firm 激进押注 AI 初创——2025 年 7 月领投 Thinking Machines Lab 创纪录的 20 亿美元种子轮，估值 120 亿美元。\n▸ 时间与位置：展望面向 2026 年；未给出具体点位。\n▸ 标的与操作：AI / 科技股 / 风险投资，重仓看多。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-11-25",
-      "direction": "强烈看多",
-      "comments": "在a16z播客发布2026展望,围绕AI时间线、美中竞争与'AI的价格'展开,延续其对AI技术乐观的强烈看多立场,其firm激进押注AI初创(2025年7月领投Thinking Machines Lab创纪录20亿美元种子轮,估值120亿)。",
-      "targets": "AI/科技股/风险投资",
-      "source": "https://a16z.com/podcasts/a16z-show/"
-    },
-    {
-      "date": "2026-01-01",
-      "direction": "看多",
-      "comments": "被美联储任命进入研究AI对生产率与就业影响的新任务小组。作为激进押注AI初创的风投,被列为预测'超通缩'(hyper-deflation)时代的阵营之一,即认为AI将大幅压低成本与价格,与美联储关于AI的通胀辩论形成张力。",
-      "targets": "AI/宏观通胀/美联储",
-      "source": "https://netzender.com/ais-costly-build-out-complicates-the-feds-inflation-fight"
+     "title": "Marc Andreessen",
+     "url": "https://a16z.com/podcasts/a16z-show/",
+     "date": "2025-11-25"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-01-01",
+   "direction": "看多",
+   "comments": "被美联储任命进入研究AI对生产率与就业影响的新任务小组。作为激进押注AI初创的风投,被列为预测'超通缩'(hyper-deflation)时代的阵营之一,即认为AI将大幅压低成本与价格,与美联储关于AI的通胀辩论形成张力。",
+   "targets": "AI/宏观通胀/美联储",
+   "source": "https://netzender.com/ais-costly-build-out-complicates-the-feds-inflation-fight",
+   "detail": "▸ 核心论点：被列为预测 AI 带来「超通缩」（hyper-deflation）时代的阵营，即认为 AI 将大幅压低成本与价格。\n▸ 关键依据：身份背景是被美联储任命进入研究 AI 对生产率与就业影响的新任务小组；作为激进押注 AI 初创的风投，其超通缩判断与美联储关于 AI 是否推升通胀的辩论形成张力。\n▸ 时间与位置：未给出具体点位与时间窗口。\n▸ 标的与操作：AI 主题、宏观通胀与美联储政策；对 AI 资产偏多、对通胀预期偏空。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://netzender.com/ais-costly-build-out-complicates-the-feds-inflation-fight",
+     "date": "2026-01-01"
+    }
+   ]
+  }
+ ]
 }

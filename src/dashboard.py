@@ -690,15 +690,18 @@ def _kol_history_payload(kol_history):
         rows = []
         for r in recs:
             last = r.get("last_date", "")
-            # 仅当该条是「深度摘要对应的那一天」时才挂 detail, 避免把今天的
-            # 摘要错误地贴到历史观点上(那会是伪造)。
-            if dp and last and dp.get("date") and last >= dp["date"]:
+            # ★优先用该历史条目自带的 detail(2026-08-23 全量回填, 369 条 100% 覆盖);
+            #   没有自带的, 才看是否匹配「今天深度抓取」那一条。两者都无则留空 ——
+            #   绝不把某一天的摘要贴到别的日期上(那是伪造)。
+            det = (r.get("detail") or "").strip()
+            srcs = r.get("sources") or []
+            if not det and dp and last and dp.get("date") and last >= dp["date"]:
                 det, srcs = dp["d"], dp["src"]
-            else:
-                det, srcs = "", []
+            if not srcs and r.get("source"):
+                srcs = [{"url": r.get("source")}]
             rows.append([r.get("first_date", ""), last,
                          r.get("direction", ""), r.get("comments", ""),
-                         r.get("targets", ""), r.get("source", ""), det, srcs])
+                         r.get("targets", ""), r.get("source", ""), det, srcs[:4]])
         out[kol] = {"s": m.get("standing", ""), "f": m.get("focus", ""), "h": rows}
     # </ 会提前闭合 <script> 标签 → 转义(XSS/断标签双重防护)
     return json.dumps(out, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")

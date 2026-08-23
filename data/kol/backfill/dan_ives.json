@@ -1,44 +1,85 @@
 {
-  "kol": "Dan Ives",
-  "sector": "Equities",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
-  "count": 5,
-  "history": [
+ "kol": "Dan Ives",
+ "sector": "Equities",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+ "count": 5,
+ "history": [
+  {
+   "date": "2025-01-15",
+   "direction": "强烈看多",
+   "comments": "Wedbush 预期 2025 年科技股整体上涨约 25%，点名 10 只受益 AI 浪潮的股票(Nvidia/微软/Palantir/Tesla/Alphabet/苹果等)，看好 AI 革命驱动的持续行情。",
+   "targets": "美股科技股/AI",
+   "source": "https://finance.yahoo.com/news/analysts-reveal-top-ai-stocks-155738138.html",
+   "detail": "▸ 核心论点：预期2025年科技股整体上涨约25%，看好AI革命驱动的持续行情。\n▸ 关键依据：Wedbush点名10只受益AI浪潮的股票，包括英伟达、微软、Palantir、特斯拉、Alphabet、苹果等，认为AI资本开支与应用落地是核心驱动。\n▸ 时间与位置：时间窗口为2025年全年，指数级涨幅预期约25%；未给出个股目标价。\n▸ 标的与操作：美股科技股/AI，强烈看多，建议配置上述组合。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-01-15",
-      "direction": "强烈看多",
-      "comments": "Wedbush 预期 2025 年科技股整体上涨约 25%，点名 10 只受益 AI 浪潮的股票(Nvidia/微软/Palantir/Tesla/Alphabet/苹果等)，看好 AI 革命驱动的持续行情。",
-      "targets": "美股科技股/AI",
-      "source": "https://finance.yahoo.com/news/analysts-reveal-top-ai-stocks-155738138.html"
-    },
-    {
-      "date": "2025-04-07",
-      "direction": "看空",
-      "comments": "在 Trump Liberation Day 关税冲击、标普濒临熊市之际，将 Tesla 12 个月目标价由 550 大砍至 315 美元(降 43%)，称 Tesla 品牌已沦为全球政治符号，对该标的转谨慎。",
-      "targets": "Tesla/美股",
-      "source": "https://www.businessinsider.com/tesla-dan-ives-wedbush-price-target-cut-2025-4"
-    },
-    {
-      "date": "2025-11-28",
-      "direction": "强烈看多",
-      "comments": "宣称当前是 Nvidia 的天下、其它公司都在交租，英伟达芯片需求供给比达 12:1、库存售罄至 2026，判定市场处于 risk-on，科技牛市将延续到 2026 年。",
-      "targets": "Nvidia/美股科技股",
-      "source": "https://intellectia.ai/news/stock/dan-ives-declares-its-nvidias-world-with-others-paying-rent-anticipates-major-tech-surge-through-2026"
-    },
-    {
-      "date": "2025-12-27",
-      "direction": "强烈看多",
-      "comments": "维持 Nvidia 2026 年底 250 美元目标价，理由是市场低估其 AI 建设带来的盈利潜力(低估约 15-20%)及中国市场重新开放的利好，网络业务收入同比暴增 162%。",
-      "targets": "Nvidia",
-      "source": "https://www.ainvest.com/news/nvidia-250-horizon-analyst-confidence-2026-growth-trajectory-2512/"
-    },
-    {
-      "date": "2025-12-30",
-      "direction": "强烈看多",
-      "comments": "列出 2026 年 Top 5 AI 选股，除 Nvidia 外还推荐三只 Magnificent Seven 成分股加一只 cult 股和一只软件股，认为 AI 交易主线在 2026 年继续走强。",
-      "targets": "美股科技股/AI",
-      "source": "https://www.morningstar.com/news/marketwatch/2025123073/techs-biggest-bull-lists-his-top-5-ai-stocks-for-2026-and-nvidias-isnt-one-of-them"
+     "title": "Dan Ives",
+     "url": "https://finance.yahoo.com/news/analysts-reveal-top-ai-stocks-155738138.html",
+     "date": "2025-01-15"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2025-04-07",
+   "direction": "看空",
+   "comments": "在 Trump Liberation Day 关税冲击、标普濒临熊市之际，将 Tesla 12 个月目标价由 550 大砍至 315 美元(降 43%)，称 Tesla 品牌已沦为全球政治符号，对该标的转谨慎。",
+   "targets": "Tesla/美股",
+   "source": "https://www.businessinsider.com/tesla-dan-ives-wedbush-price-target-cut-2025-4",
+   "detail": "▸ 核心论点：Tesla 品牌已沦为全球政治符号，对该标的由多转谨慎。\n▸ 关键依据：Trump「Liberation Day」关税冲击、标普濒临熊市；据此将12个月目标价由550美元大砍至315美元，降幅43%。\n▸ 时间与位置：2025-04-07；目标价550→315美元。\n▸ 标的与操作：Tesla、美股；下调目标价、转看空。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://www.businessinsider.com/tesla-dan-ives-wedbush-price-target-cut-2025-4"
+    }
+   ]
+  },
+  {
+   "date": "2025-11-28",
+   "direction": "强烈看多",
+   "comments": "宣称当前是 Nvidia 的天下、其它公司都在交租，英伟达芯片需求供给比达 12:1、库存售罄至 2026，判定市场处于 risk-on，科技牛市将延续到 2026 年。",
+   "targets": "Nvidia/美股科技股",
+   "source": "https://intellectia.ai/news/stock/dan-ives-declares-its-nvidias-world-with-others-paying-rent-anticipates-major-tech-surge-through-2026",
+   "detail": "▸ 核心论点：当前是 Nvidia 的天下、其它公司都在交租，市场处于 risk-on，科技牛市将延续到2026年。\n▸ 关键依据：英伟达芯片需求供给比达 12:1，库存已售罄至2026年。\n▸ 时间与位置：2025-11-28；判断牛市延续到2026年，未给出具体目标价。\n▸ 标的与操作：Nvidia、美股科技股；强烈看多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://intellectia.ai/news/stock/dan-ives-declares-its-nvidias-world-with-others-paying-rent-anticipates-major-tech-surge-through-2026"
+    }
+   ]
+  },
+  {
+   "date": "2025-12-27",
+   "direction": "强烈看多",
+   "comments": "维持 Nvidia 2026 年底 250 美元目标价，理由是市场低估其 AI 建设带来的盈利潜力(低估约 15-20%)及中国市场重新开放的利好，网络业务收入同比暴增 162%。",
+   "targets": "Nvidia",
+   "source": "https://www.ainvest.com/news/nvidia-250-horizon-analyst-confidence-2026-growth-trajectory-2512/",
+   "detail": "▸ 核心论点：维持 Nvidia 2026年底250美元目标价，强烈看多。\n▸ 关键依据：理由是市场低估其 AI 建设带来的盈利潜力（低估约15-20%），叠加中国市场重新开放的利好；数据上网络业务收入同比暴增162%。\n▸ 时间与位置：2026年底目标价250美元；估值低估幅度约15%-20%。\n▸ 标的与操作：Nvidia；操作上看多、买入持有。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.ainvest.com/news/nvidia-250-horizon-analyst-confidence-2026-growth-trajectory-2512/",
+     "date": "2025-12-27"
+    }
+   ]
+  },
+  {
+   "date": "2025-12-30",
+   "direction": "强烈看多",
+   "comments": "列出 2026 年 Top 5 AI 选股，除 Nvidia 外还推荐三只 Magnificent Seven 成分股加一只 cult 股和一只软件股，认为 AI 交易主线在 2026 年继续走强。",
+   "targets": "美股科技股/AI",
+   "source": "https://www.morningstar.com/news/marketwatch/2025123073/techs-biggest-bull-lists-his-top-5-ai-stocks-for-2026-and-nvidias-isnt-one-of-them",
+   "detail": "▸ 核心论点：AI交易主线在2026年继续走强，列出2026年Top 5 AI选股。\n▸ 关键依据：选股构成为：除英伟达外，还推荐三只Magnificent Seven成分股，加一只cult股和一只软件股，反映其对AI资本开支链条延续性的判断。\n▸ 时间与位置：未给出具体目标价；时间窗口为2026年全年。\n▸ 标的与操作：美股科技股/AI，强烈看多，建议配置上述个股组合。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Dan Ives",
+     "url": "https://www.morningstar.com/news/marketwatch/2025123073/techs-biggest-bull-lists-his-top-5-ai-stocks-for-2026-and-nvidias-isnt-one-of-them",
+     "date": "2025-12-30"
+    }
+   ]
+  }
+ ]
 }

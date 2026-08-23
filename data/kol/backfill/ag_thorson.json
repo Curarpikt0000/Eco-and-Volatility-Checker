@@ -1,30 +1,55 @@
 {
-  "kol": "AG Thorson",
-  "sector": "Precious Metals",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
-  "count": 3,
-  "history": [
+ "kol": "AG Thorson",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2026-01-19",
+   "direction": "强烈看多",
+   "comments": "白银正在垂直拉升，未来数日/数周可能急冲至120-140美元；一旦白银打出最终的喷发式高点，随后可能出现30%-50%的恐怖回调再进入盘整。",
+   "targets": "白银/黄金",
+   "source": "https://www.silver-phoenix500.com/authors/ag-thorson",
+   "detail": "▸ 核心论点：白银正在垂直拉升，未来数日/数周可能急冲，但喷发式高点之后将出现剧烈回调。\n▸ 关键依据：依据是当前的垂直拉升形态属于终局加速（blow-off）特征，一旦打出最终喷发式高点，随后可能出现30%-50%的恐怖回调再进入盘整。\n▸ 时间与位置：目标区间120-140美元，时间窗口为「未来数日/数周」；回调幅度预估30%-50%。\n▸ 标的与操作：白银、黄金，短期强烈看多但需准备兑现，冲高后转为规避。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2026-01-19",
-      "direction": "强烈看多",
-      "comments": "白银正在垂直拉升，未来数日/数周可能急冲至120-140美元；一旦白银打出最终的喷发式高点，随后可能出现30%-50%的恐怖回调再进入盘整。",
-      "targets": "白银/黄金",
-      "source": "https://www.silver-phoenix500.com/authors/ag-thorson"
-    },
-    {
-      "date": "2026-05-08",
-      "direction": "看空",
-      "comments": "2025年金银创纪录大涨后，市场正在盘整消化，判断年中前将出现回落低点（mid-year lows），之后才迎来下一轮主升浪，短期偏谨慎。",
-      "targets": "黄金/白银",
-      "source": "https://www.fxempire.com/forecasts/article/gold-and-silver-forecast-mid-year-lows-ahead-before-the-next-major-bull-run-1596677"
-    },
-    {
-      "date": "2026-07-24",
-      "direction": "中性",
-      "comments": "贵金属周初大涨但因中东局势升级而回落，金价复苏突然停滞，短线走势陷入僵持，观望为主。",
-      "targets": "黄金/白银",
-      "source": "https://www.gold-eagle.com/authors/ag-thorson"
+     "title": "AG Thorson",
+     "url": "https://www.silver-phoenix500.com/authors/ag-thorson",
+     "date": "2026-01-19"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-05-08",
+   "direction": "看空",
+   "comments": "2025年金银创纪录大涨后，市场正在盘整消化，判断年中前将出现回落低点（mid-year lows），之后才迎来下一轮主升浪，短期偏谨慎。",
+   "targets": "黄金/白银",
+   "source": "https://www.fxempire.com/forecasts/article/gold-and-silver-forecast-mid-year-lows-ahead-before-the-next-major-bull-run-1596677",
+   "detail": "▸ 核心论点：2025年金银创纪录大涨后市场正在盘整消化，短期偏谨慎，下一轮主升浪要等回落低点之后。\n▸ 关键依据：判断年中前将出现回落低点(mid-year lows)，此前的盘整属对纪录涨幅的消化。\n▸ 时间与位置：2026-05-08 发布；时间窗为2026年年中前见低；未给出具体点位。\n▸ 标的与操作：黄金、白银；短期看空/观望，待年中低点后再介入。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://www.fxempire.com/forecasts/article/gold-and-silver-forecast-mid-year-lows-ahead-before-the-next-major-bull-run-1596677"
+    }
+   ]
+  },
+  {
+   "date": "2026-07-24",
+   "direction": "中性",
+   "comments": "贵金属周初大涨但因中东局势升级而回落，金价复苏突然停滞，短线走势陷入僵持，观望为主。",
+   "targets": "黄金/白银",
+   "source": "https://www.gold-eagle.com/authors/ag-thorson",
+   "detail": "▸ 核心论点：贵金属短线走势陷入僵持，以观望为主。\n▸ 关键依据：公开信息有限，仅检索到：周初大涨后因中东局势升级而回落，金价复苏突然停滞。\n▸ 时间与位置：本周内的短线僵持；未给出具体点位。\n▸ 标的与操作：黄金、白银，观望。",
+   "detail_status": "thin",
+   "sources": [
+    {
+     "title": "AG Thorson",
+     "url": "https://www.gold-eagle.com/authors/ag-thorson",
+     "date": "2026-07-24"
+    }
+   ]
+  }
+ ]
 }

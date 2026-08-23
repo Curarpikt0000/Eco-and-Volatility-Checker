@@ -1,23 +1,41 @@
 {
-  "kol": "Chad Jones",
-  "sector": "Macro",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 2,
-  "history": [
+ "kol": "Chad Jones",
+ "sector": "Macro",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 2,
+ "history": [
+  {
+   "date": "2025-10-03",
+   "direction": "看多",
+   "comments": "在旧金山联储EERN讲座'AI与经济增长'中,作为斯坦福GSB经济学Professor阐述AI对经济增长的潜在推动及风险。延续其增长经济学框架,认为如电力、半导体、互联网般AI可能是变革性通用技术,显著提升增长。",
+   "targets": "AI/长期经济增长",
+   "source": "https://www.frbsf.org/news-and-media/events/2025/09/chad-jones-ai-and-economic-growth/",
+   "detail": "▸ 核心论点：认为 AI 可能是如电力、半导体、互联网般的变革性通用技术，显著提升长期经济增长。\n▸ 关键依据：在旧金山联储 EERN 讲座《AI 与经济增长》中，以斯坦福 GSB 经济学教授身份延续其增长经济学框架，阐述 AI 对经济增长的潜在推动及相应风险。\n▸ 时间与位置：未给出具体点位与时间窗口，属长期增长框架论述。\n▸ 标的与操作：AI 与长期经济增长主题；无直接交易标的，方向上偏乐观。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-10-03",
-      "direction": "看多",
-      "comments": "在旧金山联储EERN讲座'AI与经济增长'中,作为斯坦福GSB经济学Professor阐述AI对经济增长的潜在推动及风险。延续其增长经济学框架,认为如电力、半导体、互联网般AI可能是变革性通用技术,显著提升增长。",
-      "targets": "AI/长期经济增长",
-      "source": "https://www.frbsf.org/news-and-media/events/2025/09/chad-jones-ai-and-economic-growth/"
-    },
-    {
-      "date": "2026-02-01",
-      "direction": "看多",
-      "comments": "在斯坦福GSB演讲'AI与我们的经济未来'中呈现研究,包括与Tonetti合著'Past Automation and Future A.I.: How Weak Links Tame the Growth Explosion'(2026年1月),探讨自动化与AI对增长的影响及'弱环节'如何驯服增长爆发,整体对AI驱动增长持建设性乐观。",
-      "targets": "AI/经济增长/自动化",
-      "source": "https://web.stanford.edu/~chadj/AIandEconomicFuture.pdf"
+     "title": "",
+     "url": "https://www.frbsf.org/news-and-media/events/2025/09/chad-jones-ai-and-economic-growth/",
+     "date": "2025-10-03"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-02-01",
+   "direction": "看多",
+   "comments": "在斯坦福GSB演讲'AI与我们的经济未来'中呈现研究,包括与Tonetti合著'Past Automation and Future A.I.: How Weak Links Tame the Growth Explosion'(2026年1月),探讨自动化与AI对增长的影响及'弱环节'如何驯服增长爆发,整体对AI驱动增长持建设性乐观。",
+   "targets": "AI/经济增长/自动化",
+   "source": "https://web.stanford.edu/~chadj/AIandEconomicFuture.pdf",
+   "detail": "▸ 核心论点：在斯坦福 GSB 演讲《AI 与我们的经济未来》中，对 AI 驱动的经济增长持建设性乐观。\n▸ 关键依据：呈现与 Tonetti 合著的《Past Automation and Future A.I.: How Weak Links Tame the Growth Explosion》（2026 年 1 月），探讨自动化与 AI 对增长的影响，以及「弱环节」如何驯服增长爆发。\n▸ 时间与位置：论文发表于 2026 年 1 月，演讲同期；属长期增长框架，未给出具体点位。\n▸ 标的与操作：AI/经济增长/自动化主题，方向偏多，属学术研究判断而非交易建议。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://web.stanford.edu/~chadj/AIandEconomicFuture.pdf",
+     "date": "2026-02-01"
+    }
+   ]
+  }
+ ]
 }

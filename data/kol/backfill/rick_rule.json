@@ -1,23 +1,41 @@
 {
-  "kol": "Rick Rule",
-  "sector": "Precious Metals",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
-  "count": 2,
-  "history": [
+ "kol": "Rick Rule",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+ "count": 2,
+ "history": [
+  {
+   "date": "2026-05-28",
+   "direction": "看多",
+   "comments": "Rule称黄金跌破$4500使美国利率重回市场辩论中心，但对矿业投资者更重要的是生产商需通过并购补充储量的压力上升；黄金疲软是买入机会。",
+   "targets": "黄金/矿业股",
+   "source": "https://www.kitco.com/news/article/2026-05-28/gold-pullback-puts-rate-pressure-mining-ma-back-focus-rick-rule",
+   "detail": "▸ 核心论点：黄金回调是买入机会；对矿业投资者而言，生产商补充储量的并购压力比金价本身更重要。\n▸ 关键依据：黄金跌破 4,500 美元使美国利率问题重回市场辩论中心；同时生产商储量消耗需要通过并购补充，这一压力正在上升。\n▸ 时间与位置：关键点位为黄金跌破 4,500 美元；未给出目标价。\n▸ 标的与操作：黄金看多、逢弱买入；重点看好具备储量的矿业股（并购标的逻辑）。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2026-05-28",
-      "direction": "看多",
-      "comments": "Rule称黄金跌破$4500使美国利率重回市场辩论中心，但对矿业投资者更重要的是生产商需通过并购补充储量的压力上升；黄金疲软是买入机会。",
-      "targets": "黄金/矿业股",
-      "source": "https://www.kitco.com/news/article/2026-05-28/gold-pullback-puts-rate-pressure-mining-ma-back-focus-rick-rule"
-    },
-    {
-      "date": "2026-07-14",
-      "direction": "看多",
-      "comments": "Rule讨论仅有1%的管理团队能创造十倍回报，看好铜的超级周期，认为优质矿业管理团队是长期价值来源。",
-      "targets": "铜/矿业股",
-      "source": "https://miningnetwork.co.uk/governments-bail-out-tomago/"
+     "title": "",
+     "url": "https://www.kitco.com/news/article/2026-05-28/gold-pullback-puts-rate-pressure-mining-ma-back-focus-rick-rule",
+     "date": "2026-05-28"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-07-14",
+   "direction": "看多",
+   "comments": "Rule讨论仅有1%的管理团队能创造十倍回报，看好铜的超级周期，认为优质矿业管理团队是长期价值来源。",
+   "targets": "铜/矿业股",
+   "source": "https://miningnetwork.co.uk/governments-bail-out-tomago/",
+   "detail": "▸ 核心论点：看好铜的超级周期，并强调优质矿业管理团队才是长期价值来源。\n▸ 关键依据：指出仅有约1%的管理团队能创造十倍回报，因此选股核心在于识别优质管理层；同时看好铜的超级周期。\n▸ 时间与位置：未给出具体点位与时间窗口。\n▸ 标的与操作：铜与矿业股；操作上看多，但筛选标准是管理团队质量。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://miningnetwork.co.uk/governments-bail-out-tomago/",
+     "date": "2026-07-14"
+    }
+   ]
+  }
+ ]
 }

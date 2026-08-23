@@ -1,30 +1,55 @@
 {
-  "kol": "Robert Prechter / Elliott Wave International",
-  "sector": "Cycles & Esoteric Forecasting",
-  "backfill_date": "2026-08-22",
-  "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
-  "history": [
+ "kol": "Robert Prechter / Elliott Wave International",
+ "sector": "Cycles & Esoteric Forecasting",
+ "backfill_date": "2026-08-22",
+ "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
+ "history": [
+  {
+   "date": "2025-10-21",
+   "direction": "中性",
+   "comments": "Cycles TV 访谈《Robert Prechter: History and Outlook for Gold》（2025-10-21）。Prechter 回顾自己 1980 年在金价 $850 顶部时的激进看空调用——此后黄金跌了约 20 年、金矿股至今未回到 1980 年高点：截至 2025-10-17 金价已是 1980 年顶部的五倍，但 XAU 金矿股指数仍低于其 1980 年高位。他同时用「道指以黄金计价」这一长期比值展开：1999 年道指约值 45 盎司黄金，12 年熊市后到 2011 年 8 月只值 6 盎司，随后股票又跑赢七年。整段以长周期历史比较与波浪计数为主，未给出即时明确多空。",
+   "targets": "黄金/金矿股/美股",
+   "source": "https://www.youtube.com/watch?v=pKa3dn2T3Mo",
+   "detail": "▸ 核心论点：以长周期历史比较与波浪计数为主的回顾性分析，未给出即时明确多空，属中性。\n▸ 关键依据：回顾1980年金价850美元顶部时的激进看空——此后黄金跌约20年；截至2025-10-17金价已是1980年顶部的五倍，但 XAU 金矿股指数仍低于1980年高位。并以道指黄金计价比展开：1999年约45盎司，2011年8月只剩6盎司，随后股票又跑赢七年。\n▸ 时间与位置：历史参照点1980年金价850美元顶部、1999年45盎司、2011年8月6盎司；未给出当前具体点位。\n▸ 标的与操作：黄金、金矿股、美股；无明确操作建议，属长周期研究性观点。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-10-21",
-      "direction": "中性",
-      "comments": "Cycles TV 访谈《Robert Prechter: History and Outlook for Gold》（2025-10-21）。Prechter 回顾自己 1980 年在金价 $850 顶部时的激进看空调用——此后黄金跌了约 20 年、金矿股至今未回到 1980 年高点：截至 2025-10-17 金价已是 1980 年顶部的五倍，但 XAU 金矿股指数仍低于其 1980 年高位。他同时用「道指以黄金计价」这一长期比值展开：1999 年道指约值 45 盎司黄金，12 年熊市后到 2011 年 8 月只值 6 盎司，随后股票又跑赢七年。整段以长周期历史比较与波浪计数为主，未给出即时明确多空。",
-      "targets": "黄金/金矿股/美股",
-      "source": "https://www.youtube.com/watch?v=pKa3dn2T3Mo"
-    },
-    {
-      "date": "2026-07-28",
-      "direction": "看空",
-      "comments": "官方 X 账号（@RobertPrechter，由 Elliott Wave International 运营）帖文：指出本十年一个不寻常的现象——道琼斯工业指数在上涨的同时，道指/黄金比价却在下行；此前没有任何一个十年出现过这一组合。他提醒上一次股票与黄金以这种方式背离是 2000 年代，最终「股票输掉了这场较量」，暗示当前股市的名义上涨掩盖了以真实购买力计的贬值。（X 对当年帖文只显示月日，年份按 2026 年计。）",
-      "targets": "美股/黄金",
-      "source": "https://x.com/RobertPrechter"
-    },
-    {
-      "date": "2026-07-30",
-      "direction": "看空",
-      "comments": "官方 X 账号（@RobertPrechter）帖文：6 月 NYSE 保证金债务（margin debt）同比增速达到 54%。他对比历史上的重大市场底部——彼时保证金债务增速通常已崩塌至 -42% 至 -47% 区间，与当下环境截然相反。结论是市场杠杆极度扩张而群众几乎不担心，「直到价格开始下跌才会想起杠杆」，属对当前股市的经典看空/风险警示。（X 对当年帖文只显示月日，年份按 2026 年计。）",
-      "targets": "美股",
-      "source": "https://x.com/RobertPrechter"
+     "title": "",
+     "url": "https://www.youtube.com/watch?v=pKa3dn2T3Mo",
+     "date": "2025-10-21"
     }
-  ],
-  "count": 3
+   ]
+  },
+  {
+   "date": "2026-07-28",
+   "direction": "看空",
+   "comments": "官方 X 账号（@RobertPrechter，由 Elliott Wave International 运营）帖文：指出本十年一个不寻常的现象——道琼斯工业指数在上涨的同时，道指/黄金比价却在下行；此前没有任何一个十年出现过这一组合。他提醒上一次股票与黄金以这种方式背离是 2000 年代，最终「股票输掉了这场较量」，暗示当前股市的名义上涨掩盖了以真实购买力计的贬值。（X 对当年帖文只显示月日，年份按 2026 年计。）",
+   "targets": "美股/黄金",
+   "source": "https://x.com/RobertPrechter",
+   "detail": "▸ 核心论点：道指名义上涨的同时道指/黄金比价却在下行，这一本十年独有的背离暗示股市名义涨幅掩盖了真实购买力的贬值。\n▸ 关键依据：此前没有任何一个十年出现过这一组合；上一次股票与黄金以这种方式背离是2000年代，最终「股票输掉了这场较量」。\n▸ 时间与位置：2026-07-28 官方 X 账号(@RobertPrechter，由 Elliott Wave International 运营)帖文；X 只显示月日，年份按2026计；未给出具体点位。\n▸ 标的与操作：美股(看空)/黄金(相对占优)；以比价而非名义指数衡量资产表现。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://x.com/RobertPrechter"
+    }
+   ]
+  },
+  {
+   "date": "2026-07-30",
+   "direction": "看空",
+   "comments": "官方 X 账号（@RobertPrechter）帖文：6 月 NYSE 保证金债务（margin debt）同比增速达到 54%。他对比历史上的重大市场底部——彼时保证金债务增速通常已崩塌至 -42% 至 -47% 区间，与当下环境截然相反。结论是市场杠杆极度扩张而群众几乎不担心，「直到价格开始下跌才会想起杠杆」，属对当前股市的经典看空/风险警示。（X 对当年帖文只显示月日，年份按 2026 年计。）",
+   "targets": "美股",
+   "source": "https://x.com/RobertPrechter",
+   "detail": "▸ 核心论点：市场杠杆极度扩张而群众几乎不担心，「直到价格开始下跌才会想起杠杆」，属对当前股市的经典看空/风险警示。\n▸ 关键依据：官方X账号帖文指出6月NYSE保证金债务（margin debt）同比增速达54%；对比历史上的重大市场底部，彼时保证金债务增速通常已崩塌至-42%至-47%区间，与当下环境截然相反。\n▸ 时间与位置：数据截至2026年6月；未给出具体点位或目标价（X帖文只显示月日，年份按2026年计）。\n▸ 标的与操作：美股，看空；以杠杆指标作为风险提示而非择时信号。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Robert Prechter / Elliott Wave International",
+     "url": "https://x.com/RobertPrechter",
+     "date": "2026-07-30"
+    }
+   ]
+  }
+ ],
+ "count": 3
 }

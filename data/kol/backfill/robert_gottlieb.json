@@ -1,16 +1,25 @@
 {
-  "kol": "Robert Gottlieb",
-  "sector": "Precious Metals",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
-  "count": 1,
-  "history": [
+ "kol": "Robert Gottlieb",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+ "count": 1,
+ "history": [
+  {
+   "date": "2025-12-29",
+   "direction": "看多",
+   "comments": "资深贵金属交易员/前 bullion bank 交易员认为，2025年底金银创多个新高后的行情并非短期投机挤压，而是更根本的结构性变革在推进，金银进入'新纪元'，投资者应着眼长期而非短期价位。",
+   "targets": "黄金/白银",
+   "source": "https://www.kitco.com/news/article/2025-12-29/gold-and-silver-enter-new-era-what-investors-should-expect-2026-robert",
+   "detail": "▸ 核心论点：2025 年底金银创新高并非短期投机挤压，而是更根本的结构性变革，金银进入新纪元。\n▸ 关键依据：作为资深贵金属交易员/前 bullion bank 交易员，从市场微观结构判断本轮行情的驱动不是逼仓，而是长期性的体系变化。\n▸ 时间与位置：以 2025 年底金银创多个新高为参照，未给出具体点位或目标价。\n▸ 标的与操作：黄金、白银看多，建议着眼长期而非纠结短期价位。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-12-29",
-      "direction": "看多",
-      "comments": "资深贵金属交易员/前 bullion bank 交易员认为，2025年底金银创多个新高后的行情并非短期投机挤压，而是更根本的结构性变革在推进，金银进入'新纪元'，投资者应着眼长期而非短期价位。",
-      "targets": "黄金/白银",
-      "source": "https://www.kitco.com/news/article/2025-12-29/gold-and-silver-enter-new-era-what-investors-should-expect-2026-robert"
+     "title": "",
+     "url": "https://www.kitco.com/news/article/2025-12-29/gold-and-silver-enter-new-era-what-investors-should-expect-2026-robert",
+     "date": "2025-12-29"
     }
-  ]
+   ]
+  }
+ ]
 }

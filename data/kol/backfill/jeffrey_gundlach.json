@@ -1,1 +1,57 @@
-{"kol":"Jeffrey Gundlach","sector":"Government Debt","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":3,"history":[{"date":"2025-06-18","direction":"看多","comments":"CNBC收盘钟访谈中回应美联储议息,认为未来数月央行更可能优先就业而非通胀,暗示失业救济缓冲已尽、政策转向宽松。","targets":"美债/利率","source":"https://www.youtube.com/watch?v=QqJhb-UfHjA"},{"date":"2025-11-01","direction":"看多","comments":"11月网络直播中建议组合配置20%现金、25%债券、10-15%黄金等实物资产、40%国际股票,长期强烈看空美元,称黄金为真正的货币资产。","targets":"黄金/国际股票/债券/美元(空)","source":"https://www.businessinsider.com/stock-market-outlook-2026-top-predictions-oracles-of-wall-street-2026-1"},{"date":"2026-01-01","direction":"看多","comments":"DoubleLine访谈称黄金是最值得持有的大宗商品,给出以黄金和实物资产对冲美元贬值的组合框架。","targets":"黄金","source":"https://goldsilver.com/industry-news/article/the-bond-kings-golden-signal-jeffrey-gundlach-on-gold/"}]}
+{
+ "kol": "Jeffrey Gundlach",
+ "sector": "Government Debt",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2025-06-18",
+   "direction": "看多",
+   "comments": "CNBC收盘钟访谈中回应美联储议息,认为未来数月央行更可能优先就业而非通胀,暗示失业救济缓冲已尽、政策转向宽松。",
+   "targets": "美债/利率",
+   "source": "https://www.youtube.com/watch?v=QqJhb-UfHjA",
+   "detail": "▸ 核心论点：认为未来数月美联储更可能优先就业而非通胀，暗示政策转向宽松。\n▸ 关键依据：CNBC 收盘钟访谈中回应美联储议息，理由是失业救济缓冲已经用尽，就业端压力将主导政策权衡。\n▸ 时间与位置：时间窗口为未来数月；未给出具体利率点位。\n▸ 标的与操作：美债与利率；操作上受益于宽松转向，偏多久期。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.youtube.com/watch?v=QqJhb-UfHjA",
+     "date": "2025-06-18"
+    }
+   ]
+  },
+  {
+   "date": "2025-11-01",
+   "direction": "看多",
+   "comments": "11月网络直播中建议组合配置20%现金、25%债券、10-15%黄金等实物资产、40%国际股票,长期强烈看空美元,称黄金为真正的货币资产。",
+   "targets": "黄金/国际股票/债券/美元(空)",
+   "source": "https://www.businessinsider.com/stock-market-outlook-2026-top-predictions-oracles-of-wall-street-2026-1",
+   "detail": "▸ 核心论点：11 月网络直播中给出防御性资产配置方案，长期强烈看空美元，称黄金为真正的货币资产。\n▸ 关键依据：以美元长期贬值与美国财政风险为核心逻辑，主张分散至非美与实物资产。\n▸ 时间与位置：以当次直播的配置建议为准；未给出具体点位或目标价。\n▸ 标的与操作：建议组合 20% 现金、25% 债券、10–15% 黄金等实物资产、40% 国际股票；做空/低配美元。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.businessinsider.com/stock-market-outlook-2026-top-predictions-oracles-of-wall-street-2026-1",
+     "date": "2025-11-01"
+    }
+   ]
+  },
+  {
+   "date": "2026-01-01",
+   "direction": "看多",
+   "comments": "DoubleLine访谈称黄金是最值得持有的大宗商品,给出以黄金和实物资产对冲美元贬值的组合框架。",
+   "targets": "黄金",
+   "source": "https://goldsilver.com/industry-news/article/the-bond-kings-golden-signal-jeffrey-gundlach-on-gold/",
+   "detail": "▸ 核心论点：黄金是最值得持有的大宗商品，应以黄金与实物资产对冲美元贬值。\n▸ 关键依据：在 DoubleLine 访谈中给出组合框架，核心是货币贬值与美元脆弱性使纯纸面资产组合面临风险，实物资产需要重新纳入配置。\n▸ 时间与位置：未给出具体点位或目标价。\n▸ 标的与操作：黄金看多，配置上以黄金＋实物资产作为美元贬值的对冲工具。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://goldsilver.com/industry-news/article/the-bond-kings-golden-signal-jeffrey-gundlach-on-gold/",
+     "date": "2026-01-01"
+    }
+   ]
+  }
+ ]
+}

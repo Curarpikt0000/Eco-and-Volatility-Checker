@@ -1,1 +1,57 @@
-{"kol":"Ronny Stoeferle","sector":"Precious Metals","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":3,"history":[{"date":"2025-04-28","direction":"强烈看多","comments":"做客Sprott Radio,预告2025 In Gold We Trust报告,强调在巨大不确定性下黄金的避险与货币体系对冲角色,认为黄金牛市远未结束。","targets":"黄金/白银/矿业股","source":"https://sprott.com/podcast/ep70/ (Sprott Radio Ep70)"},{"date":"2025-05-15","direction":"强烈看多","comments":"发布第19版《In Gold We Trust》报告(题为The Big Long,440页)。核心观点:黄金已不再是逆向投资,而是对法币/央行/政治领导层信任崩塌的战略回应;当前处牛市公众参与阶段中段。","targets":"黄金/白银/矿业股","source":"https://ingoldwetrust.report (IGWT 2025报告)"},{"date":"2025-11-20","direction":"强烈看多","comments":"Wealthion访谈:黄金牛市仅到第五、六局,现应聚焦表现型黄金(矿业股与白银)。价格目标十年内$4800基准,二次通胀下$8900,并提美元结构性贬值与Mar-a-Lago协议是时间问题。","targets":"黄金(目标$4800-10000)/白银/矿业股","source":"https://wealthion.com/news/ronnie-stoeferle-gold-is-the-big-long-and-were-barely-in-the-6th-inning"}]}
+{
+ "kol": "Ronny Stoeferle",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2025-04-28",
+   "direction": "强烈看多",
+   "comments": "做客Sprott Radio,预告2025 In Gold We Trust报告,强调在巨大不确定性下黄金的避险与货币体系对冲角色,认为黄金牛市远未结束。",
+   "targets": "黄金/白银/矿业股",
+   "source": "https://sprott.com/podcast/ep70/ (Sprott Radio Ep70)",
+   "detail": "▸ 核心论点：在巨大不确定性下黄金具备避险与货币体系对冲角色，黄金牛市远未结束。\n▸ 关键依据：做客Sprott Radio并预告《2025 In Gold We Trust》报告，以货币体系风险与不确定性溢价为核心论证框架。\n▸ 时间与位置：未给出具体点位；时间上强调牛市仍在延续。\n▸ 标的与操作：黄金、白银及矿业股，强烈看多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Ronny Stoeferle",
+     "url": "https://sprott.com/podcast/ep70/ (Sprott Radio Ep70)",
+     "date": "2025-04-28"
+    }
+   ]
+  },
+  {
+   "date": "2025-05-15",
+   "direction": "强烈看多",
+   "comments": "发布第19版《In Gold We Trust》报告(题为The Big Long,440页)。核心观点:黄金已不再是逆向投资,而是对法币/央行/政治领导层信任崩塌的战略回应;当前处牛市公众参与阶段中段。",
+   "targets": "黄金/白银/矿业股",
+   "source": "https://ingoldwetrust.report (IGWT 2025报告)",
+   "detail": "▸ 核心论点：黄金已不再是逆向投资，而是对法币、央行与政治领导层信任崩塌的战略回应。\n▸ 关键依据：发布第 19 版《In Gold We Trust》报告（题为 The Big Long，440 页）；判断当前处于牛市「公众参与阶段」的中段。\n▸ 时间与位置：以 2025 年报告发布为节点，牛市阶段定位在公众参与阶段中段；未给出具体目标价。\n▸ 标的与操作：黄金、白银及矿业股，强烈看多、战略性配置。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://ingoldwetrust.report (IGWT 2025报告)",
+     "date": "2025-05-15"
+    }
+   ]
+  },
+  {
+   "date": "2025-11-20",
+   "direction": "强烈看多",
+   "comments": "Wealthion访谈:黄金牛市仅到第五、六局,现应聚焦表现型黄金(矿业股与白银)。价格目标十年内$4800基准,二次通胀下$8900,并提美元结构性贬值与Mar-a-Lago协议是时间问题。",
+   "targets": "黄金(目标$4800-10000)/白银/矿业股",
+   "source": "https://wealthion.com/news/ronnie-stoeferle-gold-is-the-big-long-and-were-barely-in-the-6th-inning",
+   "detail": "▸ 核心论点：黄金牛市仅走到第五、六局，现阶段应聚焦「表现型黄金」——矿业股与白银。\n▸ 关键依据：在 Wealthion 访谈中提出美元存在结构性贬值压力，并称 Mar-a-Lago 协议只是时间问题；牛市中后段由弹性更高的品种接棒。\n▸ 时间与位置：十年内价格目标——基准情景 4,800 美元，二次通胀情景 8,900 美元。\n▸ 标的与操作：黄金强烈看多，配置重心转向金矿股与白银。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://wealthion.com/news/ronnie-stoeferle-gold-is-the-big-long-and-were-barely-in-the-6th-inning",
+     "date": "2025-11-20"
+    }
+   ]
+  }
+ ]
+}

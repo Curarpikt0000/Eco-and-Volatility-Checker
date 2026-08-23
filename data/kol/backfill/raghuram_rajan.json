@@ -1,1 +1,25 @@
-{"kol":"Raghuram Rajan","sector":"Macro","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":1,"history":[{"date":"2026-06-11","direction":"看空","comments":"前RBI行长Rajan独家受访质疑印度经济增长叙事,称'有些地方不对劲',怀疑官方逾7%的GDP增速能否真实反映实地状况,指出增长数据与投资活动之间存在持续脱节。对印度增长质量与投资疲弱表达担忧。","targets":"印度经济/GDP/投资","source":"https://www.indiatoday.in/business/story/raghuram-rajan-questions-india-gdp-growth-weak-investment-fdi-oil-prices-2925377-2026-06-11"}]}
+{
+ "kol": "Raghuram Rajan",
+ "sector": "Macro",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 1,
+ "history": [
+  {
+   "date": "2026-06-11",
+   "direction": "看空",
+   "comments": "前RBI行长Rajan独家受访质疑印度经济增长叙事,称'有些地方不对劲',怀疑官方逾7%的GDP增速能否真实反映实地状况,指出增长数据与投资活动之间存在持续脱节。对印度增长质量与投资疲弱表达担忧。",
+   "targets": "印度经济/GDP/投资",
+   "source": "https://www.indiatoday.in/business/story/raghuram-rajan-questions-india-gdp-growth-weak-investment-fdi-oil-prices-2925377-2026-06-11",
+   "detail": "▸ 核心论点：质疑印度经济增长叙事，认为有些地方不对劲，官方增速未必反映实地状况。\n▸ 关键依据：前 RBI 行长 Rajan 指出官方逾 7% 的 GDP 增速与实际投资活动之间存在持续脱节，增长质量与投资疲弱令人担忧。\n▸ 时间与位置：未给出具体时间窗口或点位。\n▸ 标的与操作：印度经济/资产看空，属宏观增长质量层面的警示，无具体操作建议。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.indiatoday.in/business/story/raghuram-rajan-questions-india-gdp-growth-weak-investment-fdi-oil-prices-2925377-2026-06-11",
+     "date": "2026-06-11"
+    }
+   ]
+  }
+ ]
+}

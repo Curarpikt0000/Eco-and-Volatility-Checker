@@ -1,16 +1,23 @@
 {
-  "kol": "Neil Howe",
-  "sector": "Cycles & Esoteric Forecasting",
-  "backfill_date": "2026-08-22",
-  "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
-  "history": [
+ "kol": "Neil Howe",
+ "sector": "Cycles & Esoteric Forecasting",
+ "backfill_date": "2026-08-22",
+ "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
+ "history": [
+  {
+   "date": "2026-07-06",
+   "direction": "另类预言",
+   "comments": "Bloomberg 视频访谈《Difficult Era For Markets Coming Up: Howe》。Howe 结合其「第四转折（Fourth Turning）」世代长周期框架，判断未来十年的市场环境将与过去四十年出现根本性转变——即低通胀、低利率、全球化红利支撑的资产牛市范式终结，进入一个对投资者更艰难的时代。访谈同时介绍了他与 Hedgeye 的 Christian Drake Kent 共同管理的 Hedgeye Fourth Turning ETF（代码 HEFT），把这套定性长周期框架落地为资产配置产品。属长周期定性预言，非具体多空调用。",
+   "targets": "美股/全球资产配置",
+   "source": "https://www.bloomberg.com/news/videos/2026-07-06/difficult-era-for-markets-comping-up-howe-video",
+   "detail": "▸ 核心论点：以「第四转折」世代长周期框架判断，未来十年市场环境将较过去四十年根本性转变，投资者将进入更艰难的时代。\n▸ 关键依据：低通胀、低利率、全球化红利支撑的资产牛市范式终结；属长周期定性预言，非具体多空调用。\n▸ 时间与位置：2026-07-06 Bloomberg 视频访谈；时间尺度为未来十年，未给出具体点位。\n▸ 标的与操作：美股/全球资产配置；落地产品为其与 Hedgeye 的 Christian Drake Kent 共管的 Hedgeye Fourth Turning ETF(HEFT)。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2026-07-06",
-      "direction": "另类预言",
-      "comments": "Bloomberg 视频访谈《Difficult Era For Markets Coming Up: Howe》。Howe 结合其「第四转折（Fourth Turning）」世代长周期框架，判断未来十年的市场环境将与过去四十年出现根本性转变——即低通胀、低利率、全球化红利支撑的资产牛市范式终结，进入一个对投资者更艰难的时代。访谈同时介绍了他与 Hedgeye 的 Christian Drake Kent 共同管理的 Hedgeye Fourth Turning ETF（代码 HEFT），把这套定性长周期框架落地为资产配置产品。属长周期定性预言，非具体多空调用。",
-      "targets": "美股/全球资产配置",
-      "source": "https://www.bloomberg.com/news/videos/2026-07-06/difficult-era-for-markets-comping-up-howe-video"
+     "url": "https://www.bloomberg.com/news/videos/2026-07-06/difficult-era-for-markets-comping-up-howe-video"
     }
-  ],
-  "count": 1
+   ]
+  }
+ ],
+ "count": 1
 }

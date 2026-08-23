@@ -5,10 +5,83 @@
  "source_method": "web_search + LLM 提取带日期历史观点(严守不编造,仅真实来源确认日期)",
  "count": 5,
  "history": [
-  {"date": "2025-07-24", "direction": "强烈看多", "comments": "接受Triangle Investor采访,称黄金18个月翻倍为美国价格图史上首次,已突破所有技术指标可自由上行。预测2027年7月白银达250美元、黄金至少5000美元。以审计师视角详解COMEX操纵不可诉,伦敦白银近乎无自由流通量,称其为庞氏结构。", "targets": "黄金、白银", "source": "Triangle Investor Interviews (YouTube)"},
-  {"date": "2025-09-26", "direction": "看多", "comments": "在Kinesis《Live from the Vault》第242集对谈,剖析金融体系结构性压力,强调财富从西方纸面市场向东方实物需求转移,是代际性财富保值转向。看好美国散户觉醒与健全货币运动,主张个人持有实物金银以保障金融主权。", "targets": "黄金、白银", "source": "Kinesis Live from the Vault EP242"},
-  {"date": "2025-11-26", "direction": "看多", "comments": "作客Palisades Gold Radio,主题为黄金重估为何AI叙事是干扰。以审计师背景聚焦黄金重估逻辑,认为市场对AI的关注分散了对货币体系脆弱与实物金供给紧张的注意力,延续其COMEX库存与重估主线观点。", "targets": "黄金", "source": "Palisades Gold Radio"},
-  {"date": "2026-06-26", "direction": "看多", "comments": "在Liberty and Finance节目讨论COMEX能否在黄金重估中幸存,分析若发生黄金重估交易所与纸面市场的承压情形,延续其对COMEX库存不透明、实物交割挤压与定价权东移的一贯判断。", "targets": "黄金、白银", "source": "Liberty and Finance"},
-  {"date": "2026-06-30", "direction": "强烈看多", "comments": "与Andy Schectman对谈,指出6月未满月已有120-130亿美元黄金站立交割,COMEX实物交割创历史罕见水平,买家索要编号金条而非纸面凭证,信任转向实物。看好央行持续购金或为重估布局,并撰文论证美联储五大政策选项均导向货币贬值与通胀。", "targets": "黄金、白银", "source": "Andy Schectman & Rob Kientz (YouTube)"}
+  {
+   "date": "2025-07-24",
+   "direction": "强烈看多",
+   "comments": "接受Triangle Investor采访,称黄金18个月翻倍为美国价格图史上首次,已突破所有技术指标可自由上行。预测2027年7月白银达250美元、黄金至少5000美元。以审计师视角详解COMEX操纵不可诉,伦敦白银近乎无自由流通量,称其为庞氏结构。",
+   "targets": "黄金、白银",
+   "source": "Triangle Investor Interviews (YouTube)",
+   "detail": "▸ 核心论点：黄金 18 个月翻倍为美国价格图史上首次，已突破所有技术指标，可自由上行；同时指控 COMEX 与伦敦白银市场存在结构性问题。\n▸ 关键依据：以审计师视角详解 COMEX 操纵在法律上不可诉；伦敦白银近乎没有自由流通量，称其为庞氏结构。\n▸ 时间与位置：预测 2027 年 7 月白银达 250 美元、黄金至少 5,000 美元。\n▸ 标的与操作：黄金、白银强烈看多，倾向实物持有。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "Triangle Investor Interviews (YouTube)",
+     "date": "2025-07-24"
+    }
+   ]
+  },
+  {
+   "date": "2025-09-26",
+   "direction": "看多",
+   "comments": "在Kinesis《Live from the Vault》第242集对谈,剖析金融体系结构性压力,强调财富从西方纸面市场向东方实物需求转移,是代际性财富保值转向。看好美国散户觉醒与健全货币运动,主张个人持有实物金银以保障金融主权。",
+   "targets": "黄金、白银",
+   "source": "Kinesis Live from the Vault EP242",
+   "detail": "▸ 核心论点：财富正从西方纸面市场向东方实物需求转移，是代际性的财富保值转向。\n▸ 关键依据：Kinesis《Live from the Vault》第 242 集中剖析金融体系的结构性压力；看好美国散户觉醒与健全货币（sound money）运动。\n▸ 时间与位置：定性为代际性趋势；未给出具体点位。\n▸ 标的与操作：黄金、白银，主张个人持有实物金银以保障金融主权。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Robert Kientz",
+     "url": "Kinesis Live from the Vault EP242",
+     "date": "2025-09-26"
+    }
+   ]
+  },
+  {
+   "date": "2025-11-26",
+   "direction": "看多",
+   "comments": "作客Palisades Gold Radio,主题为黄金重估为何AI叙事是干扰。以审计师背景聚焦黄金重估逻辑,认为市场对AI的关注分散了对货币体系脆弱与实物金供给紧张的注意力,延续其COMEX库存与重估主线观点。",
+   "targets": "黄金",
+   "source": "Palisades Gold Radio",
+   "detail": "▸ 核心论点：作客 Palisades Gold Radio，主题为黄金重估，认为 AI 叙事是干扰项。\n▸ 关键依据：以审计师背景聚焦黄金重估逻辑，认为市场对 AI 的关注分散了对货币体系脆弱与实物黄金供给紧张的注意力；延续其 COMEX 库存与重估主线观点。\n▸ 时间与位置：未给出具体时间窗口与点位。\n▸ 标的与操作：黄金（尤其实物与重估逻辑），看多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "Palisades Gold Radio",
+     "date": "2025-11-26"
+    }
+   ]
+  },
+  {
+   "date": "2026-06-26",
+   "direction": "看多",
+   "comments": "在Liberty and Finance节目讨论COMEX能否在黄金重估中幸存,分析若发生黄金重估交易所与纸面市场的承压情形,延续其对COMEX库存不透明、实物交割挤压与定价权东移的一贯判断。",
+   "targets": "黄金、白银",
+   "source": "Liberty and Finance",
+   "detail": "▸ 核心论点：若发生黄金重估，COMEX 与纸面市场将严重承压，能否幸存存疑；延续看多实物黄金的立场。\n▸ 关键依据：一贯判断 COMEX 库存不透明、实物交割挤压加剧、定价权正在东移。\n▸ 时间与位置：2026-06-26 于 Liberty and Finance 节目讨论；未给出具体点位。\n▸ 标的与操作：黄金、白银；看多实物，警惕纸面市场与交易所风险。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "Liberty and Finance"
+    }
+   ]
+  },
+  {
+   "date": "2026-06-30",
+   "direction": "强烈看多",
+   "comments": "与Andy Schectman对谈,指出6月未满月已有120-130亿美元黄金站立交割,COMEX实物交割创历史罕见水平,买家索要编号金条而非纸面凭证,信任转向实物。看好央行持续购金或为重估布局,并撰文论证美联储五大政策选项均导向货币贬值与通胀。",
+   "targets": "黄金、白银",
+   "source": "Andy Schectman & Rob Kientz (YouTube)",
+   "detail": "▸ 核心论点：COMEX 实物交割创历史罕见水平，信任正从纸面凭证转向实物，强烈看多贵金属。\n▸ 关键依据：6 月未满月已有 120–130 亿美元黄金站立交割，买家索要编号金条而非纸面凭证；央行持续购金或为重估布局；其撰文论证美联储五大政策选项均导向货币贬值与通胀。\n▸ 时间与位置：以 2026 年 6 月交割数据为观察窗口；未给出具体点位。\n▸ 标的与操作：黄金、白银，买入并倾向持有实物。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Robert Kientz",
+     "url": "Andy Schectman & Rob Kientz (YouTube)",
+     "date": "2026-06-30"
+    }
+   ]
+  }
  ]
 }

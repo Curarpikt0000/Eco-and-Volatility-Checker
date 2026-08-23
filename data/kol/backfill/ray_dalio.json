@@ -1,30 +1,55 @@
 {
-  "kol": "Ray Dalio",
-  "sector": "Macro",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 3,
-  "history": [
+ "kol": "Ray Dalio",
+ "sector": "Macro",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2025-07-28",
+   "direction": "看多",
+   "comments": "在Kitco News访谈中建议投资者将约15%的组合配置到黄金或比特币,理由是美国国债攀升(约36.7万亿美元)、货币贬值风险与系统性金融风险上升,硬资产日益重要。",
+   "targets": "黄金、比特币",
+   "source": "goldsilver.com / goldcharterinc.com (Kitco访谈)",
+   "detail": "▸ 核心论点：建议投资者将约 15% 的组合配置到黄金或比特币等硬资产。\n▸ 关键依据：美国国债规模攀升至约 36.7 万亿美元，货币贬值风险与系统性金融风险上升，硬资产的重要性日益提高。\n▸ 时间与位置：给出 15% 的配置比例；未给出具体点位或目标价。\n▸ 标的与操作：黄金与比特币，看多，作为组合对冲配置买入（Kitco News 访谈）。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-07-28",
-      "direction": "看多",
-      "comments": "在Kitco News访谈中建议投资者将约15%的组合配置到黄金或比特币,理由是美国国债攀升(约36.7万亿美元)、货币贬值风险与系统性金融风险上升,硬资产日益重要。",
-      "targets": "黄金、比特币",
-      "source": "goldsilver.com / goldcharterinc.com (Kitco访谈)"
-    },
-    {
-      "date": "2025-09-03",
-      "direction": "看多",
-      "comments": "在接受金融时报访谈并在社媒补充,阐述美元走弱正推动投资者转向数字资产与黄金,称美元贬值是2025年最大的市场故事。",
-      "targets": "黄金、比特币、美元",
-      "source": "blockonomi.com (FT 访谈)"
-    },
-    {
-      "date": "2025-09-19",
-      "direction": "看多",
-      "comments": "桥水创始人表示,在全球债务压力与主要货币贬值风险下,黄金与非法币货币将成为更强的价值储存工具。",
-      "targets": "黄金、非法币资产",
-      "source": "linkedin.com/CNBC"
+     "title": "",
+     "url": "goldsilver.com / goldcharterinc.com (Kitco访谈)",
+     "date": "2025-07-28"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2025-09-03",
+   "direction": "看多",
+   "comments": "在接受金融时报访谈并在社媒补充,阐述美元走弱正推动投资者转向数字资产与黄金,称美元贬值是2025年最大的市场故事。",
+   "targets": "黄金、比特币、美元",
+   "source": "blockonomi.com (FT 访谈)",
+   "detail": "▸ 核心论点：美元走弱正推动投资者转向数字资产与黄金，美元贬值是2025年最大的市场故事。\n▸ 关键依据：在接受《金融时报》访谈并在社媒补充时，把资金从美元资产向黄金与数字资产的迁移视为本年度的主导资金流叙事。\n▸ 时间与位置：未给出具体点位或目标价；时间框架为2025年全年。\n▸ 标的与操作：黄金、比特币看多；美元看空。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Ray Dalio",
+     "url": "blockonomi.com (FT 访谈)",
+     "date": "2025-09-03"
+    }
+   ]
+  },
+  {
+   "date": "2025-09-19",
+   "direction": "看多",
+   "comments": "桥水创始人表示,在全球债务压力与主要货币贬值风险下,黄金与非法币货币将成为更强的价值储存工具。",
+   "targets": "黄金、非法币资产",
+   "source": "linkedin.com/CNBC",
+   "detail": "▸ 核心论点：黄金与非法币货币将成为更强的价值储存工具。\n▸ 关键依据：全球债务压力叠加主要货币的贬值风险，削弱法币的储值功能。\n▸ 时间与位置：2025-09-19；未给出具体点位或目标价。\n▸ 标的与操作：黄金、非法币资产；看多、作为储值配置。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "linkedin.com/CNBC"
+    }
+   ]
+  }
+ ]
 }

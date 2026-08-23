@@ -1,1 +1,71 @@
-{"kol":"Michael Hartnett","sector":"Macro","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":4,"history":[{"date":"2025-12-19","direction":"分歧","comments":"发布2026展望:预计低通胀低利率环境,CPI趋向2%、美债10年期或降至3.5%,但警告投资者押注'过热'情景恐落空,通过长久期零息债、中盘股、新兴市场和自然资源表达观点。","targets":"债券/中盘股/新兴市场/自然资源","source":"https://www.investing.com/news/stock-market-news/bofa-hartnetts-2026-forecast-lower-yields-higher-risks-for-ai-capex-4416773"},{"date":"2026-01-30","direction":"看空","comments":"牛熊指标升至9.4触发卖出信号,称市场处于极度乐观,89%全球股指高于50/200日均线;偏好做多债券、中国、黄金、中盘股,做空美元和投资级科技信用。","targets":"美股(空)/黄金/中国/债券","source":"https://www.investing.com/news/stock-market-news/bofas-hartnett-sees-markets-at-extreme-optimism-issues-sell-signal-4475325"},{"date":"2026-06-13","direction":"看空","comments":"警告尽管长端债收益率达5%,投资者仍重仓风险资产,牛市定位根深蒂固,多项见顶条件正在形成。","targets":"风险资产(空)","source":"https://finance.yahoo.com/markets/stocks/articles/bofa-hartnett-warns-bullish-positioning-110000962.html"},{"date":"2026-07-10","direction":"看空","comments":"牛熊指标维持在极度看多的9.5,卖出信号连续多周闪烁,全球资本涌入股票基金,警示回调风险。","targets":"全球股市(空)","source":"https://finance.biggo.com/news/3a3448a2-1aab-4d2b-9aa5-bf84f87a3853"}]}
+{
+ "kol": "Michael Hartnett",
+ "sector": "Macro",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 4,
+ "history": [
+  {
+   "date": "2025-12-19",
+   "direction": "分歧",
+   "comments": "发布2026展望:预计低通胀低利率环境,CPI趋向2%、美债10年期或降至3.5%,但警告投资者押注'过热'情景恐落空,通过长久期零息债、中盘股、新兴市场和自然资源表达观点。",
+   "targets": "债券/中盘股/新兴市场/自然资源",
+   "source": "https://www.investing.com/news/stock-market-news/bofa-hartnetts-2026-forecast-lower-yields-higher-risks-for-ai-capex-4416773",
+   "detail": "▸ 核心论点：2026年将是低通胀低利率环境，警告押注「过热」情景的投资者恐落空。\n▸ 关键依据：预计 CPI 趋向2%、美债10年期收益率或降至3.5%。\n▸ 时间与位置：2025-12-19 发布2026展望；关键位为10年期美债3.5%、CPI 2%。\n▸ 标的与操作：通过长久期零息债、中盘股、新兴市场和自然资源表达观点，对「过热」交易看空，属方向分歧。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://www.investing.com/news/stock-market-news/bofa-hartnetts-2026-forecast-lower-yields-higher-risks-for-ai-capex-4416773"
+    }
+   ]
+  },
+  {
+   "date": "2026-01-30",
+   "direction": "看空",
+   "comments": "牛熊指标升至9.4触发卖出信号,称市场处于极度乐观,89%全球股指高于50/200日均线;偏好做多债券、中国、黄金、中盘股,做空美元和投资级科技信用。",
+   "targets": "美股(空)/黄金/中国/债券",
+   "source": "https://www.investing.com/news/stock-market-news/bofas-hartnett-sees-markets-at-extreme-optimism-issues-sell-signal-4475325",
+   "detail": "▸ 核心论点：牛熊指标触发卖出信号，市场处于极度乐观状态。\n▸ 关键依据：BofA 牛熊指标升至 9.4 触发卖出信号；89% 的全球股指位于 50 日与 200 日均线之上，广度极端。\n▸ 时间与位置：以指标读数 9.4 为触发阈值；未给出具体指数点位。\n▸ 标的与操作：偏好做多债券、中国、黄金、中盘股，做空美元和投资级科技信用；对美股整体看空。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.investing.com/news/stock-market-news/bofas-hartnett-sees-markets-at-extreme-optimism-issues-sell-signal-4475325",
+     "date": "2026-01-30"
+    }
+   ]
+  },
+  {
+   "date": "2026-06-13",
+   "direction": "看空",
+   "comments": "警告尽管长端债收益率达5%,投资者仍重仓风险资产,牛市定位根深蒂固,多项见顶条件正在形成。",
+   "targets": "风险资产(空)",
+   "source": "https://finance.yahoo.com/markets/stocks/articles/bofa-hartnett-warns-bullish-positioning-110000962.html",
+   "detail": "▸ 核心论点：投资者牛市定位根深蒂固，多项见顶条件正在形成，警告风险资产。\n▸ 关键依据：长端债收益率已达 5%，投资者却仍重仓风险资产，仓位与利率环境严重背离。\n▸ 时间与位置：未给出具体点位。\n▸ 标的与操作：风险资产，看空 / 减仓。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Michael Hartnett",
+     "url": "https://finance.yahoo.com/markets/stocks/articles/bofa-hartnett-warns-bullish-positioning-110000962.html",
+     "date": "2026-06-13"
+    }
+   ]
+  },
+  {
+   "date": "2026-07-10",
+   "direction": "看空",
+   "comments": "牛熊指标维持在极度看多的9.5,卖出信号连续多周闪烁,全球资本涌入股票基金,警示回调风险。",
+   "targets": "全球股市(空)",
+   "source": "https://finance.biggo.com/news/3a3448a2-1aab-4d2b-9aa5-bf84f87a3853",
+   "detail": "▸ 核心论点：牛熊指标处于极度看多区间、卖出信号持续闪烁，警示全球股市回调风险。\n▸ 关键依据：美银牛熊指标维持在极度看多的9.5，卖出信号已连续多周闪烁，全球资本大举涌入股票基金构成逆向指标。原文进一步指出市场共识建立在「四个不会」上（美国经济不硬着陆、美联储不加息、AI 资本开支不削减、民主党不横扫中期选举），并把日本银行股称作全球抛售的煤矿金丝雀——若日债收益率快速上行压制银行股，或预示风险资产回调。\n▸ 时间与位置：未给出具体点位；卖出信号已连续多周有效。\n▸ 标的与操作：全球股市看空/减仓；关注日本银行股作为领先信号，并留意 AI 投资降温对费城半导体指数估值的压力。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://finance.biggo.com/news/3a3448a2-1aab-4d2b-9aa5-bf84f87a3853",
+     "date": "2026-07-10"
+    }
+   ]
+  }
+ ]
+}

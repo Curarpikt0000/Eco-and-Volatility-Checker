@@ -1,30 +1,55 @@
 {
-  "kol": "Torsten Sløk",
-  "sector": "Macro",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 3,
-  "history": [
+ "kol": "Torsten Sløk",
+ "sector": "Macro",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2025-05-01",
+   "direction": "看空",
+   "comments": "阿波罗首席经济学家认为若特朗普关税政策不变,2025年美国衰退概率高达90%,商业地产行业将首当其冲承受冲击。",
+   "targets": "美股、商业地产、美国经济",
+   "source": "commercialobserver.com / financialexpress.com",
+   "detail": "▸ 核心论点：若特朗普关税政策不变，2025年美国衰退概率高达90%。\n▸ 关键依据：关税冲击将传导至实体经济，商业地产行业将首当其冲承受冲击。\n▸ 时间与位置：2025-05-01；时间窗为2025年，衰退概率90%，未给出具体点位。\n▸ 标的与操作：美股、商业地产、美国经济；看空。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-05-01",
-      "direction": "看空",
-      "comments": "阿波罗首席经济学家认为若特朗普关税政策不变,2025年美国衰退概率高达90%,商业地产行业将首当其冲承受冲击。",
-      "targets": "美股、商业地产、美国经济",
-      "source": "commercialobserver.com / financialexpress.com"
-    },
-    {
-      "date": "2026-03-29",
-      "direction": "分歧",
-      "comments": "指出10年期美债收益率4.4%比合理水平3.9%高出约55个基点,期限溢价升高源于财政担忧、量化紧缩、外资需求下降及对美联储独立性的疑虑。",
-      "targets": "美债、利率",
-      "source": "apolloacademy.com (The Daily Spark)"
-    },
-    {
-      "date": "2026-06-22",
-      "direction": "中性",
-      "comments": "认为油价两个月内跌破80美元、下跌22%,已经削弱了美联储前一天发布的鹰派点阵图,暗示利率路径需下修。",
-      "targets": "原油、利率",
-      "source": "247wallst.com"
+     "url": "commercialobserver.com / financialexpress.com"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-03-29",
+   "direction": "分歧",
+   "comments": "指出10年期美债收益率4.4%比合理水平3.9%高出约55个基点,期限溢价升高源于财政担忧、量化紧缩、外资需求下降及对美联储独立性的疑虑。",
+   "targets": "美债、利率",
+   "source": "apolloacademy.com (The Daily Spark)",
+   "detail": "▸ 核心论点：10 年期美债收益率高于合理水平，期限溢价被多重因素抬升。\n▸ 关键依据：当前 10 年期收益率 4.4%，比合理水平 3.9% 高出约 55 个基点；抬升原因包括财政担忧、量化紧缩、外资需求下降以及对美联储独立性的疑虑。\n▸ 时间与位置：关键点位为 10 年期 4.4% 对 3.9% 合理值，价差约 55bp；未给出时间窗口。\n▸ 标的与操作：美债利率；判断偏分歧——收益率偏高但推升因素结构性存在，未给出明确买卖建议。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "apolloacademy.com (The Daily Spark)",
+     "date": "2026-03-29"
+    }
+   ]
+  },
+  {
+   "date": "2026-06-22",
+   "direction": "中性",
+   "comments": "认为油价两个月内跌破80美元、下跌22%,已经削弱了美联储前一天发布的鹰派点阵图,暗示利率路径需下修。",
+   "targets": "原油、利率",
+   "source": "247wallst.com",
+   "detail": "▸ 核心论点：油价快速下跌已经削弱了美联储的鹰派立场，利率路径需要下修。\n▸ 关键依据：油价在两个月内跌破 80 美元、跌幅达 22%，通胀压力随之缓解，直接对冲了美联储前一天发布的鹰派点阵图。\n▸ 时间与位置：时间窗口为两个月；关键点位为油价 80 美元。\n▸ 标的与操作：涉及原油与美国利率；立场中性，属对政策路径的修正提示而非方向性交易建议。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "247wallst.com",
+     "date": "2026-06-22"
+    }
+   ]
+  }
+ ]
 }

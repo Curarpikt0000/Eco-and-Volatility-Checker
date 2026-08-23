@@ -1,30 +1,57 @@
 {
-  "kol": "Clem Chambers",
-  "sector": "Macro",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 3,
-  "history": [
+ "kol": "Clem Chambers",
+ "sector": "Macro",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2026-06-27",
+   "direction": "看空",
+   "comments": "自称'比特币变量派'而非永久空头,长期看空比特币且预言应验——认为BTC仍将下探,坚持已'唱空比特币许久'的立场。相对更看好黄金跑赢加密。",
+   "targets": "比特币/黄金",
+   "source": "https://www.forbes.com/sites/investor/people/clem/",
+   "detail": "▸ 核心论点：自称比特币变量派而非永久空头，长期看空比特币，相对更看好黄金跑赢加密。\n▸ 关键依据：称自己长期看空比特币的判断已经应验，坚持已唱空比特币许久的立场，认为 BTC 仍将进一步下探。\n▸ 时间与位置：未给出具体点位与时间窗口。\n▸ 标的与操作：比特币看空、黄金相对看多；操作上以黄金替代加密敞口。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2026-06-27",
-      "direction": "看空",
-      "comments": "自称'比特币变量派'而非永久空头,长期看空比特币且预言应验——认为BTC仍将下探,坚持已'唱空比特币许久'的立场。相对更看好黄金跑赢加密。",
-      "targets": "比特币/黄金",
-      "source": "https://www.forbes.com/sites/investor/people/clem/"
-    },
-    {
-      "date": "2026-07-12",
-      "direction": "强烈看空",
-      "comments": "断言比特币仍在寻底,目标底部区间在3万至4万美元之间,展示'他们不想让你看到的比特币图表'佐证其熊市判断。",
-      "targets": "比特币",
-      "source": "https://www.forbes.com/sites/digital-assets/2026/07/12/the-1-bitcoin-chart-they-dont-want-you-to-see/"
-    },
-    {
-      "date": "2026-05-19",
-      "direction": "看空",
-      "comments": "认为比特币陷入僵局,黄金正在盖过加密的风头;当前仍对比特币感兴趣的只剩在顶部买入被套的玩家,'比特币已不再是原来的比特币'。相对看多黄金。",
-      "targets": "比特币/黄金",
-      "source": "https://www.forbes.com/sites/digital-assets/2026/05/19/bitcoin-stuck-in-limbo-as-gold-outshines-crypto/"
+     "title": "",
+     "url": "https://www.forbes.com/sites/investor/people/clem/",
+     "date": "2026-06-27"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-07-12",
+   "direction": "强烈看空",
+   "comments": "断言比特币仍在寻底,目标底部区间在3万至4万美元之间,展示'他们不想让你看到的比特币图表'佐证其熊市判断。",
+   "targets": "比特币",
+   "source": "https://www.forbes.com/sites/digital-assets/2026/07/12/the-1-bitcoin-chart-they-dont-want-you-to-see/",
+   "detail": "▸ 核心论点：比特币仍在寻底过程中，熊市尚未结束。\n▸ 关键依据：展示「他们不想让你看到的比特币图表」佐证熊市判断；自述不是永久空头（2017、2021、2025 均曾看多），并指比特币被伊朗、朝鲜等美国对手方用于规避制裁，可能促使美国转向不宽容立场、削弱其最大用例。\n▸ 时间与位置：目标底部区间 3 万至 4 万美元；未给出明确见底时间。\n▸ 标的与操作：比特币，强烈看空，等待底部区间出现。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.forbes.com/sites/digital-assets/2026/07/12/the-1-bitcoin-chart-they-dont-want-you-to-see/",
+     "date": "2026-07-12"
+    }
+   ]
+  },
+  {
+   "date": "2026-05-19",
+   "direction": "看空",
+   "comments": "认为比特币陷入僵局,黄金正在盖过加密的风头;当前仍对比特币感兴趣的只剩在顶部买入被套的玩家,'比特币已不再是原来的比特币'。相对看多黄金。",
+   "targets": "比特币/黄金",
+   "source": "https://www.forbes.com/sites/digital-assets/2026/05/19/bitcoin-stuck-in-limbo-as-gold-outshines-crypto/",
+   "detail": "▸ 核心论点：比特币陷入僵局，黄金正在盖过加密的风头，相对看多黄金、看空比特币。\n▸ 关键依据：认为当前仍对比特币感兴趣的只剩在顶部买入被套的玩家，增量买盘枯竭；直言比特币已不再是原来的比特币。\n▸ 时间与位置：未给出具体点位或时间窗口。\n▸ 标的与操作：比特币看空/回避，黄金相对看多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.forbes.com/sites/digital-assets/2026/05/19/bitcoin-stuck-in-limbo-as-gold-outshines-crypto/",
+     "date": "2026-05-19"
+    }
+   ]
+  }
+ ]
 }

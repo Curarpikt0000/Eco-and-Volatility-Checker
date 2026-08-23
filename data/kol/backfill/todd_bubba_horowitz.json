@@ -1,1 +1,55 @@
-{"kol":"Todd \"Bubba\" Horowitz","sector":"Precious Metals","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":3,"history":[{"date":"2026-01-06","direction":"强烈看多","comments":"Bubba Trading创始人认为金价迈向6000美元、白银突破100美元不再只是牛市预测,而是债务高企、通胀顽固及对法币体系信心流失的真实反映,贵金属上行是对经济恶化的合理回应。","targets":"黄金、白银","source":"https://marketsanity.com/gold-to-6000-silver-over-100-in-2026-fiat-con-game-exposed/"},{"date":"2026-01-26","direction":"强烈看多","comments":"40年市场老将在专访中给出2026年白银目标价,同时警告美股可能出现40%-60%的大幅回调('haircut'),看好黄金白银及矿业股,对宏观整体偏谨慎但对贵金属坚定看多。","targets":"白银、黄金、矿业股","source":"https://marketsanity.com/todd-bubba-horwitz-silver-2026-target-a-40-60-stock-market-haircut/"},{"date":"2026-07-31","direction":"强烈看多","comments":"称黄金近4000美元、白银近55美元是他愿意为多年持有而买入积累的水平;预期将出现深度股市熊市(潜在跌40%-60%),始于几乎所有资产的强制抛售,贵金属正在筑底。","targets":"黄金、白银","source":"https://metalsandminers.substack.com/p/todd-bubba-horwitz-seeing-precious"}]}
+{
+ "kol": "Todd \"Bubba\" Horowitz",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2026-01-06",
+   "direction": "强烈看多",
+   "comments": "Bubba Trading创始人认为金价迈向6000美元、白银突破100美元不再只是牛市预测,而是债务高企、通胀顽固及对法币体系信心流失的真实反映,贵金属上行是对经济恶化的合理回应。",
+   "targets": "黄金、白银",
+   "source": "https://marketsanity.com/gold-to-6000-silver-over-100-in-2026-fiat-con-game-exposed/",
+   "detail": "▸ 核心论点：金价迈向6,000美元、白银突破100美元不再只是牛市预测，而是对经济恶化的合理回应。\n▸ 关键依据：依据是债务高企、通胀顽固及对法币体系信心流失三重因素，Bubba Trading创始人认为贵金属上行是这些结构性问题的真实反映而非投机。\n▸ 时间与位置：目标位：黄金6,000美元、白银100美元以上（对应2026年展望）。\n▸ 标的与操作：黄金、白银，强烈看多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Todd \"Bubba\" Horowitz",
+     "url": "https://marketsanity.com/gold-to-6000-silver-over-100-in-2026-fiat-con-game-exposed/",
+     "date": "2026-01-06"
+    }
+   ]
+  },
+  {
+   "date": "2026-01-26",
+   "direction": "强烈看多",
+   "comments": "40年市场老将在专访中给出2026年白银目标价,同时警告美股可能出现40%-60%的大幅回调('haircut'),看好黄金白银及矿业股,对宏观整体偏谨慎但对贵金属坚定看多。",
+   "targets": "白银、黄金、矿业股",
+   "source": "https://marketsanity.com/todd-bubba-horwitz-silver-2026-target-a-40-60-stock-market-haircut/",
+   "detail": "▸ 核心论点：坚定看多黄金白银及矿业股，同时警告美股面临大幅回调，宏观整体偏谨慎。\n▸ 关键依据：40 年市场老将在专访中基于宏观风险判断，认为美股估值与结构性风险将带来一次大幅出清，而贵金属是对冲。\n▸ 时间与位置：给出 2026 年白银目标价（原文未列具体数值）；警告美股可能出现 40%–60% 的大幅回调（haircut）。\n▸ 标的与操作：黄金、白银及矿业股强烈看多；美股看空、减仓。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://marketsanity.com/todd-bubba-horwitz-silver-2026-target-a-40-60-stock-market-haircut/",
+     "date": "2026-01-26"
+    }
+   ]
+  },
+  {
+   "date": "2026-07-31",
+   "direction": "强烈看多",
+   "comments": "称黄金近4000美元、白银近55美元是他愿意为多年持有而买入积累的水平;预期将出现深度股市熊市(潜在跌40%-60%),始于几乎所有资产的强制抛售,贵金属正在筑底。",
+   "targets": "黄金、白银",
+   "source": "https://metalsandminers.substack.com/p/todd-bubba-horwitz-seeing-precious",
+   "detail": "▸ 核心论点：贵金属正在筑底，当前价位是值得为多年持有而买入积累的水平；同时预期股市将出现深度熊市。\n▸ 关键依据：预期股市潜在跌幅40%-60%，且下跌将始于几乎所有资产的强制抛售，贵金属在此过程中完成筑底。\n▸ 时间与位置：2026-07-31；买入积累位为黄金近4000美元、白银近55美元。\n▸ 标的与操作：黄金、白银——在上述水平买入并多年持有；对美股强烈看空。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://metalsandminers.substack.com/p/todd-bubba-horwitz-seeing-precious"
+    }
+   ]
+  }
+ ]
+}

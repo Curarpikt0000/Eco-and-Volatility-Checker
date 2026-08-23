@@ -1,1 +1,25 @@
-{"kol":"Maria Smirnova","sector":"Precious Metals","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":1,"history":[{"date":"2026-08-06","direction":"看多","comments":"Sprott贵金属报告认为2026上半年金银大幅回调仅是周期性修正而非趋势反转,长期逻辑完好。金价已回升至4350美元上方创七周新高;主权债务上升、财政赤字、央行储备多元化及地缘碎片化强化黄金货币资产地位。白银受结构性缺口、矿产供给受限与电气化/AI需求支撑,矿业股现金流强、估值具吸引力。","targets":"黄金/白银/金银矿业股","source":"https://sprottetfs.com/insights/gold-and-silver-looking-beyond-the-correction/"}]}
+{
+ "kol": "Maria Smirnova",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 1,
+ "history": [
+  {
+   "date": "2026-08-06",
+   "direction": "看多",
+   "comments": "Sprott贵金属报告认为2026上半年金银大幅回调仅是周期性修正而非趋势反转,长期逻辑完好。金价已回升至4350美元上方创七周新高;主权债务上升、财政赤字、央行储备多元化及地缘碎片化强化黄金货币资产地位。白银受结构性缺口、矿产供给受限与电气化/AI需求支撑,矿业股现金流强、估值具吸引力。",
+   "targets": "黄金/白银/金银矿业股",
+   "source": "https://sprottetfs.com/insights/gold-and-silver-looking-beyond-the-correction/",
+   "detail": "▸ 核心论点：2026 上半年金银大幅回调仅是周期性修正而非趋势反转，长期逻辑完好。\n▸ 关键依据：金价已回升至 4350 美元上方创七周新高；主权债务上升、财政赤字、央行储备多元化及地缘碎片化强化黄金货币资产地位；白银受结构性缺口、矿产供给受限与电气化/AI 需求支撑。\n▸ 时间与位置：口径为 2026 上半年回调后；参考位金价 4350 美元上方（七周新高），未给出目标价。\n▸ 标的与操作：黄金、白银及金银矿业股均看多，矿业股现金流强、估值具吸引力（Sprott 贵金属报告）。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://sprottetfs.com/insights/gold-and-silver-looking-beyond-the-correction/",
+     "date": "2026-08-06"
+    }
+   ]
+  }
+ ]
+}

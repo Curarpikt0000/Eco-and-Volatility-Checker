@@ -231,10 +231,17 @@ def kol_full_history():
             lst = out.setdefault(kol, [])
             if lst and lst[-1]["direction"] == direction and lst[-1]["comments"] == cmt:
                 lst[-1]["last_date"] = ds                 # 延长区间
+                # 区间延长时用最新一天的 detail(若有), 保证展开层拿到的是最新版本
+                if x.get("detail"):
+                    lst[-1]["detail"] = x.get("detail")
+                    lst[-1]["sources"] = x.get("sources") or lst[-1].get("sources") or []
             else:
                 lst.append({"first_date": ds, "last_date": ds,
                             "direction": direction, "comments": cmt,
-                            "targets": targets, "source": "", "origin": "snapshot"})
+                            "targets": targets, "source": "", "origin": "snapshot",
+                            # ★2026-08-23: 快照已带深度摘要, 必须透传给 dashboard 展开层
+                            "detail": (x.get("detail") or "").strip(),
+                            "sources": x.get("sources") or []})
 
     # ── 路 2: 历史回填(带原文链接) ──
     if os.path.isdir(KOL_BACKFILL_DIR):
@@ -258,6 +265,9 @@ def kol_full_history():
                     "targets": (h.get("targets") or "").strip(),
                     "source": (h.get("source") or "").strip(),
                     "origin": "backfill",
+                    # ★2026-08-23 全量回填(369/369): 历史观点也有四段式深度摘要
+                    "detail": (h.get("detail") or "").strip(),
+                    "sources": h.get("sources") or [],
                 })
 
     # ── 跨路去重(同日同言论可能两路都有) + 倒序 ──

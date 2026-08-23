@@ -1,1 +1,57 @@
-{"kol":"ANONYMIZED_PERSON_0_11","sector":"Precious Metals","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":3,"history":[{"date":"2026-07-10","direction":"强烈看多","comments":"在GoldRepublic访谈中详述中国与俄罗斯如何轻易将本币锚定金本位及其后果,重申黄金是货币而其余皆为信用,长期看多贵金属货币化趋势。","targets":"黄金/白银","source":"https://www.macleodfinance.com/p/interview-with-goldrepublic-dc3"},{"date":"2026-08-11","direction":"强烈看多","comments":"KWN每周综述中称本轮为56年来最被错误定价的市场,判断新一轮历史性黄金抢购已启动,金价有望重回5000美元上方。","targets":"黄金","source":"https://kingworldnews.com/weekly-wrap-with-alasdair-macleod-08-15-2026/"},{"date":"2026-08-10","direction":"强烈看多","comments":"在'GOLD MATTERS'访谈中强调贵金属为56年来最被错杀资产,央行信用体系面临崩溃,建议买入黄金白银避险。","targets":"黄金/白银","source":"https://westsdarkesthour.com/2026/08/10/alasdair/"}]}
+{
+ "kol": "ANONYMIZED_PERSON_0_11",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2026-07-10",
+   "direction": "强烈看多",
+   "comments": "在GoldRepublic访谈中详述中国与俄罗斯如何轻易将本币锚定金本位及其后果,重申黄金是货币而其余皆为信用,长期看多贵金属货币化趋势。",
+   "targets": "黄金/白银",
+   "source": "https://www.macleodfinance.com/p/interview-with-goldrepublic-dc3",
+   "detail": "▸ 核心论点：黄金是货币，其余皆为信用；中俄可以相当轻易地把本币锚定到金本位，长期看多贵金属货币化趋势。\n▸ 关键依据：在 GoldRepublic 访谈中详述中俄实施本币锚金的可行路径及其对现行信用货币体系的后果，重申货币与信用的本质区分。\n▸ 时间与位置：属长期结构性判断，未给出具体点位或时间窗口。\n▸ 标的与操作：黄金、白银强烈看多，属长期战略配置逻辑。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.macleodfinance.com/p/interview-with-goldrepublic-dc3",
+     "date": "2026-07-10"
+    }
+   ]
+  },
+  {
+   "date": "2026-08-11",
+   "direction": "强烈看多",
+   "comments": "KWN每周综述中称本轮为56年来最被错误定价的市场,判断新一轮历史性黄金抢购已启动,金价有望重回5000美元上方。",
+   "targets": "黄金",
+   "source": "https://kingworldnews.com/weekly-wrap-with-alasdair-macleod-08-15-2026/",
+   "detail": "▸ 核心论点：本轮为 56 年来最被错误定价的市场，新一轮历史性黄金抢购已经启动，强烈看多黄金。\n▸ 关键依据：KWN 每周综述中以「56 年来最被错误定价」定性当前市场，判断历史性的黄金抢购潮已经开始。\n▸ 时间与位置：金价有望重回 5000 美元上方；未给出明确达成时间窗口。\n▸ 标的与操作：黄金，买入 / 持有。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "ANONYMIZED_PERSON_0_11",
+     "url": "https://kingworldnews.com/weekly-wrap-with-alasdair-macleod-08-15-2026/",
+     "date": "2026-08-11"
+    }
+   ]
+  },
+  {
+   "date": "2026-08-10",
+   "direction": "强烈看多",
+   "comments": "在'GOLD MATTERS'访谈中强调贵金属为56年来最被错杀资产,央行信用体系面临崩溃,建议买入黄金白银避险。",
+   "targets": "黄金/白银",
+   "source": "https://westsdarkesthour.com/2026/08/10/alasdair/",
+   "detail": "▸ 核心论点：贵金属是 56 年来最被错杀的资产，央行信用体系面临崩溃。\n▸ 关键依据：在《GOLD MATTERS: The Most Mispriced Markets in 56 Years》访谈中论述法币与央行信用崩塌；相关转载同时引述其「美元在六到九个月内崩溃」以及债券市场自燃（Spontaneous Combustion）的说法。\n▸ 时间与位置：所引美元崩溃时间窗口为六到九个月；未给出具体金银点位。\n▸ 标的与操作：建议买入黄金、白银避险，强烈看多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://westsdarkesthour.com/2026/08/10/alasdair/",
+     "date": "2026-08-10"
+    }
+   ]
+  }
+ ]
+}

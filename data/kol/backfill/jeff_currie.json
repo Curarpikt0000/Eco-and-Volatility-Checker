@@ -1,37 +1,71 @@
 {
-  "kol": "Jeff Currie",
-  "sector": "Energy & Commodities",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
-  "count": 4,
-  "history": [
+ "kol": "Jeff Currie",
+ "sector": "Energy & Commodities",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+ "count": 4,
+ "history": [
+  {
+   "date": "2025-05-13",
+   "direction": "看多",
+   "comments": "在Carlyle Compass报告中重申大宗商品结构性牛市，因多年投资不足（老经济复仇），2026年油价与商品上行风险持续累积，即便政府希望油价走低。",
+   "targets": "原油/大宗商品",
+   "source": "https://www.carlyle.com/sites/default/files/2025-05/The_Carlyle_Compass_May_13_2025.pdf",
+   "detail": "▸ 核心论点：重申大宗商品结构性牛市，上行风险持续累积。\n▸ 关键依据：多年投资不足导致供给受限，即所谓老经济的复仇；即便政府希望油价走低，商品与油价的上行风险仍在积累（Carlyle Compass 报告）。\n▸ 时间与位置：时间指向 2026 年；未给出具体点位。\n▸ 标的与操作：原油 / 大宗商品，看多。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-05-13",
-      "direction": "看多",
-      "comments": "在Carlyle Compass报告中重申大宗商品结构性牛市，因多年投资不足（老经济复仇），2026年油价与商品上行风险持续累积，即便政府希望油价走低。",
-      "targets": "原油/大宗商品",
-      "source": "https://www.carlyle.com/sites/default/files/2025-05/The_Carlyle_Compass_May_13_2025.pdf"
-    },
-    {
-      "date": "2026-01-30",
-      "direction": "强烈看多",
-      "comments": "接受Bloomberg Odd Lots访谈，认为金属出现疯狂上涨，长期看多，多年来一直预测新一轮商品超级周期正在兑现。",
-      "targets": "金属/铜/大宗商品",
-      "source": "https://www.bloomberg.com/news/audio/2026-01-30/odd-lots-jeff-currie-on-the-crazy-surge-in-metals-podcast"
-    },
-    {
-      "date": "2026-01-31",
-      "direction": "强烈看多",
-      "comments": "发布1月末展望，指出金属与关键矿产进入结构性多年上升周期，驱动力为去美元化、地缘风险与供给约束；矿业巨头资本开支较2012峰值少40%。",
-      "targets": "金属/关键矿产/黄金/白银",
-      "source": "https://equityswarm.com/commodities/articles/currie-decade-of-rising-metals-and-minerals/"
-    },
-    {
-      "date": "2026-02-15",
-      "direction": "看多",
-      "comments": "接受Bloomberg TV访谈，称大宗商品处于典型晚周期上涨，预计油价将突破70-90美元区间，并谈及在Carlyle能源路径部门的新角色。",
-      "targets": "原油/大宗商品",
-      "source": "https://www.youtube.com/watch?v=vDv1zIbxq_8"
+     "title": "Jeff Currie",
+     "url": "https://www.carlyle.com/sites/default/files/2025-05/The_Carlyle_Compass_May_13_2025.pdf",
+     "date": "2025-05-13"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-01-30",
+   "direction": "强烈看多",
+   "comments": "接受Bloomberg Odd Lots访谈，认为金属出现疯狂上涨，长期看多，多年来一直预测新一轮商品超级周期正在兑现。",
+   "targets": "金属/铜/大宗商品",
+   "source": "https://www.bloomberg.com/news/audio/2026-01-30/odd-lots-jeff-currie-on-the-crazy-surge-in-metals-podcast",
+   "detail": "▸ 核心论点：金属出现疯狂上涨，长期看多，多年来一直预测的新一轮商品超级周期正在兑现。\n▸ 关键依据：在Bloomberg Odd Lots访谈中以其长期坚持的「商品超级周期」框架为依据，认为当前金属价格表现正是该周期的兑现阶段。\n▸ 时间与位置：未给出具体点位或目标价；时间维度为多年期超级周期。\n▸ 标的与操作：金属、铜及大宗商品，强烈看多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Jeff Currie",
+     "url": "https://www.bloomberg.com/news/audio/2026-01-30/odd-lots-jeff-currie-on-the-crazy-surge-in-metals-podcast",
+     "date": "2026-01-30"
+    }
+   ]
+  },
+  {
+   "date": "2026-01-31",
+   "direction": "强烈看多",
+   "comments": "发布1月末展望，指出金属与关键矿产进入结构性多年上升周期，驱动力为去美元化、地缘风险与供给约束；矿业巨头资本开支较2012峰值少40%。",
+   "targets": "金属/关键矿产/黄金/白银",
+   "source": "https://equityswarm.com/commodities/articles/currie-decade-of-rising-metals-and-minerals/",
+   "detail": "▸ 核心论点：金属与关键矿产进入结构性多年上升周期。\n▸ 关键依据：驱动力为去美元化、地缘风险与供给约束；矿业巨头资本开支较2012年峰值少40%，供给端长期受限。\n▸ 时间与位置：2026-01-31 发布1月末展望；周期尺度为多年，未给出具体目标价。\n▸ 标的与操作：金属、关键矿产、黄金、白银；强烈看多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://equityswarm.com/commodities/articles/currie-decade-of-rising-metals-and-minerals/"
+    }
+   ]
+  },
+  {
+   "date": "2026-02-15",
+   "direction": "看多",
+   "comments": "接受Bloomberg TV访谈，称大宗商品处于典型晚周期上涨，预计油价将突破70-90美元区间，并谈及在Carlyle能源路径部门的新角色。",
+   "targets": "原油/大宗商品",
+   "source": "https://www.youtube.com/watch?v=vDv1zIbxq_8",
+   "detail": "▸ 核心论点：大宗商品处于典型的晚周期上涨阶段，油价将向上突破区间。\n▸ 关键依据：在Bloomberg TV访谈中以晚周期供需框架为依据，认为资本开支不足叠加需求韧性推动价格中枢上移；同时谈及其在Carlyle能源路径部门的新角色。\n▸ 时间与位置：预计油价将突破70-90美元区间。\n▸ 标的与操作：原油与大宗商品，看多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Jeff Currie",
+     "url": "https://www.youtube.com/watch?v=vDv1zIbxq_8",
+     "date": "2026-02-15"
+    }
+   ]
+  }
+ ]
 }

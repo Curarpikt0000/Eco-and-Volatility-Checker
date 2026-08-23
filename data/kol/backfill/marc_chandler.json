@@ -1,37 +1,73 @@
 {
-  "kol": "Marc Chandler",
-  "sector": "Macro",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
-  "count": 4,
-  "history": [
+ "kol": "Marc Chandler",
+ "sector": "Macro",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+ "count": 4,
+ "history": [
+  {
+   "date": "2025-06-20",
+   "direction": "看空",
+   "comments": "Bannockburn首席策略师，指零售/工业/新屋开工等数据接连令人失望，美国经济渐弱，美联储将2025 GDP预期下调至1.4%；点阵图分歧大，暗示不确定性高，美元承压。",
+   "targets": "美元/美债",
+   "source": "https://www.kereport.com/2025/06/20/marc-chandler-fed-recap-u-s-data-weakness-and-dollar-trends/",
+   "detail": "▸ 核心论点：美国经济渐弱，美元承压。\n▸ 关键依据：零售、工业产出、新屋开工等数据接连令人失望；美联储已将 2025 年 GDP 预期下调至 1.4%；点阵图分歧大，暗示政策不确定性高。\n▸ 时间与位置：以 2025 年 6 月议息会议后的数据与点阵图为口径；未给出具体汇率点位。\n▸ 标的与操作：美元看空，美债受经济走弱影响，Bannockburn 首席策略师观点（KE Report）。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-06-20",
-      "direction": "看空",
-      "comments": "Bannockburn首席策略师，指零售/工业/新屋开工等数据接连令人失望，美国经济渐弱，美联储将2025 GDP预期下调至1.4%；点阵图分歧大，暗示不确定性高，美元承压。",
-      "targets": "美元/美债",
-      "source": "https://www.kereport.com/2025/06/20/marc-chandler-fed-recap-u-s-data-weakness-and-dollar-trends/"
-    },
-    {
-      "date": "2025-08-30",
-      "direction": "看空",
-      "comments": "多数G10及新兴市场央行今年已降息而美联储按兵不动，即将到来的降息将收窄利差并压制美元；对美元中期偏空。",
-      "targets": "美元",
-      "source": "https://www.marctomarket.com/2025/08/september-2025-monthly.html"
-    },
-    {
-      "date": "2025-09-06",
-      "direction": "看空",
-      "comments": "点评美国就业数据疲软、CPI风险与降息概率上升，认为这对美元偏空、对债券及全球风险资产有影响。",
-      "targets": "美元/美债",
-      "source": "https://kereport.substack.com/p/jobs-weak-cuts-ahead-marc-chandler"
-    },
-    {
-      "date": "2026-01-02",
-      "direction": "看空",
-      "comments": "2026宏观展望：对美元长期偏空，看好大宗商品走强，关注地缘冲突与AI交易的下一阶段，提醒投资者留意汇率与利率走势。",
-      "targets": "美元/大宗商品",
-      "source": "https://www.youtube.com/watch?v=jiLaby86gGE"
+     "title": "",
+     "url": "https://www.kereport.com/2025/06/20/marc-chandler-fed-recap-u-s-data-weakness-and-dollar-trends/",
+     "date": "2025-06-20"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2025-08-30",
+   "direction": "看空",
+   "comments": "多数G10及新兴市场央行今年已降息而美联储按兵不动，即将到来的降息将收窄利差并压制美元；对美元中期偏空。",
+   "targets": "美元",
+   "source": "https://www.marctomarket.com/2025/08/september-2025-monthly.html",
+   "detail": "▸ 核心论点：即将到来的美联储降息将收窄利差并压制美元，对美元中期偏空。\n▸ 关键依据：多数 G10 及新兴市场央行今年已经降息，而美联储此前按兵不动；美联储恢复降息后，此前支撑美元的利差优势将被压缩。\n▸ 时间与位置：时间窗口为即将到来的降息周期（9 月起）；未给出具体汇率点位。\n▸ 标的与操作：美元看空（中期），属汇率方向性判断。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.marctomarket.com/2025/08/september-2025-monthly.html",
+     "date": "2025-08-30"
+    }
+   ]
+  },
+  {
+   "date": "2025-09-06",
+   "direction": "看空",
+   "comments": "点评美国就业数据疲软、CPI风险与降息概率上升，认为这对美元偏空、对债券及全球风险资产有影响。",
+   "targets": "美元/美债",
+   "source": "https://kereport.substack.com/p/jobs-weak-cuts-ahead-marc-chandler",
+   "detail": "▸ 核心论点：美国就业明显走弱、美联储将启动降息周期，25bp 是审慎基准，美元偏空。\n▸ 关键依据：8月非农仅增 22k，6月基准修订隐含当月实际净减少就业(疫情以来首次)，下周 BLS 年度修订可能再减约 55万-95万；即便 CPI 连续第四个月走高，美联储仍会优先应对劳动力市场恶化；他称「市场钟摆可能过度摆向 50bp」。\n▸ 时间与位置：2025-09-06；降息幅度基准 25bp，关注点为下周二 BLS 修订，美元在区间边缘徘徊。\n▸ 标的与操作：美元(偏空)、美债与全球风险资产受降息预期影响；建议淡化(fade)押注 50bp 降息的极端头寸。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Jobs Weak, Cuts Ahead? Marc Chandler on the Fed’s Next Move, the Dollar, and Global Cross-Currents",
+     "url": "https://kereport.substack.com/p/jobs-weak-cuts-ahead-marc-chandler",
+     "date": "2025-09-06"
+    }
+   ]
+  },
+  {
+   "date": "2026-01-02",
+   "direction": "看空",
+   "comments": "2026宏观展望：对美元长期偏空，看好大宗商品走强，关注地缘冲突与AI交易的下一阶段，提醒投资者留意汇率与利率走势。",
+   "targets": "美元/大宗商品",
+   "source": "https://www.youtube.com/watch?v=jiLaby86gGE",
+   "detail": "▸ 核心论点：2026宏观展望：对美元长期偏空，看好大宗商品走强。\n▸ 关键依据：关注两条主线——地缘冲突与 AI 交易的下一阶段；提醒投资者留意汇率与利率走势。\n▸ 时间与位置：时间维度为2026全年展望；未给出具体点位。\n▸ 标的与操作：美元（看空）、大宗商品（看多）。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.youtube.com/watch?v=jiLaby86gGE",
+     "date": "2026-01-02"
+    }
+   ]
+  }
+ ]
 }

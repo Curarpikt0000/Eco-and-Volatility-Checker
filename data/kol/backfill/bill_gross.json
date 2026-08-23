@@ -1,16 +1,25 @@
 {
-  "kol": "Bill Gross",
-  "sector": "Government Debt",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
-  "count": 1,
-  "history": [
+ "kol": "Bill Gross",
+ "sector": "Government Debt",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+ "count": 1,
+ "history": [
+  {
+   "date": "2026-01-23",
+   "direction": "看空",
+   "comments": "债王警告美股多年牛市动能减弱、需新燃料（降息、15%+盈利增长、AI生产力证据）才能延续，估值极端（巴菲特指标创新高），呼应看空同行；对股票转谨慎偏空。",
+   "targets": "美股",
+   "source": "https://www.businessinsider.com/bond-king-bill-gross-stock-market-outlook-ai-valuations-government-2026-1",
+   "detail": "▸ 核心论点：债王警告美股多年牛市动能减弱，对股票转为谨慎偏空。\n▸ 关键依据：牛市延续需要新燃料——降息、15% 以上的盈利增长、以及 AI 生产力的实证；而估值已达极端，巴菲特指标创下新高。\n▸ 时间与位置：以当前估值极值为判断依据，呼应其他看空同行；未给出具体点位。\n▸ 标的与操作：美股，看空/减配，对股票转谨慎。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2026-01-23",
-      "direction": "看空",
-      "comments": "债王警告美股多年牛市动能减弱、需新燃料（降息、15%+盈利增长、AI生产力证据）才能延续，估值极端（巴菲特指标创新高），呼应看空同行；对股票转谨慎偏空。",
-      "targets": "美股",
-      "source": "https://www.businessinsider.com/bond-king-bill-gross-stock-market-outlook-ai-valuations-government-2026-1"
+     "title": "",
+     "url": "https://www.businessinsider.com/bond-king-bill-gross-stock-market-outlook-ai-valuations-government-2026-1",
+     "date": "2026-01-23"
     }
-  ]
+   ]
+  }
+ ]
 }

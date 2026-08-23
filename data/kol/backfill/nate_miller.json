@@ -1,30 +1,57 @@
 {
-  "kol": "Nate Miller",
-  "sector": "Precious Metals",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)；此Nate Miller=Amplify ETFs产品开发副总裁(白银ETF方向)，已与政治预测家Nate Silver区分",
-  "count": 3,
-  "history": [
+ "kol": "Nate Miller",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)；此Nate Miller=Amplify ETFs产品开发副总裁(白银ETF方向)，已与政治预测家Nate Silver区分",
+ "count": 3,
+ "history": [
+  {
+   "date": "2025-08-27",
+   "direction": "看多",
+   "comments": "Amplify ETFs产品开发副总裁Miller称白银投资需求激增带来巨大增长，$3400金价意味着银价可达$50/oz，仍看到白银巨大上行空间。",
+   "targets": "白银",
+   "source": "https://www.kitco.com/news/article/2025-08-27/3400-gold-means-silver-50oz-we-still-see-tremendous-upside-silver-amplifys",
+   "detail": "▸ 核心论点：白银投资需求激增带来巨大增长空间，仍看到白银显著上行。\n▸ 关键依据：Amplify ETFs产品开发副总裁的测算：3,400美元的金价意味着银价可达50美元/盎司，即金银比隐含白银存在明显补涨空间。\n▸ 时间与位置：对应金价3,400美元，白银目标50美元/盎司。\n▸ 标的与操作：白银，看多。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-08-27",
-      "direction": "看多",
-      "comments": "Amplify ETFs产品开发副总裁Miller称白银投资需求激增带来巨大增长，$3400金价意味着银价可达$50/oz，仍看到白银巨大上行空间。",
-      "targets": "白银",
-      "source": "https://www.kitco.com/news/article/2025-08-27/3400-gold-means-silver-50oz-we-still-see-tremendous-upside-silver-amplifys"
-    },
-    {
-      "date": "2026-02-25",
-      "direction": "看多",
-      "comments": "Miller称白银在年初抛物线式上涨后进入盘整阶段，但由零售需求强劲支撑的整体牛市逻辑保持完好。",
-      "targets": "白银",
-      "source": "https://www.kitco.com/news/article/2026-02-25/silver-consolidating-retail-investors-remain-confident-amplify-etfs"
-    },
-    {
-      "date": "2026-04-13",
-      "direction": "看多",
-      "comments": "Miller称白银在年初急涨后进入盘整期，但工业需求与投资需求支撑整体前景仍偏建设性；白银已告别$20-30时代，$60-70成新常态，围绕$70盘整是结构性转变的积极信号。",
-      "targets": "白银",
-      "source": "https://www.kitco.com/news/article/2026-04-13/silver-builds-strong-base-above-70-upside-depends-inflation-amplify-etfs"
+     "title": "Nate Miller",
+     "url": "https://www.kitco.com/news/article/2025-08-27/3400-gold-means-silver-50oz-we-still-see-tremendous-upside-silver-amplifys",
+     "date": "2025-08-27"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-02-25",
+   "direction": "看多",
+   "comments": "Miller称白银在年初抛物线式上涨后进入盘整阶段，但由零售需求强劲支撑的整体牛市逻辑保持完好。",
+   "targets": "白银",
+   "source": "https://www.kitco.com/news/article/2026-02-25/silver-consolidating-retail-investors-remain-confident-amplify-etfs",
+   "detail": "▸ 核心论点：白银年初抛物线式上涨后进入盘整阶段，但整体牛市逻辑保持完好。\n▸ 关键依据：支撑来自强劲的零售需求；据 Kitco 原文，尽管贵金属波动加剧，零售投资者并未恐慌，1月的历史新高被视作白银「起步不最快、但到得最快」的例证。\n▸ 时间与位置：未给出具体点位；时间维度为年初急涨后的盘整期。\n▸ 标的与操作：白银；操作上看多、把盘整视为牛市中的休整。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.kitco.com/news/article/2026-02-25/silver-consolidating-retail-investors-remain-confident-amplify-etfs",
+     "date": "2026-02-25"
+    }
+   ]
+  },
+  {
+   "date": "2026-04-13",
+   "direction": "看多",
+   "comments": "Miller称白银在年初急涨后进入盘整期，但工业需求与投资需求支撑整体前景仍偏建设性；白银已告别$20-30时代，$60-70成新常态，围绕$70盘整是结构性转变的积极信号。",
+   "targets": "白银",
+   "source": "https://www.kitco.com/news/article/2026-04-13/silver-builds-strong-base-above-70-upside-depends-inflation-amplify-etfs",
+   "detail": "▸ 核心论点：白银年初急涨后进入盘整期，但整体前景仍偏建设性，属看多。\n▸ 关键依据：工业需求与投资需求共同支撑前景；白银已告别20-30美元时代，60-70美元成为新常态，围绕70美元的盘整被视为结构性转变的积极信号。\n▸ 时间与位置：当前盘整区间60-70美元、围绕70美元筑基；未给出具体目标价。\n▸ 标的与操作：白银；操作上看多、把盘整视作建仓机会。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.kitco.com/news/article/2026-04-13/silver-builds-strong-base-above-70-upside-depends-inflation-amplify-etfs",
+     "date": "2026-04-13"
+    }
+   ]
+  }
+ ]
 }

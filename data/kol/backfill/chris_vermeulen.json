@@ -1,23 +1,41 @@
 {
-  "kol": "Chris Vermeulen",
-  "sector": "Precious Metals",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
-  "count": 2,
-  "history": [
+ "kol": "Chris Vermeulen",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+ "count": 2,
+ "history": [
+  {
+   "date": "2026-01-31",
+   "direction": "强烈看多",
+   "comments": "The Technical Traders 首席策略师认为金银当前上涨周期仅走到一半，金银价格将大幅走高（Dramatically Higher），中长期维持强上升趋势判断。",
+   "targets": "黄金/白银",
+   "source": "https://news.google.com/stories/CAAqNggKIjBDQklTSGpvSmMzUnZjbmt0TXpZd1NoRUtEd2l6cGVXZUVSRTVBMXlpV1owZHZTZ0FQAQ",
+   "detail": "▸ 核心论点：金银当前上涨周期仅走到一半，价格将大幅走高（Dramatically Higher）。\n▸ 关键依据：The Technical Traders 首席策略师从周期与技术形态角度判断，本轮贵金属上升趋势在中长期仍然完整，尚未进入尾声。\n▸ 时间与位置：定位为周期中段、中长期强上升趋势，未给出具体点位或目标价。\n▸ 标的与操作：黄金、白银强烈看多，建议持有等待后半程行情。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2026-01-31",
-      "direction": "强烈看多",
-      "comments": "The Technical Traders 首席策略师认为金银当前上涨周期仅走到一半，金银价格将大幅走高（Dramatically Higher），中长期维持强上升趋势判断。",
-      "targets": "黄金/白银",
-      "source": "https://news.google.com/stories/CAAqNggKIjBDQklTSGpvSmMzUnZjbmt0TXpZd1NoRUtEd2l6cGVXZUVSRTVBMXlpV1owZHZTZ0FQAQ"
-    },
-    {
-      "date": "2026-04-15",
-      "direction": "看多",
-      "comments": "在播客中拆解金银价格预测，认为市场波动可能先触发一轮回调，随后迎来下一轮重大突破；长期看多但提示短期先有震荡回撤。",
-      "targets": "黄金/白银",
-      "source": "https://ivy.fm/tag/chris-vermeulen"
+     "title": "",
+     "url": "https://news.google.com/stories/CAAqNggKIjBDQklTSGpvSmMzUnZjbmt0TXpZd1NoRUtEd2l6cGVXZUVSRTVBMXlpV1owZHZTZ0FQAQ",
+     "date": "2026-01-31"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-04-15",
+   "direction": "看多",
+   "comments": "在播客中拆解金银价格预测，认为市场波动可能先触发一轮回调，随后迎来下一轮重大突破；长期看多但提示短期先有震荡回撤。",
+   "targets": "黄金/白银",
+   "source": "https://ivy.fm/tag/chris-vermeulen",
+   "detail": "▸ 核心论点：长期看多金银，但提示短期先有震荡回撤再迎突破。\n▸ 关键依据：公开信息有限，仅检索到：播客中拆解金银价格预测，认为市场波动可能先触发一轮回调，随后迎来下一轮重大突破。\n▸ 时间与位置：未给出具体点位与时间窗口。\n▸ 标的与操作：黄金、白银，回调中逢低布局、长期看多。",
+   "detail_status": "thin",
+   "sources": [
+    {
+     "title": "Chris Vermeulen",
+     "url": "https://ivy.fm/tag/chris-vermeulen",
+     "date": "2026-04-15"
+    }
+   ]
+  }
+ ]
 }

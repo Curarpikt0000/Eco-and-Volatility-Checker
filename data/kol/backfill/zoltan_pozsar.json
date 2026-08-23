@@ -1,30 +1,57 @@
 {
-  "kol": "Zoltan Pozsar",
-  "sector": "Macro",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 3,
-  "history": [
+ "kol": "Zoltan Pozsar",
+ "sector": "Macro",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2025-09-07",
+   "direction": "看多",
+   "comments": "在Ex Uno Plures发布《The Terms of the Commonwealth Fund》,延续多极储备货币与去美元化框架,认为黄金在新世界货币秩序中扮演重要角色。",
+   "targets": "黄金、美元",
+   "source": "exunoplures.hu (Money and World Order 系列)",
+   "detail": "▸ 核心论点：延续多极储备货币与去美元化框架，认为黄金在新世界货币秩序中扮演重要角色。\n▸ 关键依据：在 Ex Uno Plures 发布《The Terms of the Commonwealth Fund》，属其 Money and World Order 系列的延续性论述。\n▸ 时间与位置：未给出具体点位与时间窗口。\n▸ 标的与操作：黄金（看多）、美元（结构性看空）。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-09-07",
-      "direction": "看多",
-      "comments": "在Ex Uno Plures发布《The Terms of the Commonwealth Fund》,延续多极储备货币与去美元化框架,认为黄金在新世界货币秩序中扮演重要角色。",
-      "targets": "黄金、美元",
-      "source": "exunoplures.hu (Money and World Order 系列)"
-    },
-    {
-      "date": "2026-01-12",
-      "direction": "看多",
-      "comments": "发布《Gold and the Lomonosov Ridge》,从地缘(北极资源争夺)角度分析黄金的战略地位,延续其黄金货币化与去美元化论点。",
-      "targets": "黄金",
-      "source": "exunoplures.hu"
-    },
-    {
-      "date": "2026-03-13",
-      "direction": "看多",
-      "comments": "发布《Physical QE and Gold》,提出实物量化宽松概念,论述央行以实物黄金作为储备管理与货币体系重构的一环。",
-      "targets": "黄金",
-      "source": "exunoplures.hu"
+     "title": "exunoplures.hu (Money and World Order 系列)",
+     "url": "",
+     "date": "2025-09-07"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-01-12",
+   "direction": "看多",
+   "comments": "发布《Gold and the Lomonosov Ridge》,从地缘(北极资源争夺)角度分析黄金的战略地位,延续其黄金货币化与去美元化论点。",
+   "targets": "黄金",
+   "source": "exunoplures.hu",
+   "detail": "▸ 核心论点：从地缘政治（北极资源争夺）角度分析黄金的战略地位，延续其黄金货币化与去美元化论点。\n▸ 关键依据：发布文章《Gold and the Lomonosov Ridge》，以罗蒙诺索夫海岭的北极资源争夺为切入点，把黄金置于大国资源与货币秩序竞争的框架中。\n▸ 时间与位置：未给出具体点位或时间窗口。\n▸ 标的与操作：黄金，看多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Zoltan Pozsar",
+     "url": "exunoplures.hu",
+     "date": "2026-01-12"
+    }
+   ]
+  },
+  {
+   "date": "2026-03-13",
+   "direction": "看多",
+   "comments": "发布《Physical QE and Gold》,提出实物量化宽松概念,论述央行以实物黄金作为储备管理与货币体系重构的一环。",
+   "targets": "黄金",
+   "source": "exunoplures.hu",
+   "detail": "▸ 核心论点：提出「实物量化宽松」（Physical QE）概念：央行以实物黄金作为储备管理与货币体系重构的一环。\n▸ 关键依据：发布研究文章《Physical QE and Gold》，从储备管理与货币体系重构角度论述央行购入实物黄金的机制性意义。\n▸ 时间与位置：未给出具体点位与时间窗口，属框架性论述。\n▸ 标的与操作：黄金；操作上结构性看多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "exunoplures.hu",
+     "url": "",
+     "date": "2026-03-13"
+    }
+   ]
+  }
+ ]
 }

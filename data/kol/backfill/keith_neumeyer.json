@@ -1,30 +1,57 @@
 {
-  "kol": "Keith Neumeyer",
-  "sector": "Precious Metals",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
-  "count": 3,
-  "history": [
+ "kol": "Keith Neumeyer",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2025-02-28",
+   "direction": "强烈看多",
+   "comments": "First Majestic Silver总裁兼CEO Neumeyer在2025 BMO矿业大会表示在囤积现金并回购股票，公司完成9.7亿美元收购Gatos Silver后寻求进一步增长，长期看好白银。",
+   "targets": "白银",
+   "source": "https://www.kitco.com/news/article/2025-02-28/keith-neumeyer-why-im-hoarding-cash-buying-back-shares",
+   "detail": "▸ 核心论点：长期看好白银，并以公司资本动作背书：囤积现金并回购股票。\n▸ 关键依据：First Majestic Silver 总裁兼 CEO 在2025 BMO 矿业大会表示，公司已完成9.7亿美元收购 Gatos Silver 后正寻求进一步增长，同时在囤积现金并回购自家股票。\n▸ 时间与位置：未给出具体银价点位与时间窗口。\n▸ 标的与操作：白银及 First Majestic 股票；操作上强烈看多，公司层面回购加并购扩张。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-02-28",
-      "direction": "强烈看多",
-      "comments": "First Majestic Silver总裁兼CEO Neumeyer在2025 BMO矿业大会表示在囤积现金并回购股票，公司完成9.7亿美元收购Gatos Silver后寻求进一步增长，长期看好白银。",
-      "targets": "白银",
-      "source": "https://www.kitco.com/news/article/2025-02-28/keith-neumeyer-why-im-hoarding-cash-buying-back-shares"
-    },
-    {
-      "date": "2026-03-04",
-      "direction": "强烈看多",
-      "comments": "Neumeyer此前$100/oz白银预测在2026年成真，他认为白银是唯一尚未触及历史高点的商品，一旦突破1980和2011高点将唤醒市场。",
-      "targets": "白银",
-      "source": "https://investingnews.com/daily/resource-investing/precious-metals-investing/silver-investing/silver-in-the-future/"
-    },
-    {
-      "date": "2026-07-27",
-      "direction": "看多",
-      "comments": "First Majestic 2025年生产及2026年展望：白银全年跑赢黄金、铅、锌，作为主要白银生产商该价格环境有利并强化整体经济效益，公司增派股息。",
-      "targets": "白银",
-      "source": "https://www.firstmajestic.com/investors/news-releases/first-majestic-reports-2025-production-and-2026-outlook-increases-dividend"
+     "title": "",
+     "url": "https://www.kitco.com/news/article/2025-02-28/keith-neumeyer-why-im-hoarding-cash-buying-back-shares",
+     "date": "2025-02-28"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-03-04",
+   "direction": "强烈看多",
+   "comments": "Neumeyer此前$100/oz白银预测在2026年成真，他认为白银是唯一尚未触及历史高点的商品，一旦突破1980和2011高点将唤醒市场。",
+   "targets": "白银",
+   "source": "https://investingnews.com/daily/resource-investing/precious-metals-investing/silver-investing/silver-in-the-future/",
+   "detail": "▸ 核心论点：强烈看多白银：白银是唯一尚未触及历史高点的商品，突破前高将唤醒市场。\n▸ 关键依据：其此前提出的100美元/盎司白银预测已在2026年成真；论点是一旦突破1980年和2011年的历史高点，将吸引市场大规模关注。\n▸ 时间与位置：关键点位为1980年与2011年的历史高点；此前100美元目标已兑现，未给出新的具体目标价。\n▸ 标的与操作：白银；操作上强烈看多、持有。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://investingnews.com/daily/resource-investing/precious-metals-investing/silver-investing/silver-in-the-future/",
+     "date": "2026-03-04"
+    }
+   ]
+  },
+  {
+   "date": "2026-07-27",
+   "direction": "看多",
+   "comments": "First Majestic 2025年生产及2026年展望：白银全年跑赢黄金、铅、锌，作为主要白银生产商该价格环境有利并强化整体经济效益，公司增派股息。",
+   "targets": "白银",
+   "source": "https://www.firstmajestic.com/investors/news-releases/first-majestic-reports-2025-production-and-2026-outlook-increases-dividend",
+   "detail": "▸ 核心论点：当前白银价格环境对主要白银生产商有利，公司整体经济效益增强。\n▸ 关键依据：First Majestic 2025 年生产及 2026 年展望显示，白银全年跑赢黄金、铅、锌；作为主要白银生产商直接受益于该价格环境。\n▸ 时间与位置：口径为 2025 全年业绩与 2026 年展望；未给出具体点位。\n▸ 标的与操作：白银及自家矿业公司，看多——公司同步增派股息。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.firstmajestic.com/investors/news-releases/first-majestic-reports-2025-production-and-2026-outlook-increases-dividend",
+     "date": "2026-07-27"
+    }
+   ]
+  }
+ ]
 }

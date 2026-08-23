@@ -1,16 +1,23 @@
 {
-  "kol": "Stewart Thomson",
-  "sector": "Precious Metals",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 1,
-  "history": [
+ "kol": "Stewart Thomson",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 1,
+ "history": [
+  {
+   "date": "2026-08-11",
+   "direction": "强烈看多",
+   "comments": "无视西方主流媒体看空黄金的\"幼稚叙事\",坚持重仓黄金。金价日线在4400美元区遇阻但短期基础目标看向4900-5000美元;油价突破上行带动金价;强调债务与石油短缺无法靠加息解决。建议在核心仓死拿的同时于目标区分批止盈。",
+   "targets": "黄金、白银、金矿股(GDX/CDNX)",
+   "source": "321gold.com / Graceland Updates (Gold: The Road To $5000)",
+   "detail": "▸ 核心论点：无视西方主流媒体看空黄金的「幼稚叙事」，坚持重仓黄金，金价通向5000美元。\n▸ 关键依据：金价日线在4400美元区遇阻但短期基础目标看向4900-5000美元；油价突破上行带动金价；强调债务与石油短缺无法靠加息解决。\n▸ 时间与位置：2026-08-11；阻力位4400美元，短期基础目标4900-5000美元。\n▸ 标的与操作：黄金、白银、金矿股(GDX/CDNX)；核心仓死拿，同时在目标区分批止盈。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2026-08-11",
-      "direction": "强烈看多",
-      "comments": "无视西方主流媒体看空黄金的\"幼稚叙事\",坚持重仓黄金。金价日线在4400美元区遇阻但短期基础目标看向4900-5000美元;油价突破上行带动金价;强调债务与石油短缺无法靠加息解决。建议在核心仓死拿的同时于目标区分批止盈。",
-      "targets": "黄金、白银、金矿股(GDX/CDNX)",
-      "source": "321gold.com / Graceland Updates (Gold: The Road To $5000)"
+     "url": "321gold.com / Graceland Updates (Gold: The Road To $5000)"
     }
-  ]
+   ]
+  }
+ ]
 }

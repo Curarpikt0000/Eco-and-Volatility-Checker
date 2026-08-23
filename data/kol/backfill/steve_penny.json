@@ -1,23 +1,41 @@
 {
-  "kol": "Steve Penny",
-  "sector": "Precious Metals",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
-  "count": 2,
-  "history": [
+ "kol": "Steve Penny",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+ "count": 2,
+ "history": [
+  {
+   "date": "2026-01-16",
+   "direction": "强烈看多",
+   "comments": "SilverChartist 创始人拆解白银史上最大级别技术突破，指出AI、太阳能、国防的工业需求以及央行政策与债务动态正为白银进入并维持三位数价格奠定基础，长期强看多。",
+   "targets": "白银/黄金",
+   "source": "https://marketsanity.com/steve-penny-this-catalyst-pushes-silver-into-triple-digits-keeps-it-there/",
+   "detail": "▸ 核心论点：白银正经历史上最大级别的技术突破，具备进入并长期维持三位数价格的基础。\n▸ 关键依据：AI、太阳能、国防的工业需求，加上央行政策与债务动态，是核心支撑；SilverChartist 创始人拆解了这一突破的技术结构。\n▸ 时间与位置：关键关口为三位数即 100 美元 / 盎司；具体支撑与回调位在访谈中讨论，未给出单一目标价。\n▸ 标的与操作：白银（兼及黄金），长期强烈看多。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2026-01-16",
-      "direction": "强烈看多",
-      "comments": "SilverChartist 创始人拆解白银史上最大级别技术突破，指出AI、太阳能、国防的工业需求以及央行政策与债务动态正为白银进入并维持三位数价格奠定基础，长期强看多。",
-      "targets": "白银/黄金",
-      "source": "https://marketsanity.com/steve-penny-this-catalyst-pushes-silver-into-triple-digits-keeps-it-there/"
-    },
-    {
-      "date": "2026-07-28",
-      "direction": "看多",
-      "comments": "分享金银展望，长期预期价格显著走高，但提示近端乃至中期可能出现更多震荡回撤，短线偏谨慎、长线坚定看多。",
-      "targets": "白银/黄金",
-      "source": "https://www.youtube.com/watch?v=AJbLlrHk8VQ"
+     "title": "Steve Penny",
+     "url": "https://marketsanity.com/steve-penny-this-catalyst-pushes-silver-into-triple-digits-keeps-it-there/",
+     "date": "2026-01-16"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-07-28",
+   "direction": "看多",
+   "comments": "分享金银展望，长期预期价格显著走高，但提示近端乃至中期可能出现更多震荡回撤，短线偏谨慎、长线坚定看多。",
+   "targets": "白银/黄金",
+   "source": "https://www.youtube.com/watch?v=AJbLlrHk8VQ",
+   "detail": "▸ 核心论点：金银长期价格显著走高，白银的「1979时刻」尚未到来；但近端乃至中期可能出现更多震荡回撤。\n▸ 关键依据：访谈中他区分时间尺度：长期由结构性因素支撑价格显著抬升，短中期则以震荡整理与回撤为主，故操作上短线谨慎、长线坚定。\n▸ 时间与位置：未给出具体点位；时间上明确划分「近端/中期震荡」与「长期显著走高」两段。\n▸ 标的与操作：白银、黄金，长线看多、短线偏谨慎。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Steve Penny",
+     "url": "https://www.youtube.com/watch?v=AJbLlrHk8VQ",
+     "date": "2026-07-28"
+    }
+   ]
+  }
+ ]
 }

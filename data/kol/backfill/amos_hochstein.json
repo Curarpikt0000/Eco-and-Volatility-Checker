@@ -1,44 +1,83 @@
 {
-  "kol": "Amos Hochstein",
-  "sector": "Energy & Commodities",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+web_extract 一手核实(1yr backfill)；仅收录可归属、带日期、有明确方向性的公开言论(CBS/Bloomberg/Newsmax/CNBC)，逐条附原始出处；泛报道/无日期/无法归属者不收录，绝不编造。",
-  "count": 5,
-  "history": [
+ "kol": "Amos Hochstein",
+ "sector": "Energy & Commodities",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+web_extract 一手核实(1yr backfill)；仅收录可归属、带日期、有明确方向性的公开言论(CBS/Bloomberg/Newsmax/CNBC)，逐条附原始出处；泛报道/无日期/无法归属者不收录，绝不编造。",
+ "count": 5,
+ "history": [
+  {
+   "date": "2026-04-19",
+   "direction": "看多(供给中断风险)",
+   "comments": "以拜登政府高级能源顾问兼中东谈判代表身份接受 CBS《Face the Nation》采访，讨论中东局势对能源市场与油价的影响，强调地缘冲突正重塑全球能源供应格局。",
+   "targets": "原油/中东能源",
+   "source": "CBS News, Face the Nation with Margaret Brennan (cbsnews.com/news/amos-hochstein-energy-middle-east-face-the-nation-transcript-04-19-2026)",
+   "detail": "▸ 核心论点：中东地缘冲突正在重塑全球能源供应格局，对油价构成上行风险。\n▸ 关键依据：以拜登政府高级能源顾问兼中东谈判代表身份，讨论中东局势对能源市场与油价的传导。\n▸ 时间与位置：2026-04-19 接受 CBS《Face the Nation》采访；未给出具体点位。\n▸ 标的与操作：原油、中东能源；因供给中断风险偏多，未给出具体交易建议。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2026-04-19",
-      "direction": "看多(供给中断风险)",
-      "comments": "以拜登政府高级能源顾问兼中东谈判代表身份接受 CBS《Face the Nation》采访，讨论中东局势对能源市场与油价的影响，强调地缘冲突正重塑全球能源供应格局。",
-      "targets": "原油/中东能源",
-      "source": "CBS News, Face the Nation with Margaret Brennan (cbsnews.com/news/amos-hochstein-energy-middle-east-face-the-nation-transcript-04-19-2026)"
-    },
-    {
-      "date": "2026-05-05",
-      "direction": "看多(供给中断风险)",
-      "comments": "Bloomberg Talks 播客访谈：描绘地缘冲击已'永久性改变'能源市场的图景——预期更高成本、供应链重构、以及对石油与安全的长期战略争夺。",
-      "targets": "原油/全球能源市场",
-      "source": "Bloomberg Talks: Amos Hochstein Talks Oil Markets, Iran War (bloomberg.com/news/audio/2026-05-05)"
-    },
-    {
-      "date": "2026-05-07",
-      "direction": "强烈看多(油价飙升警告)",
-      "comments": "Bloomberg Radio 访谈警告：'我们正朝着石油和成品油的悬崖冲去，就在本月底。'称金融市场严重误读真实供给——Brent 名义价~$110(约为年初$60两倍)，但实际货物成交价高达$145-170/桶；'真实的市场是：油不够了'，前往亚洲和欧洲的油轮'一艘都没有，零'。霍尔木兹海峡在可预见未来处于伊朗控制之下。呼吁日本/印度/新加坡扩建战略储备。",
-      "targets": "原油/Brent/成品油(柴油·航空煤油)",
-      "source": "Newsmax Finance / Bloomberg Radio, 2026-05-07 (newsmax.com/finance/streettalk/amos-hochstein-iran-war/2026/05/07/id/1255503)"
-    },
-    {
-      "date": "2026-08-13",
-      "direction": "看多(供给中断风险)",
-      "comments": "以 TWG Global 管理合伙人、前拜登白宫高级顾问身份做客 CNBC《Squawk Box》，讨论美伊战争最新进展对能源市场的冲击、霍尔木兹海峡的控制权归属等；重申需'折价看待政治声明——它们与实际发生的情况完全无关'。",
-      "targets": "原油/霍尔木兹海峡",
-      "source": "CNBC Squawk Box, 2026-08-13 (youtube.com/watch?v=T8xTJcVnX0g)"
-    },
-    {
-      "date": "2026-08-15",
-      "direction": "结构性看多(应急缓冲耗尽)",
-      "comments": "就 SPR 跌破3亿桶(43年新低)警告：'别信那些说 SPR 能降到7000万桶的政府人士，那是胡说。'称降至7000万桶将使储备'耗尽到永远无法恢复'的地步；'我不认识任何相信我们能低于3亿桶的人，我认识很多人认为我们连接近3亿桶都不行，因为那样物理上会损坏储油的盐穴。'并警告当前水平下若佛州或路易斯安那遭遇飓风，美国将陷入被动。",
-      "targets": "SPR战略石油储备/原油",
-      "source": "CNBC, 2026-08-15 (cnbc.com/2026/08/15/strategic-petroleum-reserve-spr-oil-iran-war-caverns.html)"
+     "url": "CBS News, Face the Nation with Margaret Brennan (cbsnews.com/news/amos-hochstein-energy-middle-east-face-the-nation-transcript-04-19-2026)"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-05-05",
+   "direction": "看多(供给中断风险)",
+   "comments": "Bloomberg Talks 播客访谈：描绘地缘冲击已'永久性改变'能源市场的图景——预期更高成本、供应链重构、以及对石油与安全的长期战略争夺。",
+   "targets": "原油/全球能源市场",
+   "source": "Bloomberg Talks: Amos Hochstein Talks Oil Markets, Iran War (bloomberg.com/news/audio/2026-05-05)",
+   "detail": "▸ 核心论点：地缘冲击已「永久性改变」能源市场格局，供给中断风险抬升。\n▸ 关键依据：Bloomberg Talks 播客访谈中描绘的图景：预期更高成本、供应链重构，以及围绕石油与安全的长期战略争夺。\n▸ 时间与位置：属长期结构性判断；未给出具体点位。\n▸ 标的与操作：原油 / 全球能源市场，偏多（供给中断风险溢价）。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Amos Hochstein",
+     "url": "Bloomberg Talks: Amos Hochstein Talks Oil Markets, Iran War (bloomberg.com/news/audio/2026-05-05)",
+     "date": "2026-05-05"
+    }
+   ]
+  },
+  {
+   "date": "2026-05-07",
+   "direction": "强烈看多(油价飙升警告)",
+   "comments": "Bloomberg Radio 访谈警告：'我们正朝着石油和成品油的悬崖冲去，就在本月底。'称金融市场严重误读真实供给——Brent 名义价~$110(约为年初$60两倍)，但实际货物成交价高达$145-170/桶；'真实的市场是：油不够了'，前往亚洲和欧洲的油轮'一艘都没有，零'。霍尔木兹海峡在可预见未来处于伊朗控制之下。呼吁日本/印度/新加坡扩建战略储备。",
+   "targets": "原油/Brent/成品油(柴油·航空煤油)",
+   "source": "Newsmax Finance / Bloomberg Radio, 2026-05-07 (newsmax.com/finance/streettalk/amos-hochstein-iran-war/2026/05/07/id/1255503)",
+   "detail": "▸ 核心论点：「我们正朝着石油和成品油的悬崖冲去，就在本月底」——金融市场严重误读真实供给，油价面临飙升。\n▸ 关键依据：称Brent名义价约110美元（约为年初60美元的两倍），但实际货物成交价高达145-170美元/桶；「真实的市场是：油不够了」，前往亚洲和欧洲的油轮「一艘都没有，零」；霍尔木兹海峡在可预见未来处于伊朗控制之下。\n▸ 时间与位置：时间点明确指向「本月底」；价格上Brent名义110美元、实货145-170美元/桶。\n▸ 标的与操作：原油/Brent及成品油（柴油、航空煤油），强烈看多；并呼吁日本、印度、新加坡扩建战略储备。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Amos Hochstein",
+     "url": "Newsmax Finance / Bloomberg Radio, 2026-05-07 (newsmax.com/finance/streettalk/amos-hochstein-iran-war/2026/05/07/id/1255503)",
+     "date": "2026-05-07"
+    }
+   ]
+  },
+  {
+   "date": "2026-08-13",
+   "direction": "看多(供给中断风险)",
+   "comments": "以 TWG Global 管理合伙人、前拜登白宫高级顾问身份做客 CNBC《Squawk Box》，讨论美伊战争最新进展对能源市场的冲击、霍尔木兹海峡的控制权归属等；重申需'折价看待政治声明——它们与实际发生的情况完全无关'。",
+   "targets": "原油/霍尔木兹海峡",
+   "source": "CNBC Squawk Box, 2026-08-13 (youtube.com/watch?v=T8xTJcVnX0g)",
+   "detail": "▸ 核心论点：美伊战争推升能源供给中断风险，霍尔木兹海峡控制权归属是油市核心变量。\n▸ 关键依据：以 TWG Global 管理合伙人、前拜登白宫高级顾问身份做客 CNBC《Squawk Box》分析战事进展对能源市场的冲击；重申需「折价看待政治声明——它们与实际发生的情况完全无关」。\n▸ 时间与位置：2026-08-13 节目当日；未给出具体油价点位或目标价。\n▸ 标的与操作：原油、霍尔木兹海峡航运；方向为供给中断风险下的看多，未给出具体买卖建议。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "CNBC Squawk Box, 2026-08-13 (youtube.com/watch?v=T8xTJcVnX0g)"
+    }
+   ]
+  },
+  {
+   "date": "2026-08-15",
+   "direction": "结构性看多(应急缓冲耗尽)",
+   "comments": "就 SPR 跌破3亿桶(43年新低)警告：'别信那些说 SPR 能降到7000万桶的政府人士，那是胡说。'称降至7000万桶将使储备'耗尽到永远无法恢复'的地步；'我不认识任何相信我们能低于3亿桶的人，我认识很多人认为我们连接近3亿桶都不行，因为那样物理上会损坏储油的盐穴。'并警告当前水平下若佛州或路易斯安那遭遇飓风，美国将陷入被动。",
+   "targets": "SPR战略石油储备/原油",
+   "source": "CNBC, 2026-08-15 (cnbc.com/2026/08/15/strategic-petroleum-reserve-spr-oil-iran-war-caverns.html)",
+   "detail": "▸ 核心论点：美国战略石油储备(SPR)跌破3亿桶、创43年新低，应急缓冲实质耗尽，斥「SPR还能降到7000万桶」是胡说。\n▸ 关键依据：降至7000万桶将使储备耗尽到永远无法恢复的地步；他说不认识任何相信能低于3亿桶的人，因为那样物理上会损坏储油的盐穴。\n▸ 时间与位置：2026-08-15 就 SPR 现状警告；关键水位为3亿桶下限与不可行的7000万桶，未给出油价点位。\n▸ 标的与操作：SPR/原油；警告当前水平下若佛州或路易斯安那遭飓风美国将陷入被动，结构性看多，未给出具体交易指令。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "CNBC, 2026-08-15 (cnbc.com/2026/08/15/strategic-petroleum-reserve-spr-oil-iran-war-caverns.html)"
+    }
+   ]
+  }
+ ]
 }

@@ -1,1 +1,71 @@
-{"kol":"Frank Giustra","sector":"Precious Metals","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":4,"history":[{"date":"2025-09-16","direction":"强烈看多","comments":"在访谈中提出黄金可能升至每盎司4万美元的极端牛市情景,理由是全球或将迎来类似1945年后金融重构的重大货币重置,美元与债务体系面临系统性调整,黄金作为终极硬资产将被重新估值。","targets":"黄金","source":"https://www.kitco.com (via web_search)"},{"date":"2026-02-03","direction":"强烈看多","comments":"就贵金属市场大幅抛售发声,称上周暴跌并非常规回调,而是一次蓄意的流动性事件与'打压',并警告主导金价50年的纸黄金定价体系正走向混乱终结,呼吁关注实物金库化的Project Vault方向。","targets":"黄金","source":"https://www.kitco.com/news/article/2026-02-03/paper-era-over-giustra-warns-take-down-gold"},{"date":"2026-06-29","direction":"强烈看多","comments":"讨论全球货币体系空前的结构性转变,强调央行持续增持黄金、去美元化的影响以及未来十年硬资产日益上升的重要性,认为黄金牛市有长期支撑。","targets":"黄金、硬资产","source":"YouTube访谈(via web_search)"},{"date":"2025-01-19","direction":"看多","comments":"在Future Minerals Forum间隙提出'数字黄金'概念,认为区块链化的碎片化黄金可吸引年轻一代,到2026年有望改变金价与贵金属投资格局。","targets":"黄金","source":"https://marketsanity.com/frank-giustra-digital-gold-could-lift-gold-price-by-2026"}]}
+{
+ "kol": "Frank Giustra",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 4,
+ "history": [
+  {
+   "date": "2025-09-16",
+   "direction": "强烈看多",
+   "comments": "在访谈中提出黄金可能升至每盎司4万美元的极端牛市情景,理由是全球或将迎来类似1945年后金融重构的重大货币重置,美元与债务体系面临系统性调整,黄金作为终极硬资产将被重新估值。",
+   "targets": "黄金",
+   "source": "https://www.kitco.com (via web_search)",
+   "detail": "▸ 核心论点：全球可能迎来类似 1945 年后的金融重构与货币重置，黄金将被重新估值。\n▸ 关键依据：美元与债务体系面临系统性调整，黄金作为终极硬资产在重置中被重新定价，这是极端牛市情景的基础。\n▸ 时间与位置：给出黄金可能升至每盎司 4 万美元的极端牛市情景，未给出具体时间窗口。\n▸ 标的与操作：黄金强烈看多，属长期极端情景配置。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.kitco.com (via web_search)",
+     "date": "2025-09-16"
+    }
+   ]
+  },
+  {
+   "date": "2026-02-03",
+   "direction": "强烈看多",
+   "comments": "就贵金属市场大幅抛售发声,称上周暴跌并非常规回调,而是一次蓄意的流动性事件与'打压',并警告主导金价50年的纸黄金定价体系正走向混乱终结,呼吁关注实物金库化的Project Vault方向。",
+   "targets": "黄金",
+   "source": "https://www.kitco.com/news/article/2026-02-03/paper-era-over-giustra-warns-take-down-gold",
+   "detail": "▸ 核心论点：上周贵金属暴跌并非常规回调，而是一次蓄意的流动性事件与「打压」；主导金价50年的纸黄金定价体系正走向混乱终结。\n▸ 关键依据：以抛售的形态与流动性特征判断为人为打压，而非基本面转弱；呼吁关注实物金库化的 Project Vault 方向。\n▸ 时间与位置：2026-02-03 发声，针对上一周的大幅抛售；未给出具体点位。\n▸ 标的与操作：黄金；强烈看多，倾向实物持有而非纸黄金。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://www.kitco.com/news/article/2026-02-03/paper-era-over-giustra-warns-take-down-gold"
+    }
+   ]
+  },
+  {
+   "date": "2026-06-29",
+   "direction": "强烈看多",
+   "comments": "讨论全球货币体系空前的结构性转变,强调央行持续增持黄金、去美元化的影响以及未来十年硬资产日益上升的重要性,认为黄金牛市有长期支撑。",
+   "targets": "黄金、硬资产",
+   "source": "YouTube访谈(via web_search)",
+   "detail": "▸ 核心论点：全球货币体系正在发生空前的结构性转变，黄金牛市有长期支撑。\n▸ 关键依据：央行持续增持黄金、去美元化进程推进，共同推高硬资产在未来十年的重要性。\n▸ 时间与位置：时间跨度为未来十年的长周期判断，未给出具体点位。\n▸ 标的与操作：黄金及硬资产强烈看多，属长期战略配置。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "YouTube访谈(via web_search)",
+     "date": "2026-06-29"
+    }
+   ]
+  },
+  {
+   "date": "2025-01-19",
+   "direction": "看多",
+   "comments": "在Future Minerals Forum间隙提出'数字黄金'概念,认为区块链化的碎片化黄金可吸引年轻一代,到2026年有望改变金价与贵金属投资格局。",
+   "targets": "黄金",
+   "source": "https://marketsanity.com/frank-giustra-digital-gold-could-lift-gold-price-by-2026",
+   "detail": "▸ 核心论点：提出「数字黄金」概念：区块链化的碎片化黄金可吸引年轻一代，改变贵金属投资格局。\n▸ 关键依据：在 Future Minerals Forum 间隙提出，论据是碎片化与区块链化降低了年轻投资者的持有门槛，从而扩大黄金需求基础。\n▸ 时间与位置：认为到2026年有望改变金价与贵金属投资格局；未给出具体点位。\n▸ 标的与操作：黄金；操作上看多，关注数字化/代币化黄金载体。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://marketsanity.com/frank-giustra-digital-gold-could-lift-gold-price-by-2026",
+     "date": "2025-01-19"
+    }
+   ]
+  }
+ ]
+}

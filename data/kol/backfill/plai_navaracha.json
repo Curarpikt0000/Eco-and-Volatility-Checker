@@ -1,30 +1,57 @@
 {
-  "kol": "Plai Navaracha",
-  "sector": "Alternative",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)；泰国灵媒（Mor Plai）预言类KOL，作民间预期/情绪信号，无可交易市场方向",
-  "count": 3,
-  "history": [
+ "kol": "Plai Navaracha",
+ "sector": "Alternative",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)；泰国灵媒（Mor Plai）预言类KOL，作民间预期/情绪信号，无可交易市场方向",
+ "count": 3,
+ "history": [
+  {
+   "date": "2025-09-15",
+   "direction": "未找到",
+   "comments": "泰国神秘预言家Mor Plai发布预测内容（TikTok传播），属灾害/事件类民间预言，无明确市场方向。",
+   "targets": "灾害/事件",
+   "source": "https://www.tiktok.com/discover/plai-navaracha-prediction",
+   "detail": "▸ 核心论点：公开信息有限，仅检索到：泰国神秘预言家Mor Plai通过TikTok发布预测内容，属灾害/事件类民间预言。\n▸ 关键依据：公开信息有限，原文未提供可核验的数据或论证依据。\n▸ 时间与位置：未给出具体点位，亦无明确时间窗口。\n▸ 标的与操作：无明确市场方向与操作建议。",
+   "detail_status": "thin",
+   "sources": [
     {
-      "date": "2025-09-15",
-      "direction": "未找到",
-      "comments": "泰国神秘预言家Mor Plai发布预测内容（TikTok传播），属灾害/事件类民间预言，无明确市场方向。",
-      "targets": "灾害/事件",
-      "source": "https://www.tiktok.com/discover/plai-navaracha-prediction"
-    },
-    {
-      "date": "2025-12-12",
-      "direction": "未找到",
-      "comments": "被报道曾准确预测缅甸地震并波及泰国曼谷、清迈，以及日本环太平洋火山带海底喷发等，属地震/灾害预言，无市场方向。",
-      "targets": "灾害/地震",
-      "source": "https://inasianspaces.com/2025/07/05/ryo-tatsuki-mega-earthquake-prediction-japan/"
-    },
-    {
-      "date": "2026-02-02",
-      "direction": "未找到",
-      "comments": "泰国神秘预言家Mor Plai再发预警，预言毁灭性海啸将来袭，当局对其最新警告持保留态度；属灾害预言，无市场方向。",
-      "targets": "灾害/海啸",
-      "source": "https://www.tiktok.com/discover/mor-plai-prophecy-2025?lang=en"
+     "title": "Plai Navaracha",
+     "url": "https://www.tiktok.com/discover/plai-navaracha-prediction",
+     "date": "2025-09-15"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2025-12-12",
+   "direction": "未找到",
+   "comments": "被报道曾准确预测缅甸地震并波及泰国曼谷、清迈，以及日本环太平洋火山带海底喷发等，属地震/灾害预言，无市场方向。",
+   "targets": "灾害/地震",
+   "source": "https://inasianspaces.com/2025/07/05/ryo-tatsuki-mega-earthquake-prediction-japan/",
+   "detail": "▸ 核心论点：被报道曾准确预测多起地震与海底火山活动，属地震/灾害类预言，无市场方向。\n▸ 关键依据：报道称其（泰国占卜师「Mor Plai」）准确预测缅甸地震并波及泰国曼谷、清迈，以及日本环太平洋火山带（近菲律宾一侧）海底喷发；相关报道与 Ryo Tatsuki 的日本巨震预言并列讨论。\n▸ 时间与位置：涉及事件均为灾害发生时点，非市场时间窗口；未给出任何点位。\n▸ 标的与操作：不涉及任何可交易资产，无买卖操作，方向记为未找到。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://inasianspaces.com/2025/07/05/ryo-tatsuki-mega-earthquake-prediction-japan/",
+     "date": "2025-12-12"
+    }
+   ]
+  },
+  {
+   "date": "2026-02-02",
+   "direction": "未找到",
+   "comments": "泰国神秘预言家Mor Plai再发预警，预言毁灭性海啸将来袭，当局对其最新警告持保留态度；属灾害预言，无市场方向。",
+   "targets": "灾害/海啸",
+   "source": "https://www.tiktok.com/discover/mor-plai-prophecy-2025?lang=en",
+   "detail": "▸ 核心论点：泰国神秘预言家Mor Plai再发预警，预言毁灭性海啸将来袭。\n▸ 关键依据：当局对其最新警告持保留态度；内容属民间灾害预言，未提供可验证的数据或模型依据。\n▸ 时间与位置：未给出具体点位，亦未见明确的时间窗口披露。\n▸ 标的与操作：灾害/海啸事件类预言，无市场方向，不构成任何资产的操作建议。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Plai Navaracha",
+     "url": "https://www.tiktok.com/discover/mor-plai-prophecy-2025?lang=en",
+     "date": "2026-02-02"
+    }
+   ]
+  }
+ ]
 }

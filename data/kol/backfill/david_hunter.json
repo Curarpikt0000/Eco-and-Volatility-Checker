@@ -1,37 +1,73 @@
 {
-  "kol": "David Hunter",
-  "sector": "Macro",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 4,
-  "history": [
+ "kol": "David Hunter",
+ "sector": "Macro",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 4,
+ "history": [
+  {
+   "date": "2025-11-12",
+   "direction": "强烈看多",
+   "comments": "Contrarian Macro首席策略师,预计43年长牛最后一段抛物线式冲顶,标普可达9500后于2026年迎来全球崩盘与深熊。看好rally向小盘扩散(罗素2000目标约3800),周期股金融工业消费参与,并看多美债(押注美联储宽松)。",
+   "targets": "标普500/罗素2000/美债",
+   "source": "https://www.buysidedigest.com/podcast/david-hunter-the-final-melt-up-of-a-43-year-bull-market-before-the-global-bust/",
+   "detail": "▸ 核心论点：43 年长牛的最后一段抛物线式冲顶（melt-up）尚未结束，冲顶后将迎来全球崩盘与深熊。\n▸ 关键依据：Contrarian Macro 首席策略师判断本轮涨势会向小盘与周期股扩散，金融、工业、消费板块参与；同时押注美联储宽松而看多美债。\n▸ 时间与位置：标普 500 目标可达 9500，罗素 2000 目标约 3800；崩盘时点指向 2026 年。\n▸ 标的与操作：标普 500、罗素 2000 与美债均看多（冲顶阶段），但需为 2026 年的全球崩盘预留退出计划。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-11-12",
-      "direction": "强烈看多",
-      "comments": "Contrarian Macro首席策略师,预计43年长牛最后一段抛物线式冲顶,标普可达9500后于2026年迎来全球崩盘与深熊。看好rally向小盘扩散(罗素2000目标约3800),周期股金融工业消费参与,并看多美债(押注美联储宽松)。",
-      "targets": "标普500/罗素2000/美债",
-      "source": "https://www.buysidedigest.com/podcast/david-hunter-the-final-melt-up-of-a-43-year-bull-market-before-the-global-bust/"
-    },
-    {
-      "date": "2026-05-11",
-      "direction": "强烈看多",
-      "comments": "为金银油及主要股指给出短中期目标,认为未来数月是抛物线冲顶阶段,贵金属上行空间巨大,之后才是崩盘。",
-      "targets": "黄金/白银/原油/股指",
-      "source": "https://investingnews.com/david-hunter-gold-silver-forecast/"
-    },
-    {
-      "date": "2026-05-20",
-      "direction": "强烈看多",
-      "comments": "44年长牛将于劳工节(9月初)前后抛物线冲顶:金价目标6800(或7000)、银价180(甚至250+)、标普当时约7400继续上行。此后警告80%通缩式崩盘,危机源自海外(日本/亚洲/欧洲),随后全球央行印钞或达50万亿美元、引发25%通胀。长期金价目标2万美元。",
-      "targets": "黄金6800/白银180/标普500",
-      "source": "https://www.kitco.com/news/article/2026-05-20/macro-strategist-david-hunter-warns-80-market-bust-25-inflation-global-debt"
-    },
-    {
-      "date": "2026-07-28",
-      "direction": "强烈看多",
-      "comments": "维持极度看多的短线股市观点,认为始于1982年的44年长期牛市正处最后阶段,动量正笔直冲向一场代际级别的崩盘顶点,冲顶前继续看多风险资产与贵金属。",
-      "targets": "股指/黄金/白银",
-      "source": "https://competentinvestor.com/momentum-generational-bust-markets/"
+     "title": "",
+     "url": "https://www.buysidedigest.com/podcast/david-hunter-the-final-melt-up-of-a-43-year-bull-market-before-the-global-bust/",
+     "date": "2025-11-12"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-05-11",
+   "direction": "强烈看多",
+   "comments": "为金银油及主要股指给出短中期目标,认为未来数月是抛物线冲顶阶段,贵金属上行空间巨大,之后才是崩盘。",
+   "targets": "黄金/白银/原油/股指",
+   "source": "https://investingnews.com/david-hunter-gold-silver-forecast/",
+   "detail": "▸ 核心论点：未来数月是抛物线式冲顶阶段（melt-up），金银及主要股指都将大幅走高，之后才是崩盘。\n▸ 关键依据：先冲顶后全球性崩盘（global bust）的两段式框架，认为贵金属在冲顶阶段的上行空间尤其巨大。\n▸ 时间与位置：时间窗口为未来数月的冲顶期，其后进入崩盘；访谈中给出了金、银、油及主要股指的短中期目标，原文未列具体数值。\n▸ 标的与操作：黄金、白银强烈看多，原油与股指短期同向看多，但需警惕随后的崩盘并择时退出。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://investingnews.com/david-hunter-gold-silver-forecast/",
+     "date": "2026-05-11"
+    }
+   ]
+  },
+  {
+   "date": "2026-05-20",
+   "direction": "强烈看多",
+   "comments": "44年长牛将于劳工节(9月初)前后抛物线冲顶:金价目标6800(或7000)、银价180(甚至250+)、标普当时约7400继续上行。此后警告80%通缩式崩盘,危机源自海外(日本/亚洲/欧洲),随后全球央行印钞或达50万亿美元、引发25%通胀。长期金价目标2万美元。",
+   "targets": "黄金6800/白银180/标普500",
+   "source": "https://www.kitco.com/news/article/2026-05-20/macro-strategist-david-hunter-warns-80-market-bust-25-inflation-global-debt",
+   "detail": "▸ 核心论点：44 年长牛将抛物线冲顶，此后转为 80% 的通缩式崩盘，长期仍极度看多黄金。\n▸ 关键依据：危机源自海外（日本 / 亚洲 / 欧洲），崩盘后全球央行印钞或达 50 万亿美元、引发 25% 通胀。\n▸ 时间与位置：冲顶时点在劳工节（9 月初）前后；金价目标 6800（或 7000）、银价 180（甚至 250+）、标普当时约 7400 继续上行；长期金价目标 2 万美元。\n▸ 标的与操作：黄金、白银、标普 500 先做多冲顶，随后转防御以规避崩盘。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "David Hunter",
+     "url": "https://www.kitco.com/news/article/2026-05-20/macro-strategist-david-hunter-warns-80-market-bust-25-inflation-global-debt",
+     "date": "2026-05-20"
+    }
+   ]
+  },
+  {
+   "date": "2026-07-28",
+   "direction": "强烈看多",
+   "comments": "维持极度看多的短线股市观点,认为始于1982年的44年长期牛市正处最后阶段,动量正笔直冲向一场代际级别的崩盘顶点,冲顶前继续看多风险资产与贵金属。",
+   "targets": "股指/黄金/白银",
+   "source": "https://competentinvestor.com/momentum-generational-bust-markets/",
+   "detail": "▸ 核心论点：维持极度看多的短线股市观点：冲顶前继续看多风险资产与贵金属，但顶部之后是代际级别崩盘。\n▸ 关键依据：判断始于1982年的44年长期牛市正处最后阶段，动量正笔直冲向一场代际级别的崩盘顶点。\n▸ 时间与位置：未给出具体点位；时间维度为长牛的最后阶段、冲顶进行中。\n▸ 标的与操作：股指、黄金、白银；操作上冲顶前继续做多风险资产与贵金属。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://competentinvestor.com/momentum-generational-bust-markets/",
+     "date": "2026-07-28"
+    }
+   ]
+  }
+ ]
 }

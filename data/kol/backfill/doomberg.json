@@ -1,30 +1,57 @@
 {
-  "kol": "Doomberg / Kuppy",
-  "sector": "Energy & Commodities",
-  "backfill_date": "2026-08-22",
-  "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
-  "count": 3,
-  "history": [
+ "kol": "Doomberg / Kuppy",
+ "sector": "Energy & Commodities",
+ "backfill_date": "2026-08-22",
+ "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2026-04-18",
+   "direction": "看空",
+   "comments": "Canadian Mining Report 整理 Doomberg 观点：在战争结束/地缘缓和后的情景下，Doomberg 预判原油可能出现「战后崩跌」，WTI 有机会下探 25–30 美元区间，理由是战时溢价消散、被压抑的产能与库存回补同时释放。文章据此讨论油价崩跌对加拿大矿业股的传导——低油价压低矿山与运输成本，反而利好金属与矿业板块的利润率。对原油本身是明确看空表述，给出了具体价格区间。",
+   "targets": "原油/WTI/加拿大矿业股",
+   "source": "https://www.canadianminingreport.com/blog/doomberg-predicts-post-war-oil-collapse-to-25-30-how-this-energy-shock-affects-canadian-mining-stocks-going-forward",
+   "detail": "▸ 核心论点：在战争结束/地缘缓和情景下，原油可能出现「战后崩跌」，对原油是明确看空。\n▸ 关键依据：理由是战时溢价消散、被压抑的产能与库存回补同时释放；Canadian Mining Report进一步讨论传导——低油价压低矿山与运输成本，反而利好加拿大金属与矿业板块的利润率。\n▸ 时间与位置：WTI有机会下探25-30美元区间；触发条件为战争结束/地缘缓和。\n▸ 标的与操作：原油/WTI看空；加拿大矿业股受益、相对看多。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2026-04-18",
-      "direction": "看空",
-      "comments": "Canadian Mining Report 整理 Doomberg 观点：在战争结束/地缘缓和后的情景下，Doomberg 预判原油可能出现「战后崩跌」，WTI 有机会下探 25–30 美元区间，理由是战时溢价消散、被压抑的产能与库存回补同时释放。文章据此讨论油价崩跌对加拿大矿业股的传导——低油价压低矿山与运输成本，反而利好金属与矿业板块的利润率。对原油本身是明确看空表述，给出了具体价格区间。",
-      "targets": "原油/WTI/加拿大矿业股",
-      "source": "https://www.canadianminingreport.com/blog/doomberg-predicts-post-war-oil-collapse-to-25-30-how-this-energy-shock-affects-canadian-mining-stocks-going-forward"
-    },
-    {
-      "date": "2026-05-15",
-      "direction": "看多",
-      "comments": "Palisades Gold Radio 访谈（Canadian Mining Report 整理，访谈发生于 2026 年 5 月中旬）。Doomberg 讨论油市中断风险与「Grand Bargain」情景，认为北美凭借页岩气、天然气产能与核能扩张确立能源主导地位；对加拿大商品、金属与矿业股给出偏多结论，同时强调 AI 数据中心带来的电力需求是天然气与关键矿物的结构性拉动。(日期为文中所述 mid-May 2026，取当月中旬)",
-      "targets": "天然气/原油/加拿大矿业股/关键矿物",
-      "source": "https://www.canadianminingreport.com/blog/doomberg-oil-shock-resilience-grand-bargain-potential-north-america-s-energy-dominance-bullish-outlook-for-canadian-commodities-metals-mining-stocks"
-    },
-    {
-      "date": "2026-08-20",
-      "direction": "分歧",
-      "comments": "Energy News Beat / PeakOil 转载 Doomberg 当日新分析《Natural Gas and Peak Oil》。Doomberg 挑战传统「石油峰值」叙事，提出的是「Peak NOT Oil」式反转论点：真正的稀缺与瓶颈不在原油供给，而在天然气与电力侧；原油端结构性供给依旧充裕。对油与气给出方向分化的判断（气紧油松），因此归为分歧。(发布时间按原文『published today』与站点日期换算)",
-      "targets": "天然气/原油",
-      "source": "https://peakoil.com/generalideas/natural-gas-and-peak-oil-doomberg"
+     "title": "Doomberg / Kuppy",
+     "url": "https://www.canadianminingreport.com/blog/doomberg-predicts-post-war-oil-collapse-to-25-30-how-this-energy-shock-affects-canadian-mining-stocks-going-forward",
+     "date": "2026-04-18"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-05-15",
+   "direction": "看多",
+   "comments": "Palisades Gold Radio 访谈（Canadian Mining Report 整理，访谈发生于 2026 年 5 月中旬）。Doomberg 讨论油市中断风险与「Grand Bargain」情景，认为北美凭借页岩气、天然气产能与核能扩张确立能源主导地位；对加拿大商品、金属与矿业股给出偏多结论，同时强调 AI 数据中心带来的电力需求是天然气与关键矿物的结构性拉动。(日期为文中所述 mid-May 2026，取当月中旬)",
+   "targets": "天然气/原油/加拿大矿业股/关键矿物",
+   "source": "https://www.canadianminingreport.com/blog/doomberg-oil-shock-resilience-grand-bargain-potential-north-america-s-energy-dominance-bullish-outlook-for-canadian-commodities-metals-mining-stocks",
+   "detail": "▸ 核心论点：北美凭借页岩气、天然气产能与核能扩张确立能源主导地位，对加拿大商品、金属与矿业股给出偏多结论。\n▸ 关键依据：讨论油市中断风险与「Grand Bargain」情景；强调 AI 数据中心带来的电力需求是天然气与关键矿物的结构性拉动。\n▸ 时间与位置：访谈发生于 2026 年 5 月中旬（日期取当月中旬）；未给出具体点位。\n▸ 标的与操作：天然气、原油、加拿大矿业股与关键矿物，偏多（Palisades Gold Radio 访谈，Canadian Mining Report 整理）。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.canadianminingreport.com/blog/doomberg-oil-shock-resilience-grand-bargain-potential-north-america-s-energy-dominance-bullish-outlook-for-canadian-commodities-metals-mining-stocks",
+     "date": "2026-05-15"
+    }
+   ]
+  },
+  {
+   "date": "2026-08-20",
+   "direction": "分歧",
+   "comments": "Energy News Beat / PeakOil 转载 Doomberg 当日新分析《Natural Gas and Peak Oil》。Doomberg 挑战传统「石油峰值」叙事，提出的是「Peak NOT Oil」式反转论点：真正的稀缺与瓶颈不在原油供给，而在天然气与电力侧；原油端结构性供给依旧充裕。对油与气给出方向分化的判断（气紧油松），因此归为分歧。(发布时间按原文『published today』与站点日期换算)",
+   "targets": "天然气/原油",
+   "source": "https://peakoil.com/generalideas/natural-gas-and-peak-oil-doomberg",
+   "detail": "▸ 核心论点：挑战传统「石油峰值」叙事，提出「Peak NOT Oil」式反转论点——真正的稀缺与瓶颈不在原油供给，而在天然气与电力侧。\n▸ 关键依据：原油端结构性供给依旧充裕，瓶颈集中在天然气产能与电力供应；Energy News Beat / PeakOil 转载其当日新分析《Natural Gas and Peak Oil》。\n▸ 时间与位置：发布时间按原文「published today」与站点日期换算为 2026-08-20；未给出具体点位。\n▸ 标的与操作：天然气与原油方向分化（气紧油松），故归为分歧，未给出明确买卖指令。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://peakoil.com/generalideas/natural-gas-and-peak-oil-doomberg",
+     "date": "2026-08-20"
+    }
+   ]
+  }
+ ]
 }

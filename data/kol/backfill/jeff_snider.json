@@ -1,23 +1,41 @@
 {
-  "kol": "Jeff Snider",
-  "sector": "Government Debt",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
-  "count": 2,
-  "history": [
+ "kol": "Jeff Snider",
+ "sector": "Government Debt",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+ "count": 2,
+ "history": [
+  {
+   "date": "2026-02-20",
+   "direction": "看空",
+   "comments": "在Rebel Capitalist News作为嘉宾谈国债收益率飙升，从欧洲美元/影子银行流动性视角解读，长期持衰退与流动性紧缩论，对经济与风险资产偏悲观。",
+   "targets": "美债/风险资产",
+   "source": "https://podbay.fm/p/rebel-capitalist-news/e/1719852300",
+   "detail": "▸ 核心论点：从欧洲美元/影子银行的流动性视角看，国债收益率飙升并非经济强劲，而是流动性紧缩信号，长期持衰退论。\n▸ 关键依据：以欧洲美元体系与影子银行的信用创造机制解读收益率异动，认为其反映的是美元流动性紧张而非增长预期改善。\n▸ 时间与位置：未给出具体收益率点位或时间窗口。\n▸ 标的与操作：对经济与风险资产偏悲观，看空风险资产。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2026-02-20",
-      "direction": "看空",
-      "comments": "在Rebel Capitalist News作为嘉宾谈国债收益率飙升，从欧洲美元/影子银行流动性视角解读，长期持衰退与流动性紧缩论，对经济与风险资产偏悲观。",
-      "targets": "美债/风险资产",
-      "source": "https://podbay.fm/p/rebel-capitalist-news/e/1719852300"
-    },
-    {
-      "date": "2026-05-23",
-      "direction": "看空",
-      "comments": "Substack撰文分析2年期收益率逼近4%、10年期一度触及4.70%，指出收益率曲线结构与2021-2022不同，暗含增长与流动性隐忧，维持谨慎/衰退倾向判断。",
-      "targets": "美债/收益率曲线/风险资产",
-      "source": "https://eurodollaruniversity.substack.com/p/sofr-tips-and-yields-walked-into"
+     "title": "",
+     "url": "https://podbay.fm/p/rebel-capitalist-news/e/1719852300",
+     "date": "2026-02-20"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-05-23",
+   "direction": "看空",
+   "comments": "Substack撰文分析2年期收益率逼近4%、10年期一度触及4.70%，指出收益率曲线结构与2021-2022不同，暗含增长与流动性隐忧，维持谨慎/衰退倾向判断。",
+   "targets": "美债/收益率曲线/风险资产",
+   "source": "https://eurodollaruniversity.substack.com/p/sofr-tips-and-yields-walked-into",
+   "detail": "▸ 核心论点：收益率曲线结构与2021-2022年不同，暗含增长与流动性隐忧，维持谨慎/衰退倾向判断。\n▸ 关键依据：Substack撰文分析2年期收益率逼近4%、10年期一度触及4.70%，指出这一组合与上一轮加息周期的曲线形态存在本质差异，反映的是增长与流动性问题而非单纯的通胀定价。\n▸ 时间与位置：2年期约4%、10年期一度触及4.70%；未给出目标位。\n▸ 标的与操作：美债、收益率曲线与风险资产，看空/谨慎。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Jeff Snider",
+     "url": "https://eurodollaruniversity.substack.com/p/sofr-tips-and-yields-walked-into",
+     "date": "2026-05-23"
+    }
+   ]
+  }
+ ]
 }

@@ -1,30 +1,55 @@
 {
-  "kol": "Athos Salomé",
-  "sector": "Alternative",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)；巴西'活体诺查丹玛斯'预言类KOL，作民间预期/情绪信号，无可交易市场方向",
-  "count": 3,
-  "history": [
+ "kol": "Athos Salomé",
+ "sector": "Alternative",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)；巴西'活体诺查丹玛斯'预言类KOL，作民间预期/情绪信号，无可交易市场方向",
+ "count": 3,
+ "history": [
+  {
+   "date": "2025-01-15",
+   "direction": "未找到",
+   "comments": "提醒其对洛杉矶山火的预测已成真，并列出一系列2025年可能发生的全球事件预言，属灾害/地缘类预言，无市场方向。",
+   "targets": "地缘/灾害",
+   "source": "https://economictimes.indiatimes.com/news/international/us/living-nostradamus-who-correctly-predicted-the-los-angeles-wildfires-and-their-devastation-says-this-is-in-store-for-2025/articleshow/117153110.cms",
+   "detail": "▸ 核心论点：列出一系列2025年可能发生的全球事件预言，属灾害/地缘类预言，无市场方向判断。\n▸ 关键依据：以其对洛杉矶山火的预测已成真作为可信度背书。\n▸ 时间与位置：2025-01-15 发布，针对2025年；未给出具体点位。\n▸ 标的与操作：地缘/灾害主题；无资产多空判断与操作建议。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-01-15",
-      "direction": "未找到",
-      "comments": "提醒其对洛杉矶山火的预测已成真，并列出一系列2025年可能发生的全球事件预言，属灾害/地缘类预言，无市场方向。",
-      "targets": "地缘/灾害",
-      "source": "https://economictimes.indiatimes.com/news/international/us/living-nostradamus-who-correctly-predicted-the-los-angeles-wildfires-and-their-devastation-says-this-is-in-store-for-2025/articleshow/117153110.cms"
-    },
-    {
-      "date": "2025-12-15",
-      "direction": "未找到",
-      "comments": "去年12月发布2026年10项预测，含警告伊朗与以色列紧张关系可能升级、中东局势逼近临界点，属地缘冲突预言，无市场方向。",
-      "targets": "地缘/中东",
-      "source": "https://www.express.co.uk/news/uk/2233522/athos-salome-living-nostradamus-2026-predictions-warnings"
-    },
-    {
-      "date": "2026-07-22",
-      "direction": "未找到",
-      "comments": "称其2026年两项预言已成真，警告最黑暗的预言（世界冲突）仍可能发生，属地缘冲突/末日类预言，无市场方向。",
-      "targets": "地缘/冲突",
-      "source": "https://www.tyla.com/news/living-nostradamus-predictions-2026-world-conflict-728629-20260722"
+     "url": "https://economictimes.indiatimes.com/news/international/us/living-nostradamus-who-correctly-predicted-the-los-angeles-wildfires-and-their-devastation-says-this-is-in-store-for-2025/articleshow/117153110.cms"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2025-12-15",
+   "direction": "未找到",
+   "comments": "去年12月发布2026年10项预测，含警告伊朗与以色列紧张关系可能升级、中东局势逼近临界点，属地缘冲突预言，无市场方向。",
+   "targets": "地缘/中东",
+   "source": "https://www.express.co.uk/news/uk/2233522/athos-salome-living-nostradamus-2026-predictions-warnings",
+   "detail": "▸ 核心论点：地缘冲突预言：警告伊朗与以色列紧张关系可能升级、中东局势逼近临界点，无市场方向。\n▸ 关键依据：去年12月发布的2026年10项预测之一；据原文，他称伊朗铀浓缩计划的争端可能点燃新一轮地区不稳定，并事后声称该预警已获事件印证。\n▸ 时间与位置：原文指向2026年第二季度前后的中东风险窗口；未给出任何市场点位。\n▸ 标的与操作：地缘/中东风险；无交易标的与操作建议。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.express.co.uk/news/uk/2233522/athos-salome-living-nostradamus-2026-predictions-warnings",
+     "date": "2025-12-15"
+    }
+   ]
+  },
+  {
+   "date": "2026-07-22",
+   "direction": "未找到",
+   "comments": "称其2026年两项预言已成真，警告最黑暗的预言（世界冲突）仍可能发生，属地缘冲突/末日类预言，无市场方向。",
+   "targets": "地缘/冲突",
+   "source": "https://www.tyla.com/news/living-nostradamus-predictions-2026-world-conflict-728629-20260722",
+   "detail": "▸ 核心论点：称其 2026 年的两项预言已成真，并警告最黑暗的预言（世界冲突）仍可能发生。\n▸ 关键依据：其 2025 年 12 月发布的 2026 年十项预言中，包含中东（伊朗核浓缩引发以伊紧张）升至临界点及世界杯冠军判断，本人称均已应验。\n▸ 时间与位置：原预言把中东区域动荡指向 2026 年第二季度；未给出任何市场点位。\n▸ 标的与操作：属地缘冲突/末日类预言，不涉及具体资产与买卖操作，无市场方向。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.tyla.com/news/living-nostradamus-predictions-2026-world-conflict-728629-20260722",
+     "date": "2026-07-22"
+    }
+   ]
+  }
+ ]
 }

@@ -1,30 +1,57 @@
 {
-  "kol": "Lacy Hunt",
-  "sector": "Government Debt",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
-  "count": 3,
-  "history": [
+ "kol": "Lacy Hunt",
+ "sector": "Government Debt",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2026-07-16",
+   "direction": "看空",
+   "comments": "Hoisington二季报（Hunt与Hoisington共同署名）由持续三十余年看多美债转为看空，理由是更大的财政赤字与更高的资本需求构成结构性背景转变。",
+   "targets": "美债",
+   "source": "https://www.advisorperspectives.com/articles/2026/07/16/hoisington-us-bond-bull-decades-bearish",
+   "detail": "▸ 核心论点：Hoisington 二季报（Hunt 与 Hoisington 共同署名）由持续三十余年看多美债转为看空。\n▸ 关键依据：理由是更大的财政赤字与更高的资本需求构成结构性背景转变，即资本稀缺取代此前压低利率的格局。\n▸ 时间与位置：2026 年二季度报告（7 月 16 日刊出）；未给出具体收益率点位。\n▸ 标的与操作：美债，看空。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2026-07-16",
-      "direction": "看空",
-      "comments": "Hoisington二季报（Hunt与Hoisington共同署名）由持续三十余年看多美债转为看空，理由是更大的财政赤字与更高的资本需求构成结构性背景转变。",
-      "targets": "美债",
-      "source": "https://www.advisorperspectives.com/articles/2026/07/16/hoisington-us-bond-bull-decades-bearish"
-    },
-    {
-      "date": "2026-07-29",
-      "direction": "看空",
-      "comments": "结束长达44年的长债多头立场，将组合久期大幅砍至1年以内，预期通胀升至4.5%以上，明确转为看空长期美债。",
-      "targets": "美债",
-      "source": "http://www.ratespike.com/articles/lacy-hunt-bond-reversal-treasury-yield-outlook-2026"
-    },
-    {
-      "date": "2026-08-13",
-      "direction": "看空",
-      "comments": "近四十年一直呼吁看多低收益率的Hunt发生U型反转，二季度评论开篇即阐述转熊逻辑，放弃'去全球化+高债务压低利率'旧框架。",
-      "targets": "美债",
-      "source": "https://realinvestmentadvice.com/resources/blog/lacy-hunt-turns-bearish-bonds-studying-his-reversal/"
+     "title": "",
+     "url": "https://www.advisorperspectives.com/articles/2026/07/16/hoisington-us-bond-bull-decades-bearish",
+     "date": "2026-07-16"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-07-29",
+   "direction": "看空",
+   "comments": "结束长达44年的长债多头立场，将组合久期大幅砍至1年以内，预期通胀升至4.5%以上，明确转为看空长期美债。",
+   "targets": "美债",
+   "source": "http://www.ratespike.com/articles/lacy-hunt-bond-reversal-treasury-yield-outlook-2026",
+   "detail": "▸ 核心论点：结束长达 44 年的长债多头立场，明确转为看空长期美债，预期收益率结构性走高。\n▸ 关键依据：Hoisington 旗舰美债基金有效久期从 2025 年 9 月的 20.9 年，到 2026 年 6 月 30 日已压缩至 1 年以内，接近完全重置仓位；Hunt 预期通胀升至 4.5% 以上，不再看到收益率下行的理由。\n▸ 时间与位置：久期调整在 2025 年 9 月至 2026 年 6 月之间完成；未给出具体收益率目标点位。\n▸ 标的与操作：长期美债，卖出 / 大幅缩短久期。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Lacy Hunt",
+     "url": "http://www.ratespike.com/articles/lacy-hunt-bond-reversal-treasury-yield-outlook-2026",
+     "date": "2026-07-29"
+    }
+   ]
+  },
+  {
+   "date": "2026-08-13",
+   "direction": "看空",
+   "comments": "近四十年一直呼吁看多低收益率的Hunt发生U型反转，二季度评论开篇即阐述转熊逻辑，放弃'去全球化+高债务压低利率'旧框架。",
+   "targets": "美债",
+   "source": "https://realinvestmentadvice.com/resources/blog/lacy-hunt-turns-bearish-bonds-studying-his-reversal/",
+   "detail": "▸ 核心论点：近四十年一直看多美债、呼吁低收益率的 Hunt 发生 U 型反转，二季度评论开篇即阐述转熊逻辑，放弃「去全球化+高债务压低利率」的旧框架。\n▸ 关键依据：其二季度展望《Capital Scarcity and the End of Globalization 抑通胀时代终结》判断美国通胀长期均衡区间正由约 1.5–3.5% 上移至 3.5–4.5%，并有出现 5% 以上通胀的显著风险，1990–2020 年的抑通胀架构正被侵蚀。\n▸ 时间与位置：2026 年二季度评论；未给出具体收益率点位。\n▸ 标的与操作：美债看空——Hoisington 已大幅缩短客户组合久期，所得转入短期国库券。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://realinvestmentadvice.com/resources/blog/lacy-hunt-turns-bearish-bonds-studying-his-reversal/",
+     "date": "2026-08-13"
+    }
+   ]
+  }
+ ]
 }

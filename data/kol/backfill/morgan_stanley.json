@@ -1,30 +1,55 @@
 {
-  "kol": "Morgan Stanley",
-  "sector": "宏观货币与金融体系",
-  "backfill_date": "2026-08-22",
-  "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
-  "count": 3,
-  "history": [
+ "kol": "Morgan Stanley",
+ "sector": "宏观货币与金融体系",
+ "backfill_date": "2026-08-22",
+ "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2026-01-06",
+   "direction": "看多",
+   "comments": "摩根士丹利大宗商品团队预测黄金在 2026 年四季度达到 4,800 美元/盎司，理由包括：美联储持续降息与利率下行、美联储主席换届带来的政策不确定性、央行与基金持续买入、地缘政治风险推升避险需求。白银方面同样看多，支撑来自供给缺口与中国出口管制。这是一份明确的贵金属多头基准预测。",
+   "targets": "黄金/白银",
+   "source": "https://investinglive.com/commodities/morgan-stanley-forecasts-gold-at-4800-by-q4-2026-sees-continued-fed-easing-20260106",
+   "detail": "▸ 核心论点：贵金属明确看多，给出2026年黄金基准目标。\n▸ 关键依据：理由包括美联储持续降息与利率下行、美联储主席换届带来的政策不确定性、央行与基金持续买入、地缘政治风险推升避险需求；白银另有供给缺口与中国出口管制支撑。\n▸ 时间与位置：2026-01-06 发布；目标为黄金在2026年四季度达到4,800美元/盎司。\n▸ 标的与操作：黄金、白银；均看多，属大宗商品团队的多头基准预测。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2026-01-06",
-      "direction": "看多",
-      "comments": "摩根士丹利大宗商品团队预测黄金在 2026 年四季度达到 4,800 美元/盎司，理由包括：美联储持续降息与利率下行、美联储主席换届带来的政策不确定性、央行与基金持续买入、地缘政治风险推升避险需求。白银方面同样看多，支撑来自供给缺口与中国出口管制。这是一份明确的贵金属多头基准预测。",
-      "targets": "黄金/白银",
-      "source": "https://investinglive.com/commodities/morgan-stanley-forecasts-gold-at-4800-by-q4-2026-sees-continued-fed-easing-20260106"
-    },
-    {
-      "date": "2026-04-21",
-      "direction": "分歧",
-      "comments": "经济时报报道：摩根士丹利下调黄金目标价，从 5,700 美元砍到 5,200 美元/盎司。行内措辞是牛市并未结束、但明显放缓，后续走势将更多取决于宏观数据而非市场情绪。相较年初 4,800 的预测，这一轮先上调后下修的路径本身反映其对金价高位波动的谨慎——方向上仍偏多但确认动能减弱，故记为分歧。",
-      "targets": "黄金",
-      "source": "https://economictimes.indiatimes.com/news/international/us/why-morgan-stanley-slashed-its-gold-price-forecast-to-5200-down-from-5700-is-the-gold-bull-run-over-and-what-does-it-signal-for-the-2026-gold-price-outlook-ahead/articleshow/130417478.cms"
-    },
-    {
-      "date": "2026-05-13",
-      "direction": "看多",
-      "comments": "首席投资官兼首席美股策略师 Mike Wilson 将标普 500 年底目标从 7,800 上调至 8,000 点。他的核心论点是市场已经把最大的几项风险（关税、通胀、政策不确定性）price in，且本轮美股上涨不再依赖美联储降息——盈利与运营杠杆才是驱动力。同期他还上调了 2027 年目标位。Wilson 从此前的著名空头转为明确多头。",
-      "targets": "美股/标普500",
-      "source": "https://www.morningstar.com/news/marketwatch/20260513121/morgan-stanley-boosts-sp-500-target-why-mike-wilson-says-the-market-has-already-priced-in-the-biggest-risks"
+     "url": "https://investinglive.com/commodities/morgan-stanley-forecasts-gold-at-4800-by-q4-2026-sees-continued-fed-easing-20260106"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-04-21",
+   "direction": "分歧",
+   "comments": "经济时报报道：摩根士丹利下调黄金目标价，从 5,700 美元砍到 5,200 美元/盎司。行内措辞是牛市并未结束、但明显放缓，后续走势将更多取决于宏观数据而非市场情绪。相较年初 4,800 的预测，这一轮先上调后下修的路径本身反映其对金价高位波动的谨慎——方向上仍偏多但确认动能减弱，故记为分歧。",
+   "targets": "黄金",
+   "source": "https://economictimes.indiatimes.com/news/international/us/why-morgan-stanley-slashed-its-gold-price-forecast-to-5200-down-from-5700-is-the-gold-bull-run-over-and-what-does-it-signal-for-the-2026-gold-price-outlook-ahead/articleshow/130417478.cms",
+   "detail": "▸ 核心论点：下调黄金目标价但方向仍偏多：牛市并未结束、但明显放缓，故记为分歧。\n▸ 关键依据：目标价从5700美元/盎司下调至5200美元/盎司；行内措辞是后续走势将更多取决于宏观数据而非市场情绪。相较年初4800的预测，这一轮先上调后下修的路径本身反映其对金价高位波动的谨慎。\n▸ 时间与位置：黄金目标价5200美元/盎司（自5700下调，年初预测为4800）。\n▸ 标的与操作：黄金；操作上仍偏多但确认动能减弱，趋于谨慎。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://economictimes.indiatimes.com/news/international/us/why-morgan-stanley-slashed-its-gold-price-forecast-to-5200-down-from-5700-is-the-gold-bull-run-over-and-what-does-it-signal-for-the-2026-gold-price-outlook-ahead/articleshow/130417478.cms",
+     "date": "2026-04-21"
+    }
+   ]
+  },
+  {
+   "date": "2026-05-13",
+   "direction": "看多",
+   "comments": "首席投资官兼首席美股策略师 Mike Wilson 将标普 500 年底目标从 7,800 上调至 8,000 点。他的核心论点是市场已经把最大的几项风险（关税、通胀、政策不确定性）price in，且本轮美股上涨不再依赖美联储降息——盈利与运营杠杆才是驱动力。同期他还上调了 2027 年目标位。Wilson 从此前的著名空头转为明确多头。",
+   "targets": "美股/标普500",
+   "source": "https://www.morningstar.com/news/marketwatch/20260513121/morgan-stanley-boosts-sp-500-target-why-mike-wilson-says-the-market-has-already-priced-in-the-biggest-risks",
+   "detail": "▸ 核心论点：首席美股策略师 Mike Wilson 从著名空头转为明确多头，认为最大的几项风险已被 price in。\n▸ 关键依据：关税、通胀、政策不确定性已被市场消化；本轮美股上涨不再依赖美联储降息，盈利与运营杠杆才是驱动力。\n▸ 时间与位置：标普 500 年底目标从 7,800 上调至 8,000 点，同期亦上调 2027 年目标位。\n▸ 标的与操作：美股 / 标普 500，看多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Morgan Stanley",
+     "url": "https://www.morningstar.com/news/marketwatch/20260513121/morgan-stanley-boosts-sp-500-target-why-mike-wilson-says-the-market-has-already-priced-in-the-biggest-risks",
+     "date": "2026-05-13"
+    }
+   ]
+  }
+ ]
 }

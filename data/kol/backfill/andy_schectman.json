@@ -1,44 +1,87 @@
 {
-  "kol": "Andy Schectman",
-  "sector": "Precious Metals",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
-  "count": 5,
-  "history": [
+ "kol": "Andy Schectman",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+ "count": 5,
+ "history": [
+  {
+   "date": "2025-10-16",
+   "direction": "强烈看多",
+   "comments": "资深金银商称金属市场根基出现断裂，直言从未见过这样的局面，强调全球金属市场结构性变化正在发生，长期看多金银。",
+   "targets": "黄金/白银",
+   "source": "https://www.youtube.com/watch?v=vFkpqi_EBrI",
+   "detail": "▸ 核心论点：金属市场根基出现断裂，「从未见过这样的局面」，全球金属市场正发生结构性变化。\n▸ 关键依据：作为资深金银交易商，其依据来自一线实物市场的供需与交割体验，判断当前异常并非周期性波动而是结构性断裂。\n▸ 时间与位置：未给出具体点位或时间窗口。\n▸ 标的与操作：黄金、白银，强烈看多，长期持有实物。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-10-16",
-      "direction": "强烈看多",
-      "comments": "资深金银商称金属市场根基出现断裂，直言从未见过这样的局面，强调全球金属市场结构性变化正在发生，长期看多金银。",
-      "targets": "黄金/白银",
-      "source": "https://www.youtube.com/watch?v=vFkpqi_EBrI"
-    },
-    {
-      "date": "2025-11-24",
-      "direction": "强烈看多",
-      "comments": "更新其大胆的金银预测，对2025年末金银维持强烈看多立场。",
-      "targets": "黄金/白银",
-      "source": "https://www.youtube.com/watch?v=IfdbejhNJck"
-    },
-    {
-      "date": "2026-01-14",
-      "direction": "强烈看多",
-      "comments": "在Metals and Miners访谈中谈白银工业需求与投资需求之争，认为全球对金银需求持续升级，白银争夺战将至。",
-      "targets": "白银/黄金",
-      "source": "https://metalsandminers.substack.com/p/andy-schectman-battle-for-silver"
-    },
-    {
-      "date": "2026-05-01",
-      "direction": "强烈看多",
-      "comments": "在NRS 2026 Expo发表主题演讲，阐述金银作为真正财富的意义及全球货币体系转变，坚定看多贵金属。",
-      "targets": "黄金/白银",
-      "source": "https://natural-resource-stocks.castos.com/episodes/andy-schectman-at-nrs-2026-expo-why-gold-and-silver-are-wealth"
-    },
-    {
-      "date": "2026-07-17",
-      "direction": "强烈看多",
-      "comments": "接受Investing News访谈，强调价格是误导工具，真正重要的是央行、中国、Tether持续增持黄金，认为回调洗掉了投机盘，大买家借弱势加仓。",
-      "targets": "黄金/白银",
-      "source": "https://investingnews.com/andy-schectman-gold-silver-forecast/"
+     "title": "Andy Schectman",
+     "url": "https://www.youtube.com/watch?v=vFkpqi_EBrI",
+     "date": "2025-10-16"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2025-11-24",
+   "direction": "强烈看多",
+   "comments": "更新其大胆的金银预测，对2025年末金银维持强烈看多立场。",
+   "targets": "黄金/白银",
+   "source": "https://www.youtube.com/watch?v=IfdbejhNJck",
+   "detail": "▸ 公开信息有限，仅检索到：Schectman 更新其大胆的金银预测，对 2025 年末金银维持强烈看多立场（YouTube 访谈《Andy Schectman Updates His Bold Gold and Silver Forecast for Late 2025》，2025-11-24 发布）。\n▸ 关键依据：原文未给出可核实的具体论据。\n▸ 时间与位置：未给出具体点位。\n▸ 标的与操作：黄金、白银，强烈看多。",
+   "detail_status": "thin",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.youtube.com/watch?v=IfdbejhNJck",
+     "date": "2025-11-24"
+    }
+   ]
+  },
+  {
+   "date": "2026-01-14",
+   "direction": "强烈看多",
+   "comments": "在Metals and Miners访谈中谈白银工业需求与投资需求之争，认为全球对金银需求持续升级，白银争夺战将至。",
+   "targets": "白银/黄金",
+   "source": "https://metalsandminers.substack.com/p/andy-schectman-battle-for-silver",
+   "detail": "▸ 核心论点：全球对金银的需求持续升级，白银争夺战将至——需要白银的工业与想要白银的投资者之间将爆发冲突。\n▸ 关键依据：在Metals and Miners访谈中援引COMEX创纪录的交割需求（提及12月单月约6,500万盎司白银交割）指向实物短缺，并提到上海白银较COMEX高出约8美元的价差是真实的实物价格发现；叠加去美元化、BRICS扩张与白银的关键矿产地位。\n▸ 时间与位置：未给出具体目标价；时间上指向2026年的实物紧张格局。\n▸ 标的与操作：白银、黄金，强烈看多，倾向持有实物。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Andy Schectman",
+     "url": "https://metalsandminers.substack.com/p/andy-schectman-battle-for-silver",
+     "date": "2026-01-14"
+    }
+   ]
+  },
+  {
+   "date": "2026-05-01",
+   "direction": "强烈看多",
+   "comments": "在NRS 2026 Expo发表主题演讲，阐述金银作为真正财富的意义及全球货币体系转变，坚定看多贵金属。",
+   "targets": "黄金/白银",
+   "source": "https://natural-resource-stocks.castos.com/episodes/andy-schectman-at-nrs-2026-expo-why-gold-and-silver-are-wealth",
+   "detail": "▸ 核心论点：坚定看多贵金属：金银是真正的财富而非常规投资，全球货币体系正在转变。\n▸ 关键依据：在 NRS 2026 Expo 主题演讲中阐述金银作为真正财富的意义；据主办方节目介绍，内容涵盖 Comex 交割趋势、中国对金银的持续吸纳、央行购金，以及 BRICS 结算体系、CIPS、mBridge、BRICS Pay 等去美元结算的推进。\n▸ 时间与位置：未给出具体点位与时间窗口。\n▸ 标的与操作：黄金、白银；操作上强烈看多，主张持有实物贵金属作为财务保护。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://natural-resource-stocks.castos.com/episodes/andy-schectman-at-nrs-2026-expo-why-gold-and-silver-are-wealth",
+     "date": "2026-05-01"
+    }
+   ]
+  },
+  {
+   "date": "2026-07-17",
+   "direction": "强烈看多",
+   "comments": "接受Investing News访谈，强调价格是误导工具，真正重要的是央行、中国、Tether持续增持黄金，认为回调洗掉了投机盘，大买家借弱势加仓。",
+   "targets": "黄金/白银",
+   "source": "https://investingnews.com/andy-schectman-gold-silver-forecast/",
+   "detail": "▸ 核心论点：价格是误导工具，真正重要的是实物买盘结构，因此对黄金强烈看多。\n▸ 关键依据：央行、中国、Tether 持续增持黄金；认为回调洗掉了投机盘，大买家正借价格弱势加仓。\n▸ 时间与位置：2026-07-17 接受 Investing News 访谈；未给出具体点位或目标价。\n▸ 标的与操作：黄金、白银；逢弱势买入、以实物持有为核心思路。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://investingnews.com/andy-schectman-gold-silver-forecast/"
+    }
+   ]
+  }
+ ]
 }

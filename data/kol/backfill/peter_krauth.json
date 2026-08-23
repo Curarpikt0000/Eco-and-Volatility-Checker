@@ -1,1 +1,73 @@
-{"kol":"Peter Krauth","sector":"Precious Metals","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":4,"history":[{"date":"2025-12-11","direction":"强烈看多","comments":"Silver Stock Investor与Silver Advisor编辑Krauth评白银历史性突破US$60/oz后仍看强,认为2026年白银有望触及US$70/oz,虽承认白银波动剧烈但坚信牛市延续。","targets":"白银","source":"grandforecast.com"},{"date":"2025-12-23","direction":"强烈看多","comments":"接受Triangle Investor访谈,深入讨论白银短缺与回调,认为白银牛市在2026年及以后仍有显著上行空间,建议关注实物白银、ETF与矿业股。","targets":"白银/白银矿股","source":"triangle-investor.com"},{"date":"2026-03-06","direction":"看多","comments":"在Investing News访谈中指出白银周期仍处早期,大资金蓄势待发;虽然从高位回调被广泛预期,但看好白银中长期走势,给出熊/中性/牛三情景。","targets":"白银","source":"investingnews.com"},{"date":"2026-03-11","direction":"强烈看多","comments":"接受SBC Gold访谈表示白银正冲击$50,并认为最终可达$300;短期2025年看$40,2026年基准价升至$50,基于历史金银比五次下降平均44%的框架推演。","targets":"白银","source":"sbcgold.com"}]}
+{
+ "kol": "Peter Krauth",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 4,
+ "history": [
+  {
+   "date": "2025-12-11",
+   "direction": "强烈看多",
+   "comments": "Silver Stock Investor与Silver Advisor编辑Krauth评白银历史性突破US$60/oz后仍看强,认为2026年白银有望触及US$70/oz,虽承认白银波动剧烈但坚信牛市延续。",
+   "targets": "白银",
+   "source": "grandforecast.com",
+   "detail": "▸ 核心论点：白银历史性突破 60 美元 / 盎司后仍然看强，牛市延续。\n▸ 关键依据：Silver Stock Investor 与 Silver Advisor 编辑判断该突破具历史意义，虽承认白银波动剧烈但坚信趋势未完。\n▸ 时间与位置：突破位 60 美元；2026 年白银有望触及 70 美元 / 盎司。\n▸ 标的与操作：白银，看多持有。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Peter Krauth",
+     "url": "grandforecast.com",
+     "date": "2025-12-11"
+    }
+   ]
+  },
+  {
+   "date": "2025-12-23",
+   "direction": "强烈看多",
+   "comments": "接受Triangle Investor访谈,深入讨论白银短缺与回调,认为白银牛市在2026年及以后仍有显著上行空间,建议关注实物白银、ETF与矿业股。",
+   "targets": "白银/白银矿股",
+   "source": "triangle-investor.com",
+   "detail": "▸ 核心论点：白银牛市在 2026 年及以后仍有显著上行空间，短缺是核心矛盾。\n▸ 关键依据：在 Triangle Investor 访谈中深入讨论白银的供给短缺问题，认为阶段性回调不改短缺主导的中期格局。\n▸ 时间与位置：时间跨度指向 2026 年及以后，未给出具体目标价。\n▸ 标的与操作：白银强烈看多，建议关注实物白银、白银 ETF 与矿业股三条路径。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "triangle-investor.com",
+     "date": "2025-12-23"
+    }
+   ]
+  },
+  {
+   "date": "2026-03-06",
+   "direction": "看多",
+   "comments": "在Investing News访谈中指出白银周期仍处早期,大资金蓄势待发;虽然从高位回调被广泛预期,但看好白银中长期走势,给出熊/中性/牛三情景。",
+   "targets": "白银",
+   "source": "investingnews.com",
+   "detail": "▸ 核心论点：白银周期仍处早期，大资金蓄势待发，中长期看好。\n▸ 关键依据：虽然从高位回调被市场广泛预期，但大体量资金尚未真正进场；在 Investing News 访谈中给出熊市/中性/牛市三种情景推演。\n▸ 时间与位置：定位为周期早期、中长期看好，未给出具体点位。\n▸ 标的与操作：白银看多，接受阶段性回调，属中长期配置观点。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "investingnews.com",
+     "date": "2026-03-06"
+    }
+   ]
+  },
+  {
+   "date": "2026-03-11",
+   "direction": "强烈看多",
+   "comments": "接受SBC Gold访谈表示白银正冲击$50,并认为最终可达$300;短期2025年看$40,2026年基准价升至$50,基于历史金银比五次下降平均44%的框架推演。",
+   "targets": "白银",
+   "source": "sbcgold.com",
+   "detail": "▸ 核心论点：白银正冲击50美元，并认为最终可达300美元，强烈看多白银。\n▸ 关键依据：基于历史金银比五次下降平均44%的框架推演；短期2025年看40美元，2026年基准价升至50美元。\n▸ 时间与位置：路径为2025年40美元→2026年基准50美元→长期终极目标300美元。\n▸ 标的与操作：白银，强烈看多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Peter Krauth",
+     "url": "sbcgold.com",
+     "date": "2026-03-11"
+    }
+   ]
+  }
+ ]
+}

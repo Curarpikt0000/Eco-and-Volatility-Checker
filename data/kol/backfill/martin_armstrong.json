@@ -1,51 +1,103 @@
 {
-  "kol": "Martin Armstrong",
-  "sector": "Cycles & Esoteric Forecasting",
-  "backfill_date": "2026-08-21",
-  "source_method": "web_search+LLM提取(2026-08-21 批量回填)",
-  "count": 6,
-  "history": [
+ "kol": "Martin Armstrong",
+ "sector": "Cycles & Esoteric Forecasting",
+ "backfill_date": "2026-08-21",
+ "source_method": "web_search+LLM提取(2026-08-21 批量回填)",
+ "count": 6,
+ "history": [
+  {
+   "date": "2025-12-29",
+   "direction": "另类预言",
+   "comments": "Commodity Culture 访谈（主持人 Jesse Day 在片中口述录制日为 2025 年 12 月 29 日）。Armstrong 称 Socrates 模型显示 2026 年是「Panic Cycle（恐慌周期）」年，波动率将大幅抬升，且欧盟面临苏联式解体、战争持续升级；预期 2 月起启动恐慌周期。金银方面给出白银阻力位序列：78–80 一线，突破后 89 至 90 中段，100 为心理关口，104 附近有较硬阻力；并警告欧洲可能对法币乃至黄金、白银、比特币实施资本管制。",
+   "targets": "白银/黄金/BTC/欧元/欧股",
+   "source": "https://www.youtube.com/watch?v=vr3EjyCoyh8",
+   "detail": "▸ 核心论点：Socrates 模型显示 2026 年是 Panic Cycle（恐慌周期）年，波动率将大幅抬升。\n▸ 关键依据：预期欧盟面临苏联式解体、战争持续升级；并警告欧洲可能对法币乃至黄金、白银、比特币实施资本管制。\n▸ 时间与位置：恐慌周期自 2026 年 2 月起启动；白银阻力序列为 78–80 一线，突破后 89 至 90 中段，100 为心理关口，104 附近有较硬阻力。\n▸ 标的与操作：白银、黄金、BTC、欧元、欧股：按阻力序列分批操作，并防范资本管制风险。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-12-29",
-      "direction": "另类预言",
-      "comments": "Commodity Culture 访谈（主持人 Jesse Day 在片中口述录制日为 2025 年 12 月 29 日）。Armstrong 称 Socrates 模型显示 2026 年是「Panic Cycle（恐慌周期）」年，波动率将大幅抬升，且欧盟面临苏联式解体、战争持续升级；预期 2 月起启动恐慌周期。金银方面给出白银阻力位序列：78–80 一线，突破后 89 至 90 中段，100 为心理关口，104 附近有较硬阻力；并警告欧洲可能对法币乃至黄金、白银、比特币实施资本管制。",
-      "targets": "白银/黄金/BTC/欧元/欧股",
-      "source": "https://www.youtube.com/watch?v=vr3EjyCoyh8"
-    },
-    {
-      "date": "2026-01-01",
-      "direction": "看多",
-      "comments": "《The Markets are Always Right》。重申自 2009-11-07 以来的黄金长期目标不变：$5,000/盎司最可能在 2027–2032 年间实现，极端目标 $12,000（低概率）。指出 2025 年是一个「MAJOR 转折点目标年」，下一个是 2027 年，此后波动率将显著上升直到 2032。认为欧洲若出现和平预期反而对金价不利，但否定 1980 年模型曾给出的 19 年长跌情景。",
-      "targets": "黄金",
-      "source": "https://www.armstrongeconomics.com/markets-by-sector/the-markets-are-always-right/"
-    },
-    {
-      "date": "2026-01-26",
-      "direction": "另类预言",
-      "comments": "《Iran – Socrates & Geopolitics》。回应读者提问，确认此前警告伊朗将在 2026 年 2 月面临危机、2024 年为极端冲突的转折点；Socrates 显示波动率自 2026 年 2 月起急升并延续到 9 月。他把 2022 年 9 月伊朗抗议视为始于 1979 年伊斯兰革命的这一长波的最后一浪，该浪要到 2027 年初才结束。属典型的时间窗口/周期择时预言而非明确多空。",
-      "targets": "原油/地缘政治",
-      "source": "https://www.armstrongeconomics.com/armstrongeconomics101/ai-computers/iran-socrates-geopolitics/"
-    },
-    {
-      "date": "2026-02-06",
-      "direction": "看空",
-      "comments": "《The Economy into 2028》。以 1 月创大衰退以来最大规模 1 月裁员（108,435 人，同比 +118%）印证 Socrates 对 2 月波动上升与 Directional Change 的预判，强调模型多年前就给出「衰退趋势延续到 2028 年」。失业率关键阻力位 6.6%，年线收于其上则将出现严重恶化。并称当前处于延续至 2028 年 8 月的熊彼特「创造性毁灭」浪，市场会出现高欺骗性的假动作。",
-      "targets": "美股/美国宏观",
-      "source": "https://www.armstrongeconomics.com/future-forecasts/ecm/the-economy-into-2028/"
-    },
-    {
-      "date": "2026-03-14",
-      "direction": "看空",
-      "comments": "《Liquidity Crisis 2026》。指出 BlackRock、Blackstone、Morgan Stanley、Blue Owl 等私募信贷机构已开始限制赎回，其放贷对象约 40% 现金流为负，判断该轮出清不会早于 2027 年年中见底；全球衰退将在 2028 年 8 月触底。重申原油、汽油、天然气模型 2025 年均出现 Directional Change 且指向上行，2028 年前原油极端目标 $200–$225。Socrates 曾在 1 月给出 2026 为 Panic Cycle Year。",
-      "targets": "原油/私募信贷/美股/宏观",
-      "source": "https://www.armstrongeconomics.com/world-news/liquidity-crusus/liquidity-crisis-2026/"
-    },
-    {
-      "date": "2026-04-21",
-      "direction": "另类预言",
-      "comments": "《Socrates – War & Future》。读者称 Socrates 把停火结束当周精确标记为 Double Directional Change；Armstrong 解释模型跟踪资本流、天气乃至火山等全域变量，因此在预测市场的同时也在预测战争与地缘事件。强调 Socrates 每日对 1,400 余个品种输出时间阵列与报告，并再次抛出「2032 年后西方才会醒悟」的长周期论断。属周期择时/地缘预言。",
-      "targets": "全球市场/地缘政治",
-      "source": "https://www.armstrongeconomics.com/armstrongeconomics101/ai-computers/socrates-war-future/"
+     "title": "Martin Armstrong",
+     "url": "https://www.youtube.com/watch?v=vr3EjyCoyh8",
+     "date": "2025-12-29"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-01-01",
+   "direction": "看多",
+   "comments": "《The Markets are Always Right》。重申自 2009-11-07 以来的黄金长期目标不变：$5,000/盎司最可能在 2027–2032 年间实现，极端目标 $12,000（低概率）。指出 2025 年是一个「MAJOR 转折点目标年」，下一个是 2027 年，此后波动率将显著上升直到 2032。认为欧洲若出现和平预期反而对金价不利，但否定 1980 年模型曾给出的 19 年长跌情景。",
+   "targets": "黄金",
+   "source": "https://www.armstrongeconomics.com/markets-by-sector/the-markets-are-always-right/",
+   "detail": "▸ 核心论点：重申自 2009-11-07 以来的黄金长期目标不变，长周期仍看多黄金。\n▸ 关键依据：以其周期模型定位转折年；否定 1980 年模型曾给出的19年长跌情景；认为欧洲若出现和平预期反而对金价不利。\n▸ 时间与位置：2026-01-01；目标 $5,000/盎司最可能在 2027-2032 年实现，极端目标 $12,000(低概率)；2025 年是 MAJOR 转折点目标年，下一个是 2027 年，此后波动率显著上升直到 2032。\n▸ 标的与操作：黄金；长期看多，按周期年份布局。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://www.armstrongeconomics.com/markets-by-sector/the-markets-are-always-right/"
+    }
+   ]
+  },
+  {
+   "date": "2026-01-26",
+   "direction": "另类预言",
+   "comments": "《Iran – Socrates & Geopolitics》。回应读者提问，确认此前警告伊朗将在 2026 年 2 月面临危机、2024 年为极端冲突的转折点；Socrates 显示波动率自 2026 年 2 月起急升并延续到 9 月。他把 2022 年 9 月伊朗抗议视为始于 1979 年伊斯兰革命的这一长波的最后一浪，该浪要到 2027 年初才结束。属典型的时间窗口/周期择时预言而非明确多空。",
+   "targets": "原油/地缘政治",
+   "source": "https://www.armstrongeconomics.com/armstrongeconomics101/ai-computers/iran-socrates-geopolitics/",
+   "detail": "▸ 核心论点：确认此前警告：伊朗将在 2026 年 2 月面临危机，属时间窗口 / 周期择时预言而非明确多空。\n▸ 关键依据：Socrates 显示波动率自 2026 年 2 月起急升并延续到 9 月；他把 2022 年 9 月伊朗抗议视为始于 1979 年伊斯兰革命这一长波的最后一浪；此前已指 2024 年为极端冲突的转折点。\n▸ 时间与位置：波动率窗口 2026 年 2 月至 9 月，长波要到 2027 年初才结束；未给出具体点位。\n▸ 标的与操作：原油 / 地缘政治，关注波动率抬升而非方向性下注。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Martin Armstrong",
+     "url": "https://www.armstrongeconomics.com/armstrongeconomics101/ai-computers/iran-socrates-geopolitics/",
+     "date": "2026-01-26"
+    }
+   ]
+  },
+  {
+   "date": "2026-02-06",
+   "direction": "看空",
+   "comments": "《The Economy into 2028》。以 1 月创大衰退以来最大规模 1 月裁员（108,435 人，同比 +118%）印证 Socrates 对 2 月波动上升与 Directional Change 的预判，强调模型多年前就给出「衰退趋势延续到 2028 年」。失业率关键阻力位 6.6%，年线收于其上则将出现严重恶化。并称当前处于延续至 2028 年 8 月的熊彼特「创造性毁灭」浪，市场会出现高欺骗性的假动作。",
+   "targets": "美股/美国宏观",
+   "source": "https://www.armstrongeconomics.com/future-forecasts/ecm/the-economy-into-2028/",
+   "detail": "▸ 核心论点：经济衰退趋势将延续至2028年，当前处于高欺骗性的「创造性毁灭」浪，看空美股与美国宏观。\n▸ 关键依据：以1月创大衰退以来最大规模的1月裁员（108,435人，同比+118%）印证 Socrates 模型对2月波动上升与 Directional Change 的预判，强调模型多年前就给出衰退趋势延续到2028年的结论；并称当前处于熊彼特式创造性毁灭浪，市场会出现高欺骗性的假动作。\n▸ 时间与位置：关键位为失业率阻力位6.6%——年线收于其上则将出现严重恶化；周期终点为2028年8月。\n▸ 标的与操作：美股与美国宏观；操作上看空、防范假突破式的市场诱多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.armstrongeconomics.com/future-forecasts/ecm/the-economy-into-2028/",
+     "date": "2026-02-06"
+    }
+   ]
+  },
+  {
+   "date": "2026-03-14",
+   "direction": "看空",
+   "comments": "《Liquidity Crisis 2026》。指出 BlackRock、Blackstone、Morgan Stanley、Blue Owl 等私募信贷机构已开始限制赎回，其放贷对象约 40% 现金流为负，判断该轮出清不会早于 2027 年年中见底；全球衰退将在 2028 年 8 月触底。重申原油、汽油、天然气模型 2025 年均出现 Directional Change 且指向上行，2028 年前原油极端目标 $200–$225。Socrates 曾在 1 月给出 2026 为 Panic Cycle Year。",
+   "targets": "原油/私募信贷/美股/宏观",
+   "source": "https://www.armstrongeconomics.com/world-news/liquidity-crusus/liquidity-crisis-2026/",
+   "detail": "▸ 核心论点：2026 年是流动性危机年（Panic Cycle Year），私募信贷是引爆点。\n▸ 关键依据：BlackRock、Blackstone、Blue Owl 等私募信贷机构已开始限制赎回，其放贷对象约 40% 现金流为负；Socrates 1 月即给出 2026 为 Panic Cycle Year。\n▸ 时间与位置：出清不早于 2027 年年中见底，全球衰退 2028 年 8 月触底；2028 年前原油极端目标 200–225 美元。\n▸ 标的与操作：看空私募信贷与风险资产，看多能源（原油/汽油/天然气模型指向上行）。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.armstrongeconomics.com/world-news/liquidity-crusus/liquidity-crisis-2026/",
+     "date": "2026-03-14"
+    }
+   ]
+  },
+  {
+   "date": "2026-04-21",
+   "direction": "另类预言",
+   "comments": "《Socrates – War & Future》。读者称 Socrates 把停火结束当周精确标记为 Double Directional Change；Armstrong 解释模型跟踪资本流、天气乃至火山等全域变量，因此在预测市场的同时也在预测战争与地缘事件。强调 Socrates 每日对 1,400 余个品种输出时间阵列与报告，并再次抛出「2032 年后西方才会醒悟」的长周期论断。属周期择时/地缘预言。",
+   "targets": "全球市场/地缘政治",
+   "source": "https://www.armstrongeconomics.com/armstrongeconomics101/ai-computers/socrates-war-future/",
+   "detail": "▸ 核心论点：Socrates 模型不仅预测市场，也在预测战争与地缘事件；西方要到 2032 年之后才会醒悟。\n▸ 关键依据：读者反馈称模型把停火结束当周精确标记为 Double Directional Change；Armstrong 解释模型跟踪资本流、天气乃至火山等全域变量，每日对 1,400 余个品种输出时间阵列与报告。\n▸ 时间与位置：关键时间标记为停火结束当周的 Double Directional Change，以及 2032 年后的长周期转折点；未给出具体价格点位。\n▸ 标的与操作：属周期择时与地缘预言，覆盖全市场，未给出单一标的的买卖建议。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.armstrongeconomics.com/armstrongeconomics101/ai-computers/socrates-war-future/",
+     "date": "2026-04-21"
+    }
+   ]
+  }
+ ]
 }

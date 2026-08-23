@@ -1,37 +1,73 @@
 {
-  "kol": "Citi / UBS",
-  "sector": "宏观货币与金融体系",
-  "backfill_date": "2026-08-22",
-  "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
-  "count": 4,
-  "history": [
+ "kol": "Citi / UBS",
+ "sector": "宏观货币与金融体系",
+ "backfill_date": "2026-08-22",
+ "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
+ "count": 4,
+ "history": [
+  {
+   "date": "2026-06-09",
+   "direction": "看空",
+   "comments": "花旗（Citigroup）下调近月黄金目标价：将三个月金价目标从 4,300 美元/盎司砍至 4,000 美元/盎司。这与其 2026 年 1 月把 0–3 个月目标上调到 5,000 美元的立场相比是明显的方向逆转，反映花旗认为避险溢价与降息预期已被过度定价，短期金价面临回调压力。属于短周期的明确看空调整。",
+   "targets": "黄金",
+   "source": "https://www.gate.com/news/detail/citi-cuts-near-term-gold-price-target-to-4000-from-4300-21747564",
+   "detail": "▸ 核心论点：花旗下调近月黄金目标价，认为避险溢价与降息预期已被过度定价，短期金价面临回调压力，属短周期的明确看空调整。\n▸ 关键依据：将三个月金价目标从4,300美元/盎司砍至4,000美元/盎司；与其2026年1月把0-3个月目标上调到5,000美元的立场相比是明显的方向逆转。\n▸ 时间与位置：三个月期目标4,000美元/盎司（前值4,300美元）；对照的1月0-3个月目标为5,000美元。\n▸ 标的与操作：黄金，短周期看空，建议规避近月追高。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2026-06-09",
-      "direction": "看空",
-      "comments": "花旗（Citigroup）下调近月黄金目标价：将三个月金价目标从 4,300 美元/盎司砍至 4,000 美元/盎司。这与其 2026 年 1 月把 0–3 个月目标上调到 5,000 美元的立场相比是明显的方向逆转，反映花旗认为避险溢价与降息预期已被过度定价，短期金价面临回调压力。属于短周期的明确看空调整。",
-      "targets": "黄金",
-      "source": "https://www.gate.com/news/detail/citi-cuts-near-term-gold-price-target-to-4000-from-4300-21747564"
-    },
-    {
-      "date": "2026-07-28",
-      "direction": "看多",
-      "comments": "花旗把短期黄金目标价重新设定在 4,500 美元/盎司，较 6 月的 4,000 美元上调，重回多头。同期花旗把白银预测从此前的 100 美元大幅上调至 150 美元/盎司，理由是投资需求的多头因素完好，且美国以外主要交易中心的实物白银持续趋紧。金银双双上调，白银弹性看得比黄金更大。",
-      "targets": "黄金/白银",
-      "source": "https://www.weex.com/news/detail/citi-sets-short-term-gold-price-target-at-4500-ykfrd7hn9l5uanqov0hc2gey"
-    },
-    {
-      "date": "2026-08-21",
-      "direction": "看多",
-      "comments": "瑞银（UBS Global Wealth Management）上调标普 500 年底目标至 8,100 点，理由是盈利前景增强：把 2026 年标普 500 每股收益预测从 335 美元上调至 350 美元，2027 年从 375 美元上调至 400 美元；同时把 2027 年中期指数目标从 8,200 上调至 8,400。这是一次盈利驱动型的全面上修，立场明确看多美股。",
-      "targets": "美股/标普500",
-      "source": "https://wmbdradio.com/2026/08/21/ubs-global-wealth-management-lifts-sp-500-year-end-target-to-8100/"
-    },
-    {
-      "date": "2026-01-13",
-      "direction": "强烈看多",
-      "comments": "路透 Factbox 记录：Citi Research 于 2026 年 1 月 13 日把黄金 0–3 个月价格目标上调至 5,000 美元/盎司，是当时华尔街最高的短周期黄金目标之一。该 Factbox 同时列出同业目标价对照：高盛 2026 年底 5,400 美元、摩根大通 2026 年四季度均价 5,055 美元、HSBC 2026 年底 4,450 美元、摩根士丹利 2026 年中 4,500 美元。花旗此举确认了机构对金价的共识性看多。",
-      "targets": "黄金",
-      "source": "https://www.investing.com/news/stock-market-news/factboxgoldman-sachs-raises-2026end-gold-price-forecast-to-5400oz-4459246"
+     "title": "Citi / UBS",
+     "url": "https://www.gate.com/news/detail/citi-cuts-near-term-gold-price-target-to-4000-from-4300-21747564",
+     "date": "2026-06-09"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2026-07-28",
+   "direction": "看多",
+   "comments": "花旗把短期黄金目标价重新设定在 4,500 美元/盎司，较 6 月的 4,000 美元上调，重回多头。同期花旗把白银预测从此前的 100 美元大幅上调至 150 美元/盎司，理由是投资需求的多头因素完好，且美国以外主要交易中心的实物白银持续趋紧。金银双双上调，白银弹性看得比黄金更大。",
+   "targets": "黄金/白银",
+   "source": "https://www.weex.com/news/detail/citi-sets-short-term-gold-price-target-at-4500-ykfrd7hn9l5uanqov0hc2gey",
+   "detail": "▸ 核心论点：花旗重回贵金属多头，同时上调金银目标价，且认为白银弹性大于黄金。\n▸ 关键依据：投资需求的多头因素完好；美国以外主要交易中心的实物白银持续趋紧，构成白银大幅上调的核心理由。\n▸ 时间与位置：黄金短期目标价由 6 月的 4,000 美元上调至 4,500 美元/盎司；白银预测由此前的 100 美元大幅上调至 150 美元/盎司。\n▸ 标的与操作：黄金、白银双双看多，白银为更优选择（弹性更大）。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.weex.com/news/detail/citi-sets-short-term-gold-price-target-at-4500-ykfrd7hn9l5uanqov0hc2gey",
+     "date": "2026-07-28"
+    }
+   ]
+  },
+  {
+   "date": "2026-08-21",
+   "direction": "看多",
+   "comments": "瑞银（UBS Global Wealth Management）上调标普 500 年底目标至 8,100 点，理由是盈利前景增强：把 2026 年标普 500 每股收益预测从 335 美元上调至 350 美元，2027 年从 375 美元上调至 400 美元；同时把 2027 年中期指数目标从 8,200 上调至 8,400。这是一次盈利驱动型的全面上修，立场明确看多美股。",
+   "targets": "美股/标普500",
+   "source": "https://wmbdradio.com/2026/08/21/ubs-global-wealth-management-lifts-sp-500-year-end-target-to-8100/",
+   "detail": "▸ 核心论点：瑞银全球财富管理（UBS GWM）上调标普500年底目标至8,100点，属盈利驱动型的全面上修，立场明确看多美股。\n▸ 关键依据：把2026年标普500每股收益预测从335美元上调至350美元，2027年EPS从375美元上调至400美元；上修理由是盈利前景增强，而非估值扩张。\n▸ 时间与位置：2026年底指数目标8,100点；2027年中期指数目标同步从8,200上调至8,400点。\n▸ 标的与操作：美股/标普500，看多；报告仅给出目标位上修，未给出具体买卖时点建议。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Citi / UBS",
+     "url": "https://wmbdradio.com/2026/08/21/ubs-global-wealth-management-lifts-sp-500-year-end-target-to-8100/",
+     "date": "2026-08-21"
+    }
+   ]
+  },
+  {
+   "date": "2026-01-13",
+   "direction": "强烈看多",
+   "comments": "路透 Factbox 记录：Citi Research 于 2026 年 1 月 13 日把黄金 0–3 个月价格目标上调至 5,000 美元/盎司，是当时华尔街最高的短周期黄金目标之一。该 Factbox 同时列出同业目标价对照：高盛 2026 年底 5,400 美元、摩根大通 2026 年四季度均价 5,055 美元、HSBC 2026 年底 4,450 美元、摩根士丹利 2026 年中 4,500 美元。花旗此举确认了机构对金价的共识性看多。",
+   "targets": "黄金",
+   "source": "https://www.investing.com/news/stock-market-news/factboxgoldman-sachs-raises-2026end-gold-price-forecast-to-5400oz-4459246",
+   "detail": "▸ 核心论点：花旗上调黄金短周期目标价，确认机构对金价的共识性看多。\n▸ 关键依据：Citi Research 于 2026 年 1 月 13 日把黄金 0–3 个月目标上调至 5,000 美元 / 盎司，为当时华尔街最高的短周期目标之一；路透 Factbox 同时列出同业对照：高盛 2026 年底 5,400 美元、摩根大通 2026 年四季度均价 5,055 美元、HSBC 2026 年底 4,450 美元、摩根士丹利 2026 年中 4,500 美元。\n▸ 时间与位置：0–3 个月目标 5,000 美元 / 盎司。\n▸ 标的与操作：黄金，看多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Citi / UBS",
+     "url": "https://www.investing.com/news/stock-market-news/factboxgoldman-sachs-raises-2026end-gold-price-forecast-to-5400oz-4459246",
+     "date": "2026-01-13"
+    }
+   ]
+  }
+ ]
 }

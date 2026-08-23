@@ -1,1 +1,25 @@
-{"kol":"Robert Kiyosaki","sector":"Precious Metals","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":1,"history":[{"date":"2026-02-01","direction":"强烈看多","comments":"《富爸爸穷爸爸》作者综合分析中重申看多硬资产,给出2026年目标:白银$100-200/oz(基于工业稀缺与科技需求),比特币约$250,000;并预言下一轮金融崩盘后一年内黄金可达$35,000、白银$200、比特币$750,000,坚持金银比特币为货币未来。","targets":"黄金/白银/比特币","source":"tmlabs.in"}]}
+{
+ "kol": "Robert Kiyosaki",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 1,
+ "history": [
+  {
+   "date": "2026-02-01",
+   "direction": "强烈看多",
+   "comments": "《富爸爸穷爸爸》作者综合分析中重申看多硬资产,给出2026年目标:白银$100-200/oz(基于工业稀缺与科技需求),比特币约$250,000;并预言下一轮金融崩盘后一年内黄金可达$35,000、白银$200、比特币$750,000,坚持金银比特币为货币未来。",
+   "targets": "黄金/白银/比特币",
+   "source": "tmlabs.in",
+   "detail": "▸ 核心论点：重申看多硬资产，坚持金、银、比特币是货币的未来。\n▸ 关键依据：白银目标基于工业稀缺与科技需求；并预言下一轮金融崩盘将大幅推升硬资产价格。\n▸ 时间与位置：2026 年目标：白银 100–200 美元 / 盎司、比特币约 250,000 美元；崩盘后一年内黄金 35,000 美元、白银 200 美元、比特币 750,000 美元。\n▸ 标的与操作：黄金、白银、比特币，买入持有。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Robert Kiyosaki",
+     "url": "tmlabs.in",
+     "date": "2026-02-01"
+    }
+   ]
+  }
+ ]
+}

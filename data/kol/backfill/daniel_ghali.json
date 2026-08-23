@@ -1,51 +1,101 @@
 {
-  "kol": "Daniel Ghali",
-  "sector": "Precious Metals",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
-  "count": 6,
-  "history": [
+ "kol": "Daniel Ghali",
+ "sector": "Precious Metals",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
+ "count": 6,
+ "history": [
+  {
+   "date": "2025-02-25",
+   "direction": "看多",
+   "comments": "TDS高级商品策略师Ghali称白银不再是黄金的穷亲戚，正进入连续第五年结构性赤字，投资需求可能引发挤压，看好白银独特上行故事。",
+   "targets": "白银/黄金",
+   "source": "https://www.kitco.com/news/article/2025-02-25/gold-has-win-win-setup-not-long-while-silver-squeeze-you-can-buy-td",
+   "detail": "▸ 核心论点：白银不再是黄金的「穷亲戚」，有独特的上行故事。\n▸ 关键依据：白银正进入连续第五年结构性赤字，投资需求可能引发逼空挤压。\n▸ 时间与位置：2025-02-25；未给出具体点位或目标价。\n▸ 标的与操作：白银(首选)、黄金；看多。",
+   "detail_status": "ok",
+   "sources": [
     {
-      "date": "2025-02-25",
-      "direction": "看多",
-      "comments": "TDS高级商品策略师Ghali称白银不再是黄金的穷亲戚，正进入连续第五年结构性赤字，投资需求可能引发挤压，看好白银独特上行故事。",
-      "targets": "白银/黄金",
-      "source": "https://www.kitco.com/news/article/2025-02-25/gold-has-win-win-setup-not-long-while-silver-squeeze-you-can-buy-td"
-    },
-    {
-      "date": "2025-09-12",
-      "direction": "强烈看多",
-      "comments": "Ghali称白银挤压终局临近，若投资需求像以往宽松周期般回升，库存可能在四个月内耗尽，$50关口在望。",
-      "targets": "白银",
-      "source": "https://www.zerohedge.com/news/2025-09-12/tds-ghali-silver-endgame-approaches-50-table"
-    },
-    {
-      "date": "2025-10-16",
-      "direction": "看多",
-      "comments": "在白银历史性上涨中TDS平掉战术性白银空头，亏损239万美元，但贵金属整体仍净正向，长期维持看多白银判断。",
-      "targets": "白银",
-      "source": "https://www.kitco.com/news/article/2025-10-16/tds-gets-hit-silver-train-it-closes-tactical-short-position-239-million"
-    },
-    {
-      "date": "2025-12-08",
-      "direction": "看空",
-      "comments": "Ghali转向，称2026年白银经历史上最大规模的LBMA自由流通库存补充浪潮，从稀缺溢价转为库存过剩，白银挤压结束，价格将回落至$40s。",
-      "targets": "白银",
-      "source": "https://www.scottsdalemint.com/articles/2025/tds-ghali-says-platinum-setting-up-for-big-squeeze-now/"
-    },
-    {
-      "date": "2026-01-14",
-      "direction": "中性",
-      "comments": "Ghali称黄金白银风险已两面化多年未见，债务货币化贬值交易仍支撑金银，但铂族金属PGM上行空间最强，最看好；对白银初步做空目标$40。",
-      "targets": "黄金/白银/铂族金属",
-      "source": "https://www.kitco.com/news/article/2026-01-14/debasement-trade-supporting-gold-and-silver-pgms-now-have-strongest-upside"
-    },
-    {
-      "date": "2026-05-25",
-      "direction": "看多",
-      "comments": "Ghali预测白银价格将持续攀升，主因电子和清洁能源技术对白银的关键需求推动全球需求激增。",
-      "targets": "白银",
-      "source": "https://www.juniorstocks.com/the-silver-surge-expert-forecasts-explosive-growth"
+     "url": "https://www.kitco.com/news/article/2025-02-25/gold-has-win-win-setup-not-long-while-silver-squeeze-you-can-buy-td"
     }
-  ]
+   ]
+  },
+  {
+   "date": "2025-09-12",
+   "direction": "强烈看多",
+   "comments": "Ghali称白银挤压终局临近，若投资需求像以往宽松周期般回升，库存可能在四个月内耗尽，$50关口在望。",
+   "targets": "白银",
+   "source": "https://www.zerohedge.com/news/2025-09-12/tds-ghali-silver-endgame-approaches-50-table",
+   "detail": "▸ 核心论点：白银挤压的「终局」（endgame）临近，50 美元关口在望。\n▸ 关键依据：若投资需求像以往宽松周期般回升，可自由流通的库存可能在四个月内耗尽；当时银价已升至约 41–42 美元、为 14 年高位，白银的白银协会口径 2025 年缺口约 1.176 亿盎司，为连续第五年短缺。\n▸ 时间与位置：库存耗尽窗口为四个月内；目标位 50 美元（亦为 2011 年历史高点）。\n▸ 标的与操作：白银，强烈看多（TD Securities，ZeroHedge 转载）。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.zerohedge.com/news/2025-09-12/tds-ghali-silver-endgame-approaches-50-table",
+     "date": "2025-09-12"
+    }
+   ]
+  },
+  {
+   "date": "2025-10-16",
+   "direction": "看多",
+   "comments": "在白银历史性上涨中TDS平掉战术性白银空头，亏损239万美元，但贵金属整体仍净正向，长期维持看多白银判断。",
+   "targets": "白银",
+   "source": "https://www.kitco.com/news/article/2025-10-16/tds-gets-hit-silver-train-it-closes-tactical-short-position-239-million",
+   "detail": "▸ 核心论点：在白银历史性上涨中被逼平战术性空头，但长期仍维持看多白银判断。\n▸ 关键依据：TDS 平掉战术性白银空头，录得 239 万美元亏损；不过贵金属整体持仓仍为净正向贡献。\n▸ 时间与位置：以本次平仓时点为准；未给出具体点位或目标价。\n▸ 标的与操作：白银，空头出场、转为看多（Kitco 报道）。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.kitco.com/news/article/2025-10-16/tds-gets-hit-silver-train-it-closes-tactical-short-position-239-million",
+     "date": "2025-10-16"
+    }
+   ]
+  },
+  {
+   "date": "2025-12-08",
+   "direction": "看空",
+   "comments": "Ghali转向，称2026年白银经历史上最大规模的LBMA自由流通库存补充浪潮，从稀缺溢价转为库存过剩，白银挤压结束，价格将回落至$40s。",
+   "targets": "白银",
+   "source": "https://www.scottsdalemint.com/articles/2025/tds-ghali-says-platinum-setting-up-for-big-squeeze-now/",
+   "detail": "▸ 核心论点：立场转向——2026 年白银将从稀缺溢价转为库存过剩，白银挤压行情结束。\n▸ 关键依据：预计 2026 年白银经历史上最大规模的 LBMA 自由流通（free float）库存补充浪潮，供给紧张的核心支撑瓦解。\n▸ 时间与位置：时间窗口为 2026 年；价格预计回落至 40 美元区间（$40s）。\n▸ 标的与操作：白银，看空，此前的挤压多头逻辑作废。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.scottsdalemint.com/articles/2025/tds-ghali-says-platinum-setting-up-for-big-squeeze-now/",
+     "date": "2025-12-08"
+    }
+   ]
+  },
+  {
+   "date": "2026-01-14",
+   "direction": "中性",
+   "comments": "Ghali称黄金白银风险已两面化多年未见，债务货币化贬值交易仍支撑金银，但铂族金属PGM上行空间最强，最看好；对白银初步做空目标$40。",
+   "targets": "黄金/白银/铂族金属",
+   "source": "https://www.kitco.com/news/article/2026-01-14/debasement-trade-supporting-gold-and-silver-pgms-now-have-strongest-upside",
+   "detail": "▸ 核心论点：黄金白银的风险已两面化（上下风险并存），为多年未见的格局，而铂族金属上行空间最强。\n▸ 关键依据：债务货币化贬值（debasement）交易仍在支撑金银，但白银的上行动能相对不足，PGM 才是最看好的方向。\n▸ 时间与位置：对白银给出初步做空目标 40 美元；未给出金价点位。\n▸ 标的与操作：铂族金属看多为首选；白银初步做空（目标 $40）；黄金整体中性（Kitco）。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.kitco.com/news/article/2026-01-14/debasement-trade-supporting-gold-and-silver-pgms-now-have-strongest-upside",
+     "date": "2026-01-14"
+    }
+   ]
+  },
+  {
+   "date": "2026-05-25",
+   "direction": "看多",
+   "comments": "Ghali预测白银价格将持续攀升，主因电子和清洁能源技术对白银的关键需求推动全球需求激增。",
+   "targets": "白银",
+   "source": "https://www.juniorstocks.com/the-silver-surge-expert-forecasts-explosive-growth",
+   "detail": "▸ 核心论点：白银价格将持续攀升。\n▸ 关键依据：电子与清洁能源技术对白银的关键需求推动全球需求激增。\n▸ 时间与位置：2026-05-25；未给出具体点位或目标价。\n▸ 标的与操作：白银；看多，未给出具体买卖时点。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://www.juniorstocks.com/the-silver-surge-expert-forecasts-explosive-growth"
+    }
+   ]
+  }
+ ]
 }

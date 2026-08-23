@@ -5,12 +5,117 @@
  "source_method": "web_search + LLM 提取带日期历史观点(严守不编造,仅真实来源确认日期)",
  "count": 7,
  "history": [
-  {"date": "2025-02-20", "direction": "看多", "comments": "撰文分析自去年12月以来全球黄金市场出现的诸多异常现象,认为背后有重大事件正在酝酿,暗示实物金供需紧张与COMEX交割异动,对金价后市持建设性看多立场。", "targets": "黄金(COMEX Gold)", "source": "Gold-Eagle (gold-eagle.com/authors/craig-hemke)"},
-  {"date": "2025-12-24", "direction": "强烈看多", "comments": "在INN年终访谈中称2025年是贵金属杰出的一年(金涨约65%),坚定看多2026。核心逻辑是法币持续贬值,建议不要因价格高而却步,应持续买入实物金银作为对抗政客与银行家的保护。", "targets": "黄金、白银", "source": "InvestingNews.com (Charlotte McLeod访谈)"},
-  {"date": "2026-03-09", "direction": "强烈看多", "comments": "认为市场因美对伊朗战争预期通胀升温、美联储加息而抛售金银是完全错误的。判断美联储实则将在夏季前降息、印钞、货币化,金价当周或次周将见可交易低点,下一轮突破最快下月启动并远超6000美元,视回调为买入良机。", "targets": "黄金、白银(现货及实物)", "source": "Sprott Money《Getting Gold Wrong》"},
-  {"date": "2026-06-15", "direction": "看多", "comments": "分析新任美联储主席Warsh接替Powell。指出年初预期2次降息已被市场改为50/50加息概率,导致金银自年初高点大跌。但判断Warsh是伪装成鹰派的鸽派,将与Trump、Bessent联手降息;若伊朗和平叙事落地,负实际利率、弱美元等利多将回归,贵金属被严重低估。", "targets": "黄金、白银", "source": "Sprott Money《New Fed Chair, New Market Risks》"},
-  {"date": "2026-07-06", "direction": "看多", "comments": "提出Peak Hawkishness(峰值鹰派)已过。伊朗战争推高油价致金从5400跌至4000(-26%)、银从94跌至56(-40%),但油价已回落至战前68美元。判断6月底低点很可能就是2026年低点,不预期V型反弹,料横盘消化,关注20日均线站上确认。", "targets": "黄金、白银", "source": "Sprott Money《The End Is Near: Gold Price Outlook》"},
-  {"date": "2026-07-07", "direction": "看多", "comments": "在Kitco重申2026年金银低点已于6月底出现,多次加息属妄想,油价回归战前水平后下半年CPI/PCE通胀料低于预期,美联储将重回降息、负实际利率轨道。不预期急涨,横盘即可耗尽空头指标,建议紧盯20日均线站稳作为确认信号。", "targets": "黄金、白银", "source": "Kitco News"},
-  {"date": "2026-07-07", "direction": "看多", "comments": "在KE Report访谈中给出建设性观点,称峰值鹰派后市场正趋缓和,金银已止跌企稳。指出即便2026年收于开年约4340美元的平盘,在2024-25大涨后仍属稳健。看好Q2矿业股财报超预期,认为油价成本担忧被过度放大(仅占成本约10-15%),料秋季美联储转向中性利多板块。", "targets": "黄金、白银、贵金属矿业股", "source": "The KE Report (Shad Marquitz访谈)"}
+  {
+   "date": "2025-02-20",
+   "direction": "看多",
+   "comments": "撰文分析自去年12月以来全球黄金市场出现的诸多异常现象,认为背后有重大事件正在酝酿,暗示实物金供需紧张与COMEX交割异动,对金价后市持建设性看多立场。",
+   "targets": "黄金(COMEX Gold)",
+   "source": "Gold-Eagle (gold-eagle.com/authors/craig-hemke)",
+   "detail": "▸ 核心论点：自去年12月以来全球黄金市场出现诸多异常现象，背后有重大事件正在酝酿，对金价后市持建设性看多立场。\n▸ 关键依据：撰文列举实物金供需紧张与COMEX交割异动等异常信号，认为这些现象指向纸金定价与实物市场的背离。\n▸ 时间与位置：异常起点为去年12月；未给出具体点位或目标价。\n▸ 标的与操作：黄金（COMEX Gold），看多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Craig Hemke",
+     "url": "Gold-Eagle (gold-eagle.com/authors/craig-hemke)",
+     "date": "2025-02-20"
+    }
+   ]
+  },
+  {
+   "date": "2025-12-24",
+   "direction": "强烈看多",
+   "comments": "在INN年终访谈中称2025年是贵金属杰出的一年(金涨约65%),坚定看多2026。核心逻辑是法币持续贬值,建议不要因价格高而却步,应持续买入实物金银作为对抗政客与银行家的保护。",
+   "targets": "黄金、白银",
+   "source": "InvestingNews.com (Charlotte McLeod访谈)",
+   "detail": "▸ 核心论点：2025 年是贵金属杰出的一年，坚定看多 2026。\n▸ 关键依据：黄金 2025 年上涨约 65%；核心逻辑是法币持续贬值，贵金属是对抗政客与银行家的保护手段。\n▸ 时间与位置：以 2025 全年表现为基础展望 2026；未给出具体点位或目标价。\n▸ 标的与操作：黄金、白银，强烈看多，建议不要因价格高而却步，应持续买入实物金银（INN 年终访谈）。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "InvestingNews.com (Charlotte McLeod访谈)",
+     "date": "2025-12-24"
+    }
+   ]
+  },
+  {
+   "date": "2026-03-09",
+   "direction": "强烈看多",
+   "comments": "认为市场因美对伊朗战争预期通胀升温、美联储加息而抛售金银是完全错误的。判断美联储实则将在夏季前降息、印钞、货币化,金价当周或次周将见可交易低点,下一轮突破最快下月启动并远超6000美元,视回调为买入良机。",
+   "targets": "黄金、白银(现货及实物)",
+   "source": "Sprott Money《Getting Gold Wrong》",
+   "detail": "▸ 核心论点：市场因美对伊朗战争预期通胀升温、美联储加息而抛售金银是完全错误的。\n▸ 关键依据：判断美联储实则将在夏季前降息、印钞并进行债务货币化，届时利多贵金属的宏观条件将回归。\n▸ 时间与位置：金价当周或次周将见可交易低点，下一轮突破最快下月启动，目标远超 6000 美元；美联储转向时点为夏季前。\n▸ 标的与操作：黄金、白银（现货及实物），强烈看多，视回调为买入良机（Sprott Money《Getting Gold Wrong》）。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "Sprott Money《Getting Gold Wrong》",
+     "date": "2026-03-09"
+    }
+   ]
+  },
+  {
+   "date": "2026-06-15",
+   "direction": "看多",
+   "comments": "分析新任美联储主席Warsh接替Powell。指出年初预期2次降息已被市场改为50/50加息概率,导致金银自年初高点大跌。但判断Warsh是伪装成鹰派的鸽派,将与Trump、Bessent联手降息;若伊朗和平叙事落地,负实际利率、弱美元等利多将回归,贵金属被严重低估。",
+   "targets": "黄金、白银",
+   "source": "Sprott Money《New Fed Chair, New Market Risks》",
+   "detail": "▸ 核心论点：新任美联储主席 Warsh 接替 Powell，判断其是伪装成鹰派的鸽派，贵金属被严重低估。\n▸ 关键依据：年初预期的 2 次降息已被市场改为 50/50 加息概率，导致金银自年初高点大跌；但 Warsh 将与 Trump、Bessent 联手降息，若伊朗和平叙事落地，负实际利率、弱美元等利多将回归。\n▸ 时间与位置：以 Warsh 接任为时间节点；未给出具体点位。\n▸ 标的与操作：黄金、白银，看多（Sprott Money 文章）。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "Sprott Money《New Fed Chair, New Market Risks》",
+     "date": "2026-06-15"
+    }
+   ]
+  },
+  {
+   "date": "2026-07-06",
+   "direction": "看多",
+   "comments": "提出Peak Hawkishness(峰值鹰派)已过。伊朗战争推高油价致金从5400跌至4000(-26%)、银从94跌至56(-40%),但油价已回落至战前68美元。判断6月底低点很可能就是2026年低点,不预期V型反弹,料横盘消化,关注20日均线站上确认。",
+   "targets": "黄金、白银",
+   "source": "Sprott Money《The End Is Near: Gold Price Outlook》",
+   "detail": "▸ 核心论点：Peak Hawkishness（峰值鹰派）已过，6 月底的低点很可能就是 2026 年的低点。\n▸ 关键依据：伊朗战争推高油价导致黄金从 5,400 跌至 4,000 美元（-26%）、白银从 94 跌至 56 美元（-40%）；但油价已回落至战前的 68 美元，压制因素解除。\n▸ 时间与位置：低点定于 6 月底；不预期 V 型反弹，预计横盘消化；关注金价站上 20 日均线作为确认信号。\n▸ 标的与操作：黄金、白银看多，但操作上建议等待均线确认而非立刻追多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "Sprott Money《The End Is Near: Gold Price Outlook》",
+     "date": "2026-07-06"
+    }
+   ]
+  },
+  {
+   "date": "2026-07-07",
+   "direction": "看多",
+   "comments": "在Kitco重申2026年金银低点已于6月底出现,多次加息属妄想,油价回归战前水平后下半年CPI/PCE通胀料低于预期,美联储将重回降息、负实际利率轨道。不预期急涨,横盘即可耗尽空头指标,建议紧盯20日均线站稳作为确认信号。",
+   "targets": "黄金、白银",
+   "source": "Kitco News",
+   "detail": "▸ 核心论点：重申 2026 年金银低点已于 6 月底出现，市场对多次加息的预期属妄想。\n▸ 关键依据：油价回归战前水平后，下半年 CPI/PCE 通胀料低于预期，美联储将重回降息与负实际利率轨道。\n▸ 时间与位置：低点定位在 2026 年 6 月底；不预期急涨，横盘即可耗尽空头指标；确认信号为站稳 20 日均线。\n▸ 标的与操作：黄金、白银，看多，紧盯 20 日均线作为进场确认（Kitco 访谈）。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "Kitco News",
+     "date": "2026-07-07"
+    }
+   ]
+  },
+  {
+   "date": "2026-07-07",
+   "direction": "看多",
+   "comments": "在KE Report访谈中给出建设性观点,称峰值鹰派后市场正趋缓和,金银已止跌企稳。指出即便2026年收于开年约4340美元的平盘,在2024-25大涨后仍属稳健。看好Q2矿业股财报超预期,认为油价成本担忧被过度放大(仅占成本约10-15%),料秋季美联储转向中性利多板块。",
+   "targets": "黄金、白银、贵金属矿业股",
+   "source": "The KE Report (Shad Marquitz访谈)",
+   "detail": "▸ 核心论点：峰值鹰派已过、市场趋于缓和，金银止跌企稳，看好贵金属与矿业股。\n▸ 关键依据：即便 2026 年收于开年约 4340 美元的平盘，在 2024–25 大涨之后仍属稳健；油价成本担忧被过度放大，油仅占矿业成本约 10–15%；预计 Q2 矿业股财报超预期。\n▸ 时间与位置：料秋季美联储转向中性、利多板块；金价参照 2026 年开年约 4340 美元。\n▸ 标的与操作：黄金、白银、贵金属矿业股，偏多。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Craig Hemke",
+     "url": "The KE Report (Shad Marquitz访谈)",
+     "date": "2026-07-07"
+    }
+   ]
+  }
  ]
 }
