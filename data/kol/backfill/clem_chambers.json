@@ -3,24 +3,8 @@
  "sector": "Macro",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 3,
+ "count": 6,
  "history": [
-  {
-   "date": "2026-06-27",
-   "direction": "看空",
-   "comments": "自称'比特币变量派'而非永久空头,长期看空比特币且预言应验——认为BTC仍将下探,坚持已'唱空比特币许久'的立场。相对更看好黄金跑赢加密。",
-   "targets": "比特币/黄金",
-   "source": "https://www.forbes.com/sites/investor/people/clem/",
-   "detail": "▸ 核心论点：自称比特币变量派而非永久空头，长期看空比特币，相对更看好黄金跑赢加密。\n▸ 关键依据：称自己长期看空比特币的判断已经应验，坚持已唱空比特币许久的立场，认为 BTC 仍将进一步下探。\n▸ 时间与位置：未给出具体点位与时间窗口。\n▸ 标的与操作：比特币看空、黄金相对看多；操作上以黄金替代加密敞口。",
-   "detail_status": "ok",
-   "sources": [
-    {
-     "title": "",
-     "url": "https://www.forbes.com/sites/investor/people/clem/",
-     "date": "2026-06-27"
-    }
-   ]
-  },
   {
    "date": "2026-07-12",
    "direction": "强烈看空",
@@ -34,6 +18,22 @@
      "title": "",
      "url": "https://www.forbes.com/sites/digital-assets/2026/07/12/the-1-bitcoin-chart-they-dont-want-you-to-see/",
      "date": "2026-07-12"
+    }
+   ]
+  },
+  {
+   "date": "2026-06-27",
+   "direction": "看空",
+   "comments": "自称'比特币变量派'而非永久空头,长期看空比特币且预言应验——认为BTC仍将下探,坚持已'唱空比特币许久'的立场。相对更看好黄金跑赢加密。",
+   "targets": "比特币/黄金",
+   "source": "https://www.forbes.com/sites/investor/people/clem/",
+   "detail": "▸ 核心论点：自称比特币变量派而非永久空头，长期看空比特币，相对更看好黄金跑赢加密。\n▸ 关键依据：称自己长期看空比特币的判断已经应验，坚持已唱空比特币许久的立场，认为 BTC 仍将进一步下探。\n▸ 时间与位置：未给出具体点位与时间窗口。\n▸ 标的与操作：比特币看空、黄金相对看多；操作上以黄金替代加密敞口。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.forbes.com/sites/investor/people/clem/",
+     "date": "2026-06-27"
     }
    ]
   },
@@ -52,6 +52,36 @@
      "date": "2026-05-19"
     }
    ]
+  },
+  {
+   "date": "2025-12-12",
+   "direction": "看多",
+   "comments": "2026年主线：贵金属加国防工业与半导体回流",
+   "targets": "白银/黄金/国防股/英特尔",
+   "source": "https://www.youtube.com/watch?v=pI3Xnw-7vLs",
+   "detail": "▸ 核心论点：2026 年的机会集中在贵金属与地缘驱动的国防、战略产业。\n▸ 关键依据：他给出白银与黄金 2026 年的上行展望，并把国防工业以及英特尔等科技股列为重点关注方向，逻辑是地缘紧张与战略储备需求带动实物与产能相关资产。\n▸ 时间与位置：2025 年 12 月 12 日发布的访谈。\n▸ 标的与操作：贵金属为底仓，叠加国防与半导体主题。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-12-09",
+   "direction": "强烈看多",
+   "comments": "白银可轻松上100美元，甚至看到150-160美元",
+   "targets": "白银/黄金",
+   "source": "https://bankstreetjournal.com/2025/12/09/clem-chambers-silver-can-easily-hit-us100-retail-juggernaut-in-play/",
+   "detail": "▸ 核心论点：白银是 2026 年最具爆发力的品种，散户资金入场将成为主推力。\n▸ 关键依据：aNewFN.com 首席执行官身份表示白银「可以轻松」升至每盎司 100 美元，其判断区间甚至可达 150 至 160 美元，理由是供需缺口叠加零售需求的「巨轮效应」。\n▸ 时间与位置：2025 年 12 月 9 日接受 Investing News Network 访谈。\n▸ 标的与操作：白银及白银矿股为核心多头，黄金同向配置。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-30",
+   "direction": "分歧",
+   "comments": "硬资产大牛市在前，但先来一场加密寒冬",
+   "targets": "黄金/白银/铂钯/比特币",
+   "source": "https://www.kitco.com/news/article/2025-09-30/biggest-boom-history-coming-after-crypto-winter-warns-market-veteran-clem",
+   "detail": "▸ 核心论点：世界正处在「蒸汽机发明以来最大经济繁荣」的前夜，但繁荣之前会先经历一轮加密寒冬。\n▸ 关键依据：他在 10 万美元位置已清空比特币，预计币价将回落至 4 万至 6 万美元区间，上市加密储备公司会成为本轮的 FTX；同时认为资金正从纸面资产转向实物商品，地缘冲突与 AI 用电需求推升硬资产。\n▸ 时间与位置：2025 年 9 月 26 日接受 Kitco 采访，9 月 30 日发表。\n▸ 标的与操作：看多黄金、白银、铂金与钯金，短期回避比特币与加密储备类股票。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

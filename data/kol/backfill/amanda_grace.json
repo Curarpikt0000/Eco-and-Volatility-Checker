@@ -1,8 +1,39 @@
 {
-  "kol": "Amanda Grace",
-  "sector": "Alternative",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)：其公开内容以宗教预言为主，2025-08~2026-08区间未检索到带明确日期且含明确市场/资产方向的可追踪言论",
-  "count": 0,
-  "history": []
+ "kol": "Amanda Grace",
+ "sector": "Alternative",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)：其公开内容以宗教预言为主，2025-08~2026-08区间未检索到带明确日期且含明确市场/资产方向的可追踪言论",
+ "count": 3,
+ "history": [
+  {
+   "date": "2026-01-10",
+   "direction": "分歧",
+   "comments": "称马杜罗被捕应验预言，一月被标记为公义之月",
+   "targets": "委内瑞拉/地缘政治周期",
+   "source": "https://www.elijahlist.com/words/display_word.html?ID=33580",
+   "detail": "▸ 核心论点：以 2026-01-03 马杜罗被捕对应 1990 年诺列加被捕，主张预言周期正在展开，一月被标记为公义与审判之月。\n▸ 关键依据：ElijahList 刊载其 ElijahStreams 访谈整理稿，引用 2023-12-12 与 2024-10-25 两段旧预言作为已应验依据。\n▸ 时间与位置：2026-01-10 ElijahList 发布，访谈于 2026-01-08 ElijahStreams。\n▸ 标的与操作：宗教预言性质，未涉及具体金融标的与价位，仅可作为地缘风险叙事的旁证。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2026-01-02",
+   "direction": "分歧",
+   "comments": "2026 年首播：定调为战争之年与大逆转",
+   "targets": "地缘政治/全球局势",
+   "source": "https://arkofgrace.org/media/2rc4n7v/prophetic-alert-2026-war-time-and-reversals",
+   "detail": "▸ 核心论点：将 2026 年定调为战争时期与逆转之年，认为全球事件将出现急剧反转。\n▸ 关键依据：Ark of Grace 官方节目页对 2026-01-02 首播 Prophetic Alert: 2026 War Time and Reversals 的说明。\n▸ 时间与位置：2026-01-02 17:30 ET 直播。\n▸ 标的与操作：无具体标的，地缘冲突叙事对避险资产构成潜在情绪支撑，但非其明示的交易观点。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-12-22",
+   "direction": "分歧",
+   "comments": "跨年预言直播：需极强分辨力，反对者会伪装成支持者",
+   "targets": "美国政局/2026 年展望",
+   "source": "https://arkofgrace.org/media/t4yr9g6/a-powerful-word-from-the-lord-going-into-2026",
+   "detail": "▸ 核心论点：进入 2026 年需要批判性的分辨力，警告反对力量会以支持者的面目出现。\n▸ 关键依据：Ark of Grace Ministries 官方节目页对 2025-12-22 直播内容的描述。\n▸ 时间与位置：2025-12-22 17:30 ET，Ark of Grace 官方直播。\n▸ 标的与操作：属宗教预言类内容，未给出可交易的资产标的或价格判断，仅可作为情绪与叙事参考。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  }
+ ]
 }

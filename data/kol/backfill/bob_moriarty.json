@@ -3,8 +3,44 @@
  "sector": "Precious Metals",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 3,
+ "count": 8,
  "history": [
+  {
+   "date": "2026-04-15",
+   "direction": "强烈看多",
+   "comments": "在INN访谈中警告全球局势极度危险,呼吁投资者立即采取保护措施配置金银燃料食品。看好中国叫停零售纸黄金交易将挑战西方纸货市场,推动价格向物理供需回归,长期利好实物贵金属。",
+   "targets": "黄金/白银/实物贵金属",
+   "source": "https://investingnews.com/bob-moriarty-gold-silver-forecast/",
+   "detail": "▸ 核心论点：全球局势极度危险，呼吁投资者立即采取保护措施，配置黄金白银、燃料与食品。\n▸ 关键依据：看好中国叫停零售纸黄金交易，认为此举将挑战西方纸货市场，推动价格向物理供需回归，长期利好实物贵金属。\n▸ 时间与位置：强调「立即」采取行动；未给出具体点位。\n▸ 标的与操作：黄金、白银及实物贵金属，强烈看多、立即买入配置（INN 访谈）。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://investingnews.com/bob-moriarty-gold-silver-forecast/",
+     "date": "2026-04-15"
+    }
+   ]
+  },
+  {
+   "date": "2025-11-24",
+   "direction": "看多",
+   "comments": "看好Trident等初级勘探股的钻探成果",
+   "targets": "初级勘探矿股",
+   "source": "http://www.321gold.com/editorials/moriarty/moriarty112425.html",
+   "detail": "▸ 核心论点：在贵金属牛市中，具备实际钻探成果的小型勘探公司具有最高的赔率。\n▸ 关键依据：他两周前就介绍过 Trident 这家年轻公司，此次撰文跟进其新的钻探进展，延续其一贯的「买恐惧、卖贪婪」＋挖掘被忽视资源股的方法论。\n▸ 时间与位置：2025 年 11 月 24 日 321gold 专栏。\n▸ 标的与操作：初级勘探矿股（Trident 等）；小仓位分散押注钻探成果。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-06",
+   "direction": "看空",
+   "comments": "全球流动性到临界点，警告金融危机迫近",
+   "targets": "美股/AI股/流动性",
+   "source": "https://dollarcollapse.com/top-three-videos-november-7-2025/",
+   "detail": "▸ 核心论点：全球流动性已处于临界水平，一场金融危机迫在眉睫。\n▸ 关键依据：他点名全球流动性紧张、印度方面的紧急会议、美元指数逼近 100，以及甲骨文等 AI 概念股面临的压力，作为危机临近的佐证。\n▸ 时间与位置：2025 年 11 月 6 日前后发布、被 DollarCollapse 收录为当周重点视频。\n▸ 标的与操作：回避高估值 AI 与美股，转向硬资产避险。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
   {
    "date": "2025-10-31",
    "direction": "强烈看多",
@@ -22,6 +58,36 @@
    ]
   },
   {
+   "date": "2025-10-31",
+   "direction": "看多",
+   "comments": "金银尚未见顶，回调后仍有更高目标",
+   "targets": "黄金/白银",
+   "source": "https://www.streetwisereports.com/article/2025/10/31/gold-and-silver-havent-peaked-yet-says-bob-moriarty.html",
+   "detail": "▸ 核心论点：十月末的下跌只是牛市中的调整，黄金与白银都还没有到周期顶部。\n▸ 关键依据：在与 Goldfinger Capital 的对谈中复盘当时的金银走势与矿业股表现，维持「未见顶」的判断，并讨论了 Rackla Metals、Ramp Metals 等勘探股机会。\n▸ 时间与位置：2025 年 10 月 31 日 Streetwise Reports 刊出的访谈。\n▸ 标的与操作：黄金、白银与初级勘探矿股；逢调整继续持有或加仓。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-20",
+   "direction": "分歧",
+   "comments": "金银未见大顶，但眼下是极好的回调时点",
+   "targets": "黄金/白银/资源股",
+   "source": "http://www.321gold.com/editorials/moriarty/moriarty102025.html",
+   "detail": "▸ 核心论点：用「一百个买入理由」的逆向计数法判断，金属与资源股正在进入一轮修正，但还不是真正的大顶。\n▸ 关键依据：金银的 DSI 情绪指标周四收在 89，周五急挫至 73 与 72；他强调要出现 95 以上的 DSI 才能称为重大顶部，因此定性为「修正而非见顶」，并提醒「没有人因为落袋为安而破产」。\n▸ 时间与位置：2025 年 10 月 20 日 321gold 专栏文章。\n▸ 标的与操作：黄金、白银及资源类股票；短线兑现部分利润，等待修正结束。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-04",
+   "direction": "看多",
+   "comments": "情绪尚未极端，本轮贵金属牛市远未结束",
+   "targets": "黄金/白银/矿业股",
+   "source": "https://www.youtube.com/watch?v=euc6oUYMSEE",
+   "detail": "▸ 核心论点：与历史上的贵金属大牛市相比，当前市场情绪还没有到极端亢奋阶段，行情仍有空间。\n▸ 关键依据：321gold 创始人以情绪指标为主线，对比本轮与过去几轮贵金属牛市的阶段特征，并结合欧洲债务、战争风险讨论黄金 4000 美元一线的位置。\n▸ 时间与位置：2025 年 10 月 4 日发布的访谈。\n▸ 标的与操作：黄金、白银及资源类矿股；继续持有，情绪极端时再考虑减仓。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
    "date": "2025-07-29",
    "direction": "看多",
    "comments": "在321Gold专栏中表示白银今年将成为热门品种,相关初级矿股(如SNAG)将受到市场追捧,延续其对贵金属板块的乐观判断。",
@@ -34,22 +100,6 @@
      "title": "ANONYMIZED_PERSON_0_12",
      "url": "https://www.streetwisereports.com/pub/htdocs/expert.html?id=3",
      "date": "2025-07-29"
-    }
-   ]
-  },
-  {
-   "date": "2026-04-15",
-   "direction": "强烈看多",
-   "comments": "在INN访谈中警告全球局势极度危险,呼吁投资者立即采取保护措施配置金银燃料食品。看好中国叫停零售纸黄金交易将挑战西方纸货市场,推动价格向物理供需回归,长期利好实物贵金属。",
-   "targets": "黄金/白银/实物贵金属",
-   "source": "https://investingnews.com/bob-moriarty-gold-silver-forecast/",
-   "detail": "▸ 核心论点：全球局势极度危险，呼吁投资者立即采取保护措施，配置黄金白银、燃料与食品。\n▸ 关键依据：看好中国叫停零售纸黄金交易，认为此举将挑战西方纸货市场，推动价格向物理供需回归，长期利好实物贵金属。\n▸ 时间与位置：强调「立即」采取行动；未给出具体点位。\n▸ 标的与操作：黄金、白银及实物贵金属，强烈看多、立即买入配置（INN 访谈）。",
-   "detail_status": "ok",
-   "sources": [
-    {
-     "title": "",
-     "url": "https://investingnews.com/bob-moriarty-gold-silver-forecast/",
-     "date": "2026-04-15"
     }
    ]
   }

@@ -3,8 +3,24 @@
  "sector": "Precious Metals",
  "backfill_date": "2026-08-18",
  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
- "count": 2,
+ "count": 4,
  "history": [
+  {
+   "date": "2026-07-28",
+   "direction": "看多",
+   "comments": "分享金银展望，长期预期价格显著走高，但提示近端乃至中期可能出现更多震荡回撤，短线偏谨慎、长线坚定看多。",
+   "targets": "白银/黄金",
+   "source": "https://www.youtube.com/watch?v=AJbLlrHk8VQ",
+   "detail": "▸ 核心论点：金银长期价格显著走高，白银的「1979时刻」尚未到来；但近端乃至中期可能出现更多震荡回撤。\n▸ 关键依据：访谈中他区分时间尺度：长期由结构性因素支撑价格显著抬升，短中期则以震荡整理与回撤为主，故操作上短线谨慎、长线坚定。\n▸ 时间与位置：未给出具体点位；时间上明确划分「近端/中期震荡」与「长期显著走高」两段。\n▸ 标的与操作：白银、黄金，长线看多、短线偏谨慎。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Steve Penny",
+     "url": "https://www.youtube.com/watch?v=AJbLlrHk8VQ",
+     "date": "2026-07-28"
+    }
+   ]
+  },
   {
    "date": "2026-01-16",
    "direction": "强烈看多",
@@ -22,20 +38,24 @@
    ]
   },
   {
-   "date": "2026-07-28",
+   "date": "2025-11-09",
    "direction": "看多",
-   "comments": "分享金银展望，长期预期价格显著走高，但提示近端乃至中期可能出现更多震荡回撤，短线偏谨慎、长线坚定看多。",
-   "targets": "白银/黄金",
-   "source": "https://www.youtube.com/watch?v=AJbLlrHk8VQ",
-   "detail": "▸ 核心论点：金银长期价格显著走高，白银的「1979时刻」尚未到来；但近端乃至中期可能出现更多震荡回撤。\n▸ 关键依据：访谈中他区分时间尺度：长期由结构性因素支撑价格显著抬升，短中期则以震荡整理与回撤为主，故操作上短线谨慎、长线坚定。\n▸ 时间与位置：未给出具体点位；时间上明确划分「近端/中期震荡」与「长期显著走高」两段。\n▸ 标的与操作：白银、黄金，长线看多、短线偏谨慎。",
+   "comments": "通缩冲击后白银上三位数、黄金破1万美元",
+   "targets": "白银/黄金/铂金/铀",
+   "source": "https://investingnews.com/steve-penny-november-2025/",
+   "detail": "▸ 核心论点：未来 12 个月内可能出现一次通缩冲击，而各国对该冲击的政策反应才是把金银推向新高的真正推手。\n▸ 关键依据：他明确表示「对下一次通缩冲击的反应，我认为最终会把白银推向三位数、把黄金推到 1 万美元以上」，同时对黄金、白银、铂金给出看多判断，并把铀列为关注方向。\n▸ 时间与位置：2025 年 11 月 9 日 Investing News Network 访谈。\n▸ 标的与操作：白银为主攻，黄金、铂金、铀矿板块同步配置；接受中途波动。",
    "detail_status": "ok",
-   "sources": [
-    {
-     "title": "Steve Penny",
-     "url": "https://www.youtube.com/watch?v=AJbLlrHk8VQ",
-     "date": "2026-07-28"
-    }
-   ]
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-20",
+   "direction": "看多",
+   "comments": "债务危机与通胀通缩拉锯下，黄金白银中长期偏多",
+   "targets": "黄金/白银",
+   "source": "https://www.youtube.com/watch?v=K498yHLS-_c",
+   "detail": "▸ 核心论点：美国债务与财政困境是贵金属的长期支撑，但短中期要区分通胀与通缩两种情景。\n▸ 关键依据：SilverChartist 创始人身份，从美国经济、债务危机与通胀 vs 通缩风险出发，结合图表评估金银的价格结构与关键位。\n▸ 时间与位置：2025 年 9 月 20 日发布的专访。\n▸ 标的与操作：黄金、白银；长线持有，短线随图表关键位调整仓位。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

@@ -3,8 +3,24 @@
  "sector": "Precious Metals",
  "backfill_date": "2026-08-18",
  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
- "count": 2,
+ "count": 5,
  "history": [
+  {
+   "date": "2026-01-28",
+   "direction": "看空",
+   "comments": "认为市场处于'金融危机'区域，对股票、黄金、大宗商品与比特币提示警示；预期标普500持续走弱可能下探6100甚至5600，比特币短期或先反弹。",
+   "targets": "美股/黄金/比特币",
+   "source": "https://wordupnews.com/news-video/financial-crisis-zone-traders-warning-for-gold-stocks-bitcoin-gareth-soloway/",
+   "detail": "▸ 核心论点：认为市场处于「金融危机」区域，对股票、黄金、大宗商品与比特币全面提示警示。\n▸ 关键依据：判断依据为对多资产的整体风险评估，预期标普500持续走弱；比特币短期或先出现反弹后再走弱。\n▸ 时间与位置：标普500下行目标6100，甚至可能下探5600；未给出黄金与商品的具体点位。\n▸ 标的与操作：美股、黄金、比特币；操作上看空/防守，比特币短期可能有反弹但不改警示立场。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://wordupnews.com/news-video/financial-crisis-zone-traders-warning-for-gold-stocks-bitcoin-gareth-soloway/",
+     "date": "2026-01-28"
+    }
+   ]
+  },
   {
    "date": "2025-09-23",
    "direction": "看多",
@@ -22,20 +38,34 @@
    ]
   },
   {
-   "date": "2026-01-28",
+   "date": "2025-09-23",
    "direction": "看空",
-   "comments": "认为市场处于'金融危机'区域，对股票、黄金、大宗商品与比特币提示警示；预期标普500持续走弱可能下探6100甚至5600，比特币短期或先反弹。",
-   "targets": "美股/黄金/比特币",
-   "source": "https://wordupnews.com/news-video/financial-crisis-zone-traders-warning-for-gold-stocks-bitcoin-gareth-soloway/",
-   "detail": "▸ 核心论点：认为市场处于「金融危机」区域，对股票、黄金、大宗商品与比特币全面提示警示。\n▸ 关键依据：判断依据为对多资产的整体风险评估，预期标普500持续走弱；比特币短期或先出现反弹后再走弱。\n▸ 时间与位置：标普500下行目标6100，甚至可能下探5600；未给出黄金与商品的具体点位。\n▸ 标的与操作：美股、黄金、比特币；操作上看空/防守，比特币短期可能有反弹但不改警示立场。",
+   "comments": "指出历史类比预示约 10% 回调，AI 泡沫裂缝显现",
+   "targets": "标普500/纳指/英伟达/AI 板块",
+   "source": "https://verifiedinvesting.com/blogs/live-show-recap/trading-game-plan-revealed-a-10-correction-signal-for-october",
+   "detail": "▸ 核心论点：市场被英伟达对 OpenAI 最高 1000 亿美元投资这类措辞含糊的头条驱动上涨，属于典型的 dot-com 2.0 投机氛围，历史类比指向约 10% 的回调。\n▸ 关键依据：拆解投资至多 1000 亿美元的措辞实质上无约束力；并以苹果需求叙事在数月内急转为例说明叙事驱动的脆弱性。\n▸ 时间与位置：2025-09-23，Verified Investing 的 Trading Game Plan 节目实录。\n▸ 标的与操作：对美股指数短期看空，建议极度谨慎并关注美光财报作为半导体的试金石。",
    "detail_status": "ok",
-   "sources": [
-    {
-     "title": "",
-     "url": "https://wordupnews.com/news-video/financial-crisis-zone-traders-warning-for-gold-stocks-bitcoin-gareth-soloway/",
-     "date": "2026-01-28"
-    }
-   ]
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-23",
+   "direction": "看多",
+   "comments": "黄金或先回调至 3500 再看 6000，白银目标 50 美元",
+   "targets": "黄金/白银/铂金/比特币",
+   "source": "https://investingnews.com/gareth-soloway-september-2025/",
+   "detail": "▸ 核心论点：黄金处于牛市中的看涨盘整，短期可能回调至 3500 美元，长期目标 6000 美元；白银已突破并有望摸到 50 美元，铂金同步走强。\n▸ 关键依据：以技术形态分析为主，指出 GDX 与 GDXJ 走势与金价同步，采用其上下对称的镜像分析方法；同时对美国经济健康度与股市表达担忧。\n▸ 时间与位置：2025-09-23，接受 Investing News Network 访谈。\n▸ 标的与操作：长期做多贵金属与金矿股，短期容忍回调；对股市保持谨慎。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-09",
+   "direction": "分歧",
+   "comments": "楔形形态叠加通胀数据，市场处于风暴前的平静",
+   "targets": "标普500/纳指/美元指数/美债收益率",
+   "source": "https://verifiedinvesting.com/blogs/live-show-recap/trading-game-plan-revealed-09-09-2025",
+   "detail": "▸ 核心论点：主要股指走出楔形形态，美元指数逼近可追溯至 2008 年的长期趋势线，通胀数据公布前市场处于脆弱平衡，波动率有望放大。\n▸ 关键依据：指出上周五就业数据后的反弹伴随机构大量卖出，随后成交量骤降；强调以图表概率而非叙事进行交易。\n▸ 时间与位置：2025-09-09，Verified Investing 的 Trading Game Plan 节目实录。\n▸ 标的与操作：对指数方向保持中性偏谨慎，等待 PPI 与 CPI 后再定方向，强调纪律与仓位控制。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

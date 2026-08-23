@@ -3,7 +3,7 @@
  "sector": "Macro",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 1,
+ "count": 3,
  "history": [
   {
    "date": "2026-01-12",
@@ -18,6 +18,26 @@
      "url": "https://gregmankiw.blogspot.com/ (Statement on the Federal Reserve, 2026-01-12)"
     }
    ]
+  },
+  {
+   "date": "2025-11-16",
+   "direction": "分歧",
+   "comments": "EconoFact 播客：联邦债务与财政危机风险，叠加 AI 冲击",
+   "targets": "美国国债/财政/AI 生产率",
+   "source": "https://econofact.org/podcast/on-debt-fiscal-crises-and-ai",
+   "detail": "▸ 核心论点：美国当前最关键的经济挑战是巨额联邦债务与由此产生的财政危机可能性，同时 AI 的广泛采用既带来颠覆也带来生产率希望。\n▸ 关键依据：2025-10-15 EconoFact Ask Me Anything 网络研讨会内容，剪辑成播客于 2025-11-16 发布，其本人当日在博客转发。\n▸ 时间与位置：2025-11-16，EconoFact Chats 播客（与 Michael Klein 对谈），博客同日转发。\n▸ 标的与操作：对长端美债与财政可持续性偏谨慎，对 AI 带来的生产率前景持开放态度，未给出具体交易建议。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-21",
+   "direction": "中性",
+   "comments": "转发七位专家谈50年后的美国经济，聚焦长期增长与不平等",
+   "targets": "美国长期经济增长/生产率",
+   "source": "http://gregmankiw.blogspot.com/2025/09/the-economy-50-years-from-now.html",
+   "detail": "▸ 核心论点：把讨论焦点放在美国资本主义未来50年的长期走向，强调技术进步带来的人均实际收入长期增长，同时不平等与民粹压力将持续存在。\n▸ 关键依据：其博客转载《华尔街日报》七位专家的长期预测专题，Mankiw 本人为供稿人之一。\n▸ 时间与位置：2025-09-21，Greg Mankiw 博客文章 The economy 50 years from now。\n▸ 标的与操作：长周期视角，无短期资产方向；隐含对生产率驱动的权益长期回报持中性偏正面态度。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

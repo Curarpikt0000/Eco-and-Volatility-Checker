@@ -3,7 +3,7 @@
  "sector": "Macro",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 1,
+ "count": 7,
  "history": [
   {
    "date": "2026-08-14",
@@ -20,6 +20,66 @@
      "date": "2026-08-14"
     }
    ]
+  },
+  {
+   "date": "2025-11-14",
+   "direction": "强烈看多",
+   "comments": "重申黄金长期可看 10 万美元，因美元将大幅贬值",
+   "targets": "黄金",
+   "source": "https://www.scrapmonster.com/news/gold/peter-schiff-predicts-gold-could-skyrocket-to-100000.-heres-why-and-how-you-can-capitalize-2025-11-14/97774",
+   "detail": "▸ 核心论点：黄金本身没有变化，变化的是美元购买力，若美元持续被稀释，金价可以从 2600 美元走向 26000 甚至 100000 美元，上不封顶。\n▸ 关键依据：引用过去一年金价从约 2652 美元升至约 3995 美元、涨幅 46% 作为其此前判断被验证的证据，并强调货币超发与通胀是核心驱动。\n▸ 时间与位置：2025-11-14，ScrapMonster 转载其 The Lead-Lag Report 访谈内容。\n▸ 标的与操作：长期做多实物黄金与黄金相关资产，规避以美元计价的固定收益。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-09",
+   "direction": "强烈看多",
+   "comments": "金价突破 4000 美元，称世界正准备脱离美元本位",
+   "targets": "黄金/美元",
+   "source": "https://www.schiffsovereign.com/video/gold-tops-4k-as-world-prepares-to-go-off-dollar-standard-ep-1045/",
+   "detail": "▸ 核心论点：黄金历史性突破 4000 美元反映的是美元信用的下滑，世界正在为脱离美元本位做准备。\n▸ 关键依据：结合美国财政失序与美元长期贬值趋势解释此轮金价上涨，并警告后续经济危机。\n▸ 时间与位置：2025-10-09，The Peter Schiff Show 第 1045 期。\n▸ 标的与操作：继续做多黄金，看空美元，警示美债与财政风险。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-17",
+   "direction": "看空",
+   "comments": "称降息是美联储迄今最大政策失误，资产价格已创新高",
+   "targets": "美股/美元/房地产；看多黄金",
+   "source": "https://schiffradio.com/feds-biggest-policy-mistake-yet-ep-1042/",
+   "detail": "▸ 核心论点：在资产价格创历史新高、通胀压力未消时降息，是美联储迄今最大的政策失误，将放大通胀与金融不稳定。\n▸ 关键依据：逐条批评鲍威尔记者会表述，讨论关税对通胀的传导、住房可负担性危机、缩表节奏与联储内部分歧。\n▸ 时间与位置：2025-09-17，The Peter Schiff Show 第 1042 期。\n▸ 标的与操作：看空美元与高估值美股，看多黄金及贵金属相关资产。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-15",
+   "direction": "看空",
+   "comments": "警告比特币可能在美联储降息前见顶，跑输黄金",
+   "targets": "比特币",
+   "source": "https://coincentral.com/peter-schiff-warns-of-bitcoin-topping-out-before-fed-rate-cut/",
+   "detail": "▸ 核心论点：比特币可能正在美联储 9 月降息之前筑顶，降息往往对应经济困境，风险资产受损而贵金属受益。\n▸ 关键依据：指出以黄金计价的比特币仍比 2021 年高点低约 15%，黄金与白银的相对表现持续优于比特币。\n▸ 时间与位置：2025-09-15，CoinCentral 报道其公开言论。\n▸ 标的与操作：看空比特币相对贵金属的表现，建议以黄金白银替代加密敞口。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-13",
+   "direction": "强烈看多",
+   "comments": "滞胀加重，按真实通胀调整后金银仍便宜",
+   "targets": "黄金/白银",
+   "source": "https://talkmarkets.com/content/commodities/stagflation-heavy-why-gold-and-silver-still-look-cheap?post=522585",
+   "detail": "▸ 核心论点：美国正走向更重的滞胀，按真实通胀水平调整后黄金和白银仍被低估，投资者应尽快配置。\n▸ 关键依据：批评美联储在通胀上行、劳动力市场走弱之际仍准备降息，认为这会加剧滞胀后果。\n▸ 时间与位置：2025-09-13，TalkMarkets 刊发其观点文章 Stagflation Heavy: Why Gold And Silver Still Look Cheap。\n▸ 标的与操作：继续做多贵金属，警惕以名义美元计价的资产表现失真。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-08-30",
+   "direction": "强烈看多",
+   "comments": "独家访谈：明年金价看 6000 美元，美元指数看向 70",
+   "targets": "黄金/白银/金矿股/美元指数",
+   "source": "https://quoththeraven.substack.com/p/gold-to-6000-next-year-peter-schiff",
+   "detail": "▸ 核心论点：美元结构性贬值尚在早期，黄金与金矿股仍严重低估，给出明年金价 6000 美元、美元指数跌向 70 的目标。\n▸ 关键依据：与 QTR 的周末长访谈中给出对金矿股、黄金、美元与整体市场从 2025 年底到 2026 年初的目标位。\n▸ 时间与位置：2025-08-30 Quoth the Raven（QTR Fringe Finance）独家访谈，8 月 31 日经 ZeroHedge 转载。\n▸ 标的与操作：做多黄金、白银与金矿股，做空美元，回避美股高估值资产。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

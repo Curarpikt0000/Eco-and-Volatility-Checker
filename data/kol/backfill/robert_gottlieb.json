@@ -3,7 +3,7 @@
  "sector": "Precious Metals",
  "backfill_date": "2026-08-18",
  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
- "count": 1,
+ "count": 3,
  "history": [
   {
    "date": "2025-12-29",
@@ -20,6 +20,26 @@
      "date": "2025-12-29"
     }
    ]
+  },
+  {
+   "date": "2025-10-21",
+   "direction": "分歧",
+   "comments": "金银多头已成动量交易，抛压一起就踩踏",
+   "targets": "黄金/白银/CTA与投机盘",
+   "source": "https://infiniteunknown.net/2025/10/21/robert-gottlieb-ex-executive-at-jpm-bullion-bank-long-gold-and-silver-positions-have-become-momentum-trades-and-at-the-first-sign-of-selling-many-cta-funds-and-weak-longs-rush-for-the-sa/",
+   "detail": "▸ 核心论点：Gottlieb 警告黄金与白银的多头头寸已经演变成动量交易，一旦出现最初的卖压，大量 CTA 基金与弱多头会同时夺门而出，造成剧烈回撤。\n▸ 关键依据：他从做市与银行交易台的视角判断，价格发现已被趋势跟踪资金主导，持仓结构脆弱；这与他长期看多黄金结构性地位并不矛盾，而是对短期仓位拥挤的提醒。\n▸ 时间与位置：2025年10月21日，金银在创出历史新高后出现急跌的时间点。\n▸ 标的与操作：无明确操作指引；对结构性多头不变、对短期动量盘的脆弱性发出警示，整体呈分歧。（本条来源为其公开评论的转载页，细节有限）",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-30",
+   "direction": "强烈看多",
+   "comments": "黄金已成“终极避险资产”，这轮牛市至少持续三年",
+   "targets": "黄金/央行购金/美元",
+   "source": "https://www.kitco.com/news/article/2025-09-30/gold-not-just-monetary-metal-it-force-nature-says-robert-gottlieb",
+   "detail": "▸ 核心论点：前摩根大通与汇丰贵金属主管 Gottlieb 表示金价突破3800美元创历史新高证明黄金“已成为一种自然之力”；他不去猜顶，但认为只要特朗普政策主导美国经济，这轮涨势至少还能持续三年。黄金的地位发生了结构性改变——从传统避险资产升级为“终极避险资产”。\n▸ 关键依据：2022年美国将美元武器化对付俄罗斯启动了去美元化，近月在关税与逆全球化下加速；黄金已超越欧元成为央行第二大储备资产；他强调与央行打交道三十年的经验是“价格从来不重要”，央行会持续买到目标达成。\n▸ 时间与位置：2025年9月30日 Kitco News 专访，金价刚站上3800美元、市场普遍看4000美元时。\n▸ 标的与操作：看多黄金；认为发达市场央行入场只是时间问题，中国可能是关键催化剂。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

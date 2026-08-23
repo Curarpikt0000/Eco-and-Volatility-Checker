@@ -3,49 +3,21 @@
  "sector": "贵金属",
  "backfill_date": "2026-08-22",
  "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
- "count": 5,
+ "count": 10,
  "history": [
   {
-   "date": "2025-12-09",
-   "direction": "看多",
-   "comments": "Investing News Network 访谈《Gold, Silver Price Calls for 2026, Plus Key Drivers to Watch》。TheGoldForecast.com 主编 Gary Wagner 给出 2026 年金银展望：承认期间可能出现大幅回调，但长期立场明确看多，原话是「一两年、三年之后，我相信黄金会更高、白银也会更高，这类资产在历史上不会长期下跌并停在低位」。同时列举需要盯住的关键驱动（美联储、通胀、地缘）。",
-   "targets": "黄金/白银",
-   "source": "https://investingnews.com/gary-wagner-gold-price-forecast",
-   "detail": "▸ 核心论点：2026年金银长期立场明确看多，尽管期间可能出现大幅回调。\n▸ 关键依据：原话为「一两年、三年之后，我相信黄金会更高、白银也会更高，这类资产在历史上不会长期下跌并停在低位」；同时列举需盯住的关键驱动(美联储、通胀、地缘)。\n▸ 时间与位置：2025-12-09 Investing News Network 访谈；时间尺度为一至三年，未给出具体目标价。\n▸ 标的与操作：黄金、白银；长期看多，容忍中途回调。",
-   "detail_status": "ok",
-   "sources": [
-    {
-     "url": "https://investingnews.com/gary-wagner-gold-price-forecast"
-    }
-   ]
-  },
-  {
-   "date": "2026-02-06",
-   "direction": "看多",
-   "comments": "Kitco News 技术解盘：当日现货白银遭遇大规模「清算式抛售」（liquidation event），单日跌幅达两位数，测试 70 美元出头的关键结构支撑。Wagner 把 71 美元定为必须守住的「沙线」，只要不破，多头趋势仍成立。他强调银的波动率与金的相对强势之间存在巨大分化，形容白银是「烧得比金亮一倍、但只烧一半时间的蜡烛」。尽管当日惨烈，他维持看多并更新了目标位。",
-   "targets": "白银/黄金",
-   "source": "https://www.youtube.com/watch?v=Rs1gJTb8OQY",
-   "detail": "▸ 核心论点：白银遭遇清算式抛售但关键支撑未破，多头趋势仍然成立，维持看多。\n▸ 关键依据：当日现货白银出现大规模 liquidation event，单日跌幅达两位数，测试 70 美元出头的关键结构支撑；强调银的波动率与金的相对强势之间存在巨大分化，形容白银是烧得比金亮一倍、但只烧一半时间的蜡烛。\n▸ 时间与位置：把 71 美元定为必须守住的沙线（line in the sand），只要不破多头趋势成立；当日更新了上行目标位，原文未列具体数值。\n▸ 标的与操作：白银看多，以 71 美元为止损/验证位持有。",
+   "date": "2026-08-17",
+   "direction": "分歧",
+   "comments": "Kitco 视频《The $6,000 gold target is dead, but gold has hit its bottom, says Gary Wagner》。Wagner 一方面宣告此前市场热议的 6,000 美元/盎司黄金目标已经作废（上行空间被大幅压缩），另一方面判断金价本轮下跌已经见底。看空目标位、看多底部，属典型的方向分歧表述。",
+   "targets": "黄金",
+   "source": "https://www.kitco.com/news/video/2026-08-17/the-6-000-gold-target-is-dead-but-gold-has-hit-its-bottom-says-gary-wagner",
+   "detail": "▸ 核心论点：市场热议的 6,000 美元/盎司黄金目标已经作废，上行空间被大幅压缩；但同时判断金价本轮下跌已经见底。\n▸ 关键依据：Kitco 视频访谈中，Wagner 一边宣告高目标位失效、一边确认底部成立，看空目标位与看多底部并存，属典型的方向分歧表述。\n▸ 时间与位置：明确否定 6,000 美元目标位；认为当前位置即为本轮下跌的底部，未给出新的具体上行目标。\n▸ 标的与操作：黄金。底部已现意味着不宜继续追空，但上行想象空间被压缩，整体偏中性震荡对待。",
    "detail_status": "ok",
    "sources": [
     {
      "title": "",
-     "url": "https://www.youtube.com/watch?v=Rs1gJTb8OQY",
-     "date": "2026-02-06"
-    }
-   ]
-  },
-  {
-   "date": "2026-03-11",
-   "direction": "分歧",
-   "comments": "Kitco 视频《Gary Wagner says gold's real body shows the true support level》。Wagner 讨论黄金出现「A-B-C 三浪回调」的可能性，方法上刻意忽略他认为不可持续的日线上下影线，只看 K 线实体来定位真实支撑。同时指出白银的内部技术动能强于黄金，短期金银强弱分化明显。对黄金短线偏谨慎、对白银偏强，属方向分歧。",
-   "targets": "黄金/白银",
-   "source": "https://www.kitco.com/news/video/2026-03-11/gary-wagner-says-gold-s-real-body-shows-the-true-support-level",
-   "detail": "▸ 核心论点：黄金可能走「A-B-C 三浪回调」，短线偏谨慎；白银内部技术动能强于黄金，金银强弱分化。\n▸ 关键依据：方法上刻意忽略他认为不可持续的日线上下影线，只看 K 线实体来定位真实支撑位。\n▸ 时间与位置：2026-03-11 Kitco 视频；支撑以 K 线实体判定，未给出具体数值点位。\n▸ 标的与操作：黄金(短线谨慎)、白银(偏强)；属方向分歧，未给出明确买卖指令。",
-   "detail_status": "ok",
-   "sources": [
-    {
-     "url": "https://www.kitco.com/news/video/2026-03-11/gary-wagner-says-gold-s-real-body-shows-the-true-support-level"
+     "url": "https://www.kitco.com/news/video/2026-08-17/the-6-000-gold-target-is-dead-but-gold-has-hit-its-bottom-says-gary-wagner",
+     "date": "2026-08-17"
     }
    ]
   },
@@ -66,20 +38,98 @@
    ]
   },
   {
-   "date": "2026-08-17",
+   "date": "2026-03-11",
    "direction": "分歧",
-   "comments": "Kitco 视频《The $6,000 gold target is dead, but gold has hit its bottom, says Gary Wagner》。Wagner 一方面宣告此前市场热议的 6,000 美元/盎司黄金目标已经作废（上行空间被大幅压缩），另一方面判断金价本轮下跌已经见底。看空目标位、看多底部，属典型的方向分歧表述。",
-   "targets": "黄金",
-   "source": "https://www.kitco.com/news/video/2026-08-17/the-6-000-gold-target-is-dead-but-gold-has-hit-its-bottom-says-gary-wagner",
-   "detail": "▸ 核心论点：市场热议的 6,000 美元/盎司黄金目标已经作废，上行空间被大幅压缩；但同时判断金价本轮下跌已经见底。\n▸ 关键依据：Kitco 视频访谈中，Wagner 一边宣告高目标位失效、一边确认底部成立，看空目标位与看多底部并存，属典型的方向分歧表述。\n▸ 时间与位置：明确否定 6,000 美元目标位；认为当前位置即为本轮下跌的底部，未给出新的具体上行目标。\n▸ 标的与操作：黄金。底部已现意味着不宜继续追空，但上行想象空间被压缩，整体偏中性震荡对待。",
+   "comments": "Kitco 视频《Gary Wagner says gold's real body shows the true support level》。Wagner 讨论黄金出现「A-B-C 三浪回调」的可能性，方法上刻意忽略他认为不可持续的日线上下影线，只看 K 线实体来定位真实支撑。同时指出白银的内部技术动能强于黄金，短期金银强弱分化明显。对黄金短线偏谨慎、对白银偏强，属方向分歧。",
+   "targets": "黄金/白银",
+   "source": "https://www.kitco.com/news/video/2026-03-11/gary-wagner-says-gold-s-real-body-shows-the-true-support-level",
+   "detail": "▸ 核心论点：黄金可能走「A-B-C 三浪回调」，短线偏谨慎；白银内部技术动能强于黄金，金银强弱分化。\n▸ 关键依据：方法上刻意忽略他认为不可持续的日线上下影线，只看 K 线实体来定位真实支撑位。\n▸ 时间与位置：2026-03-11 Kitco 视频；支撑以 K 线实体判定，未给出具体数值点位。\n▸ 标的与操作：黄金(短线谨慎)、白银(偏强)；属方向分歧，未给出明确买卖指令。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://www.kitco.com/news/video/2026-03-11/gary-wagner-says-gold-s-real-body-shows-the-true-support-level"
+    }
+   ]
+  },
+  {
+   "date": "2026-02-06",
+   "direction": "看多",
+   "comments": "Kitco News 技术解盘：当日现货白银遭遇大规模「清算式抛售」（liquidation event），单日跌幅达两位数，测试 70 美元出头的关键结构支撑。Wagner 把 71 美元定为必须守住的「沙线」，只要不破，多头趋势仍成立。他强调银的波动率与金的相对强势之间存在巨大分化，形容白银是「烧得比金亮一倍、但只烧一半时间的蜡烛」。尽管当日惨烈，他维持看多并更新了目标位。",
+   "targets": "白银/黄金",
+   "source": "https://www.youtube.com/watch?v=Rs1gJTb8OQY",
+   "detail": "▸ 核心论点：白银遭遇清算式抛售但关键支撑未破，多头趋势仍然成立，维持看多。\n▸ 关键依据：当日现货白银出现大规模 liquidation event，单日跌幅达两位数，测试 70 美元出头的关键结构支撑；强调银的波动率与金的相对强势之间存在巨大分化，形容白银是烧得比金亮一倍、但只烧一半时间的蜡烛。\n▸ 时间与位置：把 71 美元定为必须守住的沙线（line in the sand），只要不破多头趋势成立；当日更新了上行目标位，原文未列具体数值。\n▸ 标的与操作：白银看多，以 71 美元为止损/验证位持有。",
    "detail_status": "ok",
    "sources": [
     {
      "title": "",
-     "url": "https://www.kitco.com/news/video/2026-08-17/the-6-000-gold-target-is-dead-but-gold-has-hit-its-bottom-says-gary-wagner",
-     "date": "2026-08-17"
+     "url": "https://www.youtube.com/watch?v=Rs1gJTb8OQY",
+     "date": "2026-02-06"
     }
    ]
+  },
+  {
+   "date": "2025-12-09",
+   "direction": "看多",
+   "comments": "Investing News Network 访谈《Gold, Silver Price Calls for 2026, Plus Key Drivers to Watch》。TheGoldForecast.com 主编 Gary Wagner 给出 2026 年金银展望：承认期间可能出现大幅回调，但长期立场明确看多，原话是「一两年、三年之后，我相信黄金会更高、白银也会更高，这类资产在历史上不会长期下跌并停在低位」。同时列举需要盯住的关键驱动（美联储、通胀、地缘）。",
+   "targets": "黄金/白银",
+   "source": "https://investingnews.com/gary-wagner-gold-price-forecast",
+   "detail": "▸ 核心论点：2026年金银长期立场明确看多，尽管期间可能出现大幅回调。\n▸ 关键依据：原话为「一两年、三年之后，我相信黄金会更高、白银也会更高，这类资产在历史上不会长期下跌并停在低位」；同时列举需盯住的关键驱动(美联储、通胀、地缘)。\n▸ 时间与位置：2025-12-09 Investing News Network 访谈；时间尺度为一至三年，未给出具体目标价。\n▸ 标的与操作：黄金、白银；长期看多，容忍中途回调。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://investingnews.com/gary-wagner-gold-price-forecast"
+    }
+   ]
+  },
+  {
+   "date": "2025-12-03",
+   "direction": "看多",
+   "comments": "白银创历史新高，金银比目标 65",
+   "targets": "黄金/白银",
+   "source": "https://www.kitco.com/opinion/2025-12-03/gold-steadies-near-4220-while-silver-breaks-all-time-highs",
+   "detail": "▸ 核心论点：金银双双走强，白银突破历史新高，金银比仍有进一步压缩空间。\n▸ 关键依据：白银 12 月 2 日创 58.39 美元历史新高，年内翻倍，金银比压至 73:1，目标看 65；黄金稳于 4200 上方、年内涨约 60%；ADP 减少 3.2 万人、ISM 制造业 48.2 连续第九个月收缩，12 月降息概率约 89%，美元指数 98.88、10 年期收益率 4.06%。\n▸ 时间与位置：Kitco 评论专栏，2025 年 12 月 3 日（与 Joseph Wagner 合著）。\n▸ 标的与操作：黄金看向 4381 前高（周线上升三角形），白银 RSI 约 74 已超买但结构仍强。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-23",
+   "direction": "看多",
+   "comments": "史上级单日暴跌后出现十字星，看作技术性回调",
+   "targets": "黄金",
+   "source": "https://www.kitco.com/opinion/2025-10-23/gold-markets-signal-potential-rebound-following-historic-single-day-decline",
+   "detail": "▸ 核心论点：黄金经历 18 年来最猛单日回调后出现长下影十字星，牛市动能未破，反弹可期。\n▸ 关键依据：现货金周一见顶 4381 美元、12 月 Comex 4398 美元后周二暴跌逾 230 美元（2013 年以来最大单日跌幅）；周三形成长腿 doji，下影约为实体五倍，收盘较日内低点高 95 美元；年内涨幅 57% 下的回调技术上健康。\n▸ 时间与位置：Kitco 评论专栏，2025 年 10 月 23 日。\n▸ 标的与操作：黄金，视回调为再入场机会，关注被推迟的 CPI 数据（市场预期同比 3.1%）。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-20",
+   "direction": "看多",
+   "comments": "银行欺诈指控与政策不确定推升金价至纪录高位",
+   "targets": "黄金",
+   "source": "https://www.kitco.com/opinion/2025-10-20/gold-surges-record-highs-amid-banking-fraud-allegations-and-policy-uncertainty",
+   "detail": "▸ 核心论点：区域银行风险暴露与政策不确定性构成对黄金异常有利的环境。\n▸ 关键依据：Wagner 指出银行板块脆弱性与政策前景不明，共同推动金价冲上历史新高。\n▸ 时间与位置：Kitco 评论专栏，2025 年 10 月 20 日。\n▸ 标的与操作：黄金；避险与制度性风险溢价并存。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-19",
+   "direction": "看多",
+   "comments": "金银连续五周表现出色",
+   "targets": "黄金/白银",
+   "source": "https://www.kitco.com/opinion/2025-09-19/both-gold-and-silver-have-had-stellar-performances-over-last-five-consecutive",
+   "detail": "▸ 核心论点：黄金与白银在过去连续五周均录得出色表现，中期趋势强劲。\n▸ 关键依据：Wagner 以周线连涨记录与技术形态说明贵金属资金流持续流入。\n▸ 时间与位置：Kitco 评论专栏，2025 年 9 月 19 日。\n▸ 标的与操作：黄金与白银同步看多，白银弹性更大。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-05",
+   "direction": "看多",
+   "comments": "就业数据疲软指向 9 月降息，金价创历史新高",
+   "targets": "黄金",
+   "source": "https://www.kitco.com/opinion/2025-09-05/gold-reaches-record-high-weak-jobs-data-points-september-rate-cut",
+   "detail": "▸ 核心论点：疲弱的就业数据强化 9 月降息预期，推动金价创下历史新高。\n▸ 关键依据：非农等劳动力市场数据走弱，市场对美联储 9 月降息定价上升，实际利率下行利好无息资产。\n▸ 时间与位置：Kitco 评论专栏，2025 年 9 月 5 日。\n▸ 标的与操作：黄金；顺势看多，关注降息落地前后的兑现风险。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

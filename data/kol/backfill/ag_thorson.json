@@ -3,21 +3,21 @@
  "sector": "Precious Metals",
  "backfill_date": "2026-08-18",
  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
- "count": 3,
+ "count": 8,
  "history": [
   {
-   "date": "2026-01-19",
-   "direction": "强烈看多",
-   "comments": "白银正在垂直拉升，未来数日/数周可能急冲至120-140美元；一旦白银打出最终的喷发式高点，随后可能出现30%-50%的恐怖回调再进入盘整。",
-   "targets": "白银/黄金",
-   "source": "https://www.silver-phoenix500.com/authors/ag-thorson",
-   "detail": "▸ 核心论点：白银正在垂直拉升，未来数日/数周可能急冲，但喷发式高点之后将出现剧烈回调。\n▸ 关键依据：依据是当前的垂直拉升形态属于终局加速（blow-off）特征，一旦打出最终喷发式高点，随后可能出现30%-50%的恐怖回调再进入盘整。\n▸ 时间与位置：目标区间120-140美元，时间窗口为「未来数日/数周」；回调幅度预估30%-50%。\n▸ 标的与操作：白银、黄金，短期强烈看多但需准备兑现，冲高后转为规避。",
-   "detail_status": "ok",
+   "date": "2026-07-24",
+   "direction": "中性",
+   "comments": "贵金属周初大涨但因中东局势升级而回落，金价复苏突然停滞，短线走势陷入僵持，观望为主。",
+   "targets": "黄金/白银",
+   "source": "https://www.gold-eagle.com/authors/ag-thorson",
+   "detail": "▸ 核心论点：贵金属短线走势陷入僵持，以观望为主。\n▸ 关键依据：公开信息有限，仅检索到：周初大涨后因中东局势升级而回落，金价复苏突然停滞。\n▸ 时间与位置：本周内的短线僵持；未给出具体点位。\n▸ 标的与操作：黄金、白银，观望。",
+   "detail_status": "thin",
    "sources": [
     {
      "title": "AG Thorson",
-     "url": "https://www.silver-phoenix500.com/authors/ag-thorson",
-     "date": "2026-01-19"
+     "url": "https://www.gold-eagle.com/authors/ag-thorson",
+     "date": "2026-07-24"
     }
    ]
   },
@@ -36,20 +36,70 @@
    ]
   },
   {
-   "date": "2026-07-24",
-   "direction": "中性",
-   "comments": "贵金属周初大涨但因中东局势升级而回落，金价复苏突然停滞，短线走势陷入僵持，观望为主。",
-   "targets": "黄金/白银",
-   "source": "https://www.gold-eagle.com/authors/ag-thorson",
-   "detail": "▸ 核心论点：贵金属短线走势陷入僵持，以观望为主。\n▸ 关键依据：公开信息有限，仅检索到：周初大涨后因中东局势升级而回落，金价复苏突然停滞。\n▸ 时间与位置：本周内的短线僵持；未给出具体点位。\n▸ 标的与操作：黄金、白银，观望。",
-   "detail_status": "thin",
+   "date": "2026-01-19",
+   "direction": "强烈看多",
+   "comments": "白银正在垂直拉升，未来数日/数周可能急冲至120-140美元；一旦白银打出最终的喷发式高点，随后可能出现30%-50%的恐怖回调再进入盘整。",
+   "targets": "白银/黄金",
+   "source": "https://www.silver-phoenix500.com/authors/ag-thorson",
+   "detail": "▸ 核心论点：白银正在垂直拉升，未来数日/数周可能急冲，但喷发式高点之后将出现剧烈回调。\n▸ 关键依据：依据是当前的垂直拉升形态属于终局加速（blow-off）特征，一旦打出最终喷发式高点，随后可能出现30%-50%的恐怖回调再进入盘整。\n▸ 时间与位置：目标区间120-140美元，时间窗口为「未来数日/数周」；回调幅度预估30%-50%。\n▸ 标的与操作：白银、黄金，短期强烈看多但需准备兑现，冲高后转为规避。",
+   "detail_status": "ok",
    "sources": [
     {
      "title": "AG Thorson",
-     "url": "https://www.gold-eagle.com/authors/ag-thorson",
-     "date": "2026-07-24"
+     "url": "https://www.silver-phoenix500.com/authors/ag-thorson",
+     "date": "2026-01-19"
     }
    ]
+  },
+  {
+   "date": "2025-11-14",
+   "direction": "看空",
+   "comments": "反弹衰竭，12 月或创新低",
+   "targets": "黄金/白银/矿股",
+   "source": "https://www.fxempire.com/forecasts/article/gold-price-forecast-bounce-fades-as-markets-eye-fresh-lows-in-december-1561260",
+   "detail": "▸ 核心论点：反弹动能衰减，市场可能在 12 月寻找新的低点。\n▸ 关键依据：2024 年黄金确认牛市、2025 年白银铂金与矿股跟上，但这些趋势仍处早期，中途需要一次完整的中期调整来释放。\n▸ 时间与位置：FXEmpire，2025 年 11 月 14 日。\n▸ 标的与操作：短期防守黄金白银与矿股，中长期仍预期显著更高价位。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-22",
+   "direction": "看空",
+   "comments": "金价下探目标指向 11 月 $3,500",
+   "targets": "黄金",
+   "source": "https://www.fxempire.com/forecasts/article/gold-price-forecast-collapsing-gold-price-targets-3500-in-november-1556340",
+   "detail": "▸ 核心论点：金价在发出顶部警告后一个交易日见顶，回调可能延伸至 11 月的 3500 美元。\n▸ 关键依据：对照 2006 年同类形态的下跌幅度与节奏，推演本轮回撤的时间与价格目标。\n▸ 时间与位置：FXEmpire / Gold Eagle，2025 年 10 月 22 日。\n▸ 标的与操作：黄金，等待 3500 附近的中期周期低点作为再介入区间。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-21",
+   "direction": "看空",
+   "comments": "抛物线顶已确认",
+   "targets": "黄金",
+   "source": "https://goldprice.substack.com/p/golds-blow-off-top-confirmed",
+   "detail": "▸ 核心论点：黄金的 blow-off 行情已经结束，顶部得到确认。\n▸ 关键依据：CME 上调保证金后金价周一反弹迅速衰竭并大幅反转，动能破坏确认此前的顶部警告。\n▸ 时间与位置：GoldPredict / Substack，2025 年 10 月 21 日。\n▸ 标的与操作：黄金短线转空，等待回调完成后再重新建立多头。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-17",
+   "direction": "看空",
+   "comments": "技术面亮起罕见的抛物线顶警报",
+   "targets": "黄金",
+   "source": "https://www.fxempire.com/forecasts/article/gold-price-forecast-gold-technicals-flashing-blow-off-top-warning-1555510",
+   "detail": "▸ 核心论点：金价发出罕见的 blow-off top（抛物线顶）警告，短期见顶风险高。\n▸ 关键依据：金价在不到两个月内上涨逾 25%，触发极端超买信号；上一次类似形态出现在 2006 年，随后一个月内金价下跌近 25%。\n▸ 时间与位置：FXEmpire / Gold Eagle，2025 年 10 月 17 日。\n▸ 标的与操作：黄金，建议对短线多头仓位减仓，等待中期周期低点（ICL）。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-20",
+   "direction": "看多",
+   "comments": "金价目标 $3,800，矿股进入加速上行",
+   "targets": "黄金/白银/金矿股",
+   "source": "https://www.gold-eagle.com/article/gold-price-forecast-gold-targets-3800-miners-enter-accelerated-uptrends",
+   "detail": "▸ 核心论点：黄金瞄准 3800 美元，金矿股进入加速上升趋势阶段。\n▸ 关键依据：2024 年 3 月金价决定性突破 2100 美元即标志本轮牛市进入加速期，当前动能与矿股相对强度确认该阶段仍在延续。\n▸ 时间与位置：Gold Eagle 专栏，2025 年 9 月 20 日。\n▸ 标的与操作：黄金现货/期货为主，重点看好矿业股跑赢金属本身。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

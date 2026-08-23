@@ -3,21 +3,21 @@
  "sector": "Precious Metals",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 3,
+ "count": 6,
  "history": [
   {
-   "date": "2025-11-20",
+   "date": "2026-07-01",
    "direction": "看多",
-   "comments": "在Wealthion大会上发布贵金属矿业股详尽预测更新,给出当前最看好的个股名单,认为矿业股仍处于历史性牛市并具吸引力,延续对金银矿股的乐观判断。",
-   "targets": "金银矿业股",
-   "source": "https://www.wealthion.com/learn/top-gold-silver-mining-stock-picks-precious-metals-analyst-jeff-clark/",
-   "detail": "▸ 核心论点：在 Wealthion 大会上发布贵金属矿业股详尽预测更新，认为矿业股仍处于历史性牛市并具吸引力。\n▸ 关键依据：以矿业股相对贵金属的估值与牛市阶段判断为基础，给出当前最看好的个股名单。\n▸ 时间与位置：以大会发布时点为准的更新；未给出具体点位或目标价。\n▸ 标的与操作：金银矿业股，看多，按其推荐名单择股买入。",
+   "comments": "在Mining Network访谈中指出当前黄金牛市更像波动剧烈的1970年代而非2011周期,意味着大幅回调与再创新高交替出现,投资者进入2026下半年应做好高波动准备,长期方向仍强烈看多。",
+   "targets": "黄金/白银/矿业股",
+   "source": "https://miningnetwork.co.uk/jeff-clark-why-this-gold-bull-market-is-repeating-the-1970s-not-2011/",
+   "detail": "▸ 核心论点：当前黄金牛市更像波动剧烈的 1970 年代，而非 2011 周期。\n▸ 关键依据：1970 年代型牛市意味着大幅回调与再创新高交替出现，波动率显著高于 2011 那轮。\n▸ 时间与位置：投资者进入 2026 年下半年应做好高波动准备；未给出具体点位。\n▸ 标的与操作：黄金、白银及矿业股，长期方向仍强烈看多，回调视为牛市内正常波动（Mining Network 访谈）。",
    "detail_status": "ok",
    "sources": [
     {
      "title": "",
-     "url": "https://www.wealthion.com/learn/top-gold-silver-mining-stock-picks-precious-metals-analyst-jeff-clark/",
-     "date": "2025-11-20"
+     "url": "https://miningnetwork.co.uk/jeff-clark-why-this-gold-bull-market-is-repeating-the-1970s-not-2011/",
+     "date": "2026-07-01"
     }
    ]
   },
@@ -38,20 +38,50 @@
    ]
   },
   {
-   "date": "2026-07-01",
+   "date": "2025-11-20",
    "direction": "看多",
-   "comments": "在Mining Network访谈中指出当前黄金牛市更像波动剧烈的1970年代而非2011周期,意味着大幅回调与再创新高交替出现,投资者进入2026下半年应做好高波动准备,长期方向仍强烈看多。",
-   "targets": "黄金/白银/矿业股",
-   "source": "https://miningnetwork.co.uk/jeff-clark-why-this-gold-bull-market-is-repeating-the-1970s-not-2011/",
-   "detail": "▸ 核心论点：当前黄金牛市更像波动剧烈的 1970 年代，而非 2011 周期。\n▸ 关键依据：1970 年代型牛市意味着大幅回调与再创新高交替出现，波动率显著高于 2011 那轮。\n▸ 时间与位置：投资者进入 2026 年下半年应做好高波动准备；未给出具体点位。\n▸ 标的与操作：黄金、白银及矿业股，长期方向仍强烈看多，回调视为牛市内正常波动（Mining Network 访谈）。",
+   "comments": "在Wealthion大会上发布贵金属矿业股详尽预测更新,给出当前最看好的个股名单,认为矿业股仍处于历史性牛市并具吸引力,延续对金银矿股的乐观判断。",
+   "targets": "金银矿业股",
+   "source": "https://www.wealthion.com/learn/top-gold-silver-mining-stock-picks-precious-metals-analyst-jeff-clark/",
+   "detail": "▸ 核心论点：在 Wealthion 大会上发布贵金属矿业股详尽预测更新，认为矿业股仍处于历史性牛市并具吸引力。\n▸ 关键依据：以矿业股相对贵金属的估值与牛市阶段判断为基础，给出当前最看好的个股名单。\n▸ 时间与位置：以大会发布时点为准的更新；未给出具体点位或目标价。\n▸ 标的与操作：金银矿业股，看多，按其推荐名单择股买入。",
    "detail_status": "ok",
    "sources": [
     {
      "title": "",
-     "url": "https://miningnetwork.co.uk/jeff-clark-why-this-gold-bull-market-is-repeating-the-1970s-not-2011/",
-     "date": "2026-07-01"
+     "url": "https://www.wealthion.com/learn/top-gold-silver-mining-stock-picks-precious-metals-analyst-jeff-clark/",
+     "date": "2025-11-20"
     }
    ]
+  },
+  {
+   "date": "2025-11-13",
+   "direction": "看多",
+   "comments": "公布首选金银矿股，主张回调分批而非择时清仓",
+   "targets": "金银矿业股",
+   "source": "https://adamtaggart.substack.com/p/jeff-clarks-top-gold-and-silver-mining",
+   "detail": "▸ 核心论点：贵金属牛市仍在延续，重点在挑选具备催化剂的初级与中型矿企，而不是试图精确择时。\n▸ 关键依据：以 GDX 的表现、融资环境与估值指标作为金矿股代理观察；提示即便在牛市中也会出现多次回调，应围绕回调与税损卖出季安排建仓。\n▸ 时间与位置：2025年11月13日 Thoughtful Money 秋季线上会议加映视频公开发布。\n▸ 标的与操作：点名 Rio2、First Nordic Metals、Stallion Uranium、Golden Cross Resources、Dryden Gold 等，操作上分批介入、避免全进全出。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-29",
+   "direction": "强烈看多",
+   "comments": "牛市未见顶，仍超配矿股，认为还在早期阶段",
+   "targets": "矿业股/黄金",
+   "source": "https://www.youtube.com/watch?v=OA7FOIWECvE",
+   "detail": "▸ 核心论点：面对\"牛市是否见顶\"的普遍疑问，他明确回答否——认为行情仍处早期阶段，因此继续超配矿业股。\n▸ 关键依据：对比大型机构投资者近期动向、黄金股相对其他资产类别的表现，以及本轮牛市涨幅与历史牛市的对照，结论是涨幅尚不极端。\n▸ 时间与位置：2025年9月29日于温哥华 Metals Investor Forum 发表演讲《Is the Bull Market Peaking? Why I Remain Overweight Mining Stocks》。\n▸ 标的与操作：黄金及金矿股；维持超配立场，不因股价\"看起来涨多了\"而减仓。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-02",
+   "direction": "强烈看多",
+   "comments": "矿股大幅突破，历史级牛市周期可能刚启动",
+   "targets": "矿业股/黄金/白银",
+   "source": "https://metalsandminers.substack.com/p/jeff-clark-miners-massive-breakout",
+   "detail": "▸ 核心论点：矿业股出现大规模技术突破，可能正在开启一轮历史性的贵金属牛市周期，当前是布局被低估矿业股的时机。\n▸ 关键依据：投资者情绪尚未过热、ETF 资金流仍在早期，白银需求上升，生产商利润率改善，估值与金价之间存在明显错位。\n▸ 时间与位置：2025年9月2日 Metals and Miners 频道41分钟专访。\n▸ 标的与操作：标的为金银矿业股（含初级矿企）；主张超配矿股、利用估值错位建仓。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

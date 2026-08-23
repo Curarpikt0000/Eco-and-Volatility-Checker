@@ -3,7 +3,7 @@
  "sector": "Government Debt",
  "backfill_date": "2026-08-18",
  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
- "count": 1,
+ "count": 5,
  "history": [
   {
    "date": "2026-01-23",
@@ -20,6 +20,46 @@
      "date": "2026-01-23"
     }
    ]
+  },
+  {
+   "date": "2026-01-21",
+   "direction": "分歧",
+   "comments": "估值创历史高位，2026年市场需要一根拐杖",
+   "targets": "美股/美债/能源MLP/抵押REIT",
+   "source": "https://williamhgross.com/the-cane-mutiny/",
+   "detail": "▸ 核心论点：Gross 认为 2026 年市场不会崩盘，但会走成需要「拐杖」扶持的蹒跚步伐，与 2025 年的顺畅上行不同，估值已成为压在头顶的阴影。\n▸ 关键依据：他引用巴菲特偏好的指标——标普 500 价格对美国名义 GDP 之比，该比值已处历史高位；同时政治动荡威胁以竞争和优胜劣汰为基础的资本主义模型，AI 领域的关税与政府补贴可能反而扶持了不适者。\n▸ 时间与位置：2026 年 1 月 21 日发表的 Investment Outlook《The Cane Mutiny》，正值 1 月上半月股市小幅走高但动能钝化。\n▸ 标的与操作：偏好 Energy Transfer（ET，股息率 8.5%）与抵押 REIT AGNC（受益未来鸽派联储，股息率 12%）；债券方面预计 10 年期美债收益率升向 4.5%，因供给压倒需求且关税通胀最终被认知。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-18",
+   "direction": "看空",
+   "comments": "黄金已成动量/迷因资产，想买该再等等；10年期不该低于4%",
+   "targets": "黄金/美债/区域银行股",
+   "source": "https://fortune.com/2025/10/18/bill-gross-gold-price-momentum-meme-asset-us-deficit-debt-treasury-yield/",
+   "detail": "▸ 核心论点：Gross 在 X 上表示黄金已变成 momentum/meme asset（动量/迷因资产），若真想持有应当再等一等，暗示当前涨势过度延伸。\n▸ 关键依据：金价年内涨超 50%、自 2024 年初翻倍，10 月 17 日冲上 4300 美元后单日回落逾 2%；同时区域银行 Zions、Western Alliance 的坏账披露引发避险，10 年期美债收益率一度跌破 4%，他认为这一跌幅被夸大。\n▸ 时间与位置：2025 年 10 月 17 日 X 帖，Fortune 于 10 月 18 日报道。\n▸ 标的与操作：暂缓买入黄金；看空美债价格——认为 10 年期收益率不该低于 4%、4.5% 更合理，因赤字与供给压力压倒需求；并提示区域银行「蟑螂」会继续冲击股债。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-01",
+   "direction": "分歧",
+   "comments": "资本主义式相食，AI过度投资终将回吐，谨慎为上",
+   "targets": "美股/AI科技股/高股息价值股",
+   "source": "https://williamhgross.com/49er-madness/",
+   "detail": "▸ 核心论点：Gross 在《49er Madness》中指出资本主义天然鼓励企业间的相互吞噬，当过多高科技 AI 公司同时挤入同一场派对，不是所有人都能全身而退，容易走向 malinvestment（错误投资）。\n▸ 关键依据：他坦言无法给英伟达之类公司定出合理 P/E，但关键问题不是哪家公司能活下来，而是当整体投资水平停滞甚至下滑时经济能否保持健康——他确信这一幕会发生，只是不知何时。\n▸ 时间与位置：2025 年 10 月 1 日发表于其个人 Investment Outlook。\n▸ 标的与操作：建议未来数月/数年谨慎投资，回避纯 AI 叙事，把注意力放到科技之外的高股息、低/中市盈率标的。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-12",
+   "direction": "分歧",
+   "comments": "警告AI巨头烧钱，输家股价将受重创",
+   "targets": "美股/AI科技股",
+   "source": "https://www.businessinsider.com/bond-king-bill-gross-ai-stocks-capex-data-centers-tech-2025-9",
+   "detail": "▸ 核心论点：Gross 警告美国科技巨头为赢得 AI 竞赛正在投入巨额资本开支，这场军备竞赛注定有输家，而输家的股价将遭到明显打击。\n▸ 关键依据：他把当前 AI 资本开支潮视为典型的资本浪费/误配置风险，数据中心与算力投入的回报并不对称，胜负分化会在股价上兑现。\n▸ 时间与位置：2025 年 9 月 12 日 Business Insider 报道。\n▸ 标的与操作：对 AI 相关科技股保持警惕，不建议无差别追高；他本人科技持仓极轻（微软约 1% 仓位）。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

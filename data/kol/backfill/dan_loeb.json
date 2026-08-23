@@ -3,21 +3,21 @@
  "sector": "Equities",
  "backfill_date": "2026-08-18",
  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
- "count": 3,
+ "count": 6,
  "history": [
   {
-   "date": "2026-01-27",
+   "date": "2026-08-14",
    "direction": "看多",
-   "comments": "Third Point创始人，计划对CoStar发起新一轮维权投资，延续其事件驱动、价值导向的选股风格，对特定标的持积极进取态度。",
-   "targets": "美股/个股",
-   "source": "https://money.usnews.com/investing/news/articles/2026-01-27/exclusive-loebs-third-point-plans-to-take-aim-at-costar-in-new-activist-campaign-sources-say",
-   "detail": "▸ 核心论点：Third Point 创始人计划对 CoStar 发起新一轮维权（activist）投资。\n▸ 关键依据：延续其事件驱动、价值导向的选股风格，对特定标的持积极进取态度。\n▸ 时间与位置：报道称维权行动为「新一轮」正在筹划中；未给出目标价或具体点位。\n▸ 标的与操作：美股个股（CoStar），看多并主动介入推动价值释放。",
+   "comments": "Q2平仓5.83亿美元S&P500看跌对冲、减持Meta，转向AI算力背后的电力供应商，押注AI数据中心建设的卖铲逻辑，整体加仓风险资产。",
+   "targets": "美股/AI电力股",
+   "source": "https://themarketcontext.com/article/daniel-loebs-7-3b-third-point-drops-its-sp-500-hedge-and-bets-on-ai-power/",
+   "detail": "▸ 核心论点：Third Point 撤下标普 500 看跌对冲、整体加仓风险资产，转向押注 AI 算力背后的电力供应商，即卖铲逻辑。\n▸ 关键依据：13F 显示平仓 5.83 亿美元标普 500 看跌对冲、减持 Meta；组合规模约 72.7 亿美元，新建 1.68 亿美元 Constellation Energy 仓位；前五大持仓约占三分之一（PG&E、英伟达、亚马逊、微软、联合太平洋）。\n▸ 时间与位置：以季度 13F 披露的持仓变动为时间标尺，未给出具体目标价位。\n▸ 标的与操作：美股 / AI 电力股：买入电力与铁路基础设施，减持已大涨的 AI 大市值股（英伟达保留），移除指数对冲。",
    "detail_status": "ok",
    "sources": [
     {
-     "title": "",
-     "url": "https://money.usnews.com/investing/news/articles/2026-01-27/exclusive-loebs-third-point-plans-to-take-aim-at-costar-in-new-activist-campaign-sources-say",
-     "date": "2026-01-27"
+     "title": "Dan Loeb",
+     "url": "https://themarketcontext.com/article/daniel-loebs-7-3b-third-point-drops-its-sp-500-hedge-and-bets-on-ai-power/",
+     "date": "2026-08-14"
     }
    ]
   },
@@ -38,20 +38,50 @@
    ]
   },
   {
-   "date": "2026-08-14",
+   "date": "2026-01-27",
    "direction": "看多",
-   "comments": "Q2平仓5.83亿美元S&P500看跌对冲、减持Meta，转向AI算力背后的电力供应商，押注AI数据中心建设的卖铲逻辑，整体加仓风险资产。",
-   "targets": "美股/AI电力股",
-   "source": "https://themarketcontext.com/article/daniel-loebs-7-3b-third-point-drops-its-sp-500-hedge-and-bets-on-ai-power/",
-   "detail": "▸ 核心论点：Third Point 撤下标普 500 看跌对冲、整体加仓风险资产，转向押注 AI 算力背后的电力供应商，即卖铲逻辑。\n▸ 关键依据：13F 显示平仓 5.83 亿美元标普 500 看跌对冲、减持 Meta；组合规模约 72.7 亿美元，新建 1.68 亿美元 Constellation Energy 仓位；前五大持仓约占三分之一（PG&E、英伟达、亚马逊、微软、联合太平洋）。\n▸ 时间与位置：以季度 13F 披露的持仓变动为时间标尺，未给出具体目标价位。\n▸ 标的与操作：美股 / AI 电力股：买入电力与铁路基础设施，减持已大涨的 AI 大市值股（英伟达保留），移除指数对冲。",
+   "comments": "Third Point创始人，计划对CoStar发起新一轮维权投资，延续其事件驱动、价值导向的选股风格，对特定标的持积极进取态度。",
+   "targets": "美股/个股",
+   "source": "https://money.usnews.com/investing/news/articles/2026-01-27/exclusive-loebs-third-point-plans-to-take-aim-at-costar-in-new-activist-campaign-sources-say",
+   "detail": "▸ 核心论点：Third Point 创始人计划对 CoStar 发起新一轮维权（activist）投资。\n▸ 关键依据：延续其事件驱动、价值导向的选股风格，对特定标的持积极进取态度。\n▸ 时间与位置：报道称维权行动为「新一轮」正在筹划中；未给出目标价或具体点位。\n▸ 标的与操作：美股个股（CoStar），看多并主动介入推动价值释放。",
    "detail_status": "ok",
    "sources": [
     {
-     "title": "Dan Loeb",
-     "url": "https://themarketcontext.com/article/daniel-loebs-7-3b-third-point-drops-its-sp-500-hedge-and-bets-on-ai-power/",
-     "date": "2026-08-14"
+     "title": "",
+     "url": "https://money.usnews.com/investing/news/articles/2026-01-27/exclusive-loebs-third-point-plans-to-take-aim-at-costar-in-new-activist-campaign-sources-say",
+     "date": "2026-01-27"
     }
    ]
+  },
+  {
+   "date": "2025-11-14",
+   "direction": "看多",
+   "comments": "三季度加倍押注大型科技，微软仓位翻倍",
+   "targets": "微软/英伟达/亚马逊",
+   "source": "https://www.cnbc.com/2025/11/14/dan-loebs-third-point-leans-back-into-tech-doubling-microsoft-bet-.html",
+   "detail": "▸ 核心论点：对大型科技赢家的信心进一步提升，在三季度显著增持而非获利了结。\n▸ 关键依据：13F 显示 Third Point 加大微软、英伟达、亚马逊头寸，其中微软仓位翻倍；与投资者信中「AI 算力需求加速、盈利支撑估值」的判断一致。\n▸ 时间与位置：2025 年 11 月 14 日 CNBC 依据 SEC 13F 披露报道（持仓截至 2025-09-30）。\n▸ 标的与操作：多头集中于 MSFT/NVDA/AMZN，属趋势加仓型操作，而非防御性减仓。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-06",
+   "direction": "看多",
+   "comments": "三季度新建两笔非美 AI 投资，其一为激进介入",
+   "targets": "非美 AI 标的",
+   "source": "https://www.institutionalinvestor.com/article/third-point-goes-outside-us-newest-ai-play",
+   "detail": "▸ 核心论点：AI 主题的最佳风险回报已不局限于美国大型科技股，Third Point 将新资金投向美国以外的 AI 公司。\n▸ 关键依据：三季度新建两笔非美 AI 投资，其中一笔属激进（activist）情形；其中之一在 10 月成为组合表现最好的头寸。\n▸ 时间与位置：2025 年 11 月 6 日 Institutional Investor 报道。\n▸ 标的与操作：以亚洲/非美 AI 产业链标的作为分散美股集中度风险的方式，延续对 AI 的多头暴露但换赛道。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-04",
+   "direction": "看多",
+   "comments": "Q3+3.2%，衰退远未到来，AI 算力需求加速",
+   "targets": "美股/半导体/台积电/英伟达/信用债",
+   "source": "https://hedgefundalpha.com/investor-letters/third-point-q3-2025/",
+   "detail": "▸ 核心论点：市场上涨集中在黄金与 AI 相关股，但赢家的涨幅主要由强劲盈利支撑，衰退远未在视野内，降息周期叠加 AI 持续投资使有利环境得以延续。\n▸ 关键依据：三季度旗舰离岸基金净回报 3.2%；前五大盈利头寸为台积电、英伟达、CRH、Comfort Systems、PG&E；亏损方为 Kenvue、DSV、Primo Brands、LSEG、Flutter；推理模型使 AI 算力需求数量级上升，抵消了 DeepSeek 式效率提升的冲击。\n▸ 时间与位置：2025 年 11 月 4 日 Third Point 2025 年三季度投资者信。\n▸ 标的与操作：加码半导体/AI 真实受益者，单一名称空头集中在消费、医疗、信息服务与软件；同时看到信用市场机会。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

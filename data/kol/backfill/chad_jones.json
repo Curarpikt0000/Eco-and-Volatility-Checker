@@ -3,8 +3,24 @@
  "sector": "Macro",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 2,
+ "count": 3,
  "history": [
+  {
+   "date": "2026-02-01",
+   "direction": "看多",
+   "comments": "在斯坦福GSB演讲'AI与我们的经济未来'中呈现研究,包括与Tonetti合著'Past Automation and Future A.I.: How Weak Links Tame the Growth Explosion'(2026年1月),探讨自动化与AI对增长的影响及'弱环节'如何驯服增长爆发,整体对AI驱动增长持建设性乐观。",
+   "targets": "AI/经济增长/自动化",
+   "source": "https://web.stanford.edu/~chadj/AIandEconomicFuture.pdf",
+   "detail": "▸ 核心论点：在斯坦福 GSB 演讲《AI 与我们的经济未来》中，对 AI 驱动的经济增长持建设性乐观。\n▸ 关键依据：呈现与 Tonetti 合著的《Past Automation and Future A.I.: How Weak Links Tame the Growth Explosion》（2026 年 1 月），探讨自动化与 AI 对增长的影响，以及「弱环节」如何驯服增长爆发。\n▸ 时间与位置：论文发表于 2026 年 1 月，演讲同期；属长期增长框架，未给出具体点位。\n▸ 标的与操作：AI/经济增长/自动化主题，方向偏多，属学术研究判断而非交易建议。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://web.stanford.edu/~chadj/AIandEconomicFuture.pdf",
+     "date": "2026-02-01"
+    }
+   ]
+  },
   {
    "date": "2025-10-03",
    "direction": "看多",
@@ -22,20 +38,14 @@
    ]
   },
   {
-   "date": "2026-02-01",
-   "direction": "看多",
-   "comments": "在斯坦福GSB演讲'AI与我们的经济未来'中呈现研究,包括与Tonetti合著'Past Automation and Future A.I.: How Weak Links Tame the Growth Explosion'(2026年1月),探讨自动化与AI对增长的影响及'弱环节'如何驯服增长爆发,整体对AI驱动增长持建设性乐观。",
-   "targets": "AI/经济增长/自动化",
-   "source": "https://web.stanford.edu/~chadj/AIandEconomicFuture.pdf",
-   "detail": "▸ 核心论点：在斯坦福 GSB 演讲《AI 与我们的经济未来》中，对 AI 驱动的经济增长持建设性乐观。\n▸ 关键依据：呈现与 Tonetti 合著的《Past Automation and Future A.I.: How Weak Links Tame the Growth Explosion》（2026 年 1 月），探讨自动化与 AI 对增长的影响，以及「弱环节」如何驯服增长爆发。\n▸ 时间与位置：论文发表于 2026 年 1 月，演讲同期；属长期增长框架，未给出具体点位。\n▸ 标的与操作：AI/经济增长/自动化主题，方向偏多，属学术研究判断而非交易建议。",
+   "date": "2025-09-02",
+   "direction": "分歧",
+   "comments": "AI或加速增长但扩散需数十年，同时低估灾难性风险",
+   "targets": "AI/长期增长/生产率",
+   "source": "https://www.frbsf.org/news-and-media/events/2025/09/chad-jones-ai-and-economic-growth/",
+   "detail": "▸ 核心论点：AI有可能让长期经济增长率加速，但通用技术从发明到在GDP上留下可见影响，历史上往往需要一二十年甚至三十年；与此同时对AI灾难性风险的投入可能严重不足。\n▸ 关键依据：增长来自非竞争性(non-rival)的想法，AI自动化「想法生产」是加速增长的机制；但完全扩散受制于大量未被自动化的「弱环节」；他类比新冠期间美国为化解0.3%死亡风险付出约4%GDP，据此认为AI风险的对冲支出应当更高。\n▸ 时间与位置：2025年9月2日旧金山联储 EERN（新兴技术经济研究网络）研讨会主讲，斯坦福GSB经济学教授。\n▸ 标的与操作：无直接交易标的；对未来二十年增长路径给出「加速 vs 一切照旧」两种情景，属结构性中性偏辩证判断。",
    "detail_status": "ok",
-   "sources": [
-    {
-     "title": "",
-     "url": "https://web.stanford.edu/~chadj/AIandEconomicFuture.pdf",
-     "date": "2026-02-01"
-    }
-   ]
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

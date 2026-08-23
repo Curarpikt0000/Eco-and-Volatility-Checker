@@ -3,21 +3,21 @@
  "sector": "Macro",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 3,
+ "count": 5,
  "history": [
   {
-   "date": "2025-11-17",
-   "direction": "看多",
-   "comments": "据SEC 13F披露,Druckenmiller最新持仓显示重新增配科技股,布局AI相关趋势,此前曾于2024年底清仓英伟达、2025年初清仓Palantir。",
-   "targets": "科技股/AI",
-   "source": "https://www.thestreet.com/investing/stanley-druckenmillers-latest-buys-suggest-shifting-tech-trend",
-   "detail": "▸ 核心论点：最新持仓显示重新增配科技股，布局AI相关趋势。\n▸ 关键依据：据SEC 13F披露的持仓变动；此前他曾于2024年底清仓英伟达、2025年初清仓Palantir，本次属立场回摆。\n▸ 时间与位置：披露窗口为最新一期13F；未给出具体点位或目标价。\n▸ 标的与操作：科技股/AI相关标的，看多，已实际加仓。",
+   "date": "2026-02-27",
+   "direction": "分歧",
+   "comments": "与摩根士丹利对谈'Hard Lessons',讨论当前市场如何构建组合及后悔过早卖出的个股,强调保本与择机重仓的投资哲学。",
+   "targets": "美股",
+   "source": "https://www.morganstanley.com/insights/videos/hard-lessons/duquesne-stan-druckenmiller-iliana-bouzali",
+   "detail": "▸ 核心论点：讨论当前市场如何构建组合，强调保本与择机重仓的投资哲学，并反思过早卖出个股的遗憾。\n▸ 关键依据：与摩根士丹利对谈《Hard Lessons》，以自身交易经验为依据，核心是资本保全优先、机会来临时集中下注，而非持续满仓。\n▸ 时间与位置：未给出具体点位或目标价。\n▸ 标的与操作：美股，方向不明确（记为分歧）；操作上强调组合构建纪律而非明确多空。",
    "detail_status": "ok",
    "sources": [
     {
      "title": "S. Druckenmiller",
-     "url": "https://www.thestreet.com/investing/stanley-druckenmillers-latest-buys-suggest-shifting-tech-trend",
-     "date": "2025-11-17"
+     "url": "https://www.morganstanley.com/insights/videos/hard-lessons/duquesne-stan-druckenmiller-iliana-bouzali",
+     "date": "2026-02-27"
     }
    ]
   },
@@ -36,20 +36,40 @@
    ]
   },
   {
-   "date": "2026-02-27",
-   "direction": "分歧",
-   "comments": "与摩根士丹利对谈'Hard Lessons',讨论当前市场如何构建组合及后悔过早卖出的个股,强调保本与择机重仓的投资哲学。",
-   "targets": "美股",
-   "source": "https://www.morganstanley.com/insights/videos/hard-lessons/duquesne-stan-druckenmiller-iliana-bouzali",
-   "detail": "▸ 核心论点：讨论当前市场如何构建组合，强调保本与择机重仓的投资哲学，并反思过早卖出个股的遗憾。\n▸ 关键依据：与摩根士丹利对谈《Hard Lessons》，以自身交易经验为依据，核心是资本保全优先、机会来临时集中下注，而非持续满仓。\n▸ 时间与位置：未给出具体点位或目标价。\n▸ 标的与操作：美股，方向不明确（记为分歧）；操作上强调组合构建纪律而非明确多空。",
+   "date": "2025-11-17",
+   "direction": "看多",
+   "comments": "据SEC 13F披露,Druckenmiller最新持仓显示重新增配科技股,布局AI相关趋势,此前曾于2024年底清仓英伟达、2025年初清仓Palantir。",
+   "targets": "科技股/AI",
+   "source": "https://www.thestreet.com/investing/stanley-druckenmillers-latest-buys-suggest-shifting-tech-trend",
+   "detail": "▸ 核心论点：最新持仓显示重新增配科技股，布局AI相关趋势。\n▸ 关键依据：据SEC 13F披露的持仓变动；此前他曾于2024年底清仓英伟达、2025年初清仓Palantir，本次属立场回摆。\n▸ 时间与位置：披露窗口为最新一期13F；未给出具体点位或目标价。\n▸ 标的与操作：科技股/AI相关标的，看多，已实际加仓。",
    "detail_status": "ok",
    "sources": [
     {
      "title": "S. Druckenmiller",
-     "url": "https://www.morganstanley.com/insights/videos/hard-lessons/duquesne-stan-druckenmiller-iliana-bouzali",
-     "date": "2026-02-27"
+     "url": "https://www.thestreet.com/investing/stanley-druckenmillers-latest-buys-suggest-shifting-tech-trend",
+     "date": "2025-11-17"
     }
    ]
+  },
+  {
+   "date": "2025-11-14",
+   "direction": "看多",
+   "comments": "Q3 13F 大换仓：新建 29 只、清仓 33 只，转向电力与生物科技",
+   "targets": "亚马逊/Meta/Alphabet/GE Vernova/Vistra/生物科技",
+   "source": "https://seekingalpha.com/news/4522524-druckenmillers-duquesne-takes-in-amazon-google-meta-exits-microsoft-lilly-in-q3-moves",
+   "detail": "▸ 核心论点：三季度对美股组合做大幅重构，新建亚马逊、Meta、Alphabet 等大型科技仓位，同时清空微软与礼来，并显著增配生物科技（Natera、Insmed）与电力/AI 基建（GE Vernova、Vistra、Cleveland-Cliffs、CRH）。\n▸ 关键依据：Duquesne Family Office 于 2025-11-14 提交的三季度 13F，组合共 62 只美股、市值约 39 亿美元，新建 29 只、清仓 33 只。\n▸ 时间与位置：2025-11-14，SEC 13F 披露日，媒体同日报道。\n▸ 标的与操作：加仓大型平台科技、电力与 AI 基础设施及生物科技，减少对单一 AI 软件叙事的暴露。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-24",
+   "direction": "分歧",
+   "comments": "13F 显示清仓 Palantir，连续四季加仓其偏好的 AI 芯片股",
+   "targets": "Palantir/博通/AI 硬件",
+   "source": "https://www.fool.com/investing/2025/09/24/billionaire-stanley-druckenmiller-sell-palantir-ai/",
+   "detail": "▸ 核心论点：对高估值 AI 应用层公司获利了结，把敞口集中到 AI 基础设施与半导体环节，体现由叙事转向算力硬件的结构判断。\n▸ 关键依据：Duquesne Family Office 的 13F 披露显示过去一年清空 Palantir 全部持股，同时连续第四个季度增持其偏好的 AI 芯片标的。\n▸ 时间与位置：2025-09-24，The Motley Fool 基于其 13F 的持仓分析报道。\n▸ 标的与操作：减持 AI 应用层高估值个股，增持 AI 半导体与基础设施，整体对 AI 主题保持参与但换仓。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

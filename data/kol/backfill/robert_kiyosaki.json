@@ -3,7 +3,7 @@
  "sector": "Precious Metals",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 1,
+ "count": 5,
  "history": [
   {
    "date": "2026-02-01",
@@ -20,6 +20,46 @@
      "date": "2026-02-01"
     }
    ]
+  },
+  {
+   "date": "2026-01-05",
+   "direction": "强烈看多",
+   "comments": "重申白银看向100美元，遭市场大量质疑",
+   "targets": "白银",
+   "source": "https://www.financialexpress.com/trending/rich-dad-poor-dad-author-robert-kiyosaki-trolled-for-bold-silver-prediction/4098024/",
+   "detail": "▸ 核心论点：白银仍有巨大上行空间，目标价100美元/盎司。\n▸ 关键依据：延续其法币贬值+白银被低估的一贯叙事；但因此前多次高调喊单，被批制造FOMO。\n▸ 时间与位置：2026年1月初，白银经历2025年翻倍行情后波动加剧。\n▸ 标的与操作：继续持有并加仓实物白银，对波动风险不做对冲。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-12-30",
+   "direction": "强烈看空",
+   "comments": "喊“史上最大崩盘开始”，降息将引发恶性通胀",
+   "targets": "美股/美元 · 看多金银与加密",
+   "source": "https://finance.yahoo.com/news/robert-kiyosaki-warns-biggest-crash-180100376.html",
+   "detail": "▸ 核心论点：世界经济正在崩塌，美联储降息将导致恶性通胀，未做准备者生活成本将极其昂贵。\n▸ 关键依据：2025年12月连续在X发文重申11月的“BIGGEST CRASH IN HISTORY STARTING”判断；美国通胀自2021年起持续高于2%目标，而美联储2025年仍在能降就降。\n▸ 时间与位置：2025年12月底，金价刚创4,500美元上方纪录后回落至4,300-4,400区间。\n▸ 标的与操作：建议“买更多实物金、银、比特币和以太坊”，离开“假钱”美元。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-30",
+   "direction": "强烈看多",
+   "comments": "2026目标：BTC 25万、金2.7万、银100美元",
+   "targets": "比特币/黄金/白银/以太坊",
+   "source": "https://timesofinvesting.com/2025/11/30/kiyosakis-2026-predictions-bitcoin-gold-and-more",
+   "detail": "▸ 核心论点：“史上最大崩盘”将至，只有硬资产能对冲法币贬值。\n▸ 关键依据：美国无节制印钞与债务扩张触发格雷欣法则，劣币驱逐良币；比特币MVRV约1.8的历史区间对应30-50%反弹。\n▸ 时间与位置：2025年11月30日发布2026年预测，彼时BTC约91,544美元、白银突破56美元。\n▸ 标的与操作：给出2026年目标价——比特币25万美元、黄金27,000美元、白银100美元，主张逢跌买入。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-01",
+   "direction": "强烈看多",
+   "comments": "若只有100美元就全买银币，预言白银5倍暴涨",
+   "targets": "白银/黄金/比特币",
+   "source": "https://www.financialexpress.com/trending/robert-kiyosaki-says-he-wont-invest-100-in-gold-or-bitcoin-predicts-5x-silver-explosion/3995059/",
+   "detail": "▸ 核心论点：法币是“假钱”，实物白银是当下最被低估、最值得买的资产。\n▸ 关键依据：称白银长期被人为压价，工业+货币双重需求将引爆价格；“2025年9月白银即将爆发，你的100美元一年后会变成500美元”。\n▸ 时间与位置：2025年10月初X发文并被媒体广泛转载，当时银价正创多年新高。\n▸ 标的与操作：优先买实物银币，其次黄金、比特币与以太坊，回避现金与共同基金。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

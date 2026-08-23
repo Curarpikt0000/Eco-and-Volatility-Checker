@@ -3,21 +3,21 @@
  "sector": "Precious Metals",
  "backfill_date": "2026-08-18",
  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
- "count": 3,
+ "count": 7,
  "history": [
   {
-   "date": "2026-01-29",
+   "date": "2026-06-01",
    "direction": "看多",
-   "comments": "High Ridge Futures金属交易总监，点评金银在弱美元与去货币化交易背景下走强；布伦特原油因伊朗担忧升破70美元，铜价创高，整体大宗商品偏强。",
+   "comments": "点评贵金属在record高位后经历急剧修正，认为具备流动性的投资者可分批逢低吸纳，反映其对金银中期趋势仍偏乐观。",
    "targets": "黄金/白银",
-   "source": "https://www.theguardian.com/business/live/2026/jan/29/gold-price-weak-dollar-silver-debasement-trade-markets-business-live-news-updates",
-   "detail": "▸ 核心论点：弱美元与去货币化（debasement）交易背景下金银走强，整体大宗商品偏强。\n▸ 关键依据：High Ridge Futures 金属交易总监点评：布伦特原油因伊朗担忧升破 70 美元，铜价创高，商品板块普遍强势。\n▸ 时间与位置：布油 70 美元关口为当日参照；金银未给出具体点位。\n▸ 标的与操作：黄金、白银，偏多。",
+   "source": "https://chron.uz/en/main/selected/investors-reap-massive-gains-as-golds-relentless-rally-continues",
+   "detail": "▸ 核心论点：贵金属在创纪录高位后经历急剧修正，具备流动性的投资者可分批逢低吸纳，中期趋势仍偏乐观。\n▸ 关键依据：在金价触及历史高位后出现获利了结式的急跌，他把这类回撤定性为强势行情中的正常修正而非趋势反转，故建议用现金分批承接。\n▸ 时间与位置：未给出具体点位或目标价，仅描述「record高位后的急剧修正」。\n▸ 标的与操作：黄金、白银，看多；操作上分批逢低买入。",
    "detail_status": "ok",
    "sources": [
     {
      "title": "David Meger",
-     "url": "https://www.theguardian.com/business/live/2026/jan/29/gold-price-weak-dollar-silver-debasement-trade-markets-business-live-news-updates",
-     "date": "2026-01-29"
+     "url": "https://chron.uz/en/main/selected/investors-reap-massive-gains-as-golds-relentless-rally-continues",
+     "date": "2026-06-01"
     }
    ]
   },
@@ -36,20 +36,60 @@
    ]
   },
   {
-   "date": "2026-06-01",
+   "date": "2026-01-29",
    "direction": "看多",
-   "comments": "点评贵金属在record高位后经历急剧修正，认为具备流动性的投资者可分批逢低吸纳，反映其对金银中期趋势仍偏乐观。",
+   "comments": "High Ridge Futures金属交易总监，点评金银在弱美元与去货币化交易背景下走强；布伦特原油因伊朗担忧升破70美元，铜价创高，整体大宗商品偏强。",
    "targets": "黄金/白银",
-   "source": "https://chron.uz/en/main/selected/investors-reap-massive-gains-as-golds-relentless-rally-continues",
-   "detail": "▸ 核心论点：贵金属在创纪录高位后经历急剧修正，具备流动性的投资者可分批逢低吸纳，中期趋势仍偏乐观。\n▸ 关键依据：在金价触及历史高位后出现获利了结式的急跌，他把这类回撤定性为强势行情中的正常修正而非趋势反转，故建议用现金分批承接。\n▸ 时间与位置：未给出具体点位或目标价，仅描述「record高位后的急剧修正」。\n▸ 标的与操作：黄金、白银，看多；操作上分批逢低买入。",
+   "source": "https://www.theguardian.com/business/live/2026/jan/29/gold-price-weak-dollar-silver-debasement-trade-markets-business-live-news-updates",
+   "detail": "▸ 核心论点：弱美元与去货币化（debasement）交易背景下金银走强，整体大宗商品偏强。\n▸ 关键依据：High Ridge Futures 金属交易总监点评：布伦特原油因伊朗担忧升破 70 美元，铜价创高，商品板块普遍强势。\n▸ 时间与位置：布油 70 美元关口为当日参照；金银未给出具体点位。\n▸ 标的与操作：黄金、白银，偏多。",
    "detail_status": "ok",
    "sources": [
     {
      "title": "David Meger",
-     "url": "https://chron.uz/en/main/selected/investors-reap-massive-gains-as-golds-relentless-rally-continues",
-     "date": "2026-06-01"
+     "url": "https://www.theguardian.com/business/live/2026/jan/29/gold-price-weak-dollar-silver-debasement-trade-markets-business-live-news-updates",
+     "date": "2026-01-29"
     }
    ]
+  },
+  {
+   "date": "2025-12-01",
+   "direction": "看多",
+   "comments": "降息预期加通胀高于目标，金银维持横盘偏上趋势",
+   "targets": "黄金/白银",
+   "source": "https://www.reuters.com/world/india/gold-climbs-six-week-high-risk-off-sentiment-equities-lower-dollar-2025-12-01/",
+   "detail": "▸ 核心论点：进一步降息的预期，加上通胀压力仍高于美联储目标，构成金银价格的底层支撑；他明确表示\"我们仍认为金银处于强劲的横盘至上行趋势中\"。\n▸ 关键依据：现货金涨至4,241美元创六周新高、白银盘中创58.83美元历史新高；12月降息概率升至87%，且市场预期下一任美联储主席更偏鸽派。\n▸ 时间与位置：2025年12月1日，路透社金价报道。\n▸ 标的与操作：标的黄金与白银；维持偏多，看货币政策与新主席人选。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-17",
+   "direction": "中性",
+   "comments": "政府重开后数据洪流将至，金价来回震荡",
+   "targets": "黄金",
+   "source": "https://www.reuters.com/world/india/gold-holds-steady-focus-turns-us-data-more-fed-cues-2025-11-17/",
+   "detail": "▸ 核心论点：金价处于\"来回拉锯的震荡走势\"，市场在等待美国政府重新开门后即将集中释放的大量经济数据。\n▸ 关键依据：停摆期间数据缺位使定价缺乏锚，重开后的数据洪流会重新校准降息路径，因而多空双方都不愿在此之前下重注。\n▸ 时间与位置：2025年11月17日，路透社金价日评。\n▸ 标的与操作：标的黄金；短线中性，建议等待数据落地后再定方向。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-04",
+   "direction": "中性",
+   "comments": "美元创新高压制金价，金价跌逾1%等待就业数据",
+   "targets": "黄金/美元",
+   "source": "https://www.reuters.com/world/india/gold-holds-under-4000-dollar-resilience-fed-rate-cut-outlook-2025-11-04/",
+   "detail": "▸ 核心论点：美元走强是当前压制黄金的主要力量，金价短线跌逾1%，市场在等待美国就业数据指引。\n▸ 关键依据：他指出\"美元创新高对黄金市场形成压力\"，近期金价的疲弱很大程度来自美元的这波强势。\n▸ 时间与位置：2025年11月4日，路透社金价日评，当时金价在4,000美元下方运行。\n▸ 标的与操作：标的黄金；短线转为中性观望，以美元与就业数据为观察变量。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-29",
+   "direction": "看多",
+   "comments": "政府停摆避险需求推动金价首破3800美元创历史新高",
+   "targets": "黄金/白银",
+   "source": "https://www.reuters.com/world/india/gold-hits-record-high-soft-dollar-rate-cut-bets-lift-appeal-2025-09-29/",
+   "detail": "▸ 核心论点：黄金突破每盎司3,800美元创历史新高，核心驱动是围绕美国政府可能停摆的避险需求，叠加降息预期。\n▸ 关键依据：投资者涌入避险资产，美元走软；同日白银创14年多新高、铂金创12年新高，贵金属板块整体走强。\n▸ 时间与位置：2025年9月29日，路透社引述其作为 High Ridge Futures 金属交易总监的评论。\n▸ 标的与操作：标的黄金与白银；顺势偏多，关注财政与货币双重催化。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

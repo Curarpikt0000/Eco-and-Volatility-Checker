@@ -3,21 +3,21 @@
  "sector": "Energy & Commodities",
  "backfill_date": "2026-08-22",
  "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
- "count": 3,
+ "count": 7,
  "history": [
   {
-   "date": "2026-04-18",
-   "direction": "看空",
-   "comments": "Canadian Mining Report 整理 Doomberg 观点：在战争结束/地缘缓和后的情景下，Doomberg 预判原油可能出现「战后崩跌」，WTI 有机会下探 25–30 美元区间，理由是战时溢价消散、被压抑的产能与库存回补同时释放。文章据此讨论油价崩跌对加拿大矿业股的传导——低油价压低矿山与运输成本，反而利好金属与矿业板块的利润率。对原油本身是明确看空表述，给出了具体价格区间。",
-   "targets": "原油/WTI/加拿大矿业股",
-   "source": "https://www.canadianminingreport.com/blog/doomberg-predicts-post-war-oil-collapse-to-25-30-how-this-energy-shock-affects-canadian-mining-stocks-going-forward",
-   "detail": "▸ 核心论点：在战争结束/地缘缓和情景下，原油可能出现「战后崩跌」，对原油是明确看空。\n▸ 关键依据：理由是战时溢价消散、被压抑的产能与库存回补同时释放；Canadian Mining Report进一步讨论传导——低油价压低矿山与运输成本，反而利好加拿大金属与矿业板块的利润率。\n▸ 时间与位置：WTI有机会下探25-30美元区间；触发条件为战争结束/地缘缓和。\n▸ 标的与操作：原油/WTI看空；加拿大矿业股受益、相对看多。",
+   "date": "2026-08-20",
+   "direction": "分歧",
+   "comments": "Energy News Beat / PeakOil 转载 Doomberg 当日新分析《Natural Gas and Peak Oil》。Doomberg 挑战传统「石油峰值」叙事，提出的是「Peak NOT Oil」式反转论点：真正的稀缺与瓶颈不在原油供给，而在天然气与电力侧；原油端结构性供给依旧充裕。对油与气给出方向分化的判断（气紧油松），因此归为分歧。(发布时间按原文『published today』与站点日期换算)",
+   "targets": "天然气/原油",
+   "source": "https://peakoil.com/generalideas/natural-gas-and-peak-oil-doomberg",
+   "detail": "▸ 核心论点：挑战传统「石油峰值」叙事，提出「Peak NOT Oil」式反转论点——真正的稀缺与瓶颈不在原油供给，而在天然气与电力侧。\n▸ 关键依据：原油端结构性供给依旧充裕，瓶颈集中在天然气产能与电力供应；Energy News Beat / PeakOil 转载其当日新分析《Natural Gas and Peak Oil》。\n▸ 时间与位置：发布时间按原文「published today」与站点日期换算为 2026-08-20；未给出具体点位。\n▸ 标的与操作：天然气与原油方向分化（气紧油松），故归为分歧，未给出明确买卖指令。",
    "detail_status": "ok",
    "sources": [
     {
-     "title": "Doomberg / Kuppy",
-     "url": "https://www.canadianminingreport.com/blog/doomberg-predicts-post-war-oil-collapse-to-25-30-how-this-energy-shock-affects-canadian-mining-stocks-going-forward",
-     "date": "2026-04-18"
+     "title": "",
+     "url": "https://peakoil.com/generalideas/natural-gas-and-peak-oil-doomberg",
+     "date": "2026-08-20"
     }
    ]
   },
@@ -38,20 +38,60 @@
    ]
   },
   {
-   "date": "2026-08-20",
-   "direction": "分歧",
-   "comments": "Energy News Beat / PeakOil 转载 Doomberg 当日新分析《Natural Gas and Peak Oil》。Doomberg 挑战传统「石油峰值」叙事，提出的是「Peak NOT Oil」式反转论点：真正的稀缺与瓶颈不在原油供给，而在天然气与电力侧；原油端结构性供给依旧充裕。对油与气给出方向分化的判断（气紧油松），因此归为分歧。(发布时间按原文『published today』与站点日期换算)",
-   "targets": "天然气/原油",
-   "source": "https://peakoil.com/generalideas/natural-gas-and-peak-oil-doomberg",
-   "detail": "▸ 核心论点：挑战传统「石油峰值」叙事，提出「Peak NOT Oil」式反转论点——真正的稀缺与瓶颈不在原油供给，而在天然气与电力侧。\n▸ 关键依据：原油端结构性供给依旧充裕，瓶颈集中在天然气产能与电力供应；Energy News Beat / PeakOil 转载其当日新分析《Natural Gas and Peak Oil》。\n▸ 时间与位置：发布时间按原文「published today」与站点日期换算为 2026-08-20；未给出具体点位。\n▸ 标的与操作：天然气与原油方向分化（气紧油松），故归为分歧，未给出明确买卖指令。",
+   "date": "2026-04-18",
+   "direction": "看空",
+   "comments": "Canadian Mining Report 整理 Doomberg 观点：在战争结束/地缘缓和后的情景下，Doomberg 预判原油可能出现「战后崩跌」，WTI 有机会下探 25–30 美元区间，理由是战时溢价消散、被压抑的产能与库存回补同时释放。文章据此讨论油价崩跌对加拿大矿业股的传导——低油价压低矿山与运输成本，反而利好金属与矿业板块的利润率。对原油本身是明确看空表述，给出了具体价格区间。",
+   "targets": "原油/WTI/加拿大矿业股",
+   "source": "https://www.canadianminingreport.com/blog/doomberg-predicts-post-war-oil-collapse-to-25-30-how-this-energy-shock-affects-canadian-mining-stocks-going-forward",
+   "detail": "▸ 核心论点：在战争结束/地缘缓和情景下，原油可能出现「战后崩跌」，对原油是明确看空。\n▸ 关键依据：理由是战时溢价消散、被压抑的产能与库存回补同时释放；Canadian Mining Report进一步讨论传导——低油价压低矿山与运输成本，反而利好加拿大金属与矿业板块的利润率。\n▸ 时间与位置：WTI有机会下探25-30美元区间；触发条件为战争结束/地缘缓和。\n▸ 标的与操作：原油/WTI看空；加拿大矿业股受益、相对看多。",
    "detail_status": "ok",
    "sources": [
     {
-     "title": "",
-     "url": "https://peakoil.com/generalideas/natural-gas-and-peak-oil-doomberg",
-     "date": "2026-08-20"
+     "title": "Doomberg / Kuppy",
+     "url": "https://www.canadianminingreport.com/blog/doomberg-predicts-post-war-oil-collapse-to-25-30-how-this-energy-shock-affects-canadian-mining-stocks-going-forward",
+     "date": "2026-04-18"
     }
    ]
+  },
+  {
+   "date": "2025-11-04",
+   "direction": "看多",
+   "comments": "核竞赛进入临界状态",
+   "targets": "核能/铀",
+   "source": "https://newsletter.doomberg.com/p/playing-catch-up",
+   "detail": "▸ 核心论点：全球核能与核技术竞赛正在'进入临界'，铀与核燃料循环重要性抬升。\n▸ 关键依据：以 10 月 21 日俄罗斯宣布核动力巡航导弹 Burevestnik 试验成功为切入点，串起大国核能力与民用核复兴。\n▸ 时间与位置：Doomberg Substack《Playing Catch Up》，2025 年 11 月 4 日。\n▸ 标的与操作：看多铀与核能产业链，视其为 AI 时代能源锚点。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-01",
+   "direction": "看多",
+   "comments": "燃气轮机与 AI 构成巨大能源套利",
+   "targets": "天然气/AI 电力",
+   "source": "https://newsletter.doomberg.com/p/talebs-law",
+   "detail": "▸ 核心论点：AI 数据中心的电力需求与燃气轮机产能瓶颈之间存在'巨大的能源套利'。\n▸ 关键依据：引用 Taleb 关于'见过过剩没见过短缺持续'的说法，论证当前是真正的供给短缺而非过剩。\n▸ 时间与位置：Doomberg Substack《Taleb's Law》，2025 年 11 月 1 日（付费）。\n▸ 标的与操作：看多天然气与电力设备/发电资产，AI 是能源需求的锚。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-28",
+   "direction": "看多",
+   "comments": "六条心智模型解释当下的地缘与能源格局",
+   "targets": "能源/大宗",
+   "source": "https://newsletter.doomberg.com/p/mental-models-six-axioms-that-explain",
+   "detail": "▸ 核心论点：地缘与经济动荡在加速，需要用一组稳定的公理去理解能源与资源定价。\n▸ 关键依据：Pro Tier 月度 Doom Zoom 中系统给出六条判断世界运行方式的公理，核心围绕能源是一切经济活动的母体。\n▸ 时间与位置：Doomberg Substack，2025 年 10 月 28 日。\n▸ 标的与操作：结构性看多能源与硬资源，淡化纯叙事驱动的板块。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-16",
+   "direction": "看多",
+   "comments": "出口管制新规改变游戏规则",
+   "targets": "能源/稀土/地缘",
+   "source": "https://newsletter.doomberg.com/p/gloves-off",
+   "detail": "▸ 核心论点：美国商务部在政府停摆前落地的新规，实质改变了关键材料与技术的全球供应格局。\n▸ 关键依据：Doomberg 分析该规则对供应链与能源相关产业链的连锁影响，认为上周事件'改变了一切'。\n▸ 时间与位置：Doomberg Substack《Gloves Off》，2025 年 10 月 16 日。\n▸ 标的与操作：偏好实物资源与本土能源产业链，对依赖跨境许可的环节保持警惕。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

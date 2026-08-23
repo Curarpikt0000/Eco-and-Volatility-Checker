@@ -3,7 +3,7 @@
  "sector": "Precious Metals",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 1,
+ "count": 7,
  "history": [
   {
    "date": "2026-08-11",
@@ -18,6 +18,66 @@
      "url": "321gold.com / Graceland Updates (Gold: The Road To $5000)"
     }
    ]
+  },
+  {
+   "date": "2025-11-25",
+   "direction": "看多",
+   "comments": "马年看矿股赛马，银指向63；但美股ADL走平预警",
+   "targets": "金银矿股/白银/美股宽度",
+   "source": "http://www.321gold.com/editorials/thomson_s/thomson_s_112525.html",
+   "detail": "▸ 核心论点：2026年将是金银矿股的“赛马年”，动能突破三角形态的条件已具备。\n▸ 关键依据：黄金日线随机指标(14,7,7)在50位置形成买信号、RSI守住50；白银可能形成上升三角，目标约63美元；铂金同步走强。\n▸ 时间与位置：2025年11月25日 321gold《A Gold Stocks Horse Race》。\n▸ 标的与操作：看多矿股；同时提示美股腾落线(ADL)走平，若道指/标普/纳指创新高而ADL不跟进，将是重大风险警告。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-28",
+   "direction": "看多",
+   "comments": "回调过半仍属健康，3500-3200是加仓区",
+   "targets": "黄金/GDX/CDNX",
+   "source": "http://www.321gold.com/editorials/thomson_s/thomson_s_102825.html",
+   "detail": "▸ 核心论点：金价自3500以来的涨幅回吐约一半，GDX同步回落，属牛市中的正常修正而非趋势反转。\n▸ 关键依据：日线目标指向3600区域，正好在3500-3200大买入区上方；CDNX相对黄金的比价图仍指向矿股长期跑赢。\n▸ 时间与位置：2025年10月28日 321gold《The Awesomeness of Gold》。\n▸ 标的与操作：此前减仓者可先回补一半，另一半留待3500-3200或突破4380后追。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-14",
+   "direction": "看多",
+   "comments": "问题出在法币；银到54目标，可减仓不超三成",
+   "targets": "黄金/白银/矿业股",
+   "source": "https://www.kitco.com/opinion/2025-10-14/problem-fiat",
+   "detail": "▸ 核心论点：全球对政府法币的不满在扩散，银行分析师纷纷上调5000美元金价目标，金牛市根基是货币信用而非短周期。\n▸ 关键依据：白银当日触及其54美元目标，短线回调风险上升；上周五股市大跌、对华关税威胁下黄金反而上涨，印证其避险优越性。\n▸ 时间与位置：2025年10月14日 Kitco《The problem is fiat》。\n▸ 标的与操作：4000金/50银定义为波段减仓区（最多卖30%），核心黄金不卖；矿股因成本远低于金价仍将“更热”。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-30",
+   "direction": "看多",
+   "comments": "3800目标达成，激进仓位可先兑现三成以上利润",
+   "targets": "黄金/白银/GDX",
+   "source": "http://www.321gold.com/editorials/thomson_s/thomson_s_093025.html",
+   "detail": "▸ 核心论点：三角形态3800目标已到位，进取型玩家应部分获利了结，但不要“猜顶清仓”。\n▸ 关键依据：金价距4380高点仅约200美元，白银约57美元（一年翻倍），GDX约82接近85高点；周线随机指标高位买信号若失败可能回落至3900下方。\n▸ 时间与位置：2025年9月30日 321gold《Gold $3800 Key Investor Questions》。\n▸ 标的与操作：保守者最多兑现30%，赌徒型30%-70%；3500-3200被定义为“冠军买入区”，若不回调则看3-4900/5000三角目标。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-23",
+   "direction": "强烈看多",
+   "comments": "金价触及3800目标，喷发行情下5000唾手可得",
+   "targets": "黄金/GDX/CDNX初级矿",
+   "source": "http://www.321gold.com/editorials/thomson_s/thomson_s_092325.html",
+   "detail": "▸ 核心论点：金价当日冲上3780美元，其3800目标区基本兑现；在这种喷发式（blowoff）走势中单日涨100-300美元很正常，5000美元很容易达成。\n▸ 关键依据：降息对经济和股市只是小幅利好，最大涨幅出现在金银与矿股；CDNX图形显示初级矿股仍处大底部形态。\n▸ 时间与位置：2025年9月23日 321gold《The Gold Bull Era: What Happens Next?》。\n▸ 标的与操作：轻仓可在强势中兑现部分利润，核心仓位“铁手”持有；判断最终艾略特E浪约在2029年结束后开启新上升周期。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-02",
+   "direction": "强烈看多",
+   "comments": "称金银矿股是本轮通胀周期与央行失败下的首选",
+   "targets": "黄金/白银/矿业股",
+   "source": "https://www.kitco.com/opinion/2025-09-02/supreme-money-gold-time-celebration",
+   "detail": "▸ 核心论点：在通胀周期与政府/央行失灵的组合下，黄金、白银与矿业股是精明投资者最明确的配置方向。\n▸ 关键依据：全球对法币的信心持续流失，金价强势为“至高货币”地位背书。\n▸ 时间与位置：2025年9月2日 Kitco 专栏《Supreme money gold: A time for celebration》。\n▸ 标的与操作：核心仓位长期持有金银及矿股，把回调视为加仓机会。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

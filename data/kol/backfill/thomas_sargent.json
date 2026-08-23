@@ -1,1 +1,30 @@
-{"kol":"Thomas Sargent","sector":"Macro","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":0,"status":"未找到","history":[]}
+{
+ "kol": "Thomas Sargent",
+ "sector": "Macro",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 2,
+ "status": "未找到",
+ "history": [
+  {
+   "date": "2026-04-03",
+   "direction": "中性",
+   "comments": "政策设计与预期管理决定经济长期走向",
+   "targets": "宏观政策/预期管理/教育与经济增长",
+   "source": "https://news.cgtn.com/news/2026-04-03/Exclusive-with-Nobel-Laureate-in-Economic-Sciences-Thomas-Sargent-1M10cEGdGTe/p.html",
+   "detail": "▸ 核心论点：在 CGTN《Leaders Talk》专访中，Sargent 讨论政策设计、教育与公众预期如何共同塑造一国经济的长期前景，延续其理性预期学派的一贯框架。\n▸ 关键依据：其研究强调政策的可信度与制度连续性是通胀与增长路径的决定变量，而非单次刺激。\n▸ 时间与位置：2026年4月3日 CGTN 独家专访发布。\n▸ 标的与操作：无具体市场标的与仓位建议，属制度与政策层面的中性判断。（本条仅据官方节目页摘要，细节有限）",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2026-01-04",
+   "direction": "中性",
+   "comments": "制度与五年规划提供韧性，美关税反复推高全球成本",
+   "targets": "中国经济/全球供应链/美国关税政策",
+   "source": "https://www.ciie.org/zbh/en/speech/media/20260104/56085.html",
+   "detail": "▸ 核心论点：中国高质量发展的关键不在增速，而在制度设计、长期规划与创新生态所嵌入的韧性；相较之下美国政策频繁摇摆构成全球不确定性来源。\n▸ 关键依据：以汽车产业为例，从面向低收入市场的低端车升级为全球创新引领者；同时美方关税与贸易战抬高全球成本、扰乱供应链、削弱创新效率。\n▸ 时间与位置：2026年1月4日进博会/南财专访发布，站在“十五五”规划开局的时点评估中长期治理框架。\n▸ 标的与操作：不给具体交易标的，属宏观制度判断——对政策连续性高的经济体给予正面评价，对关税驱动的成本冲击持负面看法。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  }
+ ]
+}

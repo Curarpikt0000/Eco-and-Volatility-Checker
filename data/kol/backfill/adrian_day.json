@@ -3,19 +3,19 @@
  "sector": "Precious Metals",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 3,
+ "count": 8,
  "history": [
   {
-   "date": "2025-11-03",
+   "date": "2026-07-13",
    "direction": "强烈看多",
-   "comments": "在Streetwise专栏《这是黄金顶部吗?》中明确判断'这远非顶部'。10月16日金价创13年最大单日跌幅、此后累计下跌5.9%仅属超买后修正,回撤不足25%远低于典型40-60%。基金流向、机构持仓极低(78%投顾配置不足1%),缺乏公众参与,不具备见顶特征。看好金矿股估值仍低于长期均值。",
-   "targets": "黄金/金矿股(Agnico Eagle AEM等)",
-   "source": "https://www.streetwisereports.com/article/2025/11/03/was-this-the-top-for-gold.html",
-   "detail": "▸ 核心论点：明确判断黄金「这远非顶部」，10月的暴跌只是超买后的修正。\n▸ 关键依据：10月16日金价创13年最大单日跌幅、此后累计下跌5.9%，回撤不足25%，远低于典型的40-60%；基金流向与机构持仓极低(78%的投顾配置不足1%)，缺乏公众参与，不具备见顶特征。\n▸ 时间与位置：2025-11-03 Streetwise 专栏《这是黄金顶部吗?》；参照点为10月16日暴跌，未给出目标价。\n▸ 标的与操作：黄金、金矿股(如 Agnico Eagle AEM)；强烈看多，看好矿股估值仍低于长期均值。",
+   "comments": "在Boca Raton的Rule研讨会上对Kitco表示,矿业股看多情绪已崩塌至约7%(常态为60/40),这种极度悲观的逆向情绪恰恰是强烈的买入信号,重申对黄金及金矿股的坚定看多。",
+   "targets": "金矿股/黄金",
+   "source": "https://www.youtube.com/watch?v=8iJ8WeNQxkY",
+   "detail": "▸ 核心论点：矿业股看多情绪已崩塌至极端低位，这种逆向情绪恰恰是强烈买入信号，重申对黄金及金矿股坚定看多。\n▸ 关键依据：矿业股看多情绪读数约7%，而常态为60/40，属极度悲观区间。\n▸ 时间与位置：2026-07-13 于 Boca Raton 的 Rule 研讨会对 Kitco 表示；未给出具体点位。\n▸ 标的与操作：金矿股、黄金；在极度悲观时逆向买入。",
    "detail_status": "ok",
    "sources": [
     {
-     "url": "https://www.streetwisereports.com/article/2025/11/03/was-this-the-top-for-gold.html"
+     "url": "https://www.youtube.com/watch?v=8iJ8WeNQxkY"
     }
    ]
   },
@@ -36,18 +36,68 @@
    ]
   },
   {
-   "date": "2026-07-13",
+   "date": "2025-11-03",
    "direction": "强烈看多",
-   "comments": "在Boca Raton的Rule研讨会上对Kitco表示,矿业股看多情绪已崩塌至约7%(常态为60/40),这种极度悲观的逆向情绪恰恰是强烈的买入信号,重申对黄金及金矿股的坚定看多。",
-   "targets": "金矿股/黄金",
-   "source": "https://www.youtube.com/watch?v=8iJ8WeNQxkY",
-   "detail": "▸ 核心论点：矿业股看多情绪已崩塌至极端低位，这种逆向情绪恰恰是强烈买入信号，重申对黄金及金矿股坚定看多。\n▸ 关键依据：矿业股看多情绪读数约7%，而常态为60/40，属极度悲观区间。\n▸ 时间与位置：2026-07-13 于 Boca Raton 的 Rule 研讨会对 Kitco 表示；未给出具体点位。\n▸ 标的与操作：金矿股、黄金；在极度悲观时逆向买入。",
+   "comments": "在Streetwise专栏《这是黄金顶部吗?》中明确判断'这远非顶部'。10月16日金价创13年最大单日跌幅、此后累计下跌5.9%仅属超买后修正,回撤不足25%远低于典型40-60%。基金流向、机构持仓极低(78%投顾配置不足1%),缺乏公众参与,不具备见顶特征。看好金矿股估值仍低于长期均值。",
+   "targets": "黄金/金矿股(Agnico Eagle AEM等)",
+   "source": "https://www.streetwisereports.com/article/2025/11/03/was-this-the-top-for-gold.html",
+   "detail": "▸ 核心论点：明确判断黄金「这远非顶部」，10月的暴跌只是超买后的修正。\n▸ 关键依据：10月16日金价创13年最大单日跌幅、此后累计下跌5.9%，回撤不足25%，远低于典型的40-60%；基金流向与机构持仓极低(78%的投顾配置不足1%)，缺乏公众参与，不具备见顶特征。\n▸ 时间与位置：2025-11-03 Streetwise 专栏《这是黄金顶部吗?》；参照点为10月16日暴跌，未给出目标价。\n▸ 标的与操作：黄金、金矿股(如 Agnico Eagle AEM)；强烈看多，看好矿股估值仍低于长期均值。",
    "detail_status": "ok",
    "sources": [
     {
-     "url": "https://www.youtube.com/watch?v=8iJ8WeNQxkY"
+     "url": "https://www.streetwisereports.com/article/2025/11/03/was-this-the-top-for-gold.html"
     }
    ]
+  },
+  {
+   "date": "2025-10-25",
+   "direction": "强烈看多",
+   "comments": "这不是金价上涨行情，而是一个警报",
+   "targets": "黄金/矿业股",
+   "source": "https://thedeepdive.ca/this-isnt-a-gold-rally-its-a-warning-adrian-day/",
+   "detail": "▸ 核心论点：黄金创新高不该被当作普通的商品牛市，而是对宏观体系的一次警告信号。\n▸ 关键依据：他拆解推动金价上行的力量——央行购金、财政与货币纪律缺失、投资者对法币的信任下降；并讨论这对愿意在矿业板块投入资本的投资者意味着什么。\n▸ 时间与位置：2025 年 10 月 25 日 The Deep Dive 专访。\n▸ 标的与操作：在黄金上行的宏观逻辑下继续看多矿业股，强调选择有真实自由现金流与分红能力的公司。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-20",
+   "direction": "看多",
+   "comments": "BDC因夸大担忧被超卖，高股息可买；金企三季报强",
+   "targets": "BDC(商业发展公司)/金矿股",
+   "source": "https://www.streetwisereports.com/article/2025/10/20/bdcs-oversold-on-exaggerated-concerns-buy-for-high-yields.html",
+   "detail": "▸ 核心论点：商业发展公司（BDC）因市场对信用风险的夸大担忧而被超卖，当前收益率具备买入价值。\n▸ 关键依据：他判断市场对 BDC 资产质量的担忧被放大，价格已计入过度悲观；同期他也点评了多家黄金公司的三季度初步经营数据，整体正面。\n▸ 时间与位置：2025 年 10 月 20 日 Streetwise Reports 专栏。\n▸ 标的与操作：买入高股息 BDC 获取现金流，同时维持黄金/资源股的核心配置——这与他一贯的「分红 + 资源长期持有」策略一致。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-29",
+   "direction": "看多",
+   "comments": "黄金大会人气创纪录情绪高涨，但散户尚未涌入",
+   "targets": "金矿股/大型矿商",
+   "source": "https://www.streetwisereports.com/article/2025/09/29/record-attendance-and-upbeat-mood-at-gold-conferences.html",
+   "detail": "▸ 核心论点：黄金与金矿股年内大涨带动行业会议气氛显著转暖，但这仍不是行情尾声，因为通才型投资者尚未大量入场。\n▸ 关键依据：科罗拉多两场大型金矿会议出席人数创纪录——Beaver Creek（聚焦初级矿企）1,750 人、同比 +17%，220 家公司参会；Colorado Springs（偏大型公司）1,000 人、同比 +13%；但现场并未见到新增通才投资者的洪流。\n▸ 时间与位置：2025 年 9 月 29 日 Streetwise Reports 专栏，会议刚结束后撰写。\n▸ 标的与操作：以大型矿商为切入，认为行业情绪改善而估值尚未反映，继续持有并逢低增配。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-10",
+   "direction": "看多",
+   "comments": "较3月PDAC以来情绪转向，央行买盘与地缘支撑金价",
+   "targets": "黄金/金矿股",
+   "source": "https://www.youtube.com/watch?v=7vgvZ8-2mX4",
+   "detail": "▸ 核心论点：自 3 月 PDAC 以来黄金市场发生实质演进，投资者情绪明显转向，金价上行基础更扎实。\n▸ 关键依据：他强调央行持续购金、地缘政治风险与投资者结构变化三重驱动；对金价看到 5,000 美元级别的可能性持开放态度。\n▸ 时间与位置：录制于 2025 年 9 月 9 日，2025 年 9 月 10 日发布的访谈。\n▸ 标的与操作：看多黄金与金矿股，偏好高质量生产商与特许权（royalty）公司。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-02",
+   "direction": "中性",
+   "comments": "9月降息早已定价，是否真是新消息值得怀疑",
+   "targets": "黄金/美联储",
+   "source": "https://www.streetwisereports.com/article/2025/09/02/a-rate-cut-ahead-in-september-was-this-really-news.html",
+   "detail": "▸ 核心论点：市场把 9 月降息当作重大利好，但这一预期早已被充分定价，并非新信息。\n▸ 关键依据：Adrian Day's Global Analyst 期刊文章 A Rate Cut Ahead in September: Was This Really News?，从降息预期的定价程度切入，并附带点评其覆盖名单上若干公司的近期进展。\n▸ 时间与位置：2025 年 9 月 2 日 Streetwise Reports 发布。\n▸ 标的与操作：提示不要把已被定价的降息当作追高理由；仍以基本面稳健的资源股为持仓核心。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

@@ -1,0 +1,39 @@
+{
+ "kol": "Carl Icahn（Icahn Enterprises 创始人 / 董事长）",
+ "sector": "",
+ "backfill_date": "2026-08-23",
+ "source_method": "1yr gap backfill (web_search + web_extract)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2026-03-16",
+   "direction": "中性",
+   "comments": "Q4 13F组合高度集中，未见方向性大调仓",
+   "targets": "美股/IEP/CVR Energy/Southwest Gas/EchoStar",
+   "source": "https://seekingalpha.com/article/4882556-tracking-carl-icahns-13f-report-q4-2025-update",
+   "detail": "▸ 核心论点：截至 2025 年四季度末，Icahn 的 13F 组合仍高度集中于自家系与能源公用类资产，未出现方向性的大幅增减，反映其在高估值市场中按兵不动。\n▸ 关键依据：Seeking Alpha 追踪显示组合前几大持仓依次为 Icahn Enterprises、CVR Energy、Southwest Gas、CVR Partners 与 EchoStar，集中度极高，与三季度的防御性调整一脉相承。\n▸ 时间与位置：2026 年 3 月 16 日发布的 Q4 2025 13F 跟踪报告。\n▸ 标的与操作：核心仓位 IEP / CVI / SWX / UAN / SATS 维持不变，无新增重大方向性押注，整体判定为中性观望。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-17",
+   "direction": "分歧",
+   "comments": "Q3 13F转防御：清仓Bausch，重仓加码EchoStar",
+   "targets": "美股/EchoStar/Bausch Health",
+   "source": "https://www.benzinga.com/markets/hedge-funds/25/11/48897194/hedge-fund-billionaire-carl-icahns-q3-the-activist-goes-defensive-dumps-a-disaster-and-loads-up-on-echostar",
+   "detail": "▸ 核心论点：Icahn 三季度 13F 显示组合整体转向防御，一边了结长期亏损的困境头寸，一边把筹码集中到少数确信度更高的标的。\n▸ 关键依据：清仓长期折磨其组合的 Bausch Health（Benzinga 称之为 painful breakup），同时大举增持 EchoStar；Southwest Gas 等持仓亦有调整。整体是收缩战线而非全面加仓。\n▸ 时间与位置：2025 年 11 月 17 日 13F 披露报道，对应 2025 年三季度末持仓。\n▸ 标的与操作：减/清 Bausch Health（BHC），加仓 EchoStar（SATS），维持 Icahn Enterprises、CVR Energy、Southwest Gas 等核心仓位；方向上偏谨慎防御而非全面看多。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-08",
+   "direction": "看多",
+   "comments": "13D披露持股14.79%，回归汽车维修赛道做激进投资",
+   "targets": "美股/Monro(MNRO)/汽车后市场",
+   "source": "https://www.cnbc.com/2025/11/08/carl-icahn-returns-to-a-familiar-sector-auto-repair-as-he-builds-a-15percent-stake-in-monro.html",
+   "detail": "▸ 核心论点：Icahn 于 11 月 5 日向 SEC 提交 13D，披露持有汽车底盘维修与轮胎服务商 Monro 14.79% 股份，重回其熟悉的汽车后市场板块做激进投资。\n▸ 关键依据：Monro 近年受消费需求走弱、原材料与人工成本上升、消费者向低毛利轮胎降级三重挤压，利润率与增长承压，股价大幅回落至 15.27 美元、市值仅 4.58 亿美元；Icahn 平均成本 19.08 美元。\n▸ 时间与位置：2025 年 11 月 5 日提交 13D，8 日 CNBC 披露；属深度回撤后的困境价值介入。\n▸ 标的与操作：买入 Monro（MNRO）近 15% 股权，以股东行动主义推动治理与经营改善；Icahn 在该行业有 Pep Boys（2016）、Federal Mogul（2017）等历史布局。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  }
+ ]
+}

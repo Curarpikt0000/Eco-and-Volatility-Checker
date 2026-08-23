@@ -3,7 +3,7 @@
  "sector": "Precious Metals",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 1,
+ "count": 4,
  "history": [
   {
    "date": "2026-08-06",
@@ -20,6 +20,36 @@
      "date": "2026-08-06"
     }
    ]
+  },
+  {
+   "date": "2026-02-14",
+   "direction": "看多",
+   "comments": "近期金银波动是牛市中的健康回调",
+   "targets": "白银、黄金、贵金属矿商",
+   "source": "https://sprott.com/insights/silver-conference-featuring-maria-smirnova-sprott-cio/",
+   "detail": "▸ 核心论点：将近期金银的剧烈波动定性为牛市途中的健康回调，而非趋势反转。\n▸ 关键依据：驱动来自供应缺口与全球需求上升等基本面因素，而非投机过热；白银的工业与投资双重属性支撑中期价格。\n▸ 时间与位置：2026 年 2 月 14 日 Sprott 发布的 Silver Conference 访谈，与 Bloor Street Capital 的 James Fraser 对话。\n▸ 标的与操作：继续持有白银及贵金属矿商，回调视为布局窗口。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-12-08",
+   "direction": "强烈看多",
+   "comments": "白银供应错配未解，回落前价格应更高",
+   "targets": "白银、黄金、白银矿商",
+   "source": "https://www.silver-phoenix500.com/silver-supply-remains-dislocated-and-prices-should-go-higher-they-retreat-%E2%80%93-sprott-cio-smirnova",
+   "detail": "▸ 核心论点：2025 年困扰白银市场的供应问题仍未解决，投资需求激增进一步加剧了实物短缺，价格在回落之前应先走得更高。\n▸ 关键依据：过去十年矿山供应减少约 8000 万盎司，总供应仅约 10 亿盎司；6 月白银突破 35 美元是关键节点；伦敦 LBMA 库存因关税担忧外流纽约与 ETF 吸筹而趋紧；美联储降息与再度 QE 预期、美元走弱、比特币回落促使资金回流货币金属。\n▸ 时间与位置：2025 年 12 月 8 日 Kitco News 访谈，白银创历史新高后。\n▸ 标的与操作：看多白银与黄金，偏好白银矿商敞口。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-20",
+   "direction": "强烈看多",
+   "comments": "白银结构性短缺未解，价格有望爆发",
+   "targets": "白银、白银矿商、Sprott 相关 ETF",
+   "source": "https://www.wealthion.com/learn/sprotts-cio-maria-smirnova-on-silver-shortage-why-prices-could-explode/",
+   "detail": "▸ 核心论点：白银处于结构性供应短缺，投资需求叠加工业需求可能推动价格大幅上行。\n▸ 关键依据：矿山供应多年下滑、新矿投产不足；太阳能、电子、AI 数据中心用银持续增长；交易所库存下降。\n▸ 时间与位置：2025 年 11 月 20 日 Wealthion 访谈，白银处于历史高位区。\n▸ 标的与操作：看好实物白银与白银矿业股，Sprott 以矿商精选为主要配置方式。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

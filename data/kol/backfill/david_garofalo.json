@@ -3,24 +3,8 @@
  "sector": "Precious Metals",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 3,
+ "count": 6,
  "history": [
-  {
-   "date": "2025-12-30",
-   "direction": "强烈看多",
-   "comments": "Gold Royalty(GROY)董事长兼CEO在Bloor Street访谈中讨论2025年末金银铜大涨及2026展望,称基于$4,000金价公司预计逾$7,500万税后自由现金流,黄金上涨将直接转化为盈利。",
-   "targets": "黄金/Gold Royalty",
-   "source": "youtube.com Bloor Street Capital",
-   "detail": "▸ 核心论点：Gold Royalty（GROY）董事长兼 CEO 认为金价上涨将直接转化为公司盈利，对 2026 年展望乐观。\n▸ 关键依据：基于 4000 美元金价假设，公司预计产生逾 7500 万美元税后自由现金流；2025 年末金银铜同步大涨提供背景支撑。\n▸ 时间与位置：以 2025 年末回顾与 2026 年展望为窗口，测算基准金价 4000 美元；未给出金价目标。\n▸ 标的与操作：黄金及 Gold Royalty（GROY），强烈看多（Bloor Street Capital 访谈）。",
-   "detail_status": "ok",
-   "sources": [
-    {
-     "title": "",
-     "url": "youtube.com Bloor Street Capital",
-     "date": "2025-12-30"
-    }
-   ]
-  },
   {
    "date": "2026-01-12",
    "direction": "强烈看多",
@@ -52,6 +36,52 @@
      "date": "2026-01-04"
     }
    ]
+  },
+  {
+   "date": "2025-12-30",
+   "direction": "强烈看多",
+   "comments": "Gold Royalty(GROY)董事长兼CEO在Bloor Street访谈中讨论2025年末金银铜大涨及2026展望,称基于$4,000金价公司预计逾$7,500万税后自由现金流,黄金上涨将直接转化为盈利。",
+   "targets": "黄金/Gold Royalty",
+   "source": "youtube.com Bloor Street Capital",
+   "detail": "▸ 核心论点：Gold Royalty（GROY）董事长兼 CEO 认为金价上涨将直接转化为公司盈利，对 2026 年展望乐观。\n▸ 关键依据：基于 4000 美元金价假设，公司预计产生逾 7500 万美元税后自由现金流；2025 年末金银铜同步大涨提供背景支撑。\n▸ 时间与位置：以 2025 年末回顾与 2026 年展望为窗口，测算基准金价 4000 美元；未给出金价目标。\n▸ 标的与操作：黄金及 Gold Royalty（GROY），强烈看多（Bloor Street Capital 访谈）。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "youtube.com Bloor Street Capital",
+     "date": "2025-12-30"
+    }
+   ]
+  },
+  {
+   "date": "2025-11-05",
+   "direction": "看多",
+   "comments": "三季度创纪录收入与 EBITDA，验证高金价传导",
+   "targets": "黄金/GROY",
+   "source": "https://www.goldroyalty.com/news/news-releases/gold-royalty-reports-third-quarter-results-achieves-record-revenue-and-adjusted-ebitda",
+   "detail": "▸ 核心论点：高金价直接转化为版税公司的收入与现金流，商业模式在牛市中的杠杆得到验证。\n▸ 关键依据：Gold Royalty 公布截至三季度的经营与财务结果，实现创纪录收入与调整后 EBITDA。\n▸ 时间与位置：Gold Royalty 官方新闻稿，2025 年 11 月 5 日，温哥华。\n▸ 标的与操作：黄金版税板块；管理层预期随 Côté / Vareš / Borborema 等矿山爬产，现金流将逐季改善。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-30",
+   "direction": "看多",
+   "comments": "金价年内涨近 50%，驱动来自债务与不确定性",
+   "targets": "黄金",
+   "source": "https://allansmall.com/golds-big-run-explained-an-interview-with-david-garofalo/",
+   "detail": "▸ 核心论点：本轮金价大涨并非投机，而是高债务、全球不确定性与通胀共同驱动，具有持续性。\n▸ 关键依据：Garofalo 在访谈中拆解年内近 50% 涨幅背后的宏观结构性因素，并回答涨势能否延续。\n▸ 时间与位置：The Allan Small Financial Show 访谈，2025 年 10 月 30 日。\n▸ 标的与操作：黄金及具备高金价杠杆的版税资产。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-25",
+   "direction": "看多",
+   "comments": "开始产生自由现金流，聚焦魁北克 Abitibi 增长",
+   "targets": "黄金/金矿版税",
+   "source": "https://www.northernminer.com/news/mining-forum-americas-garofalos-gold-royalty-the-envy-of-our-peers/1003882985/",
+   "detail": "▸ 核心论点：金价高企下版税模式最先兑现利润，公司进入自由现金流阶段，下一轮增长看魁北克 Abitibi。\n▸ 关键依据：Garofalo 在 Mining Forum Americas 表示 Gold Royalty 已开始产生自由现金流，版税/streaming 结构不承担成本通胀。\n▸ 时间与位置：Northern Miner 报道，2025 年 9 月 25 日，科罗拉多斯普林斯 Mining Forum Americas。\n▸ 标的与操作：看多黄金与贵金属版税公司，强调版税相对矿商的成本免疫优势。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

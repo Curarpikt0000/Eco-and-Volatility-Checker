@@ -3,8 +3,24 @@
  "sector": "股权市场",
  "backfill_date": "2026-08-22",
  "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
- "count": 2,
+ "count": 5,
  "history": [
+  {
+   "date": "2026-07-23",
+   "direction": "看多",
+   "comments": "24/7 Wall St 梳理 Laffont 的科技持仓五大重点标的。除 AI 芯片链外，最出人意料的名字是 GE Vernova（NYSE: GEV）——它位于芯片的上游一层，生产燃气轮机、电网设备与电气化硬件，而超大规模云厂商正在以吉瓦为单位下单。文章的逻辑是「没有电子就没有 AI 加速器」，Laffont 因此把电力基础设施当作 AI 主题的延伸下注。文中亦提到台积电已承诺 560 亿美元用于 AI 芯片产能。",
+   "targets": "美股/AI/GE Vernova/台积电/半导体",
+   "source": "https://247wallst.com/investing/2026/07/23/billionaire-investor-philippe-laffonts-top-5-tech-picks",
+   "detail": "▸ 核心论点：把电力基础设施当作 AI 主题的延伸下注：没有电子就没有 AI 加速器。\n▸ 关键依据：24/7 Wall St 梳理其科技持仓五大重点标的，最出人意料的是 GE Vernova（NYSE: GEV）——位于芯片上游一层，生产燃气轮机、电网设备与电气化硬件，而超大规模云厂商正在以吉瓦为单位下单；文中亦提到台积电已承诺560亿美元用于 AI 芯片产能。\n▸ 时间与位置：未给出具体点位与目标价。\n▸ 标的与操作：美股 AI 链：GE Vernova、台积电、AI 芯片与半导体；操作上看多并向上游电力基础设施延伸配置。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://247wallst.com/investing/2026/07/23/billionaire-investor-philippe-laffonts-top-5-tech-picks",
+     "date": "2026-07-23"
+    }
+   ]
+  },
   {
    "date": "2026-06-23",
    "direction": "看多",
@@ -22,20 +38,34 @@
    ]
   },
   {
-   "date": "2026-07-23",
+   "date": "2026-06-09",
    "direction": "看多",
-   "comments": "24/7 Wall St 梳理 Laffont 的科技持仓五大重点标的。除 AI 芯片链外，最出人意料的名字是 GE Vernova（NYSE: GEV）——它位于芯片的上游一层，生产燃气轮机、电网设备与电气化硬件，而超大规模云厂商正在以吉瓦为单位下单。文章的逻辑是「没有电子就没有 AI 加速器」，Laffont 因此把电力基础设施当作 AI 主题的延伸下注。文中亦提到台积电已承诺 560 亿美元用于 AI 芯片产能。",
-   "targets": "美股/AI/GE Vernova/台积电/半导体",
-   "source": "https://247wallst.com/investing/2026/07/23/billionaire-investor-philippe-laffonts-top-5-tech-picks",
-   "detail": "▸ 核心论点：把电力基础设施当作 AI 主题的延伸下注：没有电子就没有 AI 加速器。\n▸ 关键依据：24/7 Wall St 梳理其科技持仓五大重点标的，最出人意料的是 GE Vernova（NYSE: GEV）——位于芯片上游一层，生产燃气轮机、电网设备与电气化硬件，而超大规模云厂商正在以吉瓦为单位下单；文中亦提到台积电已承诺560亿美元用于 AI 芯片产能。\n▸ 时间与位置：未给出具体点位与目标价。\n▸ 标的与操作：美股 AI 链：GE Vernova、台积电、AI 芯片与半导体；操作上看多并向上游电力基础设施延伸配置。",
+   "comments": "AI不是一笔交易而是两笔，卖短缺方先兑现利润",
+   "targets": "AI硬件/内存/电力设备",
+   "source": "https://www.globaldatacenterhub.com/p/15-key-takeaways-from-philippe-laffonts",
+   "detail": "▸ 核心论点：AI 建设分为「卖短缺」与「买稀缺设备」两类完全不同的生意，市场目前只给其中一边定价。\n▸ 关键依据：Coatue 2026 年 5 月公开市场更新指出，卖方（涡轮机、内存、存储、光模块、芯片）出货即确认全部毛利，买方则要靠 5–7 年合同慢慢回收；定价能力带来的是乘数级重估，如美光毛利率由约 16% 升至约 70%、希捷估值大幅重估。\n▸ 时间与位置：2026 年 6 月 9 日发布的 5 月更新解读。\n▸ 标的与操作：偏好卖短缺一侧的半导体、内存与电力设备标的。",
    "detail_status": "ok",
-   "sources": [
-    {
-     "title": "",
-     "url": "https://247wallst.com/investing/2026/07/23/billionaire-investor-philippe-laffonts-top-5-tech-picks",
-     "date": "2026-07-23"
-    }
-   ]
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-12-20",
+   "direction": "看多",
+   "comments": "与巴菲特、德鲁肯米勒同向重注单一AI相关资产",
+   "targets": "AI基础设施/美股科技",
+   "source": "https://dailyhodl.com/2025/12/20/billionaires-warren-buffett-stanley-druckenmiller-and-philippe-laffont-pour-5600000000-into-single-us-asset-in-massive-bet-on-future-of-ai/",
+   "detail": "▸ 核心论点：AI 基础设施是长期结构性机会，值得亿万级资金集中下注。\n▸ 关键依据：报道汇总三季度持仓，指出巴菲特、德鲁肯米勒与 Laffont 合计向同一美国资产投入约 56 亿美元，被解读为对 AI 未来的重仓押注。\n▸ 时间与位置：2025 年 12 月 20 日媒体汇总，基于 2025 三季度 13F。\n▸ 标的与操作：AI 相关美股；跟随大型机构建立并持有多头仓位。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-12-05",
+   "direction": "看多",
+   "comments": "三季度减持英伟达，加仓iShares比特币信托",
+   "targets": "AI科技股/比特币ETF",
+   "source": "https://www.fool.com/investing/2025/12/05/philippe-laffont-sell-nvidia-buy-etf-soar-20300/",
+   "detail": "▸ 核心论点：在 AI 交易内部做再平衡，从最拥挤的算力龙头分散到其他 AI 与另类资产。\n▸ 关键依据：Coatue 三季度 13F 显示 Laffont 削减了英伟达头寸，同时增持贝莱德 iShares 比特币信托（IBIT），组合中约三分之一仓位集中于数只 AI 相关个股。\n▸ 时间与位置：2025 年 12 月 5 日基于三季度持仓披露的报道。\n▸ 标的与操作：NVDA 减仓、IBIT 加仓；整体维持科技与 AI 主线多头。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

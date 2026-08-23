@@ -1,1 +1,50 @@
-{"kol":"Mervyn King","sector":"Macro","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":0,"status":"未找到","history":[]}
+{
+ "kol": "Mervyn King",
+ "sector": "Macro",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 4,
+ "status": "未找到",
+ "history": [
+  {
+   "date": "2026-06-30",
+   "direction": "中性",
+   "comments": "复盘任内失误，主张盯广义货币、少用精确前瞻指引",
+   "targets": "央行沟通/货币政策框架",
+   "source": "https://www.centralbanking.com/central-banks/monetary-policy/7976206/mervyn-king-on-his-career-and-big-mistake",
+   "detail": "▸ 核心论点：央行应重视透明度与广义货币增速，前瞻指引不宜过度精确化。\n▸ 关键依据：以全球金融危机的教训说明模型化预测在危机中的失效。\n▸ 时间与位置：2026年6月30日接受 Central Banking 专访。\n▸ 标的与操作：非直接交易观点，属货币政策制度评论，对利率路径含义偏“不确定性更高”。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2026-05-20",
+   "direction": "看空",
+   "comments": "警告候任领导人：债市不可忽视，缺可信计划会引风暴",
+   "targets": "英国金边债/利率",
+   "source": "https://www.thenationalnews.com/news/uk/2026/05/20/mervyn-king-warning-uk-bond-market-storm-gilt-rates/",
+   "detail": "▸ 核心论点：市场需要有政治背书的可信经济计划，而不是用会计手法扩大举债空间。\n▸ 关键依据：中东战事外溢暴露出长期未能遏制债务累积的体制缺陷；通胀与利率抬升风险上升。\n▸ 时间与位置：2026年5月20日就工党领导权竞逐者的扩支主张发出警告。\n▸ 标的与操作：看空金边债，认为不当财政承诺会招致“债市风暴”式的收益率飙升。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-26",
+   "direction": "看空",
+   "comments": "直言英国经济数年内难有实质改善，要求财相说实话",
+   "targets": "英国经济/财政预算",
+   "source": "https://www.youtube.com/watch?v=19SE8JHKv1Y",
+   "detail": "▸ 核心论点：现任财政大臣无法在数年内让英国经济出现有意义的好转，政府应对公众“诚实”。\n▸ 关键依据：结构性低增长叠加高债务与高融资成本，单靠印钞或财政微调不解决问题。\n▸ 时间与位置：2025年10月26日预算季前接受访问。\n▸ 标的与操作：对英国增长与资产前景偏空，暗示财政紧缩与低增长共存期拉长。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-10",
+   "direction": "看空",
+   "comments": "英国债务处境比2008年前更差，财政空间已耗尽",
+   "targets": "英国国债/英镑/财政政策",
+   "source": "https://www.thisismoney.co.uk/money/markets/article-15086169/Britain-worse-position-deal-financial-crisis-2008-warn",
+   "detail": "▸ 核心论点：英国国债占GDP约96%，处境“并不舒服”，应对下一场危机的能力弱于2008年之前。\n▸ 关键依据：G7各国长端利率同步上行说明大家“同处一团糟”；今年付息支出超1050亿英镑，逼近教育总预算。\n▸ 时间与位置：2025年9月10日上议院委员会听证；秋季预算前发声。\n▸ 标的与操作：警告财政部不要靠改口径粉饰债务，应优先降债务/GDP，否则利率与危机成本更高。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  }
+ ]
+}

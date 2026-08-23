@@ -3,7 +3,7 @@
  "sector": "Macro",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 1,
+ "count": 5,
  "history": [
   {
    "date": "2026-06-11",
@@ -20,6 +20,46 @@
      "date": "2026-06-11"
     }
    ]
+  },
+  {
+   "date": "2026-03-10",
+   "direction": "分歧",
+   "comments": "AI末日叙事过于简单，印度服务业增长更有韧性",
+   "targets": "AI/就业/宏观增长",
+   "source": "https://voxdev.org/topic/macroeconomics-growth/ai-india-and-future-service-led-growth",
+   "detail": "▸ 核心论点：围绕AI与服务业主导型增长的标准「末日叙事」过于简化，印度的增长模式可能比外界想象更有韧性。\n▸ 关键依据：技术扩散到 GDP 可见影响需要时间，服务出口结构与人力资本配置决定冲击的实际强度，而非单一自动化率假设。\n▸ 时间与位置：2026年3月10日 VoxDev「Ideas in Development」访谈。\n▸ 标的与操作：AI相关宏观与印度增长路径；对AI冲击持「谨慎但不悲观」的中性偏辩证立场。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2026-03-10",
+   "direction": "分歧",
+   "comments": "AI是否带来噩梦取决于政府会如何回应",
+   "targets": "AI/就业/政策",
+   "source": "https://www1.project-syndicate.org/commentary/ai-job-loss-scenarios-and-likely-public-responses-by-raghuram-g-rajan-2026-03",
+   "detail": "▸ 核心论点：评估AI是否导致大范围失业的「噩梦」情景，关键变量不只是技术能力，而是各国政府在就业冲击下的政策反应方式。\n▸ 关键依据：历史上重大自动化浪潮的社会后果高度取决于再分配与再培训政策；公众反弹会反过来塑造监管与财政路径。\n▸ 时间与位置：2026年3月 Project Syndicate 评论文章（2026-03-10）。\n▸ 标的与操作：AI相关政策与劳动力市场；对资产价格无直接方向指引，属结构性风险提示。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2026-01-28",
+   "direction": "看空",
+   "comments": "「极度危险的时代」，预算须押注长期韧性",
+   "targets": "全球宏观/印度经济",
+   "source": "https://www.businesstoday.in/india/story/union-budget-2026-world-in-extremely-dangerous-time-raghuram-rajan-warns-india-must-build-resilienc",
+   "detail": "▸ 核心论点：当前世界处于「极度危险的时期」，印度2026年预算不应做短期刺激，而要锚定长期视野、强化自立与增长韧性。\n▸ 关键依据：地缘与贸易格局重构、技术尤其是AI带来机会同时抬高风险；外部冲击频率上升要求经济结构具备缓冲能力。\n▸ 时间与位置：2026年1月28日，印度2026-27财年联邦预算发布前的公开表态。\n▸ 标的与操作：印度宏观与财政政策；对全球宏观环境整体持警惕、防御姿态。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-20",
+   "direction": "分歧",
+   "comments": "金价狂飙与风险资产同涨，金融稳定风险在积累",
+   "targets": "黄金/风险资产/金融稳定",
+   "source": "https://www.bloomberg.com/news/articles/2025-10-20/raghuram-rajan-on-surging-gold-and-growing-risks-to-financial-stability",
+   "detail": "▸ 核心论点：黄金持续飙升的同时风险资产也在上涨，这种「什么都涨」的组合本身说明金融体系的稳定性风险正在积累，而央行官员对此相对淡定。\n▸ 关键依据：黄金创纪录上涨与风险偏好高企同时出现，通常意味着市场在对冲某种尚未定价的体制性风险；对应 IMF 年会期间的讨论语境。\n▸ 时间与位置：2025年10月20日彭博 Odd Lots 播客与专访，芝加哥大学 Booth 金融学教授、前印度央行行长身份发声。\n▸ 标的与操作：黄金、全球风险资产；强调关注金融稳定尾部风险而非追逐单边行情。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

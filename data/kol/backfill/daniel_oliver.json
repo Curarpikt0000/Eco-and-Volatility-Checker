@@ -3,8 +3,24 @@
  "sector": "Precious Metals",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 3,
+ "count": 5,
  "history": [
+  {
+   "date": "2026-02-26",
+   "direction": "强烈看多",
+   "comments": "接受Kitco访谈称黄金牛市进入第二阶段:由央行平稳吸筹转为美国私人信贷承压驱动的剧烈波动期,预期违约蔓延将逼迫美联储扩表印钞,利好黄金。",
+   "targets": "黄金/白银/矿业股",
+   "source": "https://news.bitcoin.com/from-accumulation-to-volatility-why-golds-second-phase-may-be-wild/",
+   "detail": "▸ 核心论点：黄金牛市进入第二阶段：由央行平稳吸筹转为美国私人信贷承压驱动的剧烈波动期。\n▸ 关键依据：Kitco 访谈中指出第一阶段始于 2022 年地缘紧张引发的美元储备再评估、央行入场吸筹；如今私人信贷压力、私募股权再融资风险与美联储沉重的到期表构成新驱动，预期违约蔓延将逼迫美联储扩表印钞。\n▸ 时间与位置：阶段切换发生在 2026 年初；未给出具体点位。\n▸ 标的与操作：黄金、白银、矿业股，强烈看多，但须承受更大波动。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "ANONYMIZED_PERSON_0_12",
+     "url": "https://news.bitcoin.com/from-accumulation-to-volatility-why-golds-second-phase-may-be-wild/",
+     "date": "2026-02-26"
+    }
+   ]
+  },
   {
    "date": "2026-01-15",
    "direction": "强烈看多",
@@ -22,20 +38,24 @@
    ]
   },
   {
-   "date": "2026-02-26",
+   "date": "2026-01-15",
    "direction": "强烈看多",
-   "comments": "接受Kitco访谈称黄金牛市进入第二阶段:由央行平稳吸筹转为美国私人信贷承压驱动的剧烈波动期,预期违约蔓延将逼迫美联储扩表印钞,利好黄金。",
-   "targets": "黄金/白银/矿业股",
-   "source": "https://news.bitcoin.com/from-accumulation-to-volatility-why-golds-second-phase-may-be-wild/",
-   "detail": "▸ 核心论点：黄金牛市进入第二阶段：由央行平稳吸筹转为美国私人信贷承压驱动的剧烈波动期。\n▸ 关键依据：Kitco 访谈中指出第一阶段始于 2022 年地缘紧张引发的美元储备再评估、央行入场吸筹；如今私人信贷压力、私募股权再融资风险与美联储沉重的到期表构成新驱动，预期违约蔓延将逼迫美联储扩表印钞。\n▸ 时间与位置：阶段切换发生在 2026 年初；未给出具体点位。\n▸ 标的与操作：黄金、白银、矿业股，强烈看多，但须承受更大波动。",
+   "comments": "2025黄金+65%、HUI+155%，标普对金比价指向金价8300美元",
+   "targets": "黄金/白银/黄金矿股/美股",
+   "source": "https://www.myrmikan.com/pub/Myrmikan_Research_2026_01_15.pdf",
+   "detail": "▸ 核心论点：2025年是硬通货年——黄金涨65%、HUI金矿指数涨155%，而比特币跌7%、MSTR跌48%；以黄金计价，美元自2023年10月已贬值58%，标普500以黄金计价下跌33%。\n▸ 关键依据：若标普500/黄金比价回到2008年低点，按当前标普价位对应金价8300美元/盎司；回到1979年低点则对应4万美元——作者强调这不是价格预测而是算术。核心投资论点是信贷繁荣中商品跑赢黄金压缩矿业利润、信贷崩塌中相反。\n▸ 时间与位置：2026年1月15日 Myrmikan Research 月报。\n▸ 标的与操作：黄金与金矿股做多；另看好白银（工业需求与供给双重缺乏弹性，中国核电与光伏扩张耗银），预期油价对金价长期跑输。",
    "detail_status": "ok",
-   "sources": [
-    {
-     "title": "ANONYMIZED_PERSON_0_12",
-     "url": "https://news.bitcoin.com/from-accumulation-to-volatility-why-golds-second-phase-may-be-wild/",
-     "date": "2026-02-26"
-    }
-   ]
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-12-15",
+   "direction": "强烈看多",
+   "comments": "商品/黄金比价击穿233年趋势线，恐慌尚未开始",
+   "targets": "黄金/黄金矿股/大宗商品",
+   "source": "https://www.myrmikan.com/pub/Myrmikan_Research_2025_12_15.pdf",
+   "detail": "▸ 核心论点：商品对黄金的比价已跌破233年长期趋势线，而真正的恐慌还没开始；私人信贷市场一旦内爆、美联储被迫反应，黄金的名义与实际价格都会大幅上行。\n▸ 关键依据：黄金年新增开采量仅占地上存量1.5%，技术进步压低他物成本却难压黄金价值，故商品长期相对黄金贬值；信贷繁荣压缩金矿利润、信贷崩塌扩张金矿利润，金矿股是反周期资产。上周美联储以「准备金管理购买(RMP)」名义重启QE，起步每月400亿美元且为开放式。\n▸ 时间与位置：2025年12月15日 Myrmikan Research 月报。\n▸ 标的与操作：黄金实物与黄金矿业股为核心配置；视信贷破裂为验证论点的时点。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   },
   {
    "date": "2025-12-01",

@@ -3,7 +3,7 @@
  "sector": "Precious Metals",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 1,
+ "count": 2,
  "history": [
   {
    "date": "2026-08-04",
@@ -20,6 +20,16 @@
      "date": "2026-08-04"
     }
    ]
+  },
+  {
+   "date": "2025-09-29",
+   "direction": "强烈看多",
+   "comments": "地缘+中国囤金，金价或达3万美元",
+   "targets": "黄金/中国储备",
+   "source": "https://www.stephenleeb.com/finance-geopolitics-news/geopolitics-gold-could-it-reach-30000-per-ounce/",
+   "detail": "▸ 核心论点：地缘政治与货币体系重构下，黄金存在向每盎司 30,000 美元级别重估的可能性。\n▸ 关键依据：据世界黄金协会，2010 年以来全球开采黄金约 50,000 吨，推算中国在 2010–2024 年间累积约 31,000 吨，2025 年再增约 2,000 吨——官方储备被严重低估。\n▸ 时间与位置：2025年9月29日发表于其 Turbulent Times Investor 专栏。\n▸ 标的与操作：核心配置实物黄金及相关资源资产，看空美元信用体系。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

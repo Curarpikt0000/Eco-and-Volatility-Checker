@@ -3,8 +3,24 @@
  "sector": "宏观货币与金融体系",
  "backfill_date": "2026-08-22",
  "source_method": "web_search+LLM提取(2026-08-22 批量回填)",
- "count": 3,
+ "count": 7,
  "history": [
+  {
+   "date": "2026-08-15",
+   "direction": "中性",
+   "comments": "Fortune 报道：Acemoglu 就其新书接受访谈，提出 AI 与自由民主面临同一种危机——「凡事都有升级化（escalate everything）的倾向」，即讨论被推向极端、缺乏中间地带的理性辩论。他批评关于 AI 的公共辩论被两极叙事绑架。这一条偏制度与社会层面的判断，不含直接可交易的多空方向，记为中性。",
+   "targets": "AI/制度与政策",
+   "source": "https://fortune.com/2026/08/15/nobel-laureate-daron-acemoglu-liberal-democracy-book-stupid-ai-debate",
+   "detail": "▸ 核心论点：AI与自由民主面临同一种危机——「凡事都有升级化（escalate everything）的倾向」，讨论被推向极端、缺乏中间地带的理性辩论。\n▸ 关键依据：Fortune就其新书所做的访谈中，他批评关于AI的公共辩论被两极叙事绑架，理性中间地带消失，把AI问题与自由民主的制度困境类比。\n▸ 时间与位置：未给出具体点位，属制度与社会层面的长期观察，无明确时间窗口。\n▸ 标的与操作：AI/制度与政策议题，不含直接可交易的多空方向，记为中性、观望。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Daron Acemoglu",
+     "url": "https://fortune.com/2026/08/15/nobel-laureate-daron-acemoglu-liberal-democracy-book-stupid-ai-debate",
+     "date": "2026-08-15"
+    }
+   ]
+  },
   {
    "date": "2026-02-24",
    "direction": "看空",
@@ -36,20 +52,44 @@
    ]
   },
   {
-   "date": "2026-08-15",
-   "direction": "中性",
-   "comments": "Fortune 报道：Acemoglu 就其新书接受访谈，提出 AI 与自由民主面临同一种危机——「凡事都有升级化（escalate everything）的倾向」，即讨论被推向极端、缺乏中间地带的理性辩论。他批评关于 AI 的公共辩论被两极叙事绑架。这一条偏制度与社会层面的判断，不含直接可交易的多空方向，记为中性。",
-   "targets": "AI/制度与政策",
-   "source": "https://fortune.com/2026/08/15/nobel-laureate-daron-acemoglu-liberal-democracy-book-stupid-ai-debate",
-   "detail": "▸ 核心论点：AI与自由民主面临同一种危机——「凡事都有升级化（escalate everything）的倾向」，讨论被推向极端、缺乏中间地带的理性辩论。\n▸ 关键依据：Fortune就其新书所做的访谈中，他批评关于AI的公共辩论被两极叙事绑架，理性中间地带消失，把AI问题与自由民主的制度困境类比。\n▸ 时间与位置：未给出具体点位，属制度与社会层面的长期观察，无明确时间窗口。\n▸ 标的与操作：AI/制度与政策议题，不含直接可交易的多空方向，记为中性、观望。",
+   "date": "2026-01-13",
+   "direction": "看空",
+   "comments": "就美联储独立性与AI前景发声，双重警示",
+   "targets": "美联储独立性/AI估值",
+   "source": "https://www.bloomberg.com/news/videos/2026-01-13/nobel-laureate-acemoglu-on-fed-independence-ai-video",
+   "detail": "▸ 核心论点：Acemoglu 在彭博访谈中同时评论美联储独立性与AI的经济影响，延续其“制度约束不可动摇、AI收益被高估”的双线判断。\n▸ 关键依据：央行独立性受损会抬高通胀预期与长期利率；AI 的实际生产率贡献远低于市场叙事。\n▸ 时间与位置：2026年1月13日彭博电视访谈。\n▸ 标的与操作：无具体标的，对制度风险与AI估值均偏负面。（本条据彭博视频页摘要，细节有限）",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-12-18",
+   "direction": "看空",
+   "comments": "探讨自由民主如何在连环危机中存续",
+   "targets": "自由民主制度/政策不确定性",
+   "source": "https://foreignaffairsmagazine.podbean.com/e/how-liberal-democracy-can-survive-an-age-of-spiraling-crises/",
+   "detail": "▸ 核心论点：在《外交事务》访谈中，Acemoglu 讨论自由民主体制如何在接连不断的危机（经济、技术、地缘）中存续，强调制度失灵会自我放大。\n▸ 关键依据：其研究框架认为制度与国家能力是长期增长的根本变量，制度侵蚀带来的不是短期波动而是长期增长中枢下移。\n▸ 时间与位置：2025年12月18日《The Foreign Affairs Interview》播客发布。\n▸ 标的与操作：无具体市场标的，属制度风险的负面判断。（本条据节目页摘要，细节有限）",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-12-15",
+   "direction": "看空",
+   "comments": "年终复盘：民主交付能力不足，内部危机加深",
+   "targets": "民主制度/政治经济风险",
+   "source": "https://revdem.ceu.edu/2025/12/15/2025-in-perspective-daron-acemoglu/",
+   "detail": "▸ 核心论点：在年终对谈中，Acemoglu 复盘2025年民主制度面临的“交付危机”——制度未能兑现对民众的经济承诺，导致民粹与制度侵蚀相互强化。\n▸ 关键依据：他一贯以制度质量解释长期发展差异，认为国家能力与包容性制度的削弱会通过投资与创新渠道拖累长期增长。\n▸ 时间与位置：2025年12月15日 Review of Democracy 独家年终专访。\n▸ 标的与操作：无金融标的，属制度性风险层面的负面判断，对长期风险溢价含义偏空。",
    "detail_status": "ok",
-   "sources": [
-    {
-     "title": "Daron Acemoglu",
-     "url": "https://fortune.com/2026/08/15/nobel-laureate-daron-acemoglu-liberal-democracy-book-stupid-ai-debate",
-     "date": "2026-08-15"
-    }
-   ]
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-10",
+   "direction": "看空",
+   "comments": "最怕“马马虎虎的自动化”：裁员却不提升生产率",
+   "targets": "AI相关股票/生产率预期/劳动力市场",
+   "source": "https://www.bloomberg.com/news/articles/2025-10-10/will-ai-usher-in-an-economic-boom-or-just-a-lot-of-mediocre-automation",
+   "detail": "▸ 核心论点：Acemoglu 表示他真正担心的不是超级智能，而是充斥“so-so automation（马马虎虎的自动化）”的未来——企业用AI替代人力却换不来相应的生产率提升，结果是成本上升、就业受损、总产出改善有限。\n▸ 关键依据：他长期估算AI对GDP的影响是“非零但温和”，与市场普遍押注的爆发式生产率革命存在巨大落差，这一落差正是估值风险来源。\n▸ 时间与位置：2025年10月10日彭博长文/评论，正值AI资本开支与相关股票估值高峰期。\n▸ 标的与操作：未直接给交易建议，但其判断隐含对AI叙事驱动的估值持怀疑与看空态度。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

@@ -3,53 +3,19 @@
  "sector": "Precious Metals",
  "backfill_date": "2026-08-18",
  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
- "count": 5,
+ "count": 8,
  "history": [
   {
-   "date": "2025-10-16",
+   "date": "2026-07-17",
    "direction": "强烈看多",
-   "comments": "资深金银商称金属市场根基出现断裂，直言从未见过这样的局面，强调全球金属市场结构性变化正在发生，长期看多金银。",
+   "comments": "接受Investing News访谈，强调价格是误导工具，真正重要的是央行、中国、Tether持续增持黄金，认为回调洗掉了投机盘，大买家借弱势加仓。",
    "targets": "黄金/白银",
-   "source": "https://www.youtube.com/watch?v=vFkpqi_EBrI",
-   "detail": "▸ 核心论点：金属市场根基出现断裂，「从未见过这样的局面」，全球金属市场正发生结构性变化。\n▸ 关键依据：作为资深金银交易商，其依据来自一线实物市场的供需与交割体验，判断当前异常并非周期性波动而是结构性断裂。\n▸ 时间与位置：未给出具体点位或时间窗口。\n▸ 标的与操作：黄金、白银，强烈看多，长期持有实物。",
+   "source": "https://investingnews.com/andy-schectman-gold-silver-forecast/",
+   "detail": "▸ 核心论点：价格是误导工具，真正重要的是实物买盘结构，因此对黄金强烈看多。\n▸ 关键依据：央行、中国、Tether 持续增持黄金；认为回调洗掉了投机盘，大买家正借价格弱势加仓。\n▸ 时间与位置：2026-07-17 接受 Investing News 访谈；未给出具体点位或目标价。\n▸ 标的与操作：黄金、白银；逢弱势买入、以实物持有为核心思路。",
    "detail_status": "ok",
    "sources": [
     {
-     "title": "Andy Schectman",
-     "url": "https://www.youtube.com/watch?v=vFkpqi_EBrI",
-     "date": "2025-10-16"
-    }
-   ]
-  },
-  {
-   "date": "2025-11-24",
-   "direction": "强烈看多",
-   "comments": "更新其大胆的金银预测，对2025年末金银维持强烈看多立场。",
-   "targets": "黄金/白银",
-   "source": "https://www.youtube.com/watch?v=IfdbejhNJck",
-   "detail": "▸ 公开信息有限，仅检索到：Schectman 更新其大胆的金银预测，对 2025 年末金银维持强烈看多立场（YouTube 访谈《Andy Schectman Updates His Bold Gold and Silver Forecast for Late 2025》，2025-11-24 发布）。\n▸ 关键依据：原文未给出可核实的具体论据。\n▸ 时间与位置：未给出具体点位。\n▸ 标的与操作：黄金、白银，强烈看多。",
-   "detail_status": "thin",
-   "sources": [
-    {
-     "title": "",
-     "url": "https://www.youtube.com/watch?v=IfdbejhNJck",
-     "date": "2025-11-24"
-    }
-   ]
-  },
-  {
-   "date": "2026-01-14",
-   "direction": "强烈看多",
-   "comments": "在Metals and Miners访谈中谈白银工业需求与投资需求之争，认为全球对金银需求持续升级，白银争夺战将至。",
-   "targets": "白银/黄金",
-   "source": "https://metalsandminers.substack.com/p/andy-schectman-battle-for-silver",
-   "detail": "▸ 核心论点：全球对金银的需求持续升级，白银争夺战将至——需要白银的工业与想要白银的投资者之间将爆发冲突。\n▸ 关键依据：在Metals and Miners访谈中援引COMEX创纪录的交割需求（提及12月单月约6,500万盎司白银交割）指向实物短缺，并提到上海白银较COMEX高出约8美元的价差是真实的实物价格发现；叠加去美元化、BRICS扩张与白银的关键矿产地位。\n▸ 时间与位置：未给出具体目标价；时间上指向2026年的实物紧张格局。\n▸ 标的与操作：白银、黄金，强烈看多，倾向持有实物。",
-   "detail_status": "ok",
-   "sources": [
-    {
-     "title": "Andy Schectman",
-     "url": "https://metalsandminers.substack.com/p/andy-schectman-battle-for-silver",
-     "date": "2026-01-14"
+     "url": "https://investingnews.com/andy-schectman-gold-silver-forecast/"
     }
    ]
   },
@@ -70,18 +36,82 @@
    ]
   },
   {
-   "date": "2026-07-17",
+   "date": "2026-01-14",
    "direction": "强烈看多",
-   "comments": "接受Investing News访谈，强调价格是误导工具，真正重要的是央行、中国、Tether持续增持黄金，认为回调洗掉了投机盘，大买家借弱势加仓。",
-   "targets": "黄金/白银",
-   "source": "https://investingnews.com/andy-schectman-gold-silver-forecast/",
-   "detail": "▸ 核心论点：价格是误导工具，真正重要的是实物买盘结构，因此对黄金强烈看多。\n▸ 关键依据：央行、中国、Tether 持续增持黄金；认为回调洗掉了投机盘，大买家正借价格弱势加仓。\n▸ 时间与位置：2026-07-17 接受 Investing News 访谈；未给出具体点位或目标价。\n▸ 标的与操作：黄金、白银；逢弱势买入、以实物持有为核心思路。",
+   "comments": "在Metals and Miners访谈中谈白银工业需求与投资需求之争，认为全球对金银需求持续升级，白银争夺战将至。",
+   "targets": "白银/黄金",
+   "source": "https://metalsandminers.substack.com/p/andy-schectman-battle-for-silver",
+   "detail": "▸ 核心论点：全球对金银的需求持续升级，白银争夺战将至——需要白银的工业与想要白银的投资者之间将爆发冲突。\n▸ 关键依据：在Metals and Miners访谈中援引COMEX创纪录的交割需求（提及12月单月约6,500万盎司白银交割）指向实物短缺，并提到上海白银较COMEX高出约8美元的价差是真实的实物价格发现；叠加去美元化、BRICS扩张与白银的关键矿产地位。\n▸ 时间与位置：未给出具体目标价；时间上指向2026年的实物紧张格局。\n▸ 标的与操作：白银、黄金，强烈看多，倾向持有实物。",
    "detail_status": "ok",
    "sources": [
     {
-     "url": "https://investingnews.com/andy-schectman-gold-silver-forecast/"
+     "title": "Andy Schectman",
+     "url": "https://metalsandminers.substack.com/p/andy-schectman-battle-for-silver",
+     "date": "2026-01-14"
     }
    ]
+  },
+  {
+   "date": "2025-11-24",
+   "direction": "强烈看多",
+   "comments": "更新其大胆的金银预测，对2025年末金银维持强烈看多立场。",
+   "targets": "黄金/白银",
+   "source": "https://www.youtube.com/watch?v=IfdbejhNJck",
+   "detail": "▸ 公开信息有限，仅检索到：Schectman 更新其大胆的金银预测，对 2025 年末金银维持强烈看多立场（YouTube 访谈《Andy Schectman Updates His Bold Gold and Silver Forecast for Late 2025》，2025-11-24 发布）。\n▸ 关键依据：原文未给出可核实的具体论据。\n▸ 时间与位置：未给出具体点位。\n▸ 标的与操作：黄金、白银，强烈看多。",
+   "detail_status": "thin",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://www.youtube.com/watch?v=IfdbejhNJck",
+     "date": "2025-11-24"
+    }
+   ]
+  },
+  {
+   "date": "2025-10-16",
+   "direction": "强烈看多",
+   "comments": "资深金银商称金属市场根基出现断裂，直言从未见过这样的局面，强调全球金属市场结构性变化正在发生，长期看多金银。",
+   "targets": "黄金/白银",
+   "source": "https://www.youtube.com/watch?v=vFkpqi_EBrI",
+   "detail": "▸ 核心论点：金属市场根基出现断裂，「从未见过这样的局面」，全球金属市场正发生结构性变化。\n▸ 关键依据：作为资深金银交易商，其依据来自一线实物市场的供需与交割体验，判断当前异常并非周期性波动而是结构性断裂。\n▸ 时间与位置：未给出具体点位或时间窗口。\n▸ 标的与操作：黄金、白银，强烈看多，长期持有实物。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "Andy Schectman",
+     "url": "https://www.youtube.com/watch?v=vFkpqi_EBrI",
+     "date": "2025-10-16"
+    }
+   ]
+  },
+  {
+   "date": "2025-09-29",
+   "direction": "强烈看多",
+   "comments": "白银破 47 美元伴随创纪录空头持仓",
+   "targets": "白银、黄金",
+   "source": "https://rumble.com/v6znat4-silver-breaks-47-amid-record-short-positions-andy-schectman.html",
+   "detail": "▸ 核心论点：金银表现异常强势，白银突破 47 美元的同时市场存在创纪录的空头持仓，纸面市场与实物市场的张力在加剧。\n▸ 关键依据：机构投资者（包括摩根士丹利等大型机构）开始转向贵金属配置；实物交割与库存紧张持续。\n▸ 时间与位置：2025 年 9 月 29 日 Liberty and Finance 每周市场更新。\n▸ 标的与操作：继续看多实物白银与黄金，视空头挤压为潜在上行催化。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-08",
+   "direction": "强烈看多",
+   "comments": "金价创高实为货币贬值，看向滞胀",
+   "targets": "黄金、白银、美元（看空）",
+   "source": "https://dinarrecaps.com/our-blog/metals-going-parabolic-this-is-the-time-andy-schectman",
+   "detail": "▸ 核心论点：黄金创历史新高与其说是金价上涨，不如说是各国货币在贬值；全球正处于一场半世纪一遇的资本轮动与货币重置之中。\n▸ 关键依据：美国债务水平与货币扩张侵蚀美元信心；各国央行抛售美债、囤积黄金；COMEX 大量交割与白银逼空显示纸面市场承压；债券市场抗拒降息叠加就业数据走弱，指向滞胀。\n▸ 时间与位置：2025 年 9 月 8 日 Liberty and Finance 节目访谈。\n▸ 标的与操作：持有实物黄金白银作为货币重置下的核心保值资产，看空美元与传统资产组合。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-08-27",
+   "direction": "强烈看多",
+   "comments": "因机构进场上调金银价格预期",
+   "targets": "黄金、白银",
+   "source": "https://www.youtube.com/watch?v=KwVFF9DJzf0",
+   "detail": "▸ 核心论点：因机构资金开始进场，公开调整了自己此前的金银价格预测，转向更为激进的看多。\n▸ 关键依据：哈佛大学捐赠基金买入超过 1 亿美元黄金等机构行为，被视为大型资金配置贵金属的早期信号，而这类动作未获主流媒体足够关注。\n▸ 时间与位置：2025 年 8 月 27 日访谈，Miles Franklin CEO 身份发表。\n▸ 标的与操作：看多实物黄金与白银，强调机构需求将放大实物市场紧张。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

@@ -3,8 +3,24 @@
  "sector": "Macro",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 2,
+ "count": 6,
  "history": [
+  {
+   "date": "2026-08-11",
+   "direction": "看空",
+   "comments": "Fraga就Banco Master案表示,问题不在于银行监管制度的设计,而在于其执行上存在'荒谬的失误',反映监管应用层面的制度薄弱,进一步印证其对巴西制度与金融稳定的担忧。",
+   "targets": "巴西银行业/监管",
+   "source": "https://oglobo.globo.com/economia/noticia/2026/08/11/arminio-fraga-ve-falha-grotesca-na-aplicacao-da-regulacao-no-caso-master.ghtml",
+   "detail": "▸ 核心论点：Banco Master 案暴露的不是巴西银行监管制度设计问题，而是执行层面的荒谬失误，制度薄弱令人担忧。\n▸ 关键依据：Fraga 明确区分制度设计与制度执行，指出问题出在监管应用环节；该案进一步印证他对巴西制度质量与金融稳定的长期担忧。\n▸ 时间与位置：就 Banco Master 个案发声，未给出具体点位或时间窗口。\n▸ 标的与操作：巴西金融体系/银行业，立场看空，属制度风险提示而非具体交易建议。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://oglobo.globo.com/economia/noticia/2026/08/11/arminio-fraga-ve-falha-grotesca-na-aplicacao-da-regulacao-no-caso-master.ghtml",
+     "date": "2026-08-11"
+    }
+   ]
+  },
   {
    "date": "2026-01-07",
    "direction": "看空",
@@ -22,20 +38,44 @@
    ]
   },
   {
-   "date": "2026-08-11",
-   "direction": "看空",
-   "comments": "Fraga就Banco Master案表示,问题不在于银行监管制度的设计,而在于其执行上存在'荒谬的失误',反映监管应用层面的制度薄弱,进一步印证其对巴西制度与金融稳定的担忧。",
-   "targets": "巴西银行业/监管",
-   "source": "https://oglobo.globo.com/economia/noticia/2026/08/11/arminio-fraga-ve-falha-grotesca-na-aplicacao-da-regulacao-no-caso-master.ghtml",
-   "detail": "▸ 核心论点：Banco Master 案暴露的不是巴西银行监管制度设计问题，而是执行层面的荒谬失误，制度薄弱令人担忧。\n▸ 关键依据：Fraga 明确区分制度设计与制度执行，指出问题出在监管应用环节；该案进一步印证他对巴西制度质量与金融稳定的长期担忧。\n▸ 时间与位置：就 Banco Master 个案发声，未给出具体点位或时间窗口。\n▸ 标的与操作：巴西金融体系/银行业，立场看空，属制度风险提示而非具体交易建议。",
+   "date": "2025-10-06",
+   "direction": "强烈看空",
+   "comments": "称巴西财政政策自杀式，高利率是症状",
+   "targets": "巴西财政/Selic利率",
+   "source": "https://valor.globo.com/financas/noticia/2025/10/06/poltica-fiscal-suicida-e-juros-altos-so-sintoma-inequvoco-diz-arminio-fraga.ghtml",
+   "detail": "▸ 核心论点：财政是当下最重要的议题，高利率只是财政失序的「明确症状」，他直言当前财政政策是「自杀式的」。\n▸ 关键依据：财政主导(fiscal dominance)使货币政策效力下降，风险溢价与实际利率长期居高。\n▸ 时间与位置：2025年10月6日 FHC 基金会活动，与巴西央行行长 Galípolo 同台，Valor 报道。\n▸ 标的与操作：看空巴西财政可持续性，对本币长债保持防御。",
    "detail_status": "ok",
-   "sources": [
-    {
-     "title": "",
-     "url": "https://oglobo.globo.com/economia/noticia/2026/08/11/arminio-fraga-ve-falha-grotesca-na-aplicacao-da-regulacao-no-caso-master.ghtml",
-     "date": "2026-08-11"
-    }
-   ]
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-19",
+   "direction": "看空",
+   "comments": "巴西非绝症但病情严重，须深度改革",
+   "targets": "巴西国债/利率/结构改革",
+   "source": "https://www.infomoney.com.br/advisor/arminio-fraga-defende-reformas-profundas-e-aponta-para-riscos-dos-juros-no-brasil/",
+   "detail": "▸ 核心论点：巴西不是「终末期病人」，但状态严重；必须推进深层结构性改革，否则利率轨迹不可持续。\n▸ 关键依据：债务短端支付高于通胀约 10% 的实际利率，而投资率「非常温和」，形成恶性循环。\n▸ 时间与位置：2025年9月19日 InfoMoney 报道其公开发言。\n▸ 标的与操作：警示巴西主权债务与高利率成本，主张财政整固优先。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-16",
+   "direction": "看空",
+   "comments": "谈通胀、汇率、高利率与2026大选风险",
+   "targets": "巴西利率/汇率/2026大选",
+   "source": "https://conteudos.xpi.com.br/fundos-de-investimento/relatorios/arminio-fraga-economia-politica-e-mercado-outliers-infomoney-171/",
+   "detail": "▸ 核心论点：巴西面临通胀黏性、汇率压力与极高实际利率，2026 年大选进一步放大不确定性；同时判断美元终将被取代，问题只是时间。\n▸ 关键依据：财政扩张导致风险溢价上升，货币政策被迫维持紧缩；全球正走向多极货币格局。\n▸ 时间与位置：2025年9月16日 Outliers InfoMoney 第171期播客专访。\n▸ 标的与操作：对巴西长端利率与本币资产偏谨慎，长期看淡美元独霸地位。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-08-23",
+   "direction": "看空",
+   "comments": "警告巴西经济出现结构性倒退",
+   "targets": "巴西经济/财政/改革",
+   "source": "https://www.brasilemfolhas.com.br/2025/08/arminio-fraga-alerta-sobre-retrocessos-economicos-do-brasil-em-entrevista/",
+   "detail": "▸ 核心论点：巴西虽有数十年进步，但近年出现明显经济倒退，制度与生产率议题被政治周期挤压。\n▸ 关键依据：他以棋盘游戏比喻——每前进几步就被财政与政治因素拉回原点；投资率长期低迷。\n▸ 时间与位置：2025年8月23日刊出的巴西利亚专访。\n▸ 标的与操作：对巴西资产与本币资产保持谨慎，强调结构改革是先决条件。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

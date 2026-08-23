@@ -1,8 +1,39 @@
 {
-  "kol": "Ivan Zhao",
-  "sector": "Equities",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)；该人物无可追踪公开市场言论(Notion 联合创始人/CEO，仅有公司经营/产品类报道，无金融市场方向性观点)",
-  "count": 0,
-  "history": []
+ "kol": "Ivan Zhao",
+ "sector": "Equities",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)；该人物无可追踪公开市场言论(Notion 联合创始人/CEO，仅有公司经营/产品类报道，无金融市场方向性观点)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2026-02-20",
+   "direction": "强烈看多",
+   "comments": "产品若不能被智能体使用，就没有未来",
+   "targets": "AI/SaaS商业模式",
+   "source": "https://sources.news/p/notions-next-act",
+   "detail": "▸ 核心论点：如果一个产品无法被AI智能体调用，其未来就没什么前景；软件公司必须围绕「Agent 可用」重做产品与商业模式。\n▸ 关键依据：Notion 推出自定义 Agents 并相应调整 AI 时代的收费模式，从按席位转向与智能体使用相关的价值捕获。\n▸ 时间与位置：2026年2月20日 Alex Heath 的 Sources 通讯专访。\n▸ 标的与操作：SaaS与AI应用层；隐含对不适配智能体的传统软件持负面看法。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-23",
+   "direction": "中性",
+   "comments": "自主智能体炒作虽热，让AI真正好用仍处早期",
+   "targets": "AI/知识工作",
+   "source": "https://digidai.github.io/2025/11/23/ivan-zhao-notion-ceo-augmenting-human-intellect-deep-dive/",
+   "detail": "▸ 核心论点：尽管市场对能完成复杂任务的自主AI智能体极度追捧，让AI在知识工作中真正好用其实还处在很早期阶段。\n▸ 关键依据：知识工作的上下文与数据结构化程度不足，是智能体落地的现实瓶颈；工具本身要先被重构成「机器可用」的形态。\n▸ 时间与位置：2025年11月23日关于其「增强人类智力」主题访谈的深度整理。\n▸ 标的与操作：AI应用与SaaS；对AI长期方向乐观、对短期落地节奏偏保守。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-16",
+   "direction": "看多",
+   "comments": "智能体AI将把程序员抬升为管理者",
+   "targets": "AI/生产力软件",
+   "source": "https://www.abc.net.au/news/programs/the-business/2025-10-16/us-tech-ceo-says-agentic-ai-can-elevate-coders-to-managers/105901218",
+   "detail": "▸ 核心论点：Agentic AI（智能体）正在重塑职场分工，会把写代码的人从执行者抬升为管理智能体的「管理者」角色。\n▸ 关键依据：Notion 3.0 把AI重构为可在工作区内自主执行任务的 Agent，实践中观察到人的工作重心从操作转向指派与验收。\n▸ 时间与位置：2025年10月16日澳大利亚 ABC News《The Business》电视专访。\n▸ 标的与操作：生产力软件与AI应用层；对AI提升组织效率持明确乐观态度。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  }
+ ]
 }

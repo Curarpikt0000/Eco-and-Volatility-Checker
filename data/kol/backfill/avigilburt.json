@@ -1,0 +1,39 @@
+{
+ "kol": "Avi Gilburt",
+ "sector": "",
+ "backfill_date": "2026-08-23",
+ "source_method": "1yr gap backfill (web_search + web_extract)",
+ "count": 3,
+ "history": [
+  {
+   "date": "2025-11-18",
+   "direction": "分歧",
+   "comments": "MoneyShow演讲：给出SPX与金银下一阶段路径推演",
+   "targets": "标普500/黄金/白银",
+   "source": "https://www.moneyshow.com/video/5774676a972848cb99933b30af52fbc31/",
+   "detail": "▸ 核心论点：以艾略特波浪+情绪框架推演标普500与金银的下一阶段走势，强调周期与结构位而非宏观叙事。\n▸ 关键依据：其一贯方法是用Fibonacci Pinball定位浪型；此时金银处于长周期后段、美股结构位关键。\n▸ 时间与位置：2025年11月18日 MoneyShow 线上博览会演讲。\n▸ 标的与操作：属框架性展望，公开摘要未给出具体目标价位，方向判断需结合其同期文章。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-03",
+   "direction": "看多",
+   "comments": "白银最后一段5浪未走完，翻倍可期但要准备离场",
+   "targets": "白银/SLV",
+   "source": "https://www.kitco.com/opinion/2025-11-03/can-you-double-your-money-silver",
+   "detail": "▸ 核心论点：市场焦点都在黄金，但白银尚未完成其最后的抛物线段，仍存翻倍空间。\n▸ 关键依据：以2010-2011年分形类比，SLV自第4浪低点翻倍且第5浪等于第3浪幅度；他在2025年4月银价约29美元时就已带领会员布局。\n▸ 时间与位置：2025年11月3日 Kitco 专栏《Can you double your money with silver?》。\n▸ 标的与操作：继续持有白银多头博取最后一段，但明确提醒在5浪结构完成时兑现，因其后是熊市。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-29",
+   "direction": "看空",
+   "comments": "起底Zions基本面：CRE敞口与未保险存款双高，是被撑住的病银行",
+   "targets": "Zions Bancorp/美国区域银行股",
+   "source": "https://www.kitco.com/opinion/2025-10-29/zions-bank-typical-picture-unhealthy-bank-being-propped",
+   "detail": "▸ 核心论点：市场与卖方所谓Zions“基本面稳如磐石”与现实相去甚远，它是典型被人为撑住的不健康银行。\n▸ 关键依据：Zions商业地产贷款/权益比高达388.5%，位列全行业第23高，单一贷款板块接近权益的4倍；同时未保险存款占比高，而其对FDIC应对压力情景的能力持谨慎看法。\n▸ 时间与位置：2025年10月29日 Kitco 专栏，发生在Zions因计提贷款损失准备而股价急跌之后。\n▸ 标的与操作：看空该类区域银行，提示银行体系脆弱性是其金银/宏观框架的风险背景。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  }
+ ]
+}

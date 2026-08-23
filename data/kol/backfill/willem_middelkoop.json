@@ -3,7 +3,7 @@
  "sector": "Precious Metals",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 1,
+ "count": 6,
  "history": [
   {
    "date": "2026-08-11",
@@ -20,6 +20,56 @@
      "date": "2026-08-11"
     }
    ]
+  },
+  {
+   "date": "2025-12-16",
+   "direction": "强烈看多",
+   "comments": "突破前数日预判银价可能急冲60-70美元",
+   "targets": "白银",
+   "source": "https://www.cdfund.com/media/videos/willem-middelkoop-bij-goldrepublic.html",
+   "detail": "▸ 核心论点：白银价格可能在短期内爆发式上冲至60-70美元区间。\n▸ 关键依据：该判断在价格突破前数日给出，依据是贵金属市场结构性紧张与实物需求。\n▸ 时间与位置：2025年12月16日，其在 GoldRepublic 节目中的表态，由 cdfund.com 官方视频页记录。\n▸ 标的与操作：强烈看多白银，短期目标价60-70美元。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-31",
+   "direction": "强烈看多",
+   "comments": "大宗\"完美风暴\"，提出黄金看向1万美元",
+   "targets": "黄金/大宗商品/矿业勘探股",
+   "source": "https://www.beleggersfair.nl/2025/10/31/willem-middelkoop-goud-naar-10-000/",
+   "detail": "▸ 核心论点：地缘对抗、工业金属稀缺与央行增持黄金叠加，形成大宗商品的\"完美风暴\"，黄金看向10000美元不是空谈。\n▸ 关键依据：他列举当年黄金翻倍、白银涨三倍、金矿 ETF（GDX）年内涨约110%，远超 AEX(+10%) 与纳指(+25%)；旗下 Commodity Discovery Fund 当年已录得约+50%收益。\n▸ 时间与位置：2025年10月31日 BeleggersFair 大师课预告与访谈文稿。\n▸ 标的与操作：强烈看多黄金/白银/铜/铀及历史性低估的勘探类小盘矿股。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-25",
+   "direction": "看多",
+   "comments": "央行以黄金替代美债储备",
+   "targets": "黄金/美债",
+   "source": "https://tradersunion.com/news/market-voices/show/731073-gold-vaults-rise/",
+   "detail": "▸ 核心论点：央行储备结构正发生实质性转变，以黄金替代美国国债，削弱美元的全球储备地位。\n▸ 关键依据：他指出各国金库黄金库存上升与美债持有下降同时发生，是趋势性而非短期行为。\n▸ 时间与位置：2025年10月25日，Traders Union 的 Market Voices 栏目引述其公开评论。\n▸ 标的与操作：看多黄金、看空美债与美元储备地位。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-19",
+   "direction": "强烈看多",
+   "comments": "称央行囤金、美元体系信任瓦解，货币重置开启",
+   "targets": "黄金/贵金属",
+   "source": "https://www.stichting-jas.nl/2025/10/willem-middelkoop-wereldwijde.html",
+   "detail": "▸ 核心论点：各国央行大规模买入实物贵金属，对美元体系的信任正在瓦解，这可能是货币重置（Monetaire Reset）的起点。\n▸ 关键依据：他以全球债务危机与央行储备结构变化作为核心证据链。\n▸ 时间与位置：2025年10月19日荷兰 Stichting JAS 发布的深度对谈。\n▸ 标的与操作：强烈看多黄金及贵金属相关资产。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-08-29",
+   "direction": "强烈看多",
+   "comments": "称白银是新金融时代最被低估资产",
+   "targets": "白银/黄金",
+   "source": "https://palisadesradio.ca/willem-middelkoop-silver-the-most-undervalued-asset-in-a-new-financial-era/",
+   "detail": "▸ 核心论点：全球正进入以美元为核心的货币体系\"终局\"阶段，白银是这一新金融时代最被低估的资产。\n▸ 关键依据：他从美元体系信任流失、央行行为变化与工业+货币双重需求角度论证白银的重估空间。\n▸ 时间与位置：2025年8月29日 Palisades Gold Radio 长访谈。\n▸ 标的与操作：强烈看多白银，其次黄金；配置方向为实物贵金属与矿业股。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

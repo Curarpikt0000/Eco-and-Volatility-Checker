@@ -3,8 +3,24 @@
  "sector": "Energy & Commodities",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 3,
+ "count": 7,
  "history": [
+  {
+   "date": "2026-08-10",
+   "direction": "强烈看多",
+   "comments": "BNN Top Picks 称'我们一生中最严重的能源危机仍在持续'：判断伊朗永不主动交出霍尔木兹海峡控制权，中东产量减约700万桶/日、全球库存创纪录去化、SPR逼近最低操作水平；认为油价底部较战前至少高10美元/桶，能源股上行空间显著。推荐 Cenovus、Strathcona、Ovintiv。",
+   "targets": "CVE/SCR/OVV 加拿大能源股/原油",
+   "source": "BNN Bloomberg Top Picks 2026-08-10 (bnnbloomberg.ca/markets/2026/08/10)",
+   "detail": "▸ 核心论点：我们一生中最严重的能源危机仍在持续，油价底部被系统性抬高，能源股上行空间显著。\n▸ 关键依据：判断伊朗永不会主动交出霍尔木兹海峡控制权；中东产量减少约 700 万桶/日；全球库存创纪录去化；美国 SPR 逼近最低可操作水平。\n▸ 时间与位置：认为油价底部较战前水平至少高出 10 美元/桶；未给出具体油价目标点位。\n▸ 标的与操作：原油及能源股强烈看多，BNN Top Picks 推荐 Cenovus、Strathcona、Ovintiv 三只加拿大能源股。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "BNN Bloomberg Top Picks 2026-08-10 (bnnbloomberg.ca/markets/2026/08/10)",
+     "date": "2026-08-10"
+    }
+   ]
+  },
   {
    "date": "2026-01-20",
    "direction": "看多",
@@ -36,20 +52,44 @@
    ]
   },
   {
-   "date": "2026-08-10",
+   "date": "2025-10-23",
+   "direction": "看多",
+   "comments": "天然气单周大涨逾13%，LNG出口驱动结构性行情",
+   "targets": "天然气/LNG出口/原油",
+   "source": "https://www.linkedin.com/posts/ninepoint-partners_ericnuttall-ninepointpartners-energyinvesting-activity-7387476906817990656-NFNP",
+   "detail": "▸ 核心论点：Nuttall 在周度更新中拆解了天然气单周超过13%的强劲反弹，认为 LNG 出口能力扩张与需求增长构成结构性利多，而非一次性天气行情。\n▸ 关键依据：出口终端投产带来的边际需求叠加库存路径改善，使天然气的定价中枢上移；原油端仍受OPEC增产与库存争论主导，波动加大。\n▸ 时间与位置：2025年10月23日 Ninepoint 周度能源更新。\n▸ 标的与操作：看多天然气相关生产商与加拿大能源板块。（本条据发布摘要，细节有限）",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-21",
    "direction": "强烈看多",
-   "comments": "BNN Top Picks 称'我们一生中最严重的能源危机仍在持续'：判断伊朗永不主动交出霍尔木兹海峡控制权，中东产量减约700万桶/日、全球库存创纪录去化、SPR逼近最低操作水平；认为油价底部较战前至少高10美元/桶，能源股上行空间显著。推荐 Cenovus、Strathcona、Ovintiv。",
-   "targets": "CVE/SCR/OVV 加拿大能源股/原油",
-   "source": "BNN Bloomberg Top Picks 2026-08-10 (bnnbloomberg.ca/markets/2026/08/10)",
-   "detail": "▸ 核心论点：我们一生中最严重的能源危机仍在持续，油价底部被系统性抬高，能源股上行空间显著。\n▸ 关键依据：判断伊朗永不会主动交出霍尔木兹海峡控制权；中东产量减少约 700 万桶/日；全球库存创纪录去化；美国 SPR 逼近最低可操作水平。\n▸ 时间与位置：认为油价底部较战前水平至少高出 10 美元/桶；未给出具体油价目标点位。\n▸ 标的与操作：原油及能源股强烈看多，BNN Top Picks 推荐 Cenovus、Strathcona、Ovintiv 三只加拿大能源股。",
+   "comments": "能源多年牛市仍处早期，13-14%自由现金流收益率",
+   "targets": "加拿大油气股/WTI/天然气",
+   "source": "https://markschoeffelbbacimcfp.blogspot.com/2025/10/21OCT2025+Eric+Nuttall+Energy+Update.html",
+   "detail": "▸ 核心论点：Nuttall 在近一小时的路演演讲中主张能源股的多年牛市仍处早期阶段，市场因AI、比特币等题材“抽走了房间里的氧气”而给出极端悲观的定价；加拿大生产商因规模、储量深度与经济性正成为全球超级巨头的战略标的。\n▸ 关键依据：能源基金连续两年净流出、每日赎回；按2026年58美元WTI与4美元以上天然气条带，可以13–14%的自由现金流收益率买到数十亿美元市值的公司，且回购活跃、储量可采数十年。他还指出所谓能源转型证伪——9万亿美元可再生投资几乎没改变能源结构，油气煤需求去年均创历史新高；IEA 预计将把石油需求峰值从2029年推后至2050年。\n▸ 时间与位置：2025年10月21日多伦多路演演讲（第三方与会笔记）。\n▸ 标的与操作：重仓加拿大油气生产商，看好并购与回购驱动的重估。",
    "detail_status": "ok",
-   "sources": [
-    {
-     "title": "",
-     "url": "BNN Bloomberg Top Picks 2026-08-10 (bnnbloomberg.ca/markets/2026/08/10)",
-     "date": "2026-08-10"
-    }
-   ]
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-02",
+   "direction": "看多",
+   "comments": "过剩担忧被夸大，闲置产能风险与天然气时代到来",
+   "targets": "原油/天然气/能源股",
+   "source": "https://www.ninepoint.com/alt-thinking/commentaries/2025/10/ninepoint-energy-market-update-10022025/",
+   "detail": "▸ 核心论点：在伦敦 Energy Aspects 会议后的周度更新中，Nuttall 讨论了市场对原油过剩（glut）的担忧、OPEC 闲置产能风险，以及“天然气时代”的到来，整体认为看空情绪被过度定价。\n▸ 关键依据：会议上油企CEO、贸易商与政策制定者的一手交流显示，供给端的实际扩张能力有限，而 LNG 与电力需求驱动天然气进入结构性上行期。\n▸ 时间与位置：2025年10月2日 Ninepoint 能源市场周度更新。\n▸ 标的与操作：继续看多能源股尤其是加拿大生产商与天然气相关标的。（本条据发布页摘要，细节有限）",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-11",
+   "direction": "看多",
+   "comments": "IEA需求口径转向，能源板块情绪与基本面背离",
+   "targets": "原油/加拿大能源股",
+   "source": "https://m.youtube.com/watch?v=pr2DxxjTMIY",
+   "detail": "▸ 核心论点：Nuttall 在 Peters & Co. 能源会议后的周度更新中指出，市场对能源的情绪与基本面严重背离，IEA 在石油需求展望上的口径转变（对峰值需求的推后）是对长期看空叙事的重要修正。\n▸ 关键依据：他强调“对需求见顶的恐惧正在带来供给见顶的现实”——多年资本开支不足导致供给弹性下降，而需求持续超预期。\n▸ 时间与位置：2025年9月11日 Ninepoint 能源周度更新（同期视频发布）。\n▸ 标的与操作：看多加拿大油气生产商，认为估值与自由现金流收益率具吸引力。（本条据发布页与视频说明摘要，细节有限）",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

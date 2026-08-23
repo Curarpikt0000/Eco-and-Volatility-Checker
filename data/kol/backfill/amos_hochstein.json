@@ -3,35 +3,33 @@
  "sector": "Energy & Commodities",
  "backfill_date": "2026-08-18",
  "source_method": "web_search(ddgs)+web_extract 一手核实(1yr backfill)；仅收录可归属、带日期、有明确方向性的公开言论(CBS/Bloomberg/Newsmax/CNBC)，逐条附原始出处；泛报道/无日期/无法归属者不收录，绝不编造。",
- "count": 5,
+ "count": 9,
  "history": [
   {
-   "date": "2026-04-19",
-   "direction": "看多(供给中断风险)",
-   "comments": "以拜登政府高级能源顾问兼中东谈判代表身份接受 CBS《Face the Nation》采访，讨论中东局势对能源市场与油价的影响，强调地缘冲突正重塑全球能源供应格局。",
-   "targets": "原油/中东能源",
-   "source": "CBS News, Face the Nation with Margaret Brennan (cbsnews.com/news/amos-hochstein-energy-middle-east-face-the-nation-transcript-04-19-2026)",
-   "detail": "▸ 核心论点：中东地缘冲突正在重塑全球能源供应格局，对油价构成上行风险。\n▸ 关键依据：以拜登政府高级能源顾问兼中东谈判代表身份，讨论中东局势对能源市场与油价的传导。\n▸ 时间与位置：2026-04-19 接受 CBS《Face the Nation》采访；未给出具体点位。\n▸ 标的与操作：原油、中东能源；因供给中断风险偏多，未给出具体交易建议。",
+   "date": "2026-08-15",
+   "direction": "结构性看多(应急缓冲耗尽)",
+   "comments": "就 SPR 跌破3亿桶(43年新低)警告：'别信那些说 SPR 能降到7000万桶的政府人士，那是胡说。'称降至7000万桶将使储备'耗尽到永远无法恢复'的地步；'我不认识任何相信我们能低于3亿桶的人，我认识很多人认为我们连接近3亿桶都不行，因为那样物理上会损坏储油的盐穴。'并警告当前水平下若佛州或路易斯安那遭遇飓风，美国将陷入被动。",
+   "targets": "SPR战略石油储备/原油",
+   "source": "CNBC, 2026-08-15 (cnbc.com/2026/08/15/strategic-petroleum-reserve-spr-oil-iran-war-caverns.html)",
+   "detail": "▸ 核心论点：美国战略石油储备(SPR)跌破3亿桶、创43年新低，应急缓冲实质耗尽，斥「SPR还能降到7000万桶」是胡说。\n▸ 关键依据：降至7000万桶将使储备耗尽到永远无法恢复的地步；他说不认识任何相信能低于3亿桶的人，因为那样物理上会损坏储油的盐穴。\n▸ 时间与位置：2026-08-15 就 SPR 现状警告；关键水位为3亿桶下限与不可行的7000万桶，未给出油价点位。\n▸ 标的与操作：SPR/原油；警告当前水平下若佛州或路易斯安那遭飓风美国将陷入被动，结构性看多，未给出具体交易指令。",
    "detail_status": "ok",
    "sources": [
     {
-     "url": "CBS News, Face the Nation with Margaret Brennan (cbsnews.com/news/amos-hochstein-energy-middle-east-face-the-nation-transcript-04-19-2026)"
+     "url": "CNBC, 2026-08-15 (cnbc.com/2026/08/15/strategic-petroleum-reserve-spr-oil-iran-war-caverns.html)"
     }
    ]
   },
   {
-   "date": "2026-05-05",
+   "date": "2026-08-13",
    "direction": "看多(供给中断风险)",
-   "comments": "Bloomberg Talks 播客访谈：描绘地缘冲击已'永久性改变'能源市场的图景——预期更高成本、供应链重构、以及对石油与安全的长期战略争夺。",
-   "targets": "原油/全球能源市场",
-   "source": "Bloomberg Talks: Amos Hochstein Talks Oil Markets, Iran War (bloomberg.com/news/audio/2026-05-05)",
-   "detail": "▸ 核心论点：地缘冲击已「永久性改变」能源市场格局，供给中断风险抬升。\n▸ 关键依据：Bloomberg Talks 播客访谈中描绘的图景：预期更高成本、供应链重构，以及围绕石油与安全的长期战略争夺。\n▸ 时间与位置：属长期结构性判断；未给出具体点位。\n▸ 标的与操作：原油 / 全球能源市场，偏多（供给中断风险溢价）。",
+   "comments": "以 TWG Global 管理合伙人、前拜登白宫高级顾问身份做客 CNBC《Squawk Box》，讨论美伊战争最新进展对能源市场的冲击、霍尔木兹海峡的控制权归属等；重申需'折价看待政治声明——它们与实际发生的情况完全无关'。",
+   "targets": "原油/霍尔木兹海峡",
+   "source": "CNBC Squawk Box, 2026-08-13 (youtube.com/watch?v=T8xTJcVnX0g)",
+   "detail": "▸ 核心论点：美伊战争推升能源供给中断风险，霍尔木兹海峡控制权归属是油市核心变量。\n▸ 关键依据：以 TWG Global 管理合伙人、前拜登白宫高级顾问身份做客 CNBC《Squawk Box》分析战事进展对能源市场的冲击；重申需「折价看待政治声明——它们与实际发生的情况完全无关」。\n▸ 时间与位置：2026-08-13 节目当日；未给出具体油价点位或目标价。\n▸ 标的与操作：原油、霍尔木兹海峡航运；方向为供给中断风险下的看多，未给出具体买卖建议。",
    "detail_status": "ok",
    "sources": [
     {
-     "title": "Amos Hochstein",
-     "url": "Bloomberg Talks: Amos Hochstein Talks Oil Markets, Iran War (bloomberg.com/news/audio/2026-05-05)",
-     "date": "2026-05-05"
+     "url": "CNBC Squawk Box, 2026-08-13 (youtube.com/watch?v=T8xTJcVnX0g)"
     }
    ]
   },
@@ -52,32 +50,74 @@
    ]
   },
   {
-   "date": "2026-08-13",
+   "date": "2026-05-05",
    "direction": "看多(供给中断风险)",
-   "comments": "以 TWG Global 管理合伙人、前拜登白宫高级顾问身份做客 CNBC《Squawk Box》，讨论美伊战争最新进展对能源市场的冲击、霍尔木兹海峡的控制权归属等；重申需'折价看待政治声明——它们与实际发生的情况完全无关'。",
-   "targets": "原油/霍尔木兹海峡",
-   "source": "CNBC Squawk Box, 2026-08-13 (youtube.com/watch?v=T8xTJcVnX0g)",
-   "detail": "▸ 核心论点：美伊战争推升能源供给中断风险，霍尔木兹海峡控制权归属是油市核心变量。\n▸ 关键依据：以 TWG Global 管理合伙人、前拜登白宫高级顾问身份做客 CNBC《Squawk Box》分析战事进展对能源市场的冲击；重申需「折价看待政治声明——它们与实际发生的情况完全无关」。\n▸ 时间与位置：2026-08-13 节目当日；未给出具体油价点位或目标价。\n▸ 标的与操作：原油、霍尔木兹海峡航运；方向为供给中断风险下的看多，未给出具体买卖建议。",
+   "comments": "Bloomberg Talks 播客访谈：描绘地缘冲击已'永久性改变'能源市场的图景——预期更高成本、供应链重构、以及对石油与安全的长期战略争夺。",
+   "targets": "原油/全球能源市场",
+   "source": "Bloomberg Talks: Amos Hochstein Talks Oil Markets, Iran War (bloomberg.com/news/audio/2026-05-05)",
+   "detail": "▸ 核心论点：地缘冲击已「永久性改变」能源市场格局，供给中断风险抬升。\n▸ 关键依据：Bloomberg Talks 播客访谈中描绘的图景：预期更高成本、供应链重构，以及围绕石油与安全的长期战略争夺。\n▸ 时间与位置：属长期结构性判断；未给出具体点位。\n▸ 标的与操作：原油 / 全球能源市场，偏多（供给中断风险溢价）。",
    "detail_status": "ok",
    "sources": [
     {
-     "url": "CNBC Squawk Box, 2026-08-13 (youtube.com/watch?v=T8xTJcVnX0g)"
+     "title": "Amos Hochstein",
+     "url": "Bloomberg Talks: Amos Hochstein Talks Oil Markets, Iran War (bloomberg.com/news/audio/2026-05-05)",
+     "date": "2026-05-05"
     }
    ]
   },
   {
-   "date": "2026-08-15",
-   "direction": "结构性看多(应急缓冲耗尽)",
-   "comments": "就 SPR 跌破3亿桶(43年新低)警告：'别信那些说 SPR 能降到7000万桶的政府人士，那是胡说。'称降至7000万桶将使储备'耗尽到永远无法恢复'的地步；'我不认识任何相信我们能低于3亿桶的人，我认识很多人认为我们连接近3亿桶都不行，因为那样物理上会损坏储油的盐穴。'并警告当前水平下若佛州或路易斯安那遭遇飓风，美国将陷入被动。",
-   "targets": "SPR战略石油储备/原油",
-   "source": "CNBC, 2026-08-15 (cnbc.com/2026/08/15/strategic-petroleum-reserve-spr-oil-iran-war-caverns.html)",
-   "detail": "▸ 核心论点：美国战略石油储备(SPR)跌破3亿桶、创43年新低，应急缓冲实质耗尽，斥「SPR还能降到7000万桶」是胡说。\n▸ 关键依据：降至7000万桶将使储备耗尽到永远无法恢复的地步；他说不认识任何相信能低于3亿桶的人，因为那样物理上会损坏储油的盐穴。\n▸ 时间与位置：2026-08-15 就 SPR 现状警告；关键水位为3亿桶下限与不可行的7000万桶，未给出油价点位。\n▸ 标的与操作：SPR/原油；警告当前水平下若佛州或路易斯安那遭飓风美国将陷入被动，结构性看多，未给出具体交易指令。",
+   "date": "2026-04-19",
+   "direction": "看多(供给中断风险)",
+   "comments": "以拜登政府高级能源顾问兼中东谈判代表身份接受 CBS《Face the Nation》采访，讨论中东局势对能源市场与油价的影响，强调地缘冲突正重塑全球能源供应格局。",
+   "targets": "原油/中东能源",
+   "source": "CBS News, Face the Nation with Margaret Brennan (cbsnews.com/news/amos-hochstein-energy-middle-east-face-the-nation-transcript-04-19-2026)",
+   "detail": "▸ 核心论点：中东地缘冲突正在重塑全球能源供应格局，对油价构成上行风险。\n▸ 关键依据：以拜登政府高级能源顾问兼中东谈判代表身份，讨论中东局势对能源市场与油价的传导。\n▸ 时间与位置：2026-04-19 接受 CBS《Face the Nation》采访；未给出具体点位。\n▸ 标的与操作：原油、中东能源；因供给中断风险偏多，未给出具体交易建议。",
    "detail_status": "ok",
    "sources": [
     {
-     "url": "CNBC, 2026-08-15 (cnbc.com/2026/08/15/strategic-petroleum-reserve-spr-oil-iran-war-caverns.html)"
+     "url": "CBS News, Face the Nation with Margaret Brennan (cbsnews.com/news/amos-hochstein-energy-middle-east-face-the-nation-transcript-04-19-2026)"
     }
    ]
+  },
+  {
+   "date": "2026-03-09",
+   "direction": "强烈看多",
+   "comments": "CNBC：这是全球史上最大的能源危机，油价风险上行",
+   "targets": "原油/Brent/能源股",
+   "source": "https://www.cnbc.com/video/2026/03/09/this-is-the-biggest-energy-crisis-weve-had-in-global-history-says-amos-hochstein.html",
+   "detail": "▸ 核心论点：伊朗战争引发的供给中断构成全球历史上最大的一次能源危机，油价风险显著偏上行。\n▸ 关键依据：在 CNBC 的 Squawk Box 节目讨论战事进展、战争目标以及可能的收场方式对油价的传导。\n▸ 时间与位置：2026-03-09，CNBC Squawk Box。\n▸ 标的与操作：对原油方向强烈看多，能源板块受益，风险资产将承受输入型通胀压力。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-19",
+   "direction": "中性",
+   "comments": "ADIPEC 演讲：新形态需求重塑能源未来，需均衡能源结构",
+   "targets": "全球能源结构/油气与新能源",
+   "source": "https://www.facebook.com/adipecofficialpage/videos/hon-amos-hochstein-twg-global-adipec-2025/1388180879628813/",
+   "detail": "▸ 核心论点：以数据中心和 AI 为代表的新增需求正在重塑能源版图，强调需要均衡的能源结构来支撑创新与安全。\n▸ 关键依据：ADIPEC 2025 Spotlight Interview 官方视频摘要。\n▸ 时间与位置：2025-11-19，ADIPEC 2025（阿布扎比）。\n▸ 标的与操作：未对油价给出单边方向，倾向油气与低碳并行的组合式能源投资。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-16",
+   "direction": "看多",
+   "comments": "警告 AI 用电需求可能演变为危机，供给跟不上",
+   "targets": "电力/天然气/能源基础设施",
+   "source": "https://www.semafor.com/article/10/16/2025/ai-energy-demand-could-soon-become-a-crisis-former-biden-energy-envoy-warns",
+   "detail": "▸ 核心论点：AI 的能源需求有超出供给的风险，若不加速新增装机与输电建设，缺口会演变成危机。\n▸ 关键依据：在 Semafor World Economy 峰会发言，原话为在能源与 AI 之间存在巨大缺口。\n▸ 时间与位置：2025-10-16，Semafor 世界经济峰会。\n▸ 标的与操作：结构性利好电力供给链与天然气、核电等可调度电源，能源投资长期看多。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-10",
+   "direction": "看多",
+   "comments": "彭博访谈：AI 与能源到达拐点，电力供给是硬约束",
+   "targets": "能源/电力/AI 基础设施",
+   "source": "https://www.linkedin.com/posts/twg-global_twg-global-ai-x-power-bloomberg-synopsis-activity-7384588986989649921-9r0B",
+   "detail": "▸ 核心论点：AI 与电力进入拐点，算力扩张最终受制于发电与电网供给，能源侧将成为 AI 周期的硬约束。\n▸ 关键依据：TWG Global 官方转述其 2025-10-10 彭博访谈要点，指 AI 需求增速快于电力供给形成缺口。\n▸ 时间与位置：2025-10-10，Bloomberg 访谈（TWG Global 官方摘要）。\n▸ 标的与操作：利好发电、电网与能源基础设施投资，长期看多能源资本开支周期。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

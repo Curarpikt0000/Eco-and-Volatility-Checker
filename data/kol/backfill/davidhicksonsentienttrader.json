@@ -1,0 +1,69 @@
+{
+ "kol": "David Hickson / Sentient Trader",
+ "sector": "",
+ "backfill_date": "2026-08-23",
+ "source_method": "1yr gap backfill (web_search + web_extract)",
+ "count": 6,
+ "history": [
+  {
+   "date": "2026-03-09",
+   "direction": "分歧",
+   "comments": "标普与比特币周期更新，美股进入新18个月周期后走势分化",
+   "targets": "标普500/比特币",
+   "source": "https://time-price-research-astrofin.blogspot.com/2026/05/markets-diverge-as-us-enters-new-hurst.html",
+   "detail": "▸ 核心论点：美国市场进入新的 18 个月 Hurst 周期，但股指与比特币的周期节奏出现背离。\n▸ 关键依据：3 月 9 日的周期更新聚焦标普 500 与比特币；后续分析显示美股进入新 18 个月周期后各市场走势分化，比特币被判定 18 个月谷底在 2025 年 11 月 21 日附近形成。\n▸ 时间与位置：2026 年 3 月 9 日发布的 Hurst 周期更新。\n▸ 标的与操作：SPX 与比特币；对分化保持谨慎，不做单边重仓。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-12-22",
+   "direction": "中性",
+   "comments": "年末Macro Outlook更新，按FLD与VTL评估各市场周期位置",
+   "targets": "美股/黄金/外汇/债券",
+   "source": "https://notes.hurstcycles.com/macro-outlook/macro-outlook-22-december-2025/",
+   "detail": "▸ 核心论点：延续 Hurst 周期框架，对主要市场逐一给出周期阶段判断，整体保持中性观察。\n▸ 关键依据：使用 FLD（未来线）与 VTL（有效趋势线）等工具评估股指、黄金、外汇与债券的周期位置与转折确认条件。\n▸ 时间与位置：2025 年 12 月 22 日 Macro Outlook 周报，年末流动性偏薄阶段。\n▸ 标的与操作：全资产观察，以周期谷底确认作为进场触发。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-12-15",
+   "direction": "中性",
+   "comments": "年终周期总览，给出进入2026年初的周期路径",
+   "targets": "标普500/纳指/黄金/澳指/德指",
+   "source": "https://time-price-research-astrofin.blogspot.com/2025/12/hurst-cycles-market-update-and-outlook.html",
+   "detail": "▸ 核心论点：以 Hurst 嵌套周期给出年末到 2026 年初的转折时间窗，而非单向看涨或看跌。\n▸ 关键依据：全年最后一期市场更新，逐一复盘 SPX、NDX、ASX、DAX、NIFTY 与黄金等常规标的的周期位置，判断 11 月究竟是 10 周还是 40 周谷底仍存在不确定性。\n▸ 时间与位置：2025 年 12 月 15 日发布的年终 Hurst 周期市场更新视频。\n▸ 标的与操作：宽基股指与黄金；按下一个周期低点的时间窗分批布局。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-29",
+   "direction": "看多",
+   "comments": "黄金仍向上，美元进20日谷底，原油下探40日底",
+   "targets": "黄金/美元/原油/美股",
+   "source": "https://notes.hurstcycles.com/macro-outlook/macro-outlook-29-september-2025/",
+   "detail": "▸ 核心论点：短周期谷底陆续出现，风险资产与黄金上行结构未破坏。\n▸ 关键依据：美元与美元兑日元正进入 20 日周期谷底；黄金仍在上行；原油下行至 40 日谷底；铜与欧元可能提前形成 80 日谷底；标普与日经的 40 日谷底尚未到来；比特币已提前形成 40 日谷底。\n▸ 时间与位置：2025 年 9 月 29 日 Macro Outlook 周报。\n▸ 标的与操作：黄金维持多头；美股等 40 日谷底后再加仓；原油短线偏弱。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-22",
+   "direction": "看多",
+   "comments": "新20周周期启动，黄金续涨，美元自80日谷底反弹",
+   "targets": "黄金/美股/美元",
+   "source": "https://notes.hurstcycles.com/macro-outlook/macro-outlook-22-september-2025/",
+   "detail": "▸ 核心论点：多数资产刚完成周期谷底，进入新一轮上行阶段。\n▸ 关键依据：美元与美元兑日元自 80 日周期谷底反弹；黄金继续上行；标普、日经、比特币均已在新的 20 周周期中形成 20 日谷底；铜与欧元正下行至 80 日谷底；十年期国债仍在寻找 80 日周期低点。\n▸ 时间与位置：2025 年 9 月 22 日 Macro Outlook 周报。\n▸ 标的与操作：黄金、SPX、日经偏多持有；铜、欧元等待谷底再介入。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-08-25",
+   "direction": "分歧",
+   "comments": "20周周期底部形成时点分歧，标普与纳指信号不一致",
+   "targets": "标普500/纳斯达克/黄金/比特币",
+   "source": "https://time-price-research-astrofin.blogspot.com/2025/08/20-week-cycle-troughs-in-s-500-nasdaq.html",
+   "detail": "▸ 核心论点：主要指数的 Hurst 20 周周期低点是否已经落地存在分歧，需等待确认。\n▸ 关键依据：标普500 显示 20 周周期谷底已于 8 月 1 日形成，但纳斯达克与比特币指向更晚的一个谷底，黄金同步纳入观察。\n▸ 时间与位置：2025 年 8 月 25 日发布的周期更新，处于夏季调整末段。\n▸ 标的与操作：SPX、NDX、黄金、比特币；在周期谷底确认前保持观望，确认后按新 20 周周期做多。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  }
+ ]
+}

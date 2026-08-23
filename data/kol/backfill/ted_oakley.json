@@ -3,7 +3,7 @@
  "sector": "Macro",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 3,
+ "count": 6,
  "history": [
   {
    "date": "2026-05-21",
@@ -22,20 +22,6 @@
    ]
   },
   {
-   "date": "2026-01-15",
-   "direction": "看多",
-   "comments": "在Oxbow Quick Takes节目分享对金银市场判断,认为贵金属处于结构性上行,分享价格可能的下一步走向,持续强调'持有黄金且绝不卖出'的核心配置理念。",
-   "targets": "黄金/白银",
-   "source": "https://oxbowadvisors.com/video-ted-oakley-quick-takes-oxbow-advisors-january-15-2026-gold-silver/",
-   "detail": "▸ 核心论点：贵金属处于结构性上行，核心配置理念是「持有黄金且绝不卖出」。\n▸ 关键依据：在 Oxbow Quick Takes 节目分享对金银市场的判断与价格可能的下一步走向。\n▸ 时间与位置：2026-01-15 节目当日；未给出具体点位或目标价。\n▸ 标的与操作：黄金、白银；看多并长期持有，不卖出。",
-   "detail_status": "ok",
-   "sources": [
-    {
-     "url": "https://oxbowadvisors.com/video-ted-oakley-quick-takes-oxbow-advisors-january-15-2026-gold-silver/"
-    }
-   ]
-  },
-  {
    "date": "2026-04-01",
    "direction": "看多",
    "comments": "40年华尔街老将在Oxbow月度更新中重申以黄金白银为核心的抗通胀抗波动配置,看好被低估的能源股与新兴市场(尤其日本)机会,对高估值科技股保持警惕。",
@@ -50,6 +36,50 @@
      "date": "2026-04-01"
     }
    ]
+  },
+  {
+   "date": "2026-01-15",
+   "direction": "看多",
+   "comments": "在Oxbow Quick Takes节目分享对金银市场判断,认为贵金属处于结构性上行,分享价格可能的下一步走向,持续强调'持有黄金且绝不卖出'的核心配置理念。",
+   "targets": "黄金/白银",
+   "source": "https://oxbowadvisors.com/video-ted-oakley-quick-takes-oxbow-advisors-january-15-2026-gold-silver/",
+   "detail": "▸ 核心论点：贵金属处于结构性上行，核心配置理念是「持有黄金且绝不卖出」。\n▸ 关键依据：在 Oxbow Quick Takes 节目分享对金银市场的判断与价格可能的下一步走向。\n▸ 时间与位置：2026-01-15 节目当日；未给出具体点位或目标价。\n▸ 标的与操作：黄金、白银；看多并长期持有，不卖出。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://oxbowadvisors.com/video-ted-oakley-quick-takes-oxbow-advisors-january-15-2026-gold-silver/"
+    }
+   ]
+  },
+  {
+   "date": "2026-01-08",
+   "direction": "看空",
+   "comments": "标普前十股占43%，2026为总统周期第二年最弱",
+   "targets": "美股/标普500",
+   "source": "https://oxbowadvisors.com/market-comments-january-2026/",
+   "detail": "▸ 核心论点：投资者自以为分散，实际上标普500前十大权重股已占约43%，一旦出现像样的回调，正是这些大名字跌得最狠；2026年可能是波动剧烈的一年。\n▸ 关键依据：2026年是四年总统周期的第二年，历史上是最弱的一年（中位涨幅仅1%，2018年-6%、2022年-19%），叠加美国家庭逾50万亿美元股票敞口、五年翻倍，且历史上第二次出现家庭持股超过持有房地产。\n▸ 时间与位置：2026年1月8日发布的年终/一季度 Market Call 与《Market Comments January 2026》（标题《Don't Stop 'Til You Get Enough》）。\n▸ 标的与操作：已经或将要减持大盘权重股，强调保持平衡与流动性（引用巴菲特30%美债为例）。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-08",
+   "direction": "看空",
+   "comments": "以\"Party Like It's 1999\"类比当下，警示泡沫重演",
+   "targets": "美股",
+   "source": "https://oxbowadvisors.com/market-comments-october-2025/",
+   "detail": "▸ 核心论点：2025年的市场在许多方面让人想起1999年——对新技术（当年是光纤，如今是AI）的极度乐观正在重演，而1999年之后两年市场面目全非。\n▸ 关键依据：1999年几乎所有人都为互联网与光纤狂热，公司甚至举债追逐热潮；他把这一情绪结构与2025年逐条对照，同时讨论降息呼声与 Oxbow 的看法。\n▸ 时间与位置：2025年10月8日发布的 Oxbow《Market Comments October 2025》，标题为《Party Like It's 1999》。\n▸ 标的与操作：标的为美股尤其是热门科技股；主张降低对泡沫资产的暴露、保留流动性。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-02",
+   "direction": "分歧",
+   "comments": "复盘三季度，提示估值高企下需关注四季度风险",
+   "targets": "美股/债券/经济",
+   "source": "https://oxbowadvisors.com/video-ted-oakley-oxbow-advisors-market-update-october-2025/",
+   "detail": "▸ 核心论点：回顾2025年第三季度，认为经济、债券与股市各自处于不同节奏，投资者需要关注下一季度的潜在变化而非线性外推。\n▸ 关键依据：季度内经济数据与市场表现分化，Oxbow 强调保持组合平衡与流动性，而非追逐领涨的少数大盘股。\n▸ 时间与位置：2025年10月2日，Oxbow Advisors 官方发布其三季度市场电话会议完整访谈。\n▸ 标的与操作：涉及美股、债券；操作上偏防御，保留现金与短债缓冲。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

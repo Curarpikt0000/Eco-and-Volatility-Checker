@@ -1,8 +1,29 @@
 {
-  "kol": "Brandon Biggs",
-  "sector": "Alternative",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)：其为宗教预言类人物，公开视频多无明确发布日期；2025-08~2026-08区间未检索到带明确日期的可追踪市场言论",
-  "count": 0,
-  "history": []
+ "kol": "Brandon Biggs",
+ "sector": "Alternative",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)：其为宗教预言类人物，公开视频多无明确发布日期；2025-08~2026-08区间未检索到带明确日期的可追踪市场言论",
+ "count": 2,
+ "history": [
+  {
+   "date": "2025-12-06",
+   "direction": "强烈看空",
+   "comments": "预言\"1930年代加强版\"崩盘，先短暂财富涌流后大崩",
+   "targets": "美股/美元/银行体系",
+   "source": "https://potentialismpcf.substack.com/p/brandon-biggs-prophecies-autumnwinter",
+   "detail": "▸ 核心论点：先有一段短暂的\"财富涌流\"，随后是一场重大崩盘；他形容为\"打了兴奋剂的1930年代式崩盘\"，中产阶级受冲击最重。\n▸ 关键依据：其表述将债务泡沫\"被戳破\"、三大银行（美银、富国、大通）转向加密抵押借贷、CBDC 推出、鲍威尔卸任后利率降至接近零（约1%–2.5%）串成一条时间线，并称若最高法院否决关税相关措施将是美元的\"TKO\"。\n▸ 时间与位置：2025年12月6日公开发布的秋冬季预言整理稿，汇总其2025年秋冬多场直播内容。\n▸ 标的与操作：涉及美股、美元、银行与加密；主张提前防御、关注实物与硬资产。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-30",
+   "direction": "强烈看空",
+   "comments": "异象见巨型\"酸液债务气球\"被撑到极限，当局将主动戳破",
+   "targets": "美国经济/债务/美元",
+   "source": "https://www.youtube.com/watch?v=FFjOlC7EVX4",
+   "detail": "▸ 核心论点：他称在异象中看到一个被撑到极限、装满酸性液体的巨型\"债务气球\"，无人能阻止其破裂，当局会选择主动把它戳破，随后推出政府背书的新数字金融体系。\n▸ 关键依据：其\"异象\"叙事将当前债务规模、CBDC 立法推进与加密抵押借贷平台的兴起串联，属宗教预言性质而非量化分析。\n▸ 时间与位置：异象时间被明确记为2025年11月30日，后由第三方频道整理传播。\n▸ 标的与操作：涉及美元、美债与整体金融体系；隐含建议为远离纯法币敞口、准备体系性冲击。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  }
+ ]
 }

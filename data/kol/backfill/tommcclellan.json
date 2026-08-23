@@ -1,0 +1,59 @@
+{
+ "kol": "Tom McClellan",
+ "sector": "",
+ "backfill_date": "2026-08-23",
+ "source_method": "1yr gap backfill (web_search + web_extract)",
+ "count": 5,
+ "history": [
+  {
+   "date": "2025-10-09",
+   "direction": "看空",
+   "comments": "美德利差与股指背离已持续数月，看跌信号",
+   "targets": "美股/美债/德债利差",
+   "source": "https://www.mcoscillator.com/learning_center/weekly_chart/treasury-bund_divergence/",
+   "detail": "▸ 核心论点：股市宽度背离刚开始显现，但另一项看跌背离已运行数月——美国 10 年期与德国长债（Bund）收益率利差正与股价背离，这种背离历来预示股市麻烦。\n▸ 关键依据：正常情况下该利差与股市同步涨跌；利差高企意味着美债收益率远高于德债，是股市的不利条件，而当利差与股价出现背离时，问题往往变得更为紧迫。他指出该关系在 1990 年代初德国统一与 1999 年欧元诞生之后才成立。\n▸ 时间与位置：2025 年 10 月 9 日 Chart In Focus。\n▸ 标的与操作：对美股看空，但明确背离不给出时点，可能持续一两个月甚至更久，也存在被「修复」的可能——考虑到该利差已下滑幅度，修复难度很大。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-25",
+   "direction": "看空",
+   "comments": "逆回购降至250亿见底，牛市燃料即将耗尽",
+   "targets": "美股/流动性",
+   "source": "https://www.mcoscillator.com/learning_center/weekly_chart/reverse_repos_bottoming_out/",
+   "detail": "▸ 核心论点：逆回购（RRP）是市场流动性的抽水机，其解压过程等同于变相 QE，是 2022 年以来牛市的重要燃料；如今这一燃料几近耗尽。\n▸ 关键依据：纽约联储 RRP 规模在 2022 年 12 月底曾高达 2.5 万亿美元，现已降至仅约 250 亿美元。图中把 RRP 倒置并前移 5 个交易日与标普 500 对比，倒置曲线已升至零附近，意味着这一来源无法再提供上行动能。\n▸ 时间与位置：2025 年 9 月 25 日 Chart In Focus。\n▸ 标的与操作：若牛市要延续，必须找到新的流动性来源（如美联储重启常规回购）；否则对美股构成上行阻力。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-18",
+   "direction": "看空",
+   "comments": "Cass货运12月ROC双双转负，历来对应熊市区间",
+   "targets": "美股/标普500/运输业",
+   "source": "https://www.mcoscillator.com/learning_center/weekly_chart/cass_freight_data_have_bad_news_for_stocks/",
+   "detail": "▸ 核心论点：Cass 卡车运输数据对股价是坏消息——发货量与运费支出两项指数的 12 个月变化率现已双双回落至零轴之下，而这正是标普 500 熊市期间的典型位置。\n▸ 关键依据：美国卡车运输业自 2023 年 2 月起处于萧条；2025 年 4 月支出指数 12ROC 曾短暂转正，那只是货主为抢在关税前提货而多付运费，发货量始终低迷。当两项 12ROC 同时为正时标普通常表现极好，如今双双转负。\n▸ 时间与位置：2025 年 9 月 18 日 Chart In Focus，紧随 FOMC 降息 25 个基点之后。\n▸ 标的与操作：对美股偏空；他强调这只是一项证据，说明经济问题比 FOMC 那次降息所考虑的更大，并不给出跌幅与时点。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-04",
+   "direction": "看空",
+   "comments": "麦氏摆动指标区间异常收窄，典型见顶条件",
+   "targets": "美股/标普500",
+   "source": "https://www.mcoscillator.com/learning_center/weekly_chart/narrow_range_of_mcclellan_oscillator_readings/",
+   "detail": "▸ 核心论点：市场的「安静」是价格见顶的信号——上涨之后人人自信、无人急躁，宽度数据因而变得平静；这正是当前的状态。\n▸ 关键依据：他用麦克莱伦摆动指标过去 15 个交易日的取值区间做衡量，当前读数极低。更值得注意的是，自 2025 年 7 月以来不仅读数持续偏低，这个 15 日区间指标本身还在整体收缩，即「安静被加倍」。\n▸ 时间与位置：2025 年 9 月 4 日 Chart In Focus。\n▸ 标的与操作：对美股偏空/警惕见顶；但他明确指出该指标不预示跌幅大小，也存在失效个例。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-08-28",
+   "direction": "看空",
+   "comments": "纽约降雨领先指标暗示实际GDP增速继续回落",
+   "targets": "美国经济/GDP/美股",
+   "source": "https://www.mcoscillator.com/learning_center/weekly_chart/new_york_rain_and_gdp_data/",
+   "detail": "▸ 核心论点：McClellan 用纽约市降雨量与美国 GDP 的长期相关性做领先判断，指出降雨偏少对应实际 GDP 同比增速的继续下行。\n▸ 关键依据：8 月 28 日公布的数据将 2025 年二季度名义 GDP 增速上修至 3.3%（初值 3.0%）；但以同比口径看的实际 GDP 自 2023 年三季度高点以来持续回落，而 2025 年 6-8 月纽约降雨低于常年均值，指向增速继续走弱。\n▸ 时间与位置：2025 年 8 月 28 日 Chart In Focus。\n▸ 标的与操作：该关系只判断方向与拐点时机、不预测数值；结论偏向美国增长动能继续减弱。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  }
+ ]
+}

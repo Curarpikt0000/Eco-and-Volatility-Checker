@@ -3,8 +3,24 @@
  "sector": "Precious Metals",
  "backfill_date": "2026-08-18",
  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
- "count": 2,
+ "count": 8,
  "history": [
+  {
+   "date": "2026-04-15",
+   "direction": "看多",
+   "comments": "在播客中拆解金银价格预测，认为市场波动可能先触发一轮回调，随后迎来下一轮重大突破；长期看多但提示短期先有震荡回撤。",
+   "targets": "黄金/白银",
+   "source": "https://ivy.fm/tag/chris-vermeulen",
+   "detail": "▸ 核心论点：长期看多金银，但提示短期先有震荡回撤再迎突破。\n▸ 关键依据：公开信息有限，仅检索到：播客中拆解金银价格预测，认为市场波动可能先触发一轮回调，随后迎来下一轮重大突破。\n▸ 时间与位置：未给出具体点位与时间窗口。\n▸ 标的与操作：黄金、白银，回调中逢低布局、长期看多。",
+   "detail_status": "thin",
+   "sources": [
+    {
+     "title": "Chris Vermeulen",
+     "url": "https://ivy.fm/tag/chris-vermeulen",
+     "date": "2026-04-15"
+    }
+   ]
+  },
   {
    "date": "2026-01-31",
    "direction": "强烈看多",
@@ -22,20 +38,64 @@
    ]
   },
   {
-   "date": "2026-04-15",
+   "date": "2025-12-19",
    "direction": "看多",
-   "comments": "在播客中拆解金银价格预测，认为市场波动可能先触发一轮回调，随后迎来下一轮重大突破；长期看多但提示短期先有震荡回撤。",
-   "targets": "黄金/白银",
-   "source": "https://ivy.fm/tag/chris-vermeulen",
-   "detail": "▸ 核心论点：长期看多金银，但提示短期先有震荡回撤再迎突破。\n▸ 关键依据：公开信息有限，仅检索到：播客中拆解金银价格预测，认为市场波动可能先触发一轮回调，随后迎来下一轮重大突破。\n▸ 时间与位置：未给出具体点位与时间窗口。\n▸ 标的与操作：黄金、白银，回调中逢低布局、长期看多。",
-   "detail_status": "thin",
-   "sources": [
-    {
-     "title": "Chris Vermeulen",
-     "url": "https://ivy.fm/tag/chris-vermeulen",
-     "date": "2026-04-15"
-    }
-   ]
+   "comments": "金价先冲 5200 再迎重大回调",
+   "targets": "黄金、白银、铀、MAG7",
+   "source": "https://thetechnicaltraders.com/the-case-for-5200-gold-before-a-significant-pullback-mag7-silver-uranium/",
+   "detail": "▸ 核心论点：黄金在出现重大回调之前，仍有空间推升至 5200 美元一带。\n▸ 关键依据：技术目标位测算与周期节奏；同时讨论 MAG7、白银与铀板块的相对强弱。\n▸ 时间与位置：2025 年 12 月 19 日发表于 TheTechnicalTraders 的访谈整理。\n▸ 标的与操作：黄金仍持多，但需为随后的重置行情预留退出计划。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-12-12",
+   "direction": "看空",
+   "comments": "称近期波动并非随机，图表指向风险",
+   "targets": "美股、波动率",
+   "source": "https://thetechnicaltraders.com/market-volatility-is-not-random-heres-what-the-charts-are-signaling-next/",
+   "detail": "▸ 核心论点：近期市场抛售与波动并非随机噪音，而是大周期开始切换的技术信号。\n▸ 关键依据：图表结构显示趋势动能衰减，波动率抬升具有系统性含义而非偶发。\n▸ 时间与位置：2025 年 12 月 12 日发表于 TheTechnicalTraders 的访谈整理。\n▸ 标的与操作：对风险资产转趋谨慎，强调保护资本与对冲。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-20",
+   "direction": "分歧",
+   "comments": "市场处临界点，崩盘或逼空两种可能",
+   "targets": "美股、黄金、白银、比特币、原油",
+   "source": "https://www.wealthion.com/learn/chris-vermeulen-crash-or-melt-up-markets-at-a-critical-tipping-point/",
+   "detail": "▸ 核心论点：市场正处于关键的临界点，既可能出现新高的逼空式上涨，也可能转入痛苦的熊市，需要以图表确认方向。\n▸ 关键依据：大量技术图表分析，涵盖股指、黄金、白银、比特币与原油的关键位与背离。\n▸ 时间与位置：2025 年 11 月 20 日 Wealthion 长访谈。\n▸ 标的与操作：强调风险管理与顺势跟随，不预设单一方向。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-14",
+   "direction": "强烈看多",
+   "comments": "重申黄金年底看 5100，警告股市崩塌",
+   "targets": "黄金、股市（看空）",
+   "source": "https://www.jpost.com/business-and-innovation/precious-metals/article-873647",
+   "detail": "▸ 核心论点：加倍看多黄金，预计年底金价达到 5100 美元，背后逻辑是对金融重置与股市崩塌的担忧。\n▸ 关键依据：技术形态与资金流；股票市场处于顶部阶段，风险资产脆弱。\n▸ 时间与位置：2025 年 11 月 14 日 Jerusalem Post 贵金属栏目报道。\n▸ 标的与操作：黄金多头，股票敞口保持谨慎与防御。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-10",
+   "direction": "强烈看多",
+   "comments": "年底前黄金或再涨 30% 至 5000 美元",
+   "targets": "黄金",
+   "source": "https://www.itmtrading.com/blog/gold-surge-5000-vermeulen-forecast/",
+   "detail": "▸ 核心论点：黄金有望在年底前上涨约 30%，冲向 5000 美元，并为一次金融重置铺垫。\n▸ 关键依据：技术面形态与长期周期共振；避险资金持续流入贵金属；对法币体系与债务的担忧。\n▸ 时间与位置：2025 年 11 月 10 日与 ITM Trading 的 Daniela Cambone 访谈。\n▸ 标的与操作：持有并加码黄金敞口，作为金融重置情景下的核心防御资产。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-05",
+   "direction": "看多",
+   "comments": "金银回调是加仓机会，看向金 5200",
+   "targets": "黄金、白银",
+   "source": "https://www.zerohedge.com/news/2025-11-05/dont-sell-your-gold-silver-now-buy-dips-massive-rally-chris-vermeulen",
+   "detail": "▸ 核心论点：当前金银回调不是牛市结束，而是大级别上涨前的洗盘，不应在此时卖出贵金属。\n▸ 关键依据：斐波那契回撤位支撑、市场情绪进入恐慌阶段、情绪周期显示散户在低点交出筹码。\n▸ 时间与位置：2025 年 11 月 5 日访谈（ZeroHedge 转载），金价自高点回落期间。\n▸ 标的与操作：逢低买入黄金与白银，目标金价约 5200 美元、银价重回 60 美元上方。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

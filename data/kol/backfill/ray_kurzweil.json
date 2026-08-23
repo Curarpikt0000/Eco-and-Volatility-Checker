@@ -1,8 +1,49 @@
 {
-  "kol": "Ray Kurzweil",
-  "sector": "Equities",
-  "backfill_date": "2026-08-18",
-  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)：其公开言论以AI/奇点长期科技预言(2029/2045)为主，非市场资产方向判断，无可追踪的过去一年市场言论",
-  "count": 0,
-  "history": []
+ "kol": "Ray Kurzweil",
+ "sector": "Equities",
+ "backfill_date": "2026-08-18",
+ "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)：其公开言论以AI/奇点长期科技预言(2029/2045)为主，非市场资产方向判断，无可追踪的过去一年市场言论",
+ "count": 4,
+ "history": [
+  {
+   "date": "2026-02-11",
+   "direction": "看多",
+   "comments": "称距离攻克疾病还有约七年",
+   "targets": "AI 医疗、长寿产业",
+   "source": "https://www.bostonmagazine.com/health/2026/02/11/ray-kurzweil-interview/",
+   "detail": "▸ 核心论点：认为人类距离在 AI 帮助下大规模攻克疾病仅约七年时间。\n▸ 关键依据：AI 加速新药研发与临床模拟，医疗进步速度快于线性外推。\n▸ 时间与位置：2026 年 2 月 11 日 Boston Magazine 专访。\n▸ 标的与操作：科技与生物医疗长期主题看多，无具体交易标的。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2026-01-20",
+   "direction": "强烈看多",
+   "comments": "重申 2029 年 AGI、2045 年奇点",
+   "targets": "AGI、AI 算力、人机融合",
+   "source": "https://www.diamandis.com/podcast/singularity-countdown-agi-2029-ray-kurzweil",
+   "detail": "▸ 核心论点：坚持 AGI 于 2029 年到来、奇点于 2045 年发生的判断，人类将与 AI 融合，智能提升千倍。\n▸ 关键依据：加速回报定律；纳米机器人接入大脑与云端算力的路径；模型能力的持续跃迁。\n▸ 时间与位置：2026 年 1 月 20 日 Moonshots with Peter Diamandis 第 223 期播客。\n▸ 标的与操作：长期科技乐观叙事，对 AI 基础设施与算力主题构成支撑。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-11",
+   "direction": "强烈看多",
+   "comments": "预测 2032 年达到长寿逃逸速度",
+   "targets": "长寿科技、生物医疗、AI",
+   "source": "https://thefreesheet.com/2025/10/11/kurzweil-predicts-longevity-escape-velocity-by-2032-in-mit-lecture/",
+   "detail": "▸ 核心论点：预测到 2032 年医学进步将使人类每活一年获得超过一年的预期寿命增量，即达到长寿逃逸速度。\n▸ 关键依据：AI 驱动的药物发现与模拟试验大幅压缩研发周期，医疗进步呈指数曲线。\n▸ 时间与位置：2025 年 10 月 11 日报道，基于其 MIT 演讲内容。\n▸ 标的与操作：长期看好长寿科技与 AI 医疗方向，非短期市场判断。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-10",
+   "direction": "强烈看多",
+   "comments": "MIT 演讲重申对 AI 与技术进步的乐观",
+   "targets": "AI、科技进步、长寿医疗",
+   "source": "https://news.mit.edu/2025/ray-kurzwei-reinforces-his-optimism-tech-progress-1010",
+   "detail": "▸ 核心论点：在接受 MIT Robert A. Muh 校友奖的演讲中，重申对人工智能与技术指数级进步的强烈乐观，认为 AI 将带来医疗与长寿领域的突破。\n▸ 关键依据：加速回报定律下算力与算法成本持续下降；AI 在药物研发与生物医学上的应用正在提速。\n▸ 时间与位置：2025 年 10 月 10 日，MIT 人文艺术与社会科学学院颁奖演讲。\n▸ 标的与操作：属趋势判断而非交易建议，方向上利好 AI 与生物科技长期主题。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  }
+ ]
 }

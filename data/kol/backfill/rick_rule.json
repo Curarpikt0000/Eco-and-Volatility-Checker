@@ -3,8 +3,24 @@
  "sector": "Precious Metals",
  "backfill_date": "2026-08-18",
  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
- "count": 2,
+ "count": 5,
  "history": [
+  {
+   "date": "2026-07-14",
+   "direction": "看多",
+   "comments": "Rule讨论仅有1%的管理团队能创造十倍回报，看好铜的超级周期，认为优质矿业管理团队是长期价值来源。",
+   "targets": "铜/矿业股",
+   "source": "https://miningnetwork.co.uk/governments-bail-out-tomago/",
+   "detail": "▸ 核心论点：看好铜的超级周期，并强调优质矿业管理团队才是长期价值来源。\n▸ 关键依据：指出仅有约1%的管理团队能创造十倍回报，因此选股核心在于识别优质管理层；同时看好铜的超级周期。\n▸ 时间与位置：未给出具体点位与时间窗口。\n▸ 标的与操作：铜与矿业股；操作上看多，但筛选标准是管理团队质量。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://miningnetwork.co.uk/governments-bail-out-tomago/",
+     "date": "2026-07-14"
+    }
+   ]
+  },
   {
    "date": "2026-05-28",
    "direction": "看多",
@@ -22,20 +38,34 @@
    ]
   },
   {
-   "date": "2026-07-14",
+   "date": "2025-12-17",
    "direction": "看多",
-   "comments": "Rule讨论仅有1%的管理团队能创造十倍回报，看好铜的超级周期，认为优质矿业管理团队是长期价值来源。",
-   "targets": "铜/矿业股",
-   "source": "https://miningnetwork.co.uk/governments-bail-out-tomago/",
-   "detail": "▸ 核心论点：看好铜的超级周期，并强调优质矿业管理团队才是长期价值来源。\n▸ 关键依据：指出仅有约1%的管理团队能创造十倍回报，因此选股核心在于识别优质管理层；同时看好铜的超级周期。\n▸ 时间与位置：未给出具体点位与时间窗口。\n▸ 标的与操作：铜与矿业股；操作上看多，但筛选标准是管理团队质量。",
+   "comments": "2026展望：金牛市仍在早中期，工业金属超级周期在望",
+   "targets": "黄金/白银/铜/石油天然气/初级矿企",
+   "source": "https://triangle-investor.com/interviews/gold-silver-uranium-copper-rick-rule/",
+   "detail": "▸ 核心论点：Rule 给出2026年展望——黄金牛市仍处早到中期，白银正在突破，铜与石油等工业金属的更广泛超级周期正在酝酿；初级矿企历史性低估，并购浪潮将至。\n▸ 关键依据：他自述当前组合约40%为现金及流动性资产，正大幅转向被低估的油气板块并选择性配置黄金股，认为估值差是最大的机会来源。\n▸ 时间与位置：录制于2025年12月17日的 Triangle Investor 独家访谈。\n▸ 标的与操作：点名持有或看好 GoldMining Inc.、Royal Gold（喜欢特许权模式）、McEwen Mining（铜的上行）、Hot Chili、Osisko Development、Copper Giant 等；对 Global Atomic（政治风险）、Denison（ISR 存疑）保留态度。",
    "detail_status": "ok",
-   "sources": [
-    {
-     "title": "",
-     "url": "https://miningnetwork.co.uk/governments-bail-out-tomago/",
-     "date": "2026-07-14"
-    }
-   ]
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-20",
+   "direction": "强烈看多",
+   "comments": "1970年代式贵金属牛市中白银将跑赢黄金",
+   "targets": "白银/黄金/金矿股/初级矿企",
+   "source": "https://www.wealthion.com/learn/rick-rule-silver-will-outshine-gold-in-a-1970s-like-precious-metals-bull-market/",
+   "detail": "▸ 核心论点：在2025年 Rick Rule 自然资源论坛的独家访谈中，Rule 表示美元将像1970年代一样损失约75%的购买力，黄金有翻两番的空间，而白银的爆发力更强——当散户/通才投资者被黄金的动能吸引进场后，因白银单价低、波动大，领导权会转移到白银，届时行情“极其戏剧性”。\n▸ 关键依据：美国债务、未拨备负债与负实际收益率共同构成新一轮贵金属超级周期的宏观基础。\n▸ 时间与位置：2025年11月20日 Wealthion 发布，录于2025年 Rule 自然资源论坛。\n▸ 标的与操作：三桶策略——黄金作为保险、金矿股作为投资、初级矿企作为高风险投机；他本人希望在职业生涯中再经历一次白银的“量级跃升”。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-26",
+   "direction": "看多",
+   "comments": "金价4400回落至4100只是波动，牛市逻辑未变",
+   "targets": "黄金/白银/铀/初级矿企",
+   "source": "https://triangle-investor.com/articles/silver-uranium-gold-rick-rule/",
+   "detail": "▸ 核心论点：Rule 认为黄金从4400美元回落到4100美元只是商品投资固有的波动，要用两年视角看“是从44跌到41，还是从2涨到41”；这轮属于长期牛市中的正常回撤。\n▸ 关键依据：美国联邦债务已超38万亿美元，加上医保、社保等表外负债约120万亿；他预计未来十年美元实际购买力可能losing 75%，复刻1970年代，届时金价名义值有三到四倍空间，但中途出现20–30%回调几乎不可避免。\n▸ 时间与位置：2025年10月26日发布的 Fynd Exploration 播客访谈整理稿，金价刚从高位回落阶段。\n▸ 标的与操作：看多黄金与白银（白银为黄金的衍生品、牛市中常以2:1跑赢），铀在75美元/磅现货价下无法激励新供给，五到七年维度仍看多。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

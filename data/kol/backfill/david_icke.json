@@ -3,7 +3,7 @@
  "sector": "Alternative",
  "backfill_date": "2026-08-18",
  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
- "count": 1,
+ "count": 4,
  "history": [
   {
    "date": "2026-07-15",
@@ -20,6 +20,36 @@
      "date": "2026-07-15"
     }
    ]
+  },
+  {
+   "date": "2025-12-13",
+   "direction": "看空",
+   "comments": "伦敦反数字 ID 集会演讲，呼吁不服从",
+   "targets": "数字身份、英国政策、公民自由",
+   "source": "https://www.youtube.com/watch?v=GYW8ZJ-4iak",
+   "detail": "▸ 核心论点：在伦敦反数字身份游行上演讲，呼吁公众以不服从（non-compliance）对抗数字身份制度的推行。\n▸ 关键依据：认为控制体系依赖民众的同意与配合，一旦大规模拒绝接入，制度推行即难以落地。\n▸ 时间与位置：2025 年 12 月 13 日，伦敦 Portland Place BBC 广播大楼至 Whitehall 游行现场。\n▸ 标的与操作：非交易建议，主张个人层面拒绝接入集中化身份与支付体系。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-11",
+   "direction": "看空",
+   "comments": "称另类媒体被渗透，全球控制体系成形",
+   "targets": "全球治理体系、另类媒体、认知战",
+   "source": "https://www.thehighersidechats.com/david-icke-hidden-knowledge-alt-media-infiltration-the-global-cult/",
+   "detail": "▸ 核心论点：所谓的另类媒体已被系统性渗透，围绕人类认知的控制体系正在成形，公众看到的对立叙事本身是被安排的。\n▸ 关键依据：以隐藏知识与全球集团（global cult）架构为框架，解释信息环境的操控机制。\n▸ 时间与位置：2025 年 11 月 11 日 The Higherside Chats 播客长访谈。\n▸ 标的与操作：非市场交易观点，属对信息环境与主权侵蚀的警示。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-06",
+   "direction": "看空",
+   "comments": "警告数字 ID 是 AI 控制网格的入口",
+   "targets": "数字身份、CBDC、个人自由",
+   "source": "https://fight.fudgie.org/search/show/di/episode/20251106_Thu_W3PvadvTi18",
+   "detail": "▸ 核心论点：全球推行数字身份（Digital ID）是构建 AI 控制网格的关键一步，最终指向对个人行为与消费的全面管控。\n▸ 关键依据：各国同步立法推进数字身份与数字货币基础设施；一旦身份、支付与准入绑定，拒绝配合的成本极高。\n▸ 时间与位置：2025 年 11 月 6 日发布的视频演讲《We Need to Talk About DIGITAL ID - A WARNING》。\n▸ 标的与操作：非交易观点，属对制度与自由风险的警示，倾向反对接入集中化数字金融体系。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

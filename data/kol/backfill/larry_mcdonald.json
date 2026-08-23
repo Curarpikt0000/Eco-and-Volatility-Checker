@@ -3,21 +3,21 @@
  "sector": "Macro",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 3,
+ "count": 8,
  "history": [
   {
-   "date": "2025-12-12",
+   "date": "2025-12-24",
    "direction": "看多",
-   "comments": "Bear Traps Report创始人在MoneyShow论坛判断硬资产将在2026跑赢金融资产,通缩时代已终结,资本将大规模轮动进入硬资产与价值股。",
-   "targets": "硬资产/价值股/大宗商品",
-   "source": "https://seekingalpha.com/article/4852910-hard-assets-vs-financial-larry-mcdonald-what-leads-in-2026",
-   "detail": "▸ 核心论点：硬资产将在2026年跑赢金融资产，通缩时代已经终结。\n▸ 关键依据：Bear Traps Report创始人在MoneyShow论坛判断资本将大规模轮动进入硬资产与价值股，理由是通缩环境结束、定价权向实物资产转移。\n▸ 时间与位置：时间窗口为2026年；未给出具体点位。\n▸ 标的与操作：硬资产、价值股与大宗商品，看多；金融资产相对减配。",
+   "comments": "认为2026将是价值股之年,一场庞大的资本转移将定义2026,'反通胀格局已彻底成为过去',强调向硬资产与价值板块的巨大轮动。",
+   "targets": "价值股/硬资产",
+   "source": "https://themarket.ch/english/2026-is-set-to-be-the-year-of-value-stocks-ld.15676",
+   "detail": "▸ 核心论点：2026 年将是价值股之年，一场庞大的资本转移将定义 2026。\n▸ 关键依据：其判断依据是「反通胀格局已彻底成为过去」，资金将向硬资产与价值板块发生巨大轮动。\n▸ 时间与位置：时间指向 2026 全年；未给出具体点位。\n▸ 标的与操作：价值股、硬资产，买入 / 超配。",
    "detail_status": "ok",
    "sources": [
     {
      "title": "Larry McDonald",
-     "url": "https://seekingalpha.com/article/4852910-hard-assets-vs-financial-larry-mcdonald-what-leads-in-2026",
-     "date": "2025-12-12"
+     "url": "https://themarket.ch/english/2026-is-set-to-be-the-year-of-value-stocks-ld.15676",
+     "date": "2025-12-24"
     }
    ]
   },
@@ -38,20 +38,70 @@
    ]
   },
   {
-   "date": "2025-12-24",
+   "date": "2025-12-12",
    "direction": "看多",
-   "comments": "认为2026将是价值股之年,一场庞大的资本转移将定义2026,'反通胀格局已彻底成为过去',强调向硬资产与价值板块的巨大轮动。",
-   "targets": "价值股/硬资产",
-   "source": "https://themarket.ch/english/2026-is-set-to-be-the-year-of-value-stocks-ld.15676",
-   "detail": "▸ 核心论点：2026 年将是价值股之年，一场庞大的资本转移将定义 2026。\n▸ 关键依据：其判断依据是「反通胀格局已彻底成为过去」，资金将向硬资产与价值板块发生巨大轮动。\n▸ 时间与位置：时间指向 2026 全年；未给出具体点位。\n▸ 标的与操作：价值股、硬资产，买入 / 超配。",
+   "comments": "Bear Traps Report创始人在MoneyShow论坛判断硬资产将在2026跑赢金融资产,通缩时代已终结,资本将大规模轮动进入硬资产与价值股。",
+   "targets": "硬资产/价值股/大宗商品",
+   "source": "https://seekingalpha.com/article/4852910-hard-assets-vs-financial-larry-mcdonald-what-leads-in-2026",
+   "detail": "▸ 核心论点：硬资产将在2026年跑赢金融资产，通缩时代已经终结。\n▸ 关键依据：Bear Traps Report创始人在MoneyShow论坛判断资本将大规模轮动进入硬资产与价值股，理由是通缩环境结束、定价权向实物资产转移。\n▸ 时间与位置：时间窗口为2026年；未给出具体点位。\n▸ 标的与操作：硬资产、价值股与大宗商品，看多；金融资产相对减配。",
    "detail_status": "ok",
    "sources": [
     {
      "title": "Larry McDonald",
-     "url": "https://themarket.ch/english/2026-is-set-to-be-the-year-of-value-stocks-ld.15676",
-     "date": "2025-12-24"
+     "url": "https://seekingalpha.com/article/4852910-hard-assets-vs-financial-larry-mcdonald-what-leads-in-2026",
+     "date": "2025-12-12"
     }
    ]
+  },
+  {
+   "date": "2025-12-02",
+   "direction": "看多",
+   "comments": "以\"硬资产与大迁徙\"框定2026年主线",
+   "targets": "硬资产/大宗商品",
+   "source": "https://www.linkedin.com/posts/convertbond_hard-assets-and-the-great-migration-activity-7399865316018765824-4vte",
+   "detail": "▸ 核心论点：把2026年的核心叙事定为\"硬资产与大迁徙\"，即资金从纸面资产系统性流向实物资产。\n▸ 关键依据：延续其被动投资泡沫与财政赤字货币化的分析框架，认为该迁徙在2026年会加速。\n▸ 时间与位置：2025年12月2日，其 LinkedIn（@convertbond）帖文/演讲摘要。\n▸ 标的与操作：看多大宗商品与资源股，看空被动指数集中持仓。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-26",
+   "direction": "看多",
+   "comments": "重申硬资产将持续跑赢金融资产",
+   "targets": "硬资产 vs 金融资产",
+   "source": "https://www.linkedin.com/posts/convertbond_hard-assets-vs-financial-assets-next-week-activity-7399536326255206400-rLrf",
+   "detail": "▸ 核心论点：硬资产相对金融资产的相对表现是未来数年的主线，配置重心应向实物资产倾斜。\n▸ 关键依据：他持续用硬资产/金融资产比价图表说明该轮切换刚开始，指数集中度风险则站在金融资产一侧。\n▸ 时间与位置：2025年11月26日，其 LinkedIn（@convertbond）帖文。\n▸ 标的与操作：超配黄金、白银、能源、铜等硬资产，低配高估值金融资产。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-24",
+   "direction": "看空",
+   "comments": "称AI投资泡沫正在引发一场信用危机",
+   "targets": "美股/信用市场/AI相关债务",
+   "source": "https://www.linkedin.com/posts/convertbond_ai-investment-bubble-is-causing-a-credit-activity-7398847105567465475-tf4Y",
+   "detail": "▸ 核心论点：AI 资本开支泡沫的融资端已经开始出问题，正在演变为信用市场危机而不仅是股票估值问题。\n▸ 关键依据：他在与 Julia La Roche 的访谈后于 LinkedIn 强调 AI 投资的债务融资结构脆弱。\n▸ 时间与位置：2025年11月24日，其个人 LinkedIn（@convertbond）帖文。\n▸ 标的与操作：看空 AI 产业链信用与高估值科技股。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-20",
+   "direction": "看空",
+   "comments": "警告标普可能跌至4000出头，美元结构性走弱",
+   "targets": "美股/标普500/美元",
+   "source": "https://wealthion.com/news/larry-mcdonald-investors-fleeing-u-s-markets-where-the-smart-money-is-going-part-ii",
+   "detail": "▸ 核心论点：全球正处于大级别的资金体制转换，美国制裁与关税逼迫各国央行抛售美债换黄金，美元进入结构性下行。\n▸ 关键依据：他指出经济放缓叠加资金外流，标普500有可能被拖到4000出头的区间；新兴市场央行的\"去美债化\"是趋势性行为。\n▸ 时间与位置：2025年11月20日 Wealthion（James Connor 访谈第二部分）。\n▸ 标的与操作：看空美股与美元，看多黄金、白银、原油与新兴市场。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-10",
+   "direction": "强烈看多",
+   "comments": "硬资产大迁徙，矿业股\"Shiny 7\"跑赢科技七雄",
+   "targets": "黄金/白银/铜/铀/资源股",
+   "source": "https://www.financialsense.com/podcast/21425/commodities-chaos-and-cash-flow-larry-mcdonalds-case-hard-assets",
+   "detail": "▸ 核心论点：资金正从金融资产向硬资产大迁徙，天然资源是当下最被低估的一波机会。\n▸ 关键依据：2025年黄金、白银、铜、铀、钯金表现跑赢英伟达等\"Mag 7\"；矿业股（他称之为 Shiny 7）年内涨幅接近100%。他同时痛批被动投资是\"纯粹的邪恶\"，制造了极端的指数集中度风险。\n▸ 时间与位置：2025年10月10日 Financial Sense Newshour 访谈。\n▸ 标的与操作：看多黄金/白银/铜/铀及资源类股票，警惕被动 ETF 集中持仓风险。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

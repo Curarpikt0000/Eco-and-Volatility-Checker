@@ -1,1 +1,40 @@
-{"kol":"Jeremy Stein","sector":"Macro","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":0,"status":"未找到","history":[]}
+{
+ "kol": "Jeremy Stein",
+ "sector": "Macro",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 3,
+ "status": "未找到",
+ "history": [
+  {
+   "date": "2026-05-19",
+   "direction": "中性",
+   "comments": "缩表应看久期而非规模大小",
+   "targets": "美联储资产负债表/久期",
+   "source": "https://www.centralbanking.com/central-banks/monetary-policy/7975918/focus-on-duration-and-not-size-of-fed-ledger-ex-governor-says",
+   "detail": "▸ 核心论点：衡量联储在金融市场的足迹应看其持有资产的久期结构，而不是资产负债表的名义规模。\n▸ 关键依据：充裕准备金框架下负债端扩张本身不等于扭曲市场；真正影响期限溢价的是联储吸收了多少久期风险。\n▸ 时间与位置：2026年5月18日亚特兰大联储会议小组讨论，正值市场辩论缩表终点与准备金充裕度。\n▸ 标的与操作：对长端美债期限溢价与联储持仓久期给出框架性判断，方向上中性。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2026-03-01",
+   "direction": "中性",
+   "comments": "与Kashyap撰文：联储需新工具防美债失灵",
+   "targets": "美债市场/央行政策框架",
+   "source": "https://www.imf.org/en/publications/fandd/issues/2026/03/safeguarding-the-treasury-market-jeremy-stein",
+   "detail": "▸ 核心论点：与 Anil Kashyap 合著《Safeguarding the Treasury Market》，认为美联储需要制度化的新干预工具来应对未来美债市场压力。\n▸ 关键依据：延续其 Brookings 论文的分析——市场失灵是中介资产负债表容量不足所致，临时性大规模购债成本高且模糊政策边界。\n▸ 时间与位置：IMF《Finance & Development》2026年3月号刊发(日期取当期出版月首日)。\n▸ 标的与操作：对美债定价与联储资产负债表框架给出制度性建议，不构成方向性交易观点。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-07",
+   "direction": "中性",
+   "comments": "主张联储用国债衍生品应对美债市场失灵",
+   "targets": "美债市场/美联储工具/流动性",
+   "source": "https://www.centralbanking.com/central-banks/financial-stability/7974020/ex-governor-says-fed-should-use-treasury-derivatives-in-crisis",
+   "detail": "▸ 核心论点：联储应新增以国债衍生品(期货/互换)为主的干预工具，而非一遇压力就大规模买断现券。\n▸ 关键依据：2020 年3月式的美债市场失灵源于对冲基金基差交易去杠杆，直接购债会混淆货币政策信号并留下庞大资产负债表后遗症。\n▸ 时间与位置：2025年11月6日在欧洲央行货币市场会议演讲，市场处于准备金逐步收敛、回购利率间歇性抽紧阶段。\n▸ 标的与操作：关注美债流动性与回购利差，对联储资产负债表规模持中性偏审慎立场。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  }
+ ]
+}

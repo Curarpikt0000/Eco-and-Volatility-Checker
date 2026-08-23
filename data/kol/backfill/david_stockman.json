@@ -3,7 +3,7 @@
  "sector": "Macro",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 1,
+ "count": 6,
  "history": [
   {
    "date": "2026-08-07",
@@ -20,6 +20,56 @@
      "date": "2026-08-07"
     }
    ]
+  },
+  {
+   "date": "2026-01-27",
+   "direction": "看多",
+   "comments": "金银大涨是对纸币体系的\"真钱\"投票",
+   "targets": "黄金/白银",
+   "source": "https://davidstockman.substack.com/p/mind-the-real-moneywhy-gold-and-silver",
+   "detail": "▸ 核心论点：金银价格飙升不是投机，而是市场对失控财政与货币扩张的\"真钱\"定价。\n▸ 关键依据：他从多年财政与货币指标出发，认为任何关注这些数据的人都不会对贵金属走强感到意外。\n▸ 时间与位置：2026年1月27日，Contra Corner（Substack）发表《Mind The Real Money—Why Gold And Silver Are Soaring, Part 1》。\n▸ 标的与操作：看多黄金与白银作为对冲法币贬值的核心配置。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-12-12",
+   "direction": "强烈看空",
+   "comments": "美股估值已超过互联网泡沫顶峰",
+   "targets": "美股/标普500",
+   "source": "https://www.davidstockmanscontracorner.com/the-stock-market-is-now-trading-above-its-dotcom-peak/",
+   "detail": "▸ 核心论点：股市整体估值水平已经交易在互联网泡沫顶部之上，风险回报极不对称。\n▸ 关键依据：他对比标普总市值与当年 dotcom 顶点的倍数关系，指出前十大权重股占比过高（约四成）。\n▸ 时间与位置：2025年12月12日，Contra Corner Weekly 栏目发文。\n▸ 标的与操作：看空美股尤其是权重科技股，认为回撤幅度可能对标历史两次崩盘均值。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-13",
+   "direction": "强烈看空",
+   "comments": "联邦债务沙龙演讲：债务已呈抛物线式增长",
+   "targets": "美国国债/财政",
+   "source": "https://www.youtube.com/watch?v=WYMJtF_QNHk",
+   "detail": "▸ 核心论点：美国联邦债务已进入抛物线式扩张，任何常规政治程序都无力扭转，终局是财政危机。\n▸ 关键依据：他引用债务每约100天增加1万亿美元（约每天100亿、每小时4.16亿美元）的量级说明失控速度。\n▸ 时间与位置：2025年11月13日，其作为主讲人出席的\"联邦债务沙龙\"专场活动。\n▸ 标的与操作：强烈看空美国主权信用与长久期美债。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-11",
+   "direction": "看空",
+   "comments": "就业数据大幅下修，称利率压制掩盖债务危机",
+   "targets": "美债/美股/美国经济",
+   "source": "https://www.lewrockwell.com/2025/10/david-stockman/a-nation-managed-by-misreads-payroll-revisions-rate-suppression-and-the-debt-crisis/",
+   "detail": "▸ 核心论点：非农大幅下修说明经济远弱于官方叙事，人为压低利率只是把债务危机往后推。\n▸ 关键依据：他以 BLS 就业数据修正幅度与联邦利息支出膨胀为证，指经济\"被误读所管理\"。\n▸ 时间与位置：2025年10月11日，Contra Corner 文章经 LewRockwell 转载。\n▸ 标的与操作：看空美债与美股，认为宏观数据质量本身就是风险源。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-04",
+   "direction": "看空",
+   "comments": "讥讽TACO交易，称关税与财政政策自相矛盾",
+   "targets": "美股/美国财政",
+   "source": "https://www.lewrockwell.com/2025/10/david-stockman/taco-man-at-bat/",
+   "detail": "▸ 核心论点：特朗普经济学在关税上反复摇摆（市场戏称 TACO），既拿不到财政收入又扰乱企业投资预期。\n▸ 关键依据：他梳理政策反转的节奏与市场反应，指出华尔街已把\"总统会退缩\"当成交易前提。\n▸ 时间与位置：2025年10月4日，其 Contra Corner 文章经 LewRockwell 转载。\n▸ 标的与操作：看空由政策叙事支撑的美股风险偏好，主张远离依赖财政刺激的资产。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

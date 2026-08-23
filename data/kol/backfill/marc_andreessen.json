@@ -3,8 +3,24 @@
  "sector": "Macro",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 2,
+ "count": 5,
  "history": [
+  {
+   "date": "2026-01-01",
+   "direction": "看多",
+   "comments": "被美联储任命进入研究AI对生产率与就业影响的新任务小组。作为激进押注AI初创的风投,被列为预测'超通缩'(hyper-deflation)时代的阵营之一,即认为AI将大幅压低成本与价格,与美联储关于AI的通胀辩论形成张力。",
+   "targets": "AI/宏观通胀/美联储",
+   "source": "https://netzender.com/ais-costly-build-out-complicates-the-feds-inflation-fight",
+   "detail": "▸ 核心论点：被列为预测 AI 带来「超通缩」（hyper-deflation）时代的阵营，即认为 AI 将大幅压低成本与价格。\n▸ 关键依据：身份背景是被美联储任命进入研究 AI 对生产率与就业影响的新任务小组；作为激进押注 AI 初创的风投，其超通缩判断与美联储关于 AI 是否推升通胀的辩论形成张力。\n▸ 时间与位置：未给出具体点位与时间窗口。\n▸ 标的与操作：AI 主题、宏观通胀与美联储政策；对 AI 资产偏多、对通胀预期偏空。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "title": "",
+     "url": "https://netzender.com/ais-costly-build-out-complicates-the-feds-inflation-fight",
+     "date": "2026-01-01"
+    }
+   ]
+  },
   {
    "date": "2025-11-25",
    "direction": "强烈看多",
@@ -22,20 +38,34 @@
    ]
   },
   {
-   "date": "2026-01-01",
-   "direction": "看多",
-   "comments": "被美联储任命进入研究AI对生产率与就业影响的新任务小组。作为激进押注AI初创的风投,被列为预测'超通缩'(hyper-deflation)时代的阵营之一,即认为AI将大幅压低成本与价格,与美联储关于AI的通胀辩论形成张力。",
-   "targets": "AI/宏观通胀/美联储",
-   "source": "https://netzender.com/ais-costly-build-out-complicates-the-feds-inflation-fight",
-   "detail": "▸ 核心论点：被列为预测 AI 带来「超通缩」（hyper-deflation）时代的阵营，即认为 AI 将大幅压低成本与价格。\n▸ 关键依据：身份背景是被美联储任命进入研究 AI 对生产率与就业影响的新任务小组；作为激进押注 AI 初创的风投，其超通缩判断与美联储关于 AI 是否推升通胀的辩论形成张力。\n▸ 时间与位置：未给出具体点位与时间窗口。\n▸ 标的与操作：AI 主题、宏观通胀与美联储政策；对 AI 资产偏多、对通胀预期偏空。",
+   "date": "2025-10-26",
+   "direction": "强烈看多",
+   "comments": "AI将带来超级通缩：现在100美元的东西会卖1美分",
+   "targets": "AI/物价/商业服务",
+   "source": "https://finance.yahoo.com/news/billionaire-marc-andreessen-says-ai-193115909.html",
+   "detail": "▸ 核心论点：AI驱动的生产率激增会造成「超级通缩」，今天售价100美元的东西未来可能只卖1美分；商业服务价格将整体崩塌。\n▸ 关键依据：他在 Cheeky Pint 播客中论证，AI让智能的成本快速趋近于零，今天昂贵的服务会变得便宜甚至免费，因此「大规模贫困化」的担忧忽略了价格端。\n▸ 时间与位置：2025年10月（播客），2025年10月26日经 Benzinga/Yahoo Finance 报道。\n▸ 标的与操作：AI与科技资产强烈看多；宏观上主张AI是通缩力量，对利率与物价路径有下行含义。",
    "detail_status": "ok",
-   "sources": [
-    {
-     "title": "",
-     "url": "https://netzender.com/ais-costly-build-out-complicates-the-feds-inflation-fight",
-     "date": "2026-01-01"
-    }
-   ]
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-08",
+   "direction": "看多",
+   "comments": "AI摧毁就业让人变穷是谬论，价格会一起崩",
+   "targets": "AI/劳动力市场/消费物价",
+   "source": "https://fortune.com/2025/10/08/billionaire-investor-marc-andreesssen-ai-jobs-personal-finance-careers-costs-plummet-healthcare-law/",
+   "detail": "▸ 核心论点：认为AI会摧毁就业并让所有人变穷是一个「谬论」；即便就业真的大幅减少，AI带来的生产率飙升也会让商品与服务价格大幅下跌。\n▸ 关键依据：技术史上自动化提高产出同时压低价格，实际购买力上升；医疗、法律等高价服务的成本结构最有被AI压缩的空间。\n▸ 时间与位置：2025年10月8日 Fortune 报道其公开表态。\n▸ 标的与操作：对AI资产与整体经济持乐观看多；隐含通缩而非通胀的宏观判断。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-06",
+   "direction": "看多",
+   "comments": "AI时代他更愿押注通才而非专才",
+   "targets": "AI/人力资本",
+   "source": "https://www.benzinga.com/markets/tech/25/09/47536744/marc-andreessen-says-hed-bet-more-on-generalists-instead-of-specialists-in-the-ai-age-for-this-re",
+   "detail": "▸ 核心论点：AI时代将奖励能跨领域连点成线的通才，拥有广博跨学科知识的人比单一领域专才更有优势。\n▸ 关键依据：AI承接了大量专业性、可标准化的执行工作，人的相对优势转向判断、组合与跨域迁移能力。\n▸ 时间与位置：2025年9月6日 Benzinga 报道其公开发言。\n▸ 标的与操作：无直接资产标的，属AI对人力资本与组织结构影响的判断，整体维持技术乐观立场。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

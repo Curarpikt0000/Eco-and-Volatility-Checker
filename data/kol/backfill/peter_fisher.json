@@ -1,1 +1,40 @@
-{"kol":"Peter Fisher","sector":"Macro","backfill_date":"2026-08-17","source_method":"web_search(ddgs)+LLM提取(cron续跑)","count":0,"status":"未找到","history":[]}
+{
+ "kol": "Peter Fisher",
+ "sector": "Macro",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 3,
+ "status": "未找到",
+ "history": [
+  {
+   "date": "2026-06-01",
+   "direction": "看空",
+   "comments": "对美联储庞大资产负债表持怀疑，与贝森特、沃什同调",
+   "targets": "美联储资产负债表/美债",
+   "source": "https://www.economist.com/special-report/2026/06/01/partners-in-prime-the-fed-and-treasurys-new-relationship",
+   "detail": "▸ 核心论点：美联储过度膨胀的资产负债表本身是问题，应被压缩，而非视作常态工具。\n▸ 关键依据：作为 2001–2004 年美国财政部主管国内金融的前副部长，Fisher 认同财长贝森特与沃什对美联储巨型资产负债表的怀疑立场；《经济学人》特别报告以此描述美联储与财政部关系的重构。\n▸ 时间与位置：2026 年 6 月 1 日《经济学人》特别报告 Partners in prime。\n▸ 标的与操作：隐含对期限溢价与长端美债定价的负面含义——央行资产负债表收缩意味着债市失去边际买家。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2026-04-14",
+   "direction": "分歧",
+   "comments": "AI 投资风险与美联储换帅共同主导投资前景",
+   "targets": "美股/AI 资本开支/美联储",
+   "source": "https://mitsloan.mit.edu/centers-initiatives/mit-gcfp/ai-investment-risks-fed-leadership-changes-and-policy-uncertainty-shape-outlook-investors",
+   "detail": "▸ 核心论点：AI 领域的快速投资、美联储领导层更替与政策不确定性，三者共同塑造当前投资者面临的前景。\n▸ 关键依据：在 2026 MIT Sloan 投资年会与 ANONYMIZED_PERSON（前 SEC 主席）的对谈中，双方围绕华尔街波动率与美联储换帅可能带来的影响展开讨论。\n▸ 时间与位置：2026 年 4 月 14 日 MIT Sloan / MIT GCFP 会议纪要发布。\n▸ 标的与操作：偏风险提示型表述，未给出明确多空指令；本条为会议纪要标题级信息，细节有限。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-12",
+   "direction": "看空",
+   "comments": "财政脱锚终将逼出高通胀，美联储会被压垮",
+   "targets": "美债/美元/美国财政",
+   "source": "https://www.concordcoalition.org/facing-the-future/untethered-fiscal-policy-challenges-the-fed/",
+   "detail": "▸ 核心论点：美国财政政策已彻底脱锚，最可怕的不是当前债务水平而是不断向上的路径。\n▸ 关键依据：债务/GDP 已远超 100% 且继续上行；联邦收入与支出之间已无任何对应关系；两党各自的前提（只减税靠减支平衡 / 只加税不扩税基）都是空话。\n▸ 时间与位置：2025 年 11 月 12 日 Concord Coalition《Facing the Future》播客访谈。\n▸ 标的与操作：若无立法转向，最可能结局是通胀上行乃至逼近恶性通胀；他明确否定美联储多买国债或财政部选择性违约这两条出路，并警告一旦市场对美联储独立性失去信心，会加速恶性通胀时点。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  }
+ ]
+}

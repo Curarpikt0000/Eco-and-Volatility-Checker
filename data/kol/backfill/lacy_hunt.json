@@ -3,21 +3,21 @@
  "sector": "Government Debt",
  "backfill_date": "2026-08-18",
  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
- "count": 3,
+ "count": 5,
  "history": [
   {
-   "date": "2026-07-16",
+   "date": "2026-08-13",
    "direction": "看空",
-   "comments": "Hoisington二季报（Hunt与Hoisington共同署名）由持续三十余年看多美债转为看空，理由是更大的财政赤字与更高的资本需求构成结构性背景转变。",
+   "comments": "近四十年一直呼吁看多低收益率的Hunt发生U型反转，二季度评论开篇即阐述转熊逻辑，放弃'去全球化+高债务压低利率'旧框架。",
    "targets": "美债",
-   "source": "https://www.advisorperspectives.com/articles/2026/07/16/hoisington-us-bond-bull-decades-bearish",
-   "detail": "▸ 核心论点：Hoisington 二季报（Hunt 与 Hoisington 共同署名）由持续三十余年看多美债转为看空。\n▸ 关键依据：理由是更大的财政赤字与更高的资本需求构成结构性背景转变，即资本稀缺取代此前压低利率的格局。\n▸ 时间与位置：2026 年二季度报告（7 月 16 日刊出）；未给出具体收益率点位。\n▸ 标的与操作：美债，看空。",
+   "source": "https://realinvestmentadvice.com/resources/blog/lacy-hunt-turns-bearish-bonds-studying-his-reversal/",
+   "detail": "▸ 核心论点：近四十年一直看多美债、呼吁低收益率的 Hunt 发生 U 型反转，二季度评论开篇即阐述转熊逻辑，放弃「去全球化+高债务压低利率」的旧框架。\n▸ 关键依据：其二季度展望《Capital Scarcity and the End of Globalization 抑通胀时代终结》判断美国通胀长期均衡区间正由约 1.5–3.5% 上移至 3.5–4.5%，并有出现 5% 以上通胀的显著风险，1990–2020 年的抑通胀架构正被侵蚀。\n▸ 时间与位置：2026 年二季度评论；未给出具体收益率点位。\n▸ 标的与操作：美债看空——Hoisington 已大幅缩短客户组合久期，所得转入短期国库券。",
    "detail_status": "ok",
    "sources": [
     {
      "title": "",
-     "url": "https://www.advisorperspectives.com/articles/2026/07/16/hoisington-us-bond-bull-decades-bearish",
-     "date": "2026-07-16"
+     "url": "https://realinvestmentadvice.com/resources/blog/lacy-hunt-turns-bearish-bonds-studying-his-reversal/",
+     "date": "2026-08-13"
     }
    ]
   },
@@ -38,20 +38,40 @@
    ]
   },
   {
-   "date": "2026-08-13",
+   "date": "2026-07-16",
    "direction": "看空",
-   "comments": "近四十年一直呼吁看多低收益率的Hunt发生U型反转，二季度评论开篇即阐述转熊逻辑，放弃'去全球化+高债务压低利率'旧框架。",
+   "comments": "Hoisington二季报（Hunt与Hoisington共同署名）由持续三十余年看多美债转为看空，理由是更大的财政赤字与更高的资本需求构成结构性背景转变。",
    "targets": "美债",
-   "source": "https://realinvestmentadvice.com/resources/blog/lacy-hunt-turns-bearish-bonds-studying-his-reversal/",
-   "detail": "▸ 核心论点：近四十年一直看多美债、呼吁低收益率的 Hunt 发生 U 型反转，二季度评论开篇即阐述转熊逻辑，放弃「去全球化+高债务压低利率」的旧框架。\n▸ 关键依据：其二季度展望《Capital Scarcity and the End of Globalization 抑通胀时代终结》判断美国通胀长期均衡区间正由约 1.5–3.5% 上移至 3.5–4.5%，并有出现 5% 以上通胀的显著风险，1990–2020 年的抑通胀架构正被侵蚀。\n▸ 时间与位置：2026 年二季度评论；未给出具体收益率点位。\n▸ 标的与操作：美债看空——Hoisington 已大幅缩短客户组合久期，所得转入短期国库券。",
+   "source": "https://www.advisorperspectives.com/articles/2026/07/16/hoisington-us-bond-bull-decades-bearish",
+   "detail": "▸ 核心论点：Hoisington 二季报（Hunt 与 Hoisington 共同署名）由持续三十余年看多美债转为看空。\n▸ 关键依据：理由是更大的财政赤字与更高的资本需求构成结构性背景转变，即资本稀缺取代此前压低利率的格局。\n▸ 时间与位置：2026 年二季度报告（7 月 16 日刊出）；未给出具体收益率点位。\n▸ 标的与操作：美债，看空。",
    "detail_status": "ok",
    "sources": [
     {
      "title": "",
-     "url": "https://realinvestmentadvice.com/resources/blog/lacy-hunt-turns-bearish-bonds-studying-his-reversal/",
-     "date": "2026-08-13"
+     "url": "https://www.advisorperspectives.com/articles/2026/07/16/hoisington-us-bond-bull-decades-bearish",
+     "date": "2026-07-16"
     }
    ]
+  },
+  {
+   "date": "2026-01-27",
+   "direction": "看多",
+   "comments": "通胀加速担忧被证伪，长端美债收益率下行概率上升",
+   "targets": "30年期美债/通胀",
+   "source": "https://www.advisorperspectives.com/commentaries/2026/01/27/quarterly-review-outlook-fourth-quarter-2025",
+   "detail": "▸ 核心论点：2025年全年市场对通胀加速的担忧被证明多余，工资与物价涨幅回落，长期美债收益率下行“看来越来越可能”。\n▸ 关键依据：债务累积压制名义增长、货币增速偏低，费雪框架下实际利率与通胀预期同步回落。\n▸ 时间与位置：Hoisington 2025年四季度季评，2026年1月27日在 Advisor Perspectives 公开发布。\n▸ 标的与操作：维持长久期美债多头（此为其转向前的最后一份看多长债季评）。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-12",
+   "direction": "看多",
+   "comments": "产能闲置+AI通缩+关税抽流动性，压低增长与通胀",
+   "targets": "长端美债/通胀",
+   "source": "https://seekingalpha.com/article/4829392-hoisington-investment-management-q3-2025-review-and-outlook",
+   "detail": "▸ 核心论点：美欧中产能利用率持续下滑、AI具内生通缩性、美联储保持实质紧缩、关税抽走流动性，四者叠加将压制2025年及以后的增长与通胀。\n▸ 关键依据：美国产能利用率自峰值降4.6%、欧元区-6.2%、中国-5.0%，全球加权-5.4%；建筑与货物生产部门收缩。\n▸ 时间与位置：Hoisington 2025年三季度《Quarterly Review and Outlook》（“Idle Plants, AI, and High Tariffs”），10月中旬发布。\n▸ 标的与操作：延续长久期美国国债多头立场，认为2026年资本开支繁荣不太可能出现。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

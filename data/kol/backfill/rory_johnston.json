@@ -3,21 +3,35 @@
  "sector": "Energy & Commodities",
  "backfill_date": "2026-08-18",
  "source_method": "web_search(ddgs)+LLM提取(1yr backfill cron)",
- "count": 4,
+ "count": 7,
  "history": [
   {
-   "date": "2025-12-16",
+   "date": "2026-08-01",
    "direction": "看空",
-   "comments": "作为 Commodity Context 创始人指出，油市正处于供应过剩阶段，尽管一连串地缘风险及大量原油进入海上/中国库存暂时维持了市场紧张，但基本面偏松，油价承压下行。",
+   "comments": "撰文指出 2025 年油市最终远比 IEA/EIA/OPEC 预期更宽松，市场对 2026 年供需平衡的预期开始转向，讨论过剩(glut)正在兑现还是被否认的问题，整体偏空。",
    "targets": "原油",
-   "source": "https://www.rigzone.com/news/wire/oil_sinks_as_oversupply_pressures_intensify-16-dec-2025-182549-article/?rss=true",
-   "detail": "▸ 核心论点：油市正处于供应过剩阶段，基本面偏松，油价承压下行。\n▸ 关键依据：一连串地缘风险及大量原油进入海上 / 中国库存只是暂时维持了市场紧张；当日 WTI 结算跌 2.7% 至 55.27 美元，为 2021 年 2 月以来首次跌破 55 美元，布伦特跌 2.7% 至 58.92 美元，中东原油出现看跌的 contango 结构。\n▸ 时间与位置：WTI 55 美元关口于 2025-12-16 失守；未给出下方目标价。\n▸ 标的与操作：原油，看空。",
+   "source": "https://www.linkedin.com/posts/rorysjjohnston_new-post-barreling-ahead-realizingor-denying-activity-7422643025253703680-UajK",
+   "detail": "▸ 核心论点：2025 年油市最终远比 IEA/EIA/OPEC 三大机构预期更为宽松，过剩正在兑现，油市整体偏空。\n▸ 关键依据：撰文复盘三大机构的平衡表预测与实际结果的偏离，指出市场对 2026 年供需平衡的预期已开始转向，讨论 glut（过剩）究竟是在兑现还是被市场否认。\n▸ 时间与位置：以 2025 年实际数据回顾、指向 2026 年供需平衡；未给出具体油价点位。\n▸ 标的与操作：原油看空，属供需平衡表层面的判断，未给出具体交易操作。",
    "detail_status": "ok",
    "sources": [
     {
-     "title": "Rory Johnston",
-     "url": "https://www.rigzone.com/news/wire/oil_sinks_as_oversupply_pressures_intensify-16-dec-2025-182549-article/?rss=true",
-     "date": "2025-12-16"
+     "title": "",
+     "url": "https://www.linkedin.com/posts/rorysjjohnston_new-post-barreling-ahead-realizingor-denying-activity-7422643025253703680-UajK",
+     "date": "2026-08-01"
+    }
+   ]
+  },
+  {
+   "date": "2026-07-23",
+   "direction": "中性",
+   "comments": "发布 74 页 7 月版全球石油数据册(付费)，以数据密集、可视化方式追踪全球油市供需平衡，延续其数据优先的中性研究定位。",
+   "targets": "原油",
+   "source": "https://www.commoditycontext.com/p/global-oil-data-deck-july-2026",
+   "detail": "▸ 核心论点：维持数据优先的中性研究定位，以数据册呈现全球油市供需平衡，不给方向性多空判断。\n▸ 关键依据：发布74页的7月版全球石油数据册(付费)，以数据密集、可视化方式追踪全球供需平衡。\n▸ 时间与位置：2026-07-23 发布，对应2026年7月版；未给出具体点位或目标价。\n▸ 标的与操作：原油；立场中性，无明确买卖操作建议。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://www.commoditycontext.com/p/global-oil-data-deck-july-2026"
     }
    ]
   },
@@ -38,34 +52,50 @@
    ]
   },
   {
-   "date": "2026-07-23",
-   "direction": "中性",
-   "comments": "发布 74 页 7 月版全球石油数据册(付费)，以数据密集、可视化方式追踪全球油市供需平衡，延续其数据优先的中性研究定位。",
+   "date": "2025-12-16",
+   "direction": "看空",
+   "comments": "作为 Commodity Context 创始人指出，油市正处于供应过剩阶段，尽管一连串地缘风险及大量原油进入海上/中国库存暂时维持了市场紧张，但基本面偏松，油价承压下行。",
    "targets": "原油",
-   "source": "https://www.commoditycontext.com/p/global-oil-data-deck-july-2026",
-   "detail": "▸ 核心论点：维持数据优先的中性研究定位，以数据册呈现全球油市供需平衡，不给方向性多空判断。\n▸ 关键依据：发布74页的7月版全球石油数据册(付费)，以数据密集、可视化方式追踪全球供需平衡。\n▸ 时间与位置：2026-07-23 发布，对应2026年7月版；未给出具体点位或目标价。\n▸ 标的与操作：原油；立场中性，无明确买卖操作建议。",
+   "source": "https://www.rigzone.com/news/wire/oil_sinks_as_oversupply_pressures_intensify-16-dec-2025-182549-article/?rss=true",
+   "detail": "▸ 核心论点：油市正处于供应过剩阶段，基本面偏松，油价承压下行。\n▸ 关键依据：一连串地缘风险及大量原油进入海上 / 中国库存只是暂时维持了市场紧张；当日 WTI 结算跌 2.7% 至 55.27 美元，为 2021 年 2 月以来首次跌破 55 美元，布伦特跌 2.7% 至 58.92 美元，中东原油出现看跌的 contango 结构。\n▸ 时间与位置：WTI 55 美元关口于 2025-12-16 失守；未给出下方目标价。\n▸ 标的与操作：原油，看空。",
    "detail_status": "ok",
    "sources": [
     {
-     "url": "https://www.commoditycontext.com/p/global-oil-data-deck-july-2026"
+     "title": "Rory Johnston",
+     "url": "https://www.rigzone.com/news/wire/oil_sinks_as_oversupply_pressures_intensify-16-dec-2025-182549-article/?rss=true",
+     "date": "2025-12-16"
     }
    ]
   },
   {
-   "date": "2026-08-01",
+   "date": "2025-11-25",
    "direction": "看空",
-   "comments": "撰文指出 2025 年油市最终远比 IEA/EIA/OPEC 预期更宽松，市场对 2026 年供需平衡的预期开始转向，讨论过剩(glut)正在兑现还是被否认的问题，整体偏空。",
-   "targets": "原油",
-   "source": "https://www.linkedin.com/posts/rorysjjohnston_new-post-barreling-ahead-realizingor-denying-activity-7422643025253703680-UajK",
-   "detail": "▸ 核心论点：2025 年油市最终远比 IEA/EIA/OPEC 三大机构预期更为宽松，过剩正在兑现，油市整体偏空。\n▸ 关键依据：撰文复盘三大机构的平衡表预测与实际结果的偏离，指出市场对 2026 年供需平衡的预期已开始转向，讨论 glut（过剩）究竟是在兑现还是被市场否认。\n▸ 时间与位置：以 2025 年实际数据回顾、指向 2026 年供需平衡；未给出具体油价点位。\n▸ 标的与操作：原油看空，属供需平衡表层面的判断，未给出具体交易操作。",
+   "comments": "全球平衡宽松至 2023 年 1 月以来最弱",
+   "targets": "原油、海上浮仓库存",
+   "source": "https://www.commoditycontext.com/p/global-oil-data-deck-november-2025",
+   "detail": "▸ 核心论点：全球液体燃料市场平衡已宽松至 2023 年 1 月以来最弱水平，过剩仍主要以海上原油浮仓形式堆积。\n▸ 关键依据：11 月版 Global Oil Data Deck 的供需平衡与库存分项数据；过剩尚未完全传导至陆上可见库存，是价格未更弱的原因之一。\n▸ 时间与位置：2025 年 11 月 25 日发布于 Commodity Context。\n▸ 标的与操作：维持对原油的偏空基本面判断，关注浮仓向陆上库存转移的节点。",
    "detail_status": "ok",
-   "sources": [
-    {
-     "title": "",
-     "url": "https://www.linkedin.com/posts/rorysjjohnston_new-post-barreling-ahead-realizingor-denying-activity-7422643025253703680-UajK",
-     "date": "2026-08-01"
-    }
-   ]
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-24",
+   "direction": "看空",
+   "comments": "月度数据册显示平衡持续宽松",
+   "targets": "原油、全球石油库存",
+   "source": "https://www.commoditycontext.com/p/global-oil-data-deck-october-2025",
+   "detail": "▸ 核心论点：10 月版《Global Oil Data Deck》延续对市场宽松化的追踪，过剩主要体现在海上原油库存的累积。\n▸ 关键依据：73 页数据密集型月报，整合机构供需平衡、库存细分与浮仓数据。\n▸ 时间与位置：2025 年 10 月 24 日发布于 Commodity Context（付费订阅内容）。\n▸ 标的与操作：偏空原油基本面，强调用库存与浮仓的分项数据验证过剩是否真实落地。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-18",
+   "direction": "看空",
+   "comments": "公开撰文警示即将到来的原油过剩",
+   "targets": "原油（Brent/WTI）",
+   "source": "https://www.commoditycontext.com/p/dispatch-repost-the-coming-oil-glut",
+   "detail": "▸ 核心论点：全球原油市场正在走向自 2020 年以来最大的供应过剩，题为《The Coming Oil Glut》。\n▸ 关键依据：OPEC+ 转向增产恢复份额、非 OPEC 供应持续增长，而需求增速不足以吸收增量。\n▸ 时间与位置：2025 年 10 月 18 日，Commodity Context 转载其为 The Dispatch Energy 撰写的首篇公开报告。\n▸ 标的与操作：对油价持偏空看法，关注库存与浮仓变化作为过剩兑现的验证指标。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }

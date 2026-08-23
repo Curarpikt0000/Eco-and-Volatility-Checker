@@ -1,9 +1,40 @@
 {
-  "kol": "Raj Chetty",
-  "sector": "Macro",
-  "backfill_date": "2026-08-17",
-  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
-  "count": 0,
-  "status": "未找到",
-  "history": []
+ "kol": "Raj Chetty",
+ "sector": "Macro",
+ "backfill_date": "2026-08-17",
+ "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
+ "count": 3,
+ "status": "未找到",
+ "history": [
+  {
+   "date": "2026-01-28",
+   "direction": "中性",
+   "comments": "NPR 访谈：HOPE VI 是美国史上最大规模高贫困社区改造",
+   "targets": "美国住房政策/城市经济",
+   "source": "https://www.npr.org/2026/01/28/nx-s1-5691692/hope-vi-public-housing-opportunity-insights-raj-chetty",
+   "detail": "▸ 核心论点：评估 HOPE VI 公共住房改造项目的长期效果，强调居住环境对儿童后续收入具有因果影响。\n▸ 关键依据：Planet Money 访谈中引用其团队对搬迁与社区重建的长期追踪数据，称其为美国史上规模最大的高贫困社区振兴努力。\n▸ 时间与位置：2026-01-28，NPR / Planet Money 报道与访谈。\n▸ 标的与操作：政策研究导向，不含资产配置建议，对住房与地方财政议题有间接含义。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2026-01-02",
+   "direction": "中性",
+   "comments": "经济学人播客谈美国式精英制：机会不均是核心议题",
+   "targets": "美国经济与社会流动性",
+   "source": "https://www.economist.com/podcasts/2026/01/02/ameritocracy-a-conversation-with-raj-chetty",
+   "detail": "▸ 核心论点：在美国建国250周年前夕回顾二十年研究，认为美国梦的实际实现概率已明显下降，机会分布高度地域化。\n▸ 关键依据：哈佛 Opportunity Insights 的跨代收入流动长期数据与社区层面证据。\n▸ 时间与位置：2026-01-02，The Economist 的 Checks and Balance 播客访谈。\n▸ 标的与操作：非交易性观点，属长期结构性增长与分配判断，对风险资产无直接方向指引。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-11-04",
+   "direction": "中性",
+   "comments": "connectED 2025 主旨演讲：大数据揭示美国向上流动性停滞",
+   "targets": "美国经济流动性/劳动力市场/人力资本",
+   "source": "https://www.youtube.com/watch?v=7w-Fvq3P87M",
+   "detail": "▸ 核心论点：用行政大数据测量的美国机会均等程度仍在退坡，出生地邮编对终身收入的解释力过高，属结构性而非周期性问题。\n▸ 关键依据：Opportunity Insights 的税收与普查匹配面板显示跨代流动率长期下滑，社区环境与社会资本差异是主要传导通道。\n▸ 时间与位置：2025-11-04，connectED 2025 主旨演讲（公开视频）。\n▸ 标的与操作：不给出资产方向，属长期人力资本与分配议题，对潜在增长率的含义偏谨慎。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  }
+ ]
 }

@@ -3,35 +3,21 @@
  "sector": "Macro",
  "backfill_date": "2026-08-17",
  "source_method": "web_search(ddgs)+LLM提取(cron续跑)",
- "count": 4,
+ "count": 7,
  "history": [
   {
-   "date": "2025-12-19",
-   "direction": "分歧",
-   "comments": "发布2026展望:预计低通胀低利率环境,CPI趋向2%、美债10年期或降至3.5%,但警告投资者押注'过热'情景恐落空,通过长久期零息债、中盘股、新兴市场和自然资源表达观点。",
-   "targets": "债券/中盘股/新兴市场/自然资源",
-   "source": "https://www.investing.com/news/stock-market-news/bofa-hartnetts-2026-forecast-lower-yields-higher-risks-for-ai-capex-4416773",
-   "detail": "▸ 核心论点：2026年将是低通胀低利率环境，警告押注「过热」情景的投资者恐落空。\n▸ 关键依据：预计 CPI 趋向2%、美债10年期收益率或降至3.5%。\n▸ 时间与位置：2025-12-19 发布2026展望；关键位为10年期美债3.5%、CPI 2%。\n▸ 标的与操作：通过长久期零息债、中盘股、新兴市场和自然资源表达观点，对「过热」交易看空，属方向分歧。",
-   "detail_status": "ok",
-   "sources": [
-    {
-     "url": "https://www.investing.com/news/stock-market-news/bofa-hartnetts-2026-forecast-lower-yields-higher-risks-for-ai-capex-4416773"
-    }
-   ]
-  },
-  {
-   "date": "2026-01-30",
+   "date": "2026-07-10",
    "direction": "看空",
-   "comments": "牛熊指标升至9.4触发卖出信号,称市场处于极度乐观,89%全球股指高于50/200日均线;偏好做多债券、中国、黄金、中盘股,做空美元和投资级科技信用。",
-   "targets": "美股(空)/黄金/中国/债券",
-   "source": "https://www.investing.com/news/stock-market-news/bofas-hartnett-sees-markets-at-extreme-optimism-issues-sell-signal-4475325",
-   "detail": "▸ 核心论点：牛熊指标触发卖出信号，市场处于极度乐观状态。\n▸ 关键依据：BofA 牛熊指标升至 9.4 触发卖出信号；89% 的全球股指位于 50 日与 200 日均线之上，广度极端。\n▸ 时间与位置：以指标读数 9.4 为触发阈值；未给出具体指数点位。\n▸ 标的与操作：偏好做多债券、中国、黄金、中盘股，做空美元和投资级科技信用；对美股整体看空。",
+   "comments": "牛熊指标维持在极度看多的9.5,卖出信号连续多周闪烁,全球资本涌入股票基金,警示回调风险。",
+   "targets": "全球股市(空)",
+   "source": "https://finance.biggo.com/news/3a3448a2-1aab-4d2b-9aa5-bf84f87a3853",
+   "detail": "▸ 核心论点：牛熊指标处于极度看多区间、卖出信号持续闪烁，警示全球股市回调风险。\n▸ 关键依据：美银牛熊指标维持在极度看多的9.5，卖出信号已连续多周闪烁，全球资本大举涌入股票基金构成逆向指标。原文进一步指出市场共识建立在「四个不会」上（美国经济不硬着陆、美联储不加息、AI 资本开支不削减、民主党不横扫中期选举），并把日本银行股称作全球抛售的煤矿金丝雀——若日债收益率快速上行压制银行股，或预示风险资产回调。\n▸ 时间与位置：未给出具体点位；卖出信号已连续多周有效。\n▸ 标的与操作：全球股市看空/减仓；关注日本银行股作为领先信号，并留意 AI 投资降温对费城半导体指数估值的压力。",
    "detail_status": "ok",
    "sources": [
     {
      "title": "",
-     "url": "https://www.investing.com/news/stock-market-news/bofas-hartnett-sees-markets-at-extreme-optimism-issues-sell-signal-4475325",
-     "date": "2026-01-30"
+     "url": "https://finance.biggo.com/news/3a3448a2-1aab-4d2b-9aa5-bf84f87a3853",
+     "date": "2026-07-10"
     }
    ]
   },
@@ -52,20 +38,64 @@
    ]
   },
   {
-   "date": "2026-07-10",
+   "date": "2026-01-30",
    "direction": "看空",
-   "comments": "牛熊指标维持在极度看多的9.5,卖出信号连续多周闪烁,全球资本涌入股票基金,警示回调风险。",
-   "targets": "全球股市(空)",
-   "source": "https://finance.biggo.com/news/3a3448a2-1aab-4d2b-9aa5-bf84f87a3853",
-   "detail": "▸ 核心论点：牛熊指标处于极度看多区间、卖出信号持续闪烁，警示全球股市回调风险。\n▸ 关键依据：美银牛熊指标维持在极度看多的9.5，卖出信号已连续多周闪烁，全球资本大举涌入股票基金构成逆向指标。原文进一步指出市场共识建立在「四个不会」上（美国经济不硬着陆、美联储不加息、AI 资本开支不削减、民主党不横扫中期选举），并把日本银行股称作全球抛售的煤矿金丝雀——若日债收益率快速上行压制银行股，或预示风险资产回调。\n▸ 时间与位置：未给出具体点位；卖出信号已连续多周有效。\n▸ 标的与操作：全球股市看空/减仓；关注日本银行股作为领先信号，并留意 AI 投资降温对费城半导体指数估值的压力。",
+   "comments": "牛熊指标升至9.4触发卖出信号,称市场处于极度乐观,89%全球股指高于50/200日均线;偏好做多债券、中国、黄金、中盘股,做空美元和投资级科技信用。",
+   "targets": "美股(空)/黄金/中国/债券",
+   "source": "https://www.investing.com/news/stock-market-news/bofas-hartnett-sees-markets-at-extreme-optimism-issues-sell-signal-4475325",
+   "detail": "▸ 核心论点：牛熊指标触发卖出信号，市场处于极度乐观状态。\n▸ 关键依据：BofA 牛熊指标升至 9.4 触发卖出信号；89% 的全球股指位于 50 日与 200 日均线之上，广度极端。\n▸ 时间与位置：以指标读数 9.4 为触发阈值；未给出具体指数点位。\n▸ 标的与操作：偏好做多债券、中国、黄金、中盘股，做空美元和投资级科技信用；对美股整体看空。",
    "detail_status": "ok",
    "sources": [
     {
      "title": "",
-     "url": "https://finance.biggo.com/news/3a3448a2-1aab-4d2b-9aa5-bf84f87a3853",
-     "date": "2026-07-10"
+     "url": "https://www.investing.com/news/stock-market-news/bofas-hartnett-sees-markets-at-extreme-optimism-issues-sell-signal-4475325",
+     "date": "2026-01-30"
     }
    ]
+  },
+  {
+   "date": "2025-12-19",
+   "direction": "分歧",
+   "comments": "发布2026展望:预计低通胀低利率环境,CPI趋向2%、美债10年期或降至3.5%,但警告投资者押注'过热'情景恐落空,通过长久期零息债、中盘股、新兴市场和自然资源表达观点。",
+   "targets": "债券/中盘股/新兴市场/自然资源",
+   "source": "https://www.investing.com/news/stock-market-news/bofa-hartnetts-2026-forecast-lower-yields-higher-risks-for-ai-capex-4416773",
+   "detail": "▸ 核心论点：2026年将是低通胀低利率环境，警告押注「过热」情景的投资者恐落空。\n▸ 关键依据：预计 CPI 趋向2%、美债10年期收益率或降至3.5%。\n▸ 时间与位置：2025-12-19 发布2026展望；关键位为10年期美债3.5%、CPI 2%。\n▸ 标的与操作：通过长久期零息债、中盘股、新兴市场和自然资源表达观点，对「过热」交易看空，属方向分歧。",
+   "detail_status": "ok",
+   "sources": [
+    {
+     "url": "https://www.investing.com/news/stock-market-news/bofa-hartnetts-2026-forecast-lower-yields-higher-risks-for-ai-capex-4416773"
+    }
+   ]
+  },
+  {
+   "date": "2025-10-23",
+   "direction": "看多",
+   "comments": "创纪录黄金流入+全球宽松，押注债券黄金新兴市场",
+   "targets": "黄金/债券/新兴市场",
+   "source": "https://www.linkedin.com/posts/filalisaad_bofa-hartnett-the-flow-show-from-zero-activity-7387566138039115778-zElc",
+   "detail": "▸ 核心论点：世界正被定位为「繁荣与泡沫」的环境，资金流向印证了黄金、债券与新兴市场的同步走强。\n▸ 关键依据：BofA《Flow Show》题为 From Zero to Hero 的报告显示黄金基金出现创纪录流入，叠加全球央行普遍宽松，构成对债券、黄金和新兴市场资产的推动。\n▸ 时间与位置：2025 年 10 月 23 日 Flow Show 周报。\n▸ 标的与操作：偏好黄金、久期债券与新兴市场股票；对已高度拥挤的美股集中度保持警惕。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-10-10",
+   "direction": "强烈看多",
+   "comments": "看到明年春季金价6000美元，债务贬值交易主导",
+   "targets": "黄金",
+   "source": "https://in.investing.com/news/economy-news/bofas-hartnett-sees-6000-gold-next-spring-amid-rising-debasement-trade-5038939",
+   "detail": "▸ 核心论点：黄金在「债务贬值交易(debasement trade)」推动下，可在 2026 年春季前升至每盎司 6,000 美元。\n▸ 关键依据：投资者在黄金上的结构性配置仍然极低；新一任美联储主席的预期、繁荣/泡沫式的政策取向，以及类似 1934 年和 1973 年那样的黄金重估可能性，都对金价有利。\n▸ 时间与位置：2025 年 10 月 10 日 BofA 报告，Investing.com 等媒体报道。\n▸ 标的与操作：明确看多黄金，视其为对冲货币购买力侵蚀与政策过度的核心仓位。",
+   "detail_status": "ok",
+   "_bf": "1yr-gap-20260823"
+  },
+  {
+   "date": "2025-09-06",
+   "direction": "分歧",
+   "comments": "1970年代尼克松重演，标普冲9914后押注黄金加密",
+   "targets": "标普500/黄金/加密",
+   "source": "https://www.linkedin.com/pulse/1970s-nixon-rerun-why-hartnett-betting-all-gold-crypto-warren-child-dxrvc/",
+   "detail": "▸ 核心论点：当前政策组合是 1970 年代尼克松式的重演——「看不见的手」让位给「看得见的拳头」，最终受益的是硬资产。\n▸ 关键依据：BofA《Flow Show》题为 Invisible Hand to Visible Fist 的报告；他给出标普 500 在 9 月见到 9,914 点级别峰值的推演，认为流动性与政策干预推高名义价格，但也埋下反转。\n▸ 时间与位置：2025 年 9 月 6 日的 Flow Show 周报，经 ZeroHedge 报道扩散。\n▸ 标的与操作：短期股指仍有冲高空间但风险回报恶化；中期把筹码压在黄金与加密等抗贬值资产上。",
+   "detail_status": "thin",
+   "_bf": "1yr-gap-20260823"
   }
  ]
 }
