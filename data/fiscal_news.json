@@ -1,6 +1,6 @@
 {
   "status": "ok",
-  "as_of": "2026-08-21",
+  "as_of": "2026-08-24",
   "source": "美日财政政策事件时间线。每日 cron agent 模式 web 检索权威源(路透/彭博/NHK/财务省/US Treasury/Congress)动态更新。绝不编造,每条带来源链接。",
   "note": "cron 每日抓取最新美日财政举措(债务上限/持续决议CR/政府关门/补充预算/国债发行计划等),按日期倒序保留最近 ~20 条。",
   "events": [
@@ -13,6 +13,16 @@
       "summary": "美财政部每日数据显示,联邦债务8/19达40.047万亿美元,为史上首次突破40万亿,过去十年翻倍,利息支出持续累积推高总额。",
       "source_url": "https://www.npr.org/2026/08/19/nx-s1-5937552/the-u-s-debt-tops-a-record-shattering-40-trillion-yes-with-a-t",
       "source_name": "NPR/Treasury"
+    },
+    {
+      "date": "2026-08-19",
+      "country": "US",
+      "flag": "🇺🇸",
+      "category": "国债发行",
+      "title": "财政部将10-30年长债回购规模翻倍至每次≥$40亿",
+      "summary": "Bessent宣布加速长端回购,10-20年和20-30年段每次操作上限从$20亿提高到至少$40亿,罕见的季中干预,应对6月底以来长端\"买方罢工\"、30年收益率逼近20年高位。次日称单次或超$40亿上限。",
+      "source_url": "https://www.reuters.com/world/us-treasury-double-sizes-some-debt-buyback-operations-least-4-billion-2026-08-19/",
+      "source_name": "Reuters"
     },
     {
       "date": "2026-08-14",
@@ -35,6 +45,16 @@
       "source_name": "Politico"
     },
     {
+      "date": "2026-08-08",
+      "country": "US",
+      "flag": "🇺🇸",
+      "category": "政府关门风险",
+      "title": "参议院90-6通过CR,拨款延至12月11日,众议院待表决",
+      "summary": "参议院压倒性通过持续决议(CR),按FY2026水平为12大拨款条线续拨至12月11日或FY2027拨款法案通过为止;若众议院9月30日前不通过,10月1日面临关门风险。",
+      "source_url": "https://www.naco.org/news/senate-passes-bill-fund-government-through-december-11-and-delay-omb-rule",
+      "source_name": "NACo"
+    },
+    {
       "date": "2026-08-01",
       "country": "US",
       "flag": "🇺🇸",
@@ -43,6 +63,16 @@
       "summary": "众议院议长 Johnson 表示留给议员的时间不多;共和党内就是否用又一份持续决议(CR)把 FY2026 拨款推进程序化仍有分歧,市场关注 12 月前的关门期限风险。",
       "source_url": "https://sg.news.yahoo.com/wrangling-over-whether-punt-government-110000896.html",
       "source_name": "Yahoo News(引 Politico)"
+    },
+    {
+      "date": "2026-06-03",
+      "country": "JP",
+      "flag": "🇯🇵",
+      "category": "补正预算",
+      "title": "日本2026年度补正预算案闭议决定,市中发行额不增",
+      "summary": "政府闭议决定总额3兆円强的2026年度补正预算,公债依存度升至26.1%(约占岁出四分之一);财务省通过调减前年度发行预定额,使2026年度国债市中发行额不增。",
+      "source_url": "https://novaist.jp/articles/japan-2026-supplementary-budget/",
+      "source_name": "Novaist/財務省"
     },
     {
       "date": "2026-05-29",

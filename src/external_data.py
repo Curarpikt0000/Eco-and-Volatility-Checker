@@ -19,6 +19,23 @@ KOL_DAILY_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "kol", "da
 KOL_BACKFILL_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "kol", "backfill")
 
 
+def _tgs(v, limit=None):
+    """targets 归一为字符串(上游可能是 str / list / None)。
+
+    ★2026-08-24: 深度重抓时部分记录的 targets 被写成**数组**。
+      对 list 做 [:150] 不报错但会静默切成子列表, 比直接崩更难发现;
+      对 list 做 .strip() 则直接 AttributeError(线上 build 实崩)。
+      故所有取用点统一走本函数。
+    """
+    if v is None:
+        s = ""
+    elif isinstance(v, (list, tuple)):
+        s = "、".join(str(x).strip() for x in v if str(x).strip())
+    else:
+        s = str(v).strip()
+    return s[:limit] if limit else s
+
+
 def load_registry():
     """读 KOL 名册(full list)。返回 [{id,display_name,domain,sector,institution},...]。"""
     import json
@@ -162,7 +179,7 @@ def save_kol_daily_snapshot(date_str=None):
                 "kol": x.get("kol", ""),
                 "sector": x.get("sector", ""),
                 "direction": x.get("direction", ""),
-                "targets": (x.get("targets") or "")[:150],
+                "targets": _tgs(x.get("targets"), 150),
                 "comments": (x.get("comments") or "")[:300],
                 # ★2026-08-22(Chao): 快照必须带 detail/sources, 否则 dashboard 从快照
                 #   渲染详情层时又会退回「只有一句话」。detail 是 100-300 字结构化摘要。
@@ -227,7 +244,8 @@ def kol_full_history():
             if not cmt:
                 continue
             direction = (x.get("direction") or "").strip()
-            targets = (x.get("targets") or "").strip()
+            _tg = x.get("targets") or ""
+            targets = ", ".join(_tg) if isinstance(_tg, list) else str(_tg).strip()
             lst = out.setdefault(kol, [])
             if lst and lst[-1]["direction"] == direction and lst[-1]["comments"] == cmt:
                 lst[-1]["last_date"] = ds                 # 延长区间
@@ -262,7 +280,7 @@ def kol_full_history():
                     "first_date": dt, "last_date": dt,
                     "direction": (h.get("direction") or "").strip(),
                     "comments": cmt,
-                    "targets": (h.get("targets") or "").strip(),
+                    "targets": _tgs(h.get("targets")),
                     "source": (h.get("source") or "").strip(),
                     "origin": "backfill",
                     # ★2026-08-23 全量回填(369/369): 历史观点也有四段式深度摘要
@@ -328,7 +346,7 @@ def kol_weekly_changes():
                 "new_dir": cd,
                 "date": cur_date,
                 "comments": (c.get("comments") or "")[:300],
-                "targets": (c.get("targets") or "")[:150],
+                "targets": _tgs(c.get("targets"), 150),
             })
     return sorted(changes, key=lambda x: x["kol"])
 
@@ -516,7 +534,7 @@ def kol_stance_changes_grouped(days=None):
             "new_dir": ch.get("new_dir", ""),
             "date": ch.get("date", ""),
             "comments": (ch.get("comments") or "")[:300],
-            "targets": (ch.get("targets") or "")[:150],
+            "targets": _tgs(ch.get("targets"), 150),
         })
     # 模块内按日期降序; 模块按转向数降序
     for g in groups.values():

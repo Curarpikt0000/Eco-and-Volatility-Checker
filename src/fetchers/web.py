@@ -155,8 +155,13 @@ def fetch_aaii_sentiment():
             bear = float(last.iloc[3]) * (100 if last.iloc[3] < 1.5 else 1)
             d = last.iloc[0]
             ds = str(d)[:10] if not hasattr(d, "strftime") else d.strftime("%Y-%m-%d")
-            return {"value": round(bull - bear, 1), "as_of": ds, "status": "ok",
-                    "extra": {"bull": round(bull, 1), "bear": round(bear, 1)}}
+            # sanity: 日期须像 ISO 且 bull/bear 在合理区间且不相等异常
+            _iso_ok = bool(re.match(r"\d{4}-\d{2}-\d{2}", ds))
+            _val_ok = (0 < bull < 90) and (0 < bear < 90) and abs(bull - bear) < 90
+            if _iso_ok and _val_ok and not (bull == bear):
+                return {"value": round(bull - bear, 1), "as_of": ds, "status": "ok",
+                        "extra": {"bull": round(bull, 1), "bear": round(bear, 1)}}
+            # 解析异常(表头漂移/占位) → 视为失败, 让上层回退 overrides
     except Exception:
         pass
     # 降级 YCharts
