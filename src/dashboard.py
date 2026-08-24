@@ -284,7 +284,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
              country_ust=None, kol_views=None, credit_impulse=None, custody_accel=None,
              stress_panels=None, ofr_fsi=None, maturing_treasury=None, bis_latest=None,
-             bis_all=None,
+             bis_all=None, cb_swaps=None,
              oil_inventory=None, us_jp_yields=None, nikkei225=None, foreign_flow=None,
              iip_four=None, fiscal_news=None, hf_leverage=None, bis_gold_swaps=None,
              market_breadth=None, silver_bank_positions=None, comex_silver_issues_ref=None,
@@ -508,6 +508,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         comex_firms_top10=_comex_firms_top10_html(comex_firms_top10),
         fiscal_budget=_fiscal_budget_html(fiscal_budget),
         bis_section=_bis_section_html(bis_latest, "https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/", bis_all),
+        cb_swaps=_cb_swaps_html(cb_swaps),
         kol_roster=_kol_roster_table_html(),
         country_ust=_country_ust_html(country_ust),
         credit_impulse=_credit_impulse_html(credit_impulse),
@@ -618,7 +619,7 @@ def _cycle_kol_html(kol_views, kol_history=None):
                 cls = {"强烈看多":"kv-bull2","看多":"kv-bull","分歧":"kv-mixed","中性":"kv-mixed",
                        "看空":"kv-bear","强烈看空":"kv-bear2","另类预言":"kv-mixed"}.get(d, "kv-mixed")
                 body = _esc((v.get("comments") or "").strip()) or "—"
-                tg = _esc((v.get("targets") or "").strip())
+                tg = _esc(_tg_str(v.get("targets")))
                 dir_html = f'<span class="kol-dir {cls}">{_esc(d)}</span>'
                 tg_html = f'<div class="kol-targets">🎯 {tg}</div>' if tg else ""
             else:
@@ -648,6 +649,22 @@ def _cycle_kol_html(kol_views, kol_history=None):
     body = _block("每日 / 每周预测", "更新节奏快，可做短周期对账", hi)
     body += _block("月度 / 不定期预测", "长周期与节气/节点式预测", lo)
     return head + body
+
+
+def _tg_str(v):
+    """targets 归一为字符串。
+
+    ★2026-08-24 线上 build 崩溃根因: 深度重抓时部分子 agent 把 targets 写成了
+      **数组**(如 ["黄金$6000","白银$120"]), 而三处渲染都直接 .strip() → AttributeError。
+      上游数据形状不可控(人写/LLM 写/历史遗留混杂), 所以在**渲染层**做类型兜底:
+      list/tuple → 顿号连接; None → 空串; 其它 → str()。
+      不去改上游数据: 数组本身是合法表达, 改了反而丢结构。
+    """
+    if v is None:
+        return ""
+    if isinstance(v, (list, tuple)):
+        return "、".join(str(x).strip() for x in v if str(x).strip())
+    return str(v).strip()
 
 
 def _kol_history_payload(kol_history):
@@ -798,7 +815,7 @@ def _kol_changes_html(kol_changes):
             pc = dir_cls.get(ch["prev_dir"], "n")
             nc = dir_cls.get(ch["new_dir"], "n")
             comment = (ch.get("comments") or "").strip()
-            targets = (ch.get("targets") or "").strip()
+            targets = _tg_str(ch.get("targets"))
             extra = ""
             if comment:
                 extra += f'<div class="kol-cmt">{_esc(comment)}</div>'
@@ -865,7 +882,7 @@ def _kol_views_html(views):
         for v in vs:
             bcls, btxt = dir_badge.get(v["direction"], ("kv-mixed", v["direction"] or "—"))
             comment = (v.get("comments") or "").strip()
-            targets = (v.get("targets") or "").strip()
+            targets = _tg_str(v.get("targets"))
             since = (v.get("since_date") or "").strip()
             is_new = v.get("is_new")
             # 首现日期标注: 本周内新转成→🆕 新观点; 否则→自 X 日持有(旧观点延续)
@@ -2948,6 +2965,76 @@ def _hf_leverage_html(hf):
         f'⚠️ 数据源为 SEC Form PF，<b>季度更新且滞后发布</b>（非日频），是结构性中长期风险指标。</div>'
         f'</div>'
     )
+
+
+def _cb_swaps_html(d):
+    """★2026-08-24(Chao 点名遗失指标): 央行美元流动性互换板块。
+
+    Chao:「我刚刚发现有一个指标我们好像遗失掉了，叫"央行货币互换"…
+          你能不能看一下你是否可以把这个数据拿到，然后每天去爬取。」
+    数据源 = 纽约联储官方 API(免费无 key)。**抓不到就显示未就绪, 绝不用旧值冒充。**
+    """
+    if not isinstance(d, dict) or d.get("status") not in ("ok", "empty"):
+        msg = (d or {}).get("error") or "数据未就绪"
+        return f'<div class="tf-none">央行货币互换：{_esc(str(msg))}（未就绪，不以旧值填充）</div>'
+    if d.get("status") == "empty":
+        return ('<div class="tf-none">央行货币互换：查询区间内<b>无任何互换操作</b>。'
+                '这是<b>真实的零</b>——平静期本就接近零，不是抓取失败。</div>')
+
+    wk = d.get("weekly") or []
+    latest = d.get("latest_week_usd") or 0.0
+    peak = d.get("peak_week_usd") or 1.0
+    bycb = d.get("by_cb") or {}
+    ops = d.get("ops") or []
+
+    def _yi(v):
+        return f"{v/1e8:,.2f}"
+
+    # 周度柱状(近 52 周)
+    show = wk[-52:]
+    mx = max([w["usd"] for w in show] or [1.0]) or 1.0
+    bars = "".join(
+        f'<div class="cbs-b" style="height:{max(2, w["usd"]/mx*100):.1f}%" '
+        f'title="{_esc(w["week"])} · {_yi(w["usd"])} 亿美元"></div>'
+        for w in show)
+
+    cb_rows = "".join(
+        f'<div class="cbs-r"><span class="cbs-n">{_esc(k)}</span>'
+        f'<span class="cbs-v">{_yi(v["usd"])} 亿</span>'
+        f'<span class="cbs-c">{v["n"]} 笔</span></div>'
+        for k, v in sorted(bycb.items(), key=lambda x: -x[1]["usd"]))
+
+    op_rows = "".join(
+        f'<tr><td class="cbs-d">{_esc(o["date"])}</td>'
+        f'<td>{_esc(o["cb"])}</td>'
+        f'<td class="cbs-num"><b>{_yi(o["usd"])}</b></td>'
+        f'<td class="cbs-num">{_esc(str(o.get("term") or "—"))}天</td>'
+        f'<td class="cbs-num">{_esc(str(o.get("rate") or "—"))}%</td></tr>'
+        for o in ops[:12])
+
+    return (
+        f'<div class="kr-head">'
+        f'<span class="kr-total">本周成交 <b>{_yi(latest)}</b> 亿美元</span>'
+        f'<span class="kr-total">近一年峰值 <b>{_yi(peak)}</b> 亿</span>'
+        f'<span class="kr-total">操作 <b>{d.get("n_ops", 0)}</b> 笔</span>'
+        f'<span class="kr-total">截至 {_esc(str(d.get("as_of") or ""))}</span></div>'
+        f'<div class="cust-how"><b>这是什么：</b>美联储与外国央行的<b>美元流动性互换</b>'
+        f'（U.S. Dollar Liquidity Swap）—— 外国央行拿本币向 Fed 换美元，'
+        f'再借给本辖区缺美元的银行，到期换回。<br>'
+        f'<b>怎么看：</b>平静期接近零；<b>某国央行突然大额动用 = 该辖区银行在离岸市场借不到美元</b>，'
+        f'是美元荒的直接温度计。2008 / 2020 危机期间曾冲到数千亿美元级别。'
+        f'与 FIMA 回购、SOFR−IORB 利差互为佐证——三者同时走高才是真紧张。<br>'
+        f'<b>口径：</b>按 ISO 周汇总成交额；金额为原始美元数除以 1e8（亿美元）。'
+        f'数据源 <a class="src-lnk" href="https://www.newyorkfed.org/markets/desk-operations/central-bank-liquidity-swap-operations" '
+        f'target="_blank" rel="noopener">纽约联储官方</a>（每日更新，免费 API）。</div>'
+        f'<div class="cbs-wrap"><div class="cbs-bars">{bars}</div>'
+        f'<div class="cbs-axis"><span>{_esc(show[0]["week"]) if show else ""}</span>'
+        f'<span>近 52 周成交额（柱高 = 当周金额）</span>'
+        f'<span>{_esc(show[-1]["week"]) if show else ""}</span></div></div>'
+        f'<div class="cbs-grid">{cb_rows}</div>'
+        f'<table class="cbs-tb"><thead><tr><th>日期</th><th>对手央行</th>'
+        f'<th>金额(亿$)</th><th>期限</th><th>利率</th></tr></thead>'
+        f'<tbody>{op_rows}</tbody></table>')
 
 
 def _kol_roster_table_html():
@@ -6634,6 +6721,28 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .kp-todo {{ font-size: 10px; color: var(--muted); font-style: italic;
               background: rgba(140,155,175,.10); border-radius: 4px;
               padding: 5px 7px; margin-top: 5px; }}
+  /* ★2026-08-24 央行货币互换 */
+  .cbs-wrap {{ margin: 10px 0; }}
+  .cbs-bars {{ display: flex; align-items: flex-end; gap: 2px; height: 96px;
+               background: rgba(140,155,175,.06); border-radius: 5px; padding: 6px 8px; }}
+  .cbs-b {{ flex: 1; min-width: 3px; background: linear-gradient(180deg,#8ea1ad,#6b8494);
+            border-radius: 2px 2px 0 0; }}
+  .cbs-b:hover {{ background: var(--dust-rose); }}
+  .cbs-axis {{ display: flex; justify-content: space-between; font-size: 9.5px;
+               color: var(--muted); margin-top: 4px; font-family: var(--mono); }}
+  .cbs-grid {{ display: grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+               gap: 6px; margin: 10px 0; }}
+  .cbs-r {{ display: flex; align-items: baseline; gap: 6px; font-size: 11px;
+            background: rgba(140,155,175,.08); border-radius: 4px; padding: 5px 9px; }}
+  .cbs-n {{ flex: 1; color: var(--text); }}
+  .cbs-v {{ font-family: var(--mono); font-weight: 700; color: var(--dust-rose); }}
+  .cbs-c {{ font-size: 9.5px; color: var(--muted); }}
+  .cbs-tb {{ width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 8px; }}
+  .cbs-tb th {{ text-align: left; color: var(--muted); font-weight: 600; font-size: 10px;
+                border-bottom: 1px solid var(--border); padding: 4px 6px; }}
+  .cbs-tb td {{ padding: 4px 6px; border-bottom: 1px dashed var(--border); }}
+  .cbs-d {{ font-family: var(--mono); color: var(--muted); }}
+  .cbs-num {{ font-family: var(--mono); text-align: right; }}
 </style>
 </head>
 <body>
@@ -6854,6 +6963,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="h-grid">{holdings}</div>
 
   <!-- ═══ 附五：KOL 全量名录档案卡(Chao 2026-08-23 要求, 13 维度, 页面最底部备查) ═══ -->
+  <!-- ═══ 央行美元流动性互换(Chao 2026-08-24 点名遗失指标) ═══ -->
+  <div class="part-title" id="sec-cb-swaps"><span class="part-num">＋</span>央行货币互换 · 美元流动性互换 (Fed↔外国央行 · 离岸美元荒温度计)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{cb_swaps}</div>
+
   <div class="part-title" id="sec-kol-roster"><span class="part-num">＋</span>KOL 全量名录 · 13 维度档案卡 (编号/领域/在世/头衔/成就/荣誉/书籍/当年言论 · 名册镜像 Notion·新增自动入表)<span class="freq-badge freq-daily">随名册更新</span></div>
   <div class="card">{kol_roster}</div>
 

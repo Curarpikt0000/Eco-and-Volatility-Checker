@@ -914,6 +914,93 @@ def fetch_cb_balance_sheets(to_usd=True):
 FED_H41_URL = "https://www.federalreserve.gov/releases/h41/current/h41.htm"
 
 
+def fetch_cb_liquidity_swaps(years=1):
+    """★2026-08-24(Chao 点名遗失指标): 央行美元流动性互换 (Central Bank Liquidity Swaps)。
+
+    Chao 原话:「我刚刚发现有一个指标我们好像遗失掉了,叫"央行货币互换"。
+              本周成交额是 1.21 亿美元, 欧洲央行在 8月19号成交了 1.19 亿美元。」
+    实测两个数字与官方 API 完全吻合(W34=1.21亿 / 08-19 ECB=1.19亿), 已交叉验证。
+
+    为什么重要: 美联储与外国央行的美元互换额度是**离岸美元荒的直接温度计**。
+      平时接近零; 一旦某国央行大额动用, 说明该辖区银行体系在境外市场借不到美元。
+      2008/2020 危机期间曾冲到数千亿美元。与 FIMA 回购、SOFR-IORB 利差互为佐证。
+
+    数据源: 纽约联储官方 API (markets.newyorkfed.org), 免费无需 key, 可查历史。
+      端点: /api/fxs/all/search.json?startDate=&endDate=
+      ★注意 /latest.json 常返回空数组(只在当日有新操作时才有值), 不能用作主源;
+        必须用 search.json 按日期区间拉取。
+    单位: 原始 amount 为**美元**(非百万/十亿), 直接除 1e8 得"亿美元"。
+    """
+    import datetime as _dt
+    out = {"status": "error", "as_of": None, "ops": [], "weekly": [],
+           "by_cb": {}, "latest_week_usd": 0.0, "source": "NY Fed markets API",
+           "source_url": "https://markets.newyorkfed.org/api/fxs/all/search.json"}
+    try:
+        end = _dt.date.today()
+        start = end - _dt.timedelta(days=int(365 * years) + 10)
+        url = ("https://markets.newyorkfed.org/api/fxs/all/search.json"
+               f"?startDate={start.isoformat()}&endDate={end.isoformat()}")
+        import urllib.request as _u
+        import json as _j
+        req = _u.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        raw = _j.load(_u.urlopen(req, timeout=45))
+        ops = ((raw or {}).get("fxSwaps") or {}).get("operations") or []
+    except Exception as e:
+        out["error"] = f"NY Fed API 失败: {str(e)[:150]}"
+        return out                      # 抓不到就如实返回 error, 绝不编造
+
+    if not ops:
+        out["status"] = "empty"
+        out["error"] = "区间内无互换操作(平时可能确实为零)"
+        return out
+
+    rows = []
+    for o in ops:
+        try:
+            amt = float(o.get("amount") or 0)
+        except Exception:
+            continue
+        rows.append({
+            "date": (o.get("tradeDate") or "")[:10],
+            "cb": o.get("counterparty") or "",
+            "usd": amt,
+            "term": o.get("termInDays"),
+            "rate": o.get("interestRate"),
+            "maturity": (o.get("maturityDate") or "")[:10],
+        })
+    rows.sort(key=lambda r: r["date"], reverse=True)
+
+    # 按 ISO 周汇总(便于画柱状图与"本周成交额")
+    wk = {}
+    for r in rows:
+        try:
+            y, w, _ = _dt.date.fromisoformat(r["date"]).isocalendar()
+        except Exception:
+            continue
+        wk.setdefault((y, w), 0.0)
+        wk[(y, w)] += r["usd"]
+    weekly = [{"week": f"{y}-W{w:02d}", "usd": v} for (y, w), v in sorted(wk.items())]
+
+    by_cb = {}
+    for r in rows:
+        by_cb.setdefault(r["cb"], {"n": 0, "usd": 0.0})
+        by_cb[r["cb"]]["n"] += 1
+        by_cb[r["cb"]]["usd"] += r["usd"]
+
+    out.update({
+        "status": "ok",
+        "as_of": rows[0]["date"],
+        "ops": rows[:60],               # 最近 60 笔明细
+        "weekly": weekly,
+        "by_cb": by_cb,
+        "latest_week_usd": weekly[-1]["usd"] if weekly else 0.0,
+        "latest_week": weekly[-1]["week"] if weekly else "",
+        "n_ops": len(rows),
+        "peak_week_usd": max((w["usd"] for w in weekly), default=0.0),
+    })
+    return out
+
+
 def _custody_history_fred(start="2026-01-01"):
     """从 FRED WMTSECL1(外国官方托管可流通美债, 周度 as-of Wednesday, 2002至今活跃)
     拉历史序列。返回 [(date, value_$T), ...] 升序。空列表=拉取失败。"""

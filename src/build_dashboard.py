@@ -361,6 +361,18 @@ def main():
     except Exception as e:
         print(f"[dashboard] BIS 跳过: {e}")
 
+    # ── 央行美元流动性互换(Chao 2026-08-24 点名遗失指标, NY Fed 官方 API) ──
+    cb_swaps = {}
+    try:
+        cb_swaps = ed.fetch_cb_liquidity_swaps(1) or {}
+        print(f"[dashboard] 央行货币互换: status={cb_swaps.get('status')} "
+              f"as_of={cb_swaps.get('as_of')} "
+              f"本周={cb_swaps.get('latest_week_usd', 0)/1e8:.2f}亿 "
+              f"笔数={cb_swaps.get('n_ops')}")
+    except Exception as e:
+        cb_swaps = {"status": "error", "error": str(e)[:150]}
+        print(f"[dashboard] 央行货币互换 跳过: {e}")
+
     # ── 国债市场压力四联图(对齐 Morgan Stanley 三图 + OFR官方压力指数) ──
     stress_panels = {}
     ofr_fsi = {}
@@ -525,6 +537,7 @@ def main():
         comex_firms_top10=comex_firms_top10,
         bis_latest=bis_latest,
         bis_all=bis_all,
+        cb_swaps=cb_swaps,
         fiscal_budget=fiscal_budget,
     )
     print(f"[dashboard] 生成: {out}")
