@@ -21,9 +21,10 @@
     "note": "LEI 7月+0.2%至99.5, 六个月增长率转正(+0.2% 1-7月)为四年多来首次"
   },
   "bofa_bull_bear": {
-    "value": 9.3,
-    "as_of": "2026-08-20",
-    "status": "ok"
+    "value": 9.7,
+    "as_of": "2026-08-07",
+    "status": "ok",
+    "note": "BofA Bull&Bear 升至9.7(自2021以来最高), 远超8.0卖出阈值; 依据=股市广度扩大+高收益债强流入+信用利差收窄"
   },
   "ad_line": {
     "value": false,
@@ -32,9 +33,10 @@
     "note": "市场广度真数据(RSP/SPY东财API)判定: SPY 8/13创近高但广度确认(ratio距高点<2%), 无顶背离"
   },
   "aaii_bull_bear": {
-    "value": -4.4,
-    "as_of": "2026-08-19",
-    "status": "ok"
+    "value": -4.43,
+    "as_of": "2026-08-20",
+    "status": "ok",
+    "note": "AAII bull 35.47% / bear 39.90% (Wk of Aug 20), spread=-4.43; bear升近40%"
   },
   "margin_debt": {
     "value": 1420.0,

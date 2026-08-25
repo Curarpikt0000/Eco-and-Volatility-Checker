@@ -1,12 +1,75 @@
 {
-  "as_of": "2026-08-24",
+  "as_of": "2026-08-25",
   "politicians": [
     {
       "name": "Nancy Pelosi",
       "title": "众议院议员 (加州 · 前议长)",
-      "n_filings": 5,
+      "n_filings": 6,
       "n_recent_parsed": 3,
       "trades": [
+        {
+          "ticker": "BE",
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "07/28/2026",
+          "amount_range": "$500,001 - $1,000,000",
+          "filing_date": "8/21/2026",
+          "doc_id": "20035143"
+        },
+        {
+          "ticker": "BE",
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "07/28/2026",
+          "amount_range": "$500,001 - $1,000,000",
+          "filing_date": "8/21/2026",
+          "doc_id": "20035143"
+        },
+        {
+          "ticker": null,
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "07/27/2026",
+          "amount_range": "$500,001 - $1,000,000",
+          "filing_date": "8/21/2026",
+          "doc_id": "20035143"
+        },
+        {
+          "ticker": "BE",
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "07/24/2026",
+          "amount_range": "$1,000,001 - $5,000,000",
+          "filing_date": "8/21/2026",
+          "doc_id": "20035143"
+        },
+        {
+          "ticker": "BE",
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "07/24/2026",
+          "amount_range": "$1,000,001 - $5,000,000",
+          "filing_date": "8/21/2026",
+          "doc_id": "20035143"
+        },
+        {
+          "ticker": "INTC",
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "07/24/2026",
+          "amount_range": "$250,001 - $500,000",
+          "filing_date": "8/21/2026",
+          "doc_id": "20035143"
+        },
+        {
+          "ticker": "INTC",
+          "direction": "P",
+          "dir_cn": "买入",
+          "txn_date": "07/24/2026",
+          "amount_range": "$500,001 - $1,000,000",
+          "filing_date": "8/21/2026",
+          "doc_id": "20035143"
+        },
         {
           "ticker": "INTC",
           "direction": "P",
@@ -76,69 +139,6 @@
           "dir_cn": "买入",
           "txn_date": "01/16/2026",
           "amount_range": "$100,001 - $250,000",
-          "filing_date": "1/23/2026",
-          "doc_id": "20033725"
-        },
-        {
-          "ticker": "GOOGL",
-          "direction": "P",
-          "dir_cn": "买入",
-          "txn_date": "12/30/2025",
-          "amount_range": "$250,001 - $500,000",
-          "filing_date": "1/23/2026",
-          "doc_id": "20033725"
-        },
-        {
-          "ticker": "GOOGL",
-          "direction": "S (partial)",
-          "dir_cn": "部分卖出",
-          "txn_date": "12/30/2025",
-          "amount_range": "$1,000,001 - $5,000,000",
-          "filing_date": "1/23/2026",
-          "doc_id": "20033725"
-        },
-        {
-          "ticker": "AMZN",
-          "direction": "P",
-          "dir_cn": "买入",
-          "txn_date": "12/30/2025",
-          "amount_range": "$100,001 - $250,000",
-          "filing_date": "1/23/2026",
-          "doc_id": "20033725"
-        },
-        {
-          "ticker": "AAPL",
-          "direction": "P",
-          "dir_cn": "买入",
-          "txn_date": "12/30/2025",
-          "amount_range": "$250,001 - $500,000",
-          "filing_date": "1/23/2026",
-          "doc_id": "20033725"
-        },
-        {
-          "ticker": "AAPL",
-          "direction": "S (partial)",
-          "dir_cn": "部分卖出",
-          "txn_date": "12/30/2025",
-          "amount_range": "$5,000,001 - $25,000,000",
-          "filing_date": "1/23/2026",
-          "doc_id": "20033725"
-        },
-        {
-          "ticker": "NVDA",
-          "direction": "P",
-          "dir_cn": "买入",
-          "txn_date": "12/30/2025",
-          "amount_range": "$100,001 - $250,000",
-          "filing_date": "1/23/2026",
-          "doc_id": "20033725"
-        },
-        {
-          "ticker": "PYPL",
-          "direction": "S",
-          "dir_cn": "卖出",
-          "txn_date": "12/30/2025",
-          "amount_range": "$250,001 - $500,000",
           "filing_date": "1/23/2026",
           "doc_id": "20033725"
         }
@@ -232,7 +232,7 @@
       "trades": [],
       "n_filings": 0,
       "status": "annual_only",
-      "note": "另有 278 年度快照(2025-06-14)",
+      "note": "另有 278 年度快照(2026-07-01)",
       "source": "OGE Form 278-T (逐笔交易报告)"
     },
     {

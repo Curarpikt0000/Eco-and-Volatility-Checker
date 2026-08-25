@@ -1,0 +1,686 @@
+{
+ "status": "ok",
+ "generated": "2026-08-25T11:03:09",
+ "source": "双通道: archive PDF(01-06→06-05 per-firm) + Notion Daily auto tracking(06-06→至今, 每日增量)",
+ "data_range": "2026-01-06 → 2026-08-19",
+ "archive_pdfs_parsed": 133,
+ "archive_max_date": "2026-06-05",
+ "notion_rows_scanned": 1316,
+ "unit": "contracts",
+ "banks_all": [
+  "BMO",
+  "BNP",
+  "Barclays",
+  "BofA",
+  "Citi",
+  "Deutsche",
+  "Goldman",
+  "HSBC",
+  "JPM",
+  "Macquarie",
+  "Mizuho",
+  "Morgan Stanley",
+  "RBC",
+  "SG",
+  "Scotia",
+  "Std Chartered",
+  "Wells Fargo"
+ ],
+ "banks_core": [
+  "BNP",
+  "BofA",
+  "Citi",
+  "Deutsche",
+  "Goldman",
+  "HSBC",
+  "JPM",
+  "Morgan Stanley",
+  "Scotia",
+  "Std Chartered"
+ ],
+ "note": "净值=Σ(大行发货)−Σ(大行接货), 正=净发货(交货/压价), 负=净接货(囤货/看涨)。全投行=17家; 核心做市商=10家传统LBMA金银做市大行。数据双源: archive PDF历史打底(per-firm精确) + Notion每日交割明细增量更新。",
+ "gold": [
+  {
+   "week": "2026-01-05",
+   "all_net": -54,
+   "all_issued": 1927,
+   "all_stopped": 1981,
+   "core_net": -588,
+   "core_issued": 1348,
+   "core_stopped": 1936,
+   "days": 4
+  },
+  {
+   "week": "2026-01-12",
+   "all_net": 13,
+   "all_issued": 2624,
+   "all_stopped": 2611,
+   "core_net": 43,
+   "core_issued": 2217,
+   "core_stopped": 2174,
+   "days": 5
+  },
+  {
+   "week": "2026-01-19",
+   "all_net": -104,
+   "all_issued": 2997,
+   "all_stopped": 3101,
+   "core_net": 250,
+   "core_issued": 2798,
+   "core_stopped": 2548,
+   "days": 4
+  },
+  {
+   "week": "2026-01-26",
+   "all_net": -1313,
+   "all_issued": 19958,
+   "all_stopped": 21271,
+   "core_net": -6926,
+   "core_issued": 10184,
+   "core_stopped": 17110,
+   "days": 4
+  },
+  {
+   "week": "2026-02-02",
+   "all_net": -801,
+   "all_issued": 7423,
+   "all_stopped": 8224,
+   "core_net": -3025,
+   "core_issued": 2935,
+   "core_stopped": 5960,
+   "days": 5
+  },
+  {
+   "week": "2026-02-09",
+   "all_net": -4,
+   "all_issued": 3165,
+   "all_stopped": 3169,
+   "core_net": 992,
+   "core_issued": 2385,
+   "core_stopped": 1393,
+   "days": 5
+  },
+  {
+   "week": "2026-02-16",
+   "all_net": 2,
+   "all_issued": 483,
+   "all_stopped": 481,
+   "core_net": 297,
+   "core_issued": 479,
+   "core_stopped": 182,
+   "days": 3
+  },
+  {
+   "week": "2026-02-23",
+   "all_net": 16,
+   "all_issued": 6671,
+   "all_stopped": 6655,
+   "core_net": 1131,
+   "core_issued": 5760,
+   "core_stopped": 4629,
+   "days": 5
+  },
+  {
+   "week": "2026-03-02",
+   "all_net": -7,
+   "all_issued": 4633,
+   "all_stopped": 4640,
+   "core_net": -3454,
+   "core_issued": 1186,
+   "core_stopped": 4640,
+   "days": 4
+  },
+  {
+   "week": "2026-03-09",
+   "all_net": 115,
+   "all_issued": 10230,
+   "all_stopped": 10115,
+   "core_net": -1911,
+   "core_issued": 4786,
+   "core_stopped": 6697,
+   "days": 3
+  },
+  {
+   "week": "2026-03-16",
+   "all_net": -48,
+   "all_issued": 4231,
+   "all_stopped": 4279,
+   "core_net": 1581,
+   "core_issued": 4124,
+   "core_stopped": 2543,
+   "days": 3
+  },
+  {
+   "week": "2026-03-23",
+   "all_net": -28,
+   "all_issued": 497,
+   "all_stopped": 525,
+   "core_net": -479,
+   "core_issued": 0,
+   "core_stopped": 479,
+   "days": 1
+  },
+  {
+   "week": "2026-04-06",
+   "all_net": 5,
+   "all_issued": 840,
+   "all_stopped": 835,
+   "core_net": -537,
+   "core_issued": 274,
+   "core_stopped": 811,
+   "days": 2
+  },
+  {
+   "week": "2026-04-13",
+   "all_net": 201,
+   "all_issued": 4183,
+   "all_stopped": 3982,
+   "core_net": -1082,
+   "core_issued": 2675,
+   "core_stopped": 3757,
+   "days": 5
+  },
+  {
+   "week": "2026-04-20",
+   "all_net": -487,
+   "all_issued": 1826,
+   "all_stopped": 2313,
+   "core_net": -188,
+   "core_issued": 1765,
+   "core_stopped": 1953,
+   "days": 5
+  },
+  {
+   "week": "2026-04-27",
+   "all_net": -371,
+   "all_issued": 3273,
+   "all_stopped": 3644,
+   "core_net": 421,
+   "core_issued": 2319,
+   "core_stopped": 1898,
+   "days": 5
+  },
+  {
+   "week": "2026-05-04",
+   "all_net": -118,
+   "all_issued": 572,
+   "all_stopped": 690,
+   "core_net": -591,
+   "core_issued": 66,
+   "core_stopped": 657,
+   "days": 5
+  },
+  {
+   "week": "2026-05-11",
+   "all_net": 3,
+   "all_issued": 2100,
+   "all_stopped": 2097,
+   "core_net": -2045,
+   "core_issued": 20,
+   "core_stopped": 2065,
+   "days": 4
+  },
+  {
+   "week": "2026-05-18",
+   "all_net": -362,
+   "all_issued": 1688,
+   "all_stopped": 2050,
+   "core_net": -1841,
+   "core_issued": 203,
+   "core_stopped": 2044,
+   "days": 5
+  },
+  {
+   "week": "2026-05-25",
+   "all_net": -391,
+   "all_issued": 27821,
+   "all_stopped": 28212,
+   "core_net": -1180,
+   "core_issued": 21667,
+   "core_stopped": 22847,
+   "days": 4
+  },
+  {
+   "week": "2026-06-01",
+   "all_net": -437,
+   "all_issued": 3856,
+   "all_stopped": 4293,
+   "core_net": -954,
+   "core_issued": 2625,
+   "core_stopped": 3579,
+   "days": 5
+  },
+  {
+   "week": "2026-06-08",
+   "all_net": -48,
+   "all_issued": 4490,
+   "all_stopped": 4538,
+   "core_net": -1194,
+   "core_issued": 2933,
+   "core_stopped": 4127,
+   "days": 3
+  },
+  {
+   "week": "2026-06-15",
+   "all_net": -45,
+   "all_issued": 1650,
+   "all_stopped": 1695,
+   "core_net": 312,
+   "core_issued": 1442,
+   "core_stopped": 1130,
+   "days": 2
+  },
+  {
+   "week": "2026-06-22",
+   "all_net": -54,
+   "all_issued": 120,
+   "all_stopped": 174,
+   "core_net": -72,
+   "core_issued": 102,
+   "core_stopped": 174,
+   "days": 2
+  },
+  {
+   "week": "2026-06-29",
+   "all_net": -65,
+   "all_issued": 6462,
+   "all_stopped": 6527,
+   "core_net": 895,
+   "core_issued": 5945,
+   "core_stopped": 5050,
+   "days": 3
+  },
+  {
+   "week": "2026-07-06",
+   "all_net": -172,
+   "all_issued": 853,
+   "all_stopped": 1025,
+   "core_net": -125,
+   "core_issued": 569,
+   "core_stopped": 694,
+   "days": 5
+  },
+  {
+   "week": "2026-07-13",
+   "all_net": -252,
+   "all_issued": 1693,
+   "all_stopped": 1945,
+   "core_net": -356,
+   "core_issued": 1027,
+   "core_stopped": 1383,
+   "days": 4
+  },
+  {
+   "week": "2026-07-20",
+   "all_net": -39,
+   "all_issued": 332,
+   "all_stopped": 371,
+   "core_net": 135,
+   "core_issued": 332,
+   "core_stopped": 197,
+   "days": 3
+  },
+  {
+   "week": "2026-07-27",
+   "all_net": -119,
+   "all_issued": 1163,
+   "all_stopped": 1282,
+   "core_net": 287,
+   "core_issued": 1129,
+   "core_stopped": 842,
+   "days": 3
+  },
+  {
+   "week": "2026-08-03",
+   "all_net": -50,
+   "all_issued": 1389,
+   "all_stopped": 1439,
+   "core_net": 290,
+   "core_issued": 1315,
+   "core_stopped": 1025,
+   "days": 5
+  },
+  {
+   "week": "2026-08-10",
+   "all_net": 188,
+   "all_issued": 2012,
+   "all_stopped": 1824,
+   "core_net": 375,
+   "core_issued": 1836,
+   "core_stopped": 1461,
+   "days": 5
+  },
+  {
+   "week": "2026-08-17",
+   "all_net": -151,
+   "all_issued": 351,
+   "all_stopped": 502,
+   "core_net": 94,
+   "core_issued": 351,
+   "core_stopped": 257,
+   "days": 3
+  }
+ ],
+ "silver": [
+  {
+   "week": "2026-01-05",
+   "all_net": -25,
+   "all_issued": 2463,
+   "all_stopped": 2488,
+   "core_net": 1063,
+   "core_issued": 2391,
+   "core_stopped": 1328,
+   "days": 4
+  },
+  {
+   "week": "2026-01-12",
+   "all_net": -78,
+   "all_issued": 2210,
+   "all_stopped": 2288,
+   "core_net": 46,
+   "core_issued": 1895,
+   "core_stopped": 1849,
+   "days": 5
+  },
+  {
+   "week": "2026-01-19",
+   "all_net": 62,
+   "all_issued": 1317,
+   "all_stopped": 1255,
+   "core_net": 458,
+   "core_issued": 1135,
+   "core_stopped": 677,
+   "days": 4
+  },
+  {
+   "week": "2026-01-26",
+   "all_net": 112,
+   "all_issued": 2507,
+   "all_stopped": 2395,
+   "core_net": 1271,
+   "core_issued": 2504,
+   "core_stopped": 1233,
+   "days": 5
+  },
+  {
+   "week": "2026-02-02",
+   "all_net": 189,
+   "all_issued": 1845,
+   "all_stopped": 1656,
+   "core_net": 141,
+   "core_issued": 1417,
+   "core_stopped": 1276,
+   "days": 5
+  },
+  {
+   "week": "2026-02-09",
+   "all_net": 310,
+   "all_issued": 532,
+   "all_stopped": 222,
+   "core_net": 86,
+   "core_issued": 306,
+   "core_stopped": 220,
+   "days": 3
+  },
+  {
+   "week": "2026-02-16",
+   "all_net": 21,
+   "all_issued": 94,
+   "all_stopped": 73,
+   "core_net": -20,
+   "core_issued": 53,
+   "core_stopped": 73,
+   "days": 4
+  },
+  {
+   "week": "2026-02-23",
+   "all_net": 55,
+   "all_issued": 5611,
+   "all_stopped": 5556,
+   "core_net": -497,
+   "core_issued": 4563,
+   "core_stopped": 5060,
+   "days": 5
+  },
+  {
+   "week": "2026-03-02",
+   "all_net": 1,
+   "all_issued": 2545,
+   "all_stopped": 2544,
+   "core_net": -985,
+   "core_issued": 1063,
+   "core_stopped": 2048,
+   "days": 4
+  },
+  {
+   "week": "2026-03-09",
+   "all_net": -127,
+   "all_issued": 3704,
+   "all_stopped": 3831,
+   "core_net": -224,
+   "core_issued": 3467,
+   "core_stopped": 3691,
+   "days": 4
+  },
+  {
+   "week": "2026-03-16",
+   "all_net": 57,
+   "all_issued": 474,
+   "all_stopped": 417,
+   "core_net": 84,
+   "core_issued": 436,
+   "core_stopped": 352,
+   "days": 4
+  },
+  {
+   "week": "2026-03-23",
+   "all_net": -97,
+   "all_issued": 22,
+   "all_stopped": 119,
+   "core_net": -90,
+   "core_issued": 0,
+   "core_stopped": 90,
+   "days": 1
+  },
+  {
+   "week": "2026-04-06",
+   "all_net": -15,
+   "all_issued": 90,
+   "all_stopped": 105,
+   "core_net": -35,
+   "core_issued": 70,
+   "core_stopped": 105,
+   "days": 2
+  },
+  {
+   "week": "2026-04-13",
+   "all_net": -72,
+   "all_issued": 1132,
+   "all_stopped": 1204,
+   "core_net": -54,
+   "core_issued": 1132,
+   "core_stopped": 1186,
+   "days": 5
+  },
+  {
+   "week": "2026-04-20",
+   "all_net": -40,
+   "all_issued": 485,
+   "all_stopped": 525,
+   "core_net": 19,
+   "core_issued": 485,
+   "core_stopped": 466,
+   "days": 5
+  },
+  {
+   "week": "2026-04-27",
+   "all_net": -83,
+   "all_issued": 4551,
+   "all_stopped": 4634,
+   "core_net": 1533,
+   "core_issued": 4342,
+   "core_stopped": 2809,
+   "days": 4
+  },
+  {
+   "week": "2026-05-04",
+   "all_net": -108,
+   "all_issued": 151,
+   "all_stopped": 259,
+   "core_net": -166,
+   "core_issued": 0,
+   "core_stopped": 166,
+   "days": 5
+  },
+  {
+   "week": "2026-05-11",
+   "all_net": -131,
+   "all_issued": 399,
+   "all_stopped": 530,
+   "core_net": -373,
+   "core_issued": 112,
+   "core_stopped": 485,
+   "days": 5
+  },
+  {
+   "week": "2026-05-18",
+   "all_net": -161,
+   "all_issued": 16,
+   "all_stopped": 177,
+   "core_net": -164,
+   "core_issued": 0,
+   "core_stopped": 164,
+   "days": 4
+  },
+  {
+   "week": "2026-05-25",
+   "all_net": -311,
+   "all_issued": 2326,
+   "all_stopped": 2637,
+   "core_net": 509,
+   "core_issued": 1482,
+   "core_stopped": 973,
+   "days": 4
+  },
+  {
+   "week": "2026-06-01",
+   "all_net": -170,
+   "all_issued": 90,
+   "all_stopped": 260,
+   "core_net": -106,
+   "core_issued": 0,
+   "core_stopped": 106,
+   "days": 5
+  },
+  {
+   "week": "2026-06-08",
+   "all_net": 2,
+   "all_issued": 58,
+   "all_stopped": 56,
+   "core_net": -29,
+   "core_issued": 2,
+   "core_stopped": 31,
+   "days": 2
+  },
+  {
+   "week": "2026-06-15",
+   "all_net": -9,
+   "all_issued": 2,
+   "all_stopped": 11,
+   "core_net": -2,
+   "core_issued": 2,
+   "core_stopped": 4,
+   "days": 2
+  },
+  {
+   "week": "2026-06-22",
+   "all_net": -1,
+   "all_issued": 0,
+   "all_stopped": 1,
+   "core_net": 0,
+   "core_issued": 0,
+   "core_stopped": 0,
+   "days": 1
+  },
+  {
+   "week": "2026-06-29",
+   "all_net": 289,
+   "all_issued": 4729,
+   "all_stopped": 4440,
+   "core_net": 2621,
+   "core_issued": 4624,
+   "core_stopped": 2003,
+   "days": 3
+  },
+  {
+   "week": "2026-07-06",
+   "all_net": -128,
+   "all_issued": 579,
+   "all_stopped": 707,
+   "core_net": -245,
+   "core_issued": 303,
+   "core_stopped": 548,
+   "days": 5
+  },
+  {
+   "week": "2026-07-13",
+   "all_net": -28,
+   "all_issued": 287,
+   "all_stopped": 315,
+   "core_net": -60,
+   "core_issued": 163,
+   "core_stopped": 223,
+   "days": 4
+  },
+  {
+   "week": "2026-07-20",
+   "all_net": 50,
+   "all_issued": 1253,
+   "all_stopped": 1203,
+   "core_net": -849,
+   "core_issued": 0,
+   "core_stopped": 849,
+   "days": 3
+  },
+  {
+   "week": "2026-07-27",
+   "all_net": -16,
+   "all_issued": 0,
+   "all_stopped": 16,
+   "core_net": -2,
+   "core_issued": 0,
+   "core_stopped": 2,
+   "days": 5
+  },
+  {
+   "week": "2026-08-03",
+   "all_net": -113,
+   "all_issued": 510,
+   "all_stopped": 623,
+   "core_net": 294,
+   "core_issued": 510,
+   "core_stopped": 216,
+   "days": 4
+  },
+  {
+   "week": "2026-08-10",
+   "all_net": 24,
+   "all_issued": 62,
+   "all_stopped": 38,
+   "core_net": -21,
+   "core_issued": 2,
+   "core_stopped": 23,
+   "days": 3
+  },
+  {
+   "week": "2026-08-17",
+   "all_net": 10,
+   "all_issued": 49,
+   "all_stopped": 39,
+   "core_net": 24,
+   "core_issued": 49,
+   "core_stopped": 25,
+   "days": 3
+  }
+ ]
+}
