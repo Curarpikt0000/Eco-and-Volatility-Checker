@@ -6,7 +6,7 @@
 只读，不写。供每日 report + dashboard 底部板块用。
 时区 JST。所有数字来自真实 Notion，绝不编造。
 """
-import sys, os, datetime
+import sys, os, datetime, json
 sys.path.insert(0, os.path.dirname(__file__))
 from notion_writer import _req
 
@@ -665,7 +665,8 @@ def fetch_china_liquidity(days=400):
       只在公告日/操作日那一行有值，其余日子为 None。**这不是缺数**。
       下游必须 dropna 后再连线，否则折线会断成一堆孤点。
     """
-    out = {"status": "未获取", "omo": [], "dr007": [], "mlf": [], "sfisf": []}
+    out = {"status": "未获取", "omo": [], "dr007": [], "mlf": [], "sfisf": [],
+           "margin": []}
     rows, cursor = [], None
     for _ in range(14):                       # 上限 1400 行，够 3 年日频
         body = {"page_size": 100,
@@ -712,12 +713,20 @@ def fetch_china_liquidity(days=400):
         if v is not None:
             out["sfisf"].append({"date": d, "v": v,
                                  "rate_bp": _n(p, "SFISF_中标费率_bp")})
+        # ★ A股两融余额（Chao 2026-08-25）：数据一直在 B2 同一张表里（543 条 / 2024-06 起），
+        #   但从未渲染到 dashboard —— 「数据已有」≠「已在看板上」。
+        #   用途：SFISF 停发独立公告后，两融是**日频**的杠杆资金活跃度代理，
+        #   能回答「资金在进还是在退」，比季度/年度的 SFISF 口径灵敏得多。
+        v = _n(p, "A股两融余额_万亿")
+        if v is not None:
+            out["margin"].append({"date": d, "v": v})
 
-    for k in ("omo", "dr007", "mlf", "sfisf"):
+    for k in ("omo", "dr007", "mlf", "sfisf", "margin"):
         out[k].sort(key=lambda z: z["date"])
     out["status"] = "ok"
     out["as_of"] = max((s[-1]["date"] for s in
-                        (out["omo"], out["dr007"], out["mlf"], out["sfisf"]) if s),
+                        (out["omo"], out["dr007"], out["mlf"], out["sfisf"],
+                         out["margin"]) if s),
                        default=None)
 
     # ── MLF 净投放（Chao 2026-08-25：「总投放量，但是有到期量，对吗？」）──
@@ -747,8 +756,82 @@ def fetch_china_liquidity(days=400):
         "mlf_net": {f"{d}d": _pct_change(
             [x for x in out["mlf"] if x.get("net") is not None], "net", d)
             for d in (30, 90, 180)},
+        # 两融是**存量**（余额），比点位差，不是区间求和
+        "margin": {f"{d}d": _pct_change(out["margin"], "v", d)
+                   for d in (7, 30, 180)},
     }
+
+    # ── 宽基 ETF 份额（Chao 2026-08-25，B 方案）──
+    # ★ 只看**份额**不看规模/价格：规模=净值×份额会被指数涨跌污染
+    #   （指数涨10%、份额没动，规模也涨10%，看着像流入其实没有）。
+    #   份额增加 = 真有人申购 = 真金白银进场。这是判断国家队在不在场唯一干净的口径。
+    # 数据由 src/fetchers/etf_share.py 采自**上交所官方**每日 ETF 规模表，落盘 data/etf_share.json。
+    out["etf"] = _load_etf_share()
+    if out["etf"].get("series"):
+        out["deltas"]["etf"] = {
+            code: {f"{d}d": _pct_change(s, "v", d) for d in (7, 30, 180)}
+            for code, s in out["etf"]["series"].items()
+        }
     return out
+
+
+ETF_NAMES = {"510300": "沪深300ETF", "510050": "上证50ETF",
+             "510500": "中证500ETF"}
+
+
+def _load_etf_share():
+    """读 data/etf_share.json → {series: {code: [{date, v}]}, names: {...}}。
+
+    文件由 etf_share.py 采集器维护（键为 YYYYMMDD，值为 {code: 亿份}）。
+    这里只做读取与格式转换，**不在渲染路径里发网络请求**——
+    否则 dashboard 构建会被上游限流拖垮。
+
+    ★★ 缺口护栏（2026-08-25 实测教训）：回填未跑完时序列会「两端有、中间空」，
+       相邻两点跨越数月缺口，画出来就是一根 −72% 的悬崖 —— 看着像巨额赎回，
+       实际只是没采到。这类假象比缺数据危险得多（会直接导致误判）。
+       故：**相邻两点间隔 > 20 天即判定为缺口，从缺口处截断，只保留最近的连续段**，
+       并回报 gap_trimmed 供上层标注。宁可少画一段，也不画出假崩盘。
+    """
+    path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                        "data", "etf_share.json")
+    if not os.path.exists(path):
+        return {"status": "未采集", "series": {}}
+    try:
+        with open(path, encoding="utf-8") as f:
+            raw = json.load(f)
+    except (OSError, ValueError) as e:
+        # ★ 只吞「文件读不到 / JSON 坏了」这两类**数据问题**。
+        #   绝不用裸 except：那样代码里的 NameError/TypeError 会被伪装成
+        #   "读取失败"，看板照常渲染，bug 永远浮不上来（2026-08-25 实际踩到）。
+        return {"status": f"读取失败: {type(e).__name__}", "series": {}}
+    series = {}
+    for ds in sorted(raw):
+        iso = f"{ds[:4]}-{ds[4:6]}-{ds[6:8]}"
+        for code, v in (raw[ds] or {}).items():
+            if v is None:
+                continue
+            series.setdefault(code, []).append({"date": iso, "v": v})
+
+    trimmed = 0
+    for code, s in list(series.items()):
+        if len(s) < 2:
+            continue
+        cut = 0
+        for i in range(len(s) - 1, 0, -1):
+            d1 = datetime.date.fromisoformat(s[i]["date"])
+            d0 = datetime.date.fromisoformat(s[i - 1]["date"])
+            if (d1 - d0).days > 20:      # 跨越缺口
+                cut = i
+                break
+        if cut:
+            trimmed += len(s) - len(s[cut:])
+            series[code] = s[cut:]
+
+    return {"status": "ok" if series else "空",
+            "series": series, "names": ETF_NAMES,
+            "gap_trimmed": trimmed,
+            "as_of": max((s[-1]["date"] for s in series.values() if s),
+                         default=None)}
 
 
 def fetch_liquidity_points():

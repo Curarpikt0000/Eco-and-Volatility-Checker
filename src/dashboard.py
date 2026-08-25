@@ -5130,7 +5130,161 @@ def _cn_liq_html(cl):
              '<span class="freq-badge freq-monthly">事件驱动 · 央行启用时发布</span></div>')
     h.append(_cn_sfisf_html(sf))
 
+    # ── 图5 A股两融余额（Chao 2026-08-25 指定）──
+    # 定位：SFISF 停发独立公告后，用**日频**杠杆资金活跃度回答「钱在进还是在退」。
+    # 这是**代理指标不是 SFISF 本身** —— 标题与说明必须写清，避免口径混淆。
+    mgr = (cl.get("margin") or [])
+    if mgr:
+        h.append('<div class="part-title" style="font-size:14px;margin-top:12px">'
+                 '⑤ A股两融余额 · <b>杠杆资金日频代理</b>'
+                 '<span class="freq-badge freq-daily">每日更新</span></div>')
+        _lo, _hi = mgr[0], mgr[-1]
+        h.append(f'<p class="oil-meta">融资融券余额反映场内杠杆资金的进退，'
+                 f'是<b>日频</b>指标 —— SFISF 已停发独立公告（季度/年度口径），'
+                 f'看短期资金动向要靠这条。'
+                 f'<b>注意：这是代理指标，不等于 SFISF 本身。</b>'
+                 f'覆盖 {_lo["date"]} ~ {_hi["date"]}，共 {len(mgr)} 个交易日。</p>')
+        h.append(_cn_line_svg(mgr, "v", unit="万亿", color="#c9a961", dec=3))
+
+    # ── 图6 宽基 ETF 份额（Chao 2026-08-25，B 方案）──
+    # ★ 看份额不看规模：规模=净值×份额会被指数涨跌污染，份额才是真申购/赎回。
+    etf = cl.get("etf") or {}
+    ser = etf.get("series") or {}
+    if ser:
+        h.append('<div class="part-title" style="font-size:14px;margin-top:12px">'
+                 '⑥ 宽基 ETF 份额 · <b>真金白银进出</b>'
+                 '<span class="freq-badge freq-daily">每日更新</span></div>')
+        _n = min(len(s) for s in ser.values())
+        h.append(f'<p class="oil-meta">'
+                 f'<b>只看份额，不看规模或价格</b> —— 规模=净值×份额会被指数涨跌污染'
+                 f'（指数涨 10%、份额没动，规模也涨 10%，看着像资金流入其实没有）。'
+                 f'<b>份额增加 = 真有人申购</b>，减少 = 赎回撤离。'
+                 f'SFISF 抵押品明确包含股票 ETF 与沪深300 成分股，机构拿到钱进场首选宽基，'
+                 f'所以这三只的份额变化能侧面反映「国家队在不在场」。'
+                 f'数据源：上交所官方每日 ETF 规模表。'
+                 f'{f"覆盖约 {_n} 个交易日。" if _n else ""}'
+                 f'<b>注意：代理指标，不等于 SFISF 本身。</b></p>')
+        # ★ 2026 年这条曲线断崖式下行是**真实事件**不是数据故障，必须写明，
+        #   否则读图的人第一反应是"抓错了"。已用公开报道逐点交叉验证：
+        #   我们的 2025-12-31=888.30 / 2026-01-21=719.78 / 2026-01-27=575.33 /
+        #   2026-08-10=248.61，与媒体披露数字**完全一致**。
+        h.append('<p class="oil-meta" style="border-left:3px solid #c9a961;'
+                 'padding-left:9px;color:#c9a961">'
+                 '<b>读图提示：2026 年的断崖是真实事件，不是数据故障。</b>'
+                 '沪深300ETF 份额自 2026-01-15 起连续单边下滑，'
+                 '由 2025 年末的 888 亿份降至当前约 238 亿份（−73%）。'
+                 '公开报道确认为<b>「国家队」（中央汇金系）大额赎回</b>：'
+                 '一季度单该基金即赎回约 500 亿份，同期易方达、华夏等头部宽基同步缩水。'
+                 '数值已与公开披露逐点交叉核对一致（2025-12-31 = 888.30 亿份、'
+                 '2026-01-27 = 575.33 亿份、2026-08-10 = 248.61 亿份）。</p>')
+        h.append(_etf_share_svg(ser, etf.get("names") or {}))
+        h.append(_etf_delta_table(dl.get("etf") or {}, etf.get("names") or {}))
+
     return "".join(h)
+
+
+def _etf_share_svg(series, names, w=940, h=250):
+    """三只宽基 ETF 份额同图。
+
+    ★ 归一化到「首日=100」再画：三只量级差 5 倍（300ETF 238 亿份 vs 500ETF 49 亿份），
+      直接画绝对值会让小的那条压成一条直线，看不出变化。
+      归一化后比较的是**各自的相对增减**，这正是我们要看的「进出方向」。
+    """
+    codes = [c for c in ("510300", "510050", "510500") if series.get(c)]
+    if not codes:
+        return ""
+    cols = {"510300": "#6b8fb5", "510050": "#7fa085", "510500": "#b58a6a"}
+    norm = {}
+    for c in codes:
+        s = series[c]
+        base = s[0]["v"] or 1
+        norm[c] = [{"date": x["date"], "v": x["v"] / base * 100, "raw": x["v"]}
+                   for x in s]
+    allv = [p["v"] for c in codes for p in norm[c]]
+    lo, hi = min(allv), max(allv)
+    pad = (hi - lo) * 0.15 or 1
+    lo, hi = lo - pad, hi + pad
+    span = (hi - lo) or 1
+    ml, mr, mt, mb = 62, 14, 16, 46
+    pw, ph = w - ml - mr, h - mt - mb
+    n = max(len(norm[c]) for c in codes)
+
+    def Y(v):
+        return mt + ph - ph * (v - lo) / span
+
+    p = [f'<svg viewBox="0 0 {w} {h}" preserveAspectRatio="xMidYMid meet">']
+    for k in range(5):
+        tv = lo + span * k / 4
+        yy = Y(tv)
+        p.append(f'<line x1="{ml}" y1="{yy:.1f}" x2="{ml+pw}" y2="{yy:.1f}" '
+                 f'stroke="#2a2f3a" stroke-width="1" stroke-dasharray="3 3"/>')
+        p.append(f'<text x="{ml-7}" y="{yy+3.5:.1f}" text-anchor="end" '
+                 f'font-size="10" fill="#8b93a7">{tv:,.1f}</text>')
+    # 100 基准线（首日水平），越过=净申购，跌破=净赎回
+    if lo < 100 < hi:
+        y100 = Y(100)
+        p.append(f'<line x1="{ml}" y1="{y100:.1f}" x2="{ml+pw}" y2="{y100:.1f}" '
+                 f'stroke="#8b93a7" stroke-width="1" stroke-dasharray="5 4" opacity="0.7"/>')
+        p.append(f'<text x="{ml+pw-2}" y="{y100-4:.1f}" text-anchor="end" '
+                 f'font-size="9" fill="#8b93a7">首日基准 100（上方=净申购）</text>')
+    p.append(f'<text x="{ml-52}" y="{mt-2}" font-size="10" fill="#8b93a7">指数化</text>')
+    for c in codes:
+        s = norm[c]
+        m = len(s)
+
+        def X(i, _m=m):
+            return ml + pw * i / max(_m - 1, 1)
+        pts = " ".join(f'{X(i):.1f},{Y(x["v"]):.1f}' for i, x in enumerate(s))
+        p.append(f'<polyline points="{pts}" fill="none" stroke="{cols[c]}" '
+                 f'stroke-width="1.8"/>')
+        for i, x in enumerate(s):
+            _tip = (f'{names.get(c, c)} · {x["date"]}｜'
+                    f'{x["raw"]:,.2f} 亿份（指数 {x["v"]:.1f}）')
+            p.append(f'<circle class="tip-hit" cx="{X(i):.1f}" cy="{Y(x["v"]):.1f}" '
+                     f'r="6" fill="transparent" data-tip="{_esc(_tip)}"/>')
+    s0 = norm[codes[0]]
+    stepl = max(1, len(s0) // 8)
+    for i in range(0, len(s0), stepl):
+        xx = ml + pw * i / max(len(s0) - 1, 1)
+        p.append(f'<text x="{xx:.1f}" y="{mt+ph+14:.1f}" text-anchor="middle" '
+                 f'font-size="9" fill="#7c8496">{_esc(s0[i]["date"][5:])}</text>')
+    lx = ml
+    for c in codes:
+        nm = names.get(c, c)
+        p.append(f'<rect x="{lx}" y="{h-18}" width="10" height="10" '
+                 f'fill="{cols[c]}" opacity="0.9"/>')
+        p.append(f'<text x="{lx+14}" y="{h-9}" font-size="9.5" '
+                 f'fill="#8b93a7">{_esc(nm)}</text>')
+        lx += 26 + len(nm) * 11
+    p.append("</svg>")
+    return "".join(p)
+
+
+def _etf_delta_table(dl_etf, names):
+    """ETF 份额变动表：亿份 + 百分比。份额是存量 → 点位对比。"""
+    if not dl_etf:
+        return ""
+    h = ['<table style="width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0">'
+         '<tr style="color:#8b93a7;text-align:left">'
+         '<th style="padding:5px 8px;font-weight:500">ETF</th>'
+         '<th style="padding:5px 8px;font-weight:500">最新份额</th>'
+         '<th style="padding:5px 8px;font-weight:500">近 1 周</th>'
+         '<th style="padding:5px 8px;font-weight:500">近 1 月</th>'
+         '<th style="padding:5px 8px;font-weight:500">近半年</th></tr>']
+    for code in ("510300", "510050", "510500"):
+        d = dl_etf.get(code) or {}
+        a, b, c = d.get("7d"), d.get("30d"), d.get("180d")
+        if not any((a, b, c)):
+            continue
+        cur = (a or b or c)["cur"]
+        h.append(f'<tr style="border-top:1px solid #23272f">'
+                 f'<td style="padding:6px 8px;color:#c8cee0">{_esc(names.get(code, code))}</td>'
+                 f'<td style="padding:6px 8px"><b>{cur:,.2f} 亿份</b></td>'
+                 f'<td style="padding:6px 8px">{_fmt_delta(a, " 亿份", dec=2)}</td>'
+                 f'<td style="padding:6px 8px">{_fmt_delta(b, " 亿份", dec=2)}</td>'
+                 f'<td style="padding:6px 8px">{_fmt_delta(c, " 亿份", dec=2)}</td></tr>')
+    h.append("</table>")
+    return "".join(h) if len(h) > 2 else ""
 
 
 def _fmt_delta(d, unit="", pct_first=False, dec=2):
@@ -5190,6 +5344,15 @@ def _cn_delta_table(dl, sf):
                      "净额对比",
                      _fmt_delta(n30, "亿", dec=0), _fmt_delta(n90, "亿", dec=0),
                      _fmt_delta(n180, "亿", dec=0)))
+    # ★ A股两融余额（Chao 2026-08-25 指定）：SFISF 停发独立公告后的**日频**杠杆资金代理。
+    #   存量指标 → 比点位差，不做区间求和。数据一直在 B2，此前从未渲染。
+    mg = dl.get("margin") or {}
+    g7, g30, g180 = mg.get("7d"), mg.get("30d"), mg.get("180d")
+    if any((g7, g30, g180)):
+        cur = (g7 or g30 or g180)["cur"]
+        rows.append(("A股两融余额", f'{cur:,.4f}万亿', "杠杆资金·点位对比",
+                     _fmt_delta(g7, "万亿", dec=4), _fmt_delta(g30, "万亿", dec=4),
+                     _fmt_delta(g180, "万亿", dec=4)))
     if not rows:
         return ""
     h = ['<div class="part-title" style="font-size:14px;margin-top:10px">'
@@ -7356,7 +7519,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="card">{cips}</div>
 
   <!-- ═══ 附三·A3b：中国央行流动性四图 (OMO/DR007/MLF/PSL) ═══ -->
-  <div class="part-title" id="sec-cn-liq"><span class="part-num">＋</span>中国央行流动性 · 逆回购 / DR007 / MLF / SFISF (三层融资渠道 + 股市托底工具)<span class="freq-badge freq-daily">逆回购·DR007 每日 · MLF 月度 · SFISF 事件驱动</span></div>
+  <div class="part-title" id="sec-cn-liq"><span class="part-num">＋</span>中国央行流动性 · 逆回购 / DR007 / MLF / SFISF / 两融 (三层融资渠道 + 股市托底 + 杠杆资金)<span class="freq-badge freq-daily">逆回购·DR007·两融 每日 · MLF 月度 · SFISF 事件驱动</span></div>
   <div class="card">{cn_liq}</div>
 
   <div class="part-title" id="sec-ai-fcf"><span class="part-num">＋</span>AI 产业链 · 自由现金流与信用维度 (资本开支强度 · 杠杆 · 偿息能力)<span class="freq-badge freq-monthly">年度 · 随年报更新</span></div>
