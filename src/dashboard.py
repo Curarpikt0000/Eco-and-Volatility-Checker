@@ -4660,8 +4660,8 @@ def _ai_fcf_svg(groups, w=940, h=380):
                    f'｜经营现金流 {m["ocf"]/1e9:,.1f}B｜资本开支 '
                    f'{m["capex"]/1e9:,.1f}B｜自由现金流 {v:+,.1f}B')
             p.append(f'<rect x="{cx-bw/2:.1f}" y="{ytop:.1f}" width="{bw:.1f}" '
-                     f'height="{max(hh,0.6):.1f}" fill="{fill}" opacity="0.88">'
-                     f'<title>{_esc(tip)}</title></rect>')
+                     f'height="{max(hh,0.6):.1f}" fill="{fill}" opacity="0.88" '
+                     f'data-tip="{_esc(tip)}"/>')
             lv = f'{v:+,.0f}' if abs(v) >= 1 else f'{v:+,.1f}'
             ly = (ytop - 3) if v >= 0 else (ytop + hh + 9)
             p.append(f'<text x="{cx:.1f}" y="{ly:.1f}" text-anchor="middle" '
@@ -4774,8 +4774,8 @@ def _ai_credit_svg(rows, w=940, h=400):
                f'｜利息保障 {r["coverage"]:,.1f}x'
                f'｜净债务 {nd/1e9:+,.1f}B｜EBITDA {r["ebitda"]/1e9:,.1f}B')
         p.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="6" fill="{col}" '
-                 f'opacity="0.85" stroke="#11141a" stroke-width="1">'
-                 f'<title>{_esc(tip)}</title></circle>')
+                 f'opacity="0.85" stroke="#11141a" stroke-width="1" '
+                 f'data-tip="{_esc(tip)}"/>')
         # 标签避让: 与已放置标签太近则改放下方/左右, 避免糊成一团
         ly = cy - 10
         for _ in range(8):
@@ -4934,8 +4934,8 @@ def _cips_svg(monthly, w=940, h=330):
                f'｜日均 {f"{da:,.0f} 亿元" if da else "n/a"}'
                f'｜{"第三方回补" if third else "CIPS 官方"}')
         parts.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" '
-                     f'height="{hh:.1f}" fill="{fill}" opacity="{op}" rx="2">'
-                     f'<title>{_esc(tip)}</title></rect>')
+                     f'height="{hh:.1f}" fill="{fill}" opacity="{op}" rx="2" '
+                     f'data-tip="{_esc(tip)}"/>')
 
     # 右轴 + 日均折线(仅官方月, 断开处不连)
     davg = [(i, m["avg_amount_yi"]) for i, m in enumerate(monthly)
@@ -4961,9 +4961,8 @@ def _cips_svg(monthly, w=940, h=330):
                              f'stroke-linejoin="round"/>')
             for x, y, ym, v in seg:
                 parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3.6" '
-                             f'fill="#fff" stroke="#dc2626" stroke-width="2">'
-                             f'<title>{_esc(f"{ym}｜日均 {v:,.0f} 亿元")}</title>'
-                             f'</circle>')
+                             f'fill="#fff" stroke="#dc2626" stroke-width="2" '
+                             f'data-tip="{_esc(f"{ym}｜日均 {v:,.0f} 亿元")}"/>')
         for k in range(5):
             v = dmax * k / 4
             y = mt + ph - (v / dmax) * ph
@@ -5033,9 +5032,8 @@ def _cips_annual_svg(annual, w=940, h=190):
         prev = a
         parts.append(f'<rect x="{x:.1f}" y="{yy:.1f}" width="{bw:.1f}" '
                      f'height="{mt+ph-yy:.1f}" fill="#0f766e" opacity=".78" '
-                     f'rx="2"><title>'
-                     f'{_esc(f"{y_} 年｜金额 {a:,.0f} 亿元（{a/10000:.1f} 万亿）｜笔数 {c:,}{yoy}")}'
-                     f'</title></rect>')
+                     f'rx="2" data-tip='
+                     f'"{_esc(f"{y_} 年｜金额 {a:,.0f} 亿元（{a/10000:.1f} 万亿）｜笔数 {c:,}{yoy}")}"/>')
         parts.append(f'<text x="{x+bw/2:.1f}" y="{mt+ph+14}" '
                      f'text-anchor="middle" font-size="10" fill="#6b7280">'
                      f'{y_}</text>')
@@ -5179,6 +5177,19 @@ def _cn_delta_table(dl, sf):
         rows.append(("MLF 月度操作", f'{cur:,.0f}亿', "操作量对比",
                      _fmt_delta(m30, "亿", dec=0), _fmt_delta(m90, "亿", dec=0),
                      _fmt_delta(m180, "亿", dec=0)))
+    # ★ MLF 净投放（Chao 2026-08-25 要求）：投放量看不出真实流动性影响，
+    #   投放 5000 亿而到期 6000 亿实为净回笼。到期量 = 12 个月前操作量（MLF 全为 1 年期）。
+    mn = dl.get("mlf_net") or {}
+    n30, n90, n180 = mn.get("30d"), mn.get("90d"), mn.get("180d")
+    if any((n30, n90, n180)):
+        cur = (n30 or n90 or n180)["cur"]
+        col = "#e05c5c" if cur > 0 else ("#39c07c" if cur < 0 else "#8b93a7")
+        lab = "净投放" if cur > 0 else ("净回笼" if cur < 0 else "持平")
+        rows.append(("MLF <b>净投放</b>（投放−到期）",
+                     f'<span style="color:{col}">{cur:+,.0f}亿（{lab}）</span>',
+                     "净额对比",
+                     _fmt_delta(n30, "亿", dec=0), _fmt_delta(n90, "亿", dec=0),
+                     _fmt_delta(n180, "亿", dec=0)))
     if not rows:
         return ""
     h = ['<div class="part-title" style="font-size:14px;margin-top:10px">'
@@ -5193,9 +5204,11 @@ def _cn_delta_table(dl, sf):
          '<th style="padding:5px 8px;font-weight:500">近 1 月</th>'
          '<th style="padding:5px 8px;font-weight:500">近半年</th></tr>']
     for name, cur, kind, a, b, c in rows:
+        # name/cur 允许内嵌 <b>/<span>（净投放行要染色），故不 _esc；
+        # 内容均为本函数自造的常量或数字格式化结果，无外部输入，安全。
         h.append(f'<tr style="border-top:1px solid #23272f">'
-                 f'<td style="padding:6px 8px;color:#c8cee0">{_esc(name)}</td>'
-                 f'<td style="padding:6px 8px"><b>{_esc(cur)}</b></td>'
+                 f'<td style="padding:6px 8px;color:#c8cee0">{name}</td>'
+                 f'<td style="padding:6px 8px"><b>{cur}</b></td>'
                  f'<td style="padding:6px 8px;color:#7c8496;font-size:11px">{_esc(kind)}</td>'
                  f'<td style="padding:6px 8px">{a}</td>'
                  f'<td style="padding:6px 8px">{b}</td>'
@@ -5234,14 +5247,21 @@ def _cn_sfisf_html(sf):
          f'{f"（距今 <b>{gap}</b> 天）" if gap is not None else ""}</div>']
 
     # 判定语——直接回答「有没有剧增」
+    # ★ 2026-08-25 口径订正：不能说「未启用」。2025-05-07 央行公告已将 SFISF(5000亿)
+    #   与股票回购增持再贷款(3000亿)**合并为 8000 亿总额度统一使用**，此后不再单独
+    #   发布 SFISF 操作公告 —— 所以空窗期的准确含义是「无独立公告」，而非「央行没操作」。
+    #   交叉印证：中证协 2026-04 披露「截至 2025 年末累计操作 1050 亿」，与本表 500+550
+    #   完全一致，说明官网 2 条即为独立公告全量；同期货币政策委员会例会已不再提及该工具。
     if quiet:
-        h.append(f'<div class="oil-meta" style="color:#39c07c">'
-                 f'当前状态：<b>未启用</b>。央行已连续 {gap} 天未开展 SFISF 操作，'
-                 f'即<b>目前没有通过该工具托底股市的动作</b>。'
-                 f'若重启，本板块次日自动反映。</div>')
+        h.append(f'<div class="oil-meta" style="color:#c9a961">'
+                 f'当前状态：<b>已无独立公告 {gap} 天</b>。'
+                 f'2025-05-07 起央行将 SFISF 与股票回购增持再贷款'
+                 f'<b>合并为 8000 亿元总额度统一使用</b>，此后不再单独披露 SFISF 操作，'
+                 f'因此空窗<b>不等于「央行未操作」</b>，只能确认<b>没有新的独立公告</b>。'
+                 f'若恢复单独公告，本板块次日自动反映。</div>')
     else:
         h.append('<div class="oil-meta" style="color:#e05c5c">'
-                 '当前状态：<b>近期有操作</b> —— 需关注是否为托市信号。</div>')
+                 '当前状态：<b>近期有独立公告操作</b> —— 需关注是否为托市信号。</div>')
 
     h.append('<table style="width:100%;border-collapse:collapse;font-size:12.5px;margin:6px 0">'
              '<tr style="color:#8b93a7;text-align:left">'
@@ -5321,7 +5341,7 @@ def _cn_omo_svg(rows, w=940, h=250):
         if r.get("rate") is not None:
             tip.append(f'利率 {r["rate"]}%')
         p.append(f'<rect x="{x:.1f}" y="{mt}" width="{bw:.1f}" height="{ph}" '
-                 f'fill="transparent"><title>{_esc("｜".join(tip))}</title></rect>')
+                 f'fill="transparent" data-tip="{_esc("｜".join(tip))}"/>')
     stepl = max(1, n // 8)
     for i in range(0, n, stepl):
         x = ml + step * (i + 0.5)
@@ -5370,8 +5390,11 @@ def _cn_line_svg(rows, key, unit="", color="#6b8fb5", w=940, h=210, dec=2):
         if r.get(key) is None:
             continue
         _tip = f'{r["date"]}｜{r[key]:,.{dec}f}{unit}'
-        p.append(f'<circle cx="{X(i):.1f}" cy="{Y(r[key]):.1f}" r="7" '
-                 f'fill="transparent"><title>{_esc(_tip)}</title></circle>')
+        # ★ 规范 knowledge/frontend/data-dashboard-publishing.md §3「全图 hover tooltip」：
+        #   折线整条无法逐点 hover → 每点叠透明 tip-hit 圈 + data-tip，走全站事件委托。
+        #   不要用 SVG 原生 <title>（需悬停 1-2 秒才弹系统提示，样式也不统一）。
+        p.append(f'<circle class="tip-hit" cx="{X(i):.1f}" cy="{Y(r[key]):.1f}" r="7" '
+                 f'fill="transparent" data-tip="{_esc(_tip)}"/>')
     stepl = max(1, n // 8)
     for i in range(0, n, stepl):
         p.append(f'<text x="{X(i):.1f}" y="{mt+ph+14:.1f}" text-anchor="middle" '
@@ -5410,9 +5433,15 @@ def _cn_bar_svg(rows, key, unit="", color="#6b8fb5", w=940, h=230):
         x = ml + step * (i + 0.5) - bw / 2
         y = mt + ph - hh
         _tip = f'{r["date"]}｜{v:,.0f}{unit}'
+        # MLF 图另带到期量与净投放（rows 里若有 matured/net 就一并显示）
+        if r.get("matured") is not None:
+            _tip += f'｜到期 {r["matured"]:,.0f}{unit}'
+        if r.get("net") is not None:
+            _lab = "净投放" if r["net"] > 0 else ("净回笼" if r["net"] < 0 else "持平")
+            _tip += f'｜{_lab} {r["net"]:+,.0f}{unit}'
         p.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" '
-                 f'height="{max(hh,0.6):.1f}" fill="{color}" opacity="0.88">'
-                 f'<title>{_esc(_tip)}</title></rect>')
+                 f'height="{max(hh,0.6):.1f}" fill="{color}" opacity="0.88" '
+                 f'data-tip="{_esc(_tip)}"/>')
         p.append(f'<text x="{ml+step*(i+0.5):.1f}" y="{y-4:.1f}" '
                  f'text-anchor="middle" font-size="8.5" fill="#aab3c5">'
                  f'{v:,.0f}</text>')
@@ -5456,7 +5485,7 @@ def _cn_area_svg(rows, key, unit="", color="#a8646e", w=940, h=230):
         if r.get("net") is not None:
             _tip += f'｜当月净额 {r["net"]:+,.0f}亿'
         p.append(f'<circle cx="{X(i):.1f}" cy="{Y(r[key]):.1f}" r="6" '
-                 f'fill="transparent"><title>{_esc(_tip)}</title></circle>')
+                 f'fill="transparent" data-tip="{_esc(_tip)}"/>')
     for i, tag in ((peak_i, "峰值"), (n - 1, "最新")):
         p.append(f'<circle cx="{X(i):.1f}" cy="{Y(rows[i][key]):.1f}" r="3.5" '
                  f'fill="{color}"/>')
@@ -7451,7 +7480,16 @@ mkRadar('rLong', RADAR.long);
 
 // ═══ 自动生成左侧模块索引栏(按主题分组 + 可折叠) ═══
 (function() {{
-  var titles = Array.prototype.slice.call(document.querySelectorAll('.part-title'));
+  // ★2026-08-25(Chao 报「左边目录和右边 chart 又开始跳动」)：根因是本行以前抓的是
+  // **全部** .part-title —— 但 .part-title 这个类同时被两种东西用：
+  //   ① 顶级 section 标题（模板里写死，带 <span class="part-num">＋</span>）  46 个
+  //   ② **图内小标题**（_cn_liq_html / AI 信用维度等函数内生成，无 part-num）  6 个
+  // ②本不该进导航。它们不匹配任何 GROUPS 关键词 → 全掉进「其他」，
+  // 而「其他」按"首个成员 DOM 位置"排序会插在页面中部，于是向下滚动时
+  // 高亮在「其他」和真实分组之间来回窜 —— 这就是"跳动"。
+  // 修法：只认带 .part-num 的顶级标题。图内小标题不再参与导航与 scrollspy。
+  var titles = Array.prototype.slice.call(document.querySelectorAll('.part-title'))
+                    .filter(function(t) {{ return t.querySelector('.part-num'); }});
   var box = document.getElementById('sidenav-links');
   if (!titles.length || !box) return;
 
@@ -7465,8 +7503,13 @@ mkRadar('rLong', RADAR.long);
   // 「机构与政要持仓」由 Chao 指定固定放最后(在「其他」之下), 用 pinLast 标记。
   var GROUPS = [
     {{ name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注','A/D 腾落线','市场广度'] }},
-    {{ name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化','周期与术数预测'] }},
-    {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲'] }},
+    // ★2026-08-25(Chao)：KOL 全量名录原先未命中任何关键词 → 掉进「其他」，
+    // 但它本质就是 KOL 板块的一部分，归入本组。
+    {{ name: 'KOL 观点', match: ['KOL 观点全景','KOL 状态变化','周期与术数预测','KOL 全量名录'] }},
+    // ★2026-08-25(Chao)：「中国央行流动性」与「央行货币互换」原先都掉进「其他」，
+    // 但两者本质都是央行流动性观测 —— 一个是 PBoC 的逆回购/DR007/MLF/SFISF，
+    // 一个是 Fed 与外国央行的美元互换额度。均归入本组。
+    {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲','中国央行流动性','央行货币互换','美元流动性互换'] }},
     {{ name: '债务与信用', match: ['政府债务','世界前十大经济体','公司债','OAS 利差','CIPS','跨境人民币','AI 产业链','自由现金流','信用维度'] }},
     {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','基差套利去杠杆预警','SOFR 倒挂','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
     {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','COMEX & 上海','贵金属库存','ETF 资金流','白银做市商','COMEX 白银','投行累计','做市商每周净','issue/stop','COMEX 交割前十名','交货方','自营黄金掉期','黄金出口','Nonmonetary','黄金 Domestic Premium','Premium/Discount','白银月度进口','Silver Bullion'] }},
@@ -7486,7 +7529,9 @@ mkRadar('rLong', RADAR.long);
   var links = [];
   var bucket = {{}};
   titles.forEach(function(t, i) {{
-    var id = 'sec-' + i;
+    // ★保留已有的语义 id（模板里写死的 sec-cn-liq / sec-cips 等）。
+    // 旧实现无条件 t.id = 'sec-' + i，会把语义 id 冲掉 → 外部链接/书签锚点全失效。
+    var id = t.id || ('sec-' + i);
     t.id = id;
     var _tc = t.cloneNode(true);
     var _fb = _tc.querySelector('.freq-badge'); if (_fb) _fb.remove();

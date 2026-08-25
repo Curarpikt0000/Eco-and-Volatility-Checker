@@ -720,6 +720,20 @@ def fetch_china_liquidity(days=400):
                         (out["omo"], out["dr007"], out["mlf"], out["sfisf"]) if s),
                        default=None)
 
+    # ── MLF 净投放（Chao 2026-08-25：「总投放量，但是有到期量，对吗？」）──
+    # ★ 到期量不是估算，是**精确推算**：MLF 全部为 1 年期（实测 20/20 条 tenor 均为「1年」），
+    #   所以本月到期量 ≡ 12 个月前的操作量。数据来自我们自己已入库的同一序列。
+    #   净投放 = 本月操作量 − 12 个月前操作量 —— 这才是对银行体系流动性的真实影响：
+    #   投放 5000 亿但到期 6000 亿，实为净回笼 1000 亿，只看投放会得出反向结论。
+    # ★ PBoC 公告本身不含到期量（实抓最近 3 期确认无「到期/续作/净投放」字样），
+    #   因此前 12 个月无法计算 → 显式留 None，不外推、不用 0 冒充。
+    mlf_by_month = {r["date"][:7]: r["v"] for r in out["mlf"]}
+    for r in out["mlf"]:
+        y, m = int(r["date"][:4]), int(r["date"][5:7])
+        mat = mlf_by_month.get(f"{y-1}-{m:02d}")
+        r["matured"] = mat
+        r["net"] = (r["v"] - mat) if mat is not None else None
+
     # ── 多周期变动（Chao：「过去一周、一月甚至半年的趋势」）──
     # 存量/价格类看点位变动；流量类(OMO)看区间投放总额。
     out["deltas"] = {
@@ -729,6 +743,10 @@ def fetch_china_liquidity(days=400):
                 for d in (7, 30, 180)},
         "mlf": {f"{d}d": _pct_change(out["mlf"], "v", d)
                 for d in (30, 90, 180)},
+        # 净投放单列一行：它与「操作量」是两个不同的口径，不能合并展示
+        "mlf_net": {f"{d}d": _pct_change(
+            [x for x in out["mlf"] if x.get("net") is not None], "net", d)
+            for d in (30, 90, 180)},
     }
     return out
 
