@@ -577,6 +577,162 @@ def _latest_row(db_id, title_field="Date"):
     return None
 
 
+def _pct_change(series, key, days):
+    """时序在 N 个自然日前 vs 最新 的变动。
+
+    ★ 用**自然日回溯**而非"往前数 N 个点"：日频序列有周末与节假日缺口，
+      数点会让「过去一周」实际跨越十几天，口径失真。
+    返回 (最新值, 基准值, 绝对变动, 百分比变动) —— 找不到基准就返回 None，不外推。
+    """
+    import datetime as _dt
+    if not series:
+        return None
+    try:
+        last = series[-1]
+        last_d = _dt.date.fromisoformat(last["date"])
+    except Exception:
+        return None
+    target = last_d - _dt.timedelta(days=days)
+    # 取 <= target 里最靠近的一条（宽容 10 天，超出就算没有基准）
+    base = None
+    for r in reversed(series[:-1]):
+        try:
+            d = _dt.date.fromisoformat(r["date"])
+        except Exception:
+            continue
+        if d <= target:
+            if (target - d).days <= 10:
+                base = r
+            break
+    if not base or base.get(key) is None or last.get(key) is None:
+        return None
+    cur, prev = last[key], base[key]
+    delta = cur - prev
+    pct = (delta / prev * 100) if prev else None
+    return {"cur": cur, "prev": prev, "prev_date": base["date"],
+            "delta": delta, "pct": pct}
+
+
+def _omo_weekly_sum(omo, days):
+    """OMO 是流量不是存量 → 比「最新值变动」应看**区间投放总额**。
+
+    ★ 存量指标(DR007/余额)看点位变动；流量指标(逆回购投放)看区间求和。
+      混用会得出荒谬结论（比如"逆回购较上周-100%"其实只是当天没操作）。
+    """
+    import datetime as _dt
+    if not omo:
+        return None
+    try:
+        last_d = _dt.date.fromisoformat(omo[-1]["date"])
+    except Exception:
+        return None
+    lo = last_d - _dt.timedelta(days=days)
+    prev_lo = lo - _dt.timedelta(days=days)
+
+    def _sum(a, b):
+        s, n = 0.0, 0
+        for r in omo:
+            try:
+                d = _dt.date.fromisoformat(r["date"])
+            except Exception:
+                continue
+            if a < d <= b:
+                s += sum(r.get(k) or 0 for k in ("on", "d7", "other"))
+                n += 1
+        return s, n
+    cur, n1 = _sum(lo, last_d)
+    prev, n2 = _sum(prev_lo, lo)
+    return {"cur": cur, "prev": prev, "n_cur": n1, "n_prev": n2,
+            "delta": cur - prev,
+            "pct": ((cur - prev) / prev * 100) if prev else None}
+
+
+def fetch_china_liquidity(days=400):
+    """B2 中国流动性时序 → 四条曲线（Chao 2026-08-25 要求）。
+
+    三层融资渠道 + 一个股市稳定工具：
+      ① OMO   逆回购，日频，短期     → 隔夜 / 7天 分品种（**流量**）
+      ② DR007 银行间质押回购利率，日频 → 短期资金**价格**（存量点位）
+      ③ MLF   中期借贷便利，月频      → 中期投放（流量）
+      ④ SFISF 证券基金保险互换便利     → **股市托底工具**，看有无剧增
+
+    ★ PSL 已于 2026-08-25 下架（Chao：「已经是过时的了，或者说不太需要了」）：
+      余额自 2024-02 峰值 34,022 亿腰斩到 2025-05 的 17,939 亿，官网停更 448 天，
+      工具本身在清退。抓取器 `pboc_mlf_psl_scraper` 保留（数据仍在写 B2），
+      **只是不再渲染到 dashboard**。
+
+    ★ 频率混装的坑：B2 是**日频**表，但 MLF/SFISF 是**事件频**指标，
+      只在公告日/操作日那一行有值，其余日子为 None。**这不是缺数**。
+      下游必须 dropna 后再连线，否则折线会断成一堆孤点。
+    """
+    out = {"status": "未获取", "omo": [], "dr007": [], "mlf": [], "sfisf": []}
+    rows, cursor = [], None
+    for _ in range(14):                       # 上限 1400 行，够 3 年日频
+        body = {"page_size": 100,
+                "sorts": [{"property": "Date", "direction": "descending"}]}
+        if cursor:
+            body["start_cursor"] = cursor
+        st, b = _req("POST", f"/databases/{ECON_DB['pboc']}/query", body)
+        if st != 200:
+            out["error"] = f"Notion HTTP {st}"
+            return out
+        rows += b.get("results", [])
+        if not b.get("has_more"):
+            break
+        cursor = b.get("next_cursor")
+    if not rows:
+        out["error"] = "B2 无数据"
+        return out
+
+    def _t(p):
+        ti = p.get("Date", {}).get("title") or []
+        return ti[0]["plain_text"] if ti else None
+
+    def _n(p, k):
+        x = p.get(k)
+        return x.get("number") if x and x.get("type") == "number" else None
+
+    for r in rows:
+        p = r["properties"]
+        d = _t(p)
+        if not d:
+            continue
+        ov, sv = _n(p, "隔夜逆回购_亿"), _n(p, "7天逆回购_亿")
+        oth = _n(p, "其他期限逆回购_亿")
+        if ov is not None or sv is not None or oth is not None:
+            out["omo"].append({"date": d, "on": ov, "d7": sv, "other": oth,
+                               "rate": _n(p, "逆回购利率_pct")})
+        v = _n(p, "DR007_pct")
+        if v is not None:
+            out["dr007"].append({"date": d, "v": v})
+        v = _n(p, "MLF_操作量_亿")
+        if v is not None:
+            out["mlf"].append({"date": d, "v": v, "bal": _n(p, "MLF_余额_亿")})
+        v = _n(p, "SFISF_规模_亿")
+        if v is not None:
+            out["sfisf"].append({"date": d, "v": v,
+                                 "rate_bp": _n(p, "SFISF_中标费率_bp")})
+
+    for k in ("omo", "dr007", "mlf", "sfisf"):
+        out[k].sort(key=lambda z: z["date"])
+    out["status"] = "ok"
+    out["as_of"] = max((s[-1]["date"] for s in
+                        (out["omo"], out["dr007"], out["mlf"], out["sfisf"]) if s),
+                       default=None)
+
+    # ── 多周期变动（Chao：「过去一周、一月甚至半年的趋势」）──
+    # 存量/价格类看点位变动；流量类(OMO)看区间投放总额。
+    out["deltas"] = {
+        "dr007": {f"{d}d": _pct_change(out["dr007"], "v", d)
+                  for d in (7, 30, 180)},
+        "omo": {f"{d}d": _omo_weekly_sum(out["omo"], d)
+                for d in (7, 30, 180)},
+        "mlf": {f"{d}d": _pct_change(out["mlf"], "v", d)
+                for d in (30, 90, 180)},
+    }
+    return out
+
+
 def fetch_liquidity_points():
     """取 Economic Dashboard 流动性关键点。返回 dict(取到什么算什么，缺就 None)。"""
     out = {}
@@ -4595,32 +4751,45 @@ def fetch_corporate_credit(years=3):
 
 # ============ AI 产业链: 自由现金流 + 信用状况 ============
 # 4 类 ≤20 家。CIK 为 SEC 官方标识; 空 CIK = 无 SEC 申报(未上市/外国私有), 显式排除并说明。
+#
+# ★第 4 个字段 = 中文名 (Chao 2026-08-25 要求图上 ticker 下方附中文)。
+#   取名原则 (逐个联网核过, 不臆造):
+#   - 有官方中文名的用官方: 维谛技术(Vertiv 中国官网自称) / 伊顿(Eaton 中国官网) /
+#     美光科技 / 博通 / 微软 / 亚马逊 / 甲骨文 / 台积电 / 英伟达。
+#   - 无官方中文名但中文财经媒体有稳定通行译名的用通行译名:
+#     星座能源(CEG, 维基/雪球/国家核安全局均用) / 奇异维诺瓦(GEV, 中文维基条目名)。
+#   - ★没有任何通行中文名的**保留英文原名**, 绝不自己编音译:
+#     CoreWeave / Equinix / Digital Realty / Vistra / AMD / Meta / Alphabet。
+#     中文维基与百度百科的条目名就是英文原文, 硬造"科尔维""亿速"之类反而误导。
+#   ★★VST 的坑: 搜"Vistra 中文名"会命中「瑞致达」, 那是 Vistra Group Holdings
+#     (香港信托服务商), 与本表的 Vistra Corp (德州电力/核电, NYSE:VST) 完全是两家公司。
+#     曾差点写错, 保留英文原名最安全。
 AI_UNIVERSE = [
     ("AI应用/模型层", [
-        ("MSFT",  "Microsoft",        "0000789019"),
-        ("GOOGL", "Alphabet",         "0001652044"),
-        ("META",  "Meta",             "0001326801"),
-        ("AMZN",  "Amazon",           "0001018724"),
-        ("ORCL",  "Oracle",           "0001341439"),
+        ("MSFT",  "Microsoft",        "0000789019", "微软"),
+        ("GOOGL", "Alphabet",         "0001652044", "Alphabet（谷歌母公司）"),
+        ("META",  "Meta",             "0001326801", "Meta（原 Facebook）"),
+        ("AMZN",  "Amazon",           "0001018724", "亚马逊"),
+        ("ORCL",  "Oracle",           "0001341439", "甲骨文"),
     ]),
     ("芯片/加速器", [
-        ("NVDA",  "NVIDIA",           "0001045810"),
-        ("AMD",   "AMD",              "0000002488"),
-        ("AVGO",  "Broadcom",         "0001730168"),
-        ("TSM",   "TSMC",             "0001046179"),   # IFRS(20-F)
-        ("MU",    "Micron",           "0000723125"),
+        ("NVDA",  "NVIDIA",           "0001045810", "英伟达"),
+        ("AMD",   "AMD",              "0000002488", "AMD（超微半导体）"),
+        ("AVGO",  "Broadcom",         "0001730168", "博通"),
+        ("TSM",   "TSMC",             "0001046179", "台积电"),   # IFRS(20-F)
+        ("MU",    "Micron",           "0000723125", "美光科技"),
     ]),
     ("算力/数据中心", [
-        ("CRWV",  "CoreWeave",        "0001769628"),
-        ("EQIX",  "Equinix",          "0001101239"),
-        ("DLR",   "Digital Realty",   "0001297996"),
-        ("VRT",   "Vertiv",           "0001674101"),
+        ("CRWV",  "CoreWeave",        "0001769628", "CoreWeave"),
+        ("EQIX",  "Equinix",          "0001101239", "Equinix"),
+        ("DLR",   "Digital Realty",   "0001297996", "Digital Realty"),
+        ("VRT",   "Vertiv",           "0001674101", "维谛技术"),
     ]),
     ("电力/能源基建", [
-        ("CEG",   "Constellation",    "0001868275"),
-        ("VST",   "Vistra",           "0001692819"),
-        ("GEV",   "GE Vernova",       "0001996810"),
-        ("ETN",   "Eaton",            "0001551182"),
+        ("CEG",   "Constellation",    "0001868275", "星座能源"),
+        ("VST",   "Vistra",           "0001692819", "Vistra"),
+        ("GEV",   "GE Vernova",       "0001996810", "奇异维诺瓦"),
+        ("ETN",   "Eaton",            "0001551182", "伊顿"),
     ]),
 ]
 
@@ -4722,8 +4891,8 @@ def fetch_ai_credit():
     fys, lev_n, cov_n = [], 0, 0
 
     for gname, members in AI_UNIVERSE:
-        for tk, cname, cik in members:
-            rec = {"ticker": tk, "name": cname, "group": gname, "fy": None,
+        for tk, cname, cik, zhname in members:
+            rec = {"ticker": tk, "name": cname, "zh": zhname, "group": gname, "fy": None,
                    "leverage": None, "coverage": None, "ebitda": None,
                    "net_debt": None, "interest": None,
                    "status": "未找到", "note": ""}
@@ -4895,9 +5064,9 @@ def fetch_ai_fcf():
 
     for gname, members in AI_UNIVERSE:
         grp = {"name": gname, "members": []}
-        for tk, cname, cik in members:
+        for tk, cname, cik, zhname in members:
             tot_n += 1
-            rec = {"ticker": tk, "name": cname, "fy": None, "ocf": None,
+            rec = {"ticker": tk, "name": cname, "zh": zhname, "fy": None, "ocf": None,
                    "capex": None, "fcf": None, "ebit": None,
                    "interest": None, "coverage": None, "status": "未找到"}
             facts = _sec_facts(cik)

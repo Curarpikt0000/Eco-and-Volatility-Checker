@@ -453,6 +453,16 @@ def main():
               f"年度={len(cips.get('annual', []))}")
     except Exception as e:
         print(f"[dashboard] CIPS 跳过: {e}")
+    # 中国央行流动性四图 (OMO/DR007/MLF/PSL) — 读 Economic-Dashboard B2
+    cn_liq = {}
+    try:
+        cn_liq = ed.fetch_china_liquidity() or {}
+        print(f"[dashboard] 中国流动性: status={cn_liq.get('status')} "
+              f"as_of={cn_liq.get('as_of')} "
+              f"OMO={len(cn_liq.get('omo', []))} DR007={len(cn_liq.get('dr007', []))} "
+              f"MLF={len(cn_liq.get('mlf', []))} SFISF={len(cn_liq.get('sfisf', []))}")
+    except Exception as e:
+        print(f"[dashboard] 中国流动性 跳过: {e}")
     ai_fcf, ai_credit = {}, {}
     try:
         ai_fcf = ed.fetch_ai_fcf() or {}
@@ -514,6 +524,7 @@ def main():
         debt_gdp=debt_gdp,
         corp_credit=corp_credit,
         cips=cips,
+        cn_liq=cn_liq,
         ai_fcf=ai_fcf,
         ai_credit=ai_credit,
         maturing_treasury=maturing_treasury,

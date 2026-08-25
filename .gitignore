@@ -9,3 +9,7 @@ venv/
 .DS_Store
 *.log
 data/_daily_cache_*.json
+# 名册/数据文件的时间戳备份（apply_kol_channels.py 等脚本改写前自动生成）
+# —— 本地留痕即可，不进 git，否则每次回填都多一份 MB 级重复文件
+*.bak
+*.json.[0-9]*.bak

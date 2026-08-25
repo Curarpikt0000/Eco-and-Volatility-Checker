@@ -293,6 +293,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              ad_line_real=None, gold_premium=None, silver_imports=None, fiscal_budget=None,
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
+             cn_liq=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
@@ -518,6 +519,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         debt_gdp=_debt_gdp_html(debt_gdp),
         corp_credit=_corp_credit_html(corp_credit),
         cips=_cips_html(cips),
+        cn_liq=_cn_liq_html(cn_liq),
         ai_fcf=_ai_fcf_html(ai_fcf, ai_credit),
         auctions=_auctions_html(auctions),
         holdings=_holdings_html(holdings),
@@ -4652,7 +4654,9 @@ def _ai_fcf_svg(groups, w=940, h=380):
             yv = py(v)
             ytop, hh = (yv, y0 - yv) if v >= 0 else (y0, yv - y0)
             fill = col if v >= 0 else "#e05c5c"
-            tip = (f'{m["ticker"]}·{m["name"]}｜FY{(m.get("fy") or "")[:7]}'
+            tip = (f'{m["ticker"]}·{m["name"]}'
+                   f'{("（" + m["zh"] + "）") if m.get("zh") and m["zh"] != m["name"] else ""}'
+                   f'｜FY{(m.get("fy") or "")[:7]}'
                    f'｜经营现金流 {m["ocf"]/1e9:,.1f}B｜资本开支 '
                    f'{m["capex"]/1e9:,.1f}B｜自由现金流 {v:+,.1f}B')
             p.append(f'<rect x="{cx-bw/2:.1f}" y="{ytop:.1f}" width="{bw:.1f}" '
@@ -4664,9 +4668,16 @@ def _ai_fcf_svg(groups, w=940, h=380):
                      f'font-size="8.5" fill="#aab3c5">{lv}</text>')
         p.append(f'<text x="{cx:.1f}" y="{mt+ph+14:.1f}" text-anchor="middle" '
                  f'font-size="10" fill="#c8cee0">{_esc(m["ticker"])}</text>')
+        # ★中文名 (Chao 2026-08-25): 放 ticker 与财年之间。
+        #   字号 8 且比 ticker 暗一档, 保证 ticker 仍是第一视觉层级。
+        zh = m.get("zh")
+        if zh:
+            p.append(f'<text x="{cx:.1f}" y="{mt+ph+24.5:.1f}" '
+                     f'text-anchor="middle" font-size="8" fill="#98a1b3">'
+                     f'{_esc(zh)}</text>')
         fy = (m.get("fy") or "")[:7]
         if fy:
-            p.append(f'<text x="{cx:.1f}" y="{mt+ph+25:.1f}" '
+            p.append(f'<text x="{cx:.1f}" y="{mt+ph+35:.1f}" '
                      f'text-anchor="middle" font-size="8.5" fill="#7c8496">'
                      f'{_esc(fy)}</text>')
 
@@ -4756,7 +4767,9 @@ def _ai_credit_svg(rows, w=940, h=400):
         cx, cy = px(r["leverage"]), py(r["coverage"])
         col = colors.get(r["group"], "#8b93a7")
         nd = r.get("net_debt")
-        tip = (f'{r["ticker"]}·{r["name"]}｜FY{(r.get("fy") or "")[:7]}'
+        tip = (f'{r["ticker"]}·{r["name"]}'
+               f'{("（" + r["zh"] + "）") if r.get("zh") and r["zh"] != r["name"] else ""}'
+               f'｜FY{(r.get("fy") or "")[:7]}'
                f'｜净债务/EBITDA {r["leverage"]:+,.2f}x'
                f'｜利息保障 {r["coverage"]:,.1f}x'
                f'｜净债务 {nd/1e9:+,.1f}B｜EBITDA {r["ebitda"]/1e9:,.1f}B')
@@ -5030,6 +5043,434 @@ def _cips_annual_svg(annual, w=940, h=190):
                  f'stroke="#9ca3af" stroke-width="1.2"/>')
     parts.append("</svg>")
     return "".join(parts)
+
+
+def _cn_liq_html(cl):
+    """中国流动性四图 + 多周期变动表。cl: fetch_china_liquidity()。
+
+    布局（Chao 2026-08-25 定稿）：
+      变动表  周/月/半年 三口径同屏对比（他要「同一时间的变动情况」）
+      图1 OMO 逆回购分品种柱状 · 日频
+      图2 DR007 折线 · 日频
+      图3 MLF 月度操作柱状 · 事件频
+      图4 SFISF 股市托底工具 · 事件频（**替换原 PSL**）
+
+    ★ PSL 已下架（Chao：「已经是过时的了」）—— 工具本身在清退，官网停更 448 天。
+    ★ SFISF = 券商/基金/险资拿股票资产抵押换国债，钱只能投股市 → 最直接的官方托市工具。
+    ★ 每个子图都标**更新频率**（Chao 明确要求），避免把事件频当日频读。
+    """
+    if not cl or cl.get("status") != "ok":
+        err = (cl or {}).get("error") or ""
+        return (f'<p class="empty">中国流动性数据未就绪'
+                f'{("（" + _esc(err) + "）") if err else ""}。</p>')
+
+    omo, dr, mlf, sf = cl["omo"], cl["dr007"], cl["mlf"], cl.get("sfisf") or []
+    dl = cl.get("deltas") or {}
+    h = []
+
+    # ── 概览行 ──
+    bits = []
+    if omo:
+        last = omo[-1]
+        seg = []
+        if last.get("on") is not None:
+            seg.append(f'隔夜 {last["on"]:,.0f}亿')
+        if last.get("d7") is not None:
+            seg.append(f'7天 {last["d7"]:,.0f}亿')
+        rt = f'@{last["rate"]}%' if last.get("rate") is not None else ""
+        bits.append(f'逆回购（{last["date"]}）<b>{"＋".join(seg) or "—"}</b>{rt}')
+    if dr:
+        bits.append(f'DR007 <b>{dr[-1]["v"]:.4f}%</b>')
+    if mlf:
+        bits.append(f'MLF（{mlf[-1]["date"]}）<b>{mlf[-1]["v"]:,.0f}亿</b>')
+    if sf:
+        bits.append(f'SFISF 累计 <b>{sum(x["v"] for x in sf):,.0f}亿</b>')
+    h.append('<div class="oil-meta">' + ' · '.join(bits) + '</div>')
+
+    # ── 多周期变动表 ──
+    h.append(_cn_delta_table(dl, sf))
+
+    # ── 图1 OMO ──
+    h.append('<div class="part-title" style="font-size:14px;margin-top:12px">'
+             '① 公开市场逆回购 · 分品种投放'
+             '<span class="freq-badge freq-daily">每日更新</span></div>')
+    h.append(_cn_omo_svg(omo[-130:]))
+    h.append(f'<p class="cips-note">口径：PBoC《公开市场业务交易公告》当日<b>执行量</b>（非计划上限）。'
+             f'2026-06 起新增「隔夜」品种，与 7 天期分列——只看总量会掩盖品种结构变化。'
+             f'净投放需当日到期量，PBoC 不公开，故不展示净额、不估算。'
+             f'历史覆盖 {len(omo)} 个交易日'
+             f'（{omo[0]["date"] if omo else "-"} 起）。</p>')
+
+    # ── 图2 DR007 ──
+    if dr:
+        h.append('<div class="part-title" style="font-size:14px;margin-top:12px">'
+                 '② DR007 · 存款类机构质押式回购利率（短期资金<b>价格</b>）'
+                 '<span class="freq-badge freq-daily">每日更新</span></div>')
+        h.append(_cn_line_svg(dr, "v", unit="%", color="#c17d6a", dec=4))
+        h.append(f'<p class="cips-note">口径：CFETS（中国货币网）FDR007，'
+                 f'即<b>存款类机构</b>质押式回购加权利率。'
+                 f'★注意与 FR007 区别：后者是<b>全市场</b>（含非银），'
+                 f'资金面紧张时两者能差几十 bp，取错口径结论会反。'
+                 f'量（逆回购投放）与价（DR007）要合看：投放大而 DR007 仍上行 = 资金面真紧。'
+                 f'历史覆盖 {len(dr)} 个交易日（{dr[0]["date"]} 起）。</p>')
+
+    # ── 图3 MLF ──
+    if mlf:
+        h.append('<div class="part-title" style="font-size:14px;margin-top:12px">'
+                 '③ MLF 中期借贷便利 · 月度操作量'
+                 '<span class="freq-badge freq-monthly">月度 · 每月一次招标</span></div>')
+        h.append(_cn_bar_svg(mlf, "v", unit="亿元", color="#6b8fb5"))
+        h.append(f'<p class="cips-note">口径：PBoC《中期借贷便利招标公告》，1 年期。'
+                 f'★<b>历史长度受官方披露限制</b>：PBoC 该栏目 2025-01 才创建，'
+                 f'目前可得 {len(mlf)} 个月（{mlf[0]["date"][:7]} 起）。'
+                 f'2024 年的 MLF 公告在官网、Wayback 存档、公开数据接口均未检索到，'
+                 f'按项目铁律不用二手估算值填充。</p>')
+
+    # ── 图4 SFISF（替换 PSL）──
+    h.append('<div class="part-title" style="font-size:14px;margin-top:12px">'
+             '④ SFISF 互换便利 · <b>股市托底工具</b>'
+             '<span class="freq-badge freq-monthly">事件驱动 · 央行启用时发布</span></div>')
+    h.append(_cn_sfisf_html(sf))
+
+    return "".join(h)
+
+
+def _fmt_delta(d, unit="", pct_first=False, dec=2):
+    """变动单元格：绝对值 + 百分比，涨红跌绿（中国市场习惯）。"""
+    if not d:
+        return '<span style="color:#6b7280">—</span>'
+    dv, pc = d.get("delta"), d.get("pct")
+    col = "#e05c5c" if (dv or 0) > 0 else ("#39c07c" if (dv or 0) < 0 else "#8b93a7")
+    a = f'{dv:+,.{dec}f}{unit}'
+    b = f'（{pc:+.1f}%）' if pc is not None else ""
+    if pct_first and pc is not None:
+        a, b = f'{pc:+.1f}%', f'（{dv:+,.{dec}f}{unit}）'
+    return f'<span style="color:{col}">{a}<span style="font-size:11px">{b}</span></span>'
+
+
+def _cn_delta_table(dl, sf):
+    """周 / 月 / 半年 三口径变动对比表。
+
+    ★ 流量与存量分开算（口径不同，混用会得出荒谬结论）：
+      - DR007 是**价格点位** → 比最新 vs N 天前的点位
+      - OMO 是**流量** → 比本区间投放总额 vs 上一区间总额
+        （若对 OMO 也用点位法，会出现"较上周 -100%"，其实只是当天没操作）
+    """
+    rows = []
+    d7, d30, d180 = (dl.get("dr007") or {}).get("7d"), \
+                    (dl.get("dr007") or {}).get("30d"), \
+                    (dl.get("dr007") or {}).get("180d")
+    if any((d7, d30, d180)):
+        cur = (d7 or d30 or d180)["cur"]
+        rows.append(("DR007 资金价格", f'{cur:.4f}%', "点位对比",
+                     _fmt_delta(d7, "pp", dec=4), _fmt_delta(d30, "pp", dec=4),
+                     _fmt_delta(d180, "pp", dec=4)))
+    o = dl.get("omo") or {}
+    o7, o30, o180 = o.get("7d"), o.get("30d"), o.get("180d")
+    if any((o7, o30, o180)):
+        cur = f'{o7["cur"]:,.0f}亿' if o7 else "—"
+        rows.append(("逆回购投放（区间合计）", cur, "区间总额对比",
+                     _fmt_delta(o7, "亿", dec=0), _fmt_delta(o30, "亿", dec=0),
+                     _fmt_delta(o180, "亿", dec=0)))
+    m = dl.get("mlf") or {}
+    m30, m90, m180 = m.get("30d"), m.get("90d"), m.get("180d")
+    if any((m30, m90, m180)):
+        cur = (m30 or m90 or m180)["cur"]
+        rows.append(("MLF 月度操作", f'{cur:,.0f}亿', "操作量对比",
+                     _fmt_delta(m30, "亿", dec=0), _fmt_delta(m90, "亿", dec=0),
+                     _fmt_delta(m180, "亿", dec=0)))
+    if not rows:
+        return ""
+    h = ['<div class="part-title" style="font-size:14px;margin-top:10px">'
+         '各指标同期变动 · 周 / 月 / 半年</div>',
+         '<table class="cn-liq-tbl" style="width:100%;border-collapse:collapse;'
+         'font-size:12.5px;margin:6px 0 4px">',
+         '<tr style="color:#8b93a7;text-align:left">'
+         '<th style="padding:5px 8px;font-weight:500">指标</th>'
+         '<th style="padding:5px 8px;font-weight:500">最新</th>'
+         '<th style="padding:5px 8px;font-weight:500">口径</th>'
+         '<th style="padding:5px 8px;font-weight:500">近 1 周</th>'
+         '<th style="padding:5px 8px;font-weight:500">近 1 月</th>'
+         '<th style="padding:5px 8px;font-weight:500">近半年</th></tr>']
+    for name, cur, kind, a, b, c in rows:
+        h.append(f'<tr style="border-top:1px solid #23272f">'
+                 f'<td style="padding:6px 8px;color:#c8cee0">{_esc(name)}</td>'
+                 f'<td style="padding:6px 8px"><b>{_esc(cur)}</b></td>'
+                 f'<td style="padding:6px 8px;color:#7c8496;font-size:11px">{_esc(kind)}</td>'
+                 f'<td style="padding:6px 8px">{a}</td>'
+                 f'<td style="padding:6px 8px">{b}</td>'
+                 f'<td style="padding:6px 8px">{c}</td></tr>')
+    h.append('</table>')
+    h.append('<p class="cips-note">口径说明：DR007 是<b>价格</b>，比的是点位差（单位 pp）；'
+             '逆回购是<b>流量</b>，比的是区间投放<b>总额</b>（本区间 vs 紧邻的上一等长区间）——'
+             '两者不能用同一种算法，否则会出现「逆回购较上周 −100%」这种假信号'
+             '（实际只是当天恰好没有操作）。MLF 为月频，「近 1 周」无意义故不计算。'
+             '涨红跌绿，遵循中国市场习惯。</p>')
+    return "".join(h)
+
+
+def _cn_sfisf_html(sf):
+    """SFISF 股市托底工具。
+
+    ★ Chao 的用途是「短期看有没有剧增，观察托底股市」。
+      当前官方只披露过 2 次操作（2024-10 / 2025-01），此后 600 天无新操作 ——
+      **「没有剧增」本身就是答案**，必须显式说出来，而不是留个空图让人以为抓挂了。
+    """
+    if not sf:
+        return ('<p class="empty">SFISF 暂无操作记录。'
+                'PBoC 官网「证券、基金、保险公司互换便利」栏目未见公告。</p>')
+    import datetime as _dt
+    total = sum(x["v"] for x in sf)
+    last = sf[-1]
+    try:
+        gap = (_dt.date.today() - _dt.date.fromisoformat(last["date"])).days
+    except Exception:
+        gap = None
+    quiet = gap is not None and gap > 180
+
+    h = [f'<div class="oil-meta">累计操作 <b>{len(sf)}</b> 次 · '
+         f'合计 <b>{total:,.0f} 亿元</b> · '
+         f'最近一次 <b>{last["date"]}</b>'
+         f'{f"（距今 <b>{gap}</b> 天）" if gap is not None else ""}</div>']
+
+    # 判定语——直接回答「有没有剧增」
+    if quiet:
+        h.append(f'<div class="oil-meta" style="color:#39c07c">'
+                 f'当前状态：<b>未启用</b>。央行已连续 {gap} 天未开展 SFISF 操作，'
+                 f'即<b>目前没有通过该工具托底股市的动作</b>。'
+                 f'若重启，本板块次日自动反映。</div>')
+    else:
+        h.append('<div class="oil-meta" style="color:#e05c5c">'
+                 '当前状态：<b>近期有操作</b> —— 需关注是否为托市信号。</div>')
+
+    h.append('<table style="width:100%;border-collapse:collapse;font-size:12.5px;margin:6px 0">'
+             '<tr style="color:#8b93a7;text-align:left">'
+             '<th style="padding:5px 8px;font-weight:500">操作日</th>'
+             '<th style="padding:5px 8px;font-weight:500">轮次</th>'
+             '<th style="padding:5px 8px;font-weight:500">操作金额</th>'
+             '<th style="padding:5px 8px;font-weight:500">中标费率</th></tr>')
+    for i, x in enumerate(sf):
+        rb = f'{x["rate_bp"]:.0f} bp' if x.get("rate_bp") is not None else "—"
+        h.append(f'<tr style="border-top:1px solid #23272f">'
+                 f'<td style="padding:6px 8px;color:#c8cee0">{_esc(x["date"])}</td>'
+                 f'<td style="padding:6px 8px;color:#7c8496">第 {i+1} 次</td>'
+                 f'<td style="padding:6px 8px"><b>{x["v"]:,.0f} 亿元</b></td>'
+                 f'<td style="padding:6px 8px">{rb}</td></tr>')
+    h.append('</table>')
+
+    # 费率趋势解读（只在有 2 次以上时才说）
+    rates = [x for x in sf if x.get("rate_bp") is not None]
+    if len(rates) >= 2:
+        a, b = rates[0]["rate_bp"], rates[-1]["rate_bp"]
+        if b < a:
+            h.append(f'<div class="oil-meta">中标费率 <b>{a:.0f}bp → {b:.0f}bp</b>：'
+                     f'机构使用该工具的成本下降，等于央行<b>降低了入场门槛</b>，'
+                     f'属宽松取向。费率与金额需合看——金额不变而费率大降同样是信号。</div>')
+
+    h.append(f'<p class="cips-note">工具说明：SFISF（Securities, Funds and Insurance '
+             f'companies Swap Facility）为央行 2024-10 创设，允许券商/基金/保险以'
+             f'债券、股票 ETF、沪深300 成分股作抵押，从央行换入国债、央票等高流动性资产，'
+             f'<b>换得资金只能投向股市</b>——是最直接的官方股市稳定工具，'
+             f'首期额度 5,000 亿元。<br>'
+             f'★<b>数据可得性</b>：本表为 PBoC 官网《SFISF 操作结果公告》全量'
+             f'（专属栏目、上级聚合页、多种分页写法均已核查）。'
+             f'该工具<b>按需启用、非定期发布</b>，因此没有「日频/月频」的更新节奏——'
+             f'空窗期不代表抓取失败，而代表央行未动用。'
+             f'本板块每日检查栏目，一有新公告即入库。</p>')
+    return "".join(h)
+
+
+def _cn_omo_svg(rows, w=940, h=250):
+    """OMO 分品种堆叠柱状。隔夜/7天/其他三色。"""
+    if not rows:
+        return ""
+    def tot(r):
+        return sum(r.get(k) or 0 for k in ("on", "d7", "other"))
+    vmax = max([tot(r) for r in rows] + [1])
+    ml, mr, mt, mb = 62, 14, 16, 46
+    pw, ph = w - ml - mr, h - mt - mb
+    top = _nice_top(vmax * 1.08, 4)
+    n = len(rows)
+    step = pw / n
+    bw = max(step * 0.7, 1.2)
+    cols = {"on": "#7fa085", "d7": "#6b8fb5", "other": "#b58a6a"}
+    labs = {"on": "隔夜", "d7": "7天", "other": "其他期限"}
+    p = [f'<svg viewBox="0 0 {w} {h}" preserveAspectRatio="xMidYMid meet">']
+    for k in range(5):
+        tv = top * k / 4
+        yy = mt + ph - ph * tv / top
+        p.append(f'<line x1="{ml}" y1="{yy:.1f}" x2="{ml+pw}" y2="{yy:.1f}" '
+                 f'stroke="#2a2f3a" stroke-width="1" stroke-dasharray="3 3"/>')
+        p.append(f'<text x="{ml-7}" y="{yy+3.5:.1f}" text-anchor="end" '
+                 f'font-size="10" fill="#8b93a7">{tv:,.0f}</text>')
+    p.append(f'<text x="{ml-52}" y="{mt-2}" font-size="10" fill="#8b93a7">亿元</text>')
+    for i, r in enumerate(rows):
+        x = ml + step * i + (step - bw) / 2
+        acc = 0.0
+        tip = [f'{r["date"]}']
+        for k in ("on", "d7", "other"):
+            v = r.get(k)
+            if not v:
+                continue
+            hh = ph * v / top
+            y = mt + ph - ph * acc / top - hh
+            p.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" '
+                     f'height="{max(hh,0.6):.1f}" fill="{cols[k]}" opacity="0.88"/>')
+            acc += v
+            tip.append(f'{labs[k]} {v:,.0f}亿')
+        if r.get("rate") is not None:
+            tip.append(f'利率 {r["rate"]}%')
+        p.append(f'<rect x="{x:.1f}" y="{mt}" width="{bw:.1f}" height="{ph}" '
+                 f'fill="transparent"><title>{_esc("｜".join(tip))}</title></rect>')
+    stepl = max(1, n // 8)
+    for i in range(0, n, stepl):
+        x = ml + step * (i + 0.5)
+        p.append(f'<text x="{x:.1f}" y="{mt+ph+14:.1f}" text-anchor="middle" '
+                 f'font-size="9" fill="#7c8496">{_esc(rows[i]["date"][5:])}</text>')
+    lx = ml
+    for k in ("on", "d7", "other"):
+        p.append(f'<rect x="{lx}" y="{h-18}" width="10" height="10" '
+                 f'fill="{cols[k]}" opacity="0.88"/>')
+        p.append(f'<text x="{lx+14}" y="{h-9}" font-size="9.5" '
+                 f'fill="#8b93a7">{labs[k]}</text>')
+        lx += 24 + len(labs[k]) * 11
+    p.append("</svg>")
+    return "".join(p)
+
+
+def _cn_line_svg(rows, key, unit="", color="#6b8fb5", w=940, h=210, dec=2):
+    """通用日频折线。"""
+    vs = [r[key] for r in rows if r.get(key) is not None]
+    if not vs:
+        return ""
+    ml, mr, mt, mb = 62, 14, 16, 40
+    pw, ph = w - ml - mr, h - mt - mb
+    lo, hi = min(vs), max(vs)
+    pad = (hi - lo) * 0.15 or (abs(hi) * 0.02 or 0.01)
+    lo, hi = lo - pad, hi + pad
+    span = (hi - lo) or 1
+    n = len(rows)
+    def X(i):
+        return ml + pw * i / max(n - 1, 1)
+    def Y(v):
+        return mt + ph - ph * (v - lo) / span
+    p = [f'<svg viewBox="0 0 {w} {h}" preserveAspectRatio="xMidYMid meet">']
+    for k in range(5):
+        tv = lo + span * k / 4
+        yy = Y(tv)
+        p.append(f'<line x1="{ml}" y1="{yy:.1f}" x2="{ml+pw}" y2="{yy:.1f}" '
+                 f'stroke="#2a2f3a" stroke-width="1" stroke-dasharray="3 3"/>')
+        p.append(f'<text x="{ml-7}" y="{yy+3.5:.1f}" text-anchor="end" '
+                 f'font-size="10" fill="#8b93a7">{tv:,.{dec}f}</text>')
+    pts = " ".join(f'{X(i):.1f},{Y(r[key]):.1f}'
+                   for i, r in enumerate(rows) if r.get(key) is not None)
+    p.append(f'<polyline points="{pts}" fill="none" stroke="{color}" '
+             f'stroke-width="1.8"/>')
+    for i, r in enumerate(rows):
+        if r.get(key) is None:
+            continue
+        _tip = f'{r["date"]}｜{r[key]:,.{dec}f}{unit}'
+        p.append(f'<circle cx="{X(i):.1f}" cy="{Y(r[key]):.1f}" r="7" '
+                 f'fill="transparent"><title>{_esc(_tip)}</title></circle>')
+    stepl = max(1, n // 8)
+    for i in range(0, n, stepl):
+        p.append(f'<text x="{X(i):.1f}" y="{mt+ph+14:.1f}" text-anchor="middle" '
+                 f'font-size="9" fill="#7c8496">{_esc(rows[i]["date"][5:])}</text>')
+    p.append(f'<text x="{ml-52}" y="{mt-2}" font-size="10" '
+             f'fill="#8b93a7">{_esc(unit)}</text>')
+    p.append("</svg>")
+    return "".join(p)
+
+
+def _cn_bar_svg(rows, key, unit="", color="#6b8fb5", w=940, h=230):
+    """通用月频柱状（点少，柱宽，标日期）。"""
+    vs = [r[key] for r in rows if r.get(key) is not None]
+    if not vs:
+        return ""
+    ml, mr, mt, mb = 62, 14, 20, 48
+    pw, ph = w - ml - mr, h - mt - mb
+    top = _nice_top(max(vs) * 1.12, 4)
+    n = len(rows)
+    step = pw / n
+    bw = step * 0.6
+    p = [f'<svg viewBox="0 0 {w} {h}" preserveAspectRatio="xMidYMid meet">']
+    for k in range(5):
+        tv = top * k / 4
+        yy = mt + ph - ph * tv / top
+        p.append(f'<line x1="{ml}" y1="{yy:.1f}" x2="{ml+pw}" y2="{yy:.1f}" '
+                 f'stroke="#2a2f3a" stroke-width="1" stroke-dasharray="3 3"/>')
+        p.append(f'<text x="{ml-7}" y="{yy+3.5:.1f}" text-anchor="end" '
+                 f'font-size="10" fill="#8b93a7">{tv:,.0f}</text>')
+    p.append(f'<text x="{ml-52}" y="{mt-4}" font-size="10" fill="#8b93a7">{_esc(unit)}</text>')
+    for i, r in enumerate(rows):
+        v = r.get(key)
+        if v is None:
+            continue
+        hh = ph * v / top
+        x = ml + step * (i + 0.5) - bw / 2
+        y = mt + ph - hh
+        _tip = f'{r["date"]}｜{v:,.0f}{unit}'
+        p.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{bw:.1f}" '
+                 f'height="{max(hh,0.6):.1f}" fill="{color}" opacity="0.88">'
+                 f'<title>{_esc(_tip)}</title></rect>')
+        p.append(f'<text x="{ml+step*(i+0.5):.1f}" y="{y-4:.1f}" '
+                 f'text-anchor="middle" font-size="8.5" fill="#aab3c5">'
+                 f'{v:,.0f}</text>')
+        p.append(f'<text x="{ml+step*(i+0.5):.1f}" y="{mt+ph+14:.1f}" '
+                 f'text-anchor="middle" font-size="8.5" fill="#7c8496">'
+                 f'{_esc(r["date"][2:7])}</text>')
+    p.append("</svg>")
+    return "".join(p)
+
+
+def _cn_area_svg(rows, key, unit="", color="#a8646e", w=940, h=230):
+    """存量退坡面积图（PSL 专用）。峰值与末值打标。"""
+    vs = [r[key] for r in rows if r.get(key) is not None]
+    if not vs:
+        return ""
+    ml, mr, mt, mb = 66, 14, 22, 46
+    pw, ph = w - ml - mr, h - mt - mb
+    top = _nice_top(max(vs) * 1.10, 4)
+    n = len(rows)
+    def X(i):
+        return ml + pw * i / max(n - 1, 1)
+    def Y(v):
+        return mt + ph - ph * v / top
+    p = [f'<svg viewBox="0 0 {w} {h}" preserveAspectRatio="xMidYMid meet">']
+    for k in range(5):
+        tv = top * k / 4
+        yy = Y(tv)
+        p.append(f'<line x1="{ml}" y1="{yy:.1f}" x2="{ml+pw}" y2="{yy:.1f}" '
+                 f'stroke="#2a2f3a" stroke-width="1" stroke-dasharray="3 3"/>')
+        p.append(f'<text x="{ml-7}" y="{yy+3.5:.1f}" text-anchor="end" '
+                 f'font-size="10" fill="#8b93a7">{tv:,.0f}</text>')
+    p.append(f'<text x="{ml-56}" y="{mt-4}" font-size="10" fill="#8b93a7">{_esc(unit)}</text>')
+    line = " ".join(f'{X(i):.1f},{Y(r[key]):.1f}' for i, r in enumerate(rows))
+    p.append(f'<polygon points="{ml},{mt+ph} {line} {ml+pw},{mt+ph}" '
+             f'fill="{color}" opacity="0.18"/>')
+    p.append(f'<polyline points="{line}" fill="none" stroke="{color}" '
+             f'stroke-width="2"/>')
+    peak_i = max(range(n), key=lambda i: rows[i][key])
+    for i, r in enumerate(rows):
+        _tip = f'{r["date"]}｜余额 {r[key]:,.0f}{unit}'
+        if r.get("net") is not None:
+            _tip += f'｜当月净额 {r["net"]:+,.0f}亿'
+        p.append(f'<circle cx="{X(i):.1f}" cy="{Y(r[key]):.1f}" r="6" '
+                 f'fill="transparent"><title>{_esc(_tip)}</title></circle>')
+    for i, tag in ((peak_i, "峰值"), (n - 1, "最新")):
+        p.append(f'<circle cx="{X(i):.1f}" cy="{Y(rows[i][key]):.1f}" r="3.5" '
+                 f'fill="{color}"/>')
+        anc = "start" if i == peak_i and i < n - 1 else "end"
+        dx = 6 if anc == "start" else -6
+        p.append(f'<text x="{X(i)+dx:.1f}" y="{Y(rows[i][key])-8:.1f}" '
+                 f'text-anchor="{anc}" font-size="9.5" fill="#c8cee0">'
+                 f'{tag} {rows[i][key]:,.0f}</text>')
+    stepl = max(1, n // 8)
+    for i in range(0, n, stepl):
+        p.append(f'<text x="{X(i):.1f}" y="{mt+ph+14:.1f}" text-anchor="middle" '
+                 f'font-size="9" fill="#7c8496">{_esc(rows[i]["date"][2:7])}</text>')
+    p.append("</svg>")
+    return "".join(p)
 
 
 def _cips_html(cp):
@@ -6884,6 +7325,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·A3：中国 CIPS 跨境人民币支付 ═══ -->
   <div class="part-title" id="sec-cips"><span class="part-num">＋</span>中国 CIPS · 跨境人民币支付系统使用量 (人民币国际化 · 月度总额 / 日均强度)<span class="freq-badge freq-monthly">月度 · 官方次月发布</span></div>
   <div class="card">{cips}</div>
+
+  <!-- ═══ 附三·A3b：中国央行流动性四图 (OMO/DR007/MLF/PSL) ═══ -->
+  <div class="part-title" id="sec-cn-liq"><span class="part-num">＋</span>中国央行流动性 · 逆回购 / DR007 / MLF / SFISF (三层融资渠道 + 股市托底工具)<span class="freq-badge freq-daily">逆回购·DR007 每日 · MLF 月度 · SFISF 事件驱动</span></div>
+  <div class="card">{cn_liq}</div>
 
   <div class="part-title" id="sec-ai-fcf"><span class="part-num">＋</span>AI 产业链 · 自由现金流与信用维度 (资本开支强度 · 杠杆 · 偿息能力)<span class="freq-badge freq-monthly">年度 · 随年报更新</span></div>
   <div class="card">{ai_fcf}</div>
