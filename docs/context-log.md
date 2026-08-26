@@ -431,3 +431,108 @@ AGENTS.md 的 Cron 段仍描述旧版日报口径，需 Chao 授权后补写。
       `kol_profiles.json` 与 `sec-kol-roster`、三个新 tools、cron 步骤 3b —— 下轮补写。
 - [ ] 承接上节未清：`except: pass/continue` 技术债；`_stress_panel_svg` axis 与除零；
       BIS API 406；vintage filter 需在下一期数据到位时复核是否自动出现。
+
+---
+
+## 2026-08-27
+
+> 归档范围：2026-08-26 全天 + 08-27 凌晨会话。
+> 主线是 **KOL 三源分裂收敛为单一 SSOT（kol_store.sqlite）+ 三点投影**，
+> 以及 **「Hermes 独立线」18 张自有 Notion 表**的血缘切分。
+
+### 决策
+
+- **Chao 的总要求：「Dashboard、GitHub、Notion 所有数据都和数据库三点完全对应，每个数据库都是唯一的」**——
+  不要「backfill 一个、每天 crawling 一个、新增人员又增加一个」，要用工程方案统一。
+  这条是本轮所有改造的总纲。
+- **三个提问的拍板答复**（原话「1 你只需要填写 source 2 本项目自己的父页下面 3 0-4 一口气」）：
+  1. Notion「KOL List」**只填 `Source` 一列**；「最新观点 / 最新观点日期」归属未定，**一个字不动**。
+  2. 承载一年历史的新表建在**本项目自己的父页**下，不建在名册所在页。
+  3. P0→P4 一口气做完。
+- **「这个需要提升一下你的能力。需要出处。」**——每条新观点必须带可追溯的 source link。
+  经查根因不在抓取能力而在任务书：一年期回填的 `INSTRUCTIONS.md` 写死了
+  「必须是真实可访问 URL」，每日 cron prompt 里没有这句。
+- **数据血缘三分法（落在 `src/build_hermes_line.py` 文档头，无例外）**：
+  数据是**我抓的 / 我的 LLM 产出的** → 必须有我自己的 DB + 我自己的数据源文件；
+  只是**只读别人的表** → 不建，保持只读；**别人创建 / 维护的表** → 完全不碰。
+- **`targets` 只填本人亲口给出的数字**：引述第三方预测、本人明确拒绝给点位时举的数字、
+  只在标题出现正文不提的数字，三类一律留空（Felix Prehn 17 条里只有 3 条有真数字）。
+
+### 事实与配置
+
+- **`data/kol_store.sqlite` = KOL 观点唯一真相源**（`src/kol_store.py`）。
+  - 表 `opinion` **3608 行 / 154 人 / 2025-01-02 ~ 2026-08-26**；表 `kol` 154 行。
+  - 列：`uid / kol_id / kol_name / sector / date / direction / comments / targets /
+    detail / detail_status / source_url / source_title / sources_json /
+    source_status / origin / notion_page_id / created_at / updated_at`。
+  - `uid = sha1(kol_id|date|direction|comments[:120])` → 幂等主键，跨源天然去重。
+  - `origin` 分布：`backfill 653 / daily 2909 / manual 46`（manual = 新 3 人一次性回填）。
+  - `source_status`：**`ok 1044 / missing 2564`**（出处覆盖 29%，缺口首次被量化）。
+  - 一观点一行 **raw 无损**存储；「连续多天同一句话折叠成区间」的逻辑下沉到读取端
+    `full_history()`，渲染层不再做合并。
+  - 导出 `data/kol_store_export.json`（5.4 MB，进 git，可人肉 diff）。
+- **`external_data.kol_full_history()` 已改为优先委托 store**，store 不可用时自动退回
+  旧的 daily+backfill 双路内存合并 → **两个调用方一行未改**，故障可降级。
+- **Notion 侧三张 KOL 表的分工（铁律，写在 `src/kol_notion_sync.py` 注释里）**：
+  - `35947eb5-fd3c-800d-b852-cef31f9de6a5`「KOL List」= 名册 SSOT，**只准回填 `Source` 一列**。
+  - `3c847eb5-…-d8d50295ce1c`「KOL 每日观点」= **另一 agent 的表**，本模块禁止读写。
+  - `3c847eb5-fd3c-81b7-a827-f4effae77417`「KOL 观点历史库 (SSOT)」= **本模块独占**，
+    投影 store 全量历史。
+  - 硬闸门 `FOREIGN_DBS` + `_assert_not_foreign()`，任何写操作前必过；
+    起因是当天曾**误把 93 行写进他人表**，靠逐条落盘的 page_id 精确 archive 撤回。
+- **「Hermes 独立线」**（`src/build_hermes_line.py` + `src/hermes_line_ingest.py`）：
+  - Notion 子页「Eco · Hermes 独立线」挂在本项目父页 `3b947eb5-fd3c-80ea-9b06-d41704af3b05` 下，
+    **18 张 `HDB_*` 表**，id 已写回 `.env`（`HDB_INDICATORS` … `HDB_MONTHLY`）。
+  - 本地自有数据源 `data/hermes_line/HDB_*.json` 共 16 个文件，行数：
+    HOLDINGS 4769 / CUSTODY 522 / YIELDS 260 / NIKKEI 244 / INDICATORS 102 /
+    FOREIGN_FLOW 53 / HF_LEVERAGE 53 / IIP 44 / COT 24 / BIS_GOLD_SWAPS 15 /
+    FISCAL_NEWS 12 / REPORT 12 / MONEY_SUPPLY 3 / WEEKLY 2 / OFR 1 / **MONTHLY 0（无源，如实留空）**。
+  - 写入器硬闸门 `ALLOWED_PREFIX = "HDB_"`，非 `HDB_*` 直接 `RuntimeError`，
+    保证永远不会写到 `DB_*`（他人 / 旧线）上。
+- **严格匹配纠出一处归因造假**：回填 Source 时，个人条目 `Lina Thomas` 被双向模糊匹配
+  吃到本地**机构**记录「Goldman Sachs」的链接 —— 等于把机构的出处贴到个人头上。
+  改严格匹配后落「无匹配」，这是对的。最终 **123/125 可填，2 个如实留空**
+  （`Lina Thomas` 本地只有机构级记录，`Anu Anand` 本地无任何带链接数据）。
+- **新旧对拍结果（切换前置条件）**：144 个 KOL 中 **140 完全一致**；4 个差异全部解释清楚 ——
+  Felix Prehn +17 / Bart Melek +14 / Ricardo Evangelista（新并入 3 人，预期内修复）+
+  `Eric Hadik` = **ORDER-ONLY**（2025-10-08 同日两条不同观点，仅同日内部排序不同，集合相同）。
+- **`felix_prehn.json`（17 条，2025-09-17 ~ 2026-08-12）**：全部取自 `/tmp/felixtxt/` 已下载的
+  17 份字幕，无新检索；日期用 `yt-dlp --skip-download --print "%(upload_date)s"` **回源重取**
+  （上游交接日志省略号吃掉了 13 条日期，既不用残缺值也不跳过）。
+- **改造前 KOL `comments` 散落 6 处**（盘点结果，供日后核对）：
+  `data/kol/backfill/`（131 文件 653 条，带 source）· `data/kol/daily/`（213 文件 2841 条，
+  仅 16% 带 source）· `data/kol_independent.json`（当日 122 条）· `scratch/kol_deep_*/out/` ·
+  `scratch/kol_bf_new3/out/`（3 文件 46 条，**裸 list 格式与主库不兼容**）·
+  `data/kol/backfill_removed_20260822/`（14 文件 20 条，移出者留痕不删）。
+- **三频率报告现状**：日报（工作日 11:00 → `DB_REPORT` + `reports/<date>.md`）与
+  周报（周六 11:00 → `DB_WEEKLY` + `reports/weekly/`）齐全；
+  **`reports/monthly/` 目录至今不存在**，本项目侧月报仍未落地。
+
+### 进展
+
+- **P0** Notion「KOL List」`Source` 列回填 **123/125**，先 3 条样板验收再全量，
+  写后读回 **mismatch = 0**；其余列一字未动。
+- **P1** `kol_store.sqlite` 建成并灌入 3608 条 / 154 人（含新 3 人 46 条），全部 inserted 无冲突。
+- **P2** `kol_full_history()` 切换为读 store（对拍通过后才切，保留 fallback）；
+  Felix Prehn 的历史带 YouTube 原文链接首次出现在 dashboard 时间线上。
+- **P3** 父页下**已存在**一张「KOL 观点历史库」表（此前漏检，因为它没进 `.env`）→ 复用不新建，
+  30 条样板验收后全量投影；store 中 `notion_page_id` **3608/3608 已回写**。
+- **Hermes 独立线**：18 张 `HDB_*` 表建成 + 16 个本地数据源文件落盘 + ingest 器（含前缀硬闸门）。
+- 新增 cron `hermes-line-monthly`（每月 1 号 13:30 JST，脚本模式无 LLM，
+  从 `data/hermes_line/` 生成上月月报写 `HDB_MONTHLY`，无数据如实标注）。
+
+### 待办
+
+- [ ] **P4 未完成**：每日 cron prompt 里仍**没有**「每条观点必须带可访问 URL」这条铁律
+      （实测 prompt 内 `kol_store` / `HDB_` / `source_status` 字样均为 0 次），
+      每日抓取也还没改成经 `kol_store.upsert()` 单一写入口落盘。
+- [ ] **出处缺口 2564 条（71%）** 待补；补前需先让 `source_status` 进入每日统计与告警。
+- [ ] 本项目侧**月报三件套**（`reports/monthly/` + 汇总逻辑 + 归档位）仍未建。
+- [ ] 本轮全部改动**仍在 git index（staged）未 commit**：
+      `src/kol_store.py` / `src/kol_notion_sync.py` / `src/hermes_line_ingest.py` /
+      `src/build_hermes_line.py` / `src/external_data.py`(改) /
+      `data/kol_store.sqlite` / `data/kol_store_export.json` / `data/hermes_line/*.json`。
+      注意 `kol_store.sqlite`(5.7M) 与 `HDB_HOLDINGS.json`(4.7M) 体积偏大，提交前确认口径。
+- [ ] `AGENTS.md` 未同步本轮新事实（kol_store SSOT / 双 KOL 观点表分工 / Hermes 独立线 18 表 /
+      血缘三分法）—— 属 protected 文件，需 Chao 在场时触发。
+- [ ] 承接上节未清：`except: pass/continue` 技术债；`_stress_panel_svg` axis 与除零；BIS API 406。
