@@ -1,0 +1,138 @@
+{
+ "table": "HDB_MONEY_SUPPLY",
+ "count": 3,
+ "rows": [
+  {
+   "uid": "ms|2026-07|US",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07｜US"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "US"
+     }
+    },
+    "M0": {
+     "number": 5523.9
+    },
+    "M1": {
+     "number": 19886.4
+    },
+    "M2": {
+     "number": 23218.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "FRED (M1SL/M2SL/BOGMBASE), 月度"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2026-07-01"
+     }
+    }
+   }
+  },
+  {
+   "uid": "ms|2026-07|JP",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07｜JP"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "JP"
+     }
+    },
+    "M0": {
+     "number": 3491.9
+    },
+    "M1": {
+     "number": 6862.4
+    },
+    "M2": {
+     "number": 8161.9
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "BOJ 官方 PDF (Money Stock 速报 2026-08-12 发布; Monetary Base 2026-08-04 发布)"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2026-07-01"
+     }
+    }
+   }
+  },
+  {
+   "uid": "ms|2026-07|CN",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07｜CN"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "CN"
+     }
+    },
+    "M0": {
+     "number": 2205.0
+    },
+    "M1": {
+     "number": 17179.0
+    },
+    "M2": {
+     "number": 52895.4
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "PBoC 2026年7月金融统计数据报告 (2026-08-14 发布, M2同比+7.7%/M1同比+4%); 新华网/人民网/证券时报交叉印证"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2026-07-01"
+     }
+    }
+   }
+  }
+ ]
+}

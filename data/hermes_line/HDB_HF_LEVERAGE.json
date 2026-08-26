@@ -1,0 +1,1914 @@
+{
+ "table": "HDB_HF_LEVERAGE",
+ "count": 53,
+ "rows": [
+  {
+   "uid": "hf|2013-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2013-03-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2013-03-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 5.75
+    },
+    "回购敞口_十亿": {
+     "number": 0.591
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2013-06-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2013-06-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2013-06-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 5.83
+    },
+    "回购敞口_十亿": {
+     "number": 0.696
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2013-09-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2013-09-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2013-09-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 5.25
+    },
+    "回购敞口_十亿": {
+     "number": 0.597
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2013-12-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2013-12-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2013-12-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 5.54
+    },
+    "回购敞口_十亿": {
+     "number": 0.508
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2014-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2014-03-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2014-03-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 5.98
+    },
+    "回购敞口_十亿": {
+     "number": 0.5
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2014-06-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2014-06-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2014-06-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 5.13
+    },
+    "回购敞口_十亿": {
+     "number": 0.547
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2014-09-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2014-09-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2014-09-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 6.34
+    },
+    "回购敞口_十亿": {
+     "number": 0.573
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2014-12-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2014-12-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2014-12-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 5.55
+    },
+    "回购敞口_十亿": {
+     "number": 0.554
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2015-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2015-03-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2015-03-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 6.1
+    },
+    "回购敞口_十亿": {
+     "number": 0.659
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2015-06-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2015-06-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2015-06-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 6.02
+    },
+    "回购敞口_十亿": {
+     "number": 0.649
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2015-09-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2015-09-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2015-09-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 6.11
+    },
+    "回购敞口_十亿": {
+     "number": 0.719
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2015-12-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2015-12-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2015-12-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 5.44
+    },
+    "回购敞口_十亿": {
+     "number": 0.6
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2016-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2016-03-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2016-03-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 5.73
+    },
+    "回购敞口_十亿": {
+     "number": 0.696
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2016-06-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2016-06-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2016-06-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 6.15
+    },
+    "回购敞口_十亿": {
+     "number": 0.691
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2016-09-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2016-09-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2016-09-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 6.24
+    },
+    "回购敞口_十亿": {
+     "number": 0.729
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2016-12-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2016-12-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2016-12-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 6.24
+    },
+    "回购敞口_十亿": {
+     "number": 0.675
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2017-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2017-03-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2017-03-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 6.22
+    },
+    "回购敞口_十亿": {
+     "number": 0.738
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2017-06-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2017-06-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2017-06-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 6.04
+    },
+    "回购敞口_十亿": {
+     "number": 0.795
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2017-09-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2017-09-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2017-09-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 6.25
+    },
+    "回购敞口_十亿": {
+     "number": 0.721
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2017-12-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2017-12-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2017-12-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 6.12
+    },
+    "回购敞口_十亿": {
+     "number": 0.685
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2018-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2018-03-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2018-03-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 6.21
+    },
+    "回购敞口_十亿": {
+     "number": 0.78
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2018-06-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2018-06-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2018-06-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 6.89
+    },
+    "回购敞口_十亿": {
+     "number": 0.894
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2018-09-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2018-09-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2018-09-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 7.54
+    },
+    "回购敞口_十亿": {
+     "number": 0.862
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2018-12-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2018-12-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2018-12-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 9.02
+    },
+    "回购敞口_十亿": {
+     "number": 1.081
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2019-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2019-03-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2019-03-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 9.54
+    },
+    "回购敞口_十亿": {
+     "number": 1.221
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2019-06-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2019-06-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2019-06-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 10.52
+    },
+    "回购敞口_十亿": {
+     "number": 1.29
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2019-09-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2019-09-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2019-09-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 10.06
+    },
+    "回购敞口_十亿": {
+     "number": 1.331
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2019-12-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2019-12-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2019-12-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 10.27
+    },
+    "回购敞口_十亿": {
+     "number": 1.302
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2020-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2020-03-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2020-03-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 9.05
+    },
+    "回购敞口_十亿": {
+     "number": 1.358
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2020-06-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2020-06-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2020-06-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 9.13
+    },
+    "回购敞口_十亿": {
+     "number": 1.169
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2020-09-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2020-09-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2020-09-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 8.28
+    },
+    "回购敞口_十亿": {
+     "number": 1.331
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2020-12-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2020-12-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2020-12-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 7.49
+    },
+    "回购敞口_十亿": {
+     "number": 1.202
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2021-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2021-03-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2021-03-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 7.62
+    },
+    "回购敞口_十亿": {
+     "number": 1.066
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2021-06-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2021-06-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2021-06-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 7.63
+    },
+    "回购敞口_十亿": {
+     "number": 1.113
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2021-09-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2021-09-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2021-09-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 7.53
+    },
+    "回购敞口_十亿": {
+     "number": 1.205
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2021-12-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2021-12-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2021-12-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 7.37
+    },
+    "回购敞口_十亿": {
+     "number": 1.151
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2022-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2022-03-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2022-03-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 6.97
+    },
+    "回购敞口_十亿": {
+     "number": 1.09
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2022-06-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2022-06-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2022-06-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 6.19
+    },
+    "回购敞口_十亿": {
+     "number": 1.15
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2022-09-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2022-09-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2022-09-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 5.91
+    },
+    "回购敞口_十亿": {
+     "number": 1.149
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2022-12-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2022-12-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2022-12-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 6.62
+    },
+    "回购敞口_十亿": {
+     "number": 1.227
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2023-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2023-03-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2023-03-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 7.11
+    },
+    "回购敞口_十亿": {
+     "number": 1.442
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2023-06-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2023-06-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2023-06-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 8.5
+    },
+    "回购敞口_十亿": {
+     "number": 1.637
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2023-09-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2023-09-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2023-09-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 9.77
+    },
+    "回购敞口_十亿": {
+     "number": 1.822
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2023-12-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2023-12-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2023-12-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 10.43
+    },
+    "回购敞口_十亿": {
+     "number": 2.009
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2024-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2024-03-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2024-03-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 10.8
+    },
+    "回购敞口_十亿": {
+     "number": 2.071
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2024-06-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2024-06-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2024-06-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 10.98
+    },
+    "回购敞口_十亿": {
+     "number": 2.215
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2024-09-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2024-09-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2024-09-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 13.03
+    },
+    "回购敞口_十亿": {
+     "number": 2.738
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2024-12-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2024-12-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2024-12-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 11.67
+    },
+    "回购敞口_十亿": {
+     "number": 2.497
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2025-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-03-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2025-03-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 12.44
+    },
+    "回购敞口_十亿": {
+     "number": 2.855
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2025-06-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-06-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2025-06-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 13.33
+    },
+    "回购敞口_十亿": {
+     "number": 3.122
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2025-09-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-09-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2025-09-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 13.33
+    },
+    "回购敞口_十亿": {
+     "number": 3.165
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2025-12-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-12-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2025-12-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 13.54
+    },
+    "回购敞口_十亿": {
+     "number": 3.379
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2026-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-03-31"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2026-03-31"
+     }
+    },
+    "杠杆倍数": {
+     "number": 12.65
+    },
+    "回购敞口_十亿": {
+     "number": 3.243
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

@@ -222,18 +222,30 @@ def load_kol_daily_snapshots():
 def kol_full_history():
     """★每个 KOL 的【全量历史观点】, 按时间倒序, 供 dashboard 两层展开钻取。
 
-    数据源(两路合并, 均为真实落盘数据, 绝不编造):
-      1) data/kol/daily/*.json  —— Eco 每日独立快照(每天全量 KOL 方向+言论)
-      2) data/kol/backfill/*.json —— 逐 KOL 历史回填(带 source 原文链接)
-
-    去重规则: 每日快照里【连续相同】的 (direction, comments) 合并成一条区间记录,
-    避免同一句话因连跑 N 天而出现 N 次。区间用 first_date/last_date 表达。
+    ★2026-08-26 架构收敛(Chao 指示「统一成一个数据库」):
+      唯一真相源已改为 data/kol_store.sqlite (src/kol_store.py)。
+      三条历史链路 —— 每日快照 / 历史回填 / 新增 KOL 一次性回填 ——
+      全部经 kol_store.upsert() 汇入同一张 opinion 表, 不再于渲染时临时合并。
+      本函数优先读 store; store 不可用时自动退回下方旧的双路合并实现,
+      保证 dashboard 永不因 store 故障而白屏。
 
     返回 {kol_name: [{first_date,last_date,direction,comments,targets,source,origin}, ...]}
     列表按 last_date 倒序(最新在前)。无数据返回 {}。
     """
     import json
     import glob
+
+    # ── 主路径: 统一 SSOT ──
+    try:
+        import kol_store as _ks
+        if os.path.exists(_ks.STORE_PATH):
+            _h = _ks.full_history()
+            if _h:
+                return _h
+    except Exception as _e:      # noqa: BLE001  故障降级, 不让 dashboard 挂掉
+        print(f"[kol_full_history] store 不可用, 退回旧双路合并: {_e}")
+
+    # ── 降级路径: 旧的 daily + backfill 双路内存合并 ──
     out = {}
 
     # ── 路 1: 每日快照 → 连续同内容合并成区间 ──

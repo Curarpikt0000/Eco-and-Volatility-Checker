@@ -1,0 +1,642 @@
+{
+ "table": "HDB_FISCAL_NEWS",
+ "count": 12,
+ "rows": [
+  {
+   "uid": "fn|2026-08-24|Bessent称坚持既定拍卖日程,首次扩大回购9/10启动",
+   "props": {
+    "标题": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-24｜Bessent称坚持既定拍卖日程,首次扩大回购9/10启动"
+       }
+      }
+     ]
+    },
+    "日期": {
+     "date": {
+      "start": "2026-08-24"
+     }
+    },
+    "摘要": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Bessent表示尽管10-30年段回购上限翻倍(≥$40亿/次),财政部仍按8月初公布的再融资计划照常拍卖长债;首次扩大回购9/9-10启动(10Y/20Y),迄今\"一颗债券都还没买\";TGA现金约$9400亿,单次$40亿为下限非上限。"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Reuters"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "US"
+     }
+    },
+    "类别": {
+     "select": {
+      "name": "国债发行"
+     }
+    },
+    "来源链接": {
+     "url": "https://www.reuters.com/world/china/us-treasury-stick-debt-auction-schedule-despite-bigger-buybacks-bessent-says-2026-08-24/"
+    }
+   }
+  },
+  {
+   "uid": "fn|2026-08-19|美国国债总额首破40万亿美元创历史纪录",
+   "props": {
+    "标题": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-19｜美国国债总额首破40万亿美元创历史纪录"
+       }
+      }
+     ]
+    },
+    "日期": {
+     "date": {
+      "start": "2026-08-19"
+     }
+    },
+    "摘要": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "美财政部每日数据显示,联邦债务8/19达40.047万亿美元,为史上首次突破40万亿,过去十年翻倍,利息支出持续累积推高总额。"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "NPR/Treasury"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "US"
+     }
+    },
+    "类别": {
+     "select": {
+      "name": "债务上限/国债规模"
+     }
+    },
+    "来源链接": {
+     "url": "https://www.npr.org/2026/08/19/nx-s1-5937552/the-u-s-debt-tops-a-record-shattering-40-trillion-yes-with-a-t"
+    }
+   }
+  },
+  {
+   "uid": "fn|2026-08-19|财政部将10-30年长债回购规模翻倍至每次≥$40亿",
+   "props": {
+    "标题": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-19｜财政部将10-30年长债回购规模翻倍至每次≥$40亿"
+       }
+      }
+     ]
+    },
+    "日期": {
+     "date": {
+      "start": "2026-08-19"
+     }
+    },
+    "摘要": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Bessent宣布加速长端回购,10-20年和20-30年段每次操作上限从$20亿提高到至少$40亿,罕见的季中干预,应对6月底以来长端\"买方罢工\"、30年收益率逼近20年高位。次日称单次或超$40亿上限。"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Reuters"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "US"
+     }
+    },
+    "类别": {
+     "select": {
+      "name": "国债发行"
+     }
+    },
+    "来源链接": {
+     "url": "https://www.reuters.com/world/us-treasury-double-sizes-some-debt-buyback-operations-least-4-billion-2026-08-19/"
+    }
+   }
+  },
+  {
+   "uid": "fn|2026-08-14|高市首相拟编制 2026 年度追加补正预算案",
+   "props": {
+    "标题": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-14｜高市首相拟编制 2026 年度追加补正预算案"
+       }
+      }
+     ]
+    },
+    "日期": {
+     "date": {
+      "start": "2026-08-14"
+     }
+    },
+    "摘要": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "高市早苗首相表示将编制 2026 年度追加补正预算案,财源拟通过增发特例公债(赤字国债)筹措,规模市场传约 3 万亿日元级,含电气/燃气补贴等物价对策。"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "中央日报(引 NHK)"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "JP"
+     }
+    },
+    "类别": {
+     "select": {
+      "name": "补正预算"
+     }
+    },
+    "来源链接": {
+     "url": "https://s.japanese.joins.com/JArticle/349573?sectcode=A00&servcode=A00"
+    }
+   }
+  },
+  {
+   "uid": "fn|2026-08-08|参议院通过临时拨款案(CR)至12月,规避10/1停摆",
+   "props": {
+    "标题": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-08｜参议院通过临时拨款案(CR)至12月,规避10/1停摆"
+       }
+      }
+     ]
+    },
+    "日期": {
+     "date": {
+      "start": "2026-08-08"
+     }
+    },
+    "摘要": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "参议院8/8凌晨表决通过一揽子临时拨款方案,资金延续至12月,试图在11月中期选举前规避政府关门;皮球踢回众议院,10/1(FY2026财年末)前众院须行动否则部分政府停摆。"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Politico"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "US"
+     }
+    },
+    "类别": {
+     "select": {
+      "name": "政府关门风险"
+     }
+    },
+    "来源链接": {
+     "url": "https://www.politico.com/news/2026/08/08/senate-government-funding-01030015"
+    }
+   }
+  },
+  {
+   "uid": "fn|2026-08-08|参议院90-6通过CR,拨款延至12月11日,众议院待表决",
+   "props": {
+    "标题": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-08｜参议院90-6通过CR,拨款延至12月11日,众议院待表决"
+       }
+      }
+     ]
+    },
+    "日期": {
+     "date": {
+      "start": "2026-08-08"
+     }
+    },
+    "摘要": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "参议院压倒性通过持续决议(CR),按FY2026水平为12大拨款条线续拨至12月11日或FY2027拨款法案通过为止;若众议院9月30日前不通过,10月1日面临关门风险。"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "NACo"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "US"
+     }
+    },
+    "类别": {
+     "select": {
+      "name": "政府关门风险"
+     }
+    },
+    "来源链接": {
+     "url": "https://www.naco.org/news/senate-passes-bill-fund-government-through-december-11-and-delay-omb-rule"
+    }
+   }
+  },
+  {
+   "uid": "fn|2026-08-01|国会争论是否将政府拨款延至年底,逼近下一个关门期限",
+   "props": {
+    "标题": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-01｜国会争论是否将政府拨款延至年底,逼近下一个关门期限"
+       }
+      }
+     ]
+    },
+    "日期": {
+     "date": {
+      "start": "2026-08-01"
+     }
+    },
+    "摘要": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "众议院议长 Johnson 表示留给议员的时间不多;共和党内就是否用又一份持续决议(CR)把 FY2026 拨款推进程序化仍有分歧,市场关注 12 月前的关门期限风险。"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Yahoo News(引 Politico)"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "US"
+     }
+    },
+    "类别": {
+     "select": {
+      "name": "政府关门风险"
+     }
+    },
+    "来源链接": {
+     "url": "https://sg.news.yahoo.com/wrangling-over-whether-punt-government-110000896.html"
+    }
+   }
+  },
+  {
+   "uid": "fn|2026-06-03|日本2026年度补正预算案闭议决定,市中发行额不增",
+   "props": {
+    "标题": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-03｜日本2026年度补正预算案闭议决定,市中发行额不增"
+       }
+      }
+     ]
+    },
+    "日期": {
+     "date": {
+      "start": "2026-06-03"
+     }
+    },
+    "摘要": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "政府闭议决定总额3兆円强的2026年度补正预算,公债依存度升至26.1%(约占岁出四分之一);财务省通过调减前年度发行预定额,使2026年度国债市中发行额不增。"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Novaist/財務省"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "JP"
+     }
+    },
+    "类别": {
+     "select": {
+      "name": "补正预算"
+     }
+    },
+    "来源链接": {
+     "url": "https://novaist.jp/articles/japan-2026-supplementary-budget/"
+    }
+   }
+  },
+  {
+   "uid": "fn|2026-05-29|日本 2026 年度补正预算全额赤字国债 3 兆 1135 亿日元",
+   "props": {
+    "标题": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-05-29｜日本 2026 年度补正预算全额赤字国债 3 兆 1135 亿日元"
+       }
+      }
+     ]
+    },
+    "日期": {
+     "date": {
+      "start": "2026-05-29"
+     }
+    },
+    "摘要": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "政府近日拟阁议决定的 2026 年度补正预算歳出总额 3 兆 1135 亿日元,财源全额靠特例公债(赤字国债),但称市中发行额不增加应对。"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "ロイター Reuters"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "JP"
+     }
+    },
+    "类别": {
+     "select": {
+      "name": "补正预算/国债发行"
+     }
+    },
+    "来源链接": {
+     "url": "https://jp.reuters.com/markets/japan/CJZVKOBFUBMWJA3FL255RL6AYU-2026-05-29/"
+    }
+   }
+  },
+  {
+   "uid": "fn|2026-05-15|片山财务相:目前无需立即编制补正预算",
+   "props": {
+    "标题": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-05-15｜片山财务相:目前无需立即编制补正预算"
+       }
+      }
+     ]
+    },
+    "日期": {
+     "date": {
+      "start": "2026-05-15"
+     }
+    },
+    "摘要": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "片山さつき财务相在阁议后记者会表示,已采取抑制汽油价格等措施,加上 2026 年度预算尚有 1 万亿日元预备费,当前并非必须立即编制补正预算的状况(此为高市追加补正前的谨慎表态,可对比政策转向)。"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "FP Trendy"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "JP"
+     }
+    },
+    "类别": {
+     "select": {
+      "name": "补正预算"
+     }
+    },
+    "来源链接": {
+     "url": "https://www.fptrendy.com/2026/05/16/supplementary-budget-energy-prices-katayama/"
+    }
+   }
+  },
+  {
+   "uid": "fn|2026-02-03|特朗普签署《2026 综合拨款法案》",
+   "props": {
+    "标题": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-02-03｜特朗普签署《2026 综合拨款法案》"
+       }
+      }
+     ]
+    },
+    "日期": {
+     "date": {
+      "start": "2026-02-03"
+     }
+    },
+    "摘要": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "特朗普总统签署 Consolidated Appropriations Act 2026,为 2026 财年联邦政府提供拨款,结束此前因持续决议(CR)引发的关门僵局;含 LIHEAP 等项目资金。"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "GovtSchemes(引法案)"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "US"
+     }
+    },
+    "类别": {
+     "select": {
+      "name": "拨款法案"
+     }
+    },
+    "来源链接": {
+     "url": "https://govtschemes.org/liheap-funding-eligibility-application-guide/"
+    }
+   }
+  },
+  {
+   "uid": "fn|2026-01-28|2026 年度预算案:一般会计总额超 122 万亿日元创新高",
+   "props": {
+    "标题": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-01-28｜2026 年度预算案:一般会计总额超 122 万亿日元创新高"
+       }
+      }
+     ]
+    },
+    "日期": {
+     "date": {
+      "start": "2026-01-28"
+     }
+    },
+    "摘要": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026 年度预算案一般会计总额超 122 万亿日元创历史新高,社会保障费达 39 万亿日元;受利率上升影响,国债利払费(付息成本)急增,凸显日本财政对利率的高度敏感。"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "个人财政分析(引财务省数据)"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "JP"
+     }
+    },
+    "类别": {
+     "select": {
+      "name": "国债/财政"
+     }
+    },
+    "来源链接": {
+     "url": "https://baruharu00.hatenablog.com/entry/20260128/1769544851"
+    }
+   }
+  }
+ ]
+}

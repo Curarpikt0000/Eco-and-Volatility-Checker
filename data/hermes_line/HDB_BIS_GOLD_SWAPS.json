@@ -1,0 +1,546 @@
+{
+ "table": "HDB_BIS_GOLD_SWAPS",
+ "count": 15,
+ "rows": [
+  {
+   "uid": "bis|2010-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2010-03-31｜annual"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2010-03-31"
+     }
+    },
+    "掉期_吨": {
+     "number": 346.0
+    },
+    "环比": {
+     "number": null
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "BIS 2009-10 Annual Report"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "bis|2011-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2011-03-31｜annual"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2011-03-31"
+     }
+    },
+    "掉期_吨": {
+     "number": 409.0
+    },
+    "环比": {
+     "number": 63.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "BIS 2010-11 Annual Report"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "bis|2012-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2012-03-31｜annual"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2012-03-31"
+     }
+    },
+    "掉期_吨": {
+     "number": 355.0
+    },
+    "环比": {
+     "number": -54.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "BIS 2011-12 Annual Report"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "bis|2013-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2013-03-31｜annual"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2013-03-31"
+     }
+    },
+    "掉期_吨": {
+     "number": 404.0
+    },
+    "环比": {
+     "number": 49.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "BIS 2012-13 Annual Report"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "bis|2014-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2014-03-31｜annual"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2014-03-31"
+     }
+    },
+    "掉期_吨": {
+     "number": 236.0
+    },
+    "环比": {
+     "number": -168.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "BIS 2013-14 Annual Report"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "bis|2015-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2015-03-31｜annual"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2015-03-31"
+     }
+    },
+    "掉期_吨": {
+     "number": 47.0
+    },
+    "环比": {
+     "number": -189.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "BIS 2014-15 Annual Report"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "bis|2016-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2016-03-31｜annual"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2016-03-31"
+     }
+    },
+    "掉期_吨": {
+     "number": 0.0
+    },
+    "环比": {
+     "number": -47.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "BIS 2015-16 Annual Report"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "bis|2017-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2017-03-31｜annual"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2017-03-31"
+     }
+    },
+    "掉期_吨": {
+     "number": 438.0
+    },
+    "环比": {
+     "number": 438.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "BIS 2016-17 Annual Report"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "bis|2018-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2018-03-31｜annual"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2018-03-31"
+     }
+    },
+    "掉期_吨": {
+     "number": 361.0
+    },
+    "环比": {
+     "number": -77.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "BIS 2017-18 Annual Report"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "bis|2019-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2019-03-31｜annual"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2019-03-31"
+     }
+    },
+    "掉期_吨": {
+     "number": 175.0
+    },
+    "环比": {
+     "number": -186.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "BIS 2018-19 Annual Report"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "bis|2020-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2020-03-31｜annual"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2020-03-31"
+     }
+    },
+    "掉期_吨": {
+     "number": 326.0
+    },
+    "环比": {
+     "number": 151.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "BIS 2019-20 Annual Report"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "bis|2021-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2021-03-31｜annual"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2021-03-31"
+     }
+    },
+    "掉期_吨": {
+     "number": 490.0
+    },
+    "环比": {
+     "number": 164.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "BIS 2020-21 Annual Report (record high)"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "bis|2025-10-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-10-31｜monthly"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2025-10-31"
+     }
+    },
+    "掉期_吨": {
+     "number": 54.0
+    },
+    "环比": {
+     "number": -436.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "GATA/Lambourne from BIS statofacc251031.pdf"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "bis|2025-11-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-11-30｜monthly"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2025-11-30"
+     }
+    },
+    "掉期_吨": {
+     "number": 39.0
+    },
+    "环比": {
+     "number": -15.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "GATA/Lambourne from BIS statofacc251130.pdf"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "bis|2026-03-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-03-31｜annual"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2026-03-31"
+     }
+    },
+    "掉期_吨": {
+     "number": 184.0
+    },
+    "环比": {
+     "number": 145.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "BIS 2025-26 Annual Report"
+       }
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

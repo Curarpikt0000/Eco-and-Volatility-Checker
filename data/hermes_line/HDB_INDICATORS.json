@@ -1,0 +1,4860 @@
+{
+ "table": "HDB_INDICATORS",
+ "count": 102,
+ "rows": [
+  {
+   "uid": "ind|2025-08-08",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-08-08"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.15
+    },
+    "HY利差": {
+     "number": 2.94
+    },
+    "恐慌贪婪": {
+     "number": 58.4
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-08-08.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.15; fear_greed=58.4; margin_debt=1022.5; margin_gdp=3.15; hy_oas=2.94; yield_curve=0.51"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2025-08-15",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-08-15"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.09
+    },
+    "HY利差": {
+     "number": 2.88
+    },
+    "恐慌贪婪": {
+     "number": 63.5
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-08-15.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.09; fear_greed=63.5; margin_debt=1022.5; margin_gdp=3.15; hy_oas=2.88; yield_curve=0.58"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2025-08-22",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-08-22"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 14.22
+    },
+    "HY利差": {
+     "number": 2.88
+    },
+    "恐慌贪婪": {
+     "number": 55.5
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-08-22.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=14.22; fear_greed=55.5; margin_debt=1022.5; margin_gdp=3.15; hy_oas=2.88; yield_curve=0.58"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2025-08-29",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-08-29"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.36
+    },
+    "HY利差": {
+     "number": 2.82
+    },
+    "恐慌贪婪": {
+     "number": 61.5
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-08-29.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.36; fear_greed=61.5; margin_debt=1022.5; margin_gdp=3.15; hy_oas=2.82; yield_curve=0.64"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2025-09-05",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-09-05"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.18
+    },
+    "HY利差": {
+     "number": 2.83
+    },
+    "恐慌贪婪": {
+     "number": 58.7
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-09-05.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.18; fear_greed=58.7; margin_debt=1059.7; margin_gdp=3.26; hy_oas=2.83; yield_curve=0.59"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2025-09-12",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-09-12"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 14.76
+    },
+    "HY利差": {
+     "number": 2.79
+    },
+    "恐慌贪婪": {
+     "number": 61.3
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-09-12.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=14.76; fear_greed=61.3; margin_debt=1059.7; margin_gdp=3.26; hy_oas=2.79; yield_curve=0.5"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2025-09-19",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-09-19"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.45
+    },
+    "HY利差": {
+     "number": 2.72
+    },
+    "恐慌贪婪": {
+     "number": 66.2
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-09-19.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.45; fear_greed=66.2; margin_debt=1059.7; margin_gdp=3.26; hy_oas=2.72; yield_curve=0.57"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2025-09-26",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-09-26"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.29
+    },
+    "HY利差": {
+     "number": 2.75
+    },
+    "恐慌贪婪": {
+     "number": 51.3
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-09-26.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.29; fear_greed=51.3; margin_debt=1059.7; margin_gdp=3.26; hy_oas=2.75; yield_curve=0.57"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2025-10-03",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-10-03"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 16.65
+    },
+    "HY利差": {
+     "number": 2.8
+    },
+    "恐慌贪婪": {
+     "number": 52.6
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-10-03.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=16.65; fear_greed=52.6; margin_debt=1126.5; margin_gdp=3.47; hy_oas=2.8; yield_curve=0.55"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2025-10-10",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-10-10"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 21.66
+    },
+    "HY利差": {
+     "number": 3.18
+    },
+    "恐慌贪婪": {
+     "number": 30.1
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-10-10.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=21.66; fear_greed=30.1; margin_debt=1126.5; margin_gdp=3.47; hy_oas=3.18; yield_curve=0.53"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2025-10-17",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-10-17"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 20.78
+    },
+    "HY利差": {
+     "number": 3.04
+    },
+    "恐慌贪婪": {
+     "number": 22.3
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-10-17.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=20.78; fear_greed=22.3; margin_debt=1126.5; margin_gdp=3.47; hy_oas=3.04; yield_curve=0.56"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2025-10-24",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-10-24"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 16.37
+    },
+    "HY利差": {
+     "number": 2.88
+    },
+    "恐慌贪婪": {
+     "number": 32.5
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-10-24.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=16.37; fear_greed=32.5; margin_debt=1126.5; margin_gdp=3.47; hy_oas=2.88; yield_curve=0.54"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2025-10-31",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-10-31"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 17.44
+    },
+    "HY利差": {
+     "number": 2.94
+    },
+    "恐慌贪婪": {
+     "number": 34.5
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-10-31.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=17.44; fear_greed=34.5; margin_debt=1183.7; margin_gdp=3.64; hy_oas=2.94; yield_curve=0.51"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2025-11-07",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-11-07"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 19.08
+    },
+    "HY利差": {
+     "number": 3.15
+    },
+    "恐慌贪婪": {
+     "number": 20.4
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-11-07.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=19.08; fear_greed=20.4; margin_debt=1183.7; margin_gdp=3.64; hy_oas=3.15; yield_curve=0.56"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2025-11-14",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-11-14"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 19.83
+    },
+    "HY利差": {
+     "number": 3.07
+    },
+    "恐慌贪婪": {
+     "number": 22.1
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-11-14.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=19.83; fear_greed=22.1; margin_debt=1183.7; margin_gdp=3.64; hy_oas=3.07; yield_curve=0.52"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2025-11-21",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-11-21"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 23.43
+    },
+    "HY利差": {
+     "number": 3.19
+    },
+    "恐慌贪婪": {
+     "number": 5.7
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-11-21.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=23.43; fear_greed=5.7; margin_debt=1183.7; margin_gdp=3.64; hy_oas=3.19; yield_curve=0.55"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2025-11-28",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-11-28"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 16.35
+    },
+    "HY利差": {
+     "number": 2.95
+    },
+    "恐慌贪婪": {
+     "number": 21.8
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-11-28.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=16.35; fear_greed=21.8; margin_debt=1183.7; margin_gdp=3.64; hy_oas=2.95; yield_curve=0.55"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2025-12-05",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-12-05"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.41
+    },
+    "HY利差": {
+     "number": 2.85
+    },
+    "恐慌贪婪": {
+     "number": 38.1
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-12-05.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.41; fear_greed=38.1; margin_debt=1214.3; margin_gdp=3.74; hy_oas=2.85; yield_curve=0.58"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2025-12-12",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-12-12"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.74
+    },
+    "HY利差": {
+     "number": 2.91
+    },
+    "恐慌贪婪": {
+     "number": 39.3
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-12-12.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.74; fear_greed=39.3; margin_debt=1214.3; margin_gdp=3.74; hy_oas=2.91; yield_curve=0.67"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2025-12-19",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-12-19"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 14.91
+    },
+    "HY利差": {
+     "number": 2.9
+    },
+    "恐慌贪婪": {
+     "number": 44.2
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-12-19.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=14.91; fear_greed=44.2; margin_debt=1214.3; margin_gdp=3.74; hy_oas=2.9; yield_curve=0.68"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2025-12-26",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-12-26"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 13.6
+    },
+    "HY利差": {
+     "number": 2.86
+    },
+    "恐慌贪婪": {
+     "number": 54.9
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2025-12-26.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=13.6; fear_greed=54.9; margin_debt=1214.3; margin_gdp=3.74; hy_oas=2.86; yield_curve=0.68"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-01-02",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-01-02"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 14.51
+    },
+    "HY利差": {
+     "number": 2.83
+    },
+    "恐慌贪婪": {
+     "number": 45.2
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-01-02.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=14.51; fear_greed=45.2; margin_debt=1225.6; margin_gdp=3.77; hy_oas=2.83; yield_curve=0.72"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-01-09",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-01-09"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 14.49
+    },
+    "HY利差": {
+     "number": 2.74
+    },
+    "恐慌贪婪": {
+     "number": 54.1
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-01-09.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=14.49; fear_greed=54.1; margin_debt=1225.6; margin_gdp=3.77; hy_oas=2.74; yield_curve=0.64"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-01-16",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-01-16"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.86
+    },
+    "HY利差": {
+     "number": 2.65
+    },
+    "恐慌贪婪": {
+     "number": 63.8
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-01-16.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.86; fear_greed=63.8; margin_debt=1225.6; margin_gdp=3.77; hy_oas=2.65; yield_curve=0.65"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-01-23",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-01-23"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 16.09
+    },
+    "HY利差": {
+     "number": 2.68
+    },
+    "恐慌贪婪": {
+     "number": 54.9
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-01-23.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=16.09; fear_greed=54.9; margin_debt=1225.6; margin_gdp=3.77; hy_oas=2.68; yield_curve=0.64"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-01-30",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-01-30"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 17.44
+    },
+    "HY利差": {
+     "number": 2.8
+    },
+    "恐慌贪婪": {
+     "number": 58.6
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-01-30.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=17.44; fear_greed=58.6; margin_debt=1225.6; margin_gdp=3.77; hy_oas=2.8; yield_curve=0.74"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-02-06",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-02-06"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 17.76
+    },
+    "HY利差": {
+     "number": 2.87
+    },
+    "恐慌贪婪": {
+     "number": 45.4
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-02-06.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=17.76; fear_greed=45.4; margin_debt=1279.0; margin_gdp=3.94; hy_oas=2.87; yield_curve=0.72"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-02-13",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-02-13"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 20.6
+    },
+    "HY利差": {
+     "number": 2.95
+    },
+    "恐慌贪婪": {
+     "number": 33.8
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-02-13.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=20.6; fear_greed=33.8; margin_debt=1279.0; margin_gdp=3.94; hy_oas=2.95; yield_curve=0.64"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-02-20",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-02-20"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 19.09
+    },
+    "HY利差": {
+     "number": 2.86
+    },
+    "恐慌贪婪": {
+     "number": 42.3
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-02-20.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=19.09; fear_greed=42.3; margin_debt=1279.0; margin_gdp=3.94; hy_oas=2.86; yield_curve=0.6"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-02-27",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-02-27"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 19.86
+    },
+    "HY利差": {
+     "number": 3.1
+    },
+    "恐慌贪婪": {
+     "number": 41.2
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-02-27.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=19.86; fear_greed=41.2; margin_debt=1279.0; margin_gdp=3.94; hy_oas=3.1; yield_curve=0.59"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-03-06",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-03-06"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 29.49
+    },
+    "HY利差": {
+     "number": 3.13
+    },
+    "恐慌贪婪": {
+     "number": 25.3
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-03-06.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=29.49; fear_greed=25.3; margin_debt=1253.2; margin_gdp=3.86; hy_oas=3.13; yield_curve=0.59"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-03-13",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-03-13"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 27.19
+    },
+    "HY利差": {
+     "number": 3.28
+    },
+    "恐慌贪婪": {
+     "number": 16.7
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-03-13.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=27.19; fear_greed=16.7; margin_debt=1253.2; margin_gdp=3.86; hy_oas=3.28; yield_curve=0.55"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-03-20",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-03-20"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 26.78
+    },
+    "HY利差": {
+     "number": 3.24
+    },
+    "恐慌贪婪": {
+     "number": 8.4
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-03-20.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=26.78; fear_greed=8.4; margin_debt=1253.2; margin_gdp=3.86; hy_oas=3.24; yield_curve=0.51"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-03-27",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-03-27"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 31.05
+    },
+    "HY利差": {
+     "number": 3.42
+    },
+    "恐慌贪婪": {
+     "number": 8.2
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-03-27.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=31.05; fear_greed=8.2; margin_debt=1253.2; margin_gdp=3.86; hy_oas=3.42; yield_curve=0.56"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-04-03",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-04-03"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 23.87
+    },
+    "HY利差": {
+     "number": 3.13
+    },
+    "恐慌贪婪": {
+     "number": 18.3
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-04-03.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=23.87; fear_greed=18.3; margin_debt=1220.9; margin_gdp=3.76; hy_oas=3.13; yield_curve=0.51"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-04-10",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-04-10"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 19.23
+    },
+    "HY利差": {
+     "number": 2.94
+    },
+    "恐慌贪婪": {
+     "number": 38.1
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-04-10.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=19.23; fear_greed=38.1; margin_debt=1220.9; margin_gdp=3.76; hy_oas=2.94; yield_curve=0.5"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-04-17",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-04-17"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 17.48
+    },
+    "HY利差": {
+     "number": 2.83
+    },
+    "恐慌贪婪": {
+     "number": 68.6
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-04-17.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=17.48; fear_greed=68.6; margin_debt=1220.9; margin_gdp=3.76; hy_oas=2.83; yield_curve=0.55"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-04-24",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-04-24"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 18.71
+    },
+    "HY利差": {
+     "number": 2.86
+    },
+    "恐慌贪婪": {
+     "number": 65.4
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-04-24.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=18.71; fear_greed=65.4; margin_debt=1220.9; margin_gdp=3.76; hy_oas=2.86; yield_curve=0.53"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-05-01",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-05-01"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 16.99
+    },
+    "HY利差": {
+     "number": 2.77
+    },
+    "恐慌贪婪": {
+     "number": 71.2
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-05-01.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=16.99; fear_greed=71.2; margin_debt=1304.3; margin_gdp=4.02; hy_oas=2.77; yield_curve=0.51"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-05-08",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-05-08"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 17.19
+    },
+    "HY利差": {
+     "number": 2.81
+    },
+    "恐慌贪婪": {
+     "number": 67.3
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-05-08.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=17.19; fear_greed=67.3; margin_debt=1304.3; margin_gdp=4.02; hy_oas=2.81; yield_curve=0.48"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-05-15",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-05-15"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 18.43
+    },
+    "HY利差": {
+     "number": 2.8
+    },
+    "恐慌贪婪": {
+     "number": 63.2
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-05-15.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=18.43; fear_greed=63.2; margin_debt=1304.3; margin_gdp=4.02; hy_oas=2.8; yield_curve=0.5"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-05-22",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-05-22"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 16.7
+    },
+    "HY利差": {
+     "number": 2.74
+    },
+    "恐慌贪婪": {
+     "number": 58.2
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-05-22.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=16.7; fear_greed=58.2; margin_debt=1304.3; margin_gdp=4.02; hy_oas=2.74; yield_curve=0.43"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-05-29",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-05-29"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.32
+    },
+    "HY利差": {
+     "number": 2.72
+    },
+    "恐慌贪婪": {
+     "number": 60.5
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-05-29.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.32; fear_greed=60.5; margin_debt=1304.3; margin_gdp=4.02; hy_oas=2.72; yield_curve=0.47"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-06-05",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-05"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 21.51
+    },
+    "HY利差": {
+     "number": 2.76
+    },
+    "恐慌贪婪": {
+     "number": 41.9
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-06-05.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=21.51; fear_greed=41.9; margin_debt=1415.6; margin_gdp=4.36; hy_oas=2.76; yield_curve=0.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-06-08",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-08"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 18.92
+    },
+    "HY利差": {
+     "number": 2.75
+    },
+    "恐慌贪婪": {
+     "number": 39.4
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-06-08.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=18.92; fear_greed=39.4; hy_oas=2.75; yield_curve=0.41"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-06-09",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-09"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 19.87
+    },
+    "HY利差": {
+     "number": 2.78
+    },
+    "恐慌贪婪": {
+     "number": 33.8
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-06-09.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=19.87; fear_greed=33.8; hy_oas=2.78; yield_curve=0.4"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-06-10",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-10"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 22.22
+    },
+    "HY利差": {
+     "number": 2.8
+    },
+    "恐慌贪婪": {
+     "number": 27.3
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-06-10.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=22.22; fear_greed=27.3; hy_oas=2.8; yield_curve=0.42"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-06-11",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-11"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 19.44
+    },
+    "HY利差": {
+     "number": 2.78
+    },
+    "恐慌贪婪": {
+     "number": 29.7
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-06-11.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=19.44; fear_greed=29.7; hy_oas=2.78; yield_curve=0.4"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-06-12",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-12"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 17.68
+    },
+    "HY利差": {
+     "number": 2.71
+    },
+    "恐慌贪婪": {
+     "number": 33.5
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-06-12.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=17.68; fear_greed=33.5; hy_oas=2.71; yield_curve=0.39"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-06-15",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-15"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 16.2
+    },
+    "HY利差": {
+     "number": 2.66
+    },
+    "恐慌贪婪": {
+     "number": 40.1
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-06-15.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=16.2; fear_greed=40.1; hy_oas=2.66; yield_curve=0.4"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-06-16",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-16"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 16.41
+    },
+    "HY利差": {
+     "number": 2.71
+    },
+    "恐慌贪婪": {
+     "number": 39.5
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-06-16.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=16.41; fear_greed=39.5; hy_oas=2.71; yield_curve=0.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-06-17",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-17"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 18.44
+    },
+    "HY利差": {
+     "number": 2.63
+    },
+    "恐慌贪婪": {
+     "number": 32.9
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-06-17.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=18.44; fear_greed=32.9; hy_oas=2.63; yield_curve=0.29"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-06-18",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-18"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 16.4
+    },
+    "HY利差": {
+     "number": 2.66
+    },
+    "恐慌贪婪": {
+     "number": 37.3
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-06-18.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=16.4; fear_greed=37.3; hy_oas=2.66; yield_curve=0.27"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-06-19",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-19"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 16.78
+    },
+    "HY利差": {
+     "number": 2.66
+    },
+    "恐慌贪婪": {
+     "number": 37.3
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-06-19.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=16.78; fear_greed=37.3; hy_oas=2.66; yield_curve=0.27"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-06-22",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-22"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 17.28
+    },
+    "HY利差": {
+     "number": 2.65
+    },
+    "恐慌贪婪": {
+     "number": 33.9
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-06-22.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=17.28; fear_greed=33.9; hy_oas=2.65; yield_curve=0.27"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-06-23",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-23"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 19.49
+    },
+    "HY利差": {
+     "number": 2.71
+    },
+    "恐慌贪婪": {
+     "number": 28.5
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-06-23.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=19.49; fear_greed=28.5; margin_debt=1502.1; hy_oas=2.71; yield_curve=0.34; lei=-0.3"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-06-24",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-24"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 18.63
+    },
+    "HY利差": {
+     "number": 2.76
+    },
+    "恐慌贪婪": {
+     "number": 26.5
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-06-24.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=18.63; fear_greed=26.5; margin_debt=1502.1; hy_oas=2.76; yield_curve=0.3; lei=-0.3"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-06-25",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-25"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 18.89
+    },
+    "HY利差": {
+     "number": 2.78
+    },
+    "恐慌贪婪": {
+     "number": 25.4
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-06-25.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=18.89; fear_greed=25.4; margin_debt=1502.1; hy_oas=2.78; yield_curve=0.31; lei=-0.3"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-06-26",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-26"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 18.41
+    },
+    "HY利差": {
+     "number": 2.83
+    },
+    "恐慌贪婪": {
+     "number": 24.7
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-06-26.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=18.41; fear_greed=24.7; margin_debt=1502.1; hy_oas=2.83; yield_curve=0.31; lei=-0.3"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-06-29",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-29"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 17.65
+    },
+    "HY利差": {
+     "number": 2.8
+    },
+    "恐慌贪婪": {
+     "number": 26.9
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-06-29.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=17.65; fear_greed=26.9; margin_debt=1502.1; hy_oas=2.8; yield_curve=0.28; lei=-0.3"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-06-30",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-30"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 16.45
+    },
+    "HY利差": {
+     "number": 2.75
+    },
+    "恐慌贪婪": {
+     "number": 30.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-06-30.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=16.45; fear_greed=30.0; margin_debt=1502.1; hy_oas=2.75; yield_curve=0.3; lei=-0.3"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-01",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-01"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 16.59
+    },
+    "HY利差": {
+     "number": 2.74
+    },
+    "恐慌贪婪": {
+     "number": 31.6
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-01.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=16.59; fear_greed=31.6; margin_debt=1502.1; hy_oas=2.74; yield_curve=0.31; lei=-0.3"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-02",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-02"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 16.15
+    },
+    "HY利差": {
+     "number": 2.75
+    },
+    "恐慌贪婪": {
+     "number": 32.5
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-02.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=16.15; fear_greed=32.5; margin_debt=1502.1; hy_oas=2.75; yield_curve=0.35; lei=-0.3"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-03",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-03"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.81
+    },
+    "HY利差": {
+     "number": 2.74
+    },
+    "恐慌贪婪": {
+     "number": 32.5
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-03.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.81; fear_greed=32.5; margin_debt=1502.1; hy_oas=2.74; yield_curve=0.35; lei=-0.3"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-06",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-06"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.57
+    },
+    "HY利差": {
+     "number": 2.72
+    },
+    "恐慌贪婪": {
+     "number": 41.7
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-06.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.57; fear_greed=41.7; margin_debt=1502.1; hy_oas=2.72; yield_curve=0.35; lei=-0.3"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-07",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-07"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 16.13
+    },
+    "HY利差": {
+     "number": 2.67
+    },
+    "恐慌贪婪": {
+     "number": 39.8
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-07.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=16.13; fear_greed=39.8; margin_debt=1502.1; hy_oas=2.67; yield_curve=0.36; lei=-0.3"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-08",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-08"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 16.9
+    },
+    "HY利差": {
+     "number": 2.7
+    },
+    "恐慌贪婪": {
+     "number": 38.6
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-08.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=16.9; fear_greed=38.6; hy_oas=2.7; yield_curve=0.35"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-09",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-09"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.84
+    },
+    "HY利差": {
+     "number": 2.7
+    },
+    "恐慌贪婪": {
+     "number": 44.7
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-09.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.84; fear_greed=44.7; hy_oas=2.7; yield_curve=0.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-10",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-10"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.03
+    },
+    "HY利差": {
+     "number": 2.69
+    },
+    "恐慌贪婪": {
+     "number": 46.8
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-10.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.03; fear_greed=46.8; hy_oas=2.69; yield_curve=0.35"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-13",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-13"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 17.16
+    },
+    "HY利差": {
+     "number": 2.69
+    },
+    "恐慌贪婪": {
+     "number": 40.9
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-13.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=17.16; fear_greed=40.9; hy_oas=2.69; yield_curve=0.36"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-14",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-14"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 16.5
+    },
+    "HY利差": {
+     "number": 2.72
+    },
+    "恐慌贪婪": {
+     "number": 41.1
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-14.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=16.5; fear_greed=41.1; hy_oas=2.72; yield_curve=0.4"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-15",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-15"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.67
+    },
+    "HY利差": {
+     "number": 2.71
+    },
+    "恐慌贪婪": {
+     "number": 41.1
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-15.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.67; fear_greed=41.1; hy_oas=2.71; yield_curve=0.42"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-16",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-16"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 16.73
+    },
+    "HY利差": {
+     "number": 2.71
+    },
+    "恐慌贪婪": {
+     "number": 41.2
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-16.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=16.73; fear_greed=41.2; hy_oas=2.71; yield_curve=0.41"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-17",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-17"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 18.77
+    },
+    "HY利差": {
+     "number": 2.73
+    },
+    "恐慌贪婪": {
+     "number": 37.2
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-17.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=18.77; fear_greed=37.2; hy_oas=2.73; yield_curve=0.37"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-20",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-20"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 18.65
+    },
+    "HY利差": {
+     "number": 2.69
+    },
+    "恐慌贪婪": {
+     "number": 37.9
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-20.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=18.65; fear_greed=37.9; hy_oas=2.69; yield_curve=0.39"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-21",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-21"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 17.05
+    },
+    "HY利差": {
+     "number": 2.69
+    },
+    "恐慌贪婪": {
+     "number": 43.4
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-21.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=17.05; fear_greed=43.4; hy_oas=2.69; yield_curve=0.37"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-22",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-22"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 16.64
+    },
+    "HY利差": {
+     "number": 2.68
+    },
+    "恐慌贪婪": {
+     "number": 43.3
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-22.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=16.64; fear_greed=43.3; hy_oas=2.68; yield_curve=0.36"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-23",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-23"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 18.7
+    },
+    "HY利差": {
+     "number": 2.77
+    },
+    "恐慌贪婪": {
+     "number": 38.9
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-23.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=18.7; fear_greed=38.9; hy_oas=2.77; yield_curve=0.34"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-24",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-24"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 18.58
+    },
+    "HY利差": {
+     "number": 2.79
+    },
+    "恐慌贪婪": {
+     "number": 41.3
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-24.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=18.58; fear_greed=41.3; hy_oas=2.79; yield_curve=0.36; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-27",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-27"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 18.67
+    },
+    "HY利差": {
+     "number": 2.81
+    },
+    "恐慌贪婪": {
+     "number": 37.6
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-27.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=18.67; fear_greed=37.6; insider=0.25; hy_oas=2.81; yield_curve=0.34; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-28",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-28"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 18.21
+    },
+    "HY利差": {
+     "number": 2.84
+    },
+    "恐慌贪婪": {
+     "number": 37.9
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-28.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=18.21; fear_greed=37.9; insider=0.25; hy_oas=2.84; yield_curve=0.35; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-29",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-29"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 20.66
+    },
+    "HY利差": {
+     "number": 2.87
+    },
+    "恐慌贪婪": {
+     "number": 34.7
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-29.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=20.66; fear_greed=34.7; insider=0.25; hy_oas=2.87; yield_curve=0.45; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-30",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-30"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 17.09
+    },
+    "HY利差": {
+     "number": 2.84
+    },
+    "恐慌贪婪": {
+     "number": 40.7
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-30.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=17.09; fear_greed=40.7; aaii_bull_bear=-1.0; insider=0.25; hy_oas=2.84; yield_curve=0.45; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-07-31",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-07-31"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.99
+    },
+    "HY利差": {
+     "number": 2.85
+    },
+    "恐慌贪婪": {
+     "number": 45.2
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-07-31.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.99; fear_greed=45.2; aaii_bull_bear=-1.0; insider=0.25; bofa_bull_bear=9.7; hy_oas=2.85; yield_curve=0.47; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-08-03",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-03"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.86
+    },
+    "HY利差": {
+     "number": 2.78
+    },
+    "恐慌贪婪": {
+     "number": 50.7
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-08-03.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.86; fear_greed=50.7; aaii_bull_bear=-1.0; insider=0.25; bofa_bull_bear=9.7; hy_oas=2.78; yield_curve=0.45; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-08-04",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-04"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 16.5
+    },
+    "HY利差": {
+     "number": 2.73
+    },
+    "恐慌贪婪": {
+     "number": 60.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-08-04.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=16.5; fear_greed=60.0; aaii_bull_bear=-1.0; insider=0.25; bofa_bull_bear=9.7; hy_oas=2.73; ad_line=False; yield_curve=0.43; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-08-05",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-05"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.81
+    },
+    "HY利差": {
+     "number": 2.75
+    },
+    "恐慌贪婪": {
+     "number": 59.8
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-08-05.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.81; fear_greed=59.8; aaii_bull_bear=-1.0; put_call=0.61; insider=0.25; bofa_bull_bear=9.7; hy_oas=2.75; ad_line=False; yield_curve=0.45; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-08-06",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-06"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.15
+    },
+    "HY利差": {
+     "number": 2.71
+    },
+    "恐慌贪婪": {
+     "number": 58.9
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-08-06.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.15; fear_greed=58.9; aaii_bull_bear=-1.0; put_call=0.61; insider=0.25; bofa_bull_bear=9.7; hy_oas=2.71; ad_line=False; yield_curve=0.44; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-08-07",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-07"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 14.9
+    },
+    "HY利差": {
+     "number": 2.7
+    },
+    "恐慌贪婪": {
+     "number": 64.4
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-08-07.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=14.9; fear_greed=64.4; aaii_bull_bear=-1.0; put_call=0.61; insider=0.25; bofa_bull_bear=9.7; hy_oas=2.7; ad_line=False; yield_curve=0.46; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-08-10",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-10"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.46
+    },
+    "HY利差": {
+     "number": 2.7
+    },
+    "恐慌贪婪": {
+     "number": 64.7
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-08-10.json"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.46; fear_greed=64.7; aaii_bull_bear=-1.0; put_call=0.61; bofa_bull_bear=9.7; hy_oas=2.7; ad_line=False; yield_curve=0.47"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-08-11",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-11"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": 1.0
+    },
+    "VIX": {
+     "number": 15.46
+    },
+    "HY利差": {
+     "number": 2.7
+    },
+    "恐慌贪婪": {
+     "number": 60.7
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-08-11.json + data/daily/"
+       }
+      }
+     ]
+    },
+    "综合信号": {
+     "select": {
+      "name": "🟡 警戒"
+     }
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.46; fear_greed=60.7; aaii_bull_bear=-1.0; put_call=0.61; bofa_bull_bear=9.7; hy_oas=2.7; ad_line=False; yield_curve=0.48"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-08-12",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-12"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": 1.0
+    },
+    "VIX": {
+     "number": 15.46
+    },
+    "HY利差": {
+     "number": 2.7
+    },
+    "恐慌贪婪": {
+     "number": 60.9
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-08-12.json + data/daily/"
+       }
+      }
+     ]
+    },
+    "综合信号": {
+     "select": {
+      "name": "🟡 警戒"
+     }
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.46; fear_greed=60.9; aaii_bull_bear=0.0; put_call=0.61; sofr_iorb=-2.0; margin_debt=1502.1; margin_gdp=4.63; ipo_count=226.0; insider=0.27; bofa_bull_bear=9.7; hy_oas=2.7; ad_line=False; buffett=214.0; cape=42.24; yield_curve=0.48; lei=0.58; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-08-13",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-13"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": 1.0
+    },
+    "VIX": {
+     "number": 15.28
+    },
+    "HY利差": {
+     "number": 2.72
+    },
+    "恐慌贪婪": {
+     "number": 62.1
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-08-13.json + data/daily/"
+       }
+      }
+     ]
+    },
+    "综合信号": {
+     "select": {
+      "name": "🟡 警戒"
+     }
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.28; fear_greed=62.1; aaii_bull_bear=0.0; put_call=0.61; bofa_fms_cash=3.2; sofr_iorb=-1.0; margin_debt=1502.1; margin_gdp=4.63; ipo_count=227.0; insider=0.285; bofa_bull_bear=9.7; hy_oas=2.72; ad_line=False; buffett=214.0; cape=42.34; yield_curve=0.48; lei=0.58; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-08-14",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-14"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": 1.0
+    },
+    "VIX": {
+     "number": 14.55
+    },
+    "HY利差": {
+     "number": 2.71
+    },
+    "恐慌贪婪": {
+     "number": 66.1
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-08-14.json + data/daily/"
+       }
+      }
+     ]
+    },
+    "综合信号": {
+     "select": {
+      "name": "🟡 警戒"
+     }
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=14.55; fear_greed=66.1; aaii_bull_bear=-3.2; put_call=0.61; bofa_fms_cash=3.6; sofr_iorb=-3.0; margin_debt=1502.1; margin_gdp=4.63; ipo_count=228.0; insider=0.172; bofa_bull_bear=9.7; hy_oas=2.71; ad_line=False; buffett=214.0; cape=42.65; yield_curve=0.48; lei=0.58; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-08-17",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-17"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": 2.0
+    },
+    "VIX": {
+     "number": 14.63
+    },
+    "HY利差": {
+     "number": 2.71
+    },
+    "恐慌贪婪": {
+     "number": 65.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-08-17.json + data/daily/"
+       }
+      }
+     ]
+    },
+    "综合信号": {
+     "select": {
+      "name": "🟡 警戒"
+     }
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=14.63; fear_greed=65.0; aaii_bull_bear=-3.2; put_call=0.61; bofa_fms_cash=3.6; sofr_iorb=-3.0; margin_debt=1502.1; margin_gdp=4.63; ipo_count=229.0; insider=0.16; bofa_bull_bear=9.7; hy_oas=2.71; ad_line=False; buffett=214.0; cape=42.56; yield_curve=0.51; lei=0.58; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-08-18",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-18"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": 3.0
+    },
+    "VIX": {
+     "number": 14.25
+    },
+    "HY利差": {
+     "number": 2.67
+    },
+    "恐慌贪婪": {
+     "number": 59.5
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-08-18.json + data/daily/"
+       }
+      }
+     ]
+    },
+    "综合信号": {
+     "select": {
+      "name": "🔴 减仓"
+     }
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=14.25; fear_greed=59.5; aaii_bull_bear=0.0; put_call=0.61; bofa_fms_cash=3.9; sofr_iorb=-3.0; margin_cost=6.75; bank_funding_stress=11.0; margin_debt=1502.1; margin_gdp=4.63; ipo_count=229.0; insider=0.142; bofa_bull_bear=9.7; hy_oas=2.67; ad_line=True; buffett=214.0; cape=42.35; yield_curve=0.53; lei=0.58; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-08-19",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-19"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": 1.0
+    },
+    "VIX": {
+     "number": 15.19
+    },
+    "HY利差": {
+     "number": 2.7
+    },
+    "恐慌贪婪": {
+     "number": 54.4
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-08-19.json + data/daily/"
+       }
+      }
+     ]
+    },
+    "综合信号": {
+     "select": {
+      "name": "🟡 警戒"
+     }
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.19; fear_greed=54.4; aaii_bull_bear=0.0; put_call=0.61; bofa_fms_cash=3.9; sofr_iorb=1.0; margin_cost=6.75; bank_funding_stress=6.0; margin_debt=1502.1; margin_gdp=4.63; ipo_count=229.0; insider=0.675; bofa_bull_bear=9.7; hy_oas=2.7; ad_line=False; buffett=214.0; cape=42.06; yield_curve=0.52; lei=0.58; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-08-20",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-20"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": 1.0
+    },
+    "VIX": {
+     "number": 15.84
+    },
+    "HY利差": {
+     "number": 2.75
+    },
+    "恐慌贪婪": {
+     "number": 56.3
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-08-20.json + data/daily/"
+       }
+      }
+     ]
+    },
+    "综合信号": {
+     "select": {
+      "name": "🟡 警戒"
+     }
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.84; fear_greed=56.3; aaii_bull_bear=0.0; put_call=0.61; bofa_fms_cash=3.9; sofr_iorb=0.0; margin_cost=6.75; bank_funding_stress=8.0; margin_debt=1502.1; margin_gdp=4.63; ipo_count=232.0; insider=0.628; bofa_bull_bear=9.7; hy_oas=2.75; ad_line=False; buffett=214.0; cape=42.15; yield_curve=0.46; lei=0.58; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-08-21",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-21"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": 1.0
+    },
+    "VIX": {
+     "number": 14.89
+    },
+    "HY利差": {
+     "number": 2.73
+    },
+    "恐慌贪婪": {
+     "number": 52.5
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-08-21.json + data/daily/"
+       }
+      }
+     ]
+    },
+    "综合信号": {
+     "select": {
+      "name": "🟡 警戒"
+     }
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=14.89; fear_greed=52.5; aaii_bull_bear=0.0; put_call=0.61; bofa_fms_cash=3.9; sofr_iorb=-3.0; margin_cost=6.75; bank_funding_stress=13.0; margin_debt=1502.1; margin_gdp=4.63; ipo_count=232.0; insider=0.199; bofa_bull_bear=9.3; hy_oas=2.73; ad_line=False; buffett=214.0; cape=41.79; yield_curve=0.5; lei=0.58; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-08-24",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-24"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": 1.0
+    },
+    "VIX": {
+     "number": 16.01
+    },
+    "HY利差": {
+     "number": 2.75
+    },
+    "恐慌贪婪": {
+     "number": 55.2
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-08-24.json + data/daily/"
+       }
+      }
+     ]
+    },
+    "综合信号": {
+     "select": {
+      "name": "🟡 警戒"
+     }
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=16.01; fear_greed=55.2; aaii_bull_bear=-4.4; put_call=0.58; bofa_fms_cash=3.5; sofr_iorb=-2.0; margin_cost=6.75; bank_funding_stress=9.0; margin_debt=1420.0; margin_gdp=4.37; ipo_count=232.0; insider=0.689; bofa_bull_bear=9.3; hy_oas=2.75; ad_line=False; buffett=214.0; cape=41.96; yield_curve=0.5; lei=0.58; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-08-25",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-25"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": 2.0
+    },
+    "VIX": {
+     "number": 15.13
+    },
+    "HY利差": {
+     "number": 2.7
+    },
+    "恐慌贪婪": {
+     "number": 55.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-08-25.json + data/daily/"
+       }
+      }
+     ]
+    },
+    "综合信号": {
+     "select": {
+      "name": "🟡 警戒"
+     }
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.13; fear_greed=55.0; aaii_bull_bear=-4.43; put_call=0.58; bofa_fms_cash=3.5; sofr_iorb=0.0; margin_cost=6.75; bank_funding_stress=8.0; margin_debt=1420.0; margin_gdp=4.37; ipo_count=232.0; insider=0.087; bofa_bull_bear=9.7; hy_oas=2.7; ad_line=False; buffett=214.0; cape=41.84; yield_curve=0.46; lei=0.58; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-08-26",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-26"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": 1.0
+    },
+    "VIX": {
+     "number": 15.85
+    },
+    "HY利差": {
+     "number": 2.69
+    },
+    "恐慌贪婪": {
+     "number": 58.8
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-08-26.json + data/daily/"
+       }
+      }
+     ]
+    },
+    "综合信号": {
+     "select": {
+      "name": "🟡 警戒"
+     }
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.85; fear_greed=58.8; aaii_bull_bear=-4.43; put_call=0.58; bofa_fms_cash=3.5; sofr_iorb=0.0; margin_cost=6.75; bank_funding_stress=8.0; margin_debt=1502.1; margin_gdp=4.63; ipo_count=233.0; insider=0.364; bofa_bull_bear=9.3; hy_oas=2.69; ad_line=False; buffett=214.0; cape=41.97; yield_curve=0.47; lei=0.58; aaii_alloc=70.38"
+       }
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

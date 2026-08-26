@@ -1,0 +1,49 @@
+{
+ "table": "HDB_OFR",
+ "count": 1,
+ "rows": [
+  {
+   "uid": "ofr|2026-08-21",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-21"
+       }
+      }
+     ]
+    },
+    "OFR_FSI": {
+     "number": -2.814
+    },
+    "信用": {
+     "number": -1.175
+    },
+    "股票估值": {
+     "number": -0.59
+    },
+    "资金": {
+     "number": -0.127
+    },
+    "安全资产": {
+     "number": -0.325
+    },
+    "波动": {
+     "number": -0.597
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR via fetch_ofr_fsi"
+       }
+      }
+     ]
+    }
+   }
+  }
+ ]
+}
