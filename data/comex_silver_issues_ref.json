@@ -4,30 +4,93 @@
   "source": "Michael Lynch (@DtDS_WSS) · EconAnalytics (econanalytics.substack.com)",
   "source_url": "https://econanalytics.substack.com/",
   "update_nature": "事件驱动·不规律更新(按COMEX交割周期发文,非固定日历)·CME官方封禁脚本抓取无免key每日源·图为嵌入PNG不公开原始序列·本section仅从公开图手抄关键锚点做静态参考,非实时",
-  "note": "图=COMEX白银投行(bullion banks)累计与月度 issues/stops。蓝线=累计净头寸(千盎司),黑线=月度净。累计线走高=做市商净接货(stop,看涨囤货);走低=净交货(issue,压价)。真实可每周更新的做市商头寸方向请看下方『白银做市商头寸(CFTC COT)』一手数据section。此图数值为从公开图目视手抄的锚点,精度有限,仅示趋势。 | 最后检查 2026-08-24: 无更新(web_search 未见比 4/15 as_of 更新的含明确累计净头寸数字的新文章)",
+  "note": "图=COMEX白银投行(bullion banks)累计与月度 issues/stops。蓝线=累计净头寸(千盎司),黑线=月度净。累计线走高=做市商净接货(stop,看涨囤货);走低=净交货(issue,压价)。真实可每周更新的做市商头寸方向请看下方『白银做市商头寸(CFTC COT)』一手数据section。此图数值为从公开图目视手抄的锚点,精度有限,仅示趋势。 | 最后检查 2026-08-26: 无早于既有锚点(2026-04-15)的新正文数字,Substack 近文(1-2月)为历史回顾无新累计值",
   "annotations": [
-    {"text": "截止4月15日:做市商囤筹码3200吨,占总库存约1/3", "color": "red"},
-    {"text": "对策(图作者观点):建立国储、夺其库存、打破价格控制", "color": "red"},
-    {"text": "累计净头寸2018-2020见顶~170K千oz后回落,2026回升至~100K", "color": "blue"}
+    {
+      "text": "截止4月15日:做市商囤筹码3200吨,占总库存约1/3",
+      "color": "red"
+    },
+    {
+      "text": "对策(图作者观点):建立国储、夺其库存、打破价格控制",
+      "color": "red"
+    },
+    {
+      "text": "累计净头寸2018-2020见顶~170K千oz后回落,2026回升至~100K",
+      "color": "blue"
+    }
   ],
   "points": [
-    {"date": "2009-06-30", "cumulative_koz": 0},
-    {"date": "2010-06-30", "cumulative_koz": -5000},
-    {"date": "2011-06-30", "cumulative_koz": 10000},
-    {"date": "2012-06-30", "cumulative_koz": 25000},
-    {"date": "2013-06-30", "cumulative_koz": 40000},
-    {"date": "2014-06-30", "cumulative_koz": 55000},
-    {"date": "2015-06-30", "cumulative_koz": 75000},
-    {"date": "2016-06-30", "cumulative_koz": 100000},
-    {"date": "2017-06-30", "cumulative_koz": 130000},
-    {"date": "2018-06-30", "cumulative_koz": 160000},
-    {"date": "2019-06-30", "cumulative_koz": 172000},
-    {"date": "2020-06-30", "cumulative_koz": 170000},
-    {"date": "2021-06-30", "cumulative_koz": 155000},
-    {"date": "2022-06-30", "cumulative_koz": 130000},
-    {"date": "2023-06-30", "cumulative_koz": 110000},
-    {"date": "2024-06-30", "cumulative_koz": 90000},
-    {"date": "2025-06-30", "cumulative_koz": 85000},
-    {"date": "2026-04-15", "cumulative_koz": 100000}
+    {
+      "date": "2009-06-30",
+      "cumulative_koz": 0
+    },
+    {
+      "date": "2010-06-30",
+      "cumulative_koz": -5000
+    },
+    {
+      "date": "2011-06-30",
+      "cumulative_koz": 10000
+    },
+    {
+      "date": "2012-06-30",
+      "cumulative_koz": 25000
+    },
+    {
+      "date": "2013-06-30",
+      "cumulative_koz": 40000
+    },
+    {
+      "date": "2014-06-30",
+      "cumulative_koz": 55000
+    },
+    {
+      "date": "2015-06-30",
+      "cumulative_koz": 75000
+    },
+    {
+      "date": "2016-06-30",
+      "cumulative_koz": 100000
+    },
+    {
+      "date": "2017-06-30",
+      "cumulative_koz": 130000
+    },
+    {
+      "date": "2018-06-30",
+      "cumulative_koz": 160000
+    },
+    {
+      "date": "2019-06-30",
+      "cumulative_koz": 172000
+    },
+    {
+      "date": "2020-06-30",
+      "cumulative_koz": 170000
+    },
+    {
+      "date": "2021-06-30",
+      "cumulative_koz": 155000
+    },
+    {
+      "date": "2022-06-30",
+      "cumulative_koz": 130000
+    },
+    {
+      "date": "2023-06-30",
+      "cumulative_koz": 110000
+    },
+    {
+      "date": "2024-06-30",
+      "cumulative_koz": 90000
+    },
+    {
+      "date": "2025-06-30",
+      "cumulative_koz": 85000
+    },
+    {
+      "date": "2026-04-15",
+      "cumulative_koz": 100000
+    }
   ]
 }
