@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-26",
+  "as_of": "2026-08-27",
   "politicians": [
     {
       "name": "Nancy Pelosi",
@@ -273,115 +273,35 @@
       "title": "参议员 (阿拉巴马) · 参议院 PTR",
       "trades": [
         {
-          "ticker": "BMY",
-          "asset": "Bristol-Myers Squibb Company",
+          "ticker": "TSCO",
+          "asset": "Tractor Supply Company",
           "dir_cn": "卖出",
           "direction": "Sale (Full)",
-          "txn_date": "04/15/2025",
+          "txn_date": "01/10/2025",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "CARR",
+          "asset": "Carrier Global Corp",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "01/10/2025",
           "amount_range": "$1,001 - $15,000"
         },
         {
-          "ticker": "PYPL",
-          "asset": "Paypal Holdings",
+          "ticker": "TXN",
+          "asset": "Texas Instruments Incorporated - Common Stock",
           "dir_cn": "卖出",
           "direction": "Sale (Full)",
-          "txn_date": "04/15/2025",
+          "txn_date": "01/10/2025",
           "amount_range": "$15,001 - $50,000"
         },
         {
-          "ticker": "USIG",
-          "asset": "iShares Broad USD Investment Grade Corporate Bond",
-          "dir_cn": "买入",
-          "direction": "Purchase",
-          "txn_date": "04/15/2025",
-          "amount_range": "$50,001 - $100,000"
-        },
-        {
-          "ticker": "JPM",
-          "asset": "JP Morgan Chase & Company",
+          "ticker": "DEO",
+          "asset": "Diageo Plc ADR",
           "dir_cn": "卖出",
           "direction": "Sale (Full)",
-          "txn_date": "04/15/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "GOOGL",
-          "asset": "Alphabet Cl A",
-          "dir_cn": "部分卖出",
-          "direction": "Sale (Partial)",
-          "txn_date": "04/15/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "AMGN",
-          "asset": "Amgen Inc",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "04/15/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "AAPL",
-          "asset": "Apple Inc",
-          "dir_cn": "部分卖出",
-          "direction": "Sale (Partial)",
-          "txn_date": "04/15/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "ADM",
-          "asset": "Archer Daniels Midland",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "04/15/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "CSX",
-          "asset": "CSX Corp",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "04/15/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "STZ",
-          "asset": "Constellation Brands Inc",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "04/15/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "DUK",
-          "asset": "Duke Energy Corp",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "04/15/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "GS",
-          "asset": "Goldman Sachs Group",
-          "dir_cn": "部分卖出",
-          "direction": "Sale (Partial)",
-          "txn_date": "04/15/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "LLY",
-          "asset": "Eli Lilly and Company",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "04/15/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "MA",
-          "asset": "Mastercard Inc",
-          "dir_cn": "部分卖出",
-          "direction": "Sale (Partial)",
-          "txn_date": "04/15/2025",
+          "txn_date": "01/10/2025",
           "amount_range": "$15,001 - $50,000"
         },
         {
@@ -389,8 +309,88 @@
           "asset": "Microsoft Corp",
           "dir_cn": "卖出",
           "direction": "Sale (Full)",
-          "txn_date": "04/15/2025",
+          "txn_date": "01/10/2025",
           "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "AAPL",
+          "asset": "Apple Inc",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "01/10/2025",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "AAPL",
+          "asset": "Apple Inc. - Common Stock",
+          "dir_cn": "部分卖出",
+          "direction": "Sale (Partial)",
+          "txn_date": "08/26/2024",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "MDT",
+          "asset": "Medtronic plc. Ordinary Shares",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "08/26/2024",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "CVS",
+          "asset": "CVS Health Corporation Common Stock",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "08/26/2024",
+          "amount_range": "$1,001 - $15,000"
+        },
+        {
+          "ticker": "UPS",
+          "asset": "United Parcel Service, Inc. Common Stock",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "08/26/2024",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "EIBLX",
+          "asset": "Eaton Vance Floating Rate Fund Insti Share\n                                        \n                                        \n                                        \n                                            \n                                                \n                                                    Company: EATON VANCE FLOATING RATE CLASS I",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "08/26/2024",
+          "amount_range": "$50,001 - $100,000"
+        },
+        {
+          "ticker": "ABNFX",
+          "asset": "The Bond Fd of America Class F-2 Shares\n                                        \n                                        \n                                        \n                                            \n                                                \n                                                    Company: AMERICAN BOND FUND OF AMERICA CL F2",
+          "dir_cn": "买入",
+          "direction": "Purchase",
+          "txn_date": "08/26/2024",
+          "amount_range": "$50,001 - $100,000"
+        },
+        {
+          "ticker": "WBA",
+          "asset": "Walgreens Boots Alliance, Inc. - Common Stock",
+          "dir_cn": "买入",
+          "direction": "Purchase",
+          "txn_date": "03/21/2024",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "PARA",
+          "asset": "Paramount Global - Class B Common Stock",
+          "dir_cn": "买入",
+          "direction": "Purchase",
+          "txn_date": "03/21/2024",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": null,
+          "asset": "ROLLS-ROYCE HOLDINGS PLC SPONSORED ADR",
+          "dir_cn": "买入",
+          "direction": "Purchase",
+          "txn_date": "03/21/2024",
+          "amount_range": "$1,001 - $15,000"
         }
       ],
       "n_filings": 22,

@@ -1,0 +1,203 @@
+{
+  "date": "2026-08-27",
+  "results": {
+    "vix": {
+      "key": "vix",
+      "value": 15.45,
+      "as_of": "2026-08-25",
+      "status": "ok"
+    },
+    "fear_greed": {
+      "value": 55.2,
+      "as_of": "2026-08-26",
+      "status": "ok",
+      "extra": {
+        "rating": "greed"
+      },
+      "key": "fear_greed"
+    },
+    "aaii_bull_bear": {
+      "value": -4.43,
+      "as_of": "2026-08-20",
+      "status": "ok",
+      "note": "AAII bull 35.47% / bear 39.90% (Wk of Aug 20), spread=-4.43; bear升近40%",
+      "key": "aaii_bull_bear"
+    },
+    "put_call": {
+      "value": 0.57,
+      "as_of": "2026-08-27",
+      "status": "ok",
+      "key": "put_call"
+    },
+    "bofa_fms_cash": {
+      "value": 3.5,
+      "as_of": "2026-08",
+      "status": "ok",
+      "key": "bofa_fms_cash"
+    },
+    "sofr_iorb": {
+      "key": "sofr_iorb",
+      "value": 1.0,
+      "as_of": "2026-08-27",
+      "status": "ok",
+      "extra": {
+        "sofr": 3.66,
+        "iorb": 3.65,
+        "sofr_as_of": "2026-08-25",
+        "iorb_as_of": "2026-08-27"
+      }
+    },
+    "margin_cost": {
+      "key": "margin_cost",
+      "value": 6.75,
+      "as_of": "2026-08-25",
+      "status": "ok"
+    },
+    "bank_funding_stress": {
+      "key": "bank_funding_stress",
+      "value": 9.0,
+      "as_of": "2026-08-25",
+      "status": "ok",
+      "extra": {
+        "cp3m": 3.8,
+        "tbill3m": 3.71,
+        "sofr": 3.66,
+        "spread_bps": 9.0
+      }
+    },
+    "margin_debt": {
+      "value": 1502.1,
+      "as_of": "2026-06-30",
+      "status": "ok",
+      "key": "margin_debt"
+    },
+    "margin_gdp": {
+      "key": "margin_gdp",
+      "value": 4.62,
+      "as_of": "2026-08-27",
+      "status": "ok"
+    },
+    "ipo_count": {
+      "value": 234.0,
+      "as_of": "2026-YTD",
+      "status": "ok",
+      "extra": {
+        "source": "stockanalysis",
+        "year": 2026
+      },
+      "key": "ipo_count"
+    },
+    "insider": {
+      "value": 0.793,
+      "as_of": null,
+      "status": "ok",
+      "extra": {
+        "source": "openinsider",
+        "note": "近期榜前100笔口径,趋势用"
+      },
+      "key": "insider"
+    },
+    "bofa_bull_bear": {
+      "value": 9.3,
+      "as_of": "2026-08-18",
+      "status": "ok",
+      "note": "BofA Bull&Bear 8月FMS降至9.3(7月9.5), 仍远超8.0卖出阈值; 现金3.5%创低, 股票配置近五年高位, 56%基金经理押注no landing",
+      "key": "bofa_bull_bear"
+    },
+    "hy_oas": {
+      "key": "hy_oas",
+      "value": 2.7,
+      "as_of": "2026-08-25",
+      "status": "ok"
+    },
+    "ad_line": {
+      "key": "ad_line",
+      "value": false,
+      "as_of": "2026-08-24",
+      "status": "ok",
+      "extra": {
+        "source": "NYSE A/D 腾落线(SP500 全成分股, Economic-Dashboard cron 真数据)",
+        "cumulative": 1864,
+        "advance_pct": 60.64,
+        "ad_net": 110,
+        "cum_recent_high": 1864,
+        "cum_lookback_high": 1864,
+        "cum_made_new_high": true,
+        "recent_advance_pct_avg": 53.7,
+        "breadth_confirmed": true,
+        "tickers": 501
+      }
+    },
+    "buffett": {
+      "value": 214.0,
+      "as_of": "2026-01-01",
+      "status": "ok",
+      "extra": {
+        "source": "FRED Z.1"
+      },
+      "key": "buffett"
+    },
+    "cape": {
+      "value": 41.98,
+      "as_of": "2026-08-26",
+      "status": "ok",
+      "key": "cape"
+    },
+    "yield_curve": {
+      "key": "yield_curve",
+      "value": 0.47,
+      "as_of": "2026-08-26",
+      "status": "ok"
+    },
+    "lei": {
+      "value": 0.58,
+      "as_of": "2026-06-01",
+      "status": "ok",
+      "extra": {
+        "cli_index": 100.8,
+        "source": "FRED OECD CLI",
+        "note": "OECD综合领先指标6月变化(替Conference Board付费LEI)"
+      },
+      "key": "lei"
+    },
+    "aaii_alloc": {
+      "value": 70.38,
+      "as_of": null,
+      "status": "ok",
+      "key": "aaii_alloc"
+    }
+  },
+  "cot": {
+    "gold": {
+      "as_of": "2026-08-18",
+      "open_interest": 406260,
+      "comm_long": 69050,
+      "comm_short": 327468,
+      "comm_net": -258418,
+      "noncomm_long": 256902,
+      "noncomm_short": 34713,
+      "noncomm_net": 222189,
+      "metal": "gold",
+      "comm_net_wow": -5778,
+      "comm_long_wow": -335,
+      "comm_short_wow": 5443,
+      "comm_surge": false
+    },
+    "silver": {
+      "as_of": "2026-08-18",
+      "open_interest": 120117,
+      "comm_long": 34672,
+      "comm_short": 79464,
+      "comm_net": -44792,
+      "noncomm_long": 38353,
+      "noncomm_short": 14728,
+      "noncomm_net": 23625,
+      "metal": "silver",
+      "comm_net_wow": -818,
+      "comm_long_wow": 2871,
+      "comm_short_wow": 3689,
+      "comm_surge": false
+    }
+  },
+  "generated_at": "2026-08-27T02:03:14.869104"
+}
