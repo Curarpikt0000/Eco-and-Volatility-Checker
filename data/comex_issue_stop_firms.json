@@ -1,6 +1,6 @@
 {
  "status": "ok",
- "generated": "2026-08-25T11:04:03",
+ "generated": "2026-08-28T11:08:05",
  "source": "双通道: archive PDF(cme_delivery_parser x坐标精确 per-firm) + Notion「Daily auto tracking」Activity Note 增量",
  "unit": "合约手数",
  "note": "三金属(金/银/铂) × 全部机构(含非银) × 日粒度 per-firm 明细。供 top10 交货/接货方排名与日/周/月聚合。",
@@ -25,19 +25,21 @@
  ],
  "coverage": {
   "start": "2026-01-06",
-  "end": "2026-08-21",
-  "days": 133,
+  "end": "2026-08-26",
+  "days": 136,
   "archive_end": "2026-06-05",
   "archive_days": 91,
-  "notion_days": 42,
+  "notion_days": 45,
   "pdfs_found": 133,
   "pdfs_parsed": 133,
   "parse_failed": 0,
   "total_mismatches": 0,
-  "notion_rows": 1316,
-  "notion_used": 86,
+  "notion_rows": 1325,
+  "notion_used": 92,
   "notion_error": "",
-  "notion_unmapped_firms": []
+  "notion_unmapped_firms": [
+   "Straits"
+  ]
  },
  "parse_failures": [],
  "total_mismatches": [],
@@ -6660,6 +6662,149 @@
      "s": 3,
      "s_c": 3
     }
+   },
+   "2026-08-24": {
+    "Deutsche Bank": {
+     "i": 114,
+     "s": 0,
+     "i_h": 114
+    },
+    "BMO": {
+     "i": 320,
+     "s": 0,
+     "i_h": 320
+    },
+    "HSBC": {
+     "i": 300,
+     "s": 0,
+     "i_c": 300
+    },
+    "BofA": {
+     "i": 225,
+     "s": 0,
+     "i_h": 225
+    },
+    "ADM": {
+     "i": 1,
+     "s": 364,
+     "i_c": 1,
+     "s_c": 364
+    },
+    "CME": {
+     "i": 1080,
+     "s": 108,
+     "i_h": 1080,
+     "s_h": 108
+    },
+    "Wells Fargo": {
+     "i": 0,
+     "s": 106,
+     "s_h": 106
+    },
+    "JP Morgan": {
+     "i": 0,
+     "s": 666,
+     "s_c": 666
+    },
+    "RBC": {
+     "i": 0,
+     "s": 64,
+     "s_c": 64
+    },
+    "Advantage": {
+     "i": 0,
+     "s": 699,
+     "s_c": 699
+    },
+    "Dorman": {
+     "i": 0,
+     "s": 32,
+     "s_c": 32
+    },
+    "Interactive Brokers": {
+     "i": 0,
+     "s": 1,
+     "s_c": 1
+    }
+   },
+   "2026-08-25": {
+    "Advantage": {
+     "i": 8,
+     "s": 0,
+     "i_c": 8
+    },
+    "ADM": {
+     "i": 5,
+     "s": 0,
+     "i_c": 5
+    },
+    "Wells Fargo": {
+     "i": 0,
+     "s": 4,
+     "s_h": 4
+    },
+    "JP Morgan": {
+     "i": 0,
+     "s": 8,
+     "s_c": 8
+    },
+    "RBC": {
+     "i": 0,
+     "s": 1,
+     "s_c": 1
+    }
+   },
+   "2026-08-26": {
+    "Deutsche Bank": {
+     "i": 657,
+     "s": 0,
+     "i_h": 657
+    },
+    "SG": {
+     "i": 8,
+     "s": 0,
+     "i_c": 8
+    },
+    "Dorman": {
+     "i": 2,
+     "s": 0,
+     "i_c": 2
+    },
+    "BMO": {
+     "i": 169,
+     "s": 0,
+     "i_h": 169
+    },
+    "Advantage": {
+     "i": 71,
+     "s": 0,
+     "i_c": 71
+    },
+    "Wells Fargo": {
+     "i": 0,
+     "s": 94,
+     "s_h": 94
+    },
+    "BofA": {
+     "i": 0,
+     "s": 536,
+     "s_h": 536
+    },
+    "JP Morgan": {
+     "i": 0,
+     "s": 160,
+     "s_c": 160
+    },
+    "RBC": {
+     "i": 0,
+     "s": 115,
+     "s_c": 115
+    },
+    "ADM": {
+     "i": 0,
+     "s": 2,
+     "s_c": 2
+    }
    }
   },
   "Silver": {
@@ -12713,6 +12858,80 @@
      "i": 0,
      "s": 3,
      "s_u": 3
+    }
+   },
+   "2026-08-24": {
+    "Marex": {
+     "i": 20,
+     "s": 0,
+     "i_c": 20
+    },
+    "CME": {
+     "i": 20,
+     "s": 4,
+     "i_h": 20,
+     "s_h": 4
+    },
+    "Wells Fargo": {
+     "i": 0,
+     "s": 8,
+     "s_h": 8
+    },
+    "JP Morgan": {
+     "i": 0,
+     "s": 5,
+     "s_c": 5
+    },
+    "Advantage": {
+     "i": 0,
+     "s": 21,
+     "s_c": 21
+    },
+    "ADM": {
+     "i": 0,
+     "s": 2,
+     "s_c": 2
+    }
+   },
+   "2026-08-25": {
+    "Advantage": {
+     "i": 1,
+     "s": 0,
+     "i_c": 1
+    },
+    "Wells Fargo": {
+     "i": 0,
+     "s": 1,
+     "s_h": 1
+    }
+   },
+   "2026-08-26": {
+    "Deutsche Bank": {
+     "i": 100,
+     "s": 0,
+     "i_h": 100
+    },
+    "Advantage": {
+     "i": 3,
+     "s": 5,
+     "i_c": 3,
+     "s_c": 5
+    },
+    "ADM": {
+     "i": 1,
+     "s": 0,
+     "i_c": 1
+    },
+    "CME": {
+     "i": 5,
+     "s": 1,
+     "i_h": 5,
+     "s_h": 1
+    },
+    "BofA": {
+     "i": 0,
+     "s": 100,
+     "s_h": 100
     }
    }
   },

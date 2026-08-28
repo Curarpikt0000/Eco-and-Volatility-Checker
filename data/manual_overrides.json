@@ -5,14 +5,16 @@
     "status": "ok"
   },
   "put_call": {
-    "value": 0.57,
-    "as_of": "2026-08-27",
-    "status": "ok"
+    "value": 0.64,
+    "as_of": "2026-08-26",
+    "status": "ok",
+    "note": "CBOE equity put/call 0.64 (Aug 26, YCharts); Total P/C 0.83"
   },
   "insider": {
     "value": 0.27,
-    "as_of": "2026-08-27",
-    "status": "ok"
+    "as_of": "2026-08-01",
+    "status": "ok",
+    "note": "GuruFocus insider buy/sell 0.27 (月度, as of 2026-08-01, 30.8%低于长期均值0.39)"
   },
   "lei": {
     "value": 0.2,
@@ -33,15 +35,16 @@
     "note": "市场广度真数据(RSP/SPY东财API)判定: SPY 8/13创近高但广度确认(ratio距高点<2%), 无顶背离"
   },
   "aaii_bull_bear": {
-    "value": -4.43,
-    "as_of": "2026-08-20",
+    "value": -11.5,
+    "as_of": "2026-08-26",
     "status": "ok",
-    "note": "AAII bull 35.47% / bear 39.90% (Wk of Aug 20), spread=-4.43; bear升近40%"
+    "note": "AAII bull 32.9% / bear 44.4% / neutral 22.6% (Wk of Aug 26); spread=-11.5 (前周-4.4); bear创近高44.4%连29周高于均值; neutral创异常低"
   },
   "margin_debt": {
-    "value": 1502.07,
-    "as_of": "2026-06-30",
-    "status": "ok"
+    "value": 1417.0,
+    "as_of": "2026-07-31",
+    "status": "ok",
+    "note": "FINRA margin debt 7月$1,417.0B, 环比-5.7%(-$85B)为记录级最大单月降幅, 结束三连升; YoY +38.6%"
   },
   "bofa_fms_cash": {
     "value": 3.5,
