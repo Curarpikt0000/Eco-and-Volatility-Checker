@@ -536,3 +536,36 @@ AGENTS.md 的 Cron 段仍描述旧版日报口径，需 Chao 授权后补写。
 - [ ] `AGENTS.md` 未同步本轮新事实（kol_store SSOT / 双 KOL 观点表分工 / Hermes 独立线 18 表 /
       血缘三分法）—— 属 protected 文件，需 Chao 在场时触发。
 - [ ] 承接上节未清：`except: pass/continue` 技术债；`_stress_panel_svg` axis 与除零；BIS API 406。
+
+## 2026-08-29 / 08-30
+
+> 本两日 Telegram 对话主体在其它项目（Notion-Summary 批量笔记、Forecast-Checker 补跑），
+> 与本项目直接相关的只有下面一条用户指令，其余一律不记。
+
+### 决策
+
+- **Chao 原话（2026-08-29，针对 crawl 调度）**：
+  「整体的那个你的 crawl 应该是**每天都 run，而不是只有工作日**。」
+  该指令是在 Forecast-Checker 每日增量 crawl 的上下文里发出的，措辞是「整体的那个你的 crawl」，
+  指向**通用口径而非单一 job**。
+  本项目 `eco-vol-01-daily-scan-report` 当前排期为 `0 11 * * 1-5`（**仅工作日**，
+  自 2026-08-12 起所有 jobs.json 备份均为此值，从未改过），与该口径不一致。
+  **未自行改动**——改排期属配置写入，且指令是否覆盖本项目需 Chao 一句话确认（见待办）。
+
+### 事实与配置
+
+- 本项目 4 个 cron 现状（JST）：
+  `eco-vol-01-daily-scan-report` `0 11 * * 1-5` ·
+  `eco-vol-weekly-report` `0 11 * * 6` ·
+  `eco-vol-selfheal-watchdog` `20 * * * *` ·
+  `eco-vol-context-distill` `0 6 * * *`（本归档器，已是全周）。
+- 8/30 为周日，daily 按现排期不跑；最近一次仓库产出为 `52e48d8 weekly 2026-W35`（8/29 周报）。
+
+### 待办
+
+- [ ] **确认「crawl 每天跑」是否覆盖本项目**：若是，`eco-vol-01-daily-scan-report`
+      改 `0 11 * * *`。需一并想清周末口径——FRED/COT/拍卖等源周末无新值，
+      周末跑会写入与周五相同的数据行（`skip_none` 保护下不会抹真值，但 DB 会多出重复日行），
+      KOL / web 源则周末仍有新内容。建议方案：周末照跑但对无更新的数值源不新建行。
+- [ ] 承接上节全部未清项（P4 cron prompt 出处铁律、出处缺口 2564 条、月报三件套、
+      staged 未 commit 的 kol_store 相关改动、AGENTS.md 同步）。
