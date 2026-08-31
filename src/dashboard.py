@@ -814,9 +814,23 @@ def _kol_changes_html(kol_changes, period="week"):
     # 顶部总览
     since = kol_changes.get("since", "")
     total = kol_changes.get("total", 0)
-    head = (f'<div class="kol-overview">{_pl} KOL 状态变化（对比基准 <b>{_esc(since)}</b>）共 '
-            f'<b>{total}</b> 位 KOL 主导方向转向，涉及 <b>{len(modules)}</b> 个模块。'
-            f'<span class="kol-ov-note">↑转多(变乐观) · ↓转空(变谨慎/逆向买点)</span></div>')
+    if kol_changes.get("cumulative"):
+        # ★月度=稳定度口径(非端点转向)。口径差异必须写在脸上, 避免与周/日混读。
+        ns = kol_changes.get("n_stable", 0)
+        nf = kol_changes.get("n_flip", 0)
+        nsoft = kol_changes.get("n_soft", 0)
+        head = (f'<div class="kol-overview">本月 KOL 立场稳定度（{_esc(since)} 以来全月逐日快照）：'
+                f'<b>{nf}</b> 位跨多空反转、<b>{nsoft}</b> 位仅强度摆动、'
+                f'<b>{ns}</b> 位全月稳定，共 <b>{total}</b> 位。'
+                f'<span class="kol-ov-note">⚠️ 本档口径与本日/本周不同：'
+                f'日/周看「首尾对比的转向」，本月看「整月待过几个阵营」。'
+                f'月内多空来回者在首尾对比下会被抵消成「没变」，故本档改判稳定性。'
+                f'「跨多空反转」才是真换边；「强度摆动」只是强烈看多↔看多这类档位漂移，'
+                f'未离开原阵营；因标注精度不足，不声称具体转向次数</span></div>')
+    else:
+        head = (f'<div class="kol-overview">{_pl} KOL 状态变化（对比基准 <b>{_esc(since)}</b>）共 '
+                f'<b>{total}</b> 位 KOL 主导方向转向，涉及 <b>{len(modules)}</b> 个模块。'
+                f'<span class="kol-ov-note">↑转多(变乐观) · ↓转空(变谨慎/逆向买点)</span></div>')
 
     html = head
     _meta = _kol_meta()
@@ -827,6 +841,7 @@ def _kol_changes_html(kol_changes, period="week"):
         changes = m.get("changes", [])
         if not changes:
             continue
+        _unit = "位" if kol_changes.get("cumulative") else "转向"
         cards = ""
         for ch in changes:
             pc = dir_cls.get(ch["prev_dir"], "n")
@@ -840,6 +855,33 @@ def _kol_changes_html(kol_changes, period="week"):
                 extra += f'<div class="kol-tgt">标的：{_esc(targets)}</div>'
             # Bug1 修复: 状态变化卡片补背景介绍(与"观点全景"板块口径一致, 均取名册 institution/bio)
             extra += _kol_standing_html(_meta, ch.get("kol", ""))
+            # 月度稳定度口径: 卡片头显示 稳定/软摆动/跨多空 三级徽章 + 阵营 + 样本天数
+            # ★2026-08-31 分三级(实测): 只分"稳定/反复"两级会把 Michael Saylor 这种
+            #   强烈看多→看多 的细档漂移(掺个中性档)与真·多空反转混为一谈, 误导交易员。
+            #   flip=True 才是真跨越多空(40人); 仅多↔中/空↔中 摆动(32人)单列一级。
+            if ch.get("stable") is not None:
+                if ch.get("stable"):
+                    _sb = ('<span class="kol-arrow kol-flat">● 全月稳定</span>'
+                           f'<span class="kol-date">{_esc(ch.get("camps",""))}阵营 · '
+                           f'{ch.get("days_seen",0)}天样本</span>')
+                elif ch.get("flip"):
+                    _sb = ('<span class="kol-arrow kol-down">⇄ 跨多空反转</span>'
+                           f'<span class="kol-date">跨 {_esc(ch.get("camps",""))} · '
+                           f'{ch.get("days_seen",0)}天样本</span>')
+                else:
+                    _sb = ('<span class="kol-arrow kol-flat">～ 强度摆动</span>'
+                           f'<span class="kol-date">未换阵营 {_esc(ch.get("camps",""))} · '
+                           f'{ch.get("days_seen",0)}天样本</span>')
+                _pathv = (ch.get("path") or "").strip()
+                _path_html = (f'<div class="kol-shift">{_esc(_pathv)}</div>'
+                              if _pathv else "")
+                cards += f"""<div class="kol-item kol-drill" data-kol="{_esc(ch['kol'])}" tabindex="0" role="button">
+                  <div class="kol-line"><b>{_esc(ch['kol'])}</b> {_sb}</div>
+                  {_path_html}
+                  {extra}
+                  <div class="kol-more">点击查看该 KOL 全部观点 →</div>
+                </div>"""
+                continue
             cards += f"""<div class="kol-item kol-drill" data-kol="{_esc(ch['kol'])}" tabindex="0" role="button">
               <div class="kol-line"><b>{_esc(ch['kol'])}</b> {_shift_badge(ch['prev_dir'], ch['new_dir'])} <span class="kol-date">{_esc(ch['date'])}</span></div>
               <div class="kol-shift"><span class="kdir kdir-{pc}">{_esc(ch['prev_dir'])}</span> → <span class="kdir kdir-{nc}">{_esc(ch['new_dir'])}</span></div>
@@ -850,7 +892,7 @@ def _kol_changes_html(kol_changes, period="week"):
             f'<div class="h-module" style="border-color:{color}">'
             f'<div class="h-module-title" style="background:{color}">'
             f'<span class="h-mod-dot"></span>{_esc(sector)}<span class="h-mod-en">{_esc(en)}</span>'
-            f'<span class="h-mod-n">{len(changes)} 转向</span></div>'
+            f'<span class="h-mod-n">{len(changes)} {_unit}</span></div>'
             f'<div class="kol-mod-inner">{cards}</div></div>'
         )
     return html

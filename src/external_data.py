@@ -527,19 +527,27 @@ _KOL_SECTOR_COLOR = {
 
 
 def kol_cumulative_changes(period="month"):
-    """★累计口径转向(Chao 2026-08-31 采纳): 统计窗口内【逐日相邻】发生过的所有方向切换,
-    而不是首尾两个端点对比。
+    """★月度口径(Chao 2026-08-31 采纳, 经实测两轮修正后定稿)。
 
-    为什么需要它: 端点对比会把「月初看多→月中转空→月末又转多」的人判为『没变』。
-    实测 2026-08: 端点口径本月仅 2 人转向, 而本周(端点)就有 75 人 —— 端点口径在长窗口
-    下会系统性抵消掉中途摆动, 给出「市场共识没变」的错误结论。累计口径如实反映活跃度。
+    ── 为什么不用端点对比 ──
+    端点对比(首尾两天)会把「月初看多→月中转空→月末又转多」判为『没变』。
+    实测 2026-08: 端点口径本月仅 2 人转向, 而本周(端点)就有 75 人, 属系统性失真。
 
-    每人只保留其窗口内【最后一次】切换作为展示主体, 另附:
-      n_flips = 该人在窗口内切换总次数
-      round_trip = 是否已摆回起点方向(净变化为零, 提示这是噪音而非趋势)
-      path = 完整方向路径(如 看多→看空→看多)
-    返回 [{kol,sector,prev_dir,new_dir,date,comments,targets,n_flips,round_trip,path},...]
-    绝不编: 无有效方向的记录不参与判定。
+    ── 为什么也不逐次展示切换 ──
+    实测发现快照的 direction 标注质量不足以支撑「月内第 N 次转向」这种精度:
+    Jeffrey Gundlach 8/26-8/31 四天内容几乎是同一件事(不降息 / 押现金黄金 /
+    AI芯片是顶部信号), 却被标成 看空→看多→看空; 且"25%黄金的防御姿态"被标看多,
+    实为对黄金看多+对市场看空混在一个字段。逐次展示 = 把标注噪音当市场信号。
+    (已试过按 多/空/中 三阵营归并, 387 次仅降到 253 次, 未解决根本问题。)
+
+    ── 最终口径: 只输出「本月是否稳定」这一诚实结论 ──
+    对每人统计其月内出现过的【阵营集合】:
+      stable=True  → 全月只落在一个阵营, 立场稳定(这个结论数据撑得住)
+      stable=False → 月内在多个阵营间出现过, 标为『反复/不稳定』, 不声称具体几次
+    展示主体 = 该人月内最后一次有效观点; days_seen = 月内被抓到的天数(可信度参考)。
+    返回 [{kol,sector,prev_dir,new_dir,date,comments,targets,
+           stable,camps,days_seen,path}...]
+    绝不编: 无有效方向不参与; 不输出无法支撑的切换次数。
     """
     snaps = load_kol_daily_snapshots()
     if len(snaps) < 2:
@@ -547,30 +555,20 @@ def kol_cumulative_changes(period="month"):
     dates = sorted(snaps.keys())
     win_start, win_end, _ = _kol_period_window(period)
     win = [d for d in dates if win_start <= d <= win_end]
-    # 需要窗口起点之前一天作为初始方向基准
-    before = [d for d in dates if d < win_start]
-    if before:
-        win = [before[-1]] + win
     if len(win) < 2:
         return []
 
     _invalid = {"", "未找到", "无", "n/a", "未知", "数据滞后", "-", "—"}
 
-    # ★方向粗粒度归并(Chao 2026-08-31 实测必须):
-    #   原始 direction 有 强烈看多/看多/中性偏多/分歧/中性/中性偏空/看空/强烈看空 等细档,
-    #   同一份观点在不同日的抓取里常在相邻细档间漂移(如"看空"↔"中性偏空"),
-    #   直接逐档比对会把【标注噪音】当成【真实转向】。
-    #   实测 Jeffrey Gundlach 8/26-8/31 四天内容几乎同一件事(不降息/押现金黄金/AI芯片顶部),
-    #   却被标成 看空→看多→看空; 全月记 11 次切换, 绝大多数不是真的改主意。
-    #   故只认【多 / 空 / 中性】三大阵营之间的跨越, 阵营内漂移不计。
     def _camp(v):
+        """粗粒度阵营: 只分 多/空/中, 不认细档差异(细档漂移是标注噪音)。"""
         if not v:
             return None
         if "看多" in v:
             return "多"
         if "看空" in v:
             return "空"
-        return "中"                      # 分歧/中性 等
+        return "中"
 
     def _dir(day, kol):
         rec = snaps.get(day, {}).get(kol)
@@ -579,40 +577,52 @@ def kol_cumulative_changes(period="month"):
         v = (rec.get("direction") or "").strip()
         return None if v in _invalid else v
 
-    # 收集窗口内每个 KOL 的【阵营】序列(只在跨阵营时记一笔, 阵营内漂移忽略)
-    seq = {}
+    hist = {}
     for d in win:
         for kol in snaps.get(d, {}):
             v = _dir(d, kol)
             if v is None:
                 continue
-            c = _camp(v)
-            s = seq.setdefault(kol, [])
-            if not s or s[-1][2] != c:      # 只在【阵营】变化时记一笔
-                s.append((d, v, c))
+            hist.setdefault(kol, []).append((d, v, _camp(v)))
 
     out = []
-    for kol, s in seq.items():
+    for kol, s in hist.items():
         if len(s) < 2:
-            continue                        # 窗口内从未跨阵营
-        flips = len(s) - 1
-        first_camp, last_camp = s[0][2], s[-1][2]
-        last_day, prev_dir = s[-1][0], s[-2][1]
+            continue                        # 月内只出现一次, 无从判断稳定与否
+        camps = sorted({c for _d, _v, c in s})
+        _cs = set(camps)
+        # ★2026-08-31 实测分级: 只看"阵营数>1"会把 Michael Saylor 这种
+        #   强烈看多→看多 的细档漂移(掺了个中性档)也判成"立场反复", 误导交易员。
+        #   故分两级: flip=真跨越多空(camps 同含 多与空, 实测 40 人)
+        #            soft=仅多↔中 或 空↔中 摆动(未换阵营, 实测 32 人)
+        _flip = ("多" in _cs and "空" in _cs)
+        _stable = (len(camps) == 1)
+        last_day, last_dir = s[-1][0], s[-1][1]
         rec = snaps.get(last_day, {}).get(kol) or {}
+        # 展示用的 prev: 取最后一条之前、阵营不同的最近一条(没有则同向)
+        prev_dir = last_dir
+        for d0, v0, c0 in reversed(s[:-1]):
+            if c0 != s[-1][2]:
+                prev_dir = v0
+                break
         out.append({
             "kol": kol,
             "sector": rec.get("sector", ""),
             "prev_dir": prev_dir,
-            "new_dir": s[-1][1],
+            "new_dir": last_dir,
             "date": last_day,
             "comments": (rec.get("comments") or "")[:300],
             "targets": _tgs(rec.get("targets"), 150),
-            "n_flips": flips,
-            "round_trip": bool(flips >= 2 and first_camp == last_camp),
-            "path": "→".join(v for _, v, _c in s),
+            "stable": _stable,
+            "flip": _flip,
+            "camps": "/".join(camps),
+            "days_seen": len(s),
+            "path": "→".join(v for _d, v, _c in s[-6:]),   # 仅末 6 条供人工核查
         })
-    # 切换次数多的排前面(最活跃/最动摇的先看)
-    return sorted(out, key=lambda x: (-x["n_flips"], x["kol"]))
+    # 排序: 真跨越多空的排最前(交易含义最强), 其次仅多↔中/空↔中 摆动, 稳定的最后;
+    #       同级按被抓到天数降序(样本足的更可信)
+    return sorted(out, key=lambda x: (not x["flip"], x["stable"],
+                                      -x["days_seen"], x["kol"]))
 
 
 def kol_stance_changes_grouped(days=None, period="week"):
@@ -630,6 +640,9 @@ def kol_stance_changes_grouped(days=None, period="week"):
     #   实测本月仅 2 人 vs 本周 75 人, 属系统性失真而非平滑。
     cumulative = (period == "month")
     if cumulative:
+        # ★不过滤 stable: 月档头部文案本就分列「反复 / 稳定」两类, 卡片徽章也各自区分,
+        #   全量展示才能回答「谁一直没动摇」。(2026-08-31 我一度误加过滤, 会让
+        #   n_stable 恒为 0、头部文案自相矛盾, 已撤销。)
         raw = kol_cumulative_changes(period=period)
     else:
         raw = kol_weekly_changes(period=period)
@@ -658,9 +671,11 @@ def kol_stance_changes_grouped(days=None, period="week"):
             "date": ch.get("date", ""),
             "comments": (ch.get("comments") or "")[:300],
             "targets": _tgs(ch.get("targets"), 150),
-            # 累计口径专有: 切换次数 / 是否已摆回 / 完整路径(端点口径下为默认值)
-            "n_flips": ch.get("n_flips", 1),
-            "round_trip": bool(ch.get("round_trip")),
+            # 月度累计口径专有字段(端点口径下为默认值)
+            "stable": ch.get("stable"),
+            "flip": ch.get("flip"),
+            "camps": ch.get("camps", ""),
+            "days_seen": ch.get("days_seen", 0),
             "path": ch.get("path", ""),
         })
     # 模块内按日期降序; 模块按转向数降序
@@ -668,12 +683,17 @@ def kol_stance_changes_grouped(days=None, period="week"):
         g["changes"].sort(key=lambda x: x["date"], reverse=True)
     modules = sorted(groups.values(), key=lambda g: len(g["changes"]), reverse=True)
     total = sum(len(g["changes"]) for g in modules)
-    # 累计口径附加统计: 总切换人次 + 已摆回(净变化为零)人数
-    flips_total = sum(c.get("n_flips", 1) for g in modules for c in g["changes"])
-    round_trips = sum(1 for g in modules for c in g["changes"] if c.get("round_trip"))
+    # 月度口径附加统计: 立场稳定 / 跨多空反转 / 仅强度摆动 三级
+    n_stable = sum(1 for g in modules for c in g["changes"] if c.get("stable"))
+    n_flip = sum(1 for g in modules for c in g["changes"]
+                 if c.get("stable") is False and c.get("flip"))
+    n_soft = sum(1 for g in modules for c in g["changes"]
+                 if c.get("stable") is False and not c.get("flip"))
+    n_unstable = n_flip + n_soft
     return {"since": since, "period": period, "days": days,
-            "cumulative": cumulative, "flips_total": flips_total,
-            "round_trips": round_trips,
+            "cumulative": cumulative,
+            "n_stable": n_stable, "n_unstable": n_unstable,
+            "n_flip": n_flip, "n_soft": n_soft,
             "total": total, "modules": modules}
 
 
