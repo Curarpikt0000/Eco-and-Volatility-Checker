@@ -1,6 +1,8 @@
 {
  "date": "2026-08-31",
- "all": [
+ "count": 127,
+ "source": "Eco independent daily crawl (web_search 全量 KOL)",
+ "kols": [
   {
    "kol": "Kenneth Rogoff（哈佛大学 Maurits C. Boas 国际经济学讲席教授 / IMF 前首席经济学家）",
    "sector": "宏观货币与金融体系",
@@ -25,8 +27,7 @@
      "url": "https://www.bloomberg.com/news/articles/2026-08-28/harvard-s-rogoff-says-us-needs-shock-to-trigger-action-on-debt",
      "date": "2026-08-28"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Felix Zulauf（Zulauf Consulting 创始人 / 前 UBS 全球策略师 / Barron's Roundtable 30年成员）",
@@ -52,8 +53,7 @@
      "url": "https://www.youtube.com/watch?v=rwBA49Ii_jw",
      "date": "2026-01-25"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Felix Prehn",
@@ -79,8 +79,7 @@
      "url": "https://podcast.goatacademy.org/",
      "date": "2026-08-26"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Ricardo Evangelista",
@@ -106,8 +105,7 @@
      "url": "https://www.activtrades.com/en/market-analysis",
      "date": "2026-08-26"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Bart Melek",
@@ -133,8 +131,7 @@
      "url": "https://www.investing.com/news/commodities-news/gold-prices-set-to-exceed-4400-in-first-half-of-2026-td-securities-93CH-4277029",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Goldman Sachs",
@@ -160,8 +157,7 @@
      "url": "https://www.kitco.com/news/article/2026-01-22/goldman-sachs-raises-2026-gold-price-target-5400oz-private-sector-joins",
      "date": "2026-01-22"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Andrew Maguire（Kinesis Money 总监 / 贵金属市场吹哨人）",
@@ -187,8 +183,7 @@
      "url": "https://kinesis.money/live-from-the-vault/china-lights-fort-knox-gold-revaluation-fuse/",
      "date": "2026-07-30"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Neil Howe",
@@ -214,12 +209,10 @@
      "url": "https://www.youtube.com/watch?v=gBbrTxhJ5Ng",
      "date": "2026-01-18"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "David Hickson / Sentient Trader",
-   "id": "davidhicksonsentienttrader",
    "sector": "技术分析与周期",
    "direction": "看多",
    "targets": "黄金→20日周期峰；美元→40日峰",
@@ -237,13 +230,10 @@
      "url": "https://sentienttrader.com/the-macro-brief-5-august-2026/",
      "date": "2026-08-05"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Eric Hadik",
-   "id": "erichadik",
    "sector": "技术分析与周期",
    "direction": "看多",
    "targets": "贵金属处「2025.4-2026.4大牛市」阶段",
@@ -261,13 +251,10 @@
      "url": "https://www.linkedin.com/posts/eric-s-hadik_prepping-for-2026-golden-opportunity-activity-7418062935207448577-uKjM",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Charles Nenner",
-   "id": "charlesnenner",
    "sector": "技术分析与周期",
    "direction": "看多",
    "targets": "黄金触底$3,800后进新牛市；油看空",
@@ -285,13 +272,10 @@
      "url": "https://usawatchdog.com/big-losses-for-banks-coming-in-2026-charles-nenner/",
      "date": "2026-02"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Peter Goodburn / WaveTrack International",
-   "id": "petergoodburnwavetrackinternational",
    "sector": "技术分析与周期",
    "direction": "看多",
    "targets": "黄金safe-haven继续吸金；铜结构性短缺",
@@ -309,13 +293,10 @@
      "url": "https://www.wavetrack.com/",
      "date": "2026-08-13"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Glenn Neely",
-   "id": "glennneely",
    "sector": "技术分析与周期",
    "direction": "看多",
    "targets": "S&P 500进2026-2036新长牛；道指屡创新高",
@@ -333,13 +314,10 @@
      "url": "https://www.neowave.com/tradingblog/blog.asp?bid=125",
      "date": "2026-07-06"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Avi Gilburt",
-   "id": "avigilburt",
    "sector": "技术分析与周期",
    "direction": "看空",
    "targets": "黄金深度回调看$4,000下方至$3,800",
@@ -357,13 +335,10 @@
      "url": "https://www.elliottwavetrader.net/market-update/Losing-Steam-2026081310339369.html",
      "date": "2026-08-13"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Tom McClellan",
-   "id": "tommcclellan",
    "sector": "技术分析与周期",
    "direction": "看空",
    "targets": "股市仍处熊市阶段(至2025末/2026初)",
@@ -381,13 +356,10 @@
      "url": "https://www.youtube.com/watch?v=ylXt1LVf49w",
      "date": "2026-03-16"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Robert Prechter / Elliott Wave International",
-   "id": "robertprechterelliottwaveinternational",
    "sector": "技术分析与周期",
    "direction": "中性",
    "targets": "聚焦黄金/比特币波浪转折点(方向偏谨慎)",
@@ -405,13 +377,10 @@
      "url": "https://www.elliottwave.com/investors/the-elliott-wave-theorist/",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Amos Hochstein",
-   "id": "amos_hochstein",
    "sector": "资源与能源安全",
    "direction": "中性",
    "targets": "油价未反映地缘现实(偏低估)",
@@ -429,13 +398,10 @@
      "url": "https://www.energypolicy.columbia.edu/amos-hochstein-on-the-strait-of-hormuz-opening-and-where-the-war-is-headed/",
      "date": "2026-08"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Michael Widmer",
-   "id": "michael_widmer",
    "sector": "贵金属",
    "direction": "看多",
    "targets": "黄金2026均价$4,538/测$5,000-6,000；白银$100+",
@@ -453,13 +419,10 @@
      "url": "https://finance.yahoo.com/markets/commodities/articles/bank-america-stark-message-silver-091500000.html",
      "date": "2026-05-29"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Martin Armstrong",
-   "id": "martinarmstrong",
    "sector": "技术分析与周期",
    "direction": "看多",
    "targets": "黄金长期看$10,000；金与股同涨",
@@ -477,13 +440,10 @@
      "url": "https://www.canadianminingreport.com/blog/martin-armstrong-gold-to-10-000-as-europe-edges-toward-war-what-it-means-for-tsx-miners",
      "date": "2026-02"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Jim Rogers",
-   "id": "jim_rogers",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "长期看多金银(银或跑赢金)；近期或先回调",
@@ -501,13 +461,10 @@
      "url": "https://ceoworld.biz/2026/03/23/jim-rogers-on-gold-why-the-legendary-investor-refuses-to-sell-his-bullion/",
      "date": "2026-03-23"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Judy Shelton",
-   "id": "judy_shelton",
    "sector": "宏观货币与金融体系",
    "direction": "看多",
    "targets": "黄金为货币重置信号；倡黄金支持国债",
@@ -525,13 +482,10 @@
      "url": "https://www.monetary-metals.com/insights/podcasts/judy-sheltons-gold-standard-revival-plan/",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Nomi Prins",
-   "id": "nomi_prins",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "黄金年底$6,000(长期$10,000)；白银$120三位数",
@@ -549,13 +503,10 @@
      "url": "https://www.canadianminingreport.com/blog/dr-nomi-prins-at-the-rule-symposium-why-gold-is-headed-to-6-000-and-silver-to-triple-digits-despite-the-headlines",
      "date": "2026-07-12"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "William White",
-   "id": "william_white",
    "sector": "宏观货币与金融体系",
    "direction": "看空",
    "targets": "警示通胀目标制后遗症与金融脆弱性",
@@ -573,13 +524,10 @@
      "url": "https://williamwhite.ca/2026/",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Greg Mankiw",
-   "id": "greg_mankiw",
    "sector": "宏观货币与金融体系",
    "direction": "中性",
    "targets": "",
@@ -597,13 +545,10 @@
      "url": "https://gregmankiw.blogspot.com/2026/07/1873.html",
      "date": "2026-07-15"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Thomas Sargent",
-   "id": "thomas_sargent",
    "sector": "宏观货币与金融体系",
    "direction": "看多",
    "targets": "",
@@ -621,13 +566,10 @@
      "url": "https://news.cgtn.com/news/2026-04-03/Exclusive-with-Nobel-Laureate-in-Economic-Sciences-Thomas-Sargent-1M10cEGdGTe/p.html",
      "date": "2026-04-03"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Asha Sharma（微软企业副总裁）",
-   "id": "asha_sharma",
    "sector": "科技与未来趋势",
    "direction": "未找到",
    "targets": "",
@@ -645,13 +587,10 @@
      "url": "https://www.cnbc.com/2026/07/30/microsoft-xbox-asha-sharma-2030-plans.html",
      "date": "2026-07-30"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Chad Jones",
-   "id": "chad_jones",
    "sector": "宏观货币与金融体系",
    "direction": "中性",
    "targets": "",
@@ -669,13 +608,10 @@
      "url": "https://bcf.princeton.edu/events/chad-jones-chris-tonetti-on-past-automation-and-future-ai-how-weak-links-tame-the-growth-explosion/",
      "date": "2026-02-12"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Marc Andreessen",
-   "id": "marc_andreessen",
    "sector": "宏观货币与金融体系",
    "direction": "看多",
    "targets": "",
@@ -693,13 +629,10 @@
      "url": "https://eu.36kr.com/en/p/3631555994158340",
      "date": "2026-01"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Kevin Murphy（芝加哥大学经济学教授）",
-   "id": "kevin_murphy",
    "sector": "宏观货币与金融体系",
    "direction": "未找到",
    "targets": "",
@@ -717,13 +650,10 @@
      "url": "https://econicpartners.com/people/kevin-murphy/",
      "date": "2025-08-12"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Doug McMillon",
-   "id": "doug_mcmillon",
    "sector": "宏观货币与金融体系",
    "direction": "中性",
    "targets": "",
@@ -741,13 +671,10 @@
      "url": "https://apnews.com/article/walmart-quarter-earnings-inflation-tariffs-955945e03ffcc111389d62fa3103a051",
      "date": "2026-08-20"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Raj Chetty",
-   "id": "raj_chetty",
    "sector": "宏观货币与金融体系",
    "direction": "未找到",
    "targets": "",
@@ -765,13 +692,10 @@
      "url": "https://rajchetty.com/",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Jeremy Stein",
-   "id": "jeremy_stein",
    "sector": "宏观货币与金融体系",
    "direction": "看空",
    "targets": "",
@@ -784,13 +708,10 @@
      "url": "https://www.imf.org/en/publications/fandd/issues/2026/03/safeguarding-the-treasury-market-jeremy-stein",
      "date": "2026-03"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Karen Dynan",
-   "id": "karen_dynan",
    "sector": "宏观货币与金融体系",
    "direction": "看空",
    "targets": "",
@@ -808,13 +729,10 @@
      "url": "https://www.piie.com/events/2026/global-economic-prospects-spring-2026",
      "date": "2026-04"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Raghuram Rajan",
-   "id": "raghuram_rajan",
    "sector": "宏观货币与金融体系",
    "direction": "看空",
    "targets": "",
@@ -832,13 +750,10 @@
      "url": "https://www.youtube.com/watch?v=-9udbX_bxc0",
      "date": "2026-01-28"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Arminio Fraga",
-   "id": "arminio_fraga",
    "sector": "宏观货币与金融体系",
    "direction": "看空",
    "targets": "",
@@ -856,26 +771,20 @@
      "url": "https://veja.abril.com.br/paginas-amarelas/arminio-fraga-o-quadro-e-desastroso/",
      "date": "2026-07-24"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Peter Fisher",
-   "id": "peter_fisher",
    "sector": "宏观货币与金融体系",
    "direction": "未找到",
    "targets": "",
    "comments": "检索被同名Ken Fisher/Schiff污染,未找到本人2026观点",
    "detail": "",
    "detail_status": "none",
-   "sources": [],
-   "date": "2026-08-28",
-   "carried": true
+   "sources": []
   },
   {
    "kol": "Mervyn King",
-   "id": "mervyn_king",
    "sector": "宏观货币与金融体系",
    "direction": "中性",
    "targets": "",
@@ -893,13 +802,10 @@
      "url": "https://www.bloomberg.com/news/articles/2026-07-01/warsh-taps-ex-boe-chief-king-for-new-communications-task-force",
      "date": "2026-07-01"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Robert Kientz",
-   "id": "robert_kientz",
    "sector": "贵金属",
    "direction": "看多",
    "targets": "金约$5,500,银>$100",
@@ -917,13 +823,10 @@
      "url": "https://triangle-investor.com/interviews/silver-gold-market-insights/",
      "date": "2026-01-04"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Maria Smirnova",
-   "id": "maria_smirnova",
    "sector": "贵金属",
    "direction": "看多",
    "targets": "金已回升上$4,000,银回升过$60",
@@ -941,13 +844,10 @@
      "url": "https://nai500.com/blog/2026/08/is-the-gold-correction-over-two-asset-management-giants-weigh-in/",
      "date": "2026-08-10"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Craig Hamilton-Parker",
-   "id": "craig_hamilton_parker",
    "sector": "预测",
    "direction": "未找到",
    "targets": "",
@@ -960,13 +860,10 @@
      "url": "https://www.msn.com/en-us/politics/international-relations/new-nostradamus-who-predicted-pandemic-shares-five-chilling-2026-predictions/ar-AA1WGKGv",
      "date": "2026-01"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Ken Griffin（Citadel 创始人 / CEO）",
-   "id": "ken_griffin",
    "sector": "股权市场",
    "direction": "看空",
    "targets": "",
@@ -984,13 +881,10 @@
      "url": "https://www.cnbc.com/2026/08/21/citadel-situational-awareness-ken-griffin.html",
      "date": "2026-08-21"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Carl Icahn（Icahn Enterprises 创始人 / 董事长）",
-   "id": "carl_icahn",
    "sector": "股权市场",
    "direction": "看多",
    "targets": "",
@@ -1008,13 +902,10 @@
      "url": "https://www.insiderset.com/news/carl-icahn-icahn-q2-2026-13f-portfolio-changes-002243",
      "date": "2026-08-14"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Philippe Laffont（Coatue Management 创始人 / 首席投资官）",
-   "id": "philippe_laffont",
    "sector": "股权市场",
    "direction": "看多",
    "targets": "Anthropic十年内$5-7万亿估值",
@@ -1032,13 +923,10 @@
      "url": "https://www.businessinsider.com/hedge-fund-billionaire-coatue-ai-trade-stocks-chips-nvda-asml-2026-6",
      "date": "2026-06"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Daron Acemoglu",
-   "id": "daron_acemoglu",
    "sector": "宏观货币与金融体系",
    "direction": "看空",
    "targets": "",
@@ -1056,9 +944,7 @@
      "url": "https://fortune.com/2026/08/15/nobel-laureate-daron-acemoglu-liberal-democracy-book-stupid-ai-debate/",
      "date": "2026-08-15"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "William Watkins",
@@ -1079,8 +965,7 @@
      "url": "https://www.youtube.com/watch?v=ZS_U-32h9W8",
      "date": "2026-07"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Gary Wagner",
@@ -1101,8 +986,7 @@
      "url": "https://www.kitco.com/opinion/2026-08-28/golds-week-review-seven-session-rally-jackson-hole-rout",
      "date": "2026-08-28"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Edward Dowd",
@@ -1128,8 +1012,7 @@
      "url": "https://phinancetechnologies.com/Product_USEconomyOutlook2026.htm",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Kirill Kirilenko",
@@ -1150,8 +1033,7 @@
      "url": "https://www.crugroup.com/en/communities/thought-leadership/2026/gold-in-a-higher-price-higher-risk-world/",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Jim Curry",
@@ -1172,8 +1054,7 @@
      "url": "https://www.gold-eagle.com/authors/jim-curry",
      "date": "2026-08"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "James Turk",
@@ -1194,8 +1075,7 @@
      "url": "https://thesilverindustry.substack.com/p/james-turk-gold-over-eleven-thousand",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Jordan Roy-Byrne",
@@ -1216,8 +1096,7 @@
      "url": "https://thedailygold.com/author/tdg2013jordanrb/",
      "date": "2026-08-27"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Jesse Colombo",
@@ -1238,12 +1117,10 @@
      "url": "https://thebubblebubble.substack.com/",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Larry Lepard",
-   "id": "larry_lepard",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "金牛市处“第6-7局”，远未见顶",
@@ -1261,13 +1138,10 @@
      "url": "https://quoththeraven.substack.com/p/larry-lepard-2026-predictions-for",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Frank Giustra",
-   "id": "frank_giustra",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "当前非最终顶，真正抛物线上涨仍在后面",
@@ -1285,13 +1159,10 @@
      "url": "https://marketsanity.com/frank-giustra-next-round-of-qe-will-trigger-a-dollar-crisis/",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Dan Loeb",
-   "id": "dan_loeb",
    "sector": "股权市场",
    "direction": "中性",
    "targets": "加仓优质复利股(MSFT等)同时增加对冲、修剪周期股",
@@ -1309,13 +1180,10 @@
      "url": "https://www.danielscrivner.com/dan-loeb-trades-and-holdings-q2-2026/",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Todd \"Bubba\" Horowitz",
-   "id": "todd_bubba_horowitz",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "白银2026有上行目标；同时预警股市40-60%回调",
@@ -1333,13 +1201,10 @@
      "url": "https://marketsanity.com/gold-to-6000-silver-over-100-in-2026-fiat-con-game-exposed/",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Ronny Stoeferle",
-   "id": "ronny_stoeferle",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "白银$100+视为“确定性”，金银十年牛市后半程",
@@ -1357,13 +1222,10 @@
      "url": "https://ingoldwetrust.report/in-gold-we-trust-report/?lang=en",
      "date": "2026-05"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Massimiliano Castelli",
-   "id": "massimiliano_castelli",
    "sector": "宏观货币与金融体系",
    "direction": "看多",
    "targets": "看空美元长期、储备多元化利好黄金/欧元/人民币",
@@ -1381,13 +1243,10 @@
      "url": "https://www.linkedin.com/posts/massimiliano-castelli-phd-msc-6624125_a-new-playbook-for-reserve-management-activity-7473744013506973697-GPjU",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Alex Kuptsikevich",
-   "id": "alex_kuptsikevich",
    "sector": "贵金属与商品周期",
    "direction": "中性",
    "targets": "",
@@ -1405,13 +1264,10 @@
      "url": "https://www.fxstreet.com/author/alexander-kuptsekevich",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Bob Haberkorn",
-   "id": "bob_haberkorn",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "短期回调后地缘避险流将支撑金价续涨",
@@ -1424,13 +1280,10 @@
      "url": "https://www.reuters.com/world/india/gold-extends-gains-middle-east-war-boosts-safe-haven-demand-2026-03-03/",
      "date": "2026-03-03"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Marc Chandler",
-   "id": "marc_chandler",
    "sector": "宏观货币与金融体系",
    "direction": "看空",
    "targets": "美元长期熊市；预期收益率曲线陡峭化、商品走强",
@@ -1448,13 +1301,10 @@
      "url": "https://www.marctomarket.com/2026/08/bessent-doubles-down-dollar-slumps-but.html",
      "date": "2026-08"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "David Meger",
-   "id": "david_meger",
    "sector": "贵金属与商品周期",
    "direction": "中性",
    "targets": "",
@@ -1472,13 +1322,10 @@
      "url": "https://www.cnbc.com/2026/07/08/gold-wavers-as-investors-weigh-us-strikes-on-iran-await-fed-minutes.html",
      "date": "2026-07-08"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Timothy Arcuri",
-   "id": "timothy_arcuri",
    "sector": "股权市场",
    "direction": "看多",
    "targets": "英伟达NVDA目标价上调至$205(另有源$245)",
@@ -1496,13 +1343,10 @@
      "url": "https://www.cnbc.com/video/2026/08/24/ubs-tim-arcuri-looks-ahead-to-nvidia-q2-earnings.html",
      "date": "2026-08-24"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Jeff Currie",
-   "id": "jeff_currie",
    "sector": "资源与能源安全",
    "direction": "看多",
    "targets": "长期黄金$10,000；宣告新一轮商品超级周期",
@@ -1520,13 +1364,10 @@
      "url": "https://www.benzinga.com/markets/commodities/26/08/61360981/debasement-trade-commodities-jeff-currie-treasury-buybacks",
      "date": "2026-08"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Andy Schectman",
-   "id": "andy_schectman",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "白银按各项指标仍有大幅上行空间(有源提及$300)",
@@ -1544,13 +1385,10 @@
      "url": "https://investingnews.com/andy-schectman-gold-silver-forecast/",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Stewart Thomson",
-   "id": "stewart_thomson",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "金 $6,000+/oz",
@@ -1573,9 +1411,7 @@
      "url": "https://www.indexbox.io/blog/retired-merrill-lynch-broker-stewart-thomson-gold-copper-and-the-shift-away-from-the-dollar-april-2026/",
      "date": "2026-04-29"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Torsten Sløk",
@@ -1601,8 +1437,7 @@
      "url": "https://www.apollo.com/insights-news/insights/podcast/the-allocation/2026/06/2026-mid-year-outlook",
      "date": "2026-06"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Jeremy Grantham",
@@ -1628,8 +1463,7 @@
      "url": "https://www.webpronews.com/grantham-warns-ai-boom-is-bubble-predicts-50-market-crash-by-2026/",
      "date": "2026-01-20"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Jeff Snider",
@@ -1650,8 +1484,7 @@
      "url": "https://talkmarkets.com/article/the-eurodollar-framework-every-serious-investor-should-understand-1788014711",
      "date": "2026-08-29"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Bill Gross",
@@ -1672,8 +1505,7 @@
      "url": "https://www.businessinsider.com/bond-king-bill-gross-stock-market-outlook-ai-valuations-government-2026-1",
      "date": "2026-01-23"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Kyle Bass",
@@ -1699,8 +1531,7 @@
      "url": "https://www.cnbc.com/video/2026/04/30/watch-cnbcs-full-interview-with-rochefort-co-ceo-kyle-bass.html",
      "date": "2026-04-30"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "James Grant",
@@ -1726,8 +1557,7 @@
      "url": "https://www.grantspub.com/",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Lacy Hunt",
@@ -1753,8 +1583,7 @@
      "url": "https://www.advisorperspectives.com/articles/2026/08/17/lacy-hunt-turns-bearish-studying-reversal",
      "date": "2026-08-17"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Abhigya Anand",
@@ -1775,8 +1604,7 @@
      "url": "https://www.dkscore.com/jyotishmedium/2026-predictions-by-abhigya-anand-2176",
      "date": "2025-12-25"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Plai Navaracha",
@@ -1802,8 +1630,7 @@
      "url": "https://www.facebook.com/GoodTimesEN/posts/1483318267169952/",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Athos Salomé",
@@ -1824,8 +1651,7 @@
      "url": "https://www.history.co.uk/articles/athos-salome-predictions-2026",
      "date": "2025-12"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Anu Anand",
@@ -1835,8 +1661,7 @@
    "comments": "三次检索未找到该姓名对应的能源/资源领域市场观点",
    "detail": "",
    "detail_status": "none",
-   "sources": [],
-   "date": "2026-08-31"
+   "sources": []
   },
   {
    "kol": "David Icke",
@@ -1852,8 +1677,7 @@
      "url": "https://davidicke.com/2026/06/21/look-at-his-prediction-record-awash-with-monumentally-wrong-but-its-boosted-his-company-shareholdings-until-the-prediction-proves-to-be-wrong-and-he-makes-another-prediction-that/",
      "date": "2026-06-21"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Amanda Grace",
@@ -1879,8 +1703,7 @@
      "url": "https://factually.co/topics/amanda-grace-2026-prophecies",
      "date": "2026-05-15"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Dan Ives",
@@ -1906,8 +1729,7 @@
      "url": "https://www.businessinsider.com/ai-stocks-to-buy-2026-tech-dan-ives-wedbush-2025-12",
      "date": "2025-12-31"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Eric Nuttall",
@@ -1933,8 +1755,7 @@
      "url": "https://investingnews.com/eric-nuttall-oil-forecast/",
      "date": "2026-01-20"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Rory Johnston",
@@ -1960,8 +1781,7 @@
      "url": "https://www.commoditycontext.com/p/global-oil-data-deck-august-2026",
      "date": "2026-08-21"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Brandon Biggs",
@@ -1987,8 +1807,7 @@
      "url": "https://mycharisma.com/propheticrevival/brandon-biggs-warning-to-the-church-and-how-to-pray/",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Cathie Wood",
@@ -2014,8 +1833,7 @@
      "url": "https://global.morningstar.com/en-gb/markets/cathie-wood-tesla-bitcoin-whether-ai-is-bubble",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Doomberg / Kuppy",
@@ -2041,8 +1859,7 @@
      "url": "https://newsletter.doomberg.com/",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Michael Saylor",
@@ -2068,8 +1885,7 @@
      "url": "https://cointelegraph.com/news/michael-saylor-strategy-mstr-bitcoin-sell-speculation-btc",
      "date": "2026-05-22"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Chris Vermeulen",
@@ -2095,8 +1911,7 @@
      "url": "https://thetechnicaltraders.com/2026-market-warning-why-gold-silver-and-stocks-may-be-near-a-critical-turning-point/",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Ray Kurzweil",
@@ -2122,8 +1937,7 @@
      "url": "https://www.bostonmagazine.com/health/2026/02/11/ray-kurzweil-interview/",
      "date": "2026-02-11"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Ivan Zhao",
@@ -2144,8 +1958,7 @@
      "url": "https://www.techflowpost.com/en-US/article/31756",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Raoul Pal",
@@ -2171,8 +1984,7 @@
      "url": "https://www.51insights.xyz/p/raoul-pals-2026-playbook-dollar-debt",
      "date": "2025-11-04"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Vince Lanci",
@@ -2198,8 +2010,7 @@
      "url": "https://vblgoldfix.substack.com/archive",
      "date": "2026-08-30"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Steve Penny",
@@ -2225,8 +2036,7 @@
      "url": "https://triangle-investor.com/interviews/silver-gold-uranium-massive-upside-ahead-steve-penny/",
      "date": "2026-02-11"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Gareth Soloway",
@@ -2252,8 +2062,7 @@
      "url": "https://investingnews.com/gareth-soloway-gold-update/",
      "date": "2026-08"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "AG Thorson",
@@ -2279,12 +2088,10 @@
      "url": "https://www.fxempire.com/forecasts/article/gold-price-forecast-the-next-half-of-the-bull-market-begins-1614758",
      "date": "2026-08"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Robert Gottlieb",
-   "id": "robert_gottlieb",
    "sector": "交易与市场微观结构",
    "direction": "看多",
    "targets": "2026黄金温和上涨10-15%;白银波动更大潜力更高;结构性供给短缺",
@@ -2302,13 +2109,10 @@
      "url": "https://www.linkedin.com/posts/robert-gottlieb-519275319_gold-central-wgc-activity-7472633520805515264-Pteb",
      "date": "2026-06-16"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "David Garofalo",
-   "id": "david_garofalo",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "Gold Royalty 2026指引假设金价$5,150/oz;长期看债务/货币贬值驱动金价",
@@ -2326,13 +2130,10 @@
      "url": "https://www.marketscreener.com/news/gold-royalty-corporate-presentation-q1-2026-results-ce7f58d3d08ef123",
      "date": "2026-05-07"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Craig Hemke",
-   "id": "craig_hemke",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "黄金2026冲$6,000;白银$120;2026开年金银铜强势",
@@ -2350,13 +2151,10 @@
      "url": "https://marketsanity.com/craig-hemke-strong-start-to-2026-in-gold-silver-and-copper-macroeconomic-factors-that-matter/",
      "date": "2026-01-22"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Peter Krauth",
-   "id": "peter_krauth",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "白银今年底较现价再涨20-40%;突破$50后看$100并最终$300",
@@ -2374,13 +2172,10 @@
      "url": "https://www.sbcgold.com/blog/silver-is-gunning-for-50-and-eventually-300-peter-krauth/",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Daniel Ghali",
-   "id": "daniel_ghali",
    "sector": "交易与市场微观结构",
    "direction": "中性",
    "targets": "白银风险两面,曾做空于$93.15止损爆仓;年初预警13%未平仓量抛售致下杀;看好PGM(铂/钯)上行最强",
@@ -2398,13 +2193,10 @@
      "url": "https://www.advisorperspectives.com/articles/2026/01/02/gold-and-silver-advance-to-open-new-year-as-index-selling-looms",
      "date": "2026-01-02"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Robert Kiyosaki",
-   "id": "robert_kiyosaki",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "2026金$27K/比特币$250K;若危机后金$35K/银$200/比特币$750K/以太$95K",
@@ -2422,13 +2214,10 @@
      "url": "https://www.gate.com/news/detail/robert-kiyosaki-warns-of-2026-crash-doubles-down-on-bitcoin-gold-and-real-19816528",
      "date": "2026-03-27"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Rick Rule",
-   "id": "rick_rule",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "铀最高信心(SPUT/优质铀股,料涨25-50%+);金银看多但易钱已过;持~40%现金待回调",
@@ -2446,13 +2235,10 @@
      "url": "https://triangle-investor.com/articles/why-uranium-bull-market-is-far-from-over-rick-rule/",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Bob Coleman",
-   "id": "bob_coleman",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "金银长期价值储藏(无精确点位);警告2H2026→2027类比1929式杠杆melt-up后急跌",
@@ -2470,13 +2256,10 @@
      "url": "https://www.goldsilvervault.com/author/bob-coleman/",
      "date": "2026-05-17"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Jay Martin",
-   "id": "jay_martin",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "无本人具体点位;宽泛看多贵金属/矿业,称白银牛市「刚刚开始」",
@@ -2494,13 +2277,10 @@
      "url": "https://swpcayman.com/media/videos/uncovering-investment-trends-with-jay-martin-market-predictions-and-precious-metals-insights",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Willem Middelkoop",
-   "id": "willem_middelkoop",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "黄金$14,000-15,000;白银$500(回归1:10金银比);价格发现东移上海",
@@ -2518,13 +2298,10 @@
      "url": "https://www.kitco.com/news/article/2026-03-05/willem-middelkoop-why-global-price-discovery-permanently-migrating-shanghai",
      "date": "2026-03-05"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Jeff Clark",
-   "id": "jeff_clark",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "无精确点位;称当前回调为「十年级买入机会」,矿股料跑赢金属;强调持现金应对回调",
@@ -2542,13 +2319,10 @@
      "url": "https://bankstreetjournal.com/2026/02/02/jeff-clark-gold-silver-price-drop-cash-is-key-in-corrections/",
      "date": "2026-02-02"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Keith Neumeyer",
-   "id": "keith_neumeyer",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "白银三位数(其$100预测2026已兑现);终极目标三位数以上,被追问时点2030;结构性供给紧缺",
@@ -2566,13 +2340,10 @@
      "url": "https://www.youtube.com/watch?v=RF_-8VfzEI8",
      "date": "2026-07-22"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Stephen Leeb",
-   "id": "stephen_leeb",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "无精确点位;论点为全球货币秩序重构、美元被替代,黄金长期结构性重估",
@@ -2590,13 +2361,10 @@
      "url": "https://www.stephenleeb.com/finance-geopolitics-news/china-has-50000-tonnes-of-gold-the-dollars-replacement-is-already-built/",
      "date": "2026-08-05"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Adrian Day",
-   "id": "adrian_day",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "金矿股逆向布局；金价目标区间提及$5,500",
@@ -2614,26 +2382,20 @@
      "url": "https://wealthfargo.co.uk/gold-stocks-hit-7-bullish-adrian-day-explains-the-setup/",
      "date": "2026-07-22"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Nate Miller",
-   "id": "nate_miller",
    "sector": "贵金属与商品周期",
    "direction": "未找到",
    "targets": "",
    "comments": "未检索到该贵金属KOL可靠的2026年公开观点",
    "detail": "",
    "detail_status": "none",
-   "sources": [],
-   "date": "2026-08-28",
-   "carried": true
+   "sources": []
   },
   {
    "kol": "Bob Moriarty",
-   "id": "bob_moriarty",
    "sector": "贵金属与商品周期",
    "direction": "看多",
    "targets": "白银三位数（>$100）可能；黄金/白银/铜/铀全线看多",
@@ -2651,9 +2413,7 @@
      "url": "https://www.youtube.com/watch?v=wVABzhfdGAY",
      "date": "2025-12-23"
     }
-   ],
-   "date": "2026-08-28",
-   "carried": true
+   ]
   },
   {
    "kol": "Jeffrey Gundlach",
@@ -2674,8 +2434,7 @@
      "url": "https://www.businessinsider.com/jeff-gundlach-warns-ai-chip-strategy-may-signal-market-peak-2026-8",
      "date": "2026-08-17"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Matthew Piepenburg",
@@ -2701,8 +2460,7 @@
      "url": "https://vongreyerz.gold/matthew-piepenburg-7-signals-1-golden-direction",
      "date": "2026-07"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "S. Druckenmiller",
@@ -2728,8 +2486,7 @@
      "url": "https://www.13radar.com/guru/stanley-druckenmiller",
      "date": "2026-08-14"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Alasdair Macleod",
@@ -2755,8 +2512,7 @@
      "url": "https://marketsanity.com/category/investment-gurus/others/alasdair-macleod/",
      "date": "2026-08-22"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Daniel Oliver",
@@ -2777,8 +2533,7 @@
      "url": "https://myrmikan.com/port/",
      "date": "2026-08-14"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Michael Hartnett",
@@ -2804,8 +2559,7 @@
      "url": "https://www.investing.com/news/stock-market-news/bofas-hartnett-explains-why-wall-street-is-trading-with-no-fear-4223333",
      "date": "2026-08-14"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Ted Oakley",
@@ -2826,8 +2580,7 @@
      "url": "https://oxbowadvisors.com/video-ted-oakley-oxbow-advisors-interview-series-dan-rasmussen-august-26-2026/",
      "date": "2026-08-26"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Carroll Quigley",
@@ -2843,8 +2596,7 @@
      "url": "https://en.wikipedia.org/wiki/Carroll_Quigley",
      "date": ""
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Zoltan Pozsar",
@@ -2865,8 +2617,7 @@
      "url": "https://goldbroker.com/news/new-world-monetary-order-dedollarization-role-gold-3134",
      "date": ""
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "David Stockman",
@@ -2892,8 +2643,7 @@
      "url": "https://www.davidstockmanscontracorner.com/mind-the-incoming-date-still-no-golden-age-in-sight/",
      "date": "2026-08"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "David Hunter",
@@ -2914,8 +2664,7 @@
      "url": "https://investingnews.com/david-hunter-gold-silver-forecast/",
      "date": "2026-05-11"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "James Rickards",
@@ -2941,8 +2690,7 @@
      "url": "https://www.itmtrading.com/blog/jim-rickards-gold-10000-silver-200/",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Larry McDonald",
@@ -2963,8 +2711,7 @@
      "url": "https://seekingalpha.com/article/4852910-hard-assets-vs-financial-larry-mcdonald-what-leads",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Clem Chambers",
@@ -2985,8 +2732,7 @@
      "url": "https://investingnews.com/clem-chambers-gold-silver-forecast/",
      "date": "2026-08-20"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Peter Schiff",
@@ -3012,8 +2758,7 @@
      "url": "https://schiffradio.com/year-end-special-my-2026-economic-and-market-forecasts/",
      "date": "2026"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Ray Dalio",
@@ -3034,8 +2779,7 @@
      "url": "https://fortune.com/2026/08/04/ray-dalio-ai-bubble-1929-2000-ipos-wealth-is-not-money/",
      "date": "2026-08-04"
     }
-   ],
-   "date": "2026-08-31"
+   ]
   },
   {
    "kol": "Luke Gromen",
@@ -3061,140 +2805,7 @@
      "url": "https://advisoranalyst.com/2026/08/19/the-bull-market-that-loses-you-money-luke-gromen.html",
      "date": "2026-08-19"
     }
-   ],
-   "date": "2026-08-31"
-  }
- ],
- "changes": [
-  {
-   "kol": "Neil Howe",
-   "sector": "技术分析与周期",
-   "prev_dir": "看多",
-   "new_dir": "看空",
-   "date": "2026-08-31",
-   "comments": "第四轮回「冬季」危机相，市场进入艰难时代，危机后才有重建",
-   "targets": "美股与风险资产（宏观周期视角）、制度与地缘风险",
-   "detail": "▸ 核心论点：Hedgeye 人口统计学董事总经理、《第四轮回》合著者。他判断美国与多数发达国家已牢牢处在长周期的「冬季/危机相」，与 1930-40 年代的大萧条与二战前夜同构；2026 年 7 月 6 日在彭博更直白地说「市场即将迎来一个艰难的时代」。他的落点不是纯悲观——历史规律是危机解决后带来制度重建与社会凝聚力的更新。\n▸ 关键依据：不是价格或估值指标，而是社会与制度变量——地缘冲突升温、代际失望（年轻世代面临可负担性下降、上升通道收窄、对民主信任消退，从而更倾向激进变革）、法治与国际协议受侵蚀、机构信任崩塌。他引用民调称「多数美国人认为二战前那些年份重新变得有现实相关性」，以及全球风险评估显示美国人普遍预期未来十年内会有重大地缘对抗。\n▸ 时间与位置：以「未来十年」为周期尺度，2026 被定位为冬季相的中段；不给指数点位，也不给具体日期。\n▸ 标的与操作：无具体标的与买卖建议；框架含义是对风险资产与长久期制度稳定性溢价保持防御，同时准备迎接危机后的重建期。属于宏观周期背景判断而非可直接交易的信号。"
-  },
-  {
-   "kol": "William Watkins",
-   "sector": "宏观货币与金融体系",
-   "prev_dir": "看多",
-   "new_dir": "看空",
-   "date": "2026-08-31",
-   "comments": "美债逼近40万亿，称美元背后只剩国家强制力，非黄金",
-   "targets": "美元/法币体系、美国国债与财政、黄金(隐含正面)",
-   "detail": "▸ 核心论点：Independent Institute 宪法学者 William J. Watkins Jr. 认为，美国已偏离建国者设计的硬通货制度，今天的纸币背后「除了政府的强制力以外没有什么真正有价值的东西」。逼近 40 万亿美元的国债不只是超支问题，而是国家放弃自我约束后必须支付的账单。\n▸ 关键依据：美国国债约 39.6 万亿美元，相当于每个美国人约 11.5 万美元、约占经济体量的 120%；2026 财年净利息支出预计突破 1 万亿美元，已超过国防开支，成为联邦预算中最大的单项之一(CBO 数据)。制度转折点他指向 1936 年最高法院 United States v. Butler 案与新政；1933 年收缴黄金并将金价由约 20 美元重估至 35 美元，他直言「绝对不合宪」。1971 年最后一道金本位链条切断时金价 35 美元，而采访当日金价已在 4,100 美元上方。他认为政府「本应先加税」，实际却倾向于通胀化货币，且支出具有「棘轮效应」难以回退。\n▸ 时间与位置：未给出具体点位或时间窗口。他只给出终局判断：若放任不管，结局是「像第三世界香蕉共和国那样对债务违约」的总清算。\n▸ 标的与操作：这是制度层面的长期判断而非交易建议——看空美元纸币体系与美国财政可持续性，逻辑上利好硬通货/黄金。他本人未给出买卖操作。"
-  },
-  {
-   "kol": "Edward Dowd",
-   "sector": "宏观货币与金融体系",
-   "prev_dir": "看多",
-   "new_dir": "看空",
-   "date": "2026-08-31",
-   "comments": "2026三大风险共振，衰退+股市泡沫破裂；看多美元与金银",
-   "targets": "美股(AI泡沫)、美国房地产、影子银行/私募信贷、中国、美元(看多)、黄金白银(看多)",
-   "detail": "▸ 核心论点：2026 年美国经济面临「生涯中从未见过」的风险，是一次大级别的信用毁灭周期。他 2025 年的判断已被验证——股市涨了 17%，但实体经济内爆、地产开始下滑。由于泡沫被不断往后拖，「快速崩塌」的概率自 2025 年初以来指数级上升。\n▸ 关键依据：三大风险，两内一外。①美国住房危机：移民填补需求的通道已关闭、遣返将持续一到两年，可负担性彻底恶化，收入水平不支持当前房价，唯一的出清方式是未来两年房价下跌 25%-30%。②股市泡沫：估值已与互联网泡沫时期同样糟糕，由 AI 泡沫驱动，裂缝已现，预计年内破裂。③中国进入经济危机的急性期，将成为全球传染源，冲击日韩并外溢至美国。他认为最先出问题的是影子银行体系(私募股权、私募信贷、非存款类金融机构贷款)——过去两年商业银行的贷款增长全部来自该渠道，工商业贷款零增长；贝莱德将旗下私募债基金估值下调 19% 并免收管理费即是例证。\n▸ 时间与位置：股市泡沫预计 2026 年内破裂；房价调整窗口为未来两年、幅度 25%-30%；黄金 2030 年目标价 10,000 美元/盎司。\n▸ 标的与操作：看空美股(尤其 AI 相关)、美国住宅地产、私募信贷/影子银行敞口；因中国引发的流动性危机而看多美元；同时维持看多黄金与白银(认为当前只是盘整而非终结，理由是大型银行对黄金需求旺盛、白银则有工业用户实需)。"
-  },
-  {
-   "kol": "Torsten Sløk",
-   "sector": "宏观货币与金融体系",
-   "prev_dir": "中性",
-   "new_dir": "看多",
-   "date": "2026-08-31",
-   "comments": "美国经济由滞胀转为过热，衰退概率仅10%，年内可能加息",
-   "targets": "美国股市/AI 资本开支链、美债利率（偏上行）、美元（偏弱）",
-   "detail": "▸ 核心论点：2026 年美国经济叙事已从「滞胀」翻转为「过热」。他明确表示经济\"running pretty hot\"，把美国衰退概率下调到 10%，远低于市场定价的 30%；风险不在增长失速，而在通胀黏性迫使美联储由降转升。\n▸ 关键依据：研究报告《Stagflation in 2025. Overheating in 2026》列出 10 条顺风，核心是 AI 资本开支潮、产业回流、美元贬值提振出口竞争力，以及\"One Big Beautiful Bill\"财政刺激——他估算该法案单独贡献约 0.9% 的 2026 年 GDP 增速。通胀端：6/17 FOMC 维持 3.50%–3.75% 不变（12-0），却把 2026 年 PCE 预测由 2.7% 大幅上修至 3.6%，点阵图抹掉了原先的降息预期。\n▸ 时间与位置：时间窗口为 2026 全年，判断年底前更可能加息而非降息；政策利率锚定 3.50%–3.75%，通胀锚定 3%（PCE 预测 3.6%）。未给出股指或收益率的具体点位。\n▸ 标的与操作：偏好受 AI 资本开支拉动的实体链条（电力、半导体、地产）与美国资产（外资持续流入）；对利率敏感型久期资产偏谨慎；结构上强调 K 型分化，低收入群体承压。中长期看好 AI 投资驱动的复苏，短期提示先有一段温和滞胀。"
-  },
-  {
-   "kol": "Jeffrey Gundlach",
-   "sector": "国债利率与债券市场",
-   "prev_dir": "看多",
-   "new_dir": "看空",
-   "date": "2026-08-31",
-   "comments": "避开长债，押美联储2026加息，警告AI芯片抵押融资是顶部信号",
-   "targets": "长久期美国国债(避开)、Nvidia/AI 基建债、美股科技集中度、国际及新兴市场股债",
-   "detail": "▸ 核心论点：债务清算比市场想象来得更近。美联储2026年不会降息、更可能加息；应彻底回避发达国家长久期国债，把资金转向国际与新兴市场。Nvidia 牵头的 AI 基建融资是典型的risk市场见顶特征。\n▸ 关键依据：他弃用核心/截尾通胀口径（称 Dallas Fed 截尾均值 PCE 是「玩世不恭的把戏」），改看进出口原始物价指数，读数约 6.5%。Bloomberg 美国综合债指数 10 年与 20 年 YTW 相差不足 1bp，30 年历史均值约 4.05%，综合收益率约 4.78%；2020 年以约 1% 买入 30 年期美债者 2022 年资本亏损超 50%。Shiller CAPE 创历史高位，10 家科技/AI 公司占标普 500 市值约 41%，集中度已开始瓦解。对英伟达联合 Apollo/BlackRock/Blackstone/Brookfield/高盛/KKR 调动逾 5000 亿美元的计划，他讥为「拿不知寿命的资产给长期债务作抵押……不如发 30 年期 ABS 抵押一仓库香蕉」。\n▸ 时间与位置：明确指向 2026 年内不降息、若下注则赌加息；未给出具体股指点位或收益率目标位。以 2 年期美债为美联储政策风向标（「美联储跟着 2 年期走」）。\n▸ 标的与操作：卖出/回避发达国家长久期政府债与美国大盘科技集中股；买入国际股票、新兴市场股票及本币新兴市场债；对 AI 基建信用敞口保持怀疑。"
-  },
-  {
-   "kol": "S. Druckenmiller",
-   "sector": "宏观货币与金融体系",
-   "prev_dir": "看多",
-   "new_dir": "看空",
-   "date": "2026-08-31",
-   "comments": "痛批财政部扩大回购是变相QE，长端收益率是世上最重要的价格",
-   "targets": "长端美债（反对回购托市）、美元财政信用；组合层面 Q2 前十大含 Natera 等",
-   "detail": "▸ 核心论点：8 月 24 日在《华尔街日报》发表署名评论《Let the Bond Market Speak》，指责财政部把长债回购规模翻倍是在压制、而非改善市场功能；长端美债收益率是「世界上最重要的价格」，也是华盛顿最后一道财政纪律，人为压低只会让政客继续拖延。\n▸ 关键依据：财政部将 10–30 年期回购每次操作规模至少翻倍到 40 亿美元，排期 9 月 9 日至 11 月 4 日，且是在 30 年期收益率触及 19 年新高之后宣布；收益率初跌后次日午后即升破原位，说明市场视之为托价而非流动性维护。他强调当前国债市场运作正常（无失败拍卖、无强制抛售、无交易商融资短缺），与 2020 年 3 月不可同日而语；收益率上行反映的是真实财政担忧——通胀仍高于 2%、失业率处历史低位、赤字接近 GDP 的 6%、国债超 40 万亿美元、年利息支出将超 1.1 万亿美元。他以 1942–1951 年美联储收益率上限最终助推通胀为鉴。持仓面，Duquesne Q2 2026 披露约 95 个持仓、组合规模约 52 亿美元，第一大持仓 NTRA。\n▸ 时间与位置：直接对应 2026 年 9 月 9 日–11 月 4 日的回购窗口；未给出收益率目标点位，但认为一旦市场认定政府在守某一收益率水平，每次上行都会变成需要更大干预的压力测试。\n▸ 标的与操作：主张财政部把回购限制在小规模例行操作、并增发长债；对长端美债与依赖压低利率的资产持怀疑态度，未公开给出具体买入建议。"
-  },
-  {
-   "kol": "Michael Hartnett",
-   "sector": "宏观货币与金融体系",
-   "prev_dir": "中性",
-   "new_dir": "看空",
-   "date": "2026-08-31",
-   "comments": "称美联储「赤裸裸的鸽派」，建议撤离风险资产等收益率暴动",
-   "targets": "回避风险资产；关注日元/JGB、亚洲联合干预、美债收益率",
-   "detail": "▸ 核心论点：美联储「赤裸裸地鸽派」，将迫使金融条件持续收紧，直至被迫用激进加息重建信誉；因此应当从风险资产「撤退/轮动」而不是加仓。同时警告华尔街当前在「毫无恐惧」地交易，仓位过度看多。\n▸ 关键依据：他给出重新买入风险资产的两个前置条件——通胀出现实质回升，以及一次「收益率上行+美元下跌」的债券义警事件迫使货币与财政政策掉头。BofA 情绪指标的卖出信号历史上平均领先全球股票 2–3% 的回撤、命中率约 60%，但真正熊市还需叠加过度的盈利乐观。他把美/日/韩联合外汇干预列为当周最重要事件，担心日元无序贬值→JGB 收益率飙升→蔓延到韩国台湾债市→资金无序流出美债；并称美国决策者会出手阻止日韩台股票走弱妨碍对华 AI 竞赛，把干预称作 AI 时代的「PKO（股价维持操作）」。\n▸ 时间与位置：点名 8 月 28 日 Jackson Hole 为关键转折日（新任美联储主席在收益率钢丝上）；BofA 的note明确未给出具体指数点位或收益率阈值。\n▸ 标的与操作：减持/轮出风险资产（尤其美股），等待通胀回升与债券义警事件后再重新配置；关注日元、JGB 与亚洲债市传导链。"
-  },
-  {
-   "kol": "Ted Oakley",
-   "sector": "宏观货币与金融体系",
-   "prev_dir": "看空",
-   "new_dir": "看多",
-   "date": "2026-08-31",
-   "comments": "7月中把贵金属全买回来，看空标普与半导体，警告私募信贷",
-   "targets": "黄金/白银及金矿、能源股（看多）；标普500、半导体、微软、长期美债（看空）",
-   "detail": "▸ 核心论点：这不是一个正常市场，中期可能出现「一代人级别」的熊市使股指下挫约 40%；应从大盘成长/半导体轮出，转向硬资产与能源。他在 2025 年末至 2026 年初曾卖出全部白银和大部分黄金敞口，7 月中旬又全数买回并加码。\n▸ 关键依据：ThreeBears 追踪的公开表态显示，8 月 11 日与 8 月 16 日他连续给出看多黄金、白银（均为年内短期）、金矿股（短中长期均看多）与能源股，同时看空半导体、微软与长期美债；7 月 16 日与更早的表态一致看空标普 500 中期。8 月 26 日他与 Verdad 的 Dan Rasmussen 对谈，主题是私募股权与私募信贷的问题，指向同一条信用风险线索。\n▸ 时间与位置：金/银看多窗口标注为 2026 年 8–12 月，金矿股为短中长期；标普 500 看空延续至 2027 年 7 月；跌幅量级引用为约 40%，未给出具体指数点位。\n▸ 标的与操作：买入并持有黄金、白银、金矿股、能源股；卖出/回避标普 500 宽基、半导体、微软及长久期美债；对私募信贷保持警惕。"
-  },
-  {
-   "kol": "Zoltan Pozsar",
-   "sector": "宏观货币与金融体系",
-   "prev_dir": "看多",
-   "new_dir": "中性",
-   "date": "2026-08-31",
-   "comments": "公开信息有限：仅见8月研报标题（信誉发作/杰克逊霍尔挑战）",
-   "targets": "美元体系/黄金作为储备资产、日元与欧元、AI 与利率",
-   "detail": "▸ 核心论点：公开信息有限，仅检索到其独立研究机构 Ex Uno Plures 的 2026 年报告标题序列，无法取得正文观点原文。可确认的长期框架仍是「布雷顿森林体系 III」——制裁与大国冲突推动储备管理从无锚货币转向商品/黄金锚定。\n▸ 关键依据：Ex Uno Plures「Money and World Order」系列 2026 年篇目包括《Physical QE and Gold》(3/13)、《E Pluribus Unum》(4/20)、《The Lord of the Rings》(7/20)、《Miran Knows Nothing About Money》(7/27)、《AI and Greenspan's Original Sin》(7/29)、《Camp David, €/¥ and the Credibility Tantrum》(8/1)、《It Takes Two to Tango》(8/3)，另有《The Jackson Hole Challenge》。这些只有标题公开，正文为付费机构客户内容，本次未取得。\n▸ 时间与位置：未给出具体点位或时间窗口（无正文可引）。\n▸ 标的与操作：无可靠的公开买卖建议，暂不判定方向。"
-  },
-  {
-   "kol": "David Stockman",
-   "sector": "宏观货币与金融体系",
-   "prev_dir": "看多",
-   "new_dir": "看空",
-   "date": "2026-08-31",
-   "comments": "AI股占标普45%，预言「2026特朗普崩盘」，公债破40万亿",
-   "targets": "美股（尤其 AI/半导体集中股）看空；批评财政与美联储",
-   "detail": "▸ 核心论点：所谓「黄金时代」并不存在，Trump-O-Nomics 没有扭转通胀、投机与停滞三股力量；他直接以《Here Comes the 「Trump Crash」 of 2026》为题，把当前 AI 行情类比 1998–2001 年纳斯达克的「三年往返地狱」。\n▸ 关键依据：他引用高盛集中度数据，AI 相关股票已占标普 500 市值约 45%，半导体为主要驱动；对冲基金对芯片的净敞口达到全球股票配置的 19%，创纪录并较 2026 年初翻倍。历史类比上，纳指自 1998 年 10 月 8 日的 1,419 点在约 18 个月内涨 256% 到 2000 年 3 月 10 日的 5,048 点，随后 25 个交易日暴跌 34% 至 3,321 点（抹去前 500 天涨幅的 48%），最终于 2001 年 9 月 24 日回到 1,423 点——原样回到起点。财政面他记录 8 月 20 日美国公债正式突破 40 万亿美元（45 年前仅 1 万亿），且共和党控制的白宫与国会毫无表示。\n▸ 时间与位置：未给出明确的崩盘日期或指数目标位；类比框架暗示「涨得快、跌得更快」的往返式回吐。\n▸ 标的与操作：回避 AI/半导体主导的美股集中头寸；其 Contra Corner 多数正文为付费墙内容，本次未取得完整持仓建议。"
-  },
-  {
-   "kol": "Clem Chambers",
-   "sector": "宏观货币与金融体系",
-   "prev_dir": "中性",
-   "new_dir": "看多",
-   "date": "2026-08-31",
-   "comments": "铜一年翻倍、极端可冲$30k/吨；金年底到$6500极不可能",
-   "targets": "铜、铂金（看多）；黄金短期看淡、比特币先跌后涨；标普泡沫再涨约两年",
-   "detail": "▸ 核心论点：市场仍处「泡沫的底部」，应骑着泡沫走但要在崩盘前出场；再工业化与 AI 铺开必须靠印钞支撑，通胀会回到 5–7%。资产偏好上，他把重心从黄金转向铜与铂金。\n▸ 关键依据：8 月 12 日《The David Lin Report》访谈中他直言看铜的图形「未来一年会翻倍，而黄金不会翻倍」；对铜给出「垂直冲高到 30,000 美元/吨后回落到 15,000–20,000」的极端路径；通胀预期为「5 到 7」（他先说 5–10 再收敛到 5–7）。8 月 28 日再谈比特币，认为这轮不会到 25 万美元，会先回到 4 万–5 万美元区间再上行，四年周期只走了一半。\n▸ 时间与位置：铜翻倍窗口约到 2027 年 8 月；铜 30,000 美元/吨为周期极端目标（2028 年前）；黄金「到 2026 年圣诞节涨到 6,500 美元极不可能，更可能是筑顶后回落」；标普泡沫「大约还有两年」才见大顶。\n▸ 标的与操作：做多铜（已持有）与铂金（已选定个股）；黄金暂时观望、等回落再买；比特币等回撤到 4 万–5 万美元再考虑；股票继续骑泡沫但准备离场。"
-  },
-  {
-   "kol": "Ray Dalio",
-   "sector": "宏观货币与金融体系",
-   "prev_dir": "看多",
-   "new_dir": "看空",
-   "date": "2026-08-31",
-   "comments": "美国财政到拐点，债务付息≈收入200%，建议配黄金与比特币",
-   "targets": "美债与美元资产（看空）；黄金与比特币（推荐持有）；美股估值类比1929/2000",
-   "detail": "▸ 核心论点：美国政府财政「已处在拐点」，若现在不处理，债务将累积到只能以巨大创伤化解的水平；财政部扩大回购、日本减持美债与长端收益率飙升三者叠加，是债务危机临近的信号。他同时把 AI 行情的估值与情绪类比 1929 年和 2000 年。\n▸ 关键依据：美国支出比收入高约 40%；7 月单月财政赤字 4,320 亿美元，为 2021 年 3 月以来最高；若把美国政府视作企业，其还本付息约 11 万亿美元，相当于年收入的 200%。他指出财政部回购「能力有限」，而贝森特称单次操作可能超过 40 亿美元。他给出的解法是三管齐下把赤字压到 GDP 的 3%：削减支出、增加税收、降低利率，且必须同步进行——任何一项过猛都会造成创伤性调整；并特别警告「美联储不自然地强压利率会非常糟糕」。\n▸ 时间与位置：未给出具体点位；他强调危机的确切时点受战争等变量影响，但主张趁经济仍健康时立即动手。\n▸ 标的与操作：建议投资者持有黄金与比特币等硬资产/加密资产以对冲；减少对长久期美债与美元计价金融资产的依赖。"
-  },
-  {
-   "kol": "Luke Gromen",
-   "sector": "宏观货币与金融体系",
-   "prev_dir": "看多",
-   "new_dir": "中性",
-   "date": "2026-08-31",
-   "comments": "仍信债务贬值主线，但改用黄金而非比特币表达，BTC或探$40K",
-   "targets": "黄金与部分股票（看多）；比特币短期看空（$40K 风险）；白银长期极乐观",
-   "detail": "▸ 核心论点：长期的「货币贬值交易（debasement trade）」逻辑不变——政府会用通胀与货币贬值稀释债务——但表达工具应从比特币切换到黄金与部分股票，因为后者当前更能捕捉财政主导（fiscal dominance）的红利。这是他语气上的明显转变。\n▸ 关键依据：他在 RiskReversal 播客上列出比特币近期风险信号：相对黄金未能创新高、丢失关键均线、量子计算讨论升温导致叙事脆弱；同时 AI 板块担忧升温、美国就业与消费数据走弱，现货 ETF 后的资金流也在恶化。多位比特币分析师反驳称跌破均线与跑输黄金常出现在弱势期而非顶部。另有 8 月的公开表述称「白银持有者将成为百万富翁」，显示他对贵金属仍高度乐观。\n▸ 时间与位置：比特币下行风险指向 2026 年内 4 万美元区间；黄金与白银未给出具体目标点位。\n▸ 标的与操作：战术性减持比特币（非结构性看空），加配黄金与受益于财政主导的股票；白银长期持有。"
+   ]
   }
  ]
 }

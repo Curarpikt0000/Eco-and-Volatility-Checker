@@ -477,8 +477,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         concl_short=ai_conclusions.get("short", ""),
         concl_mid=ai_conclusions.get("mid", ""),
         concl_long=ai_conclusions.get("long", ""),
-        kol_changes=_kol_changes_html(kol_changes),
-        kol_views=_kol_views_html(kol_views),
+        kol_changes=_kol_multi_period_html(kol_changes, "changes"),
+        kol_views=_kol_multi_period_html(kol_views, "views"),
         cycle_kol="",  # ★2026-08-22 Chao: 玄学/术数派已迁往 Forecast-Checker,
                        # 技术分析派归回常规 KOL 板块, 本独立 section 停用(不再渲染)。
                        # _cycle_kol_html 保留未删, 便于日后需要时恢复。
@@ -757,14 +757,29 @@ def _kol_standing_html(meta, kol):
     return f'<div class="kol-standing">🏛 {_esc(standing)}</div>'
 
 
-def _kol_changes_html(kol_changes):
+_PERIOD_LABEL = {"day": "本日", "week": "本周", "month": "本月"}
+
+
+def _kol_period_tabs(group, active="week"):
+    """本日/本周/本月 三档切换按钮(纯前端, 三份数据都已内嵌, 点击零请求)。"""
+    btns = ""
+    for p in ("day", "week", "month"):
+        cls = "kp-btn on" if p == active else "kp-btn"
+        btns += (f'<button type="button" class="{cls}" data-kp-group="{group}" '
+                 f'data-kp="{p}">{_PERIOD_LABEL[p]}</button>')
+    return f'<div class="kp-tabs" data-kp-tabs="{group}">{btns}</div>'
+
+
+def _kol_changes_html(kol_changes, period="week"):
     """KOL 状态变化板块(模块化, 仿 13F 报告)。
     接收 kol_stance_changes_grouped() 的结果 {since,days,total,modules:[...]};
     向后兼容旧 list 结构(自动包一层"其他"模块)。
-    每个 sector 一个彩色模块, 模块下列该模块转向的 KOL(主方向变化+言论+标的+日期)。"""
+    每个 sector 一个彩色模块, 模块下列该模块转向的 KOL(主方向变化+言论+标的+日期)。
+    period: day/week/month —— 只影响文案措辞, 数据由调用方按档位传入。"""
+    _pl = _PERIOD_LABEL.get(period, "本周")
     # 空/无数据
     if not kol_changes:
-        return '<p class="empty">本周暂无 KOL 主导方向变化（或快照尚在累积中）。</p>'
+        return f'<p class="empty">{_pl}暂无 KOL 主导方向变化（或快照尚在累积中）。</p>'
     # 兼容: 旧 list 结构 → 包成单模块
     if isinstance(kol_changes, list):
         kol_changes = {"since": "", "days": 0, "total": len(kol_changes),
@@ -781,7 +796,7 @@ def _kol_changes_html(kol_changes):
         modules = [m for m in modules if m.get("changes")]
     _tot = sum(len(m.get("changes") or []) for m in modules)
     if not modules or _tot == 0:
-        return '<p class="empty">本周暂无 KOL 主导方向变化（或快照尚在累积中）。</p>'
+        return f'<p class="empty">{_pl}暂无 KOL 主导方向变化（或快照尚在累积中）。</p>'
 
     # 方向 → 色 + 强弱排序(用于判断转多/转空)
     dir_rank = {"强烈看空": -2, "看空": -1, "分歧": 0, "中性": 0, "看多": 1, "强烈看多": 2}
@@ -799,7 +814,7 @@ def _kol_changes_html(kol_changes):
     # 顶部总览
     since = kol_changes.get("since", "")
     total = kol_changes.get("total", 0)
-    head = (f'<div class="kol-overview">本周 KOL 状态变化（对比基准 <b>{_esc(since)}</b>）共 '
+    head = (f'<div class="kol-overview">{_pl} KOL 状态变化（对比基准 <b>{_esc(since)}</b>）共 '
             f'<b>{total}</b> 位 KOL 主导方向转向，涉及 <b>{len(modules)}</b> 个模块。'
             f'<span class="kol-ov-note">↑转多(变乐观) · ↓转空(变谨慎/逆向买点)</span></div>')
 
@@ -841,12 +856,14 @@ def _kol_changes_html(kol_changes):
     return html
 
 
-def _kol_views_html(views):
-    """本周 KOL 观点板块(按模块, 每 KOL 一卡带多空方向)。
+def _kol_views_html(views, period="week"):
+    """KOL 观点板块(按模块, 每 KOL 一卡带多空方向)。
     接收 kol_weekly_views() 结果 {date,total,modules:[{sector,en,color,views:[...]}]}。
-    这是'本周有意义的观点'全景(不只转向), 回答'88个KOL不可能一周没话说'。"""
+    这是'窗口内有意义的观点'全景(不只转向), 回答'上百个KOL不可能一周没话说'。
+    period: day/week/month —— 只影响文案措辞, 数据由调用方按档位传入。"""
+    _pl = _PERIOD_LABEL.get(period, "本周")
     if not views or not views.get("modules") or views.get("total", 0) == 0:
-        return '<p class="empty">本周暂无 KOL 观点数据（快照未就绪）。</p>'
+        return f'<p class="empty">{_pl}暂无 KOL 观点数据（快照未就绪）。</p>'
     # 方向 → 徽章色 + 文案(看多暖/看空冷, 与转向徽章一致的语义)
     dir_badge = {
         "强烈看多": ("kv-bull2", "强烈看多"), "看多": ("kv-bull", "看多"),
@@ -866,10 +883,10 @@ def _kol_views_html(views):
         modules = [m for m in modules if m.get("views")]
     total = sum(len(m.get("views") or []) for m in modules)
     if not modules or total == 0:
-        return '<p class="empty">本周暂无 KOL 观点数据（快照未就绪）。</p>'
+        return f'<p class="empty">{_pl}暂无 KOL 观点数据（快照未就绪）。</p>'
     # 加载 KOL 名册的业界地位/机构声誉, 按名字匹配渲染到卡片底部(与"状态变化"板块共用同一口径)
     _meta = _kol_meta()
-    head = (f'<div class="kol-overview">本周 KOL 观点全景（截至 <b>{_esc(date)}</b>）：'
+    head = (f'<div class="kol-overview">{_pl} KOL 观点全景（截至 <b>{_esc(date)}</b>）：'
             f'共 <b>{total}</b> 位 KOL 有实质观点，覆盖 <b>{len(modules)}</b> 个模块。'
             f'<span class="kol-ov-note">卡片按多空方向标色 · 强烈看多→强烈看空</span></div>')
     html = head
@@ -891,7 +908,7 @@ def _kol_views_html(views):
             since_html = ""
             if since:
                 if is_new:
-                    since_html = f'<span class="kol-since kol-since-new">🆕 本周新观点</span>'
+                    since_html = f'<span class="kol-since kol-since-new">🆕 {_pl}新观点</span>'
                 else:
                     since_html = f'<span class="kol-since">自 {_esc(since)} 持此观点</span>'
             extra = ""
@@ -915,6 +932,30 @@ def _kol_views_html(views):
             f'<div class="kol-mod-inner">{cards}</div></div>'
         )
     return html
+
+
+def _kol_multi_period_html(data_by_period, kind, active="week"):
+    """把 本日/本周/本月 三份数据渲染成「按钮 + 三个 pane」结构。
+
+    ★Chao 2026-08-31: 两个 KOL 板块顶部各加 本日/本周/本月 三档 filter。
+      三份数据全部内嵌进 HTML, 前端点击只切 display, 零网络请求。
+      data_by_period: {"day":..., "week":..., "month":...}; 缺档位则该 pane 显示未就绪。
+      kind: "views" → 观点全景 / "changes" → 状态变化。
+      ★向后兼容: 若传进来的不是 {day,week,month} 字典(旧调用直接传单份数据),
+        则退化为只渲染一份, 不显示切换按钮。
+    """
+    render = _kol_views_html if kind == "views" else _kol_changes_html
+    if not isinstance(data_by_period, dict) or not (
+            {"day", "week", "month"} & set(data_by_period.keys())):
+        return render(data_by_period, period="week")   # 旧调用: 单份数据
+    group = f"kol-{kind}"
+    panes = ""
+    for p in ("day", "week", "month"):
+        body = render(data_by_period.get(p), period=p)
+        style = "" if p == active else ' style="display:none"'
+        panes += (f'<div class="kp-pane" data-kp-group="{group}" '
+                  f'data-kp-pane="{p}"{style}>{body}</div>')
+    return _kol_period_tabs(group, active) + panes
 
 
 def _liquidity_html(liq):
@@ -6677,6 +6718,13 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .kol-cmt {{ font-size: 11px; color: var(--muted); line-height: 1.5; margin-top: 4px; }}
   .kol-tgt {{ font-size: 10.5px; color: var(--dust-blue); margin-top: 3px; }}
   .kol-standing {{ font-size: 10px; color: var(--muted); margin-top: 5px; padding-top: 5px; border-top: 1px dashed var(--border); line-height: 1.45; }}
+  /* 本日/本周/本月 三档 filter(Chao 2026-08-31) */
+  .kp-tabs {{ display: flex; gap: 6px; margin: 0 0 12px; flex-wrap: wrap; }}
+  .kp-btn {{ font-size: 12px; font-weight: 600; color: var(--muted); background: var(--card);
+             border: 1px solid var(--border); padding: 5px 16px; border-radius: 6px;
+             cursor: pointer; font-family: inherit; transition: all .15s; }}
+  .kp-btn:hover {{ border-color: var(--dust-blue); color: var(--ink); }}
+  .kp-btn.on {{ background: var(--dust-blue); border-color: var(--dust-blue); color: #fff; }}
   /* KOL 状态变化模块化(仿13F) */
   .part-title-flex {{ display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }}
   .kol-dash-btn {{ font-size: 12px; font-weight: 600; color: #fff; background: var(--dust-blue); padding: 6px 14px; border-radius: 6px; text-decoration: none; white-space: nowrap; transition: opacity .15s; }}
@@ -7981,6 +8029,23 @@ mkRadar('rLong', RADAR.long);
 
   // 卡片点击 → 打开钻取层(事件委托, 兼容动态渲染)
   document.addEventListener('click', function(ev) {{
+    // 本日/本周/本月 三档切换(Chao 2026-08-31): 三份数据已内嵌, 只切 display
+    var kp = ev.target.closest ? ev.target.closest('.kp-btn') : null;
+    if (kp) {{
+      var grp = kp.getAttribute('data-kp-group');
+      var sel = kp.getAttribute('data-kp');
+      var i, btns = document.querySelectorAll('.kp-btn[data-kp-group="' + grp + '"]');
+      for (i = 0; i < btns.length; i++) {{
+        if (btns[i].getAttribute('data-kp') === sel) btns[i].classList.add('on');
+        else btns[i].classList.remove('on');
+      }}
+      var panes = document.querySelectorAll('.kp-pane[data-kp-group="' + grp + '"]');
+      for (i = 0; i < panes.length; i++) {{
+        panes[i].style.display =
+          (panes[i].getAttribute('data-kp-pane') === sel) ? '' : 'none';
+      }}
+      return;
+    }}
     var card = ev.target.closest ? ev.target.closest('.kol-drill') : null;
     if (card) {{
       var kol = card.getAttribute('data-kol');

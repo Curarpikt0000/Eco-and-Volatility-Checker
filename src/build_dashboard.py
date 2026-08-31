@@ -65,8 +65,12 @@ def main():
                 print(f"[dashboard] KOL 当日快照已存: {sp}")
         except Exception as se:
             print(f"[dashboard] KOL 快照保存跳过: {se}")
-        kol_changes = ed.kol_stance_changes_grouped() or {}
-        kol_views = ed.kol_weekly_views() or {}
+        # ★Chao 2026-08-31: 两个 KOL 板块各带 本日/本周/本月 三档 filter,
+        #   三份数据一次算好全部内嵌进 HTML, 前端点击零请求。
+        kol_changes = {p: (ed.kol_stance_changes_grouped(period=p) or {})
+                       for p in ("day", "week", "month")}
+        kol_views = {p: (ed.kol_weekly_views(period=p) or {})
+                     for p in ("day", "week", "month")}
         # ★全量历史观点(供卡片两层展开钻取): 每日快照 + 历史回填, 连续同言论合并成区间
         try:
             kol_history = ed.kol_full_history() or {}

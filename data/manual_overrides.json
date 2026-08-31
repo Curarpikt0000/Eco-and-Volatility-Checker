@@ -5,16 +5,16 @@
     "status": "ok"
   },
   "put_call": {
-    "value": 0.64,
-    "as_of": "2026-08-26",
+    "value": 0.62,
+    "as_of": "2026-08-31",
     "status": "ok",
-    "note": "CBOE equity put/call 0.64 (Aug 26, YCharts); Total P/C 0.83"
+    "note": "CBOE equity put/call 0.62 (官方daily); Total P/C 0.84; Index P/C 0.99"
   },
   "insider": {
-    "value": 0.27,
-    "as_of": "2026-08-01",
+    "value": 0.28,
+    "as_of": "2026-08-31",
     "status": "ok",
-    "note": "GuruFocus insider buy/sell 0.27 (月度, as of 2026-08-01, 30.8%低于长期均值0.39)"
+    "note": "GuruFocus insider buy/sell 0.28 (Aug 2026, 低于长期均值0.39)"
   },
   "lei": {
     "value": 0.2,
@@ -23,10 +23,10 @@
     "note": "LEI 7月+0.2%至99.5, 六个月增长率转正(+0.2% 1-7月)为四年多来首次"
   },
   "bofa_bull_bear": {
-    "value": 9.3,
-    "as_of": "2026-08-18",
+    "value": 9.7,
+    "as_of": "2026-08-07",
     "status": "ok",
-    "note": "BofA Bull&Bear 8月FMS降至9.3(7月9.5), 仍远超8.0卖出阈值; 现金3.5%创低, 股票配置近五年高位, 56%基金经理押注no landing"
+    "note": "BofA Bull&Bear 升至9.7(自9.4), 2021年来最高, 远超8.0卖出阈值; 广度扩散+高收益债流入+利差收窄推动; FMS现金3.5%近历史低位"
   },
   "ad_line": {
     "value": false,

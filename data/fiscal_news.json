@@ -1,6 +1,6 @@
 {
   "status": "ok",
-  "as_of": "2026-08-28",
+  "as_of": "2026-08-31",
   "source": "美日财政政策事件时间线。每日 cron agent 模式 web 检索权威源(路透/彭博/NHK/财务省/US Treasury/Congress)动态更新。绝不编造,每条带来源链接。",
   "note": "cron 每日抓取最新美日财政举措(债务上限/持续决议CR/政府关门/补充预算/国债发行计划等),按日期倒序保留最近 ~20 条。",
   "events": [
@@ -22,6 +22,16 @@
       "title": "Bessent重申坚持既定长债拍卖日程,回购规模翻倍不改发行",
       "summary": "财政部长Bessent 8/24表示尽管10-30年段回购上限翻倍至≥0亿/次,仍将按既定季度再融资计划照常拍卖长债,首次扩大回购9/9-10启动。",
       "source_url": "https://www.reuters.com/world/china/us-treasury-stick-debt-auction-schedule-despite-bigger-buybacks-bessent-says-2026-08-24/",
+      "source_name": "Reuters"
+    },
+    {
+      "date": "2026-08-21",
+      "country": "JP",
+      "flag": "🇯🇵",
+      "category": "国债发行",
+      "title": "财务省27年度国债费想定金利拟设3.8%,29年来最高",
+      "summary": "财务省2027年度概算要求拟将国债利払想定金利上调至约3.8%(29年新高),反映日债收益率持续上行、利息负担加重。",
+      "source_url": "https://jp.reuters.com/economy/bank-of-japan/CFCDYMQKP5PR7AE5TDRSG5MDNI-2026-08-21/",
       "source_name": "Reuters"
     },
     {

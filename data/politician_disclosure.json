@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-28",
+  "as_of": "2026-08-31",
   "politicians": [
     {
       "name": "Nancy Pelosi",
@@ -273,60 +273,92 @@
       "title": "参议员 (阿拉巴马) · 参议院 PTR",
       "trades": [
         {
-          "ticker": "PEP",
-          "asset": "Pepsico Inc",
+          "ticker": "WAB",
+          "asset": "Westinghouse Air Brake Technologies Corporation Common Stock",
           "dir_cn": "卖出",
           "direction": "Sale (Full)",
-          "txn_date": "10/07/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "OC",
-          "asset": "Owens Corning Inc",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "10/07/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "MSFT",
-          "asset": "Microsoft Corp",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "10/07/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "AAPL",
-          "asset": "Apple Inc",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "10/07/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "GOOGL",
-          "asset": "Alphabet Inc. - Class A Common Stock",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "10/07/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "ORCL",
-          "asset": "Oracle Corporation Common Stock",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "10/07/2025",
-          "amount_range": "$15,001 - $50,000"
+          "txn_date": "06/09/2026",
+          "amount_range": "$1,001 - $15,000"
         },
         {
           "ticker": null,
-          "asset": "BIRMINGHAM ALA GO WTS SER. 2018 B\n                                        \n                                        \n                                        \n                                            Rate/Coupon: 5.0% Matures: 12/01/2043",
+          "asset": "ACN - Accenture plc Class A Ordinary Shares (Ireland)",
           "dir_cn": "卖出",
           "direction": "Sale (Full)",
-          "txn_date": "10/07/2025",
+          "txn_date": "06/08/2026",
+          "amount_range": "$1,001 - $15,000"
+        },
+        {
+          "ticker": "AWK",
+          "asset": "American Water Works Company, Inc. Common Stock",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "06/08/2026",
           "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "CSX",
+          "asset": "CSX Corporation - Common Stock",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "06/08/2026",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "DUK",
+          "asset": "Duke Energy Corporation (Holding Company) Common Stock",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "06/08/2026",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "LMT",
+          "asset": "Lockheed Martin Corporation Common Stock",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "06/08/2026",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "MA",
+          "asset": "Mastercard Incorporated Common Stock",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "06/08/2026",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "NEE",
+          "asset": "NextEra Energy, Inc. Common Stock",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "06/08/2026",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "PFE",
+          "asset": "Pfizer, Inc. Common Stock",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "06/08/2026",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "PG",
+          "asset": "Procter & Gamble Company (The) Common Stock",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "06/08/2026",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "TSCO",
+          "asset": "Tractor Supply Company - Common Stock",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "06/08/2026",
+          "amount_range": "$1,001 - $15,000"
         },
         {
           "ticker": "TSCO",
@@ -358,38 +390,6 @@
           "dir_cn": "卖出",
           "direction": "Sale (Full)",
           "txn_date": "01/10/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "MSFT",
-          "asset": "Microsoft Corp",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "01/10/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "AAPL",
-          "asset": "Apple Inc",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "01/10/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "ADBE",
-          "asset": "Adobe Inc. - Common Stock",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "10/29/2024",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "AAPL",
-          "asset": "Apple Inc. - Common Stock",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "10/29/2024",
           "amount_range": "$15,001 - $50,000"
         }
       ],

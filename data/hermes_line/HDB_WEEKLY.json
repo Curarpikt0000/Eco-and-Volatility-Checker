@@ -1,6 +1,6 @@
 {
  "table": "HDB_WEEKLY",
- "count": 2,
+ "count": 3,
  "rows": [
   {
    "uid": "wk|2026-W33",
@@ -46,6 +46,31 @@
        "type": "text",
        "text": {
         "content": "# Eco & Volatility 周报 · 2026-W34\n**周期**: 2026-08-17 ~ 2026-08-21 (JST)\n\n## 一、综合信号趋势\n| 日期 | 综合信号 | 触发数 |\n|---|---|---|\n| 08-17 周一 | 🟡 警戒 | 2 |\n| 08-18 周二 | 🔴 减仓 | 3 |\n| 08-19 周三 | 🟡 警戒 | 1 |\n| 08-20 周四 | 🟡 警戒 | 1 |\n| 08-21 周五 | 🟡 警戒 | 1 |\n\n**周内最高风险级: 🔴 减仓(08-18) · 最高触发数 3**(单日触顶后回落,未达>=3 持续,暂不触发系统性分批卖出)\n\n## 二、周内红灯指标\n- BofA FMS 现金水平\n- 保证金负债/GDP\n- 内部人买卖比(08-17/18)\n- 美银牛熊指标\n- 巴菲特指标\n- 席勒 CAPE (PE10)\n\n估值+仓位过热结构性红灯(BofA 现金/margin GDP/BofA 牛熊/巴菲特指标/CAPE)全周持续;内部人买卖比 08-19 起由🔴转🟡。\n\n## 三、本周状态变化(重点)\n① 综合信号:周一🟡转周二 08-18 冲高至🔴减仓(触发 3 项)转周三起回落🟡警戒,周内最高触发 3(未达>=3 持续,单日触顶后回落)。\n② 指标:内部人买卖比 08-19 起由🔴转🟡(内部人卖出边际放缓);CNN 恐惧贪婪 65转52.5 情绪由贪婪回中性;其余 5 项红灯(BofA现金/margin GDP/BofA牛熊/巴菲特/CAPE)全周持续,估值+仓位过热结构未改。\n③ 债市 KOL 集体转空(James Grant/Gundlach 转看空长债),与美债长端冲 5.31% 新高呼应;贵金属 KOL 集体升温(6+ 转强烈看多)。\n④ 流动性:FIMA 连续两周正动用($357.4B)美元荒信号重亮🔴;Fed 准备金逼近 $2.9T 警戒;日债 10Y 逼近 3% YCC 退出风险(日债🔴主导)。\n⑤ 央行:三大央行无扩表转向,美联储缩表延续。⑥ 机构:本周无新 13F。\n\n## 四、KOL 一周转向\n本周 KOL 全量 122 名(有明确方向 84 名)。方向分布:强烈看多 28/看多 27/中性 14/看空 9/分歧 6。本周转积极 21 人,转谨慎 9 人。\n【转多亮点】贵金属阵营集体升温(Adrian Day/Bob Moriarty/Frank Giustra/Keith Neumeyer/Peter Krauth 转强烈看多),Luke Gromen 看空转看多黄金,Druckenmiller 中性转看多美股,Cathie Wood/Raoul Pal 转强烈看多。\n【转谨慎】债市 KOL 明显转空:James Grant 看多转看空(利率升)、Jeffrey Gundlach 分歧转看空长债;Michael Saylor 强烈看多转看多 BTC;Dan Loeb 看多转分歧减持亚马逊。\n\n## 五、流动性一周综述\nFed 准备金 $2.935T(周-9B)连续 4 周<$3T,逼近 $2.9T 警戒线;ON RRP $0.225-0.317B 已归零级;TGA $953.6B 高位(周-10.3B)。FIMA 海外回购 $357.4B(周净动用 +$39.7B 连续两周正,美元荒信号重亮🔴)。美债长端本周先冲高后回落:30Y 一度站上 5.31% 新高,周五回落至 5.19%;10Y 4.63-4.72% 区间,2s10s +48~53bp 陡峭化未倒挂。日债 10Y 一度 2.919% 续创新高逼近 3%,10Y-TONAR 基差约 191bp 极厚,YCC 退出风险高(日债🔴持续)。\n【三大央行资产负债表】美联储总资产 $6746B(周-14.3B, -0.21%)缩表延续,准备金-8.8B;日本央行总资产 $4038B(较上期-8.3B),JGB 微降、经常项目存款 -118.8B;中国央行总资产 $7177B(7月口径, MoM 0%持平, 待新月更新)。三大央行整体偏缩/中性,无扩表转向。\n\n## 六、三国货币供应量 M0/M1/M2\n美国 M2 $23155B / 基础货币 $5488B(2026-06);日本 M2 $814"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "wk|2026-W35",
+   "props": {
+    "周": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-W35"
+       }
+      }
+     ]
+    },
+    "综合研判": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "# Eco & Volatility 周报 2026-W35\n\n**周期**: 2026-08-24 ~ 2026-08-28 (JST 周一~周五)\n**综合信号**: 🟡 警戒(全周稳定)  **周内最高触发**: 2/7\n\n## 一、综合信号趋势\n| 日期 | 综合信号 | 触发数 |\n|---|---|---|\n| 08-24 | 🟡警戒 | 1 |\n| 08-25 | 🟡警戒 | 2 |\n| 08-26 | 🟡警戒 | 1 |\n| 08-27 | 🟡警戒 | 1 |\n| 08-28 | 🟡警戒 | 1 |\n\n全周 🟡警戒,未升级至🔴减仓(需≥3触发)。\n\n## 二、周内红灯指标\n- 全周持续(5/5天): BofA FMS 现金水平、保证金负债/GDP、美银牛熊指标、巴菲特指标、席勒 CAPE\n- 单日: 内部人买卖比(仅08-25)\n\n结构性高估指标整周满格,但均为慢变量,未触发即时卖出。\n\n## 三、本周状态变化(重点)\n综合信号全周 🟡警戒未变(hit 1→2→1→1→1)；无指标发生灯变(红/黄/绿状态整周稳定)。 结构性高估红灯持续5天:BofA FMS 现金水平,保证金负债/GDP,美银牛熊指标,巴菲特指标,席勒 CAPE;8-25 内部人买卖比单日转红后回落。 KOL大规模转多(8-28全量刷新):转多16人(含Ray Dalio/Druckenmiller/David Hunter/David Stockman/Larry McDonald等宏观大佬由看空→看多),转空5人(Kyle Bass/Ken Griffin/Jeremy Stein/Karen等中性→看空);Martin Armstrong罕见看多→看空。 流动性:准备金$2.935T连续4周<$3T(距2.9T警戒仅35B);ON RRP归零级$0.38B;风控总分🟡紧张(日债🔴/美债🟡/基差🟡/Fed🟡)。 央行:Fed总资产$6730.9B WoW-14.8B(缩表, MBS-17.1B/FIMA回购-17.9B);BoJ$4054.7B较上期+8.6B(JGB+8.8B微扩);PBoC $7198.4B持平(月度未更新);ECB $6908.8B周-16.7B(APP+PEPP证券-18B缩表)。 机构持仓:本周无新13F披露(最近批次8-13/8-14入库, 内容为Q2 6-30期)。\n\n## 四、KOL 一周转向\n当前分布: 看多76/中性17/看空16/未找到16 (共125人, as of 2026-08-28)\n- 转多(16): Jim Rogers、Doomberg / Kuppy、Jeffrey Gundlach、S. Druckenmiller、Bob Haberkorn、Carl Icahn（Icahn Enterprises 创始人 / 董事长）、Charles Nenner、David Hunter、David Stockman、David Hickson / Sentient Trader、Edward Dowd、Larry McDonald、Massimiliano Castelli、Raoul Pal、Ray Dalio、Thomas Sargent\n- 转空(5): Martin Armstrong、Jeremy Stein、Karen Dynan、Ken Griffin（Citadel 创始人 / CEO）、Kyle Bass\n- 全部转向条目(30): Martin Armstrong(Technical & Cycle Analysis): 看多→看空；Jim Rogers(None): 看空→看多；Doomberg / Kuppy(Energy & Commodities): 分歧→看多；Jeffrey Gundlach(Government Debt): 看空→看多；S. Druckenmiller(Macro): 看空→看多；Amos Hochstein(Energy & Commodities): 看多→中性；Bob Haberkorn(Precious Metals): 中性→看多；Carl Icahn（Icahn Enterprises 创始人 / 董事长）(股权市场): 中性→看多；Cha"
        }
       }
      ]

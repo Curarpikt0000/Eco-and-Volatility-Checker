@@ -316,27 +316,24 @@ def kol_full_history():
     return out
 
 
-def kol_weekly_changes():
-    """本周 vs 上周 KOL 方向转向, 全部基于 Eco 自己的每日快照(data/kol/daily/), 不碰任何 agent DB。
-    比较逻辑: 对每个 KOL, 取『本周最新一天快照的方向』vs『上周最后一天快照的方向』, 不同则记为转向。
-    若快照不足(尚未攒够跨周数据), 回退到"最早快照 vs 最新快照"对比, 并标 note。
+def kol_weekly_changes(period="week"):
+    """窗口内 KOL 方向转向, 全部基于 Eco 自己的每日快照(data/kol/daily/), 不碰任何 agent DB。
+    比较逻辑: 对每个 KOL, 取『窗口内最新一天快照的方向』vs『窗口起点之前最后一天快照的方向』, 不同则记为转向。
+    period: day=本日(今天 vs 前一有快照日) / week=本周(默认, 本周最新 vs 上周最后) / month=本月(最新 vs 上月最后)。
+    若快照不足(尚未攒够跨窗口数据), 回退到"最早快照 vs 最新快照"对比。
     返回 [{kol, sector, prev_dir, new_dir, date, comments, targets},...] (供 grouped 分组)。"""
-    import datetime as _dt
     snaps = load_kol_daily_snapshots()
     if len(snaps) < 2:
         return []
     dates = sorted(snaps.keys())
-    today = _dt.date.today()
-    this_monday = today - _dt.timedelta(days=today.weekday())
-    last_monday = this_monday - _dt.timedelta(days=7)
-    tm, lm = this_monday.strftime("%Y-%m-%d"), last_monday.strftime("%Y-%m-%d")
-    # 本周快照 = 日期 >= 本周一; 上周快照 = 上周一 <= 日期 < 本周一
-    this_week = [d for d in dates if d >= tm]
-    last_week = [d for d in dates if lm <= d < tm]
-    if this_week and last_week:
-        cur_date, prev_date = this_week[-1], last_week[-1]
+    win_start, win_end, _ = _kol_period_window(period)
+    # 窗口内快照 / 窗口之前的快照(取最后一天作对比基准)
+    in_win = [d for d in dates if win_start <= d <= win_end]
+    before = [d for d in dates if d < win_start]
+    if in_win and before:
+        cur_date, prev_date = in_win[-1], before[-1]
     else:
-        # 跨周数据不足 → 用最新 vs 最早(诚实回退, 攒够后自动切回周对比)
+        # 跨窗口数据不足 → 用最新 vs 最早(诚实回退, 攒够后自动切回)
         cur_date, prev_date = dates[-1], dates[0]
     cur, prev = snaps.get(cur_date, {}), snaps.get(prev_date, {})
     # 无效方向(空/未找到/数据滞后等非真实立场)不参与转向判定
@@ -363,33 +360,53 @@ def kol_weekly_changes():
     return sorted(changes, key=lambda x: x["kol"])
 
 
-def kol_weekly_views(min_comment_len=10):
-    """本周全部有实质观点的 KOL, 按 sector 分组(不只转向, 而是所有有意义的观点)。
-    数据源: Eco 自己每日快照(优先本周最新一天; 无快照回退 kol_independent.json 的 all)。
-    每个 KOL 取其本周最新一次观点(方向+言论+标的)。绝不编: 无言论/无数据则跳过。
-    返回 {"date": 观点日期, "total": KOL数, "modules": [{sector,en,color,views:[{kol,direction,comments,targets,date}]}]}。
+def _kol_period_window(period="week"):
+    """把 本日/本周/本月 换算成 (窗口起点, 窗口终点, 新观点基准日) 三个 YYYY-MM-DD。
+
+    ★Chao 2026-08-31 要求三档 filter。口径:
+      day   = 今天(无今日快照则回退最近一天), 新观点基准=当天
+      week  = 上周一 → 今天 滚动窗口(维持原有口径不变), 新观点基准=本周一
+      month = 本月 1 号 → 今天, 新观点基准=本月 1 号
+    """
+    import datetime as _dt
+    today = _dt.date.today()
+    this_monday = today - _dt.timedelta(days=today.weekday())
+    if period == "day":
+        start = today
+        new_base = today
+    elif period == "month":
+        start = today.replace(day=1)
+        new_base = today.replace(day=1)
+    else:                                    # week(默认, 与历史口径一致)
+        start = this_monday - _dt.timedelta(days=7)
+        new_base = this_monday
+    return (start.strftime("%Y-%m-%d"), today.strftime("%Y-%m-%d"),
+            new_base.strftime("%Y-%m-%d"))
+
+
+def kol_weekly_views(min_comment_len=10, period="week"):
+    """指定窗口内全部有实质观点的 KOL, 按 sector 分组(不只转向, 而是所有有意义的观点)。
+    数据源: Eco 自己每日快照(优先窗口内最新一天; 无快照回退 kol_independent.json 的 all)。
+    每个 KOL 取其窗口内最新一次观点(方向+言论+标的)。绝不编: 无言论/无数据则跳过。
+    period: day=本日 / week=本周(默认) / month=本月 —— 见 _kol_period_window。
+    返回 {"date": 观点日期, "period": 档位, "total": KOL数, "modules": [...]}。
     """
     import json
     import datetime as _dt
-    # 优先: 过去一周(上周一→今天)滚动窗口聚合(独立数据仓库)
-    # ★"本周"= 过去 7 天滚动窗口(上周一 00:00 → 今天), 每个 KOL 取其窗口内
-    #   【最近一次有实质观点】的记录 → 只要过去一周任意一天有观点就一直显示,
-    #   不会因"最新那天快照恰好空/稀疏/未跑"而整个模块空掉(Chao 2026-08 修正)。
+    # 优先: 滚动窗口聚合(独立数据仓库)
+    # ★每个 KOL 取其窗口内【最近一次有实质观点】的记录 → 只要窗口内任意一天有观点
+    #   就一直显示, 不会因"最新那天快照恰好空/稀疏/未跑"而整个模块空掉(Chao 2026-08 修正)。
     snaps = load_kol_daily_snapshots()
     rows = []
     src_date = ""
     _invalid = {"", "未找到", "无", "n/a", "未知", "数据滞后", "-", "—"}
-    _today = _dt.date.today()
-    _this_monday = _today - _dt.timedelta(days=_today.weekday())
-    _last_monday = _this_monday - _dt.timedelta(days=7)
-    _win_start = _last_monday.strftime("%Y-%m-%d")   # 滚动窗口起点=上周一
-    _win_end = _today.strftime("%Y-%m-%d")
+    _win_start, _win_end, _new_base = _kol_period_window(period)
     since_map = {}   # kol -> 当前方向连续保持起始日
     if snaps:
         all_dates = sorted(snaps.keys())              # 升序
-        # 滚动窗口内的快照日期(上周一 ≤ d ≤ 今天)
+        # 滚动窗口内的快照日期
         window_dates = [d for d in all_dates if _win_start <= d <= _win_end]
-        # 若窗口内一个快照都没有(极端: 长期没跑), 诚实回退到最近有数据的一天
+        # 若窗口内一个快照都没有(极端: 长期没跑/当天还没跑), 诚实回退到最近有数据的一天
         if not window_dates:
             window_dates = all_dates[-1:]
         src_date = window_dates[-1] if window_dates else (all_dates[-1] if all_dates else "")
@@ -442,8 +459,8 @@ def kol_weekly_views(min_comment_len=10):
                                      "since_date": x.get("date", src_date)})
             except Exception:
                 pass
-    # 本周一(判断"新观点": 当前方向起始日 >= 本周一 = 本周内新转成的)
-    _this_monday_str = _this_monday.strftime("%Y-%m-%d")
+    # 新观点基准日(当前方向起始日 >= 基准日 = 本档窗口内新转成的)
+    _this_monday_str = _new_base
     # 只保留有实质言论的
     rows = [r for r in rows if (r.get("comments") or "").strip()
             and len((r["comments"]).strip()) >= min_comment_len]
@@ -472,7 +489,8 @@ def kol_weekly_views(min_comment_len=10):
     # 模块按观点数降序
     modules = sorted(groups.values(), key=lambda g: len(g["views"]), reverse=True)
     total = sum(len(g["views"]) for g in modules)
-    return {"date": src_date, "total": total, "modules": modules}
+    return {"date": src_date, "period": period, "win_start": _win_start,
+            "total": total, "modules": modules}
 
 
 # sector 中英归一(Notion DB 用英文, independent.json 用中文) → 统一中文模块名 + 英文副标 + 色
@@ -508,28 +526,24 @@ _KOL_SECTOR_COLOR = {
 }
 
 
-def kol_stance_changes_grouped(days=None):
-    """本周 KOL 方向转向, 按 sector 模块分组。
+def kol_stance_changes_grouped(days=None, period="week"):
+    """窗口内 KOL 方向转向, 按 sector 模块分组。
     ★数据源: Eco 自己的每日快照(data/kol/daily/, kol_weekly_changes), 完全独立, 不依赖任何 agent 的 Notion DB。
-    本周最新快照 vs 上周最后快照对比转向; 跨周数据不足时回退最新vs最早(诚实, 攒够自动切回)。
-    返回 {"since": 上周对比基准日, "days": N, "total": 转向总数,
+    period: day=本日 / week=本周(默认) / month=本月。窗口内最新快照 vs 窗口起点前最后快照对比转向;
+    跨窗口数据不足时回退最新vs最早(诚实, 攒够自动切回)。
+    返回 {"since": 对比基准日, "period": 档位, "days": N, "total": 转向总数,
           "modules": [{"sector":中文, "en":英文, "color":色, "changes":[{kol,prev_dir,new_dir,date,comments,targets},...]}]}
     绝不编: 无数据则 modules=[]。"""
-    import datetime as _dt
-    today = _dt.date.today()
-
-    # ★主源: Eco 自己的每日快照做本周 vs 上周对比(完全独立)
-    raw = kol_weekly_changes()
-    # 基准日: 用快照里实际对比的 prev 日期(若无则本周一)
+    # ★主源: Eco 自己的每日快照做窗口对比(完全独立)
+    raw = kol_weekly_changes(period=period)
+    # 基准日: 用快照里实际对比的 prev 日期(窗口起点之前最后一天)
     snaps = load_kol_daily_snapshots()
+    win_start, _win_end, _ = _kol_period_window(period)
     since = ""
     if snaps:
         dates = sorted(snaps.keys())
-        this_monday = today - _dt.timedelta(days=today.weekday())
-        last_monday = this_monday - _dt.timedelta(days=7)
-        tm, lm = this_monday.strftime("%Y-%m-%d"), last_monday.strftime("%Y-%m-%d")
-        last_week = [d for d in dates if lm <= d < tm]
-        since = last_week[-1] if last_week else dates[0]
+        before = [d for d in dates if d < win_start]
+        since = before[-1] if before else dates[0]
     days = len(snaps)
 
     # 按归一 sector 分组
@@ -553,7 +567,8 @@ def kol_stance_changes_grouped(days=None):
         g["changes"].sort(key=lambda x: x["date"], reverse=True)
     modules = sorted(groups.values(), key=lambda g: len(g["changes"]), reverse=True)
     total = sum(len(g["changes"]) for g in modules)
-    return {"since": since, "days": days, "total": total, "modules": modules}
+    return {"since": since, "period": period, "days": days,
+            "total": total, "modules": modules}
 
 
 def kol_today(date_str=None):
