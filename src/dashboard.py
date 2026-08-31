@@ -7575,6 +7575,14 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="card">{cycle_kol}</div>
   -->
 
+  <!-- ═══ 附五：KOL 全量名录档案卡(Chao 2026-08-23 要求, 13 维度) ═══ -->
+  <!-- ★2026-08-31(Chao「按 menu 顺序改」)：原在页面最底部(DOM #48)，但属「KOL 观点」组，
+       与组内其余 section(#9-11) 相隔 37 个 section → 滚到底时高亮突然窜回菜单顶部。
+       现紧随 KOL 板块，使 DOM 顺序 === 菜单顺序。
+       ⚠ 必须放在上面 cycle_kol 注释块【之外】，否则整段不渲染。 -->
+  <div class="part-title" id="sec-kol-roster"><span class="part-num">＋</span>KOL 全量名录 · 13 维度档案卡 (编号/领域/在世/头衔/成就/荣誉/书籍/当年言论 · 名册镜像 Notion·新增自动入表)<span class="freq-badge freq-daily">随名册更新</span></div>
+  <div class="card">{kol_roster}</div>
+
   <!-- ═══ 附二：流动性要点(联动 Economic Dashboard) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>流动性要点 · 央行/国债<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card liq-wrap">{liquidity}</div>
@@ -7595,6 +7603,18 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title"><span class="part-num">＋</span>三国 M2 十年走势 · 折线 ($B 当天汇率统一折算 · 放水力度长期对比)<span class="freq-badge freq-monthly">每月更新</span></div>
   <div class="card">{m2_history}</div>
 
+  <!-- ═══ 附三·A3b：中国央行流动性四图 (OMO/DR007/MLF/SFISF/两融) ═══ -->
+  <!-- ★2026-08-31(Chao「按 menu 顺序改」)：本 section 原在 CIPS 之后(DOM #21)，
+       但它属「流动性与央行」组，夹在「债务与信用」组中间 → 滚动时高亮回跳。
+       现移到 M2 之后、与其余央行流动性 section 相邻，使 DOM 顺序 === 菜单顺序。 -->
+  <div class="part-title" id="sec-cn-liq"><span class="part-num">＋</span>中国央行流动性 · 逆回购 / DR007 / MLF / SFISF / 两融 (三层融资渠道 + 股市托底 + 杠杆资金)<span class="freq-badge freq-daily">逆回购·DR007·两融 每日 · MLF 月度 · SFISF 事件驱动</span></div>
+  <div class="card">{cn_liq}</div>
+
+  <!-- ═══ 央行美元流动性互换(Chao 2026-08-24 点名遗失指标) ═══ -->
+  <!-- ★2026-08-31：原在页面最底部(DOM #47)，同属「流动性与央行」组 → 一并前移。 -->
+  <div class="part-title" id="sec-cb-swaps"><span class="part-num">＋</span>央行货币互换 · 美元流动性互换 (Fed↔外国央行 · 离岸美元荒温度计)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{cb_swaps}</div>
+
   <!-- ═══ 附三·二·三：Credit Impulse 信贷脉冲 (中期领先指标, 领先实体经济6-9月) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>Credit Impulse 信贷脉冲 · 中期领先指标 (美/中/欧 · 季度 · 新增信贷的加速度 · 领先实体经济6-9月)<span class="freq-badge freq-quarterly">每季度更新</span></div>
   <div class="card">{credit_impulse}</div>
@@ -7607,10 +7627,6 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·A3：中国 CIPS 跨境人民币支付 ═══ -->
   <div class="part-title" id="sec-cips"><span class="part-num">＋</span>中国 CIPS · 跨境人民币支付系统使用量 (人民币国际化 · 月度总额 / 日均强度)<span class="freq-badge freq-monthly">月度 · 官方次月发布</span></div>
   <div class="card">{cips}</div>
-
-  <!-- ═══ 附三·A3b：中国央行流动性四图 (OMO/DR007/MLF/PSL) ═══ -->
-  <div class="part-title" id="sec-cn-liq"><span class="part-num">＋</span>中国央行流动性 · 逆回购 / DR007 / MLF / SFISF / 两融 (三层融资渠道 + 股市托底 + 杠杆资金)<span class="freq-badge freq-daily">逆回购·DR007·两融 每日 · MLF 月度 · SFISF 事件驱动</span></div>
-  <div class="card">{cn_liq}</div>
 
   <div class="part-title" id="sec-ai-fcf"><span class="part-num">＋</span>AI 产业链 · 自由现金流与信用维度 (资本开支强度 · 杠杆 · 偿息能力)<span class="freq-badge freq-monthly">年度 · 随年报更新</span></div>
   <div class="card">{ai_fcf}</div>
@@ -7688,14 +7704,6 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附四：知名机构持仓 (13F) + Trump ═══ -->
   <div class="part-title"><span class="part-num">＋</span>机构持仓追踪 · 13F + Trump (对比上期变动)<span class="freq-badge freq-quarterly">每季度 · Trump不定期</span></div>
   <div class="h-grid">{holdings}</div>
-
-  <!-- ═══ 附五：KOL 全量名录档案卡(Chao 2026-08-23 要求, 13 维度, 页面最底部备查) ═══ -->
-  <!-- ═══ 央行美元流动性互换(Chao 2026-08-24 点名遗失指标) ═══ -->
-  <div class="part-title" id="sec-cb-swaps"><span class="part-num">＋</span>央行货币互换 · 美元流动性互换 (Fed↔外国央行 · 离岸美元荒温度计)<span class="freq-badge freq-daily">每日更新</span></div>
-  <div class="card">{cb_swaps}</div>
-
-  <div class="part-title" id="sec-kol-roster"><span class="part-num">＋</span>KOL 全量名录 · 13 维度档案卡 (编号/领域/在世/头衔/成就/荣誉/书籍/当年言论 · 名册镜像 Notion·新增自动入表)<span class="freq-badge freq-daily">随名册更新</span></div>
-  <div class="card">{kol_roster}</div>
 
   <div class="footnote">
     数据源：<a class="src-lnk" href="https://fred.stlouisfed.org/" target="_blank" rel="noopener">FRED</a> (VIX/HY/收益率曲线) · CNN F&amp;G · CBOE · AAII · GuruFocus · Conference Board · Renaissance · currentmarketvaluation · multpl · <a class="src-lnk" href="https://www.cftc.gov/dea/futures/deacmxsf.htm" target="_blank" rel="noopener">CFTC COT</a> (金银 commercial)。<br>

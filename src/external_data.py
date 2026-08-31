@@ -438,11 +438,27 @@ def kol_weekly_views(min_comment_len=10, period="week"):
                     else:
                         break  # 方向变了
             since_map[kol] = since
+            # ★言论首现日(Chao 2026-08-31): since 记的是【方向】连续保持起始日,
+            #   方向不变时它察觉不到言论内容已经换了 —— 实测最新快照 118 人里
+            #   60 人言论与上一日逐字相同, 却因方向没变而全被当成"当前观点",
+            #   导致本日/本周/本月三档都是 127 人、filter 形同虚设。
+            #   故另算 cmt_since = 【这段言论文本】首次出现的日期, 用于窗口过滤。
+            _cur_cmt = (x.get("comments") or "").strip()
+            cmt_since = vdate
+            if _cur_cmt:
+                for dd in reversed([d for d in all_dates if d < vdate]):
+                    prev_rec = snaps.get(dd, {}).get(kol)
+                    if not prev_rec:
+                        break                      # 断档 → 首现日停在此
+                    if (prev_rec.get("comments") or "").strip() == _cur_cmt:
+                        cmt_since = dd             # 同一段话, 继续前推
+                    else:
+                        break                      # 话变了 → 首现日确定
             rows.append({"kol": kol, "sector": x.get("sector", ""),
                          "direction": x.get("direction", ""),
                          "comments": x.get("comments", ""),
                          "targets": x.get("targets", ""), "date": vdate,
-                         "since_date": since})
+                         "since_date": since, "cmt_since": cmt_since})
     else:
         # 回退: kol_independent.json 的 all(当日全量, 无历史→首现日=当日)
         if os.path.exists(KOL_INDEPENDENT):
@@ -464,6 +480,16 @@ def kol_weekly_views(min_comment_len=10, period="week"):
     # 只保留有实质言论的
     rows = [r for r in rows if (r.get("comments") or "").strip()
             and len((r["comments"]).strip()) >= min_comment_len]
+    # ★窗口过滤(Chao 2026-08-31): 只留【这段言论本身是窗口内新出现】的人。
+    #   crawl 每天全量跑, 每人天天都有快照, 若不按言论首现日过滤,
+    #   任何窗口都会覆盖全部人 → 三档都是 127 位, filter 等于没做。
+    #   本日 = 言论首现日 >= 今天(无今日快照则回退最近一天, 即"当天或前一天有新观点");
+    #   本周/本月同理按各自窗口起点。没有新观点就诚实留空, 绝不把所有人堆上去。
+    _cut = _win_start
+    if period == "day":
+        # 本日: 以最新快照日为准(cron 可能还没跑当天), 取该日新出现的言论
+        _cut = src_date or _win_start
+    rows = [r for r in rows if (r.get("cmt_since") or r.get("date") or "") >= _cut]
     # 按归一 sector 分组
     groups = {}
     for r in rows:
@@ -473,14 +499,16 @@ def kol_weekly_views(min_comment_len=10, period="week"):
                                "color": _KOL_SECTOR_COLOR.get(zh, "#8a8377"),
                                "views": []})
         since = r.get("since_date", r.get("date", src_date))
+        _cs = r.get("cmt_since") or r.get("date") or src_date
         groups[zh]["views"].append({
             "kol": r.get("kol", ""),
             "direction": r.get("direction", ""),
             "comments": (r.get("comments") or "")[:400],
             "targets": (r.get("targets") or "")[:150],
             "date": r.get("date", src_date),
-            "since_date": since,                    # 当前观点起始日(首现)
-            "is_new": bool(since and since >= _this_monday_str),  # 本周内新转成
+            "since_date": since,                    # 当前方向起始日
+            "cmt_since": _cs,                       # 这段言论首次出现日
+            "is_new": bool(_cs and _cs >= _this_monday_str),  # 窗口内新观点
         })
     # 方向强弱排序: 看多在前(更醒目), 模块内按方向强弱降序
     _rank = {"强烈看多": 2, "看多": 1, "分歧": 0, "中性": 0, "看空": -1, "强烈看空": -2}
@@ -5225,7 +5253,10 @@ def fetch_ai_credit():
     out["total"] = len(out["rows"])
     return out
 
-_SEC_UA = {"User-Agent": "EcoVolChecker research (contact: chao.jin)"}
+# ★UA 必须含【真实邮箱】(2026-08-31 实测): SEC 对 data.sec.gov 宽松, 但
+#   www.sec.gov/Archives/ 严格校验 —— 旧值 "EcoVolChecker research (contact: chao.jin)"
+#   拉 Archives 一律 403, 导致读 filing 原始 XBRL 的补充源静默失败返回 None。
+_SEC_UA = {"User-Agent": "Eco-Volatility-Checker chao.jin@uber.com"}
 _FACTS_CACHE = {}
 
 
@@ -5357,6 +5388,21 @@ def fetch_ai_fcf():
                 continue
 
             fy = max(ocf)
+            # ★补充源(Chao 2026-08-31 方案2): companyfacts 对 20-F 外国发行人滞后,
+            #   若最新年度已落后当前年份 ≥1 年, 就去 EDGAR 找更新的年报直接读 XBRL。
+            #   实测 TSM: companyfacts 停在 2024-12-31, 而 2025 年 20-F 早已申报。
+            _newer = _latest_annual_filing(cik, after=fy)
+            if _newer:
+                _o, _c = _fcf_from_filing_xbrl(
+                    cik, _newer,
+                    (_IFRS_OCF if ns_used and ns_used[0] == "ifrs-full" else _OCF_TAGS),
+                    (_IFRS_CAPEX if ns_used and ns_used[0] == "ifrs-full" else _CAPEX_TAGS))
+                if _o and _c:
+                    _common = sorted(set(_o) & set(_c))
+                    if _common and _common[-1] > fy:
+                        _f2 = _common[-1]
+                        ocf, capex_map, fy = {_f2: _o[_f2]}, {_f2: _c[_f2]}, _f2
+                        rec["src_note"] = "20-F XBRL 原文件(companyfacts 未收录该年)"
             rec.update(fy=fy, ocf=ocf[fy], capex=capex_map[fy],
                        fcf=ocf[fy] - capex_map[fy], status="ok")
             # 利息保障倍数(供合成评级用); 拿不到不影响 FCF
@@ -5375,6 +5421,100 @@ def fetch_ai_fcf():
         out["as_of"] = max(fys)
     out["ok_count"], out["total_count"] = ok_n, tot_n
     return out
+
+
+def _latest_annual_filing(cik, after):
+    """在 EDGAR submissions 里找【报告期晚于 after】的最新年报 accession。
+
+    ★用途(Chao 2026-08-31 方案2): companyfacts 聚合库对 20-F 外国私人发行人收录滞后,
+      本函数直接查申报索引, 确认是否存在更新的年报可读。
+    after: "YYYY-MM-DD" 已有的最新财年末。无更新年报则返回 None。
+    """
+    import urllib.request
+    try:
+        u = f"https://data.sec.gov/submissions/CIK{int(cik):010d}.json"
+        d = json.loads(urllib.request.urlopen(
+            urllib.request.Request(u, headers=_SEC_UA),
+            timeout=40).read().decode("utf-8", "replace"))
+        r = d.get("filings", {}).get("recent", {})
+        best = None
+        for form, rep, accn in zip(r.get("form", []), r.get("reportDate", []),
+                                   r.get("accessionNumber", [])):
+            if not form.startswith(("10-K", "20-F")):
+                continue
+            if form.endswith("/A"):
+                continue                       # 修订件先不用, 避免口径混乱
+            if rep and rep > (after or "") and (best is None or rep > best[0]):
+                best = (rep, accn)
+        return best[1] if best else None
+    except Exception:
+        return None
+
+
+def _fcf_from_filing_xbrl(cik, accn, ocf_tags, capex_tags, unit="usd"):
+    """从【单份年报的 XBRL 原文件】取 OCF/CapEx —— companyfacts 缺该年时的补充源。
+
+    ★为什么需要(Chao 2026-08-31 方案2): SEC companyfacts 聚合库对外国私人发行人
+      (20-F) 收录严重滞后。实测 TSM 2025 年 20-F 已于 2026-04-16 申报,
+      但 companyfacts 最新仍停在 2024-12-31 → 图上 TSM 落后整整一年。
+      直接读那份 filing 的 XBRL 实例文件即可拿到, 数据仍是官方申报值, 口径不变。
+    ★单位: 20-F 常同时申报本币(twd)与美元换算值, 必须按 unitRef 过滤,
+      否则 dict 覆盖会混用两种币种 —— 实测混用会算出 FCF=-11999 億 的荒谬值。
+    ★只取无 segment 的合并数(带 segment 的是分部/分项披露)。
+    返回 {fy_end: value} 两个 dict (ocf, capex); 任一为空则返回 (None, None)。
+    """
+    import re as _re
+    import urllib.request
+    base = ("https://www.sec.gov/Archives/edgar/data/"
+            f"{int(cik)}/{accn.replace('-', '')}/")
+    try:
+        idx = json.loads(urllib.request.urlopen(
+            urllib.request.Request(base + "index.json", headers=_SEC_UA),
+            timeout=40).read().decode("utf-8", "replace"))
+        names = [it["name"] for it in idx["directory"]["item"]]
+        inst = next((n for n in names if n.endswith("_htm.xml")), None)
+        if not inst:
+            return None, None
+        raw = urllib.request.urlopen(
+            urllib.request.Request(base + inst, headers=_SEC_UA),
+            timeout=120).read().decode("utf-8", "ignore")
+    except Exception:
+        return None, None
+
+    ctx = {}
+    for m in _re.finditer(r'<context id="([^"]+)">(.*?)</context>', raw, _re.S):
+        cid, body = m.group(1), m.group(2)
+        s = _re.search(r"<startDate>([^<]+)", body)
+        e = _re.search(r"<endDate>([^<]+)", body)
+        if s and e:
+            ctx[cid] = (s.group(1), e.group(1), "<segment>" in body)
+
+    def _grab(tags):
+        got = {}
+        for tag in tags:
+            t = tag.split(":")[-1]
+            for m in _re.finditer(
+                    r'<[a-z-]+:%s([^>]*)>(-?[0-9.]+)</[a-z-]+:%s>' % (t, t), raw):
+                attrs, val = m.group(1), m.group(2)
+                cid = _re.search(r'contextRef="([^"]+)"', attrs)
+                un = _re.search(r'unitRef="([^"]+)"', attrs)
+                if not cid or not un:
+                    continue
+                cid = cid.group(1)
+                if un.group(1).lower() != unit:
+                    continue                     # 币种不符 → 跳过(防混算)
+                if cid not in ctx or ctx[cid][2]:
+                    continue                     # 带 segment 的分部数据 → 跳过
+                st, en, _ = ctx[cid]
+                if st[:4] != en[:4]:
+                    continue                     # 非完整自然年 → 跳过
+                got[en] = float(val)
+        return got
+
+    ocf, capex = _grab(ocf_tags), _grab(capex_tags)
+    if not ocf or not capex:
+        return None, None
+    return ocf, capex
 
 
 def fetch_synthetic_spreads():
