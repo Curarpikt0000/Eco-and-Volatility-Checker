@@ -526,6 +526,95 @@ _KOL_SECTOR_COLOR = {
 }
 
 
+def kol_cumulative_changes(period="month"):
+    """★累计口径转向(Chao 2026-08-31 采纳): 统计窗口内【逐日相邻】发生过的所有方向切换,
+    而不是首尾两个端点对比。
+
+    为什么需要它: 端点对比会把「月初看多→月中转空→月末又转多」的人判为『没变』。
+    实测 2026-08: 端点口径本月仅 2 人转向, 而本周(端点)就有 75 人 —— 端点口径在长窗口
+    下会系统性抵消掉中途摆动, 给出「市场共识没变」的错误结论。累计口径如实反映活跃度。
+
+    每人只保留其窗口内【最后一次】切换作为展示主体, 另附:
+      n_flips = 该人在窗口内切换总次数
+      round_trip = 是否已摆回起点方向(净变化为零, 提示这是噪音而非趋势)
+      path = 完整方向路径(如 看多→看空→看多)
+    返回 [{kol,sector,prev_dir,new_dir,date,comments,targets,n_flips,round_trip,path},...]
+    绝不编: 无有效方向的记录不参与判定。
+    """
+    snaps = load_kol_daily_snapshots()
+    if len(snaps) < 2:
+        return []
+    dates = sorted(snaps.keys())
+    win_start, win_end, _ = _kol_period_window(period)
+    win = [d for d in dates if win_start <= d <= win_end]
+    # 需要窗口起点之前一天作为初始方向基准
+    before = [d for d in dates if d < win_start]
+    if before:
+        win = [before[-1]] + win
+    if len(win) < 2:
+        return []
+
+    _invalid = {"", "未找到", "无", "n/a", "未知", "数据滞后", "-", "—"}
+
+    # ★方向粗粒度归并(Chao 2026-08-31 实测必须):
+    #   原始 direction 有 强烈看多/看多/中性偏多/分歧/中性/中性偏空/看空/强烈看空 等细档,
+    #   同一份观点在不同日的抓取里常在相邻细档间漂移(如"看空"↔"中性偏空"),
+    #   直接逐档比对会把【标注噪音】当成【真实转向】。
+    #   实测 Jeffrey Gundlach 8/26-8/31 四天内容几乎同一件事(不降息/押现金黄金/AI芯片顶部),
+    #   却被标成 看空→看多→看空; 全月记 11 次切换, 绝大多数不是真的改主意。
+    #   故只认【多 / 空 / 中性】三大阵营之间的跨越, 阵营内漂移不计。
+    def _camp(v):
+        if not v:
+            return None
+        if "看多" in v:
+            return "多"
+        if "看空" in v:
+            return "空"
+        return "中"                      # 分歧/中性 等
+
+    def _dir(day, kol):
+        rec = snaps.get(day, {}).get(kol)
+        if not rec:
+            return None
+        v = (rec.get("direction") or "").strip()
+        return None if v in _invalid else v
+
+    # 收集窗口内每个 KOL 的【阵营】序列(只在跨阵营时记一笔, 阵营内漂移忽略)
+    seq = {}
+    for d in win:
+        for kol in snaps.get(d, {}):
+            v = _dir(d, kol)
+            if v is None:
+                continue
+            c = _camp(v)
+            s = seq.setdefault(kol, [])
+            if not s or s[-1][2] != c:      # 只在【阵营】变化时记一笔
+                s.append((d, v, c))
+
+    out = []
+    for kol, s in seq.items():
+        if len(s) < 2:
+            continue                        # 窗口内从未跨阵营
+        flips = len(s) - 1
+        first_camp, last_camp = s[0][2], s[-1][2]
+        last_day, prev_dir = s[-1][0], s[-2][1]
+        rec = snaps.get(last_day, {}).get(kol) or {}
+        out.append({
+            "kol": kol,
+            "sector": rec.get("sector", ""),
+            "prev_dir": prev_dir,
+            "new_dir": s[-1][1],
+            "date": last_day,
+            "comments": (rec.get("comments") or "")[:300],
+            "targets": _tgs(rec.get("targets"), 150),
+            "n_flips": flips,
+            "round_trip": bool(flips >= 2 and first_camp == last_camp),
+            "path": "→".join(v for _, v, _c in s),
+        })
+    # 切换次数多的排前面(最活跃/最动摇的先看)
+    return sorted(out, key=lambda x: (-x["n_flips"], x["kol"]))
+
+
 def kol_stance_changes_grouped(days=None, period="week"):
     """窗口内 KOL 方向转向, 按 sector 模块分组。
     ★数据源: Eco 自己的每日快照(data/kol/daily/, kol_weekly_changes), 完全独立, 不依赖任何 agent 的 Notion DB。
@@ -535,7 +624,15 @@ def kol_stance_changes_grouped(days=None, period="week"):
           "modules": [{"sector":中文, "en":英文, "color":色, "changes":[{kol,prev_dir,new_dir,date,comments,targets},...]}]}
     绝不编: 无数据则 modules=[]。"""
     # ★主源: Eco 自己的每日快照做窗口对比(完全独立)
-    raw = kol_weekly_changes(period=period)
+    # 口径分流(Chao 2026-08-31): month 用【累计】口径(逐日相邻切换汇总),
+    #   day/week 用【端点】口径(窗口内最新 vs 窗口前最后)。
+    #   原因: 端点口径在月级窗口会把中途来回摆动的人抵消成"没变",
+    #   实测本月仅 2 人 vs 本周 75 人, 属系统性失真而非平滑。
+    cumulative = (period == "month")
+    if cumulative:
+        raw = kol_cumulative_changes(period=period)
+    else:
+        raw = kol_weekly_changes(period=period)
     # 基准日: 用快照里实际对比的 prev 日期(窗口起点之前最后一天)
     snaps = load_kol_daily_snapshots()
     win_start, _win_end, _ = _kol_period_window(period)
@@ -561,13 +658,22 @@ def kol_stance_changes_grouped(days=None, period="week"):
             "date": ch.get("date", ""),
             "comments": (ch.get("comments") or "")[:300],
             "targets": _tgs(ch.get("targets"), 150),
+            # 累计口径专有: 切换次数 / 是否已摆回 / 完整路径(端点口径下为默认值)
+            "n_flips": ch.get("n_flips", 1),
+            "round_trip": bool(ch.get("round_trip")),
+            "path": ch.get("path", ""),
         })
     # 模块内按日期降序; 模块按转向数降序
     for g in groups.values():
         g["changes"].sort(key=lambda x: x["date"], reverse=True)
     modules = sorted(groups.values(), key=lambda g: len(g["changes"]), reverse=True)
     total = sum(len(g["changes"]) for g in modules)
+    # 累计口径附加统计: 总切换人次 + 已摆回(净变化为零)人数
+    flips_total = sum(c.get("n_flips", 1) for g in modules for c in g["changes"])
+    round_trips = sum(1 for g in modules for c in g["changes"] if c.get("round_trip"))
     return {"since": since, "period": period, "days": days,
+            "cumulative": cumulative, "flips_total": flips_total,
+            "round_trips": round_trips,
             "total": total, "modules": modules}
 
 
