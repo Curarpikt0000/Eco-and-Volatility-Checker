@@ -17,6 +17,10 @@ import glob
 import json
 
 sys.path.insert(0, os.path.dirname(__file__))
+# ★2026-08-31: 本文件内 BIS / vintage 两段用的是 `from src import ...`(包路径写法),
+# 但入口 `python src/build_dashboard.py` 只把 src/ 放进 sys.path, 项目根不在 → ModuleNotFoundError:
+# 'src' → BIS 卡片被静默打空(exception 被 try 吞掉只打印"跳过")。补插项目根, 两种写法都能解析。
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import signals as sg
 import dashboard as dash
 import holdings_13f as h13
