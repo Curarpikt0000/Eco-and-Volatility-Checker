@@ -8,25 +8,25 @@
     "value": 0.62,
     "as_of": "2026-08-31",
     "status": "ok",
-    "note": "CBOE equity put/call 0.62 (官方daily); Total P/C 0.84; Index P/C 0.99"
+    "note": "CBOE equity put/call 0.62 (ycharts官方,截至8/31收盘口径); Total P/C 0.73"
   },
   "insider": {
-    "value": 0.28,
-    "as_of": "2026-08-31",
+    "value": 0.26,
+    "as_of": "2026-08-01",
     "status": "ok",
-    "note": "GuruFocus insider buy/sell 0.28 (Aug 2026, 低于长期均值0.39)"
+    "note": "GuruFocus insider buy/sell 0.26 (Aug 2026, 低于5年均值0.35; 内部人不活跃买入)"
   },
   "lei": {
     "value": 0.2,
     "as_of": "2026-07-31",
     "status": "ok",
-    "note": "LEI 7月+0.2%至99.5, 六个月增长率转正(+0.2% 1-7月)为四年多来首次"
+    "note": "LEI 7月+0.2%至99.5, 六个月增长率转正(+0.2% 1-7月)为四年多来首次(8/20发布)"
   },
   "bofa_bull_bear": {
     "value": 9.7,
     "as_of": "2026-08-07",
     "status": "ok",
-    "note": "BofA Bull&Bear 升至9.7(自9.4), 2021年来最高, 远超8.0卖出阈值; 广度扩散+高收益债流入+利差收窄推动; FMS现金3.5%近历史低位"
+    "note": "BofA Bull&Bear 9.7(自9.4), 2021年来最高, 远超8.0卖出阈值(第17次卖出信号); 广度扩散+高收益债流入+利差收窄推动; FMS现金3.5%近历史低位"
   },
   "ad_line": {
     "value": false,
@@ -36,9 +36,9 @@
   },
   "aaii_bull_bear": {
     "value": -11.5,
-    "as_of": "2026-08-26",
+    "as_of": "2026-08-27",
     "status": "ok",
-    "note": "AAII bull 32.9% / bear 44.4% / neutral 22.6% (Wk of Aug 26); spread=-11.5 (前周-4.4); bear创近高44.4%连29周高于均值; neutral创异常低"
+    "note": "AAII bull 32.9%(-2.5) / bear 44.4%(+4.5) / neutral 22.6%(-2.0) (Wk of Aug 27); spread=-11.5(前周-4.4); 连6周低于历史均值6.5%; bear创近高44.4%"
   },
   "margin_debt": {
     "value": 1417.0,

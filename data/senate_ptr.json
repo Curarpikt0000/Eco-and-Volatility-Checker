@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-31",
+  "as_of": "2026-09-01",
   "senators": [
     {
       "name": "Tommy Tuberville",
@@ -7,116 +7,6 @@
       "n_reports": 22,
       "n_parsed": 3,
       "trades": [
-        {
-          "ticker": "WAB",
-          "asset": "Westinghouse Air Brake Technologies Corporation Common Stock",
-          "txn_date": "06/09/2026",
-          "owner": "Self",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$1,001 - $15,000",
-          "filed": "07/16/2026"
-        },
-        {
-          "ticker": null,
-          "asset": "ACN - Accenture plc Class A Ordinary Shares (Ireland)",
-          "txn_date": "06/08/2026",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$1,001 - $15,000",
-          "filed": "07/16/2026"
-        },
-        {
-          "ticker": "AWK",
-          "asset": "American Water Works Company, Inc. Common Stock",
-          "txn_date": "06/08/2026",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "07/16/2026"
-        },
-        {
-          "ticker": "CSX",
-          "asset": "CSX Corporation - Common Stock",
-          "txn_date": "06/08/2026",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "07/16/2026"
-        },
-        {
-          "ticker": "DUK",
-          "asset": "Duke Energy Corporation (Holding Company) Common Stock",
-          "txn_date": "06/08/2026",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "07/16/2026"
-        },
-        {
-          "ticker": "LMT",
-          "asset": "Lockheed Martin Corporation Common Stock",
-          "txn_date": "06/08/2026",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "07/16/2026"
-        },
-        {
-          "ticker": "MA",
-          "asset": "Mastercard Incorporated Common Stock",
-          "txn_date": "06/08/2026",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "07/16/2026"
-        },
-        {
-          "ticker": "NEE",
-          "asset": "NextEra Energy, Inc. Common Stock",
-          "txn_date": "06/08/2026",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "07/16/2026"
-        },
-        {
-          "ticker": "PFE",
-          "asset": "Pfizer, Inc. Common Stock",
-          "txn_date": "06/08/2026",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "07/16/2026"
-        },
-        {
-          "ticker": "PG",
-          "asset": "Procter & Gamble Company (The) Common Stock",
-          "txn_date": "06/08/2026",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "07/16/2026"
-        },
-        {
-          "ticker": "TSCO",
-          "asset": "Tractor Supply Company - Common Stock",
-          "txn_date": "06/08/2026",
-          "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$1,001 - $15,000",
-          "filed": "07/16/2026"
-        },
         {
           "ticker": "TSCO",
           "asset": "Tractor Supply Company",
@@ -156,6 +46,116 @@
           "dir_cn": "卖出",
           "amount_range": "$15,001 - $50,000",
           "filed": "02/14/2025"
+        },
+        {
+          "ticker": "MSFT",
+          "asset": "Microsoft Corp",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "02/14/2025"
+        },
+        {
+          "ticker": "AAPL",
+          "asset": "Apple Inc",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "02/14/2025"
+        },
+        {
+          "ticker": "TSCO",
+          "asset": "Tractor Supply Company",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "08/05/2026"
+        },
+        {
+          "ticker": "CARR",
+          "asset": "Carrier Global Corp",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$1,001 - $15,000",
+          "filed": "08/05/2026"
+        },
+        {
+          "ticker": "TXN",
+          "asset": "Texas Instruments Incorporated - Common Stock",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "08/05/2026"
+        },
+        {
+          "ticker": "DEO",
+          "asset": "Diageo Plc ADR",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "08/05/2026"
+        },
+        {
+          "ticker": "MSFT",
+          "asset": "Microsoft Corp",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "08/05/2026"
+        },
+        {
+          "ticker": "AAPL",
+          "asset": "Apple Inc",
+          "txn_date": "01/10/2025",
+          "owner": "Joint",
+          "direction": "Sale (Partial)",
+          "dir_cn": "部分卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "08/05/2026"
+        },
+        {
+          "ticker": "ADBE",
+          "asset": "Adobe Inc. - Common Stock",
+          "txn_date": "10/29/2024",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "11/15/2024"
+        },
+        {
+          "ticker": "AAPL",
+          "asset": "Apple Inc. - Common Stock",
+          "txn_date": "10/29/2024",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$15,001 - $50,000",
+          "filed": "11/15/2024"
+        },
+        {
+          "ticker": "CTVA",
+          "asset": "Corteva, Inc. Common Stock",
+          "txn_date": "10/29/2024",
+          "owner": "Joint",
+          "direction": "Sale (Full)",
+          "dir_cn": "卖出",
+          "amount_range": "$1,001 - $15,000",
+          "filed": "11/15/2024"
         }
       ],
       "status": "ok"

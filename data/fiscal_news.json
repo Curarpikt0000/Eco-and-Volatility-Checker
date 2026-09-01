@@ -1,9 +1,19 @@
 {
   "status": "ok",
-  "as_of": "2026-08-31",
+  "as_of": "2026-09-01",
   "source": "美日财政政策事件时间线。每日 cron agent 模式 web 检索权威源(路透/彭博/NHK/财务省/US Treasury/Congress)动态更新。绝不编造,每条带来源链接。",
   "note": "cron 每日抓取最新美日财政举措(债务上限/持续决议CR/政府关门/补充预算/国债发行计划等),按日期倒序保留最近 ~20 条。",
   "events": [
+    {
+      "date": "2026-08-31",
+      "country": "US",
+      "flag": "🇺🇸",
+      "category": "政府关门风险",
+      "title": "众议院复会表决参议院版CR,拟延拨款至12/11规避10/1停摆",
+      "summary": "众议院8/31结束暑期休会复会,首要议程是表决参议院8/8以90-6通过的临时拨款案(延至12/11),走快速通道(suspension of rules,需2/3多数)。众参两院此前分别通过截止12/4/12/11的不同版本CR需协调;白宫已表态支持参议院版,料广泛两党支持通过。FY27十二项拨款案众议院仅过3项、参议院拨款委仍僵持topline,选前两党均不愿再停摆。",
+      "source_url": "https://www.washingtontimes.com/news/2026/aug/28/house-returns-recess-plan-fund-government-weeks-ahead-shutdown/",
+      "source_name": "Washington Times / The Hill"
+    },
     {
       "date": "2026-08-24",
       "country": "US",

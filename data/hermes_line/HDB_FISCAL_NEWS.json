@@ -1,6 +1,6 @@
 {
  "table": "HDB_FISCAL_NEWS",
- "count": 13,
+ "count": 14,
  "rows": [
   {
    "uid": "fn|2026-08-24|Bessent称坚持既定拍卖日程,首次扩大回购9/10启动",
@@ -105,6 +105,59 @@
     },
     "来源链接": {
      "url": "https://www.reuters.com/world/china/us-treasury-stick-debt-auction-schedule-despite-bigger-buybacks-bessent-says-2026-08-24/"
+    }
+   }
+  },
+  {
+   "uid": "fn|2026-08-21|财务省27年度国债费想定金利拟设3.8%,29年来最高",
+   "props": {
+    "标题": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-21｜财务省27年度国债费想定金利拟设3.8%,29年来最高"
+       }
+      }
+     ]
+    },
+    "日期": {
+     "date": {
+      "start": "2026-08-21"
+     }
+    },
+    "摘要": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "财务省2027年度概算要求拟将国债利払想定金利上调至约3.8%(29年新高),反映日债收益率持续上行、利息负担加重。"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Reuters"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "JP"
+     }
+    },
+    "类别": {
+     "select": {
+      "name": "国债发行"
+     }
+    },
+    "来源链接": {
+     "url": "https://jp.reuters.com/economy/bank-of-japan/CFCDYMQKP5PR7AE5TDRSG5MDNI-2026-08-21/"
     }
    }
   },
