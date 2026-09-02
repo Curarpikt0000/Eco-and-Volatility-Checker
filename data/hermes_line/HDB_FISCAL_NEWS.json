@@ -1,7 +1,60 @@
 {
  "table": "HDB_FISCAL_NEWS",
- "count": 14,
+ "count": 15,
  "rows": [
+  {
+   "uid": "fn|2026-08-31|众议院复会表决参议院版CR,拟延拨款至12/11规避10/1停摆",
+   "props": {
+    "标题": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-31｜众议院复会表决参议院版CR,拟延拨款至12/11规避10/1停摆"
+       }
+      }
+     ]
+    },
+    "日期": {
+     "date": {
+      "start": "2026-08-31"
+     }
+    },
+    "摘要": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "众议院8/31结束暑期休会复会,首要议程是表决参议院8/8以90-6通过的临时拨款案(延至12/11),走快速通道(suspension of rules,需2/3多数)。众参两院此前分别通过截止12/4/12/11的不同版本CR需协调;白宫已表态支持参议院版,料广泛两党支持通过。FY27十二项拨款案众议院仅过3项、参议院拨款委仍僵持topline,选前两党均不愿再停摆。"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Washington Times / The Hill"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "US"
+     }
+    },
+    "类别": {
+     "select": {
+      "name": "政府关门风险"
+     }
+    },
+    "来源链接": {
+     "url": "https://www.washingtontimes.com/news/2026/aug/28/house-returns-recess-plan-fund-government-weeks-ahead-shutdown/"
+    }
+   }
+  },
   {
    "uid": "fn|2026-08-24|Bessent称坚持既定拍卖日程,首次扩大回购9/10启动",
    "props": {

@@ -5,10 +5,10 @@
     "status": "ok"
   },
   "put_call": {
-    "value": 0.62,
-    "as_of": "2026-08-31",
+    "value": 0.84,
+    "as_of": "2026-08-28",
     "status": "ok",
-    "note": "CBOE equity put/call 0.62 (ycharts官方,截至8/31收盘口径); Total P/C 0.73"
+    "note": "CBOE Total put/call 0.84 (thetrading.tools, 8/28收盘口径); CBOE官方与GuruFocus直连均被反爬拒(403), 用第三方聚合值"
   },
   "insider": {
     "value": 0.26,

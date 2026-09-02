@@ -1,18 +1,10 @@
 {
-  "as_of": "2026-09-01",
+  "as_of": "2026-09-02",
   "name": "Donald J Trump",
   "title": "总统",
-  "annual": {
-    "doc_type": "Annual (2026)",
-    "doc_date": "2026-07-01",
-    "pdf_url": "https://extapps2.oge.gov/201/Presiden.nsf/PAS+Index/69AEAA9D7455ACD585258E27002DDEE1/$FILE/Donald-J-Trump-2026-278ANNUAL.pdf"
-  },
+  "annual": null,
   "transactions": [],
-  "status": "annual_only",
-  "sources": [
-    "https://extapps2.oge.gov/201/Presiden.nsf/PAS+Index/69AEAA9D7455ACD585258E27002DDEE1/$FILE/Donald-J-Trump-2026-278ANNUAL.pdf",
-    "https://extapps2.oge.gov/201/Presiden.nsf/PAS+Index/2BF91F890F718ACB85258E5B002DE16B/$FILE/Donald-J-Trump-08.12.2026-278T.pdf"
-  ],
-  "n_docs": 26,
-  "n_transactions": 0
+  "status": "fetch_error",
+  "sources": [],
+  "error": "HTTP Error 400: Bad Request"
 }
