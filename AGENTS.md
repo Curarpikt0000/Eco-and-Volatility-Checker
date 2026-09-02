@@ -13,10 +13,21 @@ Notion 3 时序 DB → 莫兰迪配色 dashboard（雷达图 + 仪表盘 + 6 部
 判断市场过热/趋势转折/结构性周期顶，追踪 7 项硬性卖出触发（≥3 触发 = 开始分批卖出）。
 
 ## 技术栈
-- Python venv (`.venv/`: requests/pandas/xlrd/openpyxl/**pymupdf**)
+- Python venv (`.venv/`: requests/pandas/xlrd/openpyxl/**pymupdf**/**pytesseract**)
   - `pymupdf` 供 CIPS 官方 PDF 解析（`fetch_cips`）使用；缺失时该指标降级为「未就绪」，不影响其他板块。
+  - ⚠️**系统级依赖 `tesseract-ocr`（非 pip 包，apt 安装）** —— 供 `oge_trump._ocr_pages()`
+    解析川普 OGE 278-T 用。该文件近期已改为**纯扫描件**（34 页里 33 页无文字层），
+    不 OCR 就只能拿到 0 条逐笔交易。装法：`sudo apt-get install -y tesseract-ocr tesseract-ocr-eng`。
+    实测 tesseract 5.3 @200dpi，全份 34 页约 79 秒，解析出 632 条（日期/金额校验 0 异常）。
+    **★devpod 重启不保留**（apt 装完会提示 "will not persist over updates/restarts"）——
+    要长期生效须写进个人 `devpod.yaml`。缺失时 `_ocr_pages` 返回空并**静默降级**（不崩，
+    但逐笔退回 0 条）；若发现政要板块川普逐笔突然变 0，第一件事就是 `tesseract --version`。
 - 数据源：FRED API(VIX/HY/收益率曲线/TIPS/DXY) · CNN F&G JSON API · CFTC Socrata(金银COT) ·
   AAII/CBOE/GuruFocus/ConferenceBoard/Renaissance/Buffett/multpl(web，Jina/web_extract 绕反爬)
+  - **CBOE Put/Call 走 ScraperAPI**（`SCRAPER_API_KEY` 在 `.env`）：本机数据中心 IP 被
+    CBOE 全线封（HTML 302 Cloudflare、`cdn.cboe.com` 的 csv 403、换 UA 无效）。
+    ★口径纠正（2026-09-02）：此前回退用的第三方聚合值 **0.84** 与官方 equity **0.67**
+    差 0.17，口径不同 —— 该第三方源已从降级链移除。现降级链＝ScraperAPI(官方)→Jina(官方)→未找到。
 - Notion REST v1 直连(token 复用 Economic-Dashboard) · 幂等 upsert + 写后读回
 - skill: monitoring-pipeline(数值时序变体) + economic-dashboard-daily-pipeline(cron/backfill 模式)
 
