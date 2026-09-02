@@ -569,3 +569,64 @@ AGENTS.md 的 Cron 段仍描述旧版日报口径，需 Chao 授权后补写。
       KOL / web 源则周末仍有新内容。建议方案：周末照跑但对无更新的数值源不新建行。
 - [ ] 承接上节全部未清项（P4 cron prompt 出处铁律、出处缺口 2564 条、月报三件套、
       staged 未 commit 的 kol_store 相关改动、AGENTS.md 同步）。
+
+---
+
+## 2026-09-02
+
+### 决策
+
+- **川普 OGE 278-T：Chao 选「丙 → 甲」**——先 OCR 一份试水，质量达标再全量。
+  实测试水 4 页 7.9 秒、质量达标 → 直接推进全量。
+- **CBOE put/call：Chao 主动问「能否利用 scraper」**，方向被证明是对的。
+  实测 ScraperAPI 可打通官方页，并因此发现原第三方回退值是错的（见下）。
+- **B 方案（Hermes state.db 的 FTS trigram 瘦身）在 Chao 同意后被实测推翻并撤回**：
+  trigram 不是冗余（长查询多召回 1.5~2 倍）、库碎片仅 0.9MB 无水分、删了启动会自动重建。
+  → 教训：**「库大所以容易坏」是未验证的因果**，提方案前应先测。
+- Chao 授权 commit 并 push（条件：先确认不会重演 disk I/O / state.db 损坏）。
+- 归档进 ChaoWiki 已执行完毕（见「进展」），无需重复。
+
+### 事实与配置
+
+- **CBOE Put/Call 口径纠正（重要）**：官方 equity put/call = **0.67**、total = 0.95；
+  此前降级链里用的第三方聚合值（thetrading.tools）= **0.84**，**差 0.17，口径不同 → 一直是错值**。
+  该第三方源已从降级链移除。现降级链＝**ScraperAPI(官方) → Jina(官方) → 未找到**，
+  并加 `0.1~5.0` 区间守卫防抓错数。
+  - 直连实测：HTML 页 302 Cloudflare / `cdn.cboe.com/*.csv` 403 / 换 UA 无效
+    （本机数据中心 IP 被整段封）；ScraperAPI 打 HTML 页 200（443KB），
+    但 ScraperAPI 打 CSV 端点仍 500 → **只能走 HTML 页**。
+  - 页面是 Next.js，数值在 `self.__next_f` 内嵌载荷里，需从中挖取。
+- **川普 OGE 278-T：0 → 632 条逐笔交易**。
+  - 真根因不是网络：OGE API 健康（http 200，16,648 条记录，川普相关 25 条），
+    18 份 278-T **全都有 PDF 链接**；卡在 **PDF 无文字层**——最新一份 26.9MB，
+    34 页里 33 页零文字层、`(cid:xx)` 乱码，**必须 OCR**。
+  - OCR 实测：tesseract 5.3 @200dpi，全份 34 页 **79 秒**（此前口头估「几十分钟」是高估）。
+  - 质量校验：日期非法 0 / 金额下界全部落在 OGE 标准档 0 异常 / 年份全 2026 /
+    买 363 卖 272；资产名 OCR 噪声 3 条（`|`、空串）已加过滤，635 → **632，残留 0**。
+  - 现有 `parse_278t` 的 `buy_re` 本就容忍 OCR 变体（`urchas`/`ourchas`），
+    只需在**文字层为空时插入 OCR 兜底**即可复用。
+  - `oge_trump._fetch` 原本**零重试**，7MB 响应网络抖一下整个失败 → 已加 3 次指数退避（2s/4s）。
+  - 政要卡取值字段名是 `trades`（不是 `transactions`），端到端已验证 632 条落到卡上。
+- **tesseract-ocr 是 apt 装的系统包，devpod 重启不保留**；缺失时 `_ocr_pages` 静默降级，
+  逐笔退回 0 条而不报错 → 排查第一招 `tesseract --version`。已写进 AGENTS.md。
+  要长期生效须由 Chao 写进个人 `devpod.yaml`（**未动其 devpod 配置**）。
+- GuruFocus 403 是**虚警**：openinsider 早已是主源，GuruFocus 仅为失败回退。
+- 环境事实：9/2 `~/.hermes/state.db` 结构性损坏（`database disk image is malformed`），
+  当日含本归档器在内的 agent 型 cron 批量失败、换库后自愈——这是 9/2 无归档节的原因。
+
+### 进展
+
+- commit `3e61945`（已 push 公网）：川普 278-T 接 OCR + CBOE 走 ScraperAPI + 新鲜度审计工具。
+- commit `3fcc3ec`（已 push）：AGENTS.md 补 tesseract 系统依赖说明 + CBOE 口径纠正。
+- 新建 `tools/freshness_audit.py`：全库 40 个数据源新鲜度审计。
+  13 个告警 → **2 个真问题**（COMEX issue/stop 已修；黄金 Premium 断更 17 天未修）、
+  11 个误报（4 个判据太浅 + 8 个官方本来就低频，已逐个对过 FRED `observation_end`）。
+- ChaoWiki 已归档并 push 内网：`15aa88c`（静默失败形态 16/17/18 + 新页
+  `knowledge/crawler/fallback-source-calibration.md`「反爬回退须校验口径」）、`b97b469`
+  （多 agent 并发写同一 repo 的提交纪律）。
+
+### 待办
+
+- [ ] **黄金 Premium（印度/中国）断更 17 天**：根因是它从设计上就靠**手工导入 WGC xlsx**，
+      却当作日频指标展示。ScraperAPI 路径已验证可行，或可同样解决——等 Chao 定时间。
+- [ ] tesseract 持久化：需 Chao 自行写进 `devpod.yaml`，否则重启后川普逐笔静默归 0。
