@@ -24,6 +24,7 @@ import io
 import re
 import os
 import json
+import time
 import datetime
 import urllib.request
 import urllib.error
@@ -44,11 +45,26 @@ OGE_BANDS = [
 ]
 
 
-def _fetch(url, timeout=90, as_json=False):
-    req = urllib.request.Request(url, headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        raw = r.read()
-    return json.loads(raw) if as_json else raw
+def _fetch(url, timeout=90, as_json=False, retries=3):
+    """★2026-09-02: 加指数退避重试。
+
+    原实现是一次性请求、零重试 —— OGE 全量 API 单次响应约 7MB,
+    网络抖一下整个 fetch 就失败, 政要卡当天直接标 fetch_error。
+    实测该端点本身健康(http=200, 16648 条记录), 故那类失败属瞬时故障,
+    不该让一次抖动吃掉当天数据。重试 3 次 (2s/4s 退避) 即可吸收。
+    """
+    last = None
+    for attempt in range(retries):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": UA})
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                raw = r.read()
+            return json.loads(raw) if as_json else raw
+        except Exception as e:                      # noqa: BLE001 - 网络层各类异常都重试
+            last = e
+            if attempt < retries - 1:
+                time.sleep(2 * (2 ** attempt))      # 2s, 4s
+    raise last if last else RuntimeError(f"fetch failed: {url}")
 
 
 def list_trump_docs():
@@ -99,6 +115,35 @@ def _parse_amount(s):
     return _snap_band(lo, hi)
 
 
+def _ocr_pages(pdf_bytes, dpi=200):
+    """★2026-09-02 新增: 对无文字层的扫描件做 OCR。
+
+    背景: OGE 的 278-T 近期改为纯扫描件上传 —— 34 页里除首页签名外
+      文字层全空(pdfplumber/pymupdf 都提取不到), 导致逐笔交易长期为 0,
+      而外层只报 fetch_error, 掩盖了"拿得到但读不了"的真相。
+    实测: tesseract 5.3 @200dpi, 34 页约 67s, 能正确识别标的名/
+      purchase/日期/金额区间(单页 ~30 个金额区间)。
+    返回按页拼好的文本行 list; 任一依赖缺失则返回 [] (调用方自行降级)。
+    """
+    try:
+        import pymupdf
+        import pytesseract
+        from PIL import Image
+    except ImportError:
+        return []
+    lines = []
+    try:
+        doc = pymupdf.open(stream=pdf_bytes, filetype="pdf")
+        for pg in doc:
+            pix = pg.get_pixmap(dpi=dpi)
+            img = Image.open(io.BytesIO(pix.tobytes("png")))
+            t = pytesseract.image_to_string(img, lang="eng") or ""
+            lines += [ln.strip() for ln in t.split("\n") if ln.strip()]
+    except Exception:
+        return lines          # 已 OCR 出的部分照样交出去, 不整批丢弃
+    return lines
+
+
 def parse_278t(pdf_bytes):
     """解析 278-T 逐笔交易 PDF → [{n, asset, direction, dir_cn, txn_date, amount_range}]。"""
     import pdfplumber
@@ -107,6 +152,14 @@ def parse_278t(pdf_bytes):
         for pg in pdf.pages:
             t = pg.extract_text() or ""
             lines += [l.strip() for l in t.split("\n") if l.strip()]
+
+    # ★无文字层(扫描件) → 走 OCR。判据用"可读字母数字量"而非行数:
+    #   扫描件首页往往有电子签名文字, 单看行数会误判为"有文字层"。
+    readable = sum(len([c for c in ln if c.isalnum()]) for ln in lines)
+    if readable < 400:
+        ocr_lines = _ocr_pages(pdf_bytes)
+        if ocr_lines:
+            lines = ocr_lines
 
     buy_re = re.compile(r"\b(purchas|urchas|ourchas|lourchas)", re.I)
     sell_re = re.compile(r"\bsale\b", re.I)
@@ -135,6 +188,11 @@ def parse_278t(pdf_bytes):
         if lo is None:
             continue
         asset = body[:cut.start()].strip(" .-")
+        # ★OCR 噪声过滤: 扫描件偶有把表格竖线/空白识别成"资产名"的行
+        #   (实测 635 条里 3 条, 如 '|' 或空串)。资产名少于 3 个字母数字即丢弃,
+        #   宁可漏一条也不让垃圾行进入下游统计。
+        if len([c for c in asset if c.isalnum()]) < 3:
+            continue
         amt = f"${lo:,} - ${hi:,}" if hi else f"${lo:,}"
         out.append({
             "n": m.group(1),

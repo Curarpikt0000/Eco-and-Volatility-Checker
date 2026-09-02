@@ -2,9 +2,5706 @@
   "as_of": "2026-09-02",
   "name": "Donald J Trump",
   "title": "总统",
-  "annual": null,
-  "transactions": [],
-  "status": "fetch_error",
-  "sources": [],
-  "error": "HTTP Error 400: Bad Request"
+  "annual": {
+    "doc_type": "Annual (2026)",
+    "doc_date": "2026-07-01",
+    "pdf_url": "https://extapps2.oge.gov/201/Presiden.nsf/PAS+Index/69AEAA9D7455ACD585258E27002DDEE1/$FILE/Donald-J-Trump-2026-278ANNUAL.pdf"
+  },
+  "transactions": [
+    {
+      "n": "283",
+      "asset": "TEXAS TRANSN COMMN HWY IMPT RFDG B/E 5.00 % Due Apr 1, 2036",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/26/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "31",
+      "asset": "PENNSYLVANIA ST HIGHER E SR A RV BE/R/ 5 DUE 081532 DTD 070826 FC 021527 2.870% {",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "342",
+      "asset": "DAHLONEGA GA WTR & SEW REV RFDG AGM B/E OID @98.849 3.71% 3.625 % Due Sep 1, 2034",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "926",
+      "asset": "MICROSOFT CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "927",
+      "asset": "HOME DEPOT INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "929",
+      "asset": "AT&T INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "930",
+      "asset": "ABBOTT LABS",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "931",
+      "asset": "MASTERCARD INC CLASS A",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "932",
+      "asset": "STRYKER CORP [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "934",
+      "asset": "INTUITIVE SURGICAL INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "936",
+      "asset": "META PLATFORMS INC CLASS A [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "937",
+      "asset": "FIDELITY NATL INFORMATIO",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "938",
+      "asset": "PALANTIR TECHNOLOGIES IN CLASS A",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "939",
+      "asset": "KKR & CO INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "942",
+      "asset": "IBM CORP. {",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "943",
+      "asset": "SHERWIN-WILLIAMS CO. __|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "944",
+      "asset": "AMERICAN TOWER CORP NEW REIT ___|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "945",
+      "asset": "LULULEMON ATHLETICA INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "948",
+      "asset": "KROGER CO",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "949",
+      "asset": "BROADRIDGE FINL SOLUTION",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "952",
+      "asset": "BROWN & BROWN INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "954",
+      "asset": "HP INC ___|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "956",
+      "asset": "FLUTTER ENTMT PLC F __|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "957",
+      "asset": "MEDTRONIC PLC F [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "958",
+      "asset": "|COUPANG INC CLASS CLASS A",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "966",
+      "asset": "KIMBERLY CLARK CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "967",
+      "asset": "LUCID GROUP INC |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "968",
+      "asset": "|COREWEAVE INC CLASS A",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "969",
+      "asset": "MARVELL TECHNOLOGY INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "970",
+      "asset": "[CREDO TECHNOLOGY GROUP F |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/24/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "971",
+      "asset": "FOX CORP CLASS CLASS B",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/24/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "972",
+      "asset": "|OLIN CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/24/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "973",
+      "asset": "BOOZ ALLEN HAMILTON HLDG CLASS CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/24/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "974",
+      "asset": "MARSH & MCLENNAN COS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/24/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "976",
+      "asset": "FOX CORP CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/24/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "97",
+      "asset": "ASTERA LABS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/24/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "978",
+      "asset": "LOWES COS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/24/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "982",
+      "asset": "[THE CIGNA GROUP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/24/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "983",
+      "asset": "EQUIFAX INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/24/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "984",
+      "asset": "MSA SAFETY INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/24/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "985",
+      "asset": "CBRE GROUP INC CLASS CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/24/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "987",
+      "asset": "HOULIHAN LOKEY INC CLASS CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/24/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "988",
+      "asset": "EXLSERVICE HLDGS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/24/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "989",
+      "asset": "BENTLEY SYS INC CLASS CLASS B",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/24/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "990",
+      "asset": "KYNDRYL HLDGS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/24/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "991",
+      "asset": "|CARVANA CO CLASS CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/24/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "994",
+      "asset": "SNAP INC CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/24/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "995",
+      "asset": "|CROWN CASTLE INC REIT REIT",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/24/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "998",
+      "asset": "GLOBAL PMTS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/24/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "999",
+      "asset": "SBA COMMUNICATIONS CORP REIT",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/24/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "2",
+      "asset": "Kla Corp {",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "8",
+      "asset": "Emerson Elec Co |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "9",
+      "asset": "Caterpillar Inc ___|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "10",
+      "asset": "S&p Global Inc |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "14",
+      "asset": "Hewlett Packard Enterprise Co",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "15",
+      "asset": "Intuitive Surgical Inc __|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "16",
+      "asset": "‘Space Expl Technologies Corp",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "17",
+      "asset": "Cheniere Energy Inc",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "28",
+      "asset": "Trane Technologies Plc",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "29",
+      "asset": "Huntington Bancshares Inc",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "514",
+      "asset": "MICROSOFT CORP_",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "522",
+      "asset": "INTUITIVE SURGICAL INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "523",
+      "asset": "STRYKER CORP [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "525",
+      "asset": "SHERWIN-WILLIAMS CO",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "526",
+      "asset": "PALANTIR TECHNOLOGIES IN CLASS A",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "527",
+      "asset": "DANAHER CORP |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "528",
+      "asset": "UBER TECHNOLOGIES INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "530",
+      "asset": "ZILLOW GROUP INC CLASS CLASS C",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "531",
+      "asset": "|ZOETIS INC CLASS A",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "535",
+      "asset": "EXXON MOBIL CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "536",
+      "asset": "ROLLINS INC |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "537",
+      "asset": "EQUIFAX INC [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "538",
+      "asset": "NIKE INC CLASS B",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "539",
+      "asset": "BENTLEY SYS INC CLASS CLASS 8 ___|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "542",
+      "asset": "GLOBAL PMTS INC |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "543",
+      "asset": "RESMED INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "544",
+      "asset": "NORTHROP GRUMMAN CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "546",
+      "asset": "|CHEVRON CORP NEW",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "548",
+      "asset": "|ALBERTSONS CO SHS CLA CLASS A",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "558",
+      "asset": "INSULET CORP [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "567",
+      "asset": "BJS WHSL CLUB HLDGS INC _|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1 - $1,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "568",
+      "asset": "PHILIP MORRIS INTL INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "569",
+      "asset": "FLUTTER ENTMT PLC F [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "570",
+      "asset": "ZSCALER INC |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "572",
+      "asset": "JAMPHENOL CORP NEW CLASS A",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "573",
+      "asset": "LOCKHEED MARTIN CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "576",
+      "asset": "FAIR ISAAC CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "580",
+      "asset": "[TELEDYNE TECHNOLOGIES IN",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "582",
+      "asset": "AMERICAN TOWER CORP NEW REIT",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "586",
+      "asset": "IQVIA HLDGS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "587",
+      "asset": "ROBLOX CORP CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "583",
+      "asset": "DIAMONDBACK ENERGY INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "589",
+      "asset": "API GROUP CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "590",
+      "asset": "PENUMBRA INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "592",
+      "asset": "|GEN DIGITAL INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "593",
+      "asset": "JOHNSON & JOHNSON",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "596",
+      "asset": "FASTENAL CO",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "597",
+      "asset": "ITRANSUNION",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "598",
+      "asset": "[TRACTOR SUPPLY CO",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "599",
+      "asset": "|GARTNER INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "600",
+      "asset": "ALBEMARLE CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "601",
+      "asset": "MEDTRONIC PLC F",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "602",
+      "asset": "PROCORE TECHNOLOGIES INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "603",
+      "asset": "LYONDELLBASELL INDUSTR F CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "604",
+      "asset": "|THE TRADE DESK INC CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "605",
+      "asset": "ZIMMER BIOMET HLDGS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "606",
+      "asset": "GODADDY INC CLASS CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "607",
+      "asset": "SEMPRA",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "608",
+      "asset": "PEPSICO INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "609",
+      "asset": "|HARTFORD INS GROUP INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "610",
+      "asset": "BLACKROCK INC NEW",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "611",
+      "asset": "|AMDOCS LTD F",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "612",
+      "asset": "MOODYS CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "613",
+      "asset": "VICI PPTYS INC REIT",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "615",
+      "asset": "LIBERTY MEDIA CORP DEL CLASS SERIES C",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "616",
+      "asset": "GENERAL DYNAMICS CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "617",
+      "asset": "EQT CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "621",
+      "asset": "STRATEGY INC CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "622",
+      "asset": "CONOCOPHILLIPS",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "623",
+      "asset": "ROYAL GOLD INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "624",
+      "asset": "T-MOBILE US INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "625",
+      "asset": "SS&C TECHNOLOGIES HLDGS",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "626",
+      "asset": "META PLATFORMS INC CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "627",
+      "asset": "\\VERALTO CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "639",
+      "asset": "PTC INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "641",
+      "asset": "DOMINOS PIZZA INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "642",
+      "asset": "TIX COS INC NEW,",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "643",
+      "asset": "CHUBB LTD F",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "644",
+      "asset": "COGNIZANT TECHNOLOGY SOL CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "645",
+      "asset": "INTUIT",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "646",
+      "asset": "CROWN CASTLE INC REIT REIT",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "647",
+      "asset": "COSTCO WHSL CORP NEW",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/23/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "387",
+      "asset": "MEMPHIS TN GENL IMPT B/E 3.45 % Due Jun 1, 2035",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "512",
+      "asset": "CORNING INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/22/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "513",
+      "asset": "STATE STREET SPDR S&P DIVIDEND ETF",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/22/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "783",
+      "asset": "ISHARES INTERNATIONAL TREASURY BOND ETF",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$1,000,001 - $5,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "788",
+      "asset": "ISHARES U.S. TREASURY BOND ETF",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$1,000,001 - $5,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "791",
+      "asset": "VANGUARD SHORT-TERM BOND INDEX FUND ETF SHARES",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/22/2026",
+      "amount_range": "$1,000,001 - $5,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "802",
+      "asset": "FIDELITY NATL INFORMATIO",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$1,000,001 - $5,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "803",
+      "asset": "HOME DEPOT INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$1,000,001 - $5,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "806",
+      "asset": "ABBOTT LABS",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "805",
+      "asset": "ACCENTURE PLC IRELAND F CLASS CLASS A |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "806",
+      "asset": "NIKE INC CLASS CLASS 8",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "807",
+      "asset": "|GENUINE PARTS CO",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "808",
+      "asset": "|VANGUARD DIVIDEND APPRECIATION INDEX FUND ETF SHARES",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/22/2026",
+      "amount_range": "$5,000,001 - $25,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "811",
+      "asset": "POOL CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "812",
+      "asset": "___| LIQUIDIA CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "814",
+      "asset": "THE CAMPBELL'S CO",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "817",
+      "asset": "PRIMORIS SVCS CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "820",
+      "asset": "MARKETAXESS HLDGS INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "826",
+      "asset": "LAZARD INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "836",
+      "asset": "EASTERN BANKSHARES | [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "838",
+      "asset": "CALIFORNIA WTR SVC GROUP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "242",
+      "asset": "RUSH STREET INTERACT A CLASS A [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "844",
+      "asset": "|ADMA BIOLOGICS INC _|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "854",
+      "asset": "POWELL INDS INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "855",
+      "asset": "NEOGENOMICS INC __|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "859",
+      "asset": "BRIGHTSPRING HEALTH SVCS",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "862",
+      "asset": "ARGAN INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "865",
+      "asset": "RALLIANT CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "868",
+      "asset": "|ATMUS FILTRATION TECHNOL [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/22/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "923",
+      "asset": "|VIAVI SOLUTIONS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/22/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "924",
+      "asset": "ISANMINA CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/22/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "925",
+      "asset": "SEMTECH CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/22/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "197",
+      "asset": "|ADOBE INC [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "198",
+      "asset": "BERKSHIRE HATHAWAY INC-CL 8",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$5,000,001 - $25,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "203",
+      "asset": "MOODYS CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "204",
+      "asset": "T-MOBILE US INC USD0.001",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "205",
+      "asset": "HOME DEPOT INC __|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "206",
+      "asset": "BOEING PANY ___|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "207",
+      "asset": "TYLER TECHNOLOGIES INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "209",
+      "asset": "STRYKER CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "210",
+      "asset": "PROCTER & GAMBLE PANY",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "211",
+      "asset": "LENNOX INTL INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "212",
+      "asset": "INTUIT",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "213",
+      "asset": "FACTSET RESH SYS INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "214",
+      "asset": "FORTINET INC {",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "215",
+      "asset": "CROWDSTRIKE HLDGS INC |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "217",
+      "asset": "PALO ALTO NETWORKS INC |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "218",
+      "asset": "SERVICENOW INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "220",
+      "asset": "ROYAL CARIBBEAN GROUP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "223",
+      "asset": "|AXON ENTERPRISE INC J",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "224",
+      "asset": "APPLOVIN CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "225",
+      "asset": "Salesforce Inc",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "228",
+      "asset": "Blackstone Inc. [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "231",
+      "asset": "BROADRIDGE FINL SOLUTIONS INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/18/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "261",
+      "asset": "AT&TINC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "242",
+      "asset": "LULULEMON ATHLETICA INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "243",
+      "asset": "FIDELITY NATL INFORMATION SVCS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "245",
+      "asset": "BUNGE GLOBAL SA SHS",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "246",
+      "asset": "MOLSON COORS BEVERAGE PANY",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "247",
+      "asset": "GARTNER GROUP INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "248",
+      "asset": "HENRY JACK & ASSOC INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "249",
+      "asset": "GLOBAL PMTS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "250",
+      "asset": "KKR & CO INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "251",
+      "asset": "CONSTELLATION ENERGY CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "255",
+      "asset": "COSTAR GROUP INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "256",
+      "asset": "COINBASE GLOBAL INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "257",
+      "asset": "| Hidgs Inc",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "260",
+      "asset": "THE HERSHEY COMPANY",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "261",
+      "asset": "[THERMO FISHER CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "263",
+      "asset": "BROWN & BROWN INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "264",
+      "asset": "EQUIFAX INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "265",
+      "asset": "AUTOZONE INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "266",
+      "asset": "ABBOTT LABS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "267",
+      "asset": "NETFLIX INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "268",
+      "asset": "MARSH",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "269",
+      "asset": "O REILLY AUTOMOTIVE INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "270",
+      "asset": "FISERV INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "271",
+      "asset": "|S&P GLOBAL INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "278",
+      "asset": "ROPER TECHNOLOGIES, INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "276",
+      "asset": "MOTOROLA SOLUTIONS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$1,000,001 - $5,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "277",
+      "asset": "Meta Platforms, Inc",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/18/2026",
+      "amount_range": "$1,000,001 - $5,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "286",
+      "asset": "MARSHALLTOWN IA CMNTY SCH DIST 2026 AGI SER B B/E 4.00 % Due Jun 1, 2027",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "314",
+      "asset": "MORRISTOWN TN RFDG B/E 5.00 % Due Sep 1, 2026",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "317",
+      "asset": "NEW HAMPSHIRE MUN BD BK 2019 B REV B/E 5.00 % Due Aug 15, 2026 |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "318",
+      "asset": "[CUMBERLAND CNTY PA MUN AUTH REV PENN ST HLTH B/E 5.00 % Due Nov 1, 2026 |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "320",
+      "asset": "FINNEY CNTY KS UNI SCH DIST 457 RFDG GARDEN CITY SER A B/E 4.00 % Due Sep 1, 2030",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "321",
+      "asset": "OVERLAND PK KS INTERNAL IMPT 20244 B/E 5.00 % Due Sep 1, 2026 |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "325",
+      "asset": "© FALLON MO SPL OBLIG 2025 A REV B/E 5.00 % Due Nov 1, 2026 _|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "326",
+      "asset": "RAPID CITY SD SALES TAX REV B/E PTC 5.00 % Due Dec 1, 2035 _|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "329",
+      "asset": "BENTON AR PUB UTILS REV RFDG AGM B/E PTC 5.00 % Due Sep 1, 2035 |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "346",
+      "asset": "JOHNSON & MIAMI CNTYS KS UNI SCH DIST 230 CROSSOVER RFDG B/E 5.00 % Due Sep 1, 2026",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "356",
+      "asset": "OREGON ST HIGH ED SER L B/E 5.00 % Due Aug 1, 2026",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "366",
+      "asset": "ABBVIE INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "367",
+      "asset": "STATE PUB SCH BLDG AUTH PA CLLG REV NORTHHAMPTON CNTY AREA CMNTY BAM B/E 5.00 % Due Mar 1, 2027",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "392",
+      "asset": "FORD MOTOR CO __|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "394",
+      "asset": "BOOKING HOLDINGS INC [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "404",
+      "asset": "[TAKE-TWO INTERACTIVE SOFTWARE INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "406",
+      "asset": "TESLA INC |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "407",
+      "asset": "IDEXX LABORATORIES INC [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "409",
+      "asset": "PEPSICO INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "413",
+      "asset": "SYNOPSYS INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "414",
+      "asset": "[TRACTOR SUPPLY CO |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "416",
+      "asset": "BECTON DICKINSON & CO {",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "417",
+      "asset": "NVIDIA CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "420",
+      "asset": "PTC INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "424",
+      "asset": "WARNER BROS DISCOVERY INC SER A",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "434",
+      "asset": "ULTA BEAUTY INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "475",
+      "asset": "jserwonis SOLUTIONS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "476",
+      "asset": "FOX CORP CLA",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "477",
+      "asset": "VERISIGN INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "478",
+      "asset": "CHARTER COMMUNICATIONS INC NEW CLA",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "480",
+      "asset": "DIAMONDBACK ENERGY INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "482",
+      "asset": "CONSTELLATION BRANDS INC CLA",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "487",
+      "asset": "AST SPACEMOBILE INC CLA",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "483",
+      "asset": "|AIRBNB INC CLA",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "489",
+      "asset": "ENTERGY CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "490",
+      "asset": "|VERIZON COMMUNICATIONS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "492",
+      "asset": "|APPLOVIN CORP CLA _|",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "492",
+      "asset": "|COMCAST CORP CLA",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "493",
+      "asset": "REGENERON PHARMACEUTICALS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "494",
+      "asset": "(© REILLY AUTOMOTIVE INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "495",
+      "asset": "INSMED INC PAR $.01",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "499",
+      "asset": "LYONDELLBASELL INDUSTRIES NV ORD SHS CLA",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "500",
+      "asset": "GENERAL MILLS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "506",
+      "asset": "INTUITIVE SURGICAL INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "507",
+      "asset": "ROPER TECHNOLOGIES INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "508",
+      "asset": "GE HEALTHCARE TECHNOLOGIES INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "509",
+      "asset": "JOHNSON & JOHNSON",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "510",
+      "asset": "STELLANTIS NV",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/16/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "32",
+      "asset": "Ishares Tr Russell 2000 Etf ___|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "33",
+      "asset": "Ishares Tr Global 100 Etf",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "315",
+      "asset": "TESLA INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "316",
+      "asset": "INTL BUSINESS MACHINES CORP [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "330",
+      "asset": "JQUALCOMM INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "344",
+      "asset": "CHEVRON CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "345",
+      "asset": "ACCENTURE PLC IRELAND CLA",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "354",
+      "asset": "METLIFE INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "359",
+      "asset": "NIKE INC CLB |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "361",
+      "asset": "MERCK & COMPANY INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "362",
+      "asset": "BLACKROCK FDG INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "364",
+      "asset": "PROCTER & GAMBLE CO",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "365",
+      "asset": "INTL BUSINESS MACHINES CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "370",
+      "asset": "PROLOGIS INC |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "382",
+      "asset": "|ALPHABET INC CL C __|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "389",
+      "asset": "VERIZON COMMUNICATIONS INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "390",
+      "asset": "BLACKSTONE INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "391",
+      "asset": "Dow INC [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "393",
+      "asset": "|ARES MANAGEMENT CORP CL A. |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "405",
+      "asset": "AMAZON.COM INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "410",
+      "asset": "FIDELITY NATIONAL INFORMATION SERVICES INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "411",
+      "asset": "ALPHABET INC CLA",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "412",
+      "asset": "NXP SEMICONDUCTORS NV",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "418",
+      "asset": "REVOLUTION MEDICINES INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "419",
+      "asset": "WALMART INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "426",
+      "asset": "|VERTEX PHARMACEUTICALS INC {",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "427",
+      "asset": "TEXAS INSTRUMENTS INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "428",
+      "asset": "BEST BUY COMPANY INC _|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "429",
+      "asset": "COREWEAVE INC CLA [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "432",
+      "asset": "JOHNSON & JOHNSON",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "433",
+      "asset": "MCDONALDS CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "435",
+      "asset": "|CEREBRAS SYSTEMS INC CLA |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "438",
+      "asset": "NATERA INC [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "439",
+      "asset": "COPART INC |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "440",
+      "asset": "ENTEGRIS INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "441",
+      "asset": "ISEMTECH CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "442",
+      "asset": "ISANMINA CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "443",
+      "asset": "VIAVI SOLUTIONS INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "444",
+      "asset": "FORMFACTOR INC |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "445",
+      "asset": "MICROSOFT CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "447",
+      "asset": "MOLINA HEALTHCARE INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "454",
+      "asset": "EASTMAN CHEMICAL CO",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "456",
+      "asset": "POWELL INDUSTRIES INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "457",
+      "asset": "MATCH GROUP INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "458",
+      "asset": "PLEXUS CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "459",
+      "asset": "MADISON SQUARE GARDEN SPORTS CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "461",
+      "asset": "JACKSON FINANCIAL INC CLA",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "463",
+      "asset": "RALLIANT CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "464",
+      "asset": "\\VISHAY INTERTECHNOLOGY INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "466",
+      "asset": "CORCEPT THERAPEUTICS INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "467",
+      "asset": "ENPRO INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "468",
+      "asset": "CARMAX INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "469",
+      "asset": "DEXCOM INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "470",
+      "asset": "IZURN ELKAY WATER SOLUTIONS CORP ___|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "471",
+      "asset": "‘GLAUKOS CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "72",
+      "asset": "TERRENO REALTY CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "473",
+      "asset": "ETSY INC [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "474",
+      "asset": "|ALKERMES PLC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "483",
+      "asset": "DEVON ENERGY CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/15/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "39",
+      "asset": "HOME DEPOT INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "40",
+      "asset": "WELLS FARGO & CO",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "41",
+      "asset": "MCDONALDS CORP [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "42",
+      "asset": "ELI LILLY & CO |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "43",
+      "asset": "META PLATFORMS INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "44",
+      "asset": "AT&T INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "46",
+      "asset": "MASTERCARD INCORPORATED",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "47",
+      "asset": "|ABBOTT LABORATORIES",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "48",
+      "asset": "INTUITIVE SURGICAL INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "49",
+      "asset": "RIX CORPORATION ___|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "50",
+      "asset": "JOHNSON & JOHNSON",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "2",
+      "asset": "JACCENTURE PLC IRELAND",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "53",
+      "asset": "MEDTRONIC PLC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "57",
+      "asset": "|WASTE MANAGEMENT INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "58",
+      "asset": "MERCK & CO INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "59",
+      "asset": "JOHNSON CONTROLS INTERNATIONAL PLC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "60",
+      "asset": "SHERWIN WILLIAMS CO. _|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "61",
+      "asset": "BOSTON SCIENTIFIC CORP __|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "62",
+      "asset": "CINTAS CORP. {",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "63",
+      "asset": "DOORDASH INC : ___|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "64",
+      "asset": "CENCORA INC __|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "65",
+      "asset": "EXELON CORPORATION",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "66",
+      "asset": "PEPSICO INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "67",
+      "asset": "AMGEN INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "68",
+      "asset": "BANK OF AMERICA CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "69",
+      "asset": "GENERAL DYNAMICS CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "70",
+      "asset": "REPUBLIC SERVICES INC [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "7",
+      "asset": "CHIPOTLE MEXICAN GRILL INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "72",
+      "asset": "MICROSOFT CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "3",
+      "asset": "——|Parrat HOLDINGS INC _|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "7",
+      "asset": "PG&E CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "75",
+      "asset": "UNITED AIRLINES HOLDINGS INC [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "76",
+      "asset": "ROPER TECHNOLOGIES INC __|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "79",
+      "asset": "NRG ENERGY INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "80",
+      "asset": "WILLIS TOWERS WATSON PUBLIC LIMITED COMPANY",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "81",
+      "asset": "AMERICAN WTR WKS CO INC |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "82",
+      "asset": "FIRSTENERGY CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "83",
+      "asset": "SMURFIT WESTROCK PL [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "84",
+      "asset": "CMS ENERGY CORP [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "85",
+      "asset": "T MOBILE US INC _|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "86",
+      "asset": "DEERE & CO ___|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "87",
+      "asset": "PACKAGING CORP AMER",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "88",
+      "asset": "ALLIANT ENERGY CORPORATION",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "89",
+      "asset": "BRISTOL MYERS SQUIBB CO",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "90",
+      "asset": "ABBVIE INC AVG",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "91",
+      "asset": "LYONDELLBASELL INDUSTRIES NV",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "92",
+      "asset": "JPMORGAN CHASE & CO",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "94",
+      "asset": "MOTOROLA SOLUTIONS INC __|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "95",
+      "asset": "ROYAL CARIBBEAN GROUP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "96",
+      "asset": "WILLIAMS COMPANIES INC ___|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "97",
+      "asset": "KINDER MORGAN INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "98",
+      "asset": "DOLLAR GENERAL CORPORATION",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "99",
+      "asset": "YUM BRANDS INC [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "100",
+      "asset": "|AMAZON.COM INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "101",
+      "asset": "CROWN CASTLE INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "102",
+      "asset": "SLB LIMITED",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "103",
+      "asset": "L3HARRIS TECHNOLOGIES INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "104",
+      "asset": "[S&P GLOBAL INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "105",
+      "asset": "|VERTEX PHARMACEUTICALS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "106",
+      "asset": "|CHEVRON CORPORATION *",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "107",
+      "asset": "CHUBB LTD COM",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "108",
+      "asset": "CONOCOPHILLIPS",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "109",
+      "asset": "© REILLY AUTOMOTIVE INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "111",
+      "asset": "EQT CORPORATION",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "112",
+      "asset": "AMERICAN INTERNATIONAL GROUP INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "113",
+      "asset": "'WABTEC CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "114",
+      "asset": "IDEXX LABORATORIES CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "116",
+      "asset": "BIOGEN INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "17",
+      "asset": "BAKER HUGHES COMPANY",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "120",
+      "asset": "NISOURCE INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "121",
+      "asset": "OMNICOM GROUP INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "122",
+      "asset": "PFIZER INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "123",
+      "asset": "COSTCO WHOLESALE CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "124",
+      "asset": "GILEAD SCIENCES INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "125",
+      "asset": "SOUTHERN CO",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "126",
+      "asset": "NEWMONT CORPORATION",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "127",
+      "asset": "XCEL ENERGY INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "128",
+      "asset": "ZIMMER BIOMET HOLDINGS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "129",
+      "asset": "AKAMAI TECHNOLOGIES INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "130",
+      "asset": "HASBRO INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "131",
+      "asset": "ARCH CAPITAL GROUP LTD",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "132",
+      "asset": "NORTHROP GRUMMAN CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "139",
+      "asset": "ELECTRONIC ARTS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "140",
+      "asset": "|ALBEMARLE CORPORATION",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "141",
+      "asset": "JAVALONBAY COMMUNITIES INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "142",
+      "asset": "INGERSOLL RAND INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "143",
+      "asset": "XYLEM INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "144",
+      "asset": "EVEREST GROUP LTD",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "146",
+      "asset": "ATMOS ENERGY CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "147",
+      "asset": "OTIS WORLDWIDE CORPORATION",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "148",
+      "asset": "VERALTO CORPORATION",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "149",
+      "asset": "FISERV INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "150",
+      "asset": "BECTON DICKINSON & CO",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "152",
+      "asset": "VICI PROPERTIES INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "153",
+      "asset": "MARTIN MARIETTA MATERIALS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "154",
+      "asset": "EXPAND ENERGY CORPORATION",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "155",
+      "asset": "COINBASE GLOBAL INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "156",
+      "asset": "ARCHER-DANIELS-MIDLAND CO",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "157",
+      "asset": "CBRE GROUP INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "158",
+      "asset": "AUTODESK INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "159",
+      "asset": "TRADE DESK INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "160",
+      "asset": "MSCIINC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "161",
+      "asset": "PHILIP MORRIS INTERNATIONAL INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "162",
+      "asset": "VEEVA SYSTEMS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "164",
+      "asset": "BOEING CO",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "165",
+      "asset": "MOODYS CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "167",
+      "asset": "| TRANE TECHNOLOGIES",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "168",
+      "asset": "|AIRBNB INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "186",
+      "asset": "LOWES COMPANIES INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "190",
+      "asset": "UBER TECHNOLOGIES INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "191",
+      "asset": "|VERIZON COMMUNICATIONS:",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "192",
+      "asset": "LULULEMON ATHLETICA INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "193",
+      "asset": "SALESFORCE INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "195",
+      "asset": "PROGRESSIVE CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "196",
+      "asset": "REGENERON PHARMACEUTICALS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/12/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "801",
+      "asset": "UNIVERSITY SOUTH AL 5% PUB EDUC DUE 11/01/51 __|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/10/2026",
+      "amount_range": "$1,000,001 - $5,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "279",
+      "asset": "BRACKEN CNTY KY PUB PPTYS CORP 1ST MTG REV RFDG COURT FACS B/E B/Q.3.00 % Due Aug 1, 2027",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/5/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "281",
+      "asset": "JOHNSON CNTY KS PUB BLDG COMM LSE PURCH REV CRTHSE MED EXAMINER B/E 5.00 % Due Sep 1, 2026",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/5/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "288",
+      "asset": "|OHIO HSG FIN AGY MLTIFAM HSG REV CEDAR REDEV PHASE IV LLC B/E 3.60 % Due Jun 1, 2045",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/5/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "292",
+      "asset": "COLORADO HLTH FACS AUTH REV RFOG EVANGELICAL LUTHERAN PJ B/E PTC 5.00 % Due Jun 1, 2042 _|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/5/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "297",
+      "asset": "BARTON CNTY MO SCH DIST R Il 2026 B/E B/Q MDDP 5.00 % Due Mar 1, 2027",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/5/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "324",
+      "asset": "SOUTHEAST OVERTOWN PK WEST CMNTY REDEV AGY FL TAX INCRMT REV B AGI B/E 5.00 % Due Mar 1, 2027",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/5/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "328",
+      "asset": "LOUISVILLE & JEFFERSON CNTY KY METRO GOVT SER A B/E 5.00 % Due Dec 1, 2026 |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/5/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "339",
+      "asset": "KENDALL CNTY IL FST PRESV DIST RFDG BAM B/E B/Q.4.00 % Due Jan 1, 2027 _|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/5/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "347",
+      "asset": "NEW YORK NY CITY TRANSL FIN AUTH REV FUTURE TAX SECD SER A SUB A1 B/E 5.00 % Due Nov 1, 2026",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/5/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "348",
+      "asset": "Tpesanoaee ND PK DIST SPL ASSMT PREPAYMENT 2020 A B/E B/Q.3.00 % Due Mar 1, 2027",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/5/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "349",
+      "asset": "CLEVELAND CNTY OK EDL FACS AUTH LSE REV MOORE PUB SCHS P! B/E 4,00 % Due Jun 1, 2027 {",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/5/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "353",
+      "asset": "BLACK BELT ENERGY GAS DIST AL GAS SPLY REV SUB SER D1 B/E GTD 4.00 % Due Jul 1, 2052",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/5/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "369",
+      "asset": "BLACK BELT ENERGY GAS DIST AL GAS REV PJ 6 SER B B/E 4.00 % Due Oct 1, 2052 ___|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/5/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "319",
+      "asset": "UNIVERSITY AR UNIV REV VARIOUS FAC FAYETTEVILLE CAMPUS B/E 5.00 % Due Nov 1, 2026",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "327",
+      "asset": "STARKVILLE OKTIBBEHA MS CONS SCH DIST B/E BAM 3.00 % Due Mar 1, 2027 {",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "341",
+      "asset": "ARIZONA ST INDL DEV AUTH MLTIFAM HSG REV RANCHES AT GUNSMOKE APT B/E PTC 5.00 % Due Mar 1, 2058 [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "350",
+      "asset": "PENN HILLS PA B/E 5.00 % Due Dec 1, 2026",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "368",
+      "asset": "KANSAS ST DEV FIN AUTH REV RFDG ST KS PJ R B/E 5.00 % Due Nov 1, 2026",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "799",
+      "asset": "SHELBY CNTY TENN HE 5% SYST HLTH DUE 09/01/46",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$1,000,001 - $5,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "800",
+      "asset": "ROSEVILLE MICH CMNT 5% DUE 05/01/56 |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$1,000,001 - $5,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "809",
+      "asset": "|ASBURY AUTOMOTIVE GROUP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "813",
+      "asset": "FLOWERS FOODS INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "816",
+      "asset": "PENNYMAC MTG INVT TR REIT",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "818",
+      "asset": "DAVE INC CLASS A",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "819",
+      "asset": "~_|ETHAN ALLEN INTERIORS IN",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "821",
+      "asset": "PELOTON INTERACTIVE INC CLASS A",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "822",
+      "asset": "FRESH DEL MONTE PRODUC F {",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "823",
+      "asset": "REMITLY GLOBAL INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "825",
+      "asset": "CONMED CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "832",
+      "asset": "F&G ANNUITIES & LIFE INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "833",
+      "asset": "STEWART INFORMATION SVCS",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "234",
+      "asset": "LAUREATE ED INC {",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "835",
+      "asset": "STRUPANION INC [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "337",
+      "asset": "INDIVIOR PHARMACEUTICALS [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "339",
+      "asset": "PTC THERAPEUTICS INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "240",
+      "asset": "SPHERE ENTERTAINMENT A CLASS CLASS A",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "841",
+      "asset": "UNIVERSAL TECHNICAL INST",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "843",
+      "asset": "WESTERN UN CO {",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "845",
+      "asset": "ULTRA CLEAN HLDGS INC |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "846",
+      "asset": "ARGAN INC _|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "858",
+      "asset": "ALIGNMENT HEALTHCARE INC ___|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "860",
+      "asset": "MONRO INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "864",
+      "asset": "FORMFACTOR INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "867",
+      "asset": "|JBT MAREL CORP [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "369",
+      "asset": "VERSIGENT LTD F [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "870",
+      "asset": "___| VIASAT INC __|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "871",
+      "asset": "DIEBOLD NIXDORF INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "872",
+      "asset": "LIFESTANCE HEALTH GROUP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "873",
+      "asset": "LINCOLN NATL CORP IND",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "874",
+      "asset": "EVERFORTH INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "875",
+      "asset": "BLACKLINE INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "876",
+      "asset": "N-ABLE INC |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "877",
+      "asset": "PAPA JOHNS INTL INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "879",
+      "asset": "IVERRA MOBILITY CORP CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "880",
+      "asset": "GOGO INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "881",
+      "asset": "PATRICK INDS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "882",
+      "asset": "MERIT MED SYS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "883",
+      "asset": "PERRIGO CO PLC F",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "885",
+      "asset": "NAVIENT CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "886",
+      "asset": "ALARM COM HLDGS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "888",
+      "asset": "BADGER METER INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "889",
+      "asset": "BANCFIRST CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "391",
+      "asset": "NMI HLDGS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "892",
+      "asset": "FOUR CORNERS PPTY TR INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "893",
+      "asset": "ACI WORLDWIDE INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "394",
+      "asset": "AMERISAFE INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "395",
+      "asset": "ENOVIS CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "398",
+      "asset": "ISPS COMM INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "399",
+      "asset": "ISKYWEST INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "900",
+      "asset": "ICAL MAINE FOODS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "901",
+      "asset": "SHAKE SHACK INC CLASS CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "902",
+      "asset": "LAMB WESTON HLDGS INC {",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "903",
+      "asset": "|GOOSEHEAD INS INC CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "904",
+      "asset": "INSPIRE MED SYS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "905",
+      "asset": "KADANT INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "906",
+      "asset": "PALOMAR HLDGS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "907",
+      "asset": "FRESHPET INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "908",
+      "asset": "BRINKER INTL INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "909",
+      "asset": "|WENDYS CO CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "910",
+      "asset": "CHESAPEAKE UTILS CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "911",
+      "asset": "SAREPTA THERAPEUTICS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "912",
+      "asset": "ABM INDS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "913",
+      "asset": "EVERTEC INC F",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "916",
+      "asset": "Q2 HLDGS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "917",
+      "asset": "ISTEPSTONE GROUP INC CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "918",
+      "asset": "KEMPER CORP DEL",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "919",
+      "asset": "RITHM CAPITAL CORP REIT",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "920",
+      "asset": "BRIGHT HORIZONS FAMILY S",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "921",
+      "asset": "ENERPAC TOOL GROUP CORP CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/4/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "285",
+      "asset": "TEXAS MUN GAS ACQ & SPLY CORP | GAS REV SR LIEN SER D B/E OID @95.780 6.25 % Due Dec 15, 2026",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,000,001 - $5,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "295",
+      "asset": "HARRISONBURG VA REDEV & HSG AUTH MLTIFAM HSG REV WESLEY APTS B/E 4,00 % Due Dec 1, 2028 [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "323",
+      "asset": "CHARLOTTE MECKLENBERG HOSP AUTH NC HLTHCARE REV ATRIUM HLTH D B/E 3.625 % Due Jan 15, 2048",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "337",
+      "asset": "NORWALK IA CORP PURP SER A B/E B/Q 5.00 % Due Jun 1, 2027 |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "372",
+      "asset": "DOUGLAS CNTY NE SCH DIST 1 OMAHA PUB B/E 5.00 % Due Dec 15, 2026 __|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "668",
+      "asset": "BOSTON SCIENTIFIC CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "669",
+      "asset": "SERVICENOW INC ___|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "670",
+      "asset": "IBM CORP :",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "671",
+      "asset": "[ACCENTURE PLC IRELAND F CLASS CLASS A. |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "672",
+      "asset": "ISTERIS PLC F",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "674",
+      "asset": "REPUBLIC SVCS INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "675",
+      "asset": "VERIZON COMMUNICATIONS | :",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "676",
+      "asset": "COSTAR GROUP INC [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "677",
+      "asset": "PUBLIC SVC ENTERPRISE GR ___|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "678",
+      "asset": "(GE HEALTHCARE TECHNOLOGI |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "679",
+      "asset": "KKR & CO INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "680",
+      "asset": "BOOKING HLDGS INC :",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "681",
+      "asset": "PILGRIMS PRIDE CORP NEW",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "686",
+      "asset": "SOUTHERN CO",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "687",
+      "asset": "PINTEREST INC CLASS A",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "688",
+      "asset": "NETFLIX INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "690",
+      "asset": "INGERSOLL RAND INC |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "691",
+      "asset": "PENTAIR PLC F",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "692",
+      "asset": "VERISK ANALYTICS INC CLASS A [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "693",
+      "asset": "ECOLAB INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "698",
+      "asset": "XYLEM INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "699",
+      "asset": "VERTEX PHARMACEUTICALS | __|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "700",
+      "asset": "[TRACTOR SUPPLY CO {",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "701",
+      "asset": "ELF BEAUTY INC ___|",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "702",
+      "asset": "|AMERICAN INTL GROUP INC [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "703",
+      "asset": "AXON ENTERPRISE INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "704",
+      "asset": "JAPPLOVIN CORP CLASS CLASS A",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "705",
+      "asset": "IDEXX LABS INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "706",
+      "asset": "|VERALTO CORP",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "707",
+      "asset": "| WILLIS TOWERS WATSON P F",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "708",
+      "asset": "DOORDASH INC CLASS CLASS A",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "709",
+      "asset": "CLOUDFLARE INC CLASS CLASS A",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "710",
+      "asset": "ROBINHOOD MKTS INC CLASS CLASS A,",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "711",
+      "asset": "|QXO INC |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "712",
+      "asset": "CHEWY INC CLASS CLASS A {",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "73",
+      "asset": "WHIRLPOOL CORP [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "714",
+      "asset": "PALANTIR TECHNOLOGIES IN CLASS A",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "75",
+      "asset": "HENRY JACK & ASSOC INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "716",
+      "asset": "LIBERTY BROADBAND CORP CLASS SERIES C",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "717",
+      "asset": "|AMAZON.COM INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "738",
+      "asset": "ELI LILLY AND CO",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "719",
+      "asset": "MICRON TECHNOLOGY INC",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "720",
+      "asset": "HUBSPOT INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "721",
+      "asset": "LEIDOS HLDGS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "722",
+      "asset": "MEDTRONIC PLC F",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "723",
+      "asset": "TYLER TECHNOLOGIES INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "724",
+      "asset": "ZILLOW GROUP INC CLASS CLASS C",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "725",
+      "asset": "KIMBERLY CLARK CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "726",
+      "asset": "DOXIMITY INC CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "728",
+      "asset": "ULTA BEAUTY INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "740",
+      "asset": "THE TRADE DESK INC CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "741",
+      "asset": "UBER TECHNOLOGIES INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "742",
+      "asset": "MCCORMICK & CO INC CLASS N",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "744",
+      "asset": "© REILLY AUTOMOTIVE INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "745",
+      "asset": "REALTY INCOME CORP REIT",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "748",
+      "asset": "|SS&C TECHNOLOGIES HLDGS",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "787",
+      "asset": "YUM BRANDS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "748",
+      "asset": "LULULEMON ATHLETICA INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "749",
+      "asset": "PAYPAL HLDGS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "750",
+      "asset": "FIDELITY NATL INFORMATIO",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "751",
+      "asset": "|CBRE GROUP INC CLASS CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "752",
+      "asset": "COUPANG INC CLASS CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "753",
+      "asset": "BOEING CO",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "754",
+      "asset": "CONSTELLATION ENERGY COR",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "755",
+      "asset": "CME GROUP INC CLASS CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "756",
+      "asset": "LENNAR CORP CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "757",
+      "asset": "|GALLAGHER ARTHUR J & CO",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "758",
+      "asset": "INSULET CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "759",
+      "asset": "HARTFORD INS GROUP INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "760",
+      "asset": "| GENERAL MILLS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "763",
+      "asset": "OTIS WORLDWIDE CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "764",
+      "asset": "CHIPOTLE MEXICAN GRILL!",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "766",
+      "asset": "GODADDY INC CLASS CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "772",
+      "asset": "ABBOTT LABS",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "773",
+      "asset": "COMCAST CORP NEW CLASS CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "774",
+      "asset": "LOWES COS INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "776",
+      "asset": "PROGRESSIVE CORP OH",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "7",
+      "asset": "INTUIT",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "778",
+      "asset": "COPART INC",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "779",
+      "asset": "META PLATFORMS INC CLASS CLASS A",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "780",
+      "asset": "MICROSOFT CORP",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,001 - $15,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "781",
+      "asset": "PROCTER & GAMBLE CO",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/3/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "796",
+      "asset": "DALLAS CNTY TEX 5% DB LTX DUE 08/15/56",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,000,001 - $5,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "797",
+      "asset": "KENTUCKY ST PPTY & 5% LEAS BLDG DUE 03/01/46",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$1,000,001 - $5,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "798",
+      "asset": "JEFFERSON CNTY MO C 5% GO UTX DUE 03/01/46",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/3/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "37",
+      "asset": "Broadcom Inc Com",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/2/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "278",
+      "asset": "|CARROLL CNTY KY POLLTN CTL REV RFDG KY UTILS CO 2016 A B/E 1.55 % Due Sep 1, 2042 |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/2/2026",
+      "amount_range": "$1,000,001 - $5,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "282",
+      "asset": "LOUISIANA HSG CORP MLTIFAM HSG REV LOOP COMS Pi SER B B/E 3.75 % Due Feb 1, 2028",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/2/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "293",
+      "asset": "ARIZONA ST INDL DEV AUTH MLTIFAM HSG REV RANCHES AT GUNSMOKE APT B/E PTC 5.00 % Due Mar 1, 2058 |",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/2/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "294",
+      "asset": "HARRIS CNTY TX MUD 165 2023 BAM B/E CR ENH 4.00 % Due Mar 1, 2027 [",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/2/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "343",
+      "asset": "BROOKE CNTY WV BRD ED PUB SCHS B/E ST AID PG 3.00 % Due Jun 1, 2027",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/2/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "352",
+      "asset": "MIAMI BEACH FL REDEV AGY TAX INCRMT REV RFDG CITY CTR HIST CONVNTN AGI B/E 5.00 % Due Feb 1, 2027",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/2/2026",
+      "amount_range": "$50,001 - $100,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "786",
+      "asset": "STATE STREET SPDR S&P 500 ETF TRUST",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/2/2026",
+      "amount_range": "$1,000,001 - $5,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "789",
+      "asset": "STATE STREET SPDR BLOOMBERG INTERNATIONAL TREASURY BOND ETF",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/2/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "790",
+      "asset": "STATE STREET SPDR PORTFOLIO SHORT TERM CORPORATE BOND ETF",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/2/2026",
+      "amount_range": "$500,001 - $1,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "792",
+      "asset": "STATE STREET CONSUMER DISCRETIONARY SELECT SECTOR SPDR ETF",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/2/2026",
+      "amount_range": "$1,000,001 - $5,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "793",
+      "asset": "VANGUARD SHORT-TERM BOND INDEX FUND ETF SHARES",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/2/2026",
+      "amount_range": "$1,000,001 - $5,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "794",
+      "asset": "|VANGUARD FTSE EUROPE ETF",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/2/2026",
+      "amount_range": "$1,000,001 - $5,000,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "229",
+      "asset": "M &T BK CORP PERP SUB GLBL 3.5000%",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/1/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "230",
+      "asset": "GENERAL MTRS FINL CO INC PER 6.5000%",
+      "direction": "buy",
+      "dir_cn": "买入",
+      "txn_date": "6/1/2026",
+      "amount_range": "$15,001 - $50,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "259",
+      "asset": "JPMORGAN CHASE & CO ALT TIER 3.6500%",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/1/2026",
+      "amount_range": "$100,001 - $250,000",
+      "filing_date": "2026-08-22"
+    },
+    {
+      "n": "262",
+      "asset": "SCHWAB CHARLES CORP PERP SUB 4.0000%",
+      "direction": "sell",
+      "dir_cn": "卖出",
+      "txn_date": "6/1/2026",
+      "amount_range": "$250,001 - $500,000",
+      "filing_date": "2026-08-22"
+    }
+  ],
+  "status": "ok",
+  "sources": [
+    "https://extapps2.oge.gov/201/Presiden.nsf/PAS+Index/69AEAA9D7455ACD585258E27002DDEE1/$FILE/Donald-J-Trump-2026-278ANNUAL.pdf",
+    "https://extapps2.oge.gov/201/Presiden.nsf/PAS+Index/2BF91F890F718ACB85258E5B002DE16B/$FILE/Donald-J-Trump-08.12.2026-278T.pdf"
+  ],
+  "n_docs": 25,
+  "n_transactions": 632
 }

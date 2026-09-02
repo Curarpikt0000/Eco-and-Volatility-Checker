@@ -206,12 +206,67 @@ def fetch_aaii_allocation():
 
 
 # ─────────── CBOE Equity Put/Call ───────────
+def _scraperapi_get(url, timeout=90):
+    """★2026-09-02 新增: 用 ScraperAPI 代理抓取(住宅IP轮换)。
+
+    背景: 本机是数据中心 IP, CBOE 全线封锁 —— HTML 页 302 Cloudflare、
+      cdn.cboe.com 的 totalpc.csv/equitypc.csv 均 403, 换 UA 无效。
+      实测 ScraperAPI 可拿到 CBOE 页面 (200, 443KB)。
+    绝不硬编码 key: 从 ~/.hermes/.env 读 SCRAPER_API_KEY。
+    """
+    import os
+    import urllib.parse
+    import urllib.request
+    key = os.environ.get("SCRAPER_API_KEY")
+    if not key:
+        try:
+            with open(os.path.expanduser("~/.hermes/.env")) as f:
+                for line in f:
+                    line = line.strip()
+                    if line.startswith("SCRAPER_API_KEY=") and "=" in line:
+                        key = line.split("=", 1)[1].strip().strip('"').strip("'")
+                        break
+        except OSError:
+            return None
+    if not key:
+        return None
+    api = ("http://api.scraperapi.com?api_key=" + key
+           + "&url=" + urllib.parse.quote(url, safe=""))
+    try:
+        with urllib.request.urlopen(api, timeout=timeout) as r:
+            return r.read().decode("utf-8", errors="ignore")
+    except Exception:
+        return None
+
+
 def fetch_put_call():
+    """CBOE Equity Put/Call Ratio。
+
+    ★2026-09-02 改用 ScraperAPI 拿 CBOE 官方值。
+      此前官方直连被封 → 回退第三方聚合值, 但实测两者口径不同:
+      同日官方 equity=0.67 vs 第三方 0.84 (差 0.17, 显著偏差)。
+      官方页面是 Next.js 应用, 数值在 self.__next_f 内嵌载荷里,
+      形如 "EQUITY PUT/CALL RATIO ... 0.67" —— 按标签就近取值。
+    降级链: ScraperAPI(官方) → Jina(官方) → 未找到(绝不编)。
+    """
+    # 通道1: ScraperAPI 拿官方页
+    h = _scraperapi_get("https://www.cboe.com/us/options/market_statistics/daily/")
+    if h:
+        # Next.js 载荷解码后 label 与数值之间夹着转义/标记, 用就近匹配
+        m = re.search(r"EQUITY\s+PUT/CALL\s+RATIO[^0-9]{0,40}([0-9]+\.[0-9]+)", h, re.I)
+        if m:
+            val = float(m.group(1))
+            if 0.1 <= val <= 5.0:          # 合理区间守卫, 防抓到别的数
+                return {"value": val, "as_of": None, "status": "ok",
+                        "source": "CBOE official (via ScraperAPI)"}
+
+    # 通道2: Jina 直连(历史路径, 多半被 Cloudflare 挡)
     t = jina_get("https://www.cboe.com/us/options/market_statistics/daily/")
     if t:
         m = re.search(r"EQUITY PUT/CALL RATIO\s*\|\s*([0-9]+\.[0-9]+)", t, re.I)
         if m:
-            return {"value": float(m.group(1)), "as_of": None, "status": "ok"}
+            return {"value": float(m.group(1)), "as_of": None, "status": "ok",
+                    "source": "CBOE official (via Jina)"}
     return {"value": None, "as_of": None, "status": "未找到"}
 
 
