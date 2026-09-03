@@ -1,7 +1,60 @@
 {
  "table": "HDB_FISCAL_NEWS",
- "count": 15,
+ "count": 16,
  "rows": [
+  {
+   "uid": "fn|2026-09-01|众议院370-48通过CR，政府拨款延至12/11，规避10/1停摆",
+   "props": {
+    "标题": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-01｜众议院370-48通过CR，政府拨款延至12/11，规避10/1停摆"
+       }
+      }
+     ]
+    },
+    "日期": {
+     "date": {
+      "start": "2026-09-01"
+     }
+    },
+    "摘要": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "众议院以370对48跨党派通过参议院版短期拨款案（含WIC/救灾/造船等anomalies），送白宫签署，联邦拨款延续至12月11日（中期选举后）；关门风险推迟至年底再战。"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "CNBC"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "US"
+     }
+    },
+    "类别": {
+     "select": {
+      "name": "拨款法案/政府关门风险"
+     }
+    },
+    "来源链接": {
+     "url": "https://www.cnbc.com/2026/09/01/congress-government-shutdown-vote.html"
+    }
+   }
+  },
   {
    "uid": "fn|2026-08-31|众议院复会表决参议院版CR,拟延拨款至12/11规避10/1停摆",
    "props": {

@@ -1,9 +1,19 @@
 {
   "status": "ok",
-  "as_of": "2026-09-02",
+  "as_of": "2026-09-03",
   "source": "美日财政政策事件时间线。每日 cron agent 模式 web 检索权威源(路透/彭博/NHK/财务省/US Treasury/Congress)动态更新。绝不编造,每条带来源链接。",
   "note": "cron 每日抓取最新美日财政举措(债务上限/持续决议CR/政府关门/补充预算/国债发行计划等),按日期倒序保留最近 ~20 条。",
   "events": [
+    {
+      "date": "2026-09-02",
+      "country": "US",
+      "flag": "🇺🇸",
+      "category": "拨款法案/政府关门风险",
+      "title": "参议院版CR众议院通过并送签,政府拨款延至12/11,10/1停摆风险解除",
+      "summary": "9/2众议院通过参议院此前(8/8)通过的短期拨款法案(CR),联邦政府资金延续至12月11日,中期选举前避免停摆。",
+      "source_url": "https://www.nahro.org/news/congress-passes-continuing-resolution-keeping-government-open-until-december/",
+      "source_name": "NAHRO"
+    },
     {
       "date": "2026-09-01",
       "country": "US",

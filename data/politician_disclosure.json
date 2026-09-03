@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-09-02",
+  "as_of": "2026-09-03",
   "politicians": [
     {
       "name": "Nancy Pelosi",
@@ -5434,20 +5434,20 @@
           "amount_range": "$15,001 - $50,000"
         },
         {
-          "ticker": "INTC",
-          "asset": "Intel Corporation - Common Stock\n                                        \n                                        \n                                        \n                                            Option Type: Put Strike price: $45.00\n                                                \n                                                Expires: 12/20/2024",
+          "ticker": "ADBE",
+          "asset": "Adobe Inc. - Common Stock",
           "dir_cn": "卖出",
           "direction": "Sale (Full)",
-          "txn_date": "01/24/2024",
+          "txn_date": "10/29/2024",
           "amount_range": "$15,001 - $50,000"
         },
         {
-          "ticker": "CLF",
-          "asset": "Cleveland-Cliffs Inc. Common Stock\n                                        \n                                        \n                                        \n                                            Option Type: Put Strike price: $17.00\n                                                \n                                                Expires: 01/17/2025",
+          "ticker": "AAPL",
+          "asset": "Apple Inc. - Common Stock",
           "dir_cn": "卖出",
           "direction": "Sale (Full)",
-          "txn_date": "01/22/2024",
-          "amount_range": "$1,001 - $15,000"
+          "txn_date": "10/29/2024",
+          "amount_range": "$15,001 - $50,000"
         }
       ],
       "n_filings": 22,
