@@ -36,6 +36,10 @@ OGE_API = "https://extapps2.oge.gov/201/Presiden.nsf/API.xsp/v2/rest?draw=1&star
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
 OUT_JSON = os.path.join(DATA_DIR, "oge_trump.json")
 
+# ★OCR 不可用的原因(由 _ocr_pages 写入, fetch 读出写进结果)。
+#   None = 未尝试或一切正常; 非空 = 这次 OCR 走不了, 逐笔 0 条是**环境问题**不是"没交易"。
+OCR_UNAVAILABLE_REASON = None
+
 # OGE 标准金额档(上界), 用于把 OCR 残缺的金额 snap 回标准值
 OGE_BANDS = [
     (1, 1000), (1001, 15000), (15001, 50000), (50001, 100000),
@@ -124,12 +128,31 @@ def _ocr_pages(pdf_bytes, dpi=200):
     实测: tesseract 5.3 @200dpi, 34 页约 67s, 能正确识别标的名/
       purchase/日期/金额区间(单页 ~30 个金额区间)。
     返回按页拼好的文本行 list; 任一依赖缺失则返回 [] (调用方自行降级)。
+
+    ★2026-09-04: 原实现是**完全静默**降级 —— OCR 不可用与"这份文件真没交易"
+      在外层长得一模一样(都是 0 条), 正是 AGENTS.md 里记的 P1-3 类失败。
+      现改为把不可用原因记进模块级 OCR_UNAVAILABLE_REASON, 由 fetch() 写进
+      result["ocr_status"], 下游/日报能区分"读不了"和"没有"。
     """
+    global OCR_UNAVAILABLE_REASON
+    OCR_UNAVAILABLE_REASON = None
     try:
         import pymupdf
         import pytesseract
         from PIL import Image
-    except ImportError:
+    except ImportError as e:
+        OCR_UNAVAILABLE_REASON = f"python 依赖缺失: {e}"
+        return []
+    # ★tesseract 是 apt 装的系统二进制, devpod 重启会被擦掉(实测 2026-09-03 15:21
+    #   重启后即丢失)。pytesseract 只有真去调用时才报 TesseractNotFoundError,
+    #   故这里先探一次版本, 让"环境被重置"这件事在第一时间显形。
+    try:
+        pytesseract.get_tesseract_version()
+    except Exception as e:                           # noqa: BLE001
+        OCR_UNAVAILABLE_REASON = (
+            "tesseract 二进制不可用(apt 包, devpod 重启不保留; "
+            "修复: bash tools/ensure_tesseract.sh): " + str(e)[:120]
+        )
         return []
     lines = []
     try:
@@ -258,6 +281,10 @@ def fetch(save=True, max_278t=1):
     all_txns.sort(key=tkey, reverse=True)
     result["transactions"] = all_txns
     result["n_transactions"] = len(all_txns)
+    # ★把 OCR 环境状态如实带出去: 0 条 + ocr_status 非空 = 读不了(环境),
+    #   0 条 + ocr_status 为 None = 这份文件确实没解析出交易。两者绝不混为一谈。
+    if OCR_UNAVAILABLE_REASON:
+        result["ocr_status"] = OCR_UNAVAILABLE_REASON
     if all_txns:
         result["status"] = "ok"
     elif annual:

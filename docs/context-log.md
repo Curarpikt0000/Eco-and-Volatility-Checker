@@ -630,3 +630,68 @@ AGENTS.md 的 Cron 段仍描述旧版日报口径，需 Chao 授权后补写。
 - [ ] **黄金 Premium（印度/中国）断更 17 天**：根因是它从设计上就靠**手工导入 WGC xlsx**，
       却当作日频指标展示。ScraperAPI 路径已验证可行，或可同样解决——等 Chao 定时间。
 - [ ] tesseract 持久化：需 Chao 自行写进 `devpod.yaml`，否则重启后川普逐笔静默归 0。
+
+---
+
+## 2026-09-03
+
+### 事实与配置
+
+- Chao 只问了一句「今天的任务跑了没有？」（10:00 JST）。当时主日报
+  `eco-vol-01-daily-scan-report` 排 11:00 **尚未到点**，属正常排程而非漏跑。
+- 当日本项目 cron 全绿：`eco-vol-selfheal-watchdog` 09:20 ✅ /
+  `eco-vol-context-distill` 06:03 ✅ / 周报排 9/5 周六 11:00。
+- 9/2 那批 agent 型 cron 的批量失败（`~/.hermes/state.db` 结构性损坏）当日已不再复现。
+
+### 进展
+
+- commit `a52a338`「daily 2026-09-03」：主日报 11:32 正常产出，
+  政要披露 5 卡齐全（Pelosi 15 / Crenshaw 8 / **川普 OGE 278-T 632** /
+  川普 DJT Form 4 3 / Tuberville 15），即 9/2 修的 OCR 链路在 9/3 仍然有效。
+
+---
+
+## 2026-09-04
+
+### 事实与配置
+
+- ★★**tesseract 已被 devpod 重启擦掉 —— 9/2 记的那条待办当场兑现了**。
+  证据链（非推测）：`/proc/1` 与 `/etc/hostname` 的 mtime 都是 **2026-09-03 15:21**
+  （容器在 9/3 主日报跑完 3 小时后被重建），今早 `tesseract --version` = command not found、
+  `pytesseract.get_tesseract_version()` 抛 `TesseractNotFoundError`、
+  `/usr/share/tesseract-ocr` 目录不存在。**这不是「apt 装失败」，是容器重建把系统层还原了。**
+- **危险之处在于它不报错**：`_ocr_pages()` 原实现 `except ImportError: return []`，
+  且 pytesseract 只有真去 OCR 时才抛错 → 川普 278-T 会从 632 条**静默退回 0 条**，
+  外层 `status` 仍是正常值，日报上看不出任何异常。属 AGENTS.md 里 P1-3
+  「网络/环境失败静默返空 → 下游混淆『读不了』与『没有』」的同一族。
+- 数据本身**没有被污染**：`data/oge_trump.json`（9/3 11:08 写）仍是 632 条，
+  `data/politician_disclosure.json` 也是 632 —— 因为容器重建发生在当日抓取之后。
+  今天 11:00 的日报若不修，才会是第一份被清零的。
+- 环境事实：本机 `~/.devpod/personal.devpod.yaml` 目前只有一个 task
+  （`boot_hermes_stack.sh`）；系统 crontab 的 `@reboot` 段也没有任何 tesseract 相关项。
+  两处都是 Chao 的共享配置，**未擅自改动**。
+
+### 进展
+
+- 已 `apt-get update && apt-get install -y tesseract-ocr tesseract-ocr-eng` 装回
+  （tesseract **5.3.0** / leptonica 1.82.0），`pytesseract.get_tesseract_version()` = 5.3.0。
+- 端到端复跑 `src.oge_trump`：`status=ok docs=25 txns=632 ocr_status=None`，
+  与 9/2 基线**逐笔条数完全一致**（先备份 `data/oge_trump.json` 到 `/tmp` 再跑）。
+- 代码改动（把静默降级改成显形）：
+  - `src/oge_trump.py` 新增模块级 `OCR_UNAVAILABLE_REASON`；
+    `_ocr_pages()` 进门先 `pytesseract.get_tesseract_version()` 探活，
+    缺失时记录原因而非静默返 `[]`；`fetch()` 把它写进 `result["ocr_status"]`。
+    → **0 条 + `ocr_status` 非空 = 环境读不了；0 条 + `ocr_status` 为 None = 真没交易。**
+  - 新增 `tools/ensure_tesseract.sh`（幂等；`--check` 只探不装，缺失 exit 1）。
+- 故障注入验收（不是只看「跑通了」）：把 `pytesseract.tesseract_cmd` 指向
+  `/nonexistent/tesseract` 复跑 `_ocr_pages` → 返回 `[]` **且** `OCR_UNAVAILABLE_REASON`
+  给出「tesseract 二进制不可用（apt 包，devpod 重启不保留；修复：bash tools/ensure_tesseract.sh）」。
+
+### 待办
+
+- [ ] **持久化仍未落地（需 Chao 点头，涉及他的共享配置）**：把
+      `bash ~/Projects/Eco-and-Volatility-Checker/tools/ensure_tesseract.sh` 挂进
+      ①`~/.devpod/personal.devpod.yaml` 的 `tasks:`（容器每次 create/restart 执行，首选）
+      或 ②系统 crontab 的 `@reboot` 段。**在此之前，每次容器重建都会重演今天这一出。**
+- [ ] 承接 9/2：黄金 Premium（印度/中国）断更（当时 17 天），根因是靠手工导入 WGC xlsx
+      却按日频指标展示；ScraperAPI 路径已验证可行，等 Chao 定时间。
