@@ -695,3 +695,54 @@ AGENTS.md 的 Cron 段仍描述旧版日报口径，需 Chao 授权后补写。
       或 ②系统 crontab 的 `@reboot` 段。**在此之前，每次容器重建都会重演今天这一出。**
 - [ ] 承接 9/2：黄金 Premium（印度/中国）断更（当时 17 天），根因是靠手工导入 WGC xlsx
       却按日频指标展示；ScraperAPI 路径已验证可行，等 Chao 定时间。
+
+---
+
+## 2026-09-05
+
+> 承接 9/4 白天 Chao 问「今天的发了吗？」那一轮的完整复盘（当日日志只记到 06:30 那批修复）。
+
+### 决策
+
+- Chao 只问了一句「今天的发了吗？」。我最初据 cron 元数据答「今天被跳过了」，
+  **答错并当场自我纠正** —— 判据换成产物后结论反转为「已发」。
+  ⇒ 沿用本项目既有纪律：**日报是否跑过，只看产物（快照 mtime + dashboard 生成时间 + git log），
+  不看 cron 的 `last_status` / `last_run` / `next_run`。**
+
+### 事实与配置
+
+- ★**9/3 那次容器重建擦掉的不止 `tesseract`，`/usr/bin/sqlite3` 也没了。**
+  这条比 tesseract 那条影响更大，因为受害者是**守护脚本自己**：
+  - `state_db_health_check.sh` 把「工具 command not found」当成「数据库损坏」，
+    从 9/3 起连续报 BAD，并于 **9/3 18:22 发出一条假的「state.db 损坏」告警**。
+    实测库一直健康（`quick_check=ok`，25,903 sessions 完好）。
+  - `state_db_auto_snapshot.sh` `rc=127` 连败 3 次（9/3 的 09:22 / 15:17 / 21:17），
+    24 小时快照覆盖出现空洞。
+  - ⇒ 与本项目 AGENTS.md 里 tesseract 那条是**同一根因的两个受害者**：
+    apt 装的系统二进制活不过 devpod 容器重建。
+- **修法与 tesseract 不同**：tesseract 是「装回来 + 让缺失显形」，
+  sqlite3 走的是**换掉依赖层** —— 全部改用 python3 内置 `sqlite3` 模块（标准库，
+  随 python 发行，不受 apt 层重置影响），并抽出共用的
+  `~/.hermes/scripts/sqlite_check.py`（只读 URI 打开，不与在线写入者争锁）。
+  `state_db_health_check.sh` / `state_db_auto_snapshot.sh` 内联 python heredoc，
+  `emergency_swap.sh` 已无任何 `sqlite3` 二进制引用（今日复核 grep = 0）。
+- 当日另一个 agent 已在 `8379142`（06:23）把 tesseract 装回，并做了
+  「OCR 不可用不再静默」+ `tools/ensure_tesseract.sh`。今日复核 `tesseract 5.3.0` 仍在。
+- 复核状态（2026-09-05 06:0x）：`python3 -c "import sqlite3"` = 3.40.1 可用；
+  最新自动快照 `state.db.auto-20260904-151731`（9/5 00:17 落盘，3.2 GB）→ 快照链路已恢复且持续产出。
+
+### 进展
+
+- commit `b295273`「daily 2026-09-04」11:21 push，日报正常。产物三重佐证：
+  `data/daily/2026-09-04.json`（11:20，241 KB / 20 项指标）、
+  `docs/index.html`（11:18 重建）、git log。
+- `state.db` 守护三件套去二进制化完成并实跑验证：health_check → `ok`（假 marker 自动清除，
+  已推恢复通知）、auto_snapshot → 12.6 秒完成且 integrity OK。
+
+### 待办
+
+- [ ] 承接 9/4：**tesseract 持久化仍未落地**（需 Chao 点头，涉及他的共享配置
+      `~/.devpod/personal.devpod.yaml` 或系统 crontab `@reboot`）。
+      在此之前每次容器重建都会重演。
+      ⇒ 现在**同一个钩子应顺带覆盖任何 apt 依赖的复检**，不要只挂 tesseract 一个。
+- [ ] 承接 9/2：黄金 Premium（印度/中国）断更，等 Chao 定时间。
