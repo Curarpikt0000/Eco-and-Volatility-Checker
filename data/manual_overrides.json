@@ -12,10 +12,10 @@
     "note": "CBOE官方 EQUITY put/call 0.56 (ScraperAPI render抓官方页; Total put/call 0.84同页); 口径=equity, 低值偏乐观"
   },
   "insider": {
-    "value": 0.28,
+    "value": 0.3,
     "as_of": "2026-09-01",
     "status": "ok",
-    "note": "GuruFocus insider buy/sell 0.28 (Sept 2026当月, 更新至9月; 低于5年均值0.35; 内部人不活跃买入)"
+    "note": "GuruFocus insider buy/sell 0.3 (As of 2026-09-01; 低于历史中位0.34, 区间0.12-2.01; 内部人偏谨慎)"
   },
   "lei": {
     "value": 0.2,

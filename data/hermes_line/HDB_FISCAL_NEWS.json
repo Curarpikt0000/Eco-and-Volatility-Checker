@@ -1,7 +1,60 @@
 {
  "table": "HDB_FISCAL_NEWS",
- "count": 16,
+ "count": 17,
  "rows": [
+  {
+   "uid": "fn|2026-09-02|参议院版CR众议院通过并送签,政府拨款延至12/11,10/1停摆风险解除",
+   "props": {
+    "标题": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-02｜参议院版CR众议院通过并送签,政府拨款延至12/11,10/1停摆风险解除"
+       }
+      }
+     ]
+    },
+    "日期": {
+     "date": {
+      "start": "2026-09-02"
+     }
+    },
+    "摘要": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "9/2众议院通过参议院此前(8/8)通过的短期拨款法案(CR),联邦政府资金延续至12月11日,中期选举前避免停摆。"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "NAHRO"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "US"
+     }
+    },
+    "类别": {
+     "select": {
+      "name": "拨款法案/政府关门风险"
+     }
+    },
+    "来源链接": {
+     "url": "https://www.nahro.org/news/congress-passes-continuing-resolution-keeping-government-open-until-december/"
+    }
+   }
+  },
   {
    "uid": "fn|2026-09-01|众议院370-48通过CR，政府拨款延至12/11，规避10/1停摆",
    "props": {

@@ -1,11 +1,11 @@
 {
  "status": "ok",
- "generated": "2026-08-28T11:07:13",
+ "generated": "2026-09-04T11:06:43",
  "source": "双通道: archive PDF(01-06→06-05 per-firm) + Notion Daily auto tracking(06-06→至今, 每日增量)",
- "data_range": "2026-01-06 → 2026-08-19",
+ "data_range": "2026-01-06 → 2026-09-02",
  "archive_pdfs_parsed": 133,
  "archive_max_date": "2026-06-05",
- "notion_rows_scanned": 1325,
+ "notion_rows_scanned": 1340,
  "unit": "contracts",
  "banks_all": [
   "BMO",
@@ -352,12 +352,32 @@
   },
   {
    "week": "2026-08-17",
-   "all_net": -151,
-   "all_issued": 351,
-   "all_stopped": 502,
-   "core_net": 94,
-   "core_issued": 351,
-   "core_stopped": 257,
+   "all_net": -153,
+   "all_issued": 364,
+   "all_stopped": 517,
+   "core_net": 98,
+   "core_issued": 364,
+   "core_stopped": 266,
+   "days": 4
+  },
+  {
+   "week": "2026-08-24",
+   "all_net": -2,
+   "all_issued": 3505,
+   "all_stopped": 3507,
+   "core_net": 598,
+   "core_issued": 3008,
+   "core_stopped": 2410,
+   "days": 4
+  },
+  {
+   "week": "2026-08-31",
+   "all_net": -279,
+   "all_issued": 478,
+   "all_stopped": 757,
+   "core_net": 62,
+   "core_issued": 475,
+   "core_stopped": 413,
    "days": 3
   }
  ],
@@ -680,6 +700,26 @@
    "core_net": 24,
    "core_issued": 49,
    "core_stopped": 25,
+   "days": 3
+  },
+  {
+   "week": "2026-08-24",
+   "all_net": 1025,
+   "all_issued": 3919,
+   "all_stopped": 2894,
+   "core_net": 1414,
+   "core_issued": 3219,
+   "core_stopped": 1805,
+   "days": 4
+  },
+  {
+   "week": "2026-08-31",
+   "all_net": -277,
+   "all_issued": 806,
+   "all_stopped": 1083,
+   "core_net": -134,
+   "core_issued": 446,
+   "core_stopped": 580,
    "days": 3
   }
  ]
