@@ -1,6 +1,6 @@
 {
  "table": "HDB_CUSTODY",
- "count": 522,
+ "count": 523,
  "rows": [
   {
    "uid": "cu|2016-08-31",
@@ -16171,6 +16171,37 @@
     },
     "周变化_十亿": {
      "number": 29.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "NY Fed via fetch_foreign_custody_ust"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "cu|2026-09-02",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-02"
+       }
+      }
+     ]
+    },
+    "托管余额_十亿": {
+     "number": 2601.2
+    },
+    "周变化_十亿": {
+     "number": -14.0
     },
     "数据源": {
      "rich_text": [
