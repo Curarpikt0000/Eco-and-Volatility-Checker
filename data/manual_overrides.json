@@ -36,10 +36,10 @@
     "note": "市场广度真数据(RSP/SPY东财API)判定: SPY 8/13创近高但广度确认(ratio距高点<2%), 无顶背离"
   },
   "aaii_bull_bear": {
-    "value": -11.5,
-    "as_of": "2026-08-27",
+    "value": 2.2,
+    "as_of": "2026-09-02",
     "status": "ok",
-    "note": "AAII bull 32.9%(-2.5) / bear 44.4%(+4.5) / neutral 22.6%(-2.0) (Wk of Aug 27); spread=-11.5(前周-4.4); 连6周低于历史均值6.5%; bear创近高44.4%"
+    "note": "AAII bull 39.7%(+6.8) / bear 37.6%(-6.9) / neutral 22.7%(+0.1) (Wk of Sep 2); spread=+2.2(前周-11.5); bull七周来首次高于均值37.5%; bear连30周高于均值31.5%"
   },
   "margin_debt": {
     "value": 1417.0,

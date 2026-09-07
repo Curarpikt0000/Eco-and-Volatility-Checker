@@ -1,8 +1,44 @@
 {
-  "date": "2026-09-03",
+  "date": "2026-09-07",
   "all": [
     {
+      "kol": "John LaForge（Ned Davis Research 首席另类策略师 / 前 Wells Fargo 策略师）",
+      "id": "john_laforge_ned_davis_research_wells_fargo",
+      "sector": "贵金属与商品周期",
+      "direction": "未找到",
+      "targets": "",
+      "comments": "",
+      "detail": "",
+      "detail_status": "none",
+      "sources": [],
+      "date": "2026-09-07"
+    },
+    {
+      "kol": "Phil Streible（Blue Line Futures 首席市场策略师）",
+      "id": "phil_streible_blue_line_futures",
+      "sector": "贵金属与商品周期",
+      "direction": "看多",
+      "targets": "黄金/白银",
+      "comments": "延续贵金属历史级涨势判断，聚焦长期主题驱动",
+      "detail": "▸ 核心论点：作为Blue Line Futures首席市场策略师，Streible延续对黄金白银历史级涨势的看多判断，认为长期结构性主题仍是主驱动。\n▸ 关键依据：其Metals Minute逐日节目反复强调去美元化、央行购金、实际利率与地缘风险等长线逻辑支撑金银；2026开年金银期货隔夜大涨延续动能。\n▸ 时间与位置：以逐日期货关键价位交易为主，未在公开检索中给出明确年度目标价。\n▸ 标的与操作：黄金、白银为核心，兼及铜、铂等大宗；整体偏多头，按每日关键价位给可执行交易思路。",
+      "detail_status": "ok",
+      "sources": [
+        {
+          "title": "Gold & Silver Futures Surge Overnight! Drivers in 2026",
+          "url": "https://bluelinefutures.com/2026/01/05/gold-silver-futures-surge-overnight-here-are-the-drivers-in-2026/",
+          "date": "2026-01-05"
+        },
+        {
+          "title": "2026 Outlook on Gold, Silver and Key Commodities (Schwab Network)",
+          "url": "https://www.youtube.com/watch?v=jOMuwSoem3I",
+          "date": "2025-12"
+        }
+      ],
+      "date": "2026-09-07"
+    },
+    {
       "kol": "Kenneth Rogoff（哈佛大学 Maurits C. Boas 国际经济学讲席教授 / IMF 前首席经济学家）",
+      "id": "kenneth_rogoff_maurits_c_boas_imf",
       "sector": "宏观货币与金融体系",
       "direction": "看空",
       "targets": "美国国债(10Y/30Y)、美元、长久期固定收益",
@@ -21,10 +57,11 @@
           "date": "2026-08-28"
         }
       ],
-      "date": "2026-09-01"
+      "date": "2026-09-07"
     },
     {
       "kol": "Felix Zulauf（Zulauf Consulting 创始人 / 前 UBS 全球策略师 / Barron's Roundtable 30年成员）",
+      "id": "felix_zulauf_zulauf_consulting_ubs_barron_s_roundtable_30",
       "sector": "宏观货币与金融体系",
       "direction": "看空",
       "targets": "美股(2026末-2027初见顶)、美元(长期贬值)、黄金(长期牛市)",
@@ -38,10 +75,11 @@
           "date": "2026-06-26"
         }
       ],
-      "date": "2026-09-01"
+      "date": "2026-09-07"
     },
     {
       "kol": "Felix Prehn",
+      "id": "felix_prehn",
       "sector": "贵金属与商品周期",
       "direction": "看多",
       "targets": "黄金、白银、金矿股、美元（看空）",
@@ -65,10 +103,11 @@
           "date": "2026-08-26"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Ricardo Evangelista",
+      "id": "ricardo_evangelista",
       "sector": "贵金属与商品周期",
       "direction": "看多",
       "targets": "黄金（现货）、美元（看空）、美债收益率",
@@ -92,10 +131,11 @@
           "date": "2026-08-26"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Bart Melek",
+      "id": "bart_melek",
       "sector": "贵金属与商品周期",
       "direction": "看多",
       "targets": "黄金、白银、美元（看空）、大宗商品",
@@ -119,10 +159,11 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Goldman Sachs",
+      "id": "goldman_sachs",
       "sector": "宏观货币与金融体系",
       "direction": "看多",
       "targets": "黄金（年底 $4,900/oz）、标普500（年底 8,000）、美股",
@@ -146,10 +187,11 @@
           "date": "2026-01-22"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Andrew Maguire（Kinesis Money 总监 / 贵金属市场吹哨人）",
+      "id": "andrew_maguire_kinesis_money",
       "sector": "贵金属与商品周期",
       "direction": "看多",
       "targets": "实物黄金、白银（上海溢价）、看空美元债务体系与COMEX纸金",
@@ -173,10 +215,11 @@
           "date": "2026-07-30"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Neil Howe",
+      "id": "neilhowe",
       "sector": "技术分析与周期",
       "direction": "看空",
       "targets": "美股与风险资产（宏观周期视角）、制度与地缘风险",
@@ -200,7 +243,7 @@
           "date": "2026-01-18"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "David Hickson / Sentient Trader",
@@ -223,8 +266,7 @@
           "date": "2026-08-05"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Eric Hadik",
@@ -247,8 +289,7 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Charles Nenner",
@@ -271,8 +312,7 @@
           "date": "2026-02"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Peter Goodburn / WaveTrack International",
@@ -295,8 +335,7 @@
           "date": "2026-08-13"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Glenn Neely",
@@ -319,8 +358,7 @@
           "date": "2026-07-06"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Avi Gilburt",
@@ -343,8 +381,7 @@
           "date": "2026-08-13"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Tom McClellan",
@@ -367,8 +404,7 @@
           "date": "2026-03-16"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Robert Prechter / Elliott Wave International",
@@ -391,8 +427,7 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Amos Hochstein",
@@ -415,8 +450,7 @@
           "date": "2026-08"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Michael Widmer",
@@ -439,8 +473,7 @@
           "date": "2026-05-29"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Martin Armstrong",
@@ -463,32 +496,30 @@
           "date": "2026-02"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Jim Rogers",
       "id": "jim_rogers",
       "sector": "贵金属与商品周期",
-      "direction": "看多",
-      "targets": "长期看多金银(银或跑赢金)；近期或先回调",
-      "comments": "量子基金联创/商品指数之父，长期持有并加仓白银，视金银为危机保险，近期或有回调不卖",
-      "detail": "▸ 核心论点：传奇投资人、Quantum Fund联合创始人、Rogers国际商品指数创立者Rogers长期看多商品与贵金属，视实物金银为应对危机的「必备保险」，近期已加仓白银并「刻意按兵不动」持有。\n▸ 关键依据：美国国债突破天量、长期宽松政策与债务膨胀推高资产价格并放大未来回调风险；白银在危机中或跑赢黄金；他是长期持有者而非择时者(a lifelong holder, not a market timer)。\n▸ 时间与位置：1月看2026金银大牛市启动，但1/31访谈亦提示金银短期可能回调；无具体点位，强调长期配置逻辑。\n▸ 标的与操作：长期看多并持有实物黄金白银(近期加仓白银)，现价「什么都不做」继续持有；警示宽松+债务下的市场修正风险。",
+      "direction": "看多贵金属/大宗/看空美股",
+      "targets": "油可再破$100; 长期持金银铜不卖",
+      "comments": "已清仓美股, 警告一生最严重危机, 长持金银铜",
+      "detail": "▸ 核心论点：全球几乎所有市场同创新高极不寻常且不可持续, 当人人都在赚钱时往往是麻烦临近的信号; 美国作为史上最大债务国(近40万亿)终将迎来清算, 下一次危机将是他一生中最严重的。\n▸ 关键依据：全球债务窒息(尤其美国); AI是重复出现的泡沫模式(如电力/汽车/航空), 终将剧烈修正; 铜供给受限而需求(EV/电子)激增。\n▸ 时间与位置：不擅择时不预测精确时点; 油长期可再破$100; 金曾讨论$50,000极端情景但不作为基准。\n▸ 标的与操作：已清仓全球大部分股票, 现金+中国/乌兹别克斯坦选择性持仓; 长期持有实物金/银/铜作保险传子孙, 绝不因涨而卖; 建议持现金或做空并极度谨慎。",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "Gold and Silver Big Bull Run for 2026 - Jim Rogers (Triangle Investor)",
-          "url": "https://triangle-investor.com/interviews/gold-silver-big-bull-run-2026/",
-          "date": "2026-01-20"
+          "title": "Jim Rogers warns of severe global stock crash, prefers yuan over dollar",
+          "url": "https://www.dimsumdaily.hk/jim-rogers-warns-of-severe-global-stock-crash-and-discusses-preference-for-chinese-yuan-over-us-dollar/",
+          "date": "2026-08-17"
         },
         {
-          "title": "Jim Rogers on Gold: Why the Legendary Investor Refuses to Sell His Bullion (CEOWORLD)",
-          "url": "https://ceoworld.biz/2026/03/23/jim-rogers-on-gold-why-the-legendary-investor-refuses-to-sell-his-bullion/",
-          "date": "2026-03-23"
+          "title": "Jim Rogers on Gold, Asia, and the Future of Money",
+          "url": "https://www.bullionstar.com/blogs/bullionstar/jim-rogers-on-gold-asia-and-the-future-of-money/",
+          "date": "2026-09-04"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Judy Shelton",
@@ -511,8 +542,7 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Nomi Prins",
@@ -535,8 +565,7 @@
           "date": "2026-07-12"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "William White",
@@ -559,8 +588,7 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Greg Mankiw",
@@ -583,8 +611,7 @@
           "date": "2026-07-15"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Thomas Sargent",
@@ -607,8 +634,7 @@
           "date": "2026-04-03"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Asha Sharma（微软企业副总裁）",
@@ -631,8 +657,7 @@
           "date": "2026-07-30"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Chad Jones",
@@ -655,8 +680,7 @@
           "date": "2026-02-12"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Marc Andreessen",
@@ -679,8 +703,7 @@
           "date": "2026-01"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Kevin Murphy（芝加哥大学经济学教授）",
@@ -703,8 +726,7 @@
           "date": "2025-08-12"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Doug McMillon",
@@ -727,8 +749,7 @@
           "date": "2026-08-20"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Raj Chetty",
@@ -751,8 +772,7 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Jeremy Stein",
@@ -770,8 +790,7 @@
           "date": "2026-03"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Karen Dynan",
@@ -794,8 +813,7 @@
           "date": "2026-04"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Raghuram Rajan",
@@ -818,8 +836,7 @@
           "date": "2026-01-28"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Arminio Fraga",
@@ -842,8 +859,7 @@
           "date": "2026-07-24"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Peter Fisher",
@@ -855,8 +871,7 @@
       "detail": "",
       "detail_status": "none",
       "sources": [],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Mervyn King",
@@ -879,8 +894,7 @@
           "date": "2026-07-01"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Robert Kientz",
@@ -903,8 +917,7 @@
           "date": "2026-01-04"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Maria Smirnova",
@@ -927,8 +940,7 @@
           "date": "2026-08-10"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Craig Hamilton-Parker",
@@ -946,8 +958,7 @@
           "date": "2026-01"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Ken Griffin（Citadel 创始人 / CEO）",
@@ -970,8 +981,7 @@
           "date": "2026-08-21"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Carl Icahn（Icahn Enterprises 创始人 / 董事长）",
@@ -994,8 +1004,7 @@
           "date": "2026-08-14"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Philippe Laffont（Coatue Management 创始人 / 首席投资官）",
@@ -1018,8 +1027,7 @@
           "date": "2026-06"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Daron Acemoglu",
@@ -1042,11 +1050,11 @@
           "date": "2026-08-15"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "William Watkins",
+      "id": "william_watkins",
       "sector": "宏观货币与金融体系",
       "direction": "看空",
       "targets": "美元/法币体系、美国国债与财政、黄金(隐含正面)",
@@ -1065,10 +1073,11 @@
           "date": "2026-07"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Gary Wagner",
+      "id": "gary_wagner",
       "sector": "贵金属",
       "direction": "看多",
       "targets": "黄金(COMEX 12月期金)、白银、美元、美联储利率路径",
@@ -1087,10 +1096,11 @@
           "date": "2026-08-28"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Edward Dowd",
+      "id": "edward_dowd",
       "sector": "宏观货币与金融体系",
       "direction": "看空",
       "targets": "美股(AI泡沫)、美国房地产、影子银行/私募信贷、中国、美元(看多)、黄金白银(看多)",
@@ -1114,10 +1124,11 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Kirill Kirilenko",
+      "id": "kirill_kirilenko",
       "sector": "贵金属",
       "direction": "看多",
       "targets": "黄金、白银、铂金、钯金",
@@ -1136,10 +1147,11 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Jim Curry",
+      "id": "jim_curry",
       "sector": "贵金属",
       "direction": "中性",
       "targets": "黄金(COMEX 12月期金)、美股S&P 500",
@@ -1158,10 +1170,11 @@
           "date": "2026-08"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "James Turk",
+      "id": "james_turk",
       "sector": "贵金属",
       "direction": "看多",
       "targets": "实物黄金、白银、美元(看空)、法币银行体系",
@@ -1180,10 +1193,11 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Jordan Roy-Byrne",
+      "id": "jordan_roy_byrne",
       "sector": "贵金属",
       "direction": "看多",
       "targets": "金矿股(GDX)、黄金、白银、科技股/纳斯达克(相对看空)",
@@ -1202,77 +1216,76 @@
           "date": "2026-08-27"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Jesse Colombo",
+      "id": "jesse_colombo",
       "sector": "贵金属",
-      "direction": "看多",
-      "targets": "白银(核心)、黄金、大宗商品/基础材料",
-      "comments": "银突破50年杯柄形态，目标数百美元，最低300-500",
-      "detail": "▸ 核心论点：The Bubble Bubble Report 作者(以预警 2008 金融危机被伦敦《泰晤士报》认可)。他认为白银的长期牛市仍处「非常早期」，去年 11 月的突破确立了一个极度看多的新阶段，近几个月的回调是健康且必要的降温，而非牛市终结。\n▸ 关键依据：白银在 11 月突破了自 1960 年代起形成的巨型「杯柄形态」(cup and handle)——50 美元这道曾封顶 1970 年代与 2000 年代两轮银牛、并多次引发暴跌的阻力位被攻克。仅凭该形态的规模测算，目标是每盎司数百美元，最低目标区间 300-500 美元。突破后动能强劲，白银在 1 月下旬一度冲高至 121 美元，此时 RSI 进入极度超买(2025 年底至 2026 年初)，因此随后的回调「既在预期之中也是必要的」。关键在于：原先的 50 美元天花板现已变成地板，回调期间白银始终守在其上方，突破依然有效；目前超买状态已完全消化，RSI 回到健康区间。\n▸ 时间与位置：白银最低目标区间 300-500 美元(牛市周期内)，长期看「数百美元」；关键支撑/牛熊分界为 50 美元；本轮高点参照 1 月的 121 美元。他未给出具体到达时间，只强调牛市「还有很多年要走」。\n▸ 标的与操作：白银为核心多头标的，黄金同向；他另指出大宗商品与基础材料是「地球上最被忽视和低估的资产」，存在一个终将逆转的「反向泡沫」。操作立场是回调中持有并保持乐观，不因调整离场。",
+      "direction": "看多白银黄金(长期结构性)",
+      "targets": "金至少$15,000; 银$300-500(5-10年)",
+      "comments": "银1月来回调仅健康喘息, 长期牛市尚在婴儿期, 银即将接棒领涨",
+      "detail": "▸ 核心论点：贵金属长期结构性牛市仍在婴儿期, 1月以来的回调只是健康喘息而非新熊市; 白银即将从黄金手中接棒领涨(precious metals rebound信号); 银从1960年代形成的六十年杯柄形态突破($50关口2025年11月转为支撑)预示数百美元级目标。\n▸ 关键依据：银在$70阻力下方形成bull flag; 银/M2货币供应比现仅77(1980年达1,008/2011年171)、银/S&P比现仅37(1980年2,007)、金银比现56(1980年262)——多把标尺显示银极便宜; 债务负担远超1980年。\n▸ 时间与位置：银短期看$70突破; 5-10年目标$300-500; 金至少$15,000; 矿股涨幅更大。\n▸ 标的与操作：看多实物白银/黄金+矿股; 认为美股是史上最大泡沫, 破裂时资本将涌入贵金属(而非美债/美元/房产)。(注: 目标价属激进技术派个人观点)",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "The Roadmap For Silver (The Bubble Bubble Report)",
-          "url": "https://thebubblebubble.substack.com/p/the-roadmap-for-silver",
-          "date": "2026"
+          "title": "It's Silver's Time to Shine Now",
+          "url": "https://thebubblebubble.substack.com/p/its-silvers-time-to-shine-now",
+          "date": "2026-08-28"
         },
         {
-          "title": "The Bubble Bubble Report — Jesse Colombo (Substack)",
-          "url": "https://thebubblebubble.substack.com/",
+          "title": "Why Silver is STILL in a Secular Bull Market",
+          "url": "https://thebubblebubble.substack.com/p/why-silver-is-still-in-a-secular",
           "date": "2026"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Larry Lepard",
       "id": "larry_lepard",
       "sector": "贵金属与商品周期",
-      "direction": "看多",
-      "targets": "金牛市处“第6-7局”，远未见顶",
-      "comments": "债务数学迫使货币贬值，金牛市第6-7局远未到顶",
-      "detail": "▸ 核心论点：黄金过去两年大涨后近月回调只是市场走向成熟的标志，价格远未见顶；用棒球比喻牛市仅在“第六或第七局”，长期上升趋势将恢复。\n▸ 关键依据：全球货币体系开始直面“数学现实”——政府债务累积过高，已无法再像过去那样用加息抗通胀；即便美联储主席Warsh以鹰派通胀形象上任、曾谈缩表，货币与财政约束最终将主导政策走向贬值。\n▸ 时间与位置：牛市进程“第6-7局”；未给具体点位，强调回调后重启长期上行。\n▸ 标的与操作：黄金（及白银、比特币、金矿股），坚定看多，视回调为成熟市场的健康调整。",
+      "direction": "看多黄金白银比特币(健全货币)",
+      "targets": "2026 BTC或翻倍至$200,000; 金银矿股大涨",
+      "comments": "健全货币倡导者, 2026 BTC或翻倍至$200K, 金银BTC齐涨",
+      "detail": "▸ 核心论点：健全货币(sound money)倡导者, 认为全球货币体系濒临重置; 法币贬值驱动黄金/白银/比特币三者齐涨, 2026年价格可能翻倍。\n▸ 关键依据：其黄金基金去年涨超150%; 政府债务与印钞不可持续; 比特币与黄金是两种不同形态的健全货币。\n▸ 时间与位置：认为2026比特币可能翻倍至$200,000; 金银及矿股near term大涨。\n▸ 标的与操作：看多实物黄金/白银、金矿股与比特币作为对法币贬值与货币重置的对冲。",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "‘The math is on gold’s side’: Larry Lepard sees rising debt forcing currency debasement",
-          "url": "https://www.kitco.com/news/article/2026-08-27/math-golds-side-larry-lepard-sees-rising-debt-forcing-currency-debasement",
-          "date": "2026-08-27"
+          "title": "Larry Lepard: Gold Stocks, Silver, Bitcoin - Prices to Double in 2026?",
+          "url": "https://investingnews.com/larry-lepard-gold-forecast/",
+          "date": "2026"
         },
         {
-          "title": "Larry Lepard: 2026 Predictions For Bitcoin, Gold, Silver",
+          "title": "Larry Lepard: 2026 Predictions For Bitcoin, Gold, Silver and Stocks",
           "url": "https://quoththeraven.substack.com/p/larry-lepard-2026-predictions-for",
           "date": "2026"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Frank Giustra",
       "id": "frank_giustra",
       "sector": "贵金属与商品周期",
-      "direction": "看多",
-      "targets": "当前非最终顶，真正抛物线上涨仍在后面",
-      "comments": "金处消化阶段，非最终抛物线顶，真正大涨还在后头",
-      "detail": "▸ 核心论点：黄金近月急涨后处于消化整理阶段，绝非过去牛市末端那种最终抛物线式冲顶；真正的抛物线上涨与显著上行空间仍在前方（货币重置逻辑）。\n▸ 关键依据：截至2026-03-18现货金约$5189，此前3月1日在美伊冲突升级中创历史高$5246；Giustra以其黄金周期分析判断当前只是consolidation而非cycle peak，地缘压力与货币体系重置构成中长期动力。\n▸ 时间与位置：历史高$5246、消化位$5189附近（3月口径）；未给最终目标点位，强调“更大涨幅在后”。\n▸ 标的与操作：黄金及金矿股，长期强烈看多，视当前为爆发前的蓄势。",
+      "direction": "看多黄金(结构性)/看多美国矿业",
+      "targets": "纸黄金50年定价时代终结; 布局美国铜金资产",
+      "comments": "纸黄金era结束, 上半年抛售是liquidity take down; 布局美国铜金",
+      "detail": "▸ 核心论点：上半年贵金属大抛售不是标准回调, 而是精心策划的流动性事件与take down; 纸黄金定价的50年霸权正在混乱终结; 当前不是最终的黄金冲顶, 结构性牛市仍在推进; 下一轮救助周期已经开始。\n▸ 关键依据：法国央行2025年7月-2026年1月抛售129吨存于纽约联储的黄金, 换成欧洲购入的金条, 获约150亿美元资本利得, 全部2,437吨官方储备现实物存于巴黎(去托管风险信号)。\n▸ 时间与位置：黄金结构性牛市中段, 非最终冲顶; 无精确点位。\n▸ 标的与操作：看多黄金作货币重置对冲; 借Trump放松监管+地缘紧迫布局美国铜、金资产。",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "Frank Giustra: This Is NOT the Final Gold Spike - Here's What Comes Next",
-          "url": "https://www.canadianminingreport.com/blog/frank-giustra-this-is-not-the-final-gold-spike-here-s-what-comes-next",
-          "date": "2026-03-18"
+          "title": "The paper era is over: Giustra warns of take down in gold",
+          "url": "https://www.kitco.com/news/article/2026-02-03/paper-era-over-giustra-warns-take-down-gold-calls-project-vault-signal-new",
+          "date": "2026-02-03"
         },
         {
-          "title": "Frank Giustra: Next Round of QE Will Trigger a Dollar Crisis",
-          "url": "https://marketsanity.com/frank-giustra-next-round-of-qe-will-trigger-a-dollar-crisis/",
-          "date": "2026"
+          "title": "Frank Giustra Targets U.S. Mining as Trump Slashes Red Tape",
+          "url": "https://www.juniorstocks.com/frank-giustra-targets-u-s-mining-as-trump-slashes-red-tape",
+          "date": "2026-09-05"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Dan Loeb",
@@ -1295,8 +1308,7 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Todd \"Bubba\" Horowitz",
@@ -1319,8 +1331,7 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Ronny Stoeferle",
@@ -1343,8 +1354,7 @@
           "date": "2026-05"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Massimiliano Castelli",
@@ -1367,8 +1377,7 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Alex Kuptsikevich",
@@ -1391,8 +1400,7 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Bob Haberkorn",
@@ -1410,8 +1418,7 @@
           "date": "2026-03-03"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Marc Chandler",
@@ -1434,8 +1441,7 @@
           "date": "2026-08"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "David Meger",
@@ -1458,8 +1464,7 @@
           "date": "2026-07-08"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Timothy Arcuri",
@@ -1482,8 +1487,7 @@
           "date": "2026-08-24"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Jeff Currie",
@@ -1506,8 +1510,7 @@
           "date": "2026-08"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Andy Schectman",
@@ -1530,8 +1533,7 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Stewart Thomson",
@@ -1559,65 +1561,52 @@
           "date": "2026-04-29"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Torsten Sløk",
+      "id": "torsten_sl_k",
       "sector": "宏观货币与金融体系",
-      "direction": "看多",
-      "targets": "美国股市/AI 资本开支链、美债利率（偏上行）、美元（偏弱）",
-      "comments": "美国经济由滞胀转为过热，衰退概率仅10%，年内可能加息",
-      "detail": "▸ 核心论点：2026 年美国经济叙事已从「滞胀」翻转为「过热」。他明确表示经济\"running pretty hot\"，把美国衰退概率下调到 10%，远低于市场定价的 30%；风险不在增长失速，而在通胀黏性迫使美联储由降转升。\n▸ 关键依据：研究报告《Stagflation in 2025. Overheating in 2026》列出 10 条顺风，核心是 AI 资本开支潮、产业回流、美元贬值提振出口竞争力，以及\"One Big Beautiful Bill\"财政刺激——他估算该法案单独贡献约 0.9% 的 2026 年 GDP 增速。通胀端：6/17 FOMC 维持 3.50%–3.75% 不变（12-0），却把 2026 年 PCE 预测由 2.7% 大幅上修至 3.6%，点阵图抹掉了原先的降息预期。\n▸ 时间与位置：时间窗口为 2026 全年，判断年底前更可能加息而非降息；政策利率锚定 3.50%–3.75%，通胀锚定 3%（PCE 预测 3.6%）。未给出股指或收益率的具体点位。\n▸ 标的与操作：偏好受 AI 资本开支拉动的实体链条（电力、半导体、地产）与美国资产（外资持续流入）；对利率敏感型久期资产偏谨慎；结构上强调 K 型分化，低收入群体承压。中长期看好 AI 投资驱动的复苏，短期提示先有一段温和滞胀。",
+      "direction": "看多固定收益/警告滞胀过热",
+      "targets": "通胀近4%; 利率higher-for-longer; 增配固定收益",
+      "comments": "三引擎(AI/工业复兴/大而美法案)支撑增长, 但通胀近4%趋过热",
+      "detail": "▸ 核心论点：美国经济由三大引擎(AI数据中心热潮+工业复兴+One Big Beautiful Bill)驱动, 韧性强、GDP超2%; 担忧从滞胀转向过热, 通胀或继续上行; 利率higher-for-longer。\n▸ 关键依据：AI数据中心+能源建设; 减税带来家庭平均退税约$4,000(全国超1,300亿额外消费)+企业100%即时费用化; CBO估三力合计年内抬升GDP 0.9个百分点; 当前通胀近4%(远超2%目标), FOMC维持不能降息信号。\n▸ 时间与位置：2026下半年增长强劲; 通胀风险偏上; 未给点位。\n▸ 标的与操作：★美联储在暗示投资者增配固定收益——重点配债券/信用等提供息票现金流的资产, 而非股票/风投; 规避软件业(高债务低覆盖率对利率脆弱); 股债都选能在高债务服务成本下存活的行业。",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "2026 Outlook — Apollo Academy（Torsten Sløk 年度展望）",
-          "url": "https://www.apolloacademy.com/2026-outlook/",
-          "date": "2026"
-        },
-        {
-          "title": "Torsten Sløk: US Economy 'Running Pretty Hot' in 2026",
-          "url": "https://pomegra.io/news/torsten-slok-us-economy-running-pretty-hot-in-2026",
-          "date": "2026-06-19"
-        },
-        {
-          "title": "Podcast: 2026 Mid Year Outlook — Apollo Global Management",
-          "url": "https://www.apollo.com/insights-news/insights/podcast/the-allocation/2026/06/2026-mid-year-outlook",
-          "date": "2026-06"
+          "title": "Apollo 2026 Mid Year Outlook: Three Forces Driving Markets",
+          "url": "https://www.apollo.com/institutional/insights-news/insights/the-view-from-apollo/2026/06/2026-mid-year-outlook",
+          "date": "2026-06-25"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Jeremy Grantham",
+      "id": "jeremy_grantham",
       "sector": "宏观货币与金融体系",
-      "direction": "看空",
-      "targets": "美股大盘（尤以 AI/科技为核心）、Nvidia 等 AI 龙头",
-      "comments": "美股已处两倍标准差泡沫区，AI 是典型技术泡沫，警告约50%回撤",
-      "detail": "▸ 核心论点：美股已长期处于「泡沫」区域，AI 热潮是历史上典型的重大技术创新引发的重大泡沫。他与 Edward Chancellor 在 2026 年 1 月 GMO 报告《Valuing AI: Extreme Bubble, New Golden Era, or Both》中指出，AI 可能既是极端泡沫、也是新黄金时代，但估值先要付出代价。\n▸ 关键依据：GMO 数十年沿用的泡沫定义——某资产价格偏离长期实际价格趋势达两个标准差（two-sigma）。他强调历史上「两倍标准差泡沫无一例外都破裂并回到原趋势线」，并点名 1929、1972、2000 三次美股先例；AI 目前仍是「不成熟的技术」（immature technology）。相关报道引述其预测泡沫破裂可导致约 50% 的市场跌幅。\n▸ 时间与位置：泡沫破裂时点指向 2026 年前后，但未给出精确日期；幅度锚点是「回到长期趋势线」，媒体归纳为约 -50%。未给出具体指数点位。\n▸ 标的与操作：回避美国大盘尤其 AI/科技龙头（以 Nvidia 涨势为泡沫例证）；GMO 一贯主张转向价值股、非美市场与优质防御资产。操作取向为减持美股风险敞口。",
+      "direction": "看空美股(泡沫)/看多价值防御",
+      "targets": "美股或跌50%; 泡沫=偏离长期实际趋势2个标准差",
+      "comments": "AI热潮是经典泡沫, 警告或50%回撤, 但GMO 13F仍持AI基建",
+      "detail": "▸ 核心论点：AI热潮(以Nvidia为代表)是经典泡沫, 类比互联网崩盘等历次狂热; 美股已长期处于泡沫区间(价格偏离长期实际趋势2个标准差), 迟早会破裂回归历史水平。\n▸ 关键依据：GMO对泡沫的定义=任何资产价格偏离长期实际价格趋势2个标准差; 转型科技故事可以真实但仍会把价格推至过高。\n▸ 时间与位置：预测2026年前后泡沫破裂, 可能触发约50%的市场回撤。\n▸ 标的与操作：呼吁分散与价值投资以对冲风险; 但需注意GMO Q2 2026 13F实际仍重仓AI基建(Lam Research/Nvidia)+防御资产, 言行存在张力。",
       "detail_status": "ok",
       "sources": [
-        {
-          "title": "Valuing AI: Extreme Bubble, New Golden Era, or Both（GMO Viewpoints）",
-          "url": "https://www.gmo.com/americas/research-library/valuing-ai-extreme-bubble-new-golden-era-or-both_viewpoints/",
-          "date": "2026-01-28"
-        },
-        {
-          "title": "Jeremy Grantham On AI, Valuations, And The Anatomy Of A Market Bubble",
-          "url": "https://acquirersmultiple.com/2026/02/jeremy-grantham-on-ai-valuations-and-the-anatomy-of-a-market-bubble/",
-          "date": "2026-02-01"
-        },
         {
           "title": "Grantham Warns AI Boom Is Bubble, Predicts 50% Market Crash",
           "url": "https://www.webpronews.com/grantham-warns-ai-boom-is-bubble-predicts-50-market-crash-by-2026/",
           "date": "2026-01-20"
+        },
+        {
+          "title": "Grantham Q2 2026 13F",
+          "url": "https://www.ainvest.com/news/grantham-q2-2026-13f-warning-biggest-bubble-buying-2609/",
+          "date": "2026-09-03"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Jeff Snider",
+      "id": "jeff_snider",
       "sector": "国债利率与债券市场",
       "direction": "看空",
       "targets": "美元融资/欧洲美元体系、中国经济、JGB 日本国债、黄金、铜金比",
@@ -1636,59 +1625,52 @@
           "date": "2026-08-29"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Bill Gross",
+      "id": "bill_gross",
       "sector": "国债利率与债券市场",
-      "direction": "中性",
-      "targets": "美股（估值偏高）、10年期美债、ET（Energy Transfer）、AGNC",
-      "comments": "股市不崩但需「拄拐」，估值处历史高位；10年美债看向4.5%",
-      "detail": "▸ 核心论点：2026 年 1 月《The Cane Mutiny》中他判断美股「不会全面崩盘，只是摇晃」——需要一根拐杖来稳住动能，与 2025 年的顺畅上行不同。财政与货币刺激支撑盈利预期，但估值已成为压在市场头上的阴影。\n▸ 关键依据：他引用「S&P 500 价格 vs 美国名义 GDP（实际增长＋通胀）」这一经典指标，指出该比值已处历史高位。同时担忧政治动荡侵蚀「竞争与适者生存」的资本主义模型，AI 领域的关税与政府补贴可能反而扶持「不适者」。债市方面，供给压过需求叠加关税的通胀效应终将被认知。\n▸ 时间与位置：明确点位——10 年期美国国债收益率将升向 4.5%；判断窗口为 2026 全年；对股市给出方向性判断（震荡而非崩盘），未给指数点位。\n▸ 标的与操作：偏好低/中市盈率、股息率 4% 以上的股票。点名持仓：ET（Energy Transfer，股息率约 8.5%）、AGNC（抵押型 REIT，股息率约 12%，受益于未来鸽派美联储）。债券端因收益率仍在上行而谨慎。",
-      "detail_status": "ok",
+      "direction": "谨慎/需新催化",
+      "targets": "股市涨势需低利率+AI提效证据+盈利增长续燃",
+      "comments": "股市长牛或失动能, 需新催化剂维持",
+      "detail": "▸ 核心论点：长期股市涨势可能正在失去动力, 需要新的催化剂才能延续; 对当前高估值持谨慎态度。\n▸ 关键依据：需要更低利率、AI确实提升生产率的证据、以及强劲盈利增长, 才能为涨势重新加油。\n▸ 时间与位置：未给出具体点位; 观点为2026年初评论。\n▸ 标的与操作：整体偏谨慎, 强调涨势需新燃料; 债券方面持传统的相对价值/谨慎久期视角。(注: 最新公开评论集中在1月, 近月无重大更新)",
+      "detail_status": "thin",
       "sources": [
         {
-          "title": "The Cane Mutiny — Investment Outlook",
-          "url": "https://williamhgross.com/the-cane-mutiny/",
-          "date": "2026-01-21"
-        },
-        {
-          "title": "'Bond King' Bill Gross Tells Us What the Stock Rally Needs to Keep Going",
+          "title": "Bond King Bill Gross tells us what the record stock rally needs",
           "url": "https://www.businessinsider.com/bond-king-bill-gross-stock-market-outlook-ai-valuations-government-2026-1",
           "date": "2026-01-23"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Kyle Bass",
+      "id": "kyle_bass",
       "sector": "国债利率与债券市场",
-      "direction": "看空",
-      "targets": "中国经济与人民币资产（看空）、台海/地缘风险、伊朗制裁与能源",
-      "comments": "中国经济螺旋下行无解，台海与伊朗制裁是2026核心地缘风险",
-      "detail": "▸ 核心论点：对中国持续深度看空——「没有任何东西能把中国从经济螺旋中拯救出来」。2026 年他的公开发言重心转向地缘：中国—伊朗贸易关系、美国强化制裁的连锁反应，以及台海。他在 2026-06-04 CNBC 明确表示台海「维持现状对世界最好」。\n▸ 关键依据：他列举的中国四重危机——房地产危机、银行业危机、青年失业危机，如今还要担心经常账户。地缘层面，他判断美国对伊朗（含对其最大加密货币交易所的制裁）的强化制裁将「扼杀」伊朗，并牵动中国的原油采购链条；以色列—伊朗—美国事态会让中国在军事上更为审慎。他同时是 Committee on the Present Danger: China 的创始成员，2026 年身份已转为 Rochefort Asset Management 创始人/联席 CEO。\n▸ 时间与位置：2026 年多次 CNBC 露面（1/21、4/30、6/4、8/26）。未给出具体点位或目标价，属地缘—宏观风险框架而非价位判断。\n▸ 标的与操作：回避中国相关风险资产与人民币敞口；关注制裁引发的能源供应链扰动；台海冲突尾部风险是其组合的核心对冲主题。注：Hayman 自 2016 年起已停报 13F，无公开持仓可核。",
+      "direction": "看多美元美国资产/看空中国",
+      "targets": "资金将更集中于美国资产; 中国经济螺旋下行",
+      "comments": "美国是最佳资本配置地, 中国房产/银行/就业三重危机",
+      "detail": "▸ 核心论点：美国仍是全球资本配置的最佳去处, 预计资产将更集中于美国; 中国陷入经济螺旋(房地产危机+银行危机+青年失业+经常账户担忧), 无解; 地缘上预计未来2-3年习近平会对台湾动手。\n▸ 关键依据：中国银行体系达GDP的320%; 房价曾达中位数收入26倍致适婚男性买不起房→人口崩塌; 全球在2020-2025注入约50%美元通胀, 除美元外全球无稳定。\n▸ 时间与位置：台海冲突窗口未来2-3年; 未给出具体资产点位。\n▸ 标的与操作：长期看多美国资产/美元; 规避中国; 提示地缘尾部风险(台海)对全球市场分叉的影响。",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "Enhanced U.S. sanctions will strangle Iran, says Rochefort's Kyle Bass（CNBC Power Lunch）",
+          "title": "Kyle Bass: Expect More Concentration in US Assets",
+          "url": "https://bankb.it/kyle-bass-expect-more-concentration-in-us-assets-162381",
+          "date": "2026-05"
+        },
+        {
+          "title": "Enhanced U.S. sanctions will strangle Iran, says Rochefort's Kyle Bass",
           "url": "https://www.cnbc.com/video/2026/08/26/enhanced-u-s-sanctions-will-strangle-iran-says-rocheforts-kyle-bass.html",
           "date": "2026-08-26"
-        },
-        {
-          "title": "Kyle Bass on China-Taiwan tensions: The status quo is what's best for the world（CNBC）",
-          "url": "https://www.cnbc.com/video/2026/06/04/kyle-bass-on-china-taiwan-tensions-the-status-quo-is-whats-best-for-the-world.html",
-          "date": "2026-06-04"
-        },
-        {
-          "title": "Watch CNBC's full interview with Rochefort co-CEO Kyle Bass",
-          "url": "https://www.cnbc.com/video/2026/04/30/watch-cnbcs-full-interview-with-rochefort-co-ceo-kyle-bass.html",
-          "date": "2026-04-30"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "James Grant",
+      "id": "james_grant",
       "sector": "国债利率与债券市场",
       "direction": "看空",
       "targets": "黄金（看多）、白银、长端美债/30年、私募信贷（看空）、AI 资本开支",
@@ -1712,24 +1694,20 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Lacy Hunt",
+      "id": "lacy_hunt",
       "sector": "国债利率与债券市场",
-      "direction": "看空",
-      "targets": "长久期美国国债（大幅减持）、短期国库券（增持）",
-      "comments": "放弃坚持数十年的通缩论，久期从21年砍到1年以下，转为看空长债",
-      "detail": "▸ 核心论点：华尔街任期最长的通缩论者已彻底转向。Hoisington 在 2026 年 Q2 季报《Capital Scarcity and the End of Globalization's Disinflationary Era》中正式放弃了贯穿 2008 危机、十年 QE 与 COVID 印钞期的通缩主张，改判美国均衡通胀将上移。这是结构性反转而非战术调整。\n▸ 关键依据：三股被其视为不可逆的力量——①去全球化（关税、回流）逆转了三十年供应链扩张带来的通缩压力；②财政赤字扩大造成资本稀缺，实际借贷成本结构性抬升；③人口老龄化使劳动力池收缩。据此把美国均衡通胀基准上调至 3.5%–4.5% 区间。对照 2025 年 Q4 季报（2026 年 1 月发布）当时仍主张 2026 年延续通缩、长端收益率走低——前后差距巨大。DoubleLine 的 Jeffrey Gundlach 公开点评「连 Lacy Hunt 都转空了」。\n▸ 时间与位置：具体久期路径——2025 年 9 月约 21 年 → 2026 年 Q1 末约 4.5 年 → 2026 年 6 月 30 日降至 1 年以下。通胀目标区间 3.5%–4.5%。未给出具体收益率点位。\n▸ 标的与操作：卖出长久期美国国债，资金转入短期国库券（T-bills）。含义是对长端固定收益的结构性看空，主权债务螺旋论的主要智识反方已消失。",
+      "direction": "转向看空长债(重大转向)",
+      "targets": "久期砍至<1年; 通胀预期4.5%+",
+      "comments": "放弃持守数十年的通缩论, 砍长债久期转国库券",
+      "detail": "▸ 核心论点：★重大转向——Lacy Hunt与Hoisington放弃了贯穿2008危机、十年QE与COVID印钞期的通缩论, 结束长达44年的长债牛市看法, 转为看空长期美债。\n▸ 关键依据：Q2 2026季度展望题为《资本稀缺与全球化去通胀时代的终结》, 指向更大财政赤字+更高资本需求的结构性背景; 预期通胀升至4.5%+。\n▸ 时间与位置：将客户债券久期大幅削减至1年以下, 所得资金转入国库券(T-bills)。\n▸ 标的与操作：清减长久期美债、增持短端国库券; 这是数十年长债多头立场的历史性反转, 值得高度重视。",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "Quarterly Review and Outlook, Second Quarter 2026（Hoisington 原文 PDF）",
-          "url": "https://hoisington.com/pdf/HIM2026Q2.pdf",
-          "date": "2026-Q2"
-        },
-        {
-          "title": "Lacy Hunt Abandons Deflation Thesis, Cuts Bond Duration to Under One Year",
+          "title": "Lacy Hunt Abandons Deflation Thesis, Cuts Bond Duration",
           "url": "https://www.tftc.io/lacy-hunt-deflation-thesis-hoisington-bond-duration-inflation",
           "date": "2026-08-20"
         },
@@ -1739,10 +1717,11 @@
           "date": "2026-08-17"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Abhigya Anand",
+      "id": "abhigya_anand",
       "sector": "预测",
       "direction": "看空",
       "targets": "地缘风险（中国/朝韩/菲律宾/印度）、非金融标的",
@@ -1761,10 +1740,11 @@
           "date": "2025-12-25"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Plai Navaracha",
+      "id": "plai_navaracha",
       "sector": "预测",
       "direction": "看空",
       "targets": "加密货币（预言崩盘）、AI 板块、旅游/航空（地区风险）",
@@ -1788,10 +1768,11 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Athos Salomé",
+      "id": "athos_salom",
       "sector": "预测",
       "direction": "看空",
       "targets": "美元（看空）、加密/数字货币、日本半导体产业、波兰金融、地缘（北极/中东/红海）",
@@ -1810,10 +1791,11 @@
           "date": "2025-12"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Anu Anand",
+      "id": "anu_anand",
       "sector": "资源与能源安全",
       "direction": "未找到",
       "targets": "",
@@ -1821,10 +1803,11 @@
       "detail": "",
       "detail_status": "none",
       "sources": [],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "David Icke",
+      "id": "david_icke",
       "sector": "预测",
       "direction": "看空",
       "targets": "AI 叙事与科技巨头（质疑）、马斯克相关预测",
@@ -1838,10 +1821,11 @@
           "date": "2026-06-21"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Amanda Grace",
+      "id": "amanda_grace",
       "sector": "预测",
       "direction": "看空",
       "targets": "伊朗相关地缘/制裁主题，无具体金融标的",
@@ -1865,37 +1849,34 @@
           "date": "2026-05-15"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Dan Ives",
+      "id": "dan_ives",
       "sector": "科技与未来趋势",
-      "direction": "看多",
-      "targets": "科技股整体、Palantir、Tesla、Apple、Microsoft、Oracle、Intel、Cisco、Dell、Nebius",
-      "comments": "AI仅在「九局中的第三局」，科技股2026还有15%上行空间",
-      "detail": "▸ 核心论点：Wedbush 全球科技研究主管 Dan Ives 坚定看多。年初判断 2026 年科技股涨 20%–25%，称这是 AI 的「prove it year（验证之年）」；5 月接受 CNBC 访问时重申剩余时间仍有约 15% 上行空间，并给出那句标志性表述：「我们处在这场九局比赛的第三局，这是看涨的」。\n▸ 关键依据：①AI 行情正在扩散——从 Magnificent Seven megacap 外溢到 Intel、Cisco、Dell 等「传统科技」，他称之为硬件、半导体乃至软件与基础设施的「第二、第三层导数」；②关键观察指标是资本开支——「不只是重申 CapEx，AI 的变现已经开始发生」，若财报电话会重申 capex 即利多，若暗示暂停或回撤则可能是顶部信号；③个股层面点名 Palantir 处于 AI 革命的「震中」。\n▸ 时间与位置：明确点位——Palantir 未来 2–3 年市值达 1 万亿美元；Tesla 目标价 600 美元（约 32% 上行空间），称 2026 可能是特斯拉在 AI 与机器人上的「monster year」，并预测其在 30 多个城市推出 robotaxi；2026 全年科技股 +20%–25%，年中起剩余 +15%。\n▸ 标的与操作：全面买入 AI 与科技。首选 Magnificent Seven 之外的 Palantir；组合中包含 Tesla、Apple、Microsoft、Oracle（AI 驱动的股价复苏）、Google（预测出现 Apple–Google AI 合作）以及 Intel/Cisco/Dell 等外溢受益者。",
+      "direction": "看多科技/AI股",
+      "targets": "大型科技2026或再涨20%; AI交易远未结束",
+      "comments": "AI是多层变革(软件/芯片/基础设施), 大科技或再涨20%",
+      "detail": "▸ 核心论点：华尔街头号科技多头, 极度看多AI与科技板块; 将AI视为跨软件/芯片/数字基础设施的多层变革而非单一趋势; 认为AI交易远未结束, 大型科技2026年或再涨20%。\n▸ 关键依据：新AI应用与收入流不断成形; 尽管市场对巨额投资成本有疑虑, 但AI革命全速前进。\n▸ 时间与位置：2026大型科技或再涨约20%; 未给个股点位。\n▸ 标的与操作：Top AI 2026首选Tesla/Apple/Microsoft等主要受益者(其Top 5不含Nvidia); 看多科技/AI/机器人/自动驾驶。(注: 最新系统性预测集中在2025年底至2026年3月)",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "Dan Ives: Tech Has 15% More Upside in 2026 and AI Trade Is in \"3rd Inning\"",
-          "url": "https://www.fool.com/investing/2026/05/01/tech-15-upside-2026-ai-trade-3rd-inning-dan-ives/",
-          "date": "2026-05-01"
+          "title": "Dan Ives Says Big Tech Could Rally Another 20% In 2026",
+          "url": "https://stocktwits.com/news-articles/markets/equity/dan-ives-says-big-tech-could-rally-another-20-in-2026-ai-trade-is-far-from-over/cLI7OOgREiJ",
+          "date": "2026-03-05"
         },
         {
-          "title": "Tech Stocks to Climb 20%-25% in 2026, Says Dan Ives（Bloomberg）",
-          "url": "https://www.bloomberg.com/news/videos/2026-01-02/dan-ives-expects-tech-stocks-to-climb-20-25-in-2026-video",
-          "date": "2026-01-02"
-        },
-        {
-          "title": "Top 5 Stocks to Buy As AI Hits Inflection Point in 2026（Business Insider，含 Tesla $600 目标价）",
-          "url": "https://www.businessinsider.com/ai-stocks-to-buy-2026-tech-dan-ives-wedbush-2025-12",
-          "date": "2025-12-31"
+          "title": "The Top AI and Tech Predictions for 2026 From Dan Ives",
+          "url": "https://www.businessinsider.com/ai-outlook-2026-tech-stocks-telsa-robotaxis-google-apple-nebius-2025-12",
+          "date": "2025-12-19"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Eric Nuttall",
+      "id": "eric_nuttall",
       "sector": "资源与能源安全",
       "direction": "看多",
       "targets": "原油/WTI、加拿大能源股：Cenovus(CVE)、Strathcona(SCR)、Ovintiv(OVV)、Expand Energy、EQT、Antero",
@@ -1919,10 +1900,11 @@
           "date": "2026-01-20"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Rory Johnston",
+      "id": "rory_johnston",
       "sector": "资源与能源安全",
       "direction": "中性",
       "targets": "原油/WTI、Brent、成品油裂解价差、中国原油进口与库存、OECD 战略储备",
@@ -1946,10 +1928,11 @@
           "date": "2026-08-21"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Brandon Biggs",
+      "id": "brandon_biggs",
       "sector": "预测",
       "direction": "看空",
       "targets": "美元（预言崩溃）、银行股/大型银行、数字资产",
@@ -1973,37 +1956,34 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Cathie Wood",
+      "id": "cathie_wood",
       "sector": "科技与未来趋势",
-      "direction": "看多",
-      "targets": "Tesla、Bitcoin、AI/机器人/储能/区块链/多组学测序五大平台、核电与太空数据中心",
-      "comments": "全球GDP将从3%跃至7%+，比特币2030看1.5百万美元，通胀将转负",
-      "detail": "▸ 核心论点：ARK 2026 Big Ideas 的核心押注——世界正踏上增长的第三级台阶。1500–1900 年全球实际 GDP 年增约 0.6%，铁路/电力/电话/内燃机把它推到 3% 并停留了 125 年；她认为由机器人、储能、AI、区块链、多组学测序五大平台汇聚，将带来 7%+ 的实际 GDP 增速（ARK 称之为 2.5 倍加速），并说「7%+ 还是保守的」。她同时判断增长是通缩性而非通胀性的。\n▸ 关键依据：①通胀——实时追踪 1 万种商品的 Truflation 显示美国通胀已降至 1.2%，远低于美联储 2.5–3% 的框架，她认为美联储在用错误数据决策、可能过度紧缩，预计一年内通胀跌破 2% 并转负。②AI 经济性——推理成本以每年约 99% 的速度崩塌；OpenAI 广告拟收 $60 CPM（Facebook 约 $20），两年内广告收入目标从 0 做到 750 亿美元（对比亚马逊用约七年做到 500 亿）。③Bitcoin 拆解——稳定币（尤其 Tether）抢走了她原本预期比特币在新兴市场承担的抗通胀角色，这一项下调目标价 20–30 万美元；但黄金两年翻倍且过去一年跑赢比特币被她视为利多（历史上黄金领先、比特币跟随），叠加代际财富转移而抵消。她还强调比特币在「通缩情景」下的价值——自我托管无交易对手风险。④Tesla vs Waymo——ARK 测算 Tesla robotaxi 目标 $0.20/英里，而 Uber 现均价 $2.80（四年涨 40%），存在 14 倍差距；Waymo 全美运营车辆不足 3,000 台且依赖第三方供应商，Tesla 的垂直整合是决定性优势。\n▸ 时间与位置：明确点位——Bitcoin 2030 年牛市目标 150 万美元（另有 120 万美元的口径流传）；美国 GDP 增速目标 7%+；通胀一年内跌破 2% 并转负；Tesla robotaxi 单位成本 $0.20/英里。ARK 管理规模逾 140 亿美元，ARKK 近两年年化 31–33%（但 2021 峰值后曾回撤逾 75%）。\n▸ 标的与操作：加仓 Tesla 与生成式 AI，同时疏远「传统科技股」；长期持有 Bitcoin（强调自我托管）；看好核电、太空数据中心等新基础设施；看空以内燃机为 DNA 的传统车企。她也提示 Google 可用母公司现金流补贴 AI，在 OpenAI 高定价推走用户时抢占份额。",
+      "direction": "看多创新股/看多美元",
+      "targets": "名义GDP 6-8%; 生产率5-7%; 通胀-2%至+1%",
+      "comments": "科技驱动好通缩, 股市黄金时代开端",
+      "detail": "▸ 核心论点：美国经济是蜷曲的弹簧, 未来几年将强劲反弹; 科技革命将带来好通缩(good deflation), 股市进入黄金时代开端, 类比1980-90年代攀爬忧虑之墙。\n▸ 关键依据：8月非农+16.2万、家庭调查就业+50万、工时延长显示经济强劲; 整体通胀3.7%但其他口径接近2%; 油价或跌向$30; AI训练成本年降75%、推理成本年降99%; 资本开支破20年天花板。\n▸ 时间与位置：预计名义GDP未来几年6-8%(生产率5-7%+劳动力1%+通胀-2%至+1%); 失业率或升至5%+促美联储继续降息, 2026下半年GDP加速。\n▸ 标的与操作：看多颠覆性创新(SpaceX/Tesla占旗舰15%)、AI、机器人、区块链; 与主流相反看多美元(称ROIC上升驱动美元走强)。",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "Cathie Wood's 2026 Big Bet: 7% GDP, $1.5M Bitcoin, and the End of Legacy Automakers（ARK 2026 Big Ideas 深度访谈整理）",
-          "url": "https://yuanchang.org/en/posts/cathie-wood-ark-2026-big-ideas/",
-          "date": "2026-02-27"
+          "title": "Cathie Wood: Strong August Jobs Signal Tech-Driven Deflation",
+          "url": "https://www.chaincatcher.com/en/article/2287836",
+          "date": "2026-09-06"
         },
         {
-          "title": "Cathie Wood's 2026 Outlook: The US Economy Is A Coiled Spring（ARK Invest 官方）",
-          "url": "https://www.ark-invest.com/articles/market-commentary/cathie-woods-2026-outlook",
-          "date": "2026-01"
-        },
-        {
-          "title": "Cathie Wood: Tesla Stock Forecast, Bitcoin Bull Case, AI Outlook（Morningstar）",
-          "url": "https://global.morningstar.com/en-gb/markets/cathie-wood-tesla-bitcoin-whether-ai-is-bubble",
-          "date": "2026"
+          "title": "Cathie Wood Foresees Golden Era for Sharemarket",
+          "url": "https://www.sharecafe.com.au/2026/09/02/cathie-wood-foresees-golden-era-for-sharemarket/",
+          "date": "2026-09-02"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Doomberg / Kuppy",
+      "id": "doomberg",
       "sector": "资源与能源安全",
       "direction": "看多",
       "targets": "北美天然气、加拿大能源（Alberta）、核电/铀、AI 数据中心用电、委内瑞拉油气",
@@ -2027,37 +2007,34 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Michael Saylor",
+      "id": "michael_saylor",
       "sector": "科技与未来趋势",
-      "direction": "看多",
-      "targets": "Bitcoin、Strategy（原 MicroStrategy，MSTR/MSTC）",
-      "comments": "仍看多BTC年化30%、十年内百万美元，但5月首次卖币破戒",
-      "detail": "▸ 核心论点：坚定看多比特币。2026-05-21 在 CNBC 表示未来 20 年比特币将以约每年 30% 的幅度升值，并在 2026 年底前先有一波近期上涨；他反复给出「十年末每枚 100 万美元」的目标，极端长期情景下曾提到 1,000 万美元（作为全球数字抵押资产的真实价值）。他视当前价位为显著折价并持续买入。\n▸ 关键依据：Strategy 截至 2026 年 6 月底持有 847,363 枚 BTC，累计成本约 641 亿美元，平均成本 75,651 美元/枚，占比特币总供应量逾 4%，为全球最大企业持有者。2025 年通过 ATM 增发与 STRF/STRK/STRC/STRD 等优先股工具募资 253 亿美元，成为当年美国最大股权发行人；Q1 2026 又募 116.8 亿美元，BTC Yield 年内 9.4%。★ 但风险已显性化：比特币自 2025 年 10 月峰值 126,080 美元下跌 52%，Strategy 仅 Q1 2026 就报亏 125 亿美元；2026 年 5 月公司做出史上首次比特币减持，Saylor 打破了「永不卖出」的长期承诺，他本人在 5 月受访时称 2026 年内卖币「并非不可能」。摩根大通 7 月警告其集中买入会放大波动，一旦被迫清算将对比特币价格产生超额冲击。\n▸ 时间与位置：明确点位——年化 +30%（未来 20 年）；十年末 100 万美元/枚；极端情景 1,000 万美元。对照锚点：2025-10 峰值 126,080 美元、-52% 回撤、平均成本 75,651 美元。2026-07-05 资产负债表为 843,775 BTC 加 25.5 亿美元现金。\n▸ 标的与操作：持续买入并持有比特币，以资本市场飞轮（ATM 增发＋可转债＋永续优先股）加杠杆累积。但需注意其言行已出现松动：首次卖出发生在 2026 年 5 月，杠杆化国库模型在深度回撤中承压。",
+      "direction": "长期看多比特币(个人不卖/公司可调)",
+      "targets": "目标2033年最大化每股比特币; Strategy持约650亿BTC",
+      "comments": "个人绝不卖, Strategy可为资本管理卖BTC; 8月重新买入",
+      "detail": "▸ 核心论点：坚持长期看多比特币; 个人'永不卖比特币'原则仅适用个人持仓, Strategy公司层面可为资本管理出售BTC; 目标是到2033年最大化每股比特币(BTC per share)。\n▸ 关键依据：Strategy持约650亿美元BTC; 8月曾三度亏损减持后又于8/31两个月来首次重新买入(比特币当时约$78,800)。\n▸ 时间与位置：战略目标锚定2033年; 短期比特币在$64,800-$78,800区间大幅波动。\n▸ 标的与操作：长期增持比特币为核心战略; 公司层面灵活买卖以管理资本结构; 立志使Strategy成为全球最大公司。",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "Michael Saylor's Bitcoin Strategy: Risks, Rewards, and Long-Term Outlook",
-          "url": "https://financefeeds.com/michael-saylors-bitcoin-strategy/",
-          "date": "2026-07-03"
+          "title": "Bitcoin is back-and so is Michael Saylor's Strategy first buy in two months",
+          "url": "https://fortune.com/2026/08/31/bitcoin-michael-saylors-strategy-first-buy-two-months/",
+          "date": "2026-08-31"
         },
         {
-          "title": "Bitcoin 2026 Prediction Roundup: Saylor at $1M（含 CNBC 5/21 发言）",
-          "url": "https://news.bitcoin.com/bitcoin-2026-prediction-roundup-saylor-at-1m-hayes-at-125k-brandt-at-60k-low/",
-          "date": "2026-05-26"
-        },
-        {
-          "title": "'Not unlikely' Strategy will sell Bitcoin in 2026: Michael Saylor（Cointelegraph）",
-          "url": "https://cointelegraph.com/news/michael-saylor-strategy-mstr-bitcoin-sell-speculation-btc",
-          "date": "2026-05-22"
+          "title": "Michael Saylor Clarifies Bitcoin Stance After Strategy's 1638 BTC Sale",
+          "url": "https://www.cryptotimes.io/2026/08/03/michael-saylor-clarifies-bitcoin-stance-after-strategys-1638-btc-sale/",
+          "date": "2026-08-03"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Chris Vermeulen",
+      "id": "chris_vermeulen",
       "sector": "交易与市场微观结构",
       "direction": "看多",
       "targets": "白银（目标$106）、黄金（目标$5,100–5,200）、矿业股 ETF；对美股见顶警惕",
@@ -2081,10 +2058,11 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Ray Kurzweil",
+      "id": "ray_kurzweil",
       "sector": "科技与未来趋势",
       "direction": "看多",
       "targets": "AI/AGI 主题（非具体金融标的）、生物科技与长寿领域",
@@ -2108,10 +2086,11 @@
           "date": "2026-02-11"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Ivan Zhao",
+      "id": "ivan_zhao",
       "sector": "科技与未来趋势",
       "direction": "未找到",
       "targets": "",
@@ -2130,10 +2109,11 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Raoul Pal",
+      "id": "raoul_pal",
       "sector": "科技与未来趋势",
       "direction": "看多",
       "targets": "比特币、以太坊、Solana、Sui；全球流动性主题",
@@ -2157,10 +2137,11 @@
           "date": "2025-11-04"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Vince Lanci",
+      "id": "vince_lanci",
       "sector": "交易与市场微观结构",
       "direction": "看多",
       "targets": "黄金、白银、实物金银、金矿股（Iamgold 等并购标的）",
@@ -2184,10 +2165,11 @@
           "date": "2026-08-30"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Steve Penny",
+      "id": "steve_penny",
       "sector": "交易与市场微观结构",
       "direction": "看多",
       "targets": "白银为主，兼及黄金、铂金、铀、原油",
@@ -2211,37 +2193,34 @@
           "date": "2026-02-11"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Gareth Soloway",
+      "id": "gareth_soloway",
       "sector": "交易与市场微观结构",
-      "direction": "中性",
-      "targets": "比特币、标普 500、黄金与 GDX 金矿股、美元、美债长端",
-      "comments": "比特币冲阻力已转做空，金矿跑赢黄金过头，标普守 7,600",
-      "detail": "▸ 核心论点：Verified Investing 首席策略师，长期看多贵金属与比特币但短期以「位置决定风险报酬」交易：8 月 21 日比特币数日内从约 6.2 万涨至近 8 万后撞上二月与四月低点连成的趋势线，他清仓剩余加密多头并开小额空单；同时认为金矿股相对黄金已跑过头。\n▸ 关键依据：比特币约 18,000 美元的急涨使风险报酬恶化；GDX 自 7 月低点约 70 涨至约 102.5（近 50%），黄金距前高仍约 22%、而 GDX 仅距自身高点约 14%（黄金 5,600 美元时 GDX 约 117），矿股已修复更多跌幅；宏观上视财政部增购长债为收益率曲线控制，但 30 年期收益率当日反而微升、10 年期持平，说明干预未奏效，其长期推论是债务扩张迫使干预规模递增、压力转向美元（美元本周已破位下行）。\n▸ 时间与位置：比特币下一主要阻力约 82,000，倾向回撤至 7 万出头至 7 万中段；标普 500 关键分水岭 7,600（跌破看向 7,360），位于自疫情低点以来的大平行通道内并刚在上轨受阻；黄金在斐波那契 38.2% 回撤位约 4,600 遇阻，8 月中旬另称 4,170 为关键支撑、理想买区看 3,900。\n▸ 标的与操作：加密由多转小空（战术性，非否定长期）；黄金不做空但不追高；金矿股相对黄金减配；股指在 7,600 之上维持中性偏正面。",
+      "direction": "技术派: 短期谨慎/关键位交易",
+      "targets": "金支撑$4,334/银$63.26; BTC选前或反弹至$70-75K",
+      "comments": "技术派, 金支撑$4,334银$63.26, BTC中期选前或涨至$70-75K",
+      "detail": "▸ 核心论点：技术分析派(27年经验), 关注收益率/油/美元对S&P、黄金、比特币的技术影响; 就业强劲(9/4非农+16.2万为预期3倍)使市场承压于均线测试。\n▸ 关键依据：9/1收益率上升令市场移动均线承压; 黄金日内支撑$4,334、白银$63.26; 曾给黄金两情景(突破$5,000 或 回落$3,500-3,600)。\n▸ 时间与位置：预计比特币在11月中期选举前反弹10-15%+至$70,000-75,000(总统会想动员crypto选民); 关注9/16 FOMC前波动。\n▸ 标的与操作：按关键技术位交易金/银/BTC/科技股; 强调纪律与止损, 不做长期方向豪赌而重视图表位。",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "My Trading Game Plan Revealed - 08/21/2026: Bitcoin Surge, Yield Curve Control Alarm and Gold Miners Divergence",
-          "url": "https://verifiedinvesting.com/blogs/live-show-recap/my-trading-game-plan-revealed-08-21-2026-bitcoin-surge-yield-curve-control-alarm-and-gold-miners-divergence",
-          "date": "2026-08-21"
+          "title": "Gareth Soloway Predictions - ForecastCard",
+          "url": "https://www.forecastcard.com/people/gareth-soloway/",
+          "date": "2026-08-14"
         },
         {
-          "title": "The One Chart Pattern That Could Send Gold & Silver Soaring or Crashing – Gareth Soloway",
-          "url": "https://www.canada-channel.com/the-one-chart-pattern-that-could-send-gold-silver-soaring-or-crashing-gareth-soloway/",
-          "date": "2026-08-13"
-        },
-        {
-          "title": "Gareth Soloway: Gold, Silver, Oil — Price Targets, What's Next",
-          "url": "https://investingnews.com/gareth-soloway-gold-update/",
-          "date": "2026-08"
+          "title": "Gareth Soloway market breakdown Verified Investing",
+          "url": "https://www.youtube.com/watch?v=hdXlXWnoSR0",
+          "date": "2026-09-02"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "AG Thorson",
+      "id": "ag_thorson",
       "sector": "交易与市场微观结构",
       "direction": "看多",
       "targets": "黄金、白银、铂金、GDX/GDXJ/SILJ 金银矿股；比特币偏空",
@@ -2265,7 +2244,7 @@
           "date": "2026-08"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Robert Gottlieb",
@@ -2288,8 +2267,7 @@
           "date": "2026-06-16"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "David Garofalo",
@@ -2312,8 +2290,7 @@
           "date": "2026-05-07"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Craig Hemke",
@@ -2336,32 +2313,30 @@
           "date": "2026-01-22"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Peter Krauth",
       "id": "peter_krauth",
       "sector": "贵金属与商品周期",
-      "direction": "看多",
-      "targets": "白银今年底较现价再涨20-40%;突破$50后看$100并最终$300",
-      "comments": "《大白银牛市》作者,极度看多白银,周期尚早,长期目标$300",
-      "detail": "▸ 核心论点：Silver Stock Investor主编、《The Great Silver Bull》作者ANONYMIZED_PERSON极度看多白银,认为白银牛市仍处早期(觉醒阶段刚开始、狂热尚远),现在入场「远未太晚」,近期回调可能是「诱空陷阱(bear trap)」。\n▸ 关键依据：工业需求(太阳能)与投资需求同步上升、持续供给赤字、交易所库存下降;白银供给价格弹性极低,高价难以快速解决短缺;机构资金开始进场,白银矿企现金流跑赢标普所有板块;白银站稳$50上方近一年,预示真正主升浪在前方。\n▸ 时间与位置：预计今年底较现价再涨20-40%;若确认突破$50,可在「短期内」冲$100并「最终$300」;当前白银已进入三位数区间后回落,视为诱空。\n▸ 标的与操作：看多白银,建议跨实物、ETF、大型/中型生产商到初级勘探商分层构建白银仓位;关注如Aya Gold & Silver等标的;认为贵金属矿企将变「现金机器」。",
+      "direction": "看多白银",
+      "targets": "银年底$80-85; 不再跌破$50",
+      "comments": "银已破$50, 年底看$80-85, 供应赤字+工业需求支撑",
+      "detail": "▸ 核心论点：白银已决定性突破曾经难以逾越的$50关口, 牛市远未结束; 预计年底达约$80-85(录制时银略低于$70, 称当前中度低估); 除非黑天鹅, 不预期银再跌破$50。\n▸ 关键依据：白银混合属性——约半需求来自货币/投资、半来自工业, 两侧当前均强力支撑; 交易所库存枯竭+持续供应赤字(Silver Institute估近年赤字约1.5亿oz→2025约5,000万oz→2026预测约5,500万oz); 太阳能(非洲光伏采用2026或+45%)、EV、AI、数据中心持续吸收白银。\n▸ 时间与位置：年底$80-85(未立即喊$90-100, 称更现实); 长期结构性牛市。\n▸ 标的与操作：看多白银及白银矿股(称矿股滞后但不会太久, 现金流跑赢所有S&P板块); 认为现价是罕见买入窗口。",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "Peter Krauth: Silver Cycle Still Early, Big Money Ready to Buy - INN",
-          "url": "https://investingnews.com/peter-krauth-silver-price-forecast/",
-          "date": "2026-03-06"
+          "title": "Peter Krauth Sees Silver Reaching $80 to $85 Before Year-End",
+          "url": "https://goldseek.com/article/peter-krauth-sees-silver-reaching-80-85-year-end",
+          "date": "2026-08-31"
         },
         {
-          "title": "Silver is Gunning for $50 and 'Eventually $300': Peter Krauth - SBC Gold",
-          "url": "https://www.sbcgold.com/blog/silver-is-gunning-for-50-and-eventually-300-peter-krauth/",
-          "date": "2026"
+          "title": "Silver's bull market is just getting started",
+          "url": "https://www.fxstreet.com/analysis/silvers-bull-market-is-just-getting-started-video-202608171608",
+          "date": "2026-08-17"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Daniel Ghali",
@@ -2384,56 +2359,53 @@
           "date": "2026-01-02"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Robert Kiyosaki",
       "id": "robert_kiyosaki",
       "sector": "贵金属与商品周期",
-      "direction": "看多",
-      "targets": "2026金$27K/比特币$250K;若危机后金$35K/银$200/比特币$750K/以太$95K",
-      "comments": "《富爸爸》作者,预警2026崩盘,极端看多金银比特币以太坊避险",
-      "detail": "▸ 核心论点：《富爸爸穷爸爸》作者ANONYMIZED_PERSON预测2026年经济衰退/金融崩盘,警告法币贬值,长期极端看多硬资产与加密,以白银、比特币、以太坊为投资核心配置抵御危机。\n▸ 关键依据：美国债务飙升、美元走弱、法币体系面临崩溃;将金银比特币视为对冲货币贬值的「真钱」;认为崩盘将成为财富大转移的窗口。\n▸ 时间与位置：2026年基准目标黄金$27,000、比特币$250,000;若发生全球金融危机,预测崩盘后一年内黄金可达$35,000/盎司、白银$200/盎司、比特币$750,000/枚、以太坊$95,000/枚。目标极端激进。\n▸ 标的与操作：看多并持续买入白银、比特币、以太坊(及黄金),建议投资者持有硬资产与加密对冲法币崩溃;将崩盘视为逢低加仓机会。注:其目标价极端,属长期灾难对冲叙事而非精确择时。",
+      "direction": "看多黄金白银比特币/看空法币",
+      "targets": "BTC $250K; 金$27K; 银$100 (2026)",
+      "comments": "everything bubble破裂, 买金银BTC不卖",
+      "detail": "▸ 核心论点：everything bubble(万物泡沫)正在破裂, 崩盘加速、主要银行陷入困境; 但他是买入而非卖出, 押注黄金/白银/比特币/实物资产对冲法币崩溃。\n▸ 关键依据：美国债务攀升+美元走弱; 法币贬值不可逆; 传统对冲手段是硬资产。\n▸ 时间与位置：2026价格目标 BTC $250,000 / 黄金 $27,000 / 白银 $100(此为其长期看涨喊话, 非精确择时)。\n▸ 标的与操作：持续买入比特币、以太坊、黄金、白银、石油; 看空法币与传统金融体系。(注: 其目标价长期偏极端, 作情绪风向而非精确预测参考)",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "Robert Kiyosaki Predicts Bitcoin at $250K and Gold at $27K by 2026 - CoinCheckup",
-          "url": "https://coincheckup.com/blog/robert-kiyosaki-bitcoin-250k-gold-27000-forecast",
-          "date": "2025-11-10"
+          "title": "Robert Kiyosaki 2026 Warning: Everything Bubble Breaking",
+          "url": "https://kiyosaki-blog.blogspot.com/2026/08/robert-kiyosakis-2026-warning.html",
+          "date": "2026-08-22"
         },
         {
-          "title": "Robert Kiyosaki Warns of 2026 Crash, Doubles Down on Bitcoin, Gold - Gate",
-          "url": "https://www.gate.com/news/detail/robert-kiyosaki-warns-of-2026-crash-doubles-down-on-bitcoin-gold-and-real-19816528",
-          "date": "2026-03-27"
+          "title": "Robert Kiyosaki Predicts $250K Bitcoin and $27K Gold by 2026",
+          "url": "https://www.altcoinbuzz.io/robert-kiyosaki-predicts-250k-bitcoin-and-27k-gold-by-2026",
+          "date": "2025-11-11"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Rick Rule",
       "id": "rick_rule",
       "sector": "贵金属与商品周期",
-      "direction": "看多",
-      "targets": "铀最高信心(SPUT/优质铀股,料涨25-50%+);金银看多但易钱已过;持~40%现金待回调",
-      "comments": "资源投资传奇,最高信心在铀,金银仍看多但已获利了结部分,选择性为王",
-      "detail": "▸ 核心论点：Rule Investment Media的ANONYMIZED_PERSON对2026资源超级周期高度建设性,但强调「易钱阶段已过」、选择性与耐心为王;最高信心在铀(结构性赤字+长约转型+能源安全),黄金仍看多为长期货币资产但已获利了结部分、称「金牛太拥挤」,白银「易的交易已结束、真钱在股票」。\n▸ 关键依据：铀市场结构性供给赤字(全球产量约160Mlb/y vs 需求上行),长期合约化提升生产商现金流可见性、能源安全成主驱动;央行连续第五年约1,000吨购金支撑金价;把回调视为健康整固,危机中流动性挤兑会拖累金但优质资产恢复更快、随后央行放水利好黄金。\n▸ 时间与位置：铀现货约$85/lb,分析师看涨25-50%+(Shaw预测2027年$175/lb、2028年$200/lb);持约40%现金/流动性待回调加仓;白银三位数长期可期(First Majestic的Neumeyer看2030)。\n▸ 标的与操作：重仓看多铀(优选SPUT/URNM及低成本铀股,回避多数美国铀生产商因估值含补贴);黄金视为「现金等价」的保险;选择性买入优质金银初/中级股(OceanaGold/B2Gold折价)及龙头(Franco-Nevada/Wheaton/Agnico)。",
+      "direction": "长期看多资源(3-5年)/近期谨慎",
+      "targets": "商品超级周期中局; 铀未来10年黄金十年",
+      "comments": "商品超级周期中局, 2026余下或艰难但3-5年极度看多",
+      "detail": "▸ 核心论点：商品处于超级周期中局(middle innings)而非顶部, 名义新高掩盖了货币被侵蚀, 实际价格仍有很长的路要走; 2026年余下时段资源股可能继续艰难, 但3-5年展望极度看多。\n▸ 关键依据：三十年慢性投资不足掏空了全球产能, 短期难以逆转; 黄金作储蓄资产(2000年起累积)、白银作投机、铀未来10年绝对黄金(结构性牛市)。CRB商品指数刚突破16年新高。\n▸ 时间与位置：3-5年视角极度看多; 油供给紧张预计2029-2030显现; 未给个别点位。\n▸ 标的与操作：偏好白银矿股胜过实物白银(已从实物轮入矿股); 黄金作核心储蓄; 铀(SPUT+精选矿企); 加拿大油气优于美国同业; Top Picks: Dundee Corp/International Petroleum/Sprott。",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "Rick Rule's 2026 Outlook on Natural Resource Stocks - Canadian Mining Report",
-          "url": "https://www.canadianminingreport.com/blog/rick-rule-s-2026-outlook-on-natural-resource-stocks-where-he-sees-the-biggest-opportunities",
-          "date": "2026"
+          "title": "Rick Rule: Middle Innings of Commodity Supercycle",
+          "url": "https://marketsanity.com/rick-rule-middle-innings-of-commodity-supercycle/",
+          "date": "2026-09-04"
         },
         {
-          "title": "Rick Rule: Why the Uranium Bull Market Is Far From Over - Triangle Investor",
-          "url": "https://triangle-investor.com/articles/why-uranium-bull-market-is-far-from-over-rick-rule/",
-          "date": "2026"
+          "title": "Rick Rule's Top Picks for Aug. 24, 2026",
+          "url": "https://www.bnnbloomberg.ca/markets/2026/08/24/rick-rules-top-picks-for-aug-24-2026/",
+          "date": "2026-08-24"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Bob Coleman",
@@ -2456,8 +2428,7 @@
           "date": "2026-05-17"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Jay Martin",
@@ -2480,32 +2451,30 @@
           "date": "2026"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Willem Middelkoop",
       "id": "willem_middelkoop",
       "sector": "贵金属与商品周期",
-      "direction": "看多",
-      "targets": "黄金$14,000-15,000;白银$500(回归1:10金银比);价格发现东移上海",
-      "comments": "《大重置》作者,极端看多,金看$14-15K/银看$500,货币重置已在进行",
-      "detail": "▸ 核心论点：Commodity Discovery Fund创始人、《The Big Reset》作者ANONYMIZED_PERSON认为货币「大重置」不是预测而是正在进行的渐进过程(「第一局」),通过央行黄金记账方式悄然重估而非单次戏剧性事件;中国偏好较低金价以持续吸筹,价格发现正从COMEX东移至上海。\n▸ 关键依据：央行连续第五年约1,000吨购金(约占年矿产1/3),黄金已超越美债成第二大储备资产(约占全球储备27% vs 美债22%);中国6月单月购金超150吨,中国金银需求较去年高150-200%;上海较伦敦持续$10-12白银溢价如「巨型真空」抽走西方库存;引德银报告称黄金储备份额或升至40-50%。\n▸ 时间与位置：黄金目标$14,000-15,000;白银目标$500(基于回归2000年历史1:10金银比,当前金价约$5,135);12个月内市场将普遍承认价格发现永久东移;警告主权债务危机为被忽视的黑天鹅。\n▸ 标的与操作：极端看多黄金、白银(及铜、矿业股);认为央行「囤积实物金」、买家集中在德国以东;建议配置实物金银与优质矿股,把当前回调视为「几近结束」的加仓机会。",
+      "direction": "看多黄金白银(极度)",
+      "targets": "金$14,000-15,000; 银短期$100, 长期$500",
+      "comments": "货币重置已在央行账面悄然发生, 中国逢跌必买",
+      "detail": "▸ 核心论点：他预言十余年的货币重置(Big Reset)已不是预测而是正在进行的渐进过程——通过央行对黄金的会计处理悄然发生, 而非一次性戏剧性重估; 我们处于'第一局'; 黄金正回归货币角色替代部分债券。\n▸ 关键依据：中国逢跌必买(6月单月购超150吨, 需求较去年高150-200%), 偏好低价以继续吸筹; 央行连续第5年购金约1,000吨(约占年矿产1/3); 黄金已超美债成全球第二大储备资产(约27%, 美债降至22%); 外国持美债占比从约35%降至约12%; 黄金成美国按价值计最大出口之一。\n▸ 时间与位置：回调将尽; 金长期目标$14,000-15,000; 银短期或数月内回$100, 长期目标$500(近两周他个人增持白银)。\n▸ 标的与操作：极度看多实物黄金/白银(称银是穷人的黄金、金属赛道最快的马)+矿股; 强调拥有实物而非纸面。(注: 目标价属激进个人观点)",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "China is buying every dip and the 'reset' is already here, Middelkoop says - Kitco",
+          "title": "China is buying every dip and the reset is already here",
           "url": "https://www.kitco.com/news/article/2026-07-27/china-buying-every-dip-and-reset-already-here-middelkoop-says",
           "date": "2026-07-27"
         },
         {
-          "title": "Willem Middelkoop: Why global price discovery is permanently migrating to Shanghai - Kitco",
-          "url": "https://www.kitco.com/news/article/2026-03-05/willem-middelkoop-why-global-price-discovery-permanently-migrating-shanghai",
-          "date": "2026-03-05"
+          "title": "End of a dollar-centered world nears, gold to replace some bonds",
+          "url": "https://www.finanzen.at/nachrichten/rohstoffe/end-of-a-dollar-centered-world-nears--gold-to-replace-some-bonds--fund-manager-says-15915341",
+          "date": "2026-09-02"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Jeff Clark",
@@ -2528,8 +2497,7 @@
           "date": "2026-02-02"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Keith Neumeyer",
@@ -2552,8 +2520,7 @@
           "date": "2026-07-22"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Stephen Leeb",
@@ -2576,17 +2543,16 @@
           "date": "2026-08-05"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Adrian Day",
       "id": "adrian_day",
       "sector": "贵金属与商品周期",
-      "direction": "看多",
-      "targets": "金矿股逆向布局；金价目标区间提及$5,500",
-      "comments": "金矿股跌40%、看多情绪仅7%，视为50年一遇逆向买点",
-      "detail": "▸ 核心论点：黄金牛市远未见顶，当前金矿股40%回调+情绪极度低迷是经典逆向买入机会，「完美布局」。\n▸ 关键依据：金矿股较1月峰值跌约40%，看多情绪仅7%（三周前曾单日触0）；大型金矿估值处50年最低四分位（PE/PCF/PNAV全线）；央行4月>3月、5月>4月持续增持，Tether亦在吸筹。\n▸ 时间与位置：未给出明确金价目标价，Rule研讨会提及$5,500参照位；类比1974/2006/2008中周期回调后均快速反弹（2008年金矿板块见底3个月内翻倍）。\n▸ 标的与操作：看多黄金及金矿股（尤其大型senior矿商），主张回调中持有/加仓，警示美联储政策、私人信贷与AI泡沫破裂的近期风险。",
+      "direction": "看多黄金矿股(完美setup)",
+      "targets": "GDX自1月高点跌约35%, 估值处历史最低20分位",
+      "comments": "金矿股完美setup: 价格低/估值最低20分位/情绪近投降",
+      "detail": "▸ 核心论点：金矿股呈现完美setup——价格回落、估值处历史最低20分位、情绪近投降(金矿股多空情绪指数徘徊7-7.5%看多, 一度触0); 美国财政部两次干预(护日元+压长端收益率)恰恰暴露虚弱, incredibly bullish for gold。\n▸ 关键依据：GDX自1月高点跌约35%; 当前金牛由央行(及Tether等)价格不敏感的结构性买盘驱动(去美元化/防武器化), 而非零售通胀对冲; 黄金是唯一非他人负债的资产; 若美国无法以合理价格卖债, 美联储只能下场买债→美元下跌→利多黄金。\n▸ 时间与位置：短期风险=强美元/高收益率/美联储或加息; 若金回测低点失败或下探$3,600; 但结构性买盘提供支撑。\n▸ 标的与操作：看多优质金矿股(生产商/权利金/开发商/精选初级矿), 逢低选择性买入; 强调管理层质量优先; 提示AI泡沫瓦解、私人信贷脆弱性风险。",
       "detail_status": "ok",
       "sources": [
         {
@@ -2595,13 +2561,12 @@
           "date": "2026-07-12"
         },
         {
-          "title": "Gold Stocks Hit 7% Bullish. Adrian Day Explains the Setup",
-          "url": "https://wealthfargo.co.uk/gold-stocks-hit-7-bullish-adrian-day-explains-the-setup/",
-          "date": "2026-07-22"
+          "title": "U.S. Treasury's interventions show weakness: Incredibly bullish for gold",
+          "url": "https://www.miningdiscovery.com/news/us-treasurys-interventions-show-weakness-incredibly-bullish-for-gold-adrian-day",
+          "date": "2026-09-04"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Nate Miller",
@@ -2613,8 +2578,7 @@
       "detail": "",
       "detail_status": "none",
       "sources": [],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Bob Moriarty",
@@ -2637,87 +2601,75 @@
           "date": "2025-12-23"
         }
       ],
-      "date": "2026-08-28",
-      "carried": true
+      "date": "2026-09-07"
     },
     {
       "kol": "Jeffrey Gundlach",
+      "id": "jeffrey_gundlach",
       "sector": "国债利率与债券市场",
-      "direction": "看空",
-      "targets": "长久期美国国债(避开)、Nvidia/AI 基建债、美股科技集中度、国际及新兴市场股债",
-      "comments": "避开长债，押美联储2026加息，警告AI芯片抵押融资是顶部信号",
-      "detail": "▸ 核心论点：债务清算比市场想象来得更近。美联储2026年不会降息、更可能加息；应彻底回避发达国家长久期国债，把资金转向国际与新兴市场。Nvidia 牵头的 AI 基建融资是典型的risk市场见顶特征。\n▸ 关键依据：他弃用核心/截尾通胀口径（称 Dallas Fed 截尾均值 PCE 是「玩世不恭的把戏」），改看进出口原始物价指数，读数约 6.5%。Bloomberg 美国综合债指数 10 年与 20 年 YTW 相差不足 1bp，30 年历史均值约 4.05%，综合收益率约 4.78%；2020 年以约 1% 买入 30 年期美债者 2022 年资本亏损超 50%。Shiller CAPE 创历史高位，10 家科技/AI 公司占标普 500 市值约 41%，集中度已开始瓦解。对英伟达联合 Apollo/BlackRock/Blackstone/Brookfield/高盛/KKR 调动逾 5000 亿美元的计划，他讥为「拿不知寿命的资产给长期债务作抵押……不如发 30 年期 ABS 抵押一仓库香蕉」。\n▸ 时间与位置：明确指向 2026 年内不降息、若下注则赌加息；未给出具体股指点位或收益率目标位。以 2 年期美债为美联储政策风向标（「美联储跟着 2 年期走」）。\n▸ 标的与操作：卖出/回避发达国家长久期政府债与美国大盘科技集中股；买入国际股票、新兴市场股票及本币新兴市场债；对 AI 基建信用敞口保持怀疑。",
+      "direction": "看空长期债券/看多现金黄金实物资产",
+      "targets": "避开发达市场长期国债; 转向国际/新兴市场",
+      "comments": "预计2026加息非降息, 持现金黄金实物资产",
+      "detail": "▸ 核心论点：警告避开发达市场长期政府债券, 预计2026美联储将加息而非降息, 建议转向国际与新兴市场资产。\n▸ 关键依据：预计原始通胀逼近约6.5%; 投资者正涌向真实资产而非投机资产(白银创新高印证)。\n▸ 时间与位置：2026年预计加息; 未给出具体点位。\n▸ 标的与操作：避长久期发达国国债; 增配现金、黄金、实物资产、国际及新兴市场。(注: 最新观点截至6月网络研讨会, 9/8有Gundlach Unlocked新直播待更新)",
       "detail_status": "ok",
       "sources": [
         {
           "title": "Gundlach: Expect 2026 Rate Hikes, Avoid Long-Term Bonds",
           "url": "https://asset-management-news.com/markets/gundlach-expect-2026-rate-hikes-avoid-long-term-bonds/",
           "date": "2026-06-23"
-        },
-        {
-          "title": "Jeff Gundlach Warns AI Chip Strategy May Signal Market Peak",
-          "url": "https://www.businessinsider.com/jeff-gundlach-warns-ai-chip-strategy-may-signal-market-peak-2026-8",
-          "date": "2026-08-17"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Matthew Piepenburg",
+      "id": "matthew_piepenburg",
       "sector": "贵金属与商品周期",
-      "direction": "看多",
-      "targets": "实物黄金、白银、贵金属矿业股；看空美元与美债",
-      "comments": "$40万亿债务螺旋，黄金终将被重估至1.5万–2万美元，白银$110是新地板",
-      "detail": "▸ 核心论点：美国已进入加速的主权债务与货币危机，全球货币体系是「结构性崩坏」而非周期性波动；华盛顿最终只能允许（甚至需要）黄金大幅重估来给长端债务续命——「黄金不再是敌人，而是我们最后的希望」。\n▸ 关键依据：美国国债超 40 万亿美元、债务/GDP 约 120%，福利支出加利息已吞掉约 105% 的税收收入；30 年期收益率处于金融危机以来最高；财政部从 TGA 抽取上万亿美元救急；外国买家越来越偏好黄金而非美债；央行持续增持黄金而非国债。他的算术是：金价到 1.5 万–2 万美元可为官方金库释放「远超 5 万亿美元」用于货币化长端债务，而官方黄金仍按约 110 亿美元账面计价。对新任美联储主席的评价是「披着鹰派外衣的鸽派」。\n▸ 时间与位置：黄金目标 15,000–20,000 美元（他倾向由供需渐进推升而非一夜重估，因后者会摧毁美元）；白银认为 110 美元以上「不是顶，而是新的地板」，100 美元已在后视镜里。未给出明确到达时间。\n▸ 标的与操作：买入并持有瑞士境外银行体系的实物黄金白银（「实物优先、纸货最后」），矿业股是「肥美好球」；回避美元资产与长期国债。",
+      "direction": "看多黄金(长期结构性)",
+      "targets": "当前黄金牛市远超历次周期, 仍处早期章节",
+      "comments": "2026黄金牛市仍在早期, 债务/估值/美元霸权衰退支撑",
+      "detail": "▸ 核心论点：尽管2026有战争、历史级黄金回调、美债破40万亿等波动, 长期黄金牛市仍处早期章节; 当前黄金的set-up(债务水平/标普高估/美元霸权衰退)在数学意义上远超历次牛市周期; 强调黄金关键在underlying drivers而非price action。\n▸ 关键依据：全球债务水平、S&P过度估值、美元霸权下滑三重因素使今日格局与过去周期根本不同; 2026年初COMEX操纵+全球战争流动性措施曾迫使黄金被抛售(制造买点)。\n▸ 时间与位置：黄金长期结构性牛市早期; 无精确点位(称价格是distraction)。\n▸ 标的与操作：看多实物黄金/白银作货币贬值与债务对冲; 认为当前是高度可信的贵金属买入时刻。",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "$20k Gold Is Our LAST HOPE! - Piepenburg",
-          "url": "https://silvertrade.com/news/precious-metals/silver-news/20k-gold-is-our-last-hope-piepenburg/",
-          "date": "2026-08-27"
+          "title": "Current Gold Setup Greatly Surpasses Prior Bull Cycles",
+          "url": "https://www.gold-eagle.com/article/current-gold-setup-greatly-surpasses-prior-bull-cycles",
+          "date": "2026-09-01"
         },
         {
-          "title": "Top Three Videos – August 28, 2026 (Dollar Collapse)",
-          "url": "https://dollarcollapse.com/top-three-videos-august-28-2026/",
-          "date": "2026-08-28"
-        },
-        {
-          "title": "Matthew Piepenburg: 7 Signals, 1 Golden Direction (VON GREYERZ)",
-          "url": "https://vongreyerz.gold/matthew-piepenburg-7-signals-1-golden-direction",
-          "date": "2026-07"
+          "title": "Matthew Piepenburg: Screaming Indicators For Gold's Rise",
+          "url": "https://www.youtube.com/watch?v=YBbrwzzYOt4",
+          "date": "2026-08-26"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "S. Druckenmiller",
+      "id": "s_druckenmiller",
       "sector": "宏观货币与金融体系",
-      "direction": "看空",
-      "targets": "长端美债（反对回购托市）、美元财政信用；组合层面 Q2 前十大含 Natera 等",
-      "comments": "痛批财政部扩大回购是变相QE，长端收益率是世上最重要的价格",
-      "detail": "▸ 核心论点：8 月 24 日在《华尔街日报》发表署名评论《Let the Bond Market Speak》，指责财政部把长债回购规模翻倍是在压制、而非改善市场功能；长端美债收益率是「世界上最重要的价格」，也是华盛顿最后一道财政纪律，人为压低只会让政客继续拖延。\n▸ 关键依据：财政部将 10–30 年期回购每次操作规模至少翻倍到 40 亿美元，排期 9 月 9 日至 11 月 4 日，且是在 30 年期收益率触及 19 年新高之后宣布；收益率初跌后次日午后即升破原位，说明市场视之为托价而非流动性维护。他强调当前国债市场运作正常（无失败拍卖、无强制抛售、无交易商融资短缺），与 2020 年 3 月不可同日而语；收益率上行反映的是真实财政担忧——通胀仍高于 2%、失业率处历史低位、赤字接近 GDP 的 6%、国债超 40 万亿美元、年利息支出将超 1.1 万亿美元。他以 1942–1951 年美联储收益率上限最终助推通胀为鉴。持仓面，Duquesne Q2 2026 披露约 95 个持仓、组合规模约 52 亿美元，第一大持仓 NTRA。\n▸ 时间与位置：直接对应 2026 年 9 月 9 日–11 月 4 日的回购窗口；未给出收益率目标点位，但认为一旦市场认定政府在守某一收益率水平，每次上行都会变成需要更大干预的压力测试。\n▸ 标的与操作：主张财政部把回购限制在小规模例行操作、并增发长债；对长端美债与依赖压低利率的资产持怀疑态度，未公开给出具体买入建议。",
+      "direction": "看空美元/看多黄金能源",
+      "targets": "能源股约占40%仓位; 黄金作地缘对冲",
+      "comments": "看空美元(外资超配美元), 持金作地缘对冲, 质疑Bessent护盘",
+      "detail": "▸ 核心论点：组合已不再以AI驱动; 看空美元(处历史购买力高位); 持有黄金作地缘政治对冲; 公开质疑Bessent的债市操作难以成功。\n▸ 关键依据：外国人严重超配美元(foreigners way overloaded in dollars); 能源转型因可再生难以规模化而失败, ESG导致投资不足使供给受限。\n▸ 时间与位置：能源股预计18个月内显著回报; 未给出美元具体点位。\n▸ 标的与操作：约40%仓位配能源股; 黄金地缘对冲; 看空美元; 涉及日本/韩国/铜。(注: 最新集中在1-3月访谈, 8/25再度质疑Bessent护盘)",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "Druckenmiller: Treasury Should Let Bond Market Speak (Newsmax)",
-          "url": "https://www.newsmax.com/finance/streettalk/treasury-bond-buybacks/2026/08/26/id/1267351/",
-          "date": "2026-08-26"
+          "title": "Druckenmiller leads doubters who think Bessent bond ploys will fail",
+          "url": "https://www.cnbc.com/2026/08/25/stanley-druckenmiller-leads-doubters-who-think-bessents-bond-ploys-will-fail.html",
+          "date": "2026-08-25"
         },
         {
-          "title": "Let the Bond Market Speak (WSJ op-ed)",
-          "url": "https://www.wsj.com/opinion/let-the-bond-market-speak-81529d74",
-          "date": "2026-08-24"
-        },
-        {
-          "title": "Stanley Druckenmiller Portfolio: Q2 2026 (13F)",
-          "url": "https://www.13radar.com/guru/stanley-druckenmiller",
-          "date": "2026-08-14"
+          "title": "Druckenmiller: Portfolio No Longer AI-Driven, Bearish On Dollar",
+          "url": "https://www.realclearpolitics.com/video/2026/03/01/druckenmiller_portfolio_no_longer_ai-driven_bearish_on_dollar_at_historic_purchasing_power_peak.html",
+          "date": "2026-03-01"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Alasdair Macleod",
+      "id": "alasdair_macleod",
       "sector": "贵金属与商品周期",
       "direction": "看多",
       "targets": "实物黄金白银（看多）；美股、信用债、法币体系（看空）；铜等商品",
@@ -2741,10 +2693,11 @@
           "date": "2026-08-22"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Daniel Oliver",
+      "id": "daniel_oliver",
       "sector": "贵金属与商品周期",
       "direction": "看多",
       "targets": "黄金（及金矿）；看空 AI 超大规模厂商与私募信贷、neocloud 债务",
@@ -2763,59 +2716,57 @@
           "date": "2026-08-14"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Michael Hartnett",
+      "id": "michael_hartnett",
       "sector": "宏观货币与金融体系",
-      "direction": "看空",
-      "targets": "回避风险资产；关注日元/JGB、亚洲联合干预、美债收益率",
-      "comments": "称美联储「赤裸裸的鸽派」，建议撤离风险资产等收益率暴动",
-      "detail": "▸ 核心论点：美联储「赤裸裸地鸽派」，将迫使金融条件持续收紧，直至被迫用激进加息重建信誉；因此应当从风险资产「撤退/轮动」而不是加仓。同时警告华尔街当前在「毫无恐惧」地交易，仓位过度看多。\n▸ 关键依据：他给出重新买入风险资产的两个前置条件——通胀出现实质回升，以及一次「收益率上行+美元下跌」的债券义警事件迫使货币与财政政策掉头。BofA 情绪指标的卖出信号历史上平均领先全球股票 2–3% 的回撤、命中率约 60%，但真正熊市还需叠加过度的盈利乐观。他把美/日/韩联合外汇干预列为当周最重要事件，担心日元无序贬值→JGB 收益率飙升→蔓延到韩国台湾债市→资金无序流出美债；并称美国决策者会出手阻止日韩台股票走弱妨碍对华 AI 竞赛，把干预称作 AI 时代的「PKO（股价维持操作）」。\n▸ 时间与位置：点名 8 月 28 日 Jackson Hole 为关键转折日（新任美联储主席在收益率钢丝上）；BofA 的note明确未给出具体指数点位或收益率阈值。\n▸ 标的与操作：减持/轮出风险资产（尤其美股），等待通胀回升与债券义警事件后再重新配置；关注日元、JGB 与亚洲债市传导链。",
+      "direction": "看多商品黄金/看空拥挤AI股",
+      "targets": "全球30Y收益率>5%则AI基建跑输; 民主党横扫则美股-10%+",
+      "comments": "政策恐慌奏效, 维持多商品黄金; AI是债券主导泡沫",
+      "detail": "▸ 核心论点：政策恐慌正在奏效(日元升值捍卫$4油价/160美元兑日元/5%美债收益率红线); 维持看多商品与黄金等债务贬值对冲; AI是债券主导的泡沫, 长久期收益率而非股市叙事才是AI交易的真锚。\n▸ 关键依据：上周最大事件是全球债市崩解(美10Y 4.81%逼近2008/30Y 5.31%为2007来最高/日10Y破3%为1996来首次/德10Y 3.38%); 标普29倍PE, 仅4%成分股创新高(类比2000年3月); 超大规模云厂自由现金流已转负, 泡沫可能随时破裂。资金流: 现金+300亿/债券+183亿/黄金+32亿/股票仅+28亿(9周最少)。\n▸ 时间与位置：全球30Y降回5%以下前AI基建持续跑输AI应用; 民主党11月中期横扫(Polymarket 50%)则美股-10%+/美元走弱。\n▸ 标的与操作：维持多商品+黄金; AI后泡沫框架长羞辱短傲慢, 轮动至必需消费/矿业; 民主党横扫情景做空金融股+美元、转长久期债券。",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "BofA's Hartnett calls Fed 'nakedly dovish,' urges retreat from risk assets",
-          "url": "https://us.headtopics.com/news/bofa-s-hartnett-calls-fed-nakedly-dovish-urges-retreat-86193323",
-          "date": "2026-08-02"
+          "title": "BofA Hartnett maintains commodities and gold position",
+          "url": "https://uk.advfn.com/market-news/article/22361/bofas-hartnett-favours-commodities-and-gold-as-policy-intervention-limits-bond-yields",
+          "date": "2026-09-06"
         },
         {
-          "title": "BofA's Hartnett Sees Warsh on Yield Tightrope at Jackson Hole (Bloomberg)",
-          "url": "https://www.bloomberg.com/news/articles/2026-08-28/bofa-s-hartnett-sees-warsh-on-yield-tightrope-at-jackson-hole",
-          "date": "2026-08-28"
-        },
-        {
-          "title": "BofA's Hartnett explains why Wall Street is trading with 'no fear'",
-          "url": "https://www.investing.com/news/stock-market-news/bofas-hartnett-explains-why-wall-street-is-trading-with-no-fear-4223333",
-          "date": "2026-08-14"
+          "title": "BofA Strategist Warns Democratic Sweep Could Send Stocks Down 10%",
+          "url": "https://finance.biggo.com/news/90a86c16-a9f5-4e94-8d4d-2aa43a63eaee",
+          "date": "2026-09-06"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Ted Oakley",
+      "id": "ted_oakley",
       "sector": "宏观货币与金融体系",
-      "direction": "看多",
-      "targets": "黄金/白银及金矿、能源股（看多）；标普500、半导体、微软、长期美债（看空）",
-      "comments": "7月中把贵金属全买回来，看空标普与半导体，警告私募信贷",
-      "detail": "▸ 核心论点：这不是一个正常市场，中期可能出现「一代人级别」的熊市使股指下挫约 40%；应从大盘成长/半导体轮出，转向硬资产与能源。他在 2025 年末至 2026 年初曾卖出全部白银和大部分黄金敞口，7 月中旬又全数买回并加码。\n▸ 关键依据：ThreeBears 追踪的公开表态显示，8 月 11 日与 8 月 16 日他连续给出看多黄金、白银（均为年内短期）、金矿股（短中长期均看多）与能源股，同时看空半导体、微软与长期美债；7 月 16 日与更早的表态一致看空标普 500 中期。8 月 26 日他与 Verdad 的 Dan Rasmussen 对谈，主题是私募股权与私募信贷的问题，指向同一条信用风险线索。\n▸ 时间与位置：金/银看多窗口标注为 2026 年 8–12 月，金矿股为短中长期；标普 500 看空延续至 2027 年 7 月；跌幅量级引用为约 40%，未给出具体指数点位。\n▸ 标的与操作：买入并持有黄金、白银、金矿股、能源股；卖出/回避标普 500 宽基、半导体、微软及长久期美债；对私募信贷保持警惕。",
-      "detail_status": "ok",
+      "direction": "谨慎防御/坚守原则",
+      "targets": "市场绝非正常; 坚守投资原则",
+      "comments": "最新信《坚守你的原则》, 认为当前市场绝非正常",
+      "detail": "▸ 核心论点：最新致客户信题为《坚守你的原则》(Stick to Your Principles), 认为当前市场绝非正常, 提醒投资者在异常环境下不要放弃纪律与原则。\n▸ 关键依据：49年从业经验视角; 对经济、债券、股市与全球不确定性的综合判断(具体数据点在其季度Market Comments中)。\n▸ 时间与位置：未给出具体点位; 观点持续偏谨慎防御。\n▸ 标的与操作：偏防御配置, 强调纪律与本金保护; 作为KOL名册中唯一有活跃13F的机构(Oxbow), 其实际持仓变动见机构持仓板块。(注: 公开细节有限, 深度需其付费信件)",
+      "detail_status": "thin",
       "sources": [
         {
-          "title": "Ted Oakley Prediction Accuracy & Track Record（含 2026-08-11/16 逐条表态）",
-          "url": "https://threebears.io/commentators/ted-oakley",
-          "date": "2026-08-19"
+          "title": "Ted Oakley - Stick to Your Principles interview",
+          "url": "https://www.youtube.com/watch?v=EH5FovG5Hsc",
+          "date": "2026-08-25"
         },
         {
-          "title": "Video: Ted Oakley – Oxbow Advisors – Interview Series – Dan Rasmussen",
-          "url": "https://oxbowadvisors.com/video-ted-oakley-oxbow-advisors-interview-series-dan-rasmussen-august-26-2026/",
-          "date": "2026-08-26"
+          "title": "Our Market Thoughts 2026 - Oxbow Advisors",
+          "url": "https://oxbowadvisors.com/our-market-thoughts-2026/",
+          "date": "2026"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Carroll Quigley",
+      "id": "carroll_quigley",
       "sector": "宏观货币与金融体系",
       "direction": "未找到",
       "targets": "",
@@ -2829,130 +2780,121 @@
           "date": ""
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Zoltan Pozsar",
+      "id": "zoltan_pozsar",
       "sector": "宏观货币与金融体系",
-      "direction": "中性",
-      "targets": "美元体系/黄金作为储备资产、日元与欧元、AI 与利率",
-      "comments": "公开信息有限：仅见8月研报标题（信誉发作/杰克逊霍尔挑战）",
-      "detail": "▸ 核心论点：公开信息有限，仅检索到其独立研究机构 Ex Uno Plures 的 2026 年报告标题序列，无法取得正文观点原文。可确认的长期框架仍是「布雷顿森林体系 III」——制裁与大国冲突推动储备管理从无锚货币转向商品/黄金锚定。\n▸ 关键依据：Ex Uno Plures「Money and World Order」系列 2026 年篇目包括《Physical QE and Gold》(3/13)、《E Pluribus Unum》(4/20)、《The Lord of the Rings》(7/20)、《Miran Knows Nothing About Money》(7/27)、《AI and Greenspan's Original Sin》(7/29)、《Camp David, €/¥ and the Credibility Tantrum》(8/1)、《It Takes Two to Tango》(8/3)，另有《The Jackson Hole Challenge》。这些只有标题公开，正文为付费机构客户内容，本次未取得。\n▸ 时间与位置：未给出具体点位或时间窗口（无正文可引）。\n▸ 标的与操作：无可靠的公开买卖建议，暂不判定方向。",
-      "detail_status": "thin",
+      "direction": "看多黄金/商品货币(Bretton Woods III)",
+      "targets": "美元单极时代终结; 大宗/黄金支撑的货币兴起",
+      "comments": "Bretton Woods III框架: 从无锚货币转向商品支撑货币",
+      "detail": "▸ 核心论点：美元单极时代正在终结, 世界从无锚法币(inside money)转向以商品/黄金支撑的货币(outside money)——即Bretton Woods III; 低通胀时代已结束, 不会回到2%的旧世界。\n▸ 关键依据：西方对俄制裁是国际货币体系的转折点; 多极世界里人民币与欧元将挑战美元储备地位; 黄金在新货币秩序中扮演主要角色; 四种货币价格框架(货币/信用/大宗/外汇)。\n▸ 时间与位置：结构性长期转变, 无精确点位; 强调低通胀一去不返。\n▸ 标的与操作：看多黄金与实物大宗商品作为outside money核心; 关注去美元化与商品融资瓶颈。(注: 核心框架为其历年一贯论述, 近月无新报告)",
+      "detail_status": "ok",
       "sources": [
         {
-          "title": "Money and World Order（Ex Uno Plures 报告目录）",
-          "url": "https://exunoplures.hu/money-and-world-order",
-          "date": "2026-08"
+          "title": "Bretton Woods III: What the Evidence Shows Three Years On",
+          "url": "https://philippdubach.com/posts/pozsars-bretton-woods-iii-three-years-later-2/2/",
+          "date": "2025-10-26"
         },
         {
-          "title": "Zoltan Pozsar: New World Monetary Order, Dedollarization and the Role of Gold",
-          "url": "https://goldbroker.com/news/new-world-monetary-order-dedollarization-role-gold-3134",
-          "date": ""
+          "title": "The Death of the Dollar: Pozsar's New Monetary Order",
+          "url": "https://www.youtube.com/watch?v=znSdvKBc1ck",
+          "date": "2026-02-12"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "David Stockman",
+      "id": "david_stockman",
       "sector": "宏观货币与金融体系",
-      "direction": "看空",
-      "targets": "美股（尤其 AI/半导体集中股）看空；批评财政与美联储",
-      "comments": "AI股占标普45%，预言「2026特朗普崩盘」，公债破40万亿",
-      "detail": "▸ 核心论点：所谓「黄金时代」并不存在，Trump-O-Nomics 没有扭转通胀、投机与停滞三股力量；他直接以《Here Comes the 「Trump Crash」 of 2026》为题，把当前 AI 行情类比 1998–2001 年纳斯达克的「三年往返地狱」。\n▸ 关键依据：他引用高盛集中度数据，AI 相关股票已占标普 500 市值约 45%，半导体为主要驱动；对冲基金对芯片的净敞口达到全球股票配置的 19%，创纪录并较 2026 年初翻倍。历史类比上，纳指自 1998 年 10 月 8 日的 1,419 点在约 18 个月内涨 256% 到 2000 年 3 月 10 日的 5,048 点，随后 25 个交易日暴跌 34% 至 3,321 点（抹去前 500 天涨幅的 48%），最终于 2001 年 9 月 24 日回到 1,423 点——原样回到起点。财政面他记录 8 月 20 日美国公债正式突破 40 万亿美元（45 年前仅 1 万亿），且共和党控制的白宫与国会毫无表示。\n▸ 时间与位置：未给出明确的崩盘日期或指数目标位；类比框架暗示「涨得快、跌得更快」的往返式回吐。\n▸ 标的与操作：回避 AI/半导体主导的美股集中头寸；其 Contra Corner 多数正文为付费墙内容，本次未取得完整持仓建议。",
+      "direction": "看空(债务/财政崩坏)/看多硬通货",
+      "targets": "公共债务破40万亿, 30Y收益率19年新高且刚开始上行",
+      "comments": "美债破40万亿, 赞Warsh停印钞, 长端收益率只会更高",
+      "detail": "▸ 核心论点：美国财政治理彻底崩坏, 公共债务8/20破40万亿(45年前仅1万亿); Trump-O-Nomics使共和党成第二个大政府党, 逆转无望; 赞扬新美联储主席Warsh上任100天保持资产负债表不印钞(6.731万亿持平)是跨越货币卢比孔河的正确一步。\n▸ 关键依据：全球公共债务1987年以来涨12.5倍(9.6万亿→120万亿); 赤字以3万亿年率飙升, 10Y收益率为2007年8月来最高、30Y为19年新高且刚开始上行; Q2实际GDP仅1.47%(剔除AI资本开支狂潮仅0.9%)。\n▸ 时间与位置：CBO预测2055年债务达GDP的172%; 若利率高250基点, 利息将吞噬全部税收; 30Y收益率升势刚起步。\n▸ 标的与操作：看空长债/看空美国财政信用; 隐含看多硬通货; 警告Warsh若在QE呼声下动摇则前功尽弃。",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "Heads Up POTUS: Here Comes The Trump Crash of 2026, Part 1",
-          "url": "https://davidstockman.substack.com/p/heads-up-potus-here-comes-the-trump",
-          "date": "2026-05-19"
+          "title": "Mind The Yields-Kevin Warsh Now Has The Conn",
+          "url": "https://davidstockman.substack.com/p/mind-the-yieldskevin-warsh-now-has-432",
+          "date": "2026-09-03"
         },
         {
-          "title": "Number Of The Day: $40 Trillion Of Public Debt And Counting Rapidly To WTF?!",
+          "title": "Number Of The Day: $40 Trillion Of Public Debt",
           "url": "https://davidstockman.substack.com/p/number-of-the-day-40-trillion-of",
           "date": "2026-08-21"
-        },
-        {
-          "title": "Mind The Incoming Date—Still No Golden Age In Sight（Contra Corner）",
-          "url": "https://www.davidstockmanscontracorner.com/mind-the-incoming-date-still-no-golden-age-in-sight/",
-          "date": "2026-08"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "David Hunter",
+      "id": "david_hunter",
       "sector": "宏观货币与金融体系",
-      "direction": "看多",
-      "targets": "标普500（最后拉升后崩盘）、黄金、白银、原油；日本与私募信贷是风险源",
-      "comments": "最后一轮融涨后80%通缩崩盘；金6800、银180先到",
-      "detail": "▸ 核心论点：43–44 年的长期牛市正走向最后一段抛物线式「融涨」，此后是全球性的通缩式崩盘（约 -80%），迫使各国央行印钞规模高达 50 万亿美元来救银行体系；投资哲学要从「持有时间」转为「择时」。\n▸ 关键依据：他判断触发点在美国之外——日本隐藏杠杆最危险（2026 年 5 月中旬日本央行利率 0.75%、10 年期国债收益率升至 2.79%，为 1996 年以来最高），此外是未经周期检验的私募股权/私募信贷（养老金配置比重不断上升）。通胀端他给出崩盘后 25% 的极端读数。5 月受访时标普 500 在 7,400 附近、现货金约 4,550 美元。\n▸ 时间与位置：融涨顶点最早可能在劳动节（9 月初）前后；黄金 6,800 美元、白银 180 美元（他称 180 仍可能保守，极端情形冲到 250 美元以上）；此前版本给出标普融涨至 8000 一线后再 -80%。\n▸ 标的与操作：短期继续做多股指与贵金属吃完最后一段，随后果断离场转防守；长期看好黄金白银，警惕日本、私募信贷相关敞口。",
+      "direction": "短期看多(melt-up)/后转极度看空(bust)",
+      "targets": "S&P目标10,000; 金$7,000银$180; 后80%通缩崩盘",
+      "comments": "最终抛物线melt-up(S&P 10K/金7K)后接80%通缩大崩盘",
+      "detail": "▸ 核心论点：44年长牛处于最终抛物线melt-up阶段(或今年秋/劳动节见顶), 之后是80%的通缩性大崩盘, 触发点在海外(尤其日本隐藏杠杆)而非美国; 央行随后被迫印钞高达50万亿救银行, 引发2030年代初25%的通胀。\n▸ 关键依据：全球债务2025年底达348万亿, 崩盘后或超450万亿; 5%都难服务债务, 15-20%更无解; 私募股权/私人信贷隐藏杠杆+衍生品放大下行。\n▸ 时间与位置：melt-up顶或早至劳动节/今秋; S&P目标10,000; 金$7,000(崩盘中回撤40-50%至3,500后终极$20,000)/银$180(崩盘或跌70-80%)。\n▸ 标的与操作：短期做多股票/金/银/铜(final leg); 但设好退出信号, 为其后的代际级崩盘与买入机会做准备。",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "Macro strategist David Hunter warns of 80% market bust, 25% inflation（Kitco）",
+          "title": "Macro strategist David Hunter warns of 80% market bust, 25% inflation",
           "url": "https://www.kitco.com/news/article/2026-05-20/macro-strategist-david-hunter-warns-80-market-bust-25-inflation-global-debt",
           "date": "2026-05-20"
         },
         {
-          "title": "David Hunter: Final Melt-Up, Then Global Bust? Gold, Silver, Oil Price Targets",
-          "url": "https://investingnews.com/david-hunter-gold-silver-forecast/",
-          "date": "2026-05-11"
+          "title": "David Hunter: Momentum is Driving Straight Up Into a Generational Bust",
+          "url": "https://competentmanpod.substack.com/p/david-hunter-momentum-is-driving",
+          "date": "2026-07-28"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "James Rickards",
+      "id": "james_rickards",
       "sector": "宏观货币与金融体系",
-      "direction": "看多",
-      "targets": "黄金（$10,000 中期目标）、白银（$200）；看空美元体系",
-      "comments": "维持年底金$10000中期目标，称回调是美元荒非逻辑破裂",
-      "detail": "▸ 核心论点：黄金 10,000 美元/盎司仍是可信的「中期目标」，对应 2026 年底这一时间框架；他强调这不是极端假设，而是基于央行购金、地缘风险与系统性脆弱的可观察动态。另有一个理论上界：若按当前美国基础货币的 40% 黄金准备率计算，隐含金价将超过 27,000 美元/盎司——他明确把这作为数学锚而非近期交易目标。\n▸ 关键依据：他把年内那波金价下跌归因于「全球美元荒」而非逻辑破裂——霍尔木兹海峡（承担全球约 20% 石油与 20% LNG）因伊朗冲突被双向封锁，能源短缺国抛售黄金储备换美元，杠杆多头触发止损、CTA 趋势算法放大跌势；随后油价从约 110 美元/桶回落到 67–70 美元区间，紧急美元需求缓解。他的分析框架混用分形数学与尺度不变性、复杂性理论建模非线性系统风险，以及 1970 年代以来危机升级的历史模式。\n▸ 时间与位置：黄金 10,000 美元对应 2026 年底；白银另有 200 美元的对应目标；27,000 美元为货币重置情景下的理论边界，无时间表。\n▸ 标的与操作：买入并持有实物黄金与白银（以及矿业敞口）；把美元与美元计价资产视为风险源。",
+      "direction": "看多黄金(极度)",
+      "targets": "金2026年底$10,000; 银$200",
+      "comments": "黄金$10K靠美国国库黄金重估($42→市价)机制",
+      "detail": "▸ 核心论点：给出2026年底黄金$10,000的极度看涨预测, 核心机制不是图表形态, 而是美国国库黄金的重估——将法定价$42.2222/oz重估至当前市价($4,400+), 释放巨额账面价值(藏在美联储资产负债表第一行的黄金凭证)。\n▸ 关键依据：央行抛美元囤实物金; 财政部现在谈论其黄金储备如同拥有五角大楼级别的战争基金; $10,000远超机构共识区间($2,700-$6,300)但有具体命名机制支撑。\n▸ 时间与位置：黄金2026年底$10,000; 白银$200; 长期可涨2000%+(参照历次牛市涨1600%/600%)。\n▸ 标的与操作：极度看多黄金/白银作为对央行抛美元与黄金重估的押注。(注: 目标价属激进派, 作长期方向与机制参考)",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "James Rickards' $10,000 Gold Prediction Explained for 2026",
-          "url": "https://discoveryalert.com.au/james-rickards-gold-10000-prediction-central-banks-2026/",
-          "date": "2026"
+          "title": "Jim Rickards changed his entire predictions for gold/silver August 2026",
+          "url": "https://silvertrade.com/news/precious-metals/gold-news/jim-rickards-changed-his-entire-predictions-for-gold-silver-in-august-2026-heres-why/",
+          "date": "2026-09-01"
         },
         {
-          "title": "$10,000 Gold by End of 2026 Is Still Realistic - Jim Rickards",
-          "url": "https://www.canadianminingreport.com/blog/10-000-gold-by-end-of-2026-is-still-realistic-jim-rickards",
-          "date": "2026"
-        },
-        {
-          "title": "Jim Rickards SHOCKS: Gold to $10,000 & Silver to $200",
-          "url": "https://www.itmtrading.com/blog/jim-rickards-gold-10000-silver-200/",
-          "date": "2026"
+          "title": "Gold Price Prediction: Is Rickards' $10,000 Right?",
+          "url": "https://discoveryalert.com/analysis/gold-price-prediction-rickards-revaluation/",
+          "date": "2026-09-01"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Larry McDonald",
+      "id": "larry_mcdonald",
       "sector": "宏观货币与金融体系",
-      "direction": "看多",
-      "targets": "硬资产/价值股：能源、天然气、煤炭、核电、铜、金矿（看多）；大型科技股（看空）；美国信用市场风险",
-      "comments": "资金从科技大迁徙到硬资产，2026是价值股之年，紧盯信用裂缝",
-      "detail": "▸ 核心论点：2010–2020 的通缩体制已彻底结束，市场进入「顽固通胀 + 高利率」新时代，将出现一次「资本的大迁徙」——从科技股流向硬资产及控制硬资产的公司；2026 年是价值股之年。他把 2026 形容为「杠铃/拔河」：一边是美国迅速加速的信用危机，一边是巨量货币与财政刺激。\n▸ 关键依据：纳斯达克 100 总市值已达 33.8 万亿美元，三年前仅 12.4 万亿——只要极小比例资金从科技外流，就足以显著推高其他板块；他以金矿指数为例，一年前总市值约 3,200 亿美元，如今约 8,300 亿，翻倍多。宏观面他引用亚特兰大联储实时预测 Q4 GDP 增速 3%、失业率低位、财政赤字占 GDP 6%（30 年均值的两倍），AI 军备竞赛 2025–26 两年资本开支 2 万亿美元，而美联储仍在降息并重启 QE——他称这对通胀「极其危险」。他的名言：「英伟达与整个 AI 板块要成功，唯一路径是天然气股、煤炭股、核电股和铜股全部翻倍或翻三倍。」\n▸ 时间与位置：时间框架为 2026 全年的板块轮动；未给出具体指数点位或商品目标价。\n▸ 标的与操作：买入能源、商品、天然气/煤炭/核电/铜相关价值股与矿业股；减持大型 AI/科技股；密切跟踪美国信用市场（私募信贷/高收益）裂缝作为风险开关。",
-      "detail_status": "ok",
+      "direction": "看多硬资产/价值股",
+      "targets": "大轮动出科技进硬资产/价值; 警告美国信用风险",
+      "comments": "旧市场剧本已死, 大轮动进硬资产, 2026是价值股之年",
+      "detail": "▸ 核心论点：旧市场剧本已死, 正发生从科技股向硬资产与价值股的大轮动; 2026是价值股之年; 同时警告美国信用体系内酝酿的系统性风险。\n▸ 关键依据：利率下行+财政支出+AI热潮的能源需求, 共同为硬资产的大轮动铺路; AI基建热潮中被忽视的赢家值得关注。\n▸ 时间与位置：2026年定调轮动; 未给具体点位。\n▸ 标的与操作：从科技名字轮出至价值股/硬资产; 关注AI基建被低估的受益者; 警惕美国信用landscape的系统性风险。(注: 最新公开深度访谈集中在2025年12月, 近月无重大更新)",
+      "detail_status": "thin",
       "sources": [
         {
-          "title": "Larry McDonald: «2026 Is Set to Be the Year of Value Stocks»（The Market NZZ）",
-          "url": "https://themarket.ch/english/2026-is-set-to-be-the-year-of-value-stocks-ld.15676",
-          "date": "2026"
-        },
-        {
-          "title": "Hard Assets Vs. Financial - Larry McDonald On What Leads（Seeking Alpha）",
-          "url": "https://seekingalpha.com/article/4852910-hard-assets-vs-financial-larry-mcdonald-what-leads",
-          "date": "2026"
+          "title": "Hard Assets Vs. Financial - Larry McDonald On What Leads In 2026",
+          "url": "https://seekingalpha.com/article/4852910-hard-assets-vs-financial-larry-mcdonald-what-leads-in-2026",
+          "date": "2025-12-12"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Clem Chambers",
+      "id": "clem_chambers",
       "sector": "宏观货币与金融体系",
       "direction": "看多",
       "targets": "铜、铂金（看多）；黄金短期看淡、比特币先跌后涨；标普泡沫再涨约两年",
@@ -2971,258 +2913,128 @@
           "date": "2026-08-20"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Peter Schiff",
+      "id": "peter_schiff",
       "sector": "宏观货币与金融体系",
-      "direction": "看多",
-      "targets": "黄金白银（看多）；美元、美股、比特币（看空）；美国消费者",
-      "comments": "2026危机或超2008，金银是先行警报，比特币会跟着股票跌",
-      "detail": "▸ 核心论点：美国 2026 年可能爆发一场比 2008 更严重的危机，根源不是房贷杠杆而是美元崩塌、公共债务不可持续与借贷成本上升，直接冲击美国消费者；金银的暴涨不是投机，而是金融风暴的「先行信号（harbinger）」。\n▸ 关键依据：2025 年现货黄金上涨逾 60%、白银突破多十年的 50 美元天花板一度冲到 80 美元区间、年末仍在 70 美元上方（全年约 +140%），同期比特币下跌约 7%、美元指数跌超 10%，是近十年最差年份——他把这种背离类比 2007 年次贷压力先在小众市场显形。债务面，美国国债已超 38 万亿美元（8 月下旬已破 40 万亿），利息支出超过国防开支。他明确反对比特币作为危机对冲：美元崩溃会推高进口价格、侵蚀实际工资、压缩可投资资金，届时资金流向有形价值储藏，比特币会像风险资产一样随股票下跌。\n▸ 时间与位置：危机窗口指向 2026 年内；年初他曾给出金价站上 5,000 美元的方向性判断，本轮检索未见更新的精确目标位。\n▸ 标的与操作：买入并持有实物黄金白银（及矿业股）；卖出/回避美元资产、美股与比特币。",
+      "direction": "看多黄金白银/看空美元",
+      "targets": "金$6,000(2026)乃至$10,000; 银$150-200; DXY→70甚至更低",
+      "comments": "金上$4,600警示美债务/美元危机远超2008",
+      "detail": "▸ 核心论点：美国正走向美元危机+主权债务危机, 规模将令2008相形见绌; 金上$4,600本身即警示投资者认为美联储虚张声势, 将放任通胀。\n▸ 关键依据：10Y收益率8/31触及4.75%逼近2007高点, 30Y达5.28%; 日本已将美债持仓从1.3万亿降至1.1万亿; 财政部翻倍长债回购上限至40亿; 央行连年净买金, 黄金与收益率同涨反常。\n▸ 时间与位置：金2026目标$6,000, 长期$10,000+; 银$150-200; DXY年底或至90, 若QE重启2026年底→70, 40不排除。\n▸ 标的与操作：看多黄金/白银/金矿股(称miners可再涨50-100%), 看空美元。",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "Peter Schiff Warns of 2026 US Economic Crisis Worse Than 2008（CCN）",
-          "url": "https://www.ccn.com/education/crypto/us-economic-crisis-2026-peter-schiff-dollar-collapse-gold-beats-bitcoin/",
-          "date": "2026"
+          "title": "Peter Schiff Stark Warning: Treasury Bond Maneuvers",
+          "url": "https://www.webpronews.com/peter-schiffs-stark-warning-treasurys-bond-maneuvers-risk-accelerating-a-dollar-and-debt-reckoning/",
+          "date": "2026-09-02"
         },
         {
-          "title": "Peter's Blog（SchiffGold 最新分析）",
-          "url": "https://www.schiffgold.com/news",
-          "date": "2026-08-26"
-        },
-        {
-          "title": "Year-End Special: My 2026 Economic and Market Forecasts",
-          "url": "https://schiffradio.com/year-end-special-my-2026-economic-and-market-forecasts/",
-          "date": "2026"
+          "title": "Peter Schiff Warns Gold Above $4,600",
+          "url": "https://www.ibtimes.co.uk/peter-schiff-gold-surge-us-treasury-challenges-1816422",
+          "date": "2026-08"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Ray Dalio",
+      "id": "ray_dalio",
       "sector": "宏观货币与金融体系",
-      "direction": "看空",
-      "targets": "美债与美元资产（看空）；黄金与比特币（推荐持有）；美股估值类比1929/2000",
-      "comments": "美国财政到拐点，债务付息≈收入200%，建议配黄金与比特币",
-      "detail": "▸ 核心论点：美国政府财政「已处在拐点」，若现在不处理，债务将累积到只能以巨大创伤化解的水平；财政部扩大回购、日本减持美债与长端收益率飙升三者叠加，是债务危机临近的信号。他同时把 AI 行情的估值与情绪类比 1929 年和 2000 年。\n▸ 关键依据：美国支出比收入高约 40%；7 月单月财政赤字 4,320 亿美元，为 2021 年 3 月以来最高；若把美国政府视作企业，其还本付息约 11 万亿美元，相当于年收入的 200%。他指出财政部回购「能力有限」，而贝森特称单次操作可能超过 40 亿美元。他给出的解法是三管齐下把赤字压到 GDP 的 3%：削减支出、增加税收、降低利率，且必须同步进行——任何一项过猛都会造成创伤性调整；并特别警告「美联储不自然地强压利率会非常糟糕」。\n▸ 时间与位置：未给出具体点位；他强调危机的确切时点受战争等变量影响，但主张趁经济仍健康时立即动手。\n▸ 标的与操作：建议投资者持有黄金与比特币等硬资产/加密资产以对冲；减少对长久期美债与美元计价金融资产的依赖。",
+      "direction": "看空债券/看多黄金比特币",
+      "targets": "黄金配置10-15%+少量比特币; 债券低配",
+      "comments": "卖债买金, 警告美债务危机1-5年内(基准3年)",
+      "detail": "▸ 核心论点：美国财政已到拐点, 若不处理债务将累积到无法管理的地步; 债务危机可能一年至五年内到来(基准估计三年±两年)。\n▸ 关键依据：美国支出超收入约40%, 7月赤字破4320亿美元; 若按企业口径, 债务偿付相当于年收入的约200%(约11万亿美元)。Bessent的国债回购公告(上调至至少40亿)是危机临近信号, 叠加日本减持美债、长端收益率飙升。\n▸ 时间与位置：债务危机窗口1-5年, 基准3年; 需将赤字降到GDP的3%(三管齐下策略)。\n▸ 标的与操作：低配债券; 黄金配置10-15%对冲; 加少量比特币; 跨资产跨国分散于财政稳健国家。",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "Ray Dalio says Bessent move is sign that a debt crisis is getting closer; recommends gold and bitcoin（CNBC）",
-          "url": "https://www.cnbc.com/2026/08/21/ray-dalio-bessent-debt-crisis-bitcoin-gold.html",
+          "title": "Dalio Says Sell Bonds, Buy Gold, Bitcoin as Debt Crisis Looms",
+          "url": "https://www.bloomberg.com/news/articles/2026-08-21/dalio-says-sell-bonds-buy-gold-bitcoin-as-debt-crisis-looms",
           "date": "2026-08-21"
         },
         {
-          "title": "Ray Dalio on the AI bubble nearing 1929, 2000 levels（Fortune）",
-          "url": "https://fortune.com/2026/08/04/ray-dalio-ai-bubble-1929-2000-ipos-wealth-is-not-money/",
-          "date": "2026-08-04"
+          "title": "Ray Dalio: Bessent move is sign debt crisis nearing",
+          "url": "https://www.cnbc.com/2026/08/21/ray-dalio-bessent-debt-crisis-bitcoin-gold.html",
+          "date": "2026-08-21"
         }
       ],
-      "date": "2026-08-31"
+      "date": "2026-09-07"
     },
     {
       "kol": "Luke Gromen",
+      "id": "luke_gromen",
       "sector": "宏观货币与金融体系",
-      "direction": "中性",
-      "targets": "黄金与部分股票（看多）；比特币短期看空（$40K 风险）；白银长期极乐观",
-      "comments": "仍信债务贬值主线，但改用黄金而非比特币表达，BTC或探$40K",
-      "detail": "▸ 核心论点：长期的「货币贬值交易（debasement trade）」逻辑不变——政府会用通胀与货币贬值稀释债务——但表达工具应从比特币切换到黄金与部分股票，因为后者当前更能捕捉财政主导（fiscal dominance）的红利。这是他语气上的明显转变。\n▸ 关键依据：他在 RiskReversal 播客上列出比特币近期风险信号：相对黄金未能创新高、丢失关键均线、量子计算讨论升温导致叙事脆弱；同时 AI 板块担忧升温、美国就业与消费数据走弱，现货 ETF 后的资金流也在恶化。多位比特币分析师反驳称跌破均线与跑输黄金常出现在弱势期而非顶部。另有 8 月的公开表述称「白银持有者将成为百万富翁」，显示他对贵金属仍高度乐观。\n▸ 时间与位置：比特币下行风险指向 2026 年内 4 万美元区间；黄金与白银未给出具体目标点位。\n▸ 标的与操作：战术性减持比特币（非结构性看空），加配黄金与受益于财政主导的股票；白银长期持有。",
+      "direction": "看多黄金/看空美元体系",
+      "targets": "金5年内$7,800; 黄金2028-29超美元储备份额",
+      "comments": "后1971美元体系瓦解, 黄金替代美债成储备",
+      "detail": "▸ 核心论点：后1971年美元储备体系正加速瓦解, 黄金正在取代美债成为全球储备资产(而非仅对冲); 财政主导(fiscal dominance)是核心框架。\n▸ 关键依据：2025年黄金在全球外汇储备中已超过美债; Gromen预计2028-2029(本届总统任期内)黄金份额将超过美元; 美国财政压力+美债市场承压+日本减持构成长期利多黄金。\n▸ 时间与位置：金未来5年$7,800可信; 黄金超美元储备份额2028-29。\n▸ 标的与操作：看多黄金, 看空美元/美债体系。",
       "detail_status": "ok",
       "sources": [
         {
-          "title": "Luke Gromen Warns Bitcoin Could Slide Toward $40K in 2026",
-          "url": "https://coinpaper.com/13110/luke-gromen-warns-bitcoin-could-slide-toward-40-k-in-2026",
-          "date": "2026"
+          "title": "Luke Gromen: Gold Is Replacing Treasuries",
+          "url": "https://podcastalpha.substack.com/p/gold-is-replacing-treasuries",
+          "date": "2026-07-13"
         },
         {
-          "title": "SILVER HOLDERS WILL BE MILLIONAIRES — Luke Gromen",
-          "url": "https://thephaser.com/2026/08/silver-holders-will-be-millionaires-luke-gromen/",
-          "date": "2026-08"
-        },
-        {
-          "title": "Winning the Rally, Losing the Decade（AdvisorAnalyst）",
-          "url": "https://advisoranalyst.com/2026/08/19/the-bull-market-that-loses-you-money-luke-gromen.html",
-          "date": "2026-08-19"
+          "title": "Futures Edge interview",
+          "url": "https://www.youtube.com/watch?v=Kf-RLkN3qfo",
+          "date": "2026-08-31"
         }
       ],
-      "date": "2026-08-31"
-    },
-    {
-      "kol": "Phil Streible（Blue Line Futures 首席市场策略师）",
-      "sector": "贵金属/大宗商品",
-      "direction": "看多",
-      "targets": "黄金/白银",
-      "comments": "延续贵金属历史级涨势判断，聚焦长期主题驱动",
-      "detail": "▸ 核心论点：作为Blue Line Futures首席市场策略师，Streible延续对黄金白银历史级涨势的看多判断，认为长期结构性主题仍是主驱动。\n▸ 关键依据：其Metals Minute逐日节目反复强调去美元化、央行购金、实际利率与地缘风险等长线逻辑支撑金银；2026开年金银期货隔夜大涨延续动能。\n▸ 时间与位置：以逐日期货关键价位交易为主，未在公开检索中给出明确年度目标价。\n▸ 标的与操作：黄金、白银为核心，兼及铜、铂等大宗；整体偏多头，按每日关键价位给可执行交易思路。",
-      "detail_status": "ok",
-      "sources": [
-        {
-          "title": "Gold & Silver Futures Surge Overnight! Drivers in 2026",
-          "url": "https://bluelinefutures.com/2026/01/05/gold-silver-futures-surge-overnight-here-are-the-drivers-in-2026/",
-          "date": "2026-01-05"
-        },
-        {
-          "title": "2026 Outlook on Gold, Silver and Key Commodities (Schwab Network)",
-          "url": "https://www.youtube.com/watch?v=jOMuwSoem3I",
-          "date": "2025-12"
-        }
-      ],
-      "date": "2026-09-02"
-    },
-    {
-      "kol": "John LaForge（Ned Davis Research 首席另类策略师 / 前 Wells Fargo 策略师）",
-      "sector": "大宗商品与贵金属",
-      "direction": "未找到",
-      "targets": "",
-      "comments": "",
-      "detail": "",
-      "detail_status": "none",
-      "sources": [],
-      "date": "2026-09-03"
+      "date": "2026-09-07"
     }
   ],
   "changes": [
     {
-      "kol": "Neil Howe",
-      "sector": "技术分析与周期",
-      "prev_dir": "看多",
-      "new_dir": "看空",
-      "date": "2026-08-31",
-      "comments": "第四轮回「冬季」危机相，市场进入艰难时代，危机后才有重建",
-      "targets": "美股与风险资产（宏观周期视角）、制度与地缘风险",
-      "detail": "▸ 核心论点：Hedgeye 人口统计学董事总经理、《第四轮回》合著者。他判断美国与多数发达国家已牢牢处在长周期的「冬季/危机相」，与 1930-40 年代的大萧条与二战前夜同构；2026 年 7 月 6 日在彭博更直白地说「市场即将迎来一个艰难的时代」。他的落点不是纯悲观——历史规律是危机解决后带来制度重建与社会凝聚力的更新。\n▸ 关键依据：不是价格或估值指标，而是社会与制度变量——地缘冲突升温、代际失望（年轻世代面临可负担性下降、上升通道收窄、对民主信任消退，从而更倾向激进变革）、法治与国际协议受侵蚀、机构信任崩塌。他引用民调称「多数美国人认为二战前那些年份重新变得有现实相关性」，以及全球风险评估显示美国人普遍预期未来十年内会有重大地缘对抗。\n▸ 时间与位置：以「未来十年」为周期尺度，2026 被定位为冬季相的中段；不给指数点位，也不给具体日期。\n▸ 标的与操作：无具体标的与买卖建议；框架含义是对风险资产与长久期制度稳定性溢价保持防御，同时准备迎接危机后的重建期。属于宏观周期背景判断而非可直接交易的信号。"
-    },
-    {
-      "kol": "William Watkins",
-      "sector": "宏观货币与金融体系",
-      "prev_dir": "看多",
-      "new_dir": "看空",
-      "date": "2026-08-31",
-      "comments": "美债逼近40万亿，称美元背后只剩国家强制力，非黄金",
-      "targets": "美元/法币体系、美国国债与财政、黄金(隐含正面)",
-      "detail": "▸ 核心论点：Independent Institute 宪法学者 William J. Watkins Jr. 认为，美国已偏离建国者设计的硬通货制度，今天的纸币背后「除了政府的强制力以外没有什么真正有价值的东西」。逼近 40 万亿美元的国债不只是超支问题，而是国家放弃自我约束后必须支付的账单。\n▸ 关键依据：美国国债约 39.6 万亿美元，相当于每个美国人约 11.5 万美元、约占经济体量的 120%；2026 财年净利息支出预计突破 1 万亿美元，已超过国防开支，成为联邦预算中最大的单项之一(CBO 数据)。制度转折点他指向 1936 年最高法院 United States v. Butler 案与新政；1933 年收缴黄金并将金价由约 20 美元重估至 35 美元，他直言「绝对不合宪」。1971 年最后一道金本位链条切断时金价 35 美元，而采访当日金价已在 4,100 美元上方。他认为政府「本应先加税」，实际却倾向于通胀化货币，且支出具有「棘轮效应」难以回退。\n▸ 时间与位置：未给出具体点位或时间窗口。他只给出终局判断：若放任不管，结局是「像第三世界香蕉共和国那样对债务违约」的总清算。\n▸ 标的与操作：这是制度层面的长期判断而非交易建议——看空美元纸币体系与美国财政可持续性，逻辑上利好硬通货/黄金。他本人未给出买卖操作。"
-    },
-    {
-      "kol": "Edward Dowd",
-      "sector": "宏观货币与金融体系",
-      "prev_dir": "看多",
-      "new_dir": "看空",
-      "date": "2026-08-31",
-      "comments": "2026三大风险共振，衰退+股市泡沫破裂；看多美元与金银",
-      "targets": "美股(AI泡沫)、美国房地产、影子银行/私募信贷、中国、美元(看多)、黄金白银(看多)",
-      "detail": "▸ 核心论点：2026 年美国经济面临「生涯中从未见过」的风险，是一次大级别的信用毁灭周期。他 2025 年的判断已被验证——股市涨了 17%，但实体经济内爆、地产开始下滑。由于泡沫被不断往后拖，「快速崩塌」的概率自 2025 年初以来指数级上升。\n▸ 关键依据：三大风险，两内一外。①美国住房危机：移民填补需求的通道已关闭、遣返将持续一到两年，可负担性彻底恶化，收入水平不支持当前房价，唯一的出清方式是未来两年房价下跌 25%-30%。②股市泡沫：估值已与互联网泡沫时期同样糟糕，由 AI 泡沫驱动，裂缝已现，预计年内破裂。③中国进入经济危机的急性期，将成为全球传染源，冲击日韩并外溢至美国。他认为最先出问题的是影子银行体系(私募股权、私募信贷、非存款类金融机构贷款)——过去两年商业银行的贷款增长全部来自该渠道，工商业贷款零增长；贝莱德将旗下私募债基金估值下调 19% 并免收管理费即是例证。\n▸ 时间与位置：股市泡沫预计 2026 年内破裂；房价调整窗口为未来两年、幅度 25%-30%；黄金 2030 年目标价 10,000 美元/盎司。\n▸ 标的与操作：看空美股(尤其 AI 相关)、美国住宅地产、私募信贷/影子银行敞口；因中国引发的流动性危机而看多美元；同时维持看多黄金与白银(认为当前只是盘整而非终结，理由是大型银行对黄金需求旺盛、白银则有工业用户实需)。"
-    },
-    {
-      "kol": "Torsten Sløk",
-      "sector": "宏观货币与金融体系",
-      "prev_dir": "中性",
-      "new_dir": "看多",
-      "date": "2026-08-31",
-      "comments": "美国经济由滞胀转为过热，衰退概率仅10%，年内可能加息",
-      "targets": "美国股市/AI 资本开支链、美债利率（偏上行）、美元（偏弱）",
-      "detail": "▸ 核心论点：2026 年美国经济叙事已从「滞胀」翻转为「过热」。他明确表示经济\"running pretty hot\"，把美国衰退概率下调到 10%，远低于市场定价的 30%；风险不在增长失速，而在通胀黏性迫使美联储由降转升。\n▸ 关键依据：研究报告《Stagflation in 2025. Overheating in 2026》列出 10 条顺风，核心是 AI 资本开支潮、产业回流、美元贬值提振出口竞争力，以及\"One Big Beautiful Bill\"财政刺激——他估算该法案单独贡献约 0.9% 的 2026 年 GDP 增速。通胀端：6/17 FOMC 维持 3.50%–3.75% 不变（12-0），却把 2026 年 PCE 预测由 2.7% 大幅上修至 3.6%，点阵图抹掉了原先的降息预期。\n▸ 时间与位置：时间窗口为 2026 全年，判断年底前更可能加息而非降息；政策利率锚定 3.50%–3.75%，通胀锚定 3%（PCE 预测 3.6%）。未给出股指或收益率的具体点位。\n▸ 标的与操作：偏好受 AI 资本开支拉动的实体链条（电力、半导体、地产）与美国资产（外资持续流入）；对利率敏感型久期资产偏谨慎；结构上强调 K 型分化，低收入群体承压。中长期看好 AI 投资驱动的复苏，短期提示先有一段温和滞胀。"
-    },
-    {
-      "kol": "Jeffrey Gundlach",
+      "kol": "Kyle Bass",
       "sector": "国债利率与债券市场",
-      "prev_dir": "看多",
-      "new_dir": "看空",
-      "date": "2026-08-31",
-      "comments": "避开长债，押美联储2026加息，警告AI芯片抵押融资是顶部信号",
-      "targets": "长久期美国国债(避开)、Nvidia/AI 基建债、美股科技集中度、国际及新兴市场股债",
-      "detail": "▸ 核心论点：债务清算比市场想象来得更近。美联储2026年不会降息、更可能加息；应彻底回避发达国家长久期国债，把资金转向国际与新兴市场。Nvidia 牵头的 AI 基建融资是典型的risk市场见顶特征。\n▸ 关键依据：他弃用核心/截尾通胀口径（称 Dallas Fed 截尾均值 PCE 是「玩世不恭的把戏」），改看进出口原始物价指数，读数约 6.5%。Bloomberg 美国综合债指数 10 年与 20 年 YTW 相差不足 1bp，30 年历史均值约 4.05%，综合收益率约 4.78%；2020 年以约 1% 买入 30 年期美债者 2022 年资本亏损超 50%。Shiller CAPE 创历史高位，10 家科技/AI 公司占标普 500 市值约 41%，集中度已开始瓦解。对英伟达联合 Apollo/BlackRock/Blackstone/Brookfield/高盛/KKR 调动逾 5000 亿美元的计划，他讥为「拿不知寿命的资产给长期债务作抵押……不如发 30 年期 ABS 抵押一仓库香蕉」。\n▸ 时间与位置：明确指向 2026 年内不降息、若下注则赌加息；未给出具体股指点位或收益率目标位。以 2 年期美债为美联储政策风向标（「美联储跟着 2 年期走」）。\n▸ 标的与操作：卖出/回避发达国家长久期政府债与美国大盘科技集中股；买入国际股票、新兴市场股票及本币新兴市场债；对 AI 基建信用敞口保持怀疑。"
-    },
-    {
-      "kol": "S. Druckenmiller",
-      "sector": "宏观货币与金融体系",
-      "prev_dir": "看多",
-      "new_dir": "看空",
-      "date": "2026-08-31",
-      "comments": "痛批财政部扩大回购是变相QE，长端收益率是世上最重要的价格",
-      "targets": "长端美债（反对回购托市）、美元财政信用；组合层面 Q2 前十大含 Natera 等",
-      "detail": "▸ 核心论点：8 月 24 日在《华尔街日报》发表署名评论《Let the Bond Market Speak》，指责财政部把长债回购规模翻倍是在压制、而非改善市场功能；长端美债收益率是「世界上最重要的价格」，也是华盛顿最后一道财政纪律，人为压低只会让政客继续拖延。\n▸ 关键依据：财政部将 10–30 年期回购每次操作规模至少翻倍到 40 亿美元，排期 9 月 9 日至 11 月 4 日，且是在 30 年期收益率触及 19 年新高之后宣布；收益率初跌后次日午后即升破原位，说明市场视之为托价而非流动性维护。他强调当前国债市场运作正常（无失败拍卖、无强制抛售、无交易商融资短缺），与 2020 年 3 月不可同日而语；收益率上行反映的是真实财政担忧——通胀仍高于 2%、失业率处历史低位、赤字接近 GDP 的 6%、国债超 40 万亿美元、年利息支出将超 1.1 万亿美元。他以 1942–1951 年美联储收益率上限最终助推通胀为鉴。持仓面，Duquesne Q2 2026 披露约 95 个持仓、组合规模约 52 亿美元，第一大持仓 NTRA。\n▸ 时间与位置：直接对应 2026 年 9 月 9 日–11 月 4 日的回购窗口；未给出收益率目标点位，但认为一旦市场认定政府在守某一收益率水平，每次上行都会变成需要更大干预的压力测试。\n▸ 标的与操作：主张财政部把回购限制在小规模例行操作、并增发长债；对长端美债与依赖压低利率的资产持怀疑态度，未公开给出具体买入建议。"
+      "prev_dir": "看空",
+      "new_dir": "看多美元美国资产/看空中国",
+      "date": "2026-09-07",
+      "comments": "美国是最佳资本配置地, 中国房产/银行/就业三重危机",
+      "targets": "资金将更集中于美国资产; 中国经济螺旋下行",
+      "detail": "▸ 核心论点：美国仍是全球资本配置的最佳去处, 预计资产将更集中于美国; 中国陷入经济螺旋(房地产危机+银行危机+青年失业+经常账户担忧), 无解; 地缘上预计未来2-3年习近平会对台湾动手。\n▸ 关键依据：中国银行体系达GDP的320%; 房价曾达中位数收入26倍致适婚男性买不起房→人口崩塌; 全球在2020-2025注入约50%美元通胀, 除美元外全球无稳定。\n▸ 时间与位置：台海冲突窗口未来2-3年; 未给出具体资产点位。\n▸ 标的与操作：长期看多美国资产/美元; 规避中国; 提示地缘尾部风险(台海)对全球市场分叉的影响。"
     },
     {
       "kol": "Michael Hartnett",
       "sector": "宏观货币与金融体系",
-      "prev_dir": "中性",
-      "new_dir": "看空",
-      "date": "2026-08-31",
-      "comments": "称美联储「赤裸裸的鸽派」，建议撤离风险资产等收益率暴动",
-      "targets": "回避风险资产；关注日元/JGB、亚洲联合干预、美债收益率",
-      "detail": "▸ 核心论点：美联储「赤裸裸地鸽派」，将迫使金融条件持续收紧，直至被迫用激进加息重建信誉；因此应当从风险资产「撤退/轮动」而不是加仓。同时警告华尔街当前在「毫无恐惧」地交易，仓位过度看多。\n▸ 关键依据：他给出重新买入风险资产的两个前置条件——通胀出现实质回升，以及一次「收益率上行+美元下跌」的债券义警事件迫使货币与财政政策掉头。BofA 情绪指标的卖出信号历史上平均领先全球股票 2–3% 的回撤、命中率约 60%，但真正熊市还需叠加过度的盈利乐观。他把美/日/韩联合外汇干预列为当周最重要事件，担心日元无序贬值→JGB 收益率飙升→蔓延到韩国台湾债市→资金无序流出美债；并称美国决策者会出手阻止日韩台股票走弱妨碍对华 AI 竞赛，把干预称作 AI 时代的「PKO（股价维持操作）」。\n▸ 时间与位置：点名 8 月 28 日 Jackson Hole 为关键转折日（新任美联储主席在收益率钢丝上）；BofA 的note明确未给出具体指数点位或收益率阈值。\n▸ 标的与操作：减持/轮出风险资产（尤其美股），等待通胀回升与债券义警事件后再重新配置；关注日元、JGB 与亚洲债市传导链。"
+      "prev_dir": "看空",
+      "new_dir": "看多商品黄金/看空拥挤AI股",
+      "date": "2026-09-07",
+      "comments": "政策恐慌奏效, 维持多商品黄金; AI是债券主导泡沫",
+      "targets": "全球30Y收益率>5%则AI基建跑输; 民主党横扫则美股-10%+",
+      "detail": "▸ 核心论点：政策恐慌正在奏效(日元升值捍卫$4油价/160美元兑日元/5%美债收益率红线); 维持看多商品与黄金等债务贬值对冲; AI是债券主导的泡沫, 长久期收益率而非股市叙事才是AI交易的真锚。\n▸ 关键依据：上周最大事件是全球债市崩解(美10Y 4.81%逼近2008/30Y 5.31%为2007来最高/日10Y破3%为1996来首次/德10Y 3.38%); 标普29倍PE, 仅4%成分股创新高(类比2000年3月); 超大规模云厂自由现金流已转负, 泡沫可能随时破裂。资金流: 现金+300亿/债券+183亿/黄金+32亿/股票仅+28亿(9周最少)。\n▸ 时间与位置：全球30Y降回5%以下前AI基建持续跑输AI应用; 民主党11月中期横扫(Polymarket 50%)则美股-10%+/美元走弱。\n▸ 标的与操作：维持多商品+黄金; AI后泡沫框架长羞辱短傲慢, 轮动至必需消费/矿业; 民主党横扫情景做空金融股+美元、转长久期债券。"
     },
     {
       "kol": "Ted Oakley",
       "sector": "宏观货币与金融体系",
-      "prev_dir": "看空",
-      "new_dir": "看多",
-      "date": "2026-08-31",
-      "comments": "7月中把贵金属全买回来，看空标普与半导体，警告私募信贷",
-      "targets": "黄金/白银及金矿、能源股（看多）；标普500、半导体、微软、长期美债（看空）",
-      "detail": "▸ 核心论点：这不是一个正常市场，中期可能出现「一代人级别」的熊市使股指下挫约 40%；应从大盘成长/半导体轮出，转向硬资产与能源。他在 2025 年末至 2026 年初曾卖出全部白银和大部分黄金敞口，7 月中旬又全数买回并加码。\n▸ 关键依据：ThreeBears 追踪的公开表态显示，8 月 11 日与 8 月 16 日他连续给出看多黄金、白银（均为年内短期）、金矿股（短中长期均看多）与能源股，同时看空半导体、微软与长期美债；7 月 16 日与更早的表态一致看空标普 500 中期。8 月 26 日他与 Verdad 的 Dan Rasmussen 对谈，主题是私募股权与私募信贷的问题，指向同一条信用风险线索。\n▸ 时间与位置：金/银看多窗口标注为 2026 年 8–12 月，金矿股为短中长期；标普 500 看空延续至 2027 年 7 月；跌幅量级引用为约 40%，未给出具体指数点位。\n▸ 标的与操作：买入并持有黄金、白银、金矿股、能源股；卖出/回避标普 500 宽基、半导体、微软及长久期美债；对私募信贷保持警惕。"
+      "prev_dir": "看多",
+      "new_dir": "谨慎防御/坚守原则",
+      "date": "2026-09-07",
+      "comments": "最新信《坚守你的原则》, 认为当前市场绝非正常",
+      "targets": "市场绝非正常; 坚守投资原则",
+      "detail": "▸ 核心论点：最新致客户信题为《坚守你的原则》(Stick to Your Principles), 认为当前市场绝非正常, 提醒投资者在异常环境下不要放弃纪律与原则。\n▸ 关键依据：49年从业经验视角; 对经济、债券、股市与全球不确定性的综合判断(具体数据点在其季度Market Comments中)。\n▸ 时间与位置：未给出具体点位; 观点持续偏谨慎防御。\n▸ 标的与操作：偏防御配置, 强调纪律与本金保护; 作为KOL名册中唯一有活跃13F的机构(Oxbow), 其实际持仓变动见机构持仓板块。(注: 公开细节有限, 深度需其付费信件)"
     },
     {
       "kol": "Zoltan Pozsar",
       "sector": "宏观货币与金融体系",
-      "prev_dir": "看多",
-      "new_dir": "中性",
-      "date": "2026-08-31",
-      "comments": "公开信息有限：仅见8月研报标题（信誉发作/杰克逊霍尔挑战）",
-      "targets": "美元体系/黄金作为储备资产、日元与欧元、AI 与利率",
-      "detail": "▸ 核心论点：公开信息有限，仅检索到其独立研究机构 Ex Uno Plures 的 2026 年报告标题序列，无法取得正文观点原文。可确认的长期框架仍是「布雷顿森林体系 III」——制裁与大国冲突推动储备管理从无锚货币转向商品/黄金锚定。\n▸ 关键依据：Ex Uno Plures「Money and World Order」系列 2026 年篇目包括《Physical QE and Gold》(3/13)、《E Pluribus Unum》(4/20)、《The Lord of the Rings》(7/20)、《Miran Knows Nothing About Money》(7/27)、《AI and Greenspan's Original Sin》(7/29)、《Camp David, €/¥ and the Credibility Tantrum》(8/1)、《It Takes Two to Tango》(8/3)，另有《The Jackson Hole Challenge》。这些只有标题公开，正文为付费机构客户内容，本次未取得。\n▸ 时间与位置：未给出具体点位或时间窗口（无正文可引）。\n▸ 标的与操作：无可靠的公开买卖建议，暂不判定方向。"
-    },
-    {
-      "kol": "David Stockman",
-      "sector": "宏观货币与金融体系",
-      "prev_dir": "看多",
-      "new_dir": "看空",
-      "date": "2026-08-31",
-      "comments": "AI股占标普45%，预言「2026特朗普崩盘」，公债破40万亿",
-      "targets": "美股（尤其 AI/半导体集中股）看空；批评财政与美联储",
-      "detail": "▸ 核心论点：所谓「黄金时代」并不存在，Trump-O-Nomics 没有扭转通胀、投机与停滞三股力量；他直接以《Here Comes the 「Trump Crash」 of 2026》为题，把当前 AI 行情类比 1998–2001 年纳斯达克的「三年往返地狱」。\n▸ 关键依据：他引用高盛集中度数据，AI 相关股票已占标普 500 市值约 45%，半导体为主要驱动；对冲基金对芯片的净敞口达到全球股票配置的 19%，创纪录并较 2026 年初翻倍。历史类比上，纳指自 1998 年 10 月 8 日的 1,419 点在约 18 个月内涨 256% 到 2000 年 3 月 10 日的 5,048 点，随后 25 个交易日暴跌 34% 至 3,321 点（抹去前 500 天涨幅的 48%），最终于 2001 年 9 月 24 日回到 1,423 点——原样回到起点。财政面他记录 8 月 20 日美国公债正式突破 40 万亿美元（45 年前仅 1 万亿），且共和党控制的白宫与国会毫无表示。\n▸ 时间与位置：未给出明确的崩盘日期或指数目标位；类比框架暗示「涨得快、跌得更快」的往返式回吐。\n▸ 标的与操作：回避 AI/半导体主导的美股集中头寸；其 Contra Corner 多数正文为付费墙内容，本次未取得完整持仓建议。"
-    },
-    {
-      "kol": "Clem Chambers",
-      "sector": "宏观货币与金融体系",
       "prev_dir": "中性",
-      "new_dir": "看多",
-      "date": "2026-08-31",
-      "comments": "铜一年翻倍、极端可冲$30k/吨；金年底到$6500极不可能",
-      "targets": "铜、铂金（看多）；黄金短期看淡、比特币先跌后涨；标普泡沫再涨约两年",
-      "detail": "▸ 核心论点：市场仍处「泡沫的底部」，应骑着泡沫走但要在崩盘前出场；再工业化与 AI 铺开必须靠印钞支撑，通胀会回到 5–7%。资产偏好上，他把重心从黄金转向铜与铂金。\n▸ 关键依据：8 月 12 日《The David Lin Report》访谈中他直言看铜的图形「未来一年会翻倍，而黄金不会翻倍」；对铜给出「垂直冲高到 30,000 美元/吨后回落到 15,000–20,000」的极端路径；通胀预期为「5 到 7」（他先说 5–10 再收敛到 5–7）。8 月 28 日再谈比特币，认为这轮不会到 25 万美元，会先回到 4 万–5 万美元区间再上行，四年周期只走了一半。\n▸ 时间与位置：铜翻倍窗口约到 2027 年 8 月；铜 30,000 美元/吨为周期极端目标（2028 年前）；黄金「到 2026 年圣诞节涨到 6,500 美元极不可能，更可能是筑顶后回落」；标普泡沫「大约还有两年」才见大顶。\n▸ 标的与操作：做多铜（已持有）与铂金（已选定个股）；黄金暂时观望、等回落再买；比特币等回撤到 4 万–5 万美元再考虑；股票继续骑泡沫但准备离场。"
-    },
-    {
-      "kol": "Ray Dalio",
-      "sector": "宏观货币与金融体系",
-      "prev_dir": "看多",
-      "new_dir": "看空",
-      "date": "2026-08-31",
-      "comments": "美国财政到拐点，债务付息≈收入200%，建议配黄金与比特币",
-      "targets": "美债与美元资产（看空）；黄金与比特币（推荐持有）；美股估值类比1929/2000",
-      "detail": "▸ 核心论点：美国政府财政「已处在拐点」，若现在不处理，债务将累积到只能以巨大创伤化解的水平；财政部扩大回购、日本减持美债与长端收益率飙升三者叠加，是债务危机临近的信号。他同时把 AI 行情的估值与情绪类比 1929 年和 2000 年。\n▸ 关键依据：美国支出比收入高约 40%；7 月单月财政赤字 4,320 亿美元，为 2021 年 3 月以来最高；若把美国政府视作企业，其还本付息约 11 万亿美元，相当于年收入的 200%。他指出财政部回购「能力有限」，而贝森特称单次操作可能超过 40 亿美元。他给出的解法是三管齐下把赤字压到 GDP 的 3%：削减支出、增加税收、降低利率，且必须同步进行——任何一项过猛都会造成创伤性调整；并特别警告「美联储不自然地强压利率会非常糟糕」。\n▸ 时间与位置：未给出具体点位；他强调危机的确切时点受战争等变量影响，但主张趁经济仍健康时立即动手。\n▸ 标的与操作：建议投资者持有黄金与比特币等硬资产/加密资产以对冲；减少对长久期美债与美元计价金融资产的依赖。"
+      "new_dir": "看多黄金/商品货币(Bretton Woods III)",
+      "date": "2026-09-07",
+      "comments": "Bretton Woods III框架: 从无锚货币转向商品支撑货币",
+      "targets": "美元单极时代终结; 大宗/黄金支撑的货币兴起",
+      "detail": "▸ 核心论点：美元单极时代正在终结, 世界从无锚法币(inside money)转向以商品/黄金支撑的货币(outside money)——即Bretton Woods III; 低通胀时代已结束, 不会回到2%的旧世界。\n▸ 关键依据：西方对俄制裁是国际货币体系的转折点; 多极世界里人民币与欧元将挑战美元储备地位; 黄金在新货币秩序中扮演主要角色; 四种货币价格框架(货币/信用/大宗/外汇)。\n▸ 时间与位置：结构性长期转变, 无精确点位; 强调低通胀一去不返。\n▸ 标的与操作：看多黄金与实物大宗商品作为outside money核心; 关注去美元化与商品融资瓶颈。(注: 核心框架为其历年一贯论述, 近月无新报告)"
     },
     {
       "kol": "Luke Gromen",
       "sector": "宏观货币与金融体系",
-      "prev_dir": "看多",
-      "new_dir": "中性",
-      "date": "2026-08-31",
-      "comments": "仍信债务贬值主线，但改用黄金而非比特币表达，BTC或探$40K",
-      "targets": "黄金与部分股票（看多）；比特币短期看空（$40K 风险）；白银长期极乐观",
-      "detail": "▸ 核心论点：长期的「货币贬值交易（debasement trade）」逻辑不变——政府会用通胀与货币贬值稀释债务——但表达工具应从比特币切换到黄金与部分股票，因为后者当前更能捕捉财政主导（fiscal dominance）的红利。这是他语气上的明显转变。\n▸ 关键依据：他在 RiskReversal 播客上列出比特币近期风险信号：相对黄金未能创新高、丢失关键均线、量子计算讨论升温导致叙事脆弱；同时 AI 板块担忧升温、美国就业与消费数据走弱，现货 ETF 后的资金流也在恶化。多位比特币分析师反驳称跌破均线与跑输黄金常出现在弱势期而非顶部。另有 8 月的公开表述称「白银持有者将成为百万富翁」，显示他对贵金属仍高度乐观。\n▸ 时间与位置：比特币下行风险指向 2026 年内 4 万美元区间；黄金与白银未给出具体目标点位。\n▸ 标的与操作：战术性减持比特币（非结构性看空），加配黄金与受益于财政主导的股票；白银长期持有。"
-    },
-    {
-      "kol": "Phil Streible（Blue Line Futures 首席市场策略师）",
-      "sector": "贵金属/大宗商品",
-      "prev_dir": "",
-      "new_dir": "看多",
-      "date": "2026-09-02",
-      "comments": "延续贵金属历史级涨势判断，聚焦长期主题驱动",
-      "targets": "黄金/白银",
-      "detail": "▸ 核心论点：作为Blue Line Futures首席市场策略师，Streible延续对黄金白银历史级涨势的看多判断，认为长期结构性主题仍是主驱动。\n▸ 关键依据：其Metals Minute逐日节目反复强调去美元化、央行购金、实际利率与地缘风险等长线逻辑支撑金银；2026开年金银期货隔夜大涨延续动能。\n▸ 时间与位置：以逐日期货关键价位交易为主，未在公开检索中给出明确年度目标价。\n▸ 标的与操作：黄金、白银为核心，兼及铜、铂等大宗；整体偏多头，按每日关键价位给可执行交易思路。"
+      "prev_dir": "中性",
+      "new_dir": "看多黄金/看空美元体系",
+      "date": "2026-09-07",
+      "comments": "后1971美元体系瓦解, 黄金替代美债成储备",
+      "targets": "金5年内$7,800; 黄金2028-29超美元储备份额",
+      "detail": "▸ 核心论点：后1971年美元储备体系正加速瓦解, 黄金正在取代美债成为全球储备资产(而非仅对冲); 财政主导(fiscal dominance)是核心框架。\n▸ 关键依据：2025年黄金在全球外汇储备中已超过美债; Gromen预计2028-2029(本届总统任期内)黄金份额将超过美元; 美国财政压力+美债市场承压+日本减持构成长期利多黄金。\n▸ 时间与位置：金未来5年$7,800可信; 黄金超美元储备份额2028-29。\n▸ 标的与操作：看多黄金, 看空美元/美债体系。"
     }
   ]
 }
