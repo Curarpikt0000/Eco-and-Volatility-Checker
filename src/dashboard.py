@@ -6637,13 +6637,16 @@ _TEMPLATE = r"""<!DOCTYPE html>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
   :root {{
-    /* 莫兰迪色板 (低饱和灰调) */
-    --bg: #e8e4dd;          /* 燕麦灰 */
-    --card: #f2efe9;        /* 米白 */
-    --card2: #e3ddd3;       /* 浅陶土 */
-    --border: #cdc6ba;      /* 灰褐边 */
-    --text: #4a463f;        /* 深咖灰 */
-    --muted: #8a8377;       /* 灰褐 */
+    /* 莫兰迪色板 (低饱和灰调)
+       ★2026-09-07 Chao: "底色再暗一点，太凉了" → 整体降明度 + 加暖。
+       原 bg #e8e4dd / card #f2efe9 偏冷灰且过亮；现往赭土暖调压一档，
+       仍保持莫兰迪低饱和(不是深色主题)，文字对比度同步加深保证可读。 */
+    --bg: #ddd6ca;          /* 暖赭灰(原 #e8e4dd，压暗+加暖) */
+    --card: #eae4d9;        /* 暖米白(原 #f2efe9) */
+    --card2: #dcd4c6;       /* 浅陶土(原 #e3ddd3) */
+    --border: #c2b8a6;      /* 灰褐边(原 #cdc6ba，随底色加深) */
+    --text: #423d34;        /* 深咖灰(原 #4a463f，略加深保对比) */
+    --muted: #7d7568;       /* 灰褐(原 #8a8377) */
     --sage: #9aab97;        /* 鼠尾草绿(正常) */
     --sage-bg: #dfe6dc;
     --clay: #c08a7d;        /* 陶土红(危险) */
