@@ -746,3 +746,83 @@ AGENTS.md 的 Cron 段仍描述旧版日报口径，需 Chao 授权后补写。
       在此之前每次容器重建都会重演。
       ⇒ 现在**同一个钩子应顺带覆盖任何 apt 依赖的复检**，不要只挂 tesseract 一个。
 - [ ] 承接 9/2：黄金 Premium（印度/中国）断更，等 Chao 定时间。
+
+## 2026-09-07
+
+### 决策
+
+- Chao 报「两个板块空白」后，我给出甲（补 fetcher 止血）/ 乙（cron 改调 `build_dashboard.py` 治本）/
+  丙（甲+门禁）三选项，**Chao 选乙**，随后追加「同意」批准完整执行计划。
+- Chao 后续指令「**1 and 2 顺序做**」：先做乙方案（cron 治本），再查「全量名录为什么没有全部言论」。
+- 配色：Chao 说 dashboard 底色「太凉了」→ 往暖 + 暗一档调整，但**不切深色主题**，
+  且改动前必须先验对比度不倒退。
+
+### 事实与配置
+
+- ★**病根：同一份采集清单两处维护。** 每日 cron 不走 `build_dashboard.py`，而是在 prompt 里
+  内联一条手写调用 40+ fetcher 的巨型命令。机械集合对比（不是肉眼扫）结果：
+  - cron 调 38 个 fetcher，`build_dashboard.py` 调 40 个，**cron 是 builder 的真子集**；
+  - cron 独缺 `fetch_china_liquidity` / `fetch_cb_liquidity_swaps` → `generate()` 收到 `None`
+    → 线上渲染成「数据未就绪」空状态（`class="tf-none"`），而**数据层从来没坏**
+    （实测 OMO 551 点 / DR007 545 点 / 两融 552 点到 09-07；货币互换 60 笔到 09-02）。
+  - 旁证漂移：cron 里参数名 `swaps=` 已被 BIS 黄金掉期占用，央行货币互换压根没进参数表。
+  - 与 AGENTS.md 里「prompt 硬编码 88 个 KOL 导致新增漏抓」是**同一病根的第二个实例**。
+- ★**那条「不能改用 build_dashboard.py 否则丢 AI 短评」的警告是错的（实测推翻）。**
+  用 `data/ai_analysis_<date>.json` 里的真实文本做指纹逐条比对旧/新产物：
+
+  | | 旧产物（cron 内联版） | 新产物（builder 版） |
+  |---|---|---|
+  | reads | **0 条命中** | 14/14 |
+  | notes | **0 条命中** | 20/20 |
+  | conclusions | **0 条命中** | 3/3 |
+
+  ⇒ 旧 cron 路径**从来就没把 AI 短评渲染进页面**，警告保护的东西不存在。
+  补齐只需读已落盘 JSON 的 `reads`/`notes`/`conclusions` 三个字段，**不调 LLM、不联网**。
+- ★**TIPS 混进名义券拍卖曲线（真数据错误，非显示问题）**。对着 Chao 截图核数发现两条异常：
+  10Y `2026-07-23` 规模 21.0B / 收益率 2.438%；30Y `2026-02-19` 规模 9.0B / 收益率 2.473%
+  —— 规模腰斩、收益率只有邻月一半。**没有凭数值猜**，回财政部官方 API 拉全字段拿到铁证：
+  官方有专用标识字段 **`inflation_index_security: Yes/No`**。TIPS 的 `security_type` 也是 Note、
+  `security_term` 也是 10-Year，所以原来靠这两个字段的过滤拦不住。
+  修复点 `src/external_data.py:2154`，改用 `inflation_index_security` 精确过滤。
+  TIPS 报的是**实际收益率（扣通胀）**，与名义券不是一个口径，混在一起会误读需求强弱。
+- ★**验证陷阱：第一版校验脚本定位到了 CSS 区而不是数据区**，得出「抽到 0 个收益率 → 干净」的
+  假通过。重新定位到真数据区（244 个实例）才算数：24 个收益率全部落在 3.965~5.216 名义券区间。
+  ⇒ 校验产物前必须先确认自己抓的是渲染出的内容区，不是样式定义区。
+- **配色改动**（`dashboard.py` 莫兰迪色板）：`--bg` `#e8e4dd`→`#ddd6ca`（明度 −13%）、
+  `--card` `#f2efe9`→`#eae4d9`（−10%）、`--border` `#cdc6ba`→`#c2b8a6`、`--text` `#4a463f`→`#423d34`。
+  WCAG 对比度四项不降反升，次要文字 on 底色 **2.96（原本不达标）→ 3.15（达标）**。
+- **「#5 缺号」是布局错觉不是丢人**：`#5 Stewart Thomson`（Graceland Updates）在册且档案完整，
+  三列瀑布流按列填充导致横扫时像跳号。页面共 130 个编号、范围 1→140，缺的 130-139 是编号排到 140
+  而实际 130 人。
+- ★**「全量名录没有全部言论」根因 = 渲染层只取 1 条，数据是全的**：
+  - `data/kol/backfill/`：131 个文件、**128 人有 `history`、共 653 条言论**（今日复核一致），
+    最多 Alex Kuptsikevich 22 条 / Jim Curry 14 条 / Luke Gromen 11 条；
+  - `data/kol_profiles.json`（名录卡片数据源）：每人只有 **`quote_2026` 单字符串** = 1 条；
+  - `dashboard.py:3222` `_row("2026 代表言论", p.get("quote_2026"))` 写死取一条；
+  - 653 条历史**已经加载进页面 payload**（`kol_history_json`），只是没接到名录卡片上。
+  - 附带教训：我最初统计报「131 位全 0 条」是**读错字段**（找 `items/quotes/opinions`，
+    实际字段名是 `history`）—— 统计前先 dump 真实结构再下结论。
+
+### 进展
+
+- `11e0bd2` style(dashboard)：底色调暗加暖 + 用 `build_dashboard.py` 重建顺带补回两个空板块
+  （央行货币互换：本周 1.01 亿 / 峰值 4.80 亿 / 101 笔；中国流动性：日期轴到 09-07）。
+- `475806e` fix(auctions)：TIPS 过滤，两条脏数据清除，7 个期限各补回真实的第 4 次名义券拍卖。
+- `04d70b6` refactor(cron)：乙方案落地。
+  - `build_dashboard.py` 新增 `latest_ai_analysis()`（纯读 JSON，缺文件 LOUD 警告后继续）；
+  - `dash.generate()` 改成**先构造 `gen_kwargs` dict 再展开**，门禁才拿得到实际传参；
+  - 新增门禁 `assert_no_missing_kwargs()`：`generate()` 形参 vs 实际传参自动比对，
+    实跑输出「✅ 全部 49 个数据形参均已传入」，缺参数会 LOUD 报错；
+  - cron prompt 从 **17,371 → 14,705 字符**，删掉那条过时警告与「新增参数必须同步加到这里」的铁律；
+  - 旧 `jobs.json` 已备份 `.bak_ecovol_0907_184235`，job 校验完好（enabled / 周一至周五 11:00）。
+- 零回归验证通过：23 个板块锚点全存活、空状态标记 0→0、日期数 24,216→24,215、SVG 图元持平。
+- 三次 push 均核对 local == remote，线上 https://curarpikt0000.github.io/Eco-and-Volatility-Checker/ 已更新。
+
+### 待办
+
+- [ ] **任务 2 未完成**：把 653 条历史言论接进全量名录卡片（当前每人仍只显示 `quote_2026` 一条）。
+      数据已在 payload 里，缺的是 `dashboard.py:3222` 附近的渲染接线。
+- [ ] **明天（9/8）11:00 是新 cron 路径第一次自动跑**，需验证：两个原空板块是否仍有数据、
+      AI 短评是否首次出现在页面、门禁是否打印「全部形参均已传入」。
+- [ ] 承接 9/4：tesseract 持久化仍未落地（需 Chao 点头动 devpod 配置）。
+- [ ] 承接 9/2：黄金 Premium（印度/中国）断更，等 Chao 定时间。
