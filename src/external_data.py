@@ -2143,6 +2143,16 @@ def fetch_treasury_auctions(history_days=420):
     future = defaultdict(list)   # term → 未来(auction_date>=today 且未开标)
     for x in rows:
         st, term, ad = x.get("security_type"), x.get("security_term"), x.get("auction_date")
+        # ★2026-09-07 修: 剔除 TIPS(通胀保值债券)。
+        #   TIPS 的 security_type 同样是 Note/Bond、security_term 同样是 10-Year/30-Year,
+        #   靠这两个字段过不掉。但它报的是**实际收益率**(扣通胀)且发行规模小得多,
+        #   混进来会污染名义券曲线 —— 实测两条脏数据:
+        #     10-Year 2026-07-23  规模 21.0B  收益率 2.438%  (邻月名义券 42.0B / 4.68%)
+        #     30-Year 2026-02-19  规模  9.0B  收益率 2.473%  (邻月名义券 25.0B / 5.22%)
+        #   官方 API 有专用标识字段 inflation_index_security = Yes/No, 用它精确过滤
+        #   (旁证: TIPS 行才有 cpi_base_reference_period / index_ratio_on_issue_date)。
+        if str(x.get("inflation_index_security") or "").strip().lower() in ("yes", "y", "true"):
+            continue
         if st not in ("Note", "Bond") or term not in AUCTION_KEY_TERMS or not ad:
             continue
         d = datetime.date.fromisoformat(ad)
