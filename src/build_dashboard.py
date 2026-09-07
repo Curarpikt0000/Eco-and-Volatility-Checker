@@ -33,6 +33,79 @@ def latest_snapshot():
     return json.load(open(snaps[-1])), snaps[-1]
 
 
+def latest_ai_analysis(snap_date=None):
+    """读 data/ai_analysis_<date>.json → (reads, conclusions, notes)。
+
+    ★2026-09-07 新增。背景：每日 cron 原先不走本脚本，而是在 prompt 里内联一条
+    调 40+ fetcher 的手写巨型命令，理由写在 cron prompt 里：
+        「★不能改用 build_dashboard.py: 它不读 data/ai_analysis_*.json，会丢每日 AI 短评」
+    实测这三个参数（ai_reads / ai_conclusions / daily_notes）全部来自**已经落盘的**
+    ai_analysis_<date>.json（键: reads / notes / conclusions），纯读文件、不调 LLM、不联网。
+    补上这十几行后该理由即不成立，cron 可以改调本脚本，从而消灭「两处维护 fetcher 清单」
+    这个静默失败源（曾导致 fetch_china_liquidity / fetch_cb_liquidity_swaps 漏登记，
+    两个板块在线上静默显示「数据未就绪」而数据层完全正常）。
+
+    找不到当天文件时**不静默**：打印 LOUD 警告并返回空，由 dashboard.generate()
+    内部的 _rule_conclusions() 规则兜底（该兜底本来就存在）。
+    """
+    base = os.path.join(os.path.dirname(__file__), "..", "data")
+    path = None
+    if snap_date:
+        cand = os.path.join(base, "ai_analysis_%s.json" % snap_date)
+        if os.path.exists(cand):
+            path = cand
+    if not path:
+        files = sorted(glob.glob(os.path.join(base, "ai_analysis_*.json")))
+        if files:
+            path = files[-1]
+    if not path:
+        print("[dashboard] ⚠️⚠️ 未找到任何 ai_analysis_*.json —— AI 短评/结论将走规则兜底")
+        return {}, None, {}
+    try:
+        ai = json.load(open(path))
+    except Exception as e:
+        print("[dashboard] ⚠️⚠️ ai_analysis 解析失败(%s): %s —— 走规则兜底" % (path, e))
+        return {}, None, {}
+
+    fname = os.path.basename(path)
+    if snap_date and snap_date not in fname:
+        # 日期对不上要说出来，否则会拿昨天的短评配今天的数据而无人察觉
+        print("[dashboard] ⚠️ AI 短评日期不匹配: 快照=%s 但只有 %s" % (snap_date, fname))
+    else:
+        print("[dashboard] AI 短评: %s (reads=%d notes=%d conclusions=%s)" % (
+            fname, len(ai.get("reads") or {}), len(ai.get("notes") or {}),
+            "有" if ai.get("conclusions") else "无"))
+    return ai.get("reads") or {}, ai.get("conclusions"), ai.get("notes") or {}
+
+
+def assert_no_missing_kwargs(passed_kwargs):
+    """★2026-09-07 门禁: generate() 形参 vs 本脚本实际传参, 缺了就 LOUD 报警。
+
+    为什么需要这道门禁 —— 本项目已经因为「加了新板块但采集侧漏登记」栽过两次:
+      · fetch_china_liquidity / fetch_cb_liquidity_swaps 漏进每日 cron 的 fetcher 清单
+        → 线上两个板块长期显示「数据未就绪」, 而数据层完全正常, 靠 Chao 肉眼发现。
+      · 更早一次: cron prompt 硬编码「88 个 KOL」, 名册新增的人被静默漏抓。
+    共同病根: 清单靠人手维护, 漏了没有任何信号。
+    把「有没有漏」变成开机自检, 比写进文档可靠 —— 文档不会在漏的时候喊。
+
+    注意只**警告不中断**: 有些形参(snap/checks/hit/gstats/overall)是位置参数,
+    另一些是可选的; 目的是让漏登记立刻可见, 而不是让 dashboard 生不出来。
+    """
+    import inspect
+    sig = inspect.signature(dash.generate)
+    positional = {"snap", "checks", "hit", "gstats", "overall"}
+    all_params = set(sig.parameters) - positional
+    missing = sorted(all_params - set(passed_kwargs))
+    if missing:
+        print("[dashboard] ⚠️⚠️ 门禁: generate() 有 %d 个形参本脚本没传 —— "
+              "若其中有真实数据板块, 它会静默渲染成空白:" % len(missing))
+        for m in missing:
+            print("    · %s" % m)
+    else:
+        print("[dashboard] ✅ 门禁: generate() 全部 %d 个数据形参均已传入" % len(all_params))
+    return missing
+
+
 def history_getter_factory(snap_dir):
     def getter(key, days=21):
         return dash.load_history(snap_dir, key, days=days)
@@ -43,6 +116,10 @@ def main():
     snap, path = latest_snapshot()
     snap_dir = os.path.dirname(path)
     print(f"[dashboard] 用快照 {os.path.basename(path)} (date={snap['date']})")
+
+    # ★2026-09-07: 读当天 AI 短评/结论(纯读已落盘 JSON, 不调 LLM)。
+    # 这是 cron 能从「手写 40+ fetcher 巨型命令」改调本脚本的前提。
+    ai_reads, ai_conclusions, daily_notes = latest_ai_analysis(snap.get("date"))
 
     results = snap["results"]
     cot = snap.get("cot", {})
@@ -515,8 +592,12 @@ def main():
     except Exception as e:
         print(f"[dashboard] OFR 写 Notion 跳过: {e}")
 
-    out = dash.generate(
-        snap, checks, hit, gstats, overall,
+    # ★2026-09-07: 改成先建 kwargs dict 再展开传入 —— 这样门禁 assert_no_missing_kwargs()
+    # 能拿到「本脚本实际传了哪些」并与 generate() 形参表逐一比对。
+    # 直接写成 dash.generate(a=a, b=b, ...) 的话, 漏传哪个从外部看不出来。
+    gen_kwargs = dict(
+        # AI 短评/结论/一句话点评(读已落盘的 ai_analysis_<date>.json)
+        ai_reads=ai_reads, ai_conclusions=ai_conclusions, daily_notes=daily_notes,
         holdings=holdings, kol_changes=kol_changes,
         kol_views=kol_views,
         kol_history=kol_history,
@@ -559,6 +640,8 @@ def main():
         cb_swaps=cb_swaps,
         fiscal_budget=fiscal_budget,
     )
+    assert_no_missing_kwargs(gen_kwargs)
+    out = dash.generate(snap, checks, hit, gstats, overall, **gen_kwargs)
     print(f"[dashboard] 生成: {out}")
     return out
 
