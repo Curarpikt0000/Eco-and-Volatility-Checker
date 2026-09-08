@@ -86,6 +86,27 @@ Notion 3 时序 DB → 莫兰迪配色 dashboard（雷达图 + 仪表盘 + 6 部
     `kol_weekly_views()/kol_stance_changes_grouped()` 读的是每日快照，**两者都不看名册**。
     移出人后若不在 dashboard 渲染层按名册过滤，会出现「卡片没了但历史仍内嵌在 payload」或
     「卡片还在但点开空白」。已在 `_kol_history_payload` / `_kol_views_html` / `_kol_changes_html` 三处加过滤。
+- ★★**四方一致性对账（Chao 2026-09-08 要求「类似这样的事情一定要避免」）**：
+  `tools/kol_consistency_audit.py` 机械比对 **Notion(SSOT) ↔ 本地名册 ↔ dashboard 卡片 ↔ cron 实抓**
+  四层，任何一层与 SSOT 有出入即 `exit 1`（可作 cron 门禁）。
+  判据全部取自**实际产物**（Notion API / registry.json / docs/index.html 里的 `kp-nm` / kol_independent.json），
+  不看任何状态标签。已挂进每日 cron 步骤 0 之后。
+  - **起因**：Chao 在 Notion 删了「Goldman Sachs」（机构非自然人），dashboard 卡片却还在，
+    同步工具报「移出 0」。**根因是 8/22 那次匹配修复没修彻底** —— 当时为 Nomi Prins 加了
+    「单方向 + 取最短」，但没排除「本地名本身就是纯机构名」：本地 `Goldman Sachs`
+    规范化成 `goldmansachs`，确实是 Notion 里
+    「Lina Thomas（Goldman Sachs Research…）」「Nomi Prins（…前 Goldman Sachs MD）」的子串
+    → 被当成 Lina Thomas 的本地对应而保留。
+  - **修法**：`is_pure_institution()` —— 无「人名（机构）」括号结构 + 命中机构词表 者
+    **不参与模糊匹配，只允许精确匹配**。见 `tools/sync_kol_from_notion.py`。
+  - **附带发现**：`Lina Thomas` 一直被那条机构记录顶掉，**Notion 有她本地却从没建过条目
+    ＝ 从未被抓过**。同类 bug 不只多显示一个机构，还会**吞掉真人 KOL**。
+  - **教训**：同一个匹配坑修过一次不等于修完了 —— 换个主角就会再犯。
+    **靠人眼发现「名单里多了个不该有的」不可接受，必须有机械对账**。
+- ★**检索词质量（2026-09-08 实测，属优化项非 bug）**：新建条目的 `search_terms` 会直接取
+  Notion 全名（含机构后缀长串）。实测长串**仍能搜到结果**（搜索引擎容错），
+  但命中质量差于纯人名（长串出泛结果，纯人名直接命中维基/本人主页）。目前 24 人如此。
+  **不要据此断言「他们搜不到所以没历史」** —— 我曾这样推断，实测被推翻。
 - ★★**项目边界(Chao 2026-08-22 裁定)**：**玄学 / 术数 / 占星 / 通灵 / 末日预言类不属本项目**
   （易经 / 六爻 / 奇门遁甲 / 八字 / 金融占星 / 圣经周期择时）→ 归 **Forecast-Checker** 项目
   （见 `~/Projects/Forecast-Checker/AGENTS.md`，其源文件为 `data/batch_esoteric_finance.json`，

@@ -90,6 +90,42 @@ def slugify(s):
     return t or re.sub(r"\W+", "", s)[:24]
 
 
+# ★2026-09-08(Chao 报「Goldman Sachs 是机构不是 KOL, 我在 Notion 取消了但
+#   dashboard 还在」): 8/22 为 Nomi Prins 修的模糊匹配坑, 换个主角又踩了一次。
+#
+#   当时的修法是「模糊只认 本地名 ⊂ Notion 名 单方向 + 取最短候选」, 方向没错,
+#   但漏了一类: **本地名本身就是纯机构名**。Notion 里有
+#       「Lina Thomas（Goldman Sachs Research 高级大宗商品分析师…）」
+#       「Nomi Prins（… 前 Goldman Sachs MD）」
+#   本地那条纯机构条目「Goldman Sachs」规范化后是 goldmansachs, 确实是这两个长串
+#   的子串 → 被判定为「Lina Thomas 那行的本地对应」而保留, 于是 Notion 明明删了,
+#   本地却报「移出 0」, 卡片继续留在 dashboard 上。
+#
+#   正解: 纯机构名不参与模糊匹配, 只允许精确匹配。判据 = 无「人名（机构）」结构
+#   且命中机构词表 —— 真人条目要么带括号后缀, 要么不含这些词。
+_INST_WORDS = (
+    "sachs", "stanley", "citi", "ubs", "jpmorgan", "j p morgan", "barclays",
+    "nomura", "hsbc", "deutsche", "santander", "bnp", "socgen", "wells fargo",
+    "bank of", "foundation", "institute", "research", "capital", "securities",
+    "asset management", "partners", "associates", "consulting", "group",
+)
+
+
+def is_pure_institution(name):
+    """本地条目是否为「纯机构名」(而非「人名（机构后缀）」)。
+
+    纯机构名不得参与模糊匹配, 否则会把 Notion 里任何带该机构后缀的真人行吃掉,
+    导致该机构条目被永久保留、Notion 侧的删除同步不过来。
+    """
+    n = (name or "").strip()
+    if not n:
+        return False
+    if "（" in n or "(" in n:      # 「人名（机构 …）」结构 → 是真人
+        return False
+    low = re.sub(r"[^a-z ]+", " ", n.lower())
+    return any(w in low for w in _INST_WORDS)
+
+
 def main(apply_it):
     notion = fetch_notion()
     reg = json.load(open(REG, encoding="utf-8"))
@@ -121,8 +157,11 @@ def main(apply_it):
         if name in exact:
             return exact[name]
         nk = norm(name)
+        # ★2026-09-08: 纯机构名(如「Goldman Sachs」)不参与模糊 —— 否则它会吃掉
+        #   Notion 里任何带该机构后缀的真人行, 使 Notion 侧的删除永远同步不过来。
         cands = [(lk, lv) for lk, lv in lmap.items()
-                 if lk not in used and len(lk) > 4 and lk in nk]
+                 if lk not in used and len(lk) > 4 and lk in nk
+                 and not is_pure_institution(lv.get("display_name", ""))]
         if not cands:
             return None
         lk, lv = min(cands, key=lambda x: len(x[0]))

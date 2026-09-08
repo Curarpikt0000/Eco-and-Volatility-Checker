@@ -136,25 +136,22 @@
       "_note": "由 Notion 同步新建; search_terms 仅含姓名, 可后续在本地补充别名"
     },
     {
-      "id": "goldman_sachs",
-      "display_name": "Goldman Sachs",
-      "notion_select_name": "Goldman Sachs",
-      "domain": "宏观货币与金融体系",
-      "sector": "宏观货币与金融体系",
-      "detail_sector": "宏观货币与金融体系",
-      "kol_or_ib": "KOL",
-      "institution": "Goldman Sachs Research 高级大宗商品分析师（senior commodities analyst），黄金/白银专家。长期发布黄金预测研报并接受 Goldman 官方播客 The Markets 访谈，观点视作 Goldman 贵金属研究团队官方向。",
-      "monitor_dimensions": "利润驱动型牛市分析、电力竞赛投资框架",
-      "notion_num": "12",
-      "_added": "2026-08-12 (from Notion KOL List DB sync to 88)",
+      "id": "lina_thomas_goldman_sachs_research",
+      "display_name": "Lina Thomas（Goldman Sachs Research 高级大宗商品分析师 / 黄金白银专家）",
+      "notion_select_name": "Lina Thomas（Goldman Sachs Research 高级大宗商品分析师 / 黄金白银专家）",
+      "domain": "贵金属与商品周期",
       "notion_domain": "贵金属与商品周期",
       "notion_list_num": "122",
+      "institution": "Goldman Sachs Research 高级大宗商品分析师（senior commodities analyst），黄金/白银专家。长期发布黄金预测研报并接受 Goldman 官方播客 The Markets 访谈，观点视作 Goldman 贵金属研究团队官方向。",
+      "bio": "Goldman Sachs Research 高级大宗商品分析师（senior commodities analyst），黄金/白银专家。长期发布黄金预测研报并接受 Goldman 官方播客 The Markets 访谈，观点视作 Goldman 贵金属研究团队官方向。",
       "focus": "黄金目标价与周期判断（央行购金需求、Fed 货币政策与 ETF 资金流）、投机多单集中引发的战术回调风险、白银跟随黄金走势。",
+      "search_terms": [
+        "Lina Thomas（Goldman Sachs Research 高级大宗商品分析师 / 黄金白银专家）"
+      ],
       "active": true,
+      "added_date": "2026-09-08",
       "_sot": "Notion KOL List (mirror)",
-      "youtube_channel_id": "UCyz6-taovlaOkPsPtK4KNEg",
-      "youtube_handle": "@GoldmanSachs",
-      "_yt_source": "probe+judge 2026-08-25 (parent-verified)"
+      "_note": "由 Notion 同步新建; search_terms 仅含姓名, 可后续在本地补充别名"
     },
     {
       "id": "andrew_maguire_kinesis_money",
