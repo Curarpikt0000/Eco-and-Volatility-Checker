@@ -2821,9 +2821,7 @@ def _comex_firms_top10_html(cf):
         f'同一家常同时有 C 与 H 两笔（如 Marex 同日 C 接 1 手、H 发 52 手）。'
         f'<b>读榜时应优先看 H 占比高的机构</b>——那才是机构在用自己的钱表态。'
         f'<span class="tf-ou">?</span> = 账户类型未知：'
-        f'{cov.get("notion_days","?")} 天的 Notion 增量段原始记录中<b>没有 ORG 字段</b>，'
-        f'如实标注为未知，<b>绝不臆测归到 C 或 H</b>（archive PDF 段 '
-        f'{cov.get("archive_days","?")} 天有精确 C/H）。<br>'
+        f'{_ch_gap_text(cf)}<br>'
         f'<b>排名口径</b>：按该窗口内<b>累计总量</b>排（非净额）——净额会让大进大出的做市商掉榜，'
         f'不符合「谁交货最多」的直觉。同一家可同时进两个榜（既发又接属正常做市行为）。<br>'
         f'<b>怎么用</b>：某家<b>持续霸榜接货方</b>＝在囤实物（看涨/逼空）；'
@@ -2834,6 +2832,69 @@ def _comex_firms_top10_html(cf):
         f'短窗口内榜单为空属真实情况，不用其它窗口数字填充。</div>'
         f'{_comex_firms_who_html()}'
         f'</div>')
+
+
+def _ch_gap_summary(cf=None):
+    """从**原始 json 文件**实算「哪些日期没有 C/H 拆分」，供说明文字动态生成。
+
+    ★2026-09-08(Chao 问「你不是已经有了 c h 了么，看看还有必要吗」): 页面上原本写死
+    「{notion_days} 天的 Notion 增量段原始记录中没有 ORG 字段」——**这句话已经过时**。
+    实测: archive 段(≤archive_end) 缺 0 天; Notion 段的缺口全部止于 2026-08-19,
+    因为上游 cme_delivery_parser 在 8/21 改为输出「Advantage(C)发5」格式后, 解析器的
+    兼容逻辑就一直正常工作(实测 8/26、8/28、9/02 的 i_c/s_c/i_h/s_h 都在)。
+    写死 notion_days 会把「早就修好的历史缺口」说成「整段都没有」, 与今天上午黄金
+    premium 那个假「每日更新」标签是同一类病: **说明文字与真实状态脱节**。
+
+    ★★踩坑(同日): 第一版传 fetch_comex_issue_stop_firms() 的返回值进来, 结果渲染出
+    「all ~ w 区间内 Gold 4 天」这种垃圾 —— 因为**那个返回值的 metals 已经是按窗口
+    聚合过的**(键是 d/w/m/all), 不是逐日原始数据。逐日只存在于 json 文件里。
+    故本函数直接读文件, 不接受聚合后的入参。
+
+    返回 dict: {metal: {"n": 缺失天数, "first": 最早, "last": 最晚}}，无缺失则不含该 metal。
+    """
+    import os as _os
+    p = _os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))),
+                      "data", "comex_issue_stop_firms.json")
+    try:
+        with open(p, encoding="utf-8") as f:
+            raw = json.load(f)
+    except Exception:
+        return {}
+    out = {}
+    for metal, days in (raw.get("metals") or {}).items():
+        if not isinstance(days, dict):
+            continue
+        miss = []
+        for d in sorted(days):
+            # 只认 YYYY-MM-DD 形式的键，跳过任何聚合键
+            if not (len(d) == 10 and d[4] == "-" and d[7] == "-"):
+                continue
+            firms = days[d]
+            if not isinstance(firms, dict):
+                continue
+            has_ch = any(
+                ("i_c" in v or "s_c" in v or "i_h" in v or "s_h" in v)
+                for v in firms.values() if isinstance(v, dict))
+            if not has_ch:
+                miss.append(d)
+        if miss:
+            out[metal] = {"n": len(miss), "first": miss[0], "last": miss[-1]}
+    return out
+
+
+def _ch_gap_text(cf=None):
+    """把 _ch_gap_summary 渲染成一句诚实的中文说明。"""
+    gaps = _ch_gap_summary()
+    if not gaps:
+        return "目前<b>所有交割日均带精确 C/H</b>，无未知账户类型。"
+    # 合并三金属的整体范围
+    first = min(g["first"] for g in gaps.values())
+    last = max(g["last"] for g in gaps.values())
+    per = "、".join("%s %d 天" % (m, g["n"]) for m, g in gaps.items())
+    return (f'<b>{_esc(first)} ~ {_esc(last)}</b> 区间内有部分交割日缺账户类型'
+            f'（{_esc(per)}）——那段时期上游 Notion 增量记录尚未带出 CME 的 ORG 列，'
+            f'如实标注为未知，<b>绝不臆测归到 C 或 H</b>；'
+            f'<b>{_esc(last)} 之后已恢复精确 C/H</b>，archive PDF 段全程精确。')
 
 
 def _comex_firms_who_html():
