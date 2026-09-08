@@ -2313,7 +2313,14 @@ def _gold_premium_html(gp):
         f'<div class="cust-wrap">'
         f'<div class="cust-chart-col cust-chart-full">'
         f'<div class="cust-chart-title">印度 &amp; 中国黄金 Domestic Premium/Discount (US$/oz)'
-        f'<span class="chart-freq freq-d">🟢 每日 · World Gold Council goldhub</span></div>'
+        # ★2026-09-08 修(Chao 报「这张图没有每日更新啊」): 原标「🟢 每日」是**错的承诺**。
+        #   WGC 官方方法论 PDF 原文: "We publish the data monthly, but the file contains
+        #   daily data" / "Indian premium/discount data is calculated and reported weekly"
+        #   —— 源头就是周更/月更, 只是文件内装日频序列。标成「每日」等于向读者承诺了
+        #   数据源根本不提供的频率。改标官方真实口径 + 挂 weekly 档滞后徽章,
+        #   断更时读者一眼可见(实测本次已断 25 天: 数据停 08-14, 今日 09-08)。
+        f'<span class="chart-freq freq-w">🟡 周更/月更（WGC 官方口径）· World Gold Council goldhub</span>'
+        f'{_stale_badge(gp.get("as_of", ""), "weekly", "黄金 premium")}</div>'
         f'{svg}'
         f'<div class="oil-meta">最新（{_esc(gp.get("as_of",""))}）：'
         f'印度 <b>{ind["latest"] if ind else "-"}</b> US$/oz（{ind_state}）　'
@@ -7678,7 +7685,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title" id="sec-gold-exports"><span class="part-num">＋</span>美国黄金出口 · Nonmonetary Gold Exports (各国黄金运回家·去美元化实物信号·2026Q1暴涨4.9×)<span class="freq-badge freq-quarterly">每季更新</span></div>
   <div class="card">{gold_exports}</div>
   <!-- ═══ 附三·十二B1：印度/中国黄金 domestic premium (WGC goldhub) ═══ -->
-  <div class="part-title" id="sec-gold-premium"><span class="part-num">＋</span>印度 &amp; 中国黄金 Domestic Premium/Discount (亚洲实物黄金需求风向标·WGC 真数据)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="part-title" id="sec-gold-premium"><span class="part-num">＋</span>印度 &amp; 中国黄金 Domestic Premium/Discount (亚洲实物黄金需求风向标·WGC 真数据)<span class="freq-badge freq-weekly">周更/月更</span></div>
   <div class="card">{gold_premium}</div>
   <!-- ═══ 附三·十二B1b：印度白银月度进口 (UN Comtrade) ═══ -->
   <div class="part-title" id="sec-silver-imports"><span class="part-num">＋</span>印度白银月度进口 · Silver Bullion Imports (全球最大白银进口国·实物需求风向标·UN Comtrade 免费月度)<span class="freq-badge freq-monthly">每月更新</span></div>

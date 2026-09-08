@@ -3597,6 +3597,59 @@ def fetch_silver_imports_data(json_path=None):
     return {"status": "未获取", "as_of": "", "note": "印度白银进口 JSON 未找到"}
 
 
+def _fetch_gold_premium_api():
+    """★2026-09-08 新增: 从 WGC 官方 API 抓 premium 增量。
+
+    背景(Chao 报「这张图没有每日更新啊」): 本指标原设计是**纯手工** ——
+    「用户从 goldhub 下 xlsx → 人工重跑 parse 脚本」, 从未自动化过, 结果停在
+    2026-08-14 断更 25 天, 页面却标着「每日更新」。
+
+    修复过程中试过并失败的路(勿重走): xlsx 直链 403 / 带 Referer 403 /
+    会话预热(cookie) 403 / ScraperAPI 5 种参数全 500 / playwright 真浏览器
+    页内 fetch 仍 403 —— 说明是 IP 段被 CDN 拉黑, 不是指纹问题。
+    自己猜的 API 路径(v13/charts/premium 等)全 404。
+
+    真正的解法是**从页面 HTML 里挖出真实端点**(而不是猜):
+        https://fsapi.gold.org/api/v11/charts/local-gold-price-premiums
+    该域名未被封(页面自己在用), 直连 200, 返回
+        chartData.india_premdisc / china_premdisc = [[epoch_ms, value], ...]
+        chartData.asOfDate
+    实测 260 点滚动窗口(近 1 年)、asOfDate=2026-09-04。
+
+    ★注意只有近 1 年 —— 所以调用方必须与既有 xlsx 历史**合并**而非覆盖,
+    否则会把印度 2012 起、中国 2003 起的长历史截断。
+    """
+    import urllib.request
+    import datetime as _dt
+    url = "https://fsapi.gold.org/api/v11/charts/local-gold-price-premiums"
+    req = urllib.request.Request(url, headers={
+        "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                       "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"),
+        "Accept": "application/json,*/*",
+        "Referer": "https://www.gold.org/goldhub/data/gold-premium",
+    })
+    with urllib.request.urlopen(req, timeout=60) as r:
+        if r.status != 200:
+            return None, None, None
+        payload = json.loads(r.read().decode("utf-8", "ignore"))
+    cd = payload.get("chartData") or {}
+
+    def _conv(rows):
+        out = []
+        for row in (rows or []):
+            if not isinstance(row, (list, tuple)) or len(row) < 2 or row[1] is None:
+                continue
+            ts = row[0]
+            try:
+                d = _dt.datetime.utcfromtimestamp(ts / 1000 if ts > 1e11 else ts).date()
+            except Exception:
+                continue
+            out.append({"date": d.isoformat(), "premium": round(float(row[1]), 4)})
+        return out
+
+    return _conv(cd.get("india_premdisc")), _conv(cd.get("china_premdisc")), cd.get("asOfDate")
+
+
 def fetch_gold_premium(india_path=None, china_path=None):
     """印度 + 中国黄金 domestic premium/discount (US$/oz, 日度)。
     源: World Gold Council goldhub (ICE Benchmark/MCX/RBI/NCDEX; Bloomberg/SGE)。
@@ -3624,6 +3677,51 @@ def fetch_gold_premium(india_path=None, china_path=None):
 
     ind = _load(india_path)
     chn = _load(china_path)
+
+    # ★2026-09-08: 先用官方 API 抓增量, 与本地 xlsx 历史合并。
+    #   API 只给近 1 年(260 点)滚动窗口, 本地 xlsx 有印度 2012 / 中国 2003 起长历史,
+    #   所以是 merge 而非 replace —— 覆盖会截断十几年历史。
+    #   同一天两边都有时**以 API 为准**(官方口径可能回溯修订, 如 2025-01 印度方法论重算)。
+    api_note = ""
+    try:
+        api_ind, api_chn, api_asof = _fetch_gold_premium_api()
+    except Exception as e:
+        api_ind = api_chn = api_asof = None
+        api_note = "API 增量失败(%s), 仅用本地历史" % type(e).__name__
+
+    def _merge(local, incoming):
+        """本地历史 + API 增量 → 按日期去重合并(API 优先), 返回 (dict, 是否有新增)。"""
+        if not incoming:
+            return local, 0
+        base = dict((p["date"], p["premium"]) for p in (local or {}).get("points", []))
+        before = len(base)
+        for p in incoming:
+            base[p["date"]] = p["premium"]        # API 覆盖同日旧值(官方修订优先)
+        pts = [{"date": d, "premium": v} for d, v in sorted(base.items())]
+        added = len(base) - before
+        out = dict(local or {})
+        out["status"] = "ok"
+        out["points"] = pts
+        out["as_of"] = pts[-1]["date"] if pts else out.get("as_of", "")
+        out["latest"] = pts[-1]["premium"] if pts else out.get("latest")
+        # ★同步 n —— 它是 xlsx 落盘时写的点数字段, 合并后若不更新会长期显示旧值,
+        #   造成「日志说 3801、实际 3816」这种自相矛盾的假象(2026-09-08 实测踩到)。
+        if "n" in out or pts:
+            out["n"] = len(pts)
+        return out, added
+
+    n_add = 0
+    if api_ind:
+        ind, a = _merge(ind, api_ind)
+        n_add += a
+    if api_chn:
+        chn, a = _merge(chn, api_chn)
+        n_add += a
+    if api_asof and n_add:
+        api_note = "API 增量 +%d 点 (官方 asOfDate=%s)" % (n_add, api_asof)
+    elif api_ind and not n_add:
+        api_note = "API 已是最新, 无新增点"
+
     if not ind and not chn:
         return {"status": "未获取", "as_of": "",
                 "note": "黄金 premium 数据未找到 (WGC xlsx 未解析?)"}
@@ -3632,6 +3730,7 @@ def fetch_gold_premium(india_path=None, china_path=None):
         "as_of": (ind or chn).get("as_of", ""),
         "india": ind,
         "china": chn,
+        "note": api_note,
     }
 
 
