@@ -463,6 +463,15 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
     overall_cls = {"🔴 减仓": "danger", "🟡 警戒": "warn", "🟢 平静": "calm"}.get(overall, "calm")
     generated = (datetime.datetime.utcnow() + datetime.timedelta(hours=9)).strftime("%Y-%m-%d %H:%M JST")
 
+    # ★2026-09-08: payload 只算一次, 同时给名录卡片一份「谁有多少条历史」索引,
+    #   让卡片能挂钻取并显示真实条数(而不是再算一遍或写死)。
+    _kol_hist_json = _kol_history_payload(kol_history)
+    try:
+        _kol_hist_index = {k: v.get("h") or []
+                           for k, v in json.loads(_kol_hist_json).items()}
+    except Exception:
+        _kol_hist_index = {}
+
     html = _TEMPLATE.format(
         date=date_str, generated=generated,
         overall=overall, overall_cls=overall_cls,
@@ -482,7 +491,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         cycle_kol="",  # ★2026-08-22 Chao: 玄学/术数派已迁往 Forecast-Checker,
                        # 技术分析派归回常规 KOL 板块, 本独立 section 停用(不再渲染)。
                        # _cycle_kol_html 保留未删, 便于日后需要时恢复。
-        kol_history_json=_kol_history_payload(kol_history),
+        kol_history_json=_kol_hist_json,
         liquidity=_liquidity_html(liquidity),
         cb_balance=_cb_balance_html(cb_balance),
         money_supply=_money_supply_html(money_supply),
@@ -510,7 +519,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         fiscal_budget=_fiscal_budget_html(fiscal_budget),
         bis_section=_bis_section_html(bis_latest, "https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/", bis_all),
         cb_swaps=_cb_swaps_html(cb_swaps),
-        kol_roster=_kol_roster_table_html(),
+        kol_roster=_kol_roster_table_html(_kol_hist_index),
         country_ust=_country_ust_html(country_ust),
         credit_impulse=_credit_impulse_html(credit_impulse),
         stress_panels=_stress_panels_html(stress_panels, ofr_fsi),
@@ -667,6 +676,53 @@ def _tg_str(v):
     if isinstance(v, (list, tuple)):
         return "、".join(str(x).strip() for x in v if str(x).strip())
     return str(v).strip()
+
+
+def _kol_payload_key(prof_name, payload_keys):
+    """★2026-09-08(Chao 问「全量名录怎么没有这个KOL的全部言论？」): 把名录卡片的
+    人名解析成 kol_history payload 的 key, 供卡片挂 kol-drill 钻取。
+
+    为什么需要解析而不能直接用: 名录卡片读 data/kol_profiles.json(125 人),
+    历史 payload 的 key 来自名册 registry(129 人) —— 同一个人两边写法不同:
+        卡片 Stanley Druckenmiller  ←→ 名册 S. Druckenmiller
+        卡片 Ken Griffin            ←→ 名册 Ken Griffin（Citadel 创始人 / CEO）
+        卡片 N. Gregory Mankiw      ←→ 名册 Greg Mankiw
+    实测 125 人里 115 直接命中、7 人属这类写法差异、3 个是机构非自然人
+    (Citi / UBS、Morgan Stanley、Foundation for the Study of Cycles)。
+    不解析的话那 7 人点开会是空白。
+
+    ★匹配方向沿用 AGENTS.md 记过的坑: 只认「主干相等 / 单方向包含 / 姓相同」,
+    不做双向模糊 —— 否则「Goldman Sachs」这类机构后缀会抢先吃掉别人的行。
+    """
+    if not prof_name:
+        return ""
+    if prof_name in payload_keys:
+        return prof_name
+
+    def _base(s):
+        s = re.sub(r'[（(].*', '', s or '')       # 去括号后缀
+        s = re.sub(r'\b[A-Z]\.\s*', '', s)        # 去中间名缩写
+        return re.sub(r'[^a-z]+', '', s.lower())
+
+    def _last(s):
+        s = re.sub(r'[（(].*', '', s or '').strip()
+        parts = [w for w in re.split(r'\s+', s) if len(w) > 1]
+        return parts[-1].lower() if parts else ''
+
+    pb, pl = _base(prof_name), _last(prof_name)
+    if not pb:
+        return ""
+    cands = []
+    for k in payload_keys:
+        kb, kl = _base(k), _last(k)
+        if pb == kb:
+            cands.append((0, len(k), k))
+        elif pb in kb or kb in pb:
+            cands.append((1, len(k), k))
+        elif pl and pl == kl and len(pl) > 3:
+            cands.append((2, len(k), k))
+    cands.sort()
+    return cands[0][2] if cands else ""
 
 
 def _kol_history_payload(kol_history):
@@ -3129,7 +3185,7 @@ def _cb_swaps_html(d):
         f'<tbody>{op_rows}</tbody></table>')
 
 
-def _kol_roster_table_html():
+def _kol_roster_table_html(hist_keys=None):
     """★2026-08-23(Chao): KOL 全量名录 —— 每人一张 Wiki 式档案卡, 放页面最底部备查。
 
     Chao 指定的 13 个维度(一个都不能少):
@@ -3231,12 +3287,27 @@ def _kol_roster_table_html():
             if not p:
                 body += ('<div class="kp-todo">档案待补 —— 名册已收录，'
                          '但尚未逐人检索撰写完整档案（不猜写）</div>')
+            # ★2026-09-08(Chao 问「全量名录怎么没有这个KOL的全部言论？」):
+            #   卡片原先只显示 quote_2026 这一条, 而 kol_history payload 里
+            #   平均每人有 27 条结构化言论(含 detail 论点/依据 + 来源链接),
+            #   一直躺在页面 payload 里没接上。此处挂 kol-drill:
+            #   点卡片 → 复用既有弹层按时间倒序看全部 N 条(含键盘可达性)。
+            #   data-kol 必须用 payload 的 key(见 _kol_payload_key: 两边写法不同)。
+            hk = _kol_payload_key(k.get("display_name") or "", hist_keys or ())
+            nh = len((hist_keys or {}).get(hk) or ()) if isinstance(hist_keys, dict) else 0
+            drill_cls, drill_attr, more = "", "", ""
+            if hk:
+                drill_cls = " kol-drill"
+                drill_attr = (f' data-kol="{_esc(hk)}" tabindex="0" role="button"'
+                              f' title="查看全部言论"')
+                more = (f'<div class="kp-more">查看全部'
+                        f'{f" {nh} 条" if nh else ""}言论 ›</div>')
             cards.append(
-                f'<div class="kp-card" style="border-left-color:{col}">'
+                f'<div class="kp-card{drill_cls}"{drill_attr} style="border-left-color:{col}">'
                 f'<div class="kp-hd"><span class="kp-num">#{num_txt}</span>'
                 f'<span class="kp-nm">{_esc(k.get("display_name") or "")}</span>'
                 f'{dead_tag}</div>'
-                f'{body}</div>')
+                f'{body}{more}</div>')
         blocks.append(
             f'<div class="kp-grp">'
             f'<div class="kp-gt" style="background:{col}">{_esc(d)}'
@@ -6833,6 +6904,11 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .cyc-link:hover {{ color:#4d4159; }}
   /* ── KOL 两层展开钻取(卡片 → 时间列表 → 单条详情) ── */
   .kol-drill {{ cursor: pointer; transition: box-shadow .15s, transform .15s; }}
+  /* ★2026-09-08: 名录卡片的「查看全部 N 条言论」入口 */
+  .kp-more {{ margin-top:8px; padding-top:7px; border-top:1px dashed var(--border);
+             font-size:11.5px; color:var(--dust-blue); font-weight:600;
+             opacity:.75; transition:opacity .15s; }}
+  .kp-card.kol-drill:hover .kp-more {{ opacity:1; }}
   .kol-drill:hover {{ box-shadow: 0 3px 12px rgba(0,0,0,.10); transform: translateY(-1px); }}
   .kol-drill:focus-visible {{ outline: 2px solid var(--dust-blue); outline-offset: 2px; }}
   .kol-more {{ font-size: 10px; color: var(--dust-blue); margin-top: 6px; opacity: .75; }}
