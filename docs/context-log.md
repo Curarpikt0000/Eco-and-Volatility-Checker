@@ -826,3 +826,92 @@ AGENTS.md 的 Cron 段仍描述旧版日报口径，需 Chao 授权后补写。
       AI 短评是否首次出现在页面、门禁是否打印「全部形参均已传入」。
 - [ ] 承接 9/4：tesseract 持久化仍未落地（需 Chao 点头动 devpod 配置）。
 - [ ] 承接 9/2：黄金 Premium（印度/中国）断更，等 Chao 定时间。
+
+## 2026-09-08
+
+### 决策
+
+- Chao 就「WGC 黄金 Premium 图没有每日更新」给三选项后拍板 **甲 + 乙**：
+  先改正撒谎的频率标签，再修浏览器工具走真浏览器下载。（丙＝自算溢价未采纳）
+- KOL 全量名录言论展示形态：Chao 选 **甲方案** —— 卡片保留 1 条代表言论 +「查看全部 N 条」
+  弹层钻取（复用既有 kol-drill 组件，改动最小），不内联多条撑爆名录页。
+- Chao 明确「**要查**」那 10 个 profiles↔registry 对不上的人（不是放着不管）。
+- Chao 对 Goldman Sachs 卡片残留的态度：「**类似这样的事情一定要避免**」→ 由此确立
+  四方一致性对账门禁（不再依赖人眼发现名单里多了不该有的）。
+
+### 事实与配置
+
+- ★**「每日更新」标签本身就是假的**（比断更更严重）。WGC 官方方法论 PDF 原文：
+  "We publish the data **monthly**, but the file contains daily data"、
+  "Indian premium/discount data is calculated and reported **weekly**"。
+  源头是周更/月更，只是文件内含日频序列。原设计注释自白「用户从 goldhub 下新 xlsx →
+  重跑 parse 脚本」＝**从来就是纯手工，从未自动化**，数据停在 8/14、断更 25 天。
+- ★**WGC 数据的可用通道只有一条**：官方图表端点
+  `https://fsapi.gold.org/api/v11/charts/local-gold-price-premiums`（从页面 HTML 里挖出来的，
+  页面自身在用所以未被封）。以下**全部失败，不要再试**：
+  xlsx 直链 `gold.org/download/file/11657/gold-premiums.xlsx` 直连/带 Referer/会话预热 cookie
+  → 403；ScraperAPI 5 种参数组合 → 500；playwright 真浏览器带完整 cookie → **仍 403**
+  （⇒ 不是指纹问题，是该 IP 段被 WGC CDN 拉黑，同 CBOE 一类）；自猜路径 → 全 404。
+  API 只给 260 点滚动窗口，故必须**与本地 xlsx 历史 merge 而非覆盖**，同日冲突以官方为准
+  （WGC 会回溯修订）。落盘 `data/gold_premium_{india,china}.json`。
+- ★**browser 工具坏了与 WGC 无关**：`/home/user/inspect.py`（7/22 调试 Google Slides 的
+  27 行临时脚本）**遮蔽了 Python 标准库 inspect**，daemon 从 home 启动即中招。
+  处置＝**改名归档不删别人的文件** → `/home/user/scratch-archive/inspect_slides_probe_20260722.py`。
+  解除后报错变成「Chrome 没跑」，而 playwright chromium 已装（项目 venv 里没有 playwright，
+  要用系统 python 跑）。
+- ★**KOL 名录「没有全部言论」＝渲染层只取 1 条，数据一直是全的**（复核后数字大幅上修）：
+  历史言论总量 **3,146 条 / 115 人，平均 27.4 条/人**（此前 9/7 记的 653 条只是
+  `data/kol/backfill/` 单一目录），最多 79 条；而卡片写死 `p.get("quote_2026")` 单条。
+  这些历史**每天都随页面 payload (`kol_history_json`) 下发**，只是没接线。
+  质量可用（每条含 日期/方向/一句话/detail 核心论点+关键依据/来源链接），正合三层结构要求。
+- ★**两份名单人名写法不一致**（新增 `_kol_payload_key()` 解决）：profiles(125) 用全名 /
+  registry(129) 带机构后缀或缩写 —— `Stanley Druckenmiller ←→ S. Druckenmiller`、
+  `Ken Griffin ←→ Ken Griffin（Citadel 创始人 / CEO）`、`N. Gregory Mankiw ←→ Greg Mankiw`。
+  匹配只认「主干相等 / 单方向包含 / 姓相同」，**不做双向模糊**（机构后缀会抢先吃掉别人的行）。
+  未挂上的 4 人（LaForge/Streible/Rogoff/Zulauf）实测 backfill 确实无历史，**非 bug**。
+- ★★**同一个匹配坑换个主角又踩一次**：8/22 为 Nomi Prins 加的「单方向 + 取最短」没排除
+  「本地名本身就是纯机构名」—— 本地 `Goldman Sachs` 规范化成 `goldmansachs`，确实是
+  Notion 里某条「人名（Goldman Sachs Research…）」的子串 → 被当成她的本地对应而保留，
+  同步工具报「移出 0」。修法＝`is_pure_institution()`（无「人名（机构）」括号结构 +
+  命中机构词表者只允许精确匹配）。**附带发现：被顶掉的那位真人 Notion 里有、本地从没建过条目
+  ＝ 从未被抓过** —— 这类 bug 不只多显示一个机构，还会吞掉真人 KOL。
+- ★**说明文字与真实状态脱节是一类系统性病**（当天连撞两例：假「每日更新」标签、
+  COMEX C/H 写死过时天数）。COMEX 实测：archive 段(1/06~6/05) 缺 0 天；Notion 段缺口
+  **全部止于 2026-08-19**（上游 8/21 改输出「Advantage(C)发5」格式后解析器兼容一直正常），
+  Gold 38 / Silver 37 / Platinum 9 天缺失全在 6/09~8/19。⇒ **回补没必要，撒谎的是文案**。
+  改为 `_ch_gap_summary()/_ch_gap_text()` 每次渲染从原始 json 实算。
+  踩坑：第一版传 `fetch_comex_issue_stop_firms()` 返回值渲染出垃圾 ——
+  **那个返回值的 metals 已按窗口聚合（键是 d/w/m/all），逐日数据只在 json 文件里**。
+- 9/8 的 cron 状态是 `delivery_failed` 而非失败/排队：`Telegram send failed: Timed out`，
+  **报告、dashboard、快照、git 提交全部完成，只有最后推送超时**。
+  ⇒ 判断 cron 跑没跑要看产物（报告字节数/落盘时间/commit），不看投递状态。
+- 9/7 那次 cron 治本改动**首次自动跑全部生效**：报告出现「门禁通过：49 个数据形参全部传入」、
+  两个曾空白板块「数据未就绪」= 0 处、AI 短评 reads/notes 全量渲染。
+
+### 进展
+
+- `b400deb` fix(gold-premium)：接 WGC 官方 fsapi 端点自动更新 + 修正假「每日更新」标签
+  （改「周更/月更(WGC 官方口径)」+ weekly 档滞后徽章，图内标签与 section part-title
+  **两处独立维护均已改**）。数据 8/14 → **9/04**；印度 3801→3816 点、中国 6083→6098 点，
+  两条序列起点未变（2012-01-24 / 2003-04-25）。
+- `f5a96cc` feat(kol-roster)：名录卡片接上全部言论钻取。129 张卡片 **125 张挂上**，
+  7 个写法差异全部解析正确、0 处错配；playwright 真浏览器实测点击
+  （名字含双引号的 Todd "Bubba" Horowitz 21 条 / Grantham 27 / Druckenmiller 34 /
+  Ken Griffin 10）全部正常打开、0 JS 报错。
+- `825d226` fix(kol)：`is_pure_institution()` + 新增 `tools/kol_consistency_audit.py`
+  四方对账（Notion SSOT ↔ 本地名册 ↔ dashboard 卡片 ↔ cron 实抓，全读实际产物，
+  有差异 exit 1），已挂进每日 cron 步骤 0b、差异写进日报数据健康度段。
+  清理 `kol_profiles.json` 里 4 个机构孤儿档案（125→121）；
+  移出 1 人留痕 `data/kol_removed_20260908.json`，**backfill 历史文件按铁律全部保留**。
+  对账实跑：名册 ✅ dashboard ✅ / cron 实抓 ❌（当天 11:00 跑在修复前，次日自动纠正）。
+- `f5805aa` fix(comex)：C/H 说明文字改为从数据实算。
+- 四次改动均零回归验证：23 个板块锚点全存活、空状态零增加。
+- 补发了 9/8 完整 12 模块日报（Telegram 超时那份），拆两条发出。
+
+### 待办
+
+- [ ] **验证四方对账门禁在 9/9 cron 自动跑后转全绿**（cron 实抓那一路当天是红的）。
+- [ ] 承接 9/4：tesseract 持久化仍未落地（需 Chao 点头动 devpod 配置）。
+      注：9/8 日报显示重装后川普 278-T 已从 annual_only 恢复逐笔，但重启仍会再丢。
+- [ ] 检索词质量优化（非 bug）：24 人的 `search_terms` 是 Notion 带机构后缀的长串，
+      能搜到但命中质量差于纯人名。
