@@ -12,10 +12,10 @@
     "note": "CBOE官方 EQUITY put/call 0.56 (ScraperAPI render抓官方页; Total put/call 0.84同页); 口径=equity, 低值偏乐观"
   },
   "insider": {
-    "value": 0.3,
-    "as_of": "2026-09-01",
+    "value": 0.26,
+    "as_of": "2026-08-31",
     "status": "ok",
-    "note": "GuruFocus insider buy/sell 0.3 (As of 2026-09-01; 低于历史中位0.34, 区间0.12-2.01; 内部人偏谨慎)"
+    "note": "GuruFocus insider buy/sell 0.26 (Aug 2026; 低于历史中位0.34, 区间0.12-2.01; 内部人偏谨慎, 较上月0.3继续下滑)"
   },
   "lei": {
     "value": 0.2,
@@ -42,10 +42,10 @@
     "note": "AAII bull 39.7%(+6.8) / bear 37.6%(-6.9) / neutral 22.7%(+0.1) (Wk of Sep 2); spread=+2.2(前周-11.5); bull七周来首次高于均值37.5%; bear连30周高于均值31.5%"
   },
   "margin_debt": {
-    "value": 1417.0,
-    "as_of": "2026-07-31",
+    "value": 1502.1,
+    "as_of": "2026-06-30",
     "status": "ok",
-    "note": "FINRA margin debt 7月$1,417.0B, 环比-5.7%(-$85B)为记录级最大单月降幅, 结束三连升; YoY +38.6%"
+    "note": "FINRA margin debt 6月$1,502.1B(官方最新, 7月数据未发布), 环比+6.1%(+$86.5B), 创历史新高; YoY +49.0%; 占GDP约4%超2021峰值(3.97%), 最伸展零售杠杆周期"
   },
   "bofa_fms_cash": {
     "value": 3.5,
