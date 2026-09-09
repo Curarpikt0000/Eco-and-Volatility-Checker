@@ -197,8 +197,37 @@ def main():
     try:
         import external_data as ed
         country_ust = ed.fetch_country_ust_holdings(years=10) or {}
+        _eu = country_ust.get("EU", {})
+        _cus = country_ust.get("EU_CUSTODY", {})
+        _real = country_ust.get("EU_REAL", {})
+        print(f"[dashboard] 分国别持美债: EU={_eu.get('status')} "
+              f"as_of={(_eu.get('latest') or ['—'])[0]} "
+              f"托管={(_cus.get('latest') or ['—','—'])[1]} "
+              f"真实需求={(_real.get('latest') or ['—','—'])[1]}")
     except Exception as e:
         print(f"[dashboard] 分国别持美债跳过: {e}")
+
+    # ★2026-09-09 新增: 全球「外国官方(央行) vs 外国私人」持有美债
+    #   (Chao: 「下面这个需要分央行和私人部门两个数据」)
+    tic_official_private = {}
+    try:
+        import external_data as ed
+        tic_official_private = ed.fetch_tic_official_vs_private() or {}
+        print(f"[dashboard] TIC官方vs私人: status={tic_official_private.get('status')} "
+              f"as_of={tic_official_private.get('latest_month')} "
+              f"官方占比={tic_official_private.get('share_latest')}%")
+    except Exception as e:
+        print(f"[dashboard] TIC官方vs私人跳过: {e}")
+
+    # ★2026-09-09 新增: 欧元区五国央行(德/意/荷/西/芬)各自资产负债表总资产
+    euro_ncb = {}
+    try:
+        import external_data as ed
+        euro_ncb = ed.fetch_euro_ncb_balance_sheets() or {}
+        _ok = [k for k, v in euro_ncb.items() if v.get("status") == "ok"]
+        print(f"[dashboard] 欧元区五国央行: {len(_ok)}/5 ok {_ok}")
+    except Exception as e:
+        print(f"[dashboard] 欧元区五国央行跳过: {e}")
 
     credit_impulse = {}
     try:
@@ -604,6 +633,8 @@ def main():
         liquidity=liquidity, cb_balance=cb_balance, custody=custody,
         auctions=auctions, money_supply=money_supply, m2_history=m2_history,
         country_ust=country_ust,
+        tic_official_private=tic_official_private,
+        euro_ncb=euro_ncb,
         credit_impulse=credit_impulse,
         custody_accel=custody_accel,
         stress_panels=stress_panels,

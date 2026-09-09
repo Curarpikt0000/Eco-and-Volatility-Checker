@@ -282,7 +282,8 @@ def threshold_text(ind):
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
-             country_ust=None, kol_views=None, credit_impulse=None, custody_accel=None,
+             country_ust=None, tic_official_private=None, euro_ncb=None,
+             kol_views=None, credit_impulse=None, custody_accel=None,
              stress_panels=None, ofr_fsi=None, maturing_treasury=None, bis_latest=None,
              bis_all=None, cb_swaps=None,
              oil_inventory=None, us_jp_yields=None, nikkei225=None, foreign_flow=None,
@@ -493,7 +494,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
                        # _cycle_kol_html 保留未删, 便于日后需要时恢复。
         kol_history_json=_kol_hist_json,
         liquidity=_liquidity_html(liquidity),
-        cb_balance=_cb_balance_html(cb_balance),
+        cb_balance=_cb_balance_html(cb_balance, euro_ncb),
         money_supply=_money_supply_html(money_supply),
         m2_history=_m2_history_html(m2_history),
         custody=_custody_html(custody),
@@ -520,7 +521,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         bis_section=_bis_section_html(bis_latest, "https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/", bis_all),
         cb_swaps=_cb_swaps_html(cb_swaps),
         kol_roster=_kol_roster_table_html(_kol_hist_index),
-        country_ust=_country_ust_html(country_ust),
+        country_ust=_country_ust_html(country_ust, tic_official_private),
         credit_impulse=_credit_impulse_html(credit_impulse),
         stress_panels=_stress_panels_html(stress_panels, ofr_fsi),
         basis_trade=_basis_trade_html(basis_trade),
@@ -3901,14 +3902,136 @@ def _oil_inventory_html(oil):
     )
 
 
-def _country_ust_html(cu):
-    """日本 / 中国 / 欧盟 分国别持有美债近10年折线(三图) + 2008 至今三国长历史图。cu: fetch_country_ust_holdings()。"""
+def _official_private_svg(off, priv, w=1050, h=230):
+    """全球「外国官方 vs 外国私人」持有美债双线图。off/priv: [(YYYY-MM, $B),...] 升序。"""
+    if not off or not priv or len(off) < 2:
+        return '<div class="cust-chart-na">数据未就绪</div>'
+    pad_l, pad_r, pad_t, pad_b = 58, 14, 16, 26
+    iw, ih = w - pad_l - pad_r, h - pad_t - pad_b
+    allv = [v for _, v in off] + [v for _, v in priv]
+    vmin, vmax = min(allv), max(allv)
+    span = (vmax - vmin) or 1.0
+    vmin -= span * 0.08
+    vmax += span * 0.08
+    span = vmax - vmin
+    n = len(off)
+
+    def path(pts, color):
+        d = []
+        for i, (_, v) in enumerate(pts):
+            x = pad_l + (iw * i / max(n - 1, 1))
+            y = pad_t + ih - ih * (v - vmin) / span
+            d.append(f'{"M" if i == 0 else "L"}{x:.1f},{y:.1f}')
+        return (f'<path d="{"".join(d)}" fill="none" stroke="{color}" '
+                f'stroke-width="2.1" stroke-linejoin="round"/>')
+
+    grid = []
+    for f in (0, .25, .5, .75, 1):
+        y = pad_t + ih - ih * f
+        val = vmin + span * f
+        grid.append(f'<line x1="{pad_l}" y1="{y:.1f}" x2="{w-pad_r}" y2="{y:.1f}" '
+                    f'stroke="#d8d0c3" stroke-width=".6" stroke-dasharray="2,3"/>')
+        grid.append(f'<text x="{pad_l-6}" y="{y+3.5:.1f}" text-anchor="end" '
+                    f'font-size="9.5" fill="#8a8377">{val:,.0f}</text>')
+    xl = []
+    for i in (0, n // 3, 2 * n // 3, n - 1):
+        if 0 <= i < n:
+            x = pad_l + (iw * i / max(n - 1, 1))
+            xl.append(f'<text x="{x:.1f}" y="{h-8}" text-anchor="middle" '
+                      f'font-size="9.5" fill="#8a8377">{off[i][0]}</text>')
+    return (f'<svg viewBox="0 0 {w} {h}" class="cu-svg" role="img">'
+            f'{"".join(grid)}{path(priv, "#8f9bb3")}{path(off, "#c08a7d")}'
+            f'{"".join(xl)}</svg>')
+
+
+def _official_private_block(op):
+    """全球 官方 vs 私人 持有美债。op: fetch_tic_official_vs_private()。
+
+    ★这是 TIC 唯一的央行/非央行拆分, **只有全球总量, 没有分国**——
+      Chao 2026-09-09 问「日本/美国央行和其他机构持有美债有没有区别」,
+      答案是有且巨大, 但分国拆分美国财政部不公布(见函数 docstring)。
+    """
+    if not op or op.get("status") != "ok":
+        st = (op or {}).get("status", "数据未就绪")
+        return (f'<div class="cu-op"><div class="cu-op-title">全球 · 外国官方 vs 外国私人</div>'
+                f'<div class="cust-chart-na">数据未就绪（{_esc(st)}）</div></div>')
+    o_last, p_last = op["official_latest"], op["private_latest"]
+    sh_f, sh_l = op["share_first"], op["share_latest"]
+    od, pd_ = op["official_delta"], op["private_delta"]
+    trend = "下降" if sh_l < sh_f else "上升"
+    return (
+        f'<div class="cu-op">'
+        f'<div class="cu-op-title">🏛 全球 · 外国<b>官方</b>(央行/主权基金) vs 外国<b>私人</b> 持有美债'
+        f'<span class="cu-op-sub">{_esc(op["first_month"])} → {_esc(op["latest_month"])} · $B · '
+        f'TIC 唯一的央行/非央行拆分</span></div>'
+        f'<div class="cu-op-kpis">'
+        f'<div class="cu-op-kpi"><span class="k-lab">官方(央行)</span>'
+        f'<span class="k-val" style="color:#c08a7d">{o_last:,.0f}B</span>'
+        f'<span class="k-dlt {"r" if od < 0 else "g"}">{od:+,.0f}B</span></div>'
+        f'<div class="cu-op-kpi"><span class="k-lab">私人</span>'
+        f'<span class="k-val" style="color:#8f9bb3">{p_last:,.0f}B</span>'
+        f'<span class="k-dlt {"r" if pd_ < 0 else "g"}">{pd_:+,.0f}B</span></div>'
+        f'<div class="cu-op-kpi"><span class="k-lab">官方占比</span>'
+        f'<span class="k-val">{sh_f:.1f}% → {sh_l:.1f}%</span>'
+        f'<span class="k-dlt {"r" if sh_l < sh_f else "g"}">{sh_l-sh_f:+.1f}pp</span></div>'
+        f'</div>'
+        f'{_official_private_svg(op["official"], op["private"])}'
+        f'<div class="cu-op-leg">'
+        f'<span><i style="background:#c08a7d"></i>外国官方（央行 / 主权财富基金）</span>'
+        f'<span><i style="background:#8f9bb3"></i>外国私人（银行 / 基金 / 保险 / 企业）</span>'
+        f'</div>'
+        f'<div class="cu-op-read"><b>怎么读：</b>官方占比从 {sh_f:.1f}% {trend}到 {sh_l:.1f}%'
+        f'（{sh_l-sh_f:+.1f}pp）—— 全球央行净{"减持" if od < 0 else "增持"} '
+        f'{abs(od):,.0f}B，私人净{"减持" if pd_ < 0 else "增持"} {abs(pd_):,.0f}B。'
+        f'<b>边际买家已从官方部门转向私人部门</b>，意味着美债需求对价格/利差更敏感、'
+        f'对储备管理政策的依赖下降。<b>注意：此拆分只有全球总量，'
+        f'TIC 的 113 个国家/地区中没有任何一国带官方/私人拆分</b>——'
+        f'「某国央行持有多少美债」美国财政部不公布，需看该国央行自己的资产负债表。</div>'
+        f'</div>'
+    )
+
+
+def _prov_line(d):
+    """单条序列的溯源行(Chao: 所有数据需可回溯源头 + 抓取路径)。"""
+    pv = (d or {}).get("provenance") or {}
+    if not pv:
+        return ""
+    mem = (d or {}).get("members") or []
+    mem_s = ("，成员：" + "、".join(mem)) if len(mem) > 1 else ""
+    return (
+        f'<div class="cu-prov-row"><span class="cu-prov-nm">{_esc((d or {}).get("flag",""))} '
+        f'{_esc((d or {}).get("name",""))}</span>'
+        f'<span class="cu-prov-body">'
+        f'当期：<a href="{_esc(pv.get("primary",""))}" target="_blank" rel="noopener">'
+        f'{_esc(pv.get("primary","").rsplit("/",1)[-1])}</a> '
+        f'（{_esc(pv.get("primary_desc",""))}）｜'
+        f'长历史：<a href="{_esc(pv.get("history",""))}" target="_blank" rel="noopener">'
+        f'{_esc(pv.get("history","").rsplit("/",1)[-1])}</a>｜'
+        f'取值列：<code>{_esc(pv.get("column",""))}</code>｜'
+        f'{_esc(pv.get("agg",""))}{_esc(mem_s)}'
+        f'</span></div>'
+    )
+
+
+def _country_ust_html(cu, official_private=None):
+    """日本 / 中国 / 欧元区(拆分) 持有美债 + 全球官方vs私人 + 2008长历史 + 溯源。
+
+    ★2026-09-09 重写(Chao 以国债交易员视角提的三条要求):
+      ① 欧盟不再拢成一个数 —— 拆「托管中心(比卢爱)」与「真实需求国(德法意荷西芬)」,
+         两组驱动逻辑相反: 前者是第三国资金借道 Euroclear/Clearstream,
+         后者才是欧洲机构的真实配置(美欧利差与对冲成本驱动)。
+         实测拆开后 真实需求 +139.4% > 托管 +96.1%, 这个结构差异在合计里被完全抹掉。
+      ② 新增全球「官方 vs 私人」——「分央行和私人部门两个数据」。
+      ③ 每条序列附溯源(URL/表名/列名/成员国)。
+    """
     _keys = ("Japan", "China", "EU")
+    _eu_split = ("EU_CUSTODY", "EU_REAL")
     if not cu or all(cu.get(k, {}).get("status") != "ok" for k in _keys):
         return '<p class="empty">日本 / 中国 / 欧盟 持有美债数据未就绪。</p>'
     src = next((cu[k].get("source") for k in _keys if cu.get(k, {}).get("status") == "ok"),
                "US Treasury TIC")
-    # 2008 长历史多国折线数据
+
+    # ── 2008 长历史多国折线 ──
     _long_colors = {"Japan": "#6b8fb5", "China": "#c0757d", "EU": "#7fa085"}
     long_series = {}
     for k in _keys:
@@ -3932,6 +4055,77 @@ def _country_ust_html(cu):
             f'{_country_ust_long_svg(long_series)}'
             f'</div>'
         )
+
+    # ── 欧元区拆分行 ──
+    eu_split_block = ""
+    if any(cu.get(k, {}).get("status") == "ok" for k in _eu_split):
+        cus, real = cu.get("EU_CUSTODY", {}), cu.get("EU_REAL", {})
+        ratio = ""
+        try:
+            tot = cus["latest"][1] + real["latest"][1]
+            ratio = (f'托管中心占欧元区合计 <b>{100*cus["latest"][1]/tot:.1f}%</b>，'
+                     f'真实需求国 <b>{100*real["latest"][1]/tot:.1f}%</b>')
+        except Exception:
+            ratio = ""
+        eu_split_block = (
+            f'<div class="cu-eusplit">'
+            f'<div class="cu-eusplit-title">🔍 欧元区拆分 · 托管中心 vs 真实需求国'
+            f'<span class="cu-eusplit-sub">同为 TIC 口径，但持有人性质完全不同 —— '
+            f'合计数会抹掉这个结构差异</span></div>'
+            f'<div class="cust-charts cust-charts-2">'
+            f'{_country_ust_col(cus)}'
+            f'{_country_ust_col(real)}'
+            f'</div>'
+            f'<div class="cu-eusplit-read"><b>交易员视角：</b>'
+            f'<b>托管中心</b>＝比利时(Euroclear)／卢森堡(Clearstream)／爱尔兰。'
+            f'卢森堡持仓约为其 GDP 的 <b>4.3 倍</b>，比利时约 <b>0.67 倍</b> —— '
+            f'经济体量根本撑不起这个规模，说明大部分是<b>第三国资金借道寄存</b>'
+            f'（2014 年比利时持仓暴涨被普遍认为是中国借道 Euroclear）。'
+            f'这一组的变化要与中国持仓<b>反向对读</b>：中国降、托管升，很可能是同一笔钱换了保管箱，'
+            f'而非真实抛售。<br>'
+            f'<b>真实需求国</b>＝德/法/意/荷/西/芬，持仓量级与经济体量匹配，'
+            f'反映欧洲保险／养老金／基金的<b>真实配置行为</b>，主要由美欧利差'
+            f'（10Y 美债 − 德债，扣汇率对冲成本后的净收益）驱动。'
+            f'{ratio}。<br>'
+            f'<b>⚠️ 与下方各国央行资产负债表不是包含关系：</b>这里统计的是所有外国持有人'
+            f'（保险／养老金／基金／企业），欧元区各国央行几乎不持有美债'
+            f'（实测德国央行「对非欧元区外币债权」仅 €0.004B，外汇储备已大部分上缴 ECB 统一管理）。'
+            f'</div></div>'
+        )
+
+    # ── 全球 官方 vs 私人 ──
+    op_block = _official_private_block(official_private)
+
+    # ── 溯源 ──
+    prov_rows = "".join(_prov_line(cu.get(k)) for k in
+                        ("Japan", "China", "EU", "EU_CUSTODY", "EU_REAL")
+                        if (cu.get(k) or {}).get("provenance"))
+    op_prov = ""
+    if official_private and official_private.get("status") == "ok":
+        op_prov = (
+            f'<div class="cu-prov-row"><span class="cu-prov-nm">🏛 全球官方/私人</span>'
+            f'<span class="cu-prov-body">'
+            f'<a href="https://ticdata.treasury.gov/Publish/slt_table3.txt" '
+            f'target="_blank" rel="noopener">slt_table3.txt</a>'
+            f'（TIC Table 3 内两行全球汇总）｜'
+            f'行名：<code>Of Which: Foreign Official</code>(码 99990) / '
+            f'<code>Of Which: Foreign Non-Official</code>(码 99991)｜'
+            f'取值列：<code>for_treas_pos(第4列)</code>｜无分国拆分'
+            f'</span></div>')
+    prov_block = (
+        f'<div class="cu-prov">'
+        f'<div class="cu-prov-title">🔗 数据溯源 · 每条序列的来源与抓取路径</div>'
+        f'{prov_rows}{op_prov}'
+        f'<div class="cu-prov-note">★ TIC 为<b>托管口径</b>：统计证券登记在哪国托管账户，'
+        f'不是最终受益人。美国财政部原文：“…cannot attribute holdings of U.S. securities '
+        f'with complete accuracy … if a U.S. Treasury security purchased by a foreign resident '
+        f'is held in a custodial account in a third country, the true ownership of the security '
+        f'will not be reflected in the data.”（'
+        f'<a href="https://home.treasury.gov/system/files/136/Press-notice-TIC-for-Oct-2024.pdf" '
+        f'target="_blank" rel="noopener">TIC 月度新闻稿</a>）</div>'
+        f'</div>'
+    )
+
     return (
         f'<div class="cust-wrap">'
         f'<div class="cust-charts cust-charts-3">'
@@ -3939,13 +4133,17 @@ def _country_ust_html(cu):
         f'{_country_ust_col(cu.get("China"))}'
         f'{_country_ust_col(cu.get("EU"))}'
         f'</div>'
-        f'<div class="cust-how"><b>如何看：</b>美国财政部 TIC 口径下各国/地区持有的美债总额（含官方+私人，月度）。'
-        f'与上方"外国官方托管美债"口径不同：托管是纽约联储账户的外国<b>官方合计</b>，这里是<b>分国别</b>总持仓。'
-        f'<b>日本</b>是美债最大单一持有国，近10年高位震荡；<b>中国</b>近10年持续系统性减持，是去美元化/中美博弈的结构性信号；'
-        f'<b>欧盟</b>为欧元区主要成员（德/法/意/荷/比/卢/爱/西/芬）加总（TIC 无欧盟合计口径），'
-        f'其中比利时含 Euroclear 国际托管中心的第三方持仓，故欧盟合计偏高、趋势性增长明显。'
+        f'{eu_split_block}'
+        f'{op_block}'
+        f'<div class="cust-how"><b>如何看：</b>美国财政部 TIC 口径下各国/地区持有的美债总额'
+        f'（含官方＋私人，月度，滞后约 2 个月）。'
+        f'<b>日本</b>是最大单一持有国，近10年高位震荡；'
+        f'<b>中国</b>近10年持续系统性减持，是去美元化／中美博弈的结构性信号；'
+        f'<b>欧元区合计</b>为 9 国加总（TIC 无欧盟合计行），'
+        f'已在上方按<b>托管中心／真实需求国</b>拆开——两者信号含义相反，不可混看。'
         f'数据源：{_linkify_sources(src)}。</div>'
         f'{long_block}'
+        f'{prov_block}'
         f'</div>'
     )
 
@@ -6338,14 +6536,135 @@ def _comex_inventory_html(ci):
             f'{flow_intro}{"".join(flow_blocks)}</div>')
 
 
-def _cb_balance_html(cb):
-    """底部四大央行资产负债表板块(US/JP/CN/ECB), 2x2 布局。统一当天汇率折 $B 横向可比。"""
+def _ncb_spark(series, color="#8a9bb0", w=250, h=52):
+    """五国央行总资产迷你走势线。series: [(YYYY-MM, val),...] 升序。"""
+    if not series or len(series) < 2:
+        return ""
+    vals = [v for _, v in series]
+    lo, hi = min(vals), max(vals)
+    span = (hi - lo) or 1.0
+    n = len(series)
+    pts = []
+    for i, (_, v) in enumerate(series):
+        x = 2 + (w - 4) * i / (n - 1)
+        y = h - 4 - (h - 10) * (v - lo) / span
+        pts.append(f'{"M" if i == 0 else "L"}{x:.1f},{y:.1f}')
+    return (f'<svg viewBox="0 0 {w} {h}" class="ncb-spark" preserveAspectRatio="none" '
+            f'role="img"><path d="{"".join(pts)}" fill="none" stroke="{color}" '
+            f'stroke-width="1.8" stroke-linejoin="round"/></svg>')
+
+
+def _euro_ncb_html(ncb):
+    """欧元区五国央行(德/意/荷/西/芬)资产负债表总资产子表。
+
+    ★2026-09-09 新增(Chao 要求)。**必须与上方 Eurosystem 卡片、
+      以及 TIC 持有美债表区分清楚**, 三者口径完全不同:
+        - Eurosystem 卡片 = ECB 本部 + 20 家成员国央行的**合并**表
+        - 本表 = 五国央行**各自**的总资产(可横向比较, 也能看出谁占大头)
+        - TIC「德国持有美债 107.8B」= 德国**所有**外国持有人(保险/养老金/基金),
+          与德国央行无关 —— 实测德国央行「对非欧元区外币债权」仅 €0.004B。
+    """
+    if not ncb:
+        return ""
+    ok = {k: v for k, v in ncb.items() if v.get("status") == "ok"}
+    if not ok:
+        sts = "、".join(f'{v.get("name","")}: {v.get("status","")}'
+                       for v in ncb.values())
+        return (f'<div class="ncb-wrap"><div class="ncb-title">欧元区五国央行 · 资产负债表总资产</div>'
+                f'<div class="cust-chart-na">数据未就绪（{_esc(sts)}）</div></div>')
+
+    unit = next(iter(ok.values())).get("unit", "$B")
+    tot = sum(v["latest"][1] for v in ok.values())
+    rows = []
+    for cc, v in sorted(ok.items(), key=lambda z: -z[1]["latest"][1]):
+        m, val = v["latest"]
+        d, dp = v.get("delta"), v.get("delta_pct")
+        up = (d is not None and d >= 0)
+        cls = "g" if up else "r"
+        arrow = "▲" if up else "▼"
+        share = 100 * val / tot if tot else 0
+        rows.append(
+            f'<div class="ncb-row">'
+            f'<span class="ncb-flag">{_esc(v.get("flag",""))}</span>'
+            f'<span class="ncb-nm">{_esc(v.get("name",""))}</span>'
+            f'<span class="ncb-val">{val:,.0f}<i>{_esc(unit)}</i></span>'
+            f'<span class="ncb-share">{share:.1f}%</span>'
+            f'<span class="ncb-spark-wrap">{_ncb_spark(v["series"])}</span>'
+            f'<span class="ncb-dlt {cls}">{arrow} {d:+,.0f} ({dp:+.1f}%)</span>'
+            f'<span class="ncb-asof">{_esc(m)}</span>'
+            f'</div>')
+    span_txt = ""
+    f0 = next(iter(ok.values())).get("first")
+    l0 = next(iter(ok.values())).get("latest")
+    if f0 and l0:
+        span_txt = f'{f0[0]} → {l0[0]}'
+
+    return (
+        f'<div class="ncb-wrap">'
+        f'<div class="ncb-title">🏦 欧元区五国央行 · 各自资产负债表总资产'
+        f'<span class="ncb-sub">德/意/荷/西/芬 · {_esc(span_txt)} · {_esc(unit)} · '
+        f'变动为区间首末对比 · 与上方 Eurosystem 合并表<b>不是同一口径</b></span></div>'
+        f'<div class="ncb-head">'
+        f'<span class="ncb-flag"></span><span class="ncb-nm">央行</span>'
+        f'<span class="ncb-val">总资产</span><span class="ncb-share">占五国</span>'
+        f'<span class="ncb-spark-wrap">走势</span>'
+        f'<span class="ncb-dlt">区间变动</span><span class="ncb-asof">数据月</span>'
+        f'</div>'
+        f'{"".join(rows)}'
+        f'<div class="ncb-read"><b>怎么读：</b>这五家是欧元区里 TIC 当期表未单列的成员国'
+        f'（德/意/荷/西/芬 在 Table 5 里被归入 All Other，故此前欧盟数据被迫退回年度存档表）。'
+        f'此处给出它们央行<b>自己</b>的资产负债表规模，可横向比较谁在扩表／缩表。<br>'
+        f'<b>⚠️ 三个口径务必分清：</b>'
+        f'①上方 <b>Eurosystem</b> 卡片＝ECB 本部 ＋ 20 家成员国央行的<b>合并</b>表；'
+        f'②本表＝五国央行<b>各自</b>的表；'
+        f'③「持有美债」板块里的德国 / 法国等＝该国<b>所有外国持有人</b>'
+        f'（保险／养老金／基金／企业），<b>与央行无关</b> —— '
+        f'实测德国央行「对非欧元区外币债权」仅 <b>€0.004B</b>，'
+        f'欧元区各国央行几乎不持有美债（外汇储备已大部分上缴 ECB 统一管理）。</div>'
+        f'<div class="cu-prov" style="margin-top:12px">'
+        f'<div class="cu-prov-title">🔗 数据溯源</div>'
+        f'<div class="cu-prov-row"><span class="cu-prov-nm">五国央行总资产</span>'
+        f'<span class="cu-prov-body">'
+        f'<a href="https://data.ecb.europa.eu/data/datasets/BSI" target="_blank" '
+        f'rel="noopener">ECB Data Portal · BSI 数据集</a>｜'
+        f'序列 key：<code>BSI/M.{{国家码}}.N.N.T00.A.1.Z5.0000.Z01.E</code>'
+        f'（国家码 DE/IT/NL/ES/FI）｜'
+        f'官方标题：<code>Total assets of the NCB, Stocks</code>｜'
+        f'原始单位百万欧元，按 FRED <code>DEXUSEU</code> 当日汇率折 $B'
+        f'</span></div>'
+        f'<div class="cu-prov-row"><span class="cu-prov-nm">Eurosystem 合并表</span>'
+        f'<span class="cu-prov-body">'
+        f'<a href="https://data.ecb.europa.eu/data/datasets/ILM" target="_blank" '
+        f'rel="noopener">ECB Data Portal · ILM 数据集</a>｜'
+        f'序列 key：<code>ILM/W.U2.C.*</code>（U2＝欧元区整体，C＝Eurosystem）｜周度'
+        f'</span></div>'
+        f'<div class="cu-prov-note">★ ECB BSI 的 NCB 部门只提供 <code>T00 总资产</code> 与 '
+        f'<code>L40 发行债务证券</code> 两个科目，<b>没有黄金／证券等分项</b>。'
+        f'德国的详细分项可另走 Bundesbank API（<code>BBBK11.D.TTA032</code> 等，'
+        f'实测总资产 €2,271B／黄金 €381B），但五国口径将不一致，故此处统一只做总资产。'
+        f'意/荷/西/芬 四国各自的 API 端点格式互不相同且实测不可直接取数，'
+        f'故统一走 ECB 口径以保证可横向比较。</div>'
+        f'</div>'
+        f'</div>'
+    )
+
+
+def _cb_balance_html(cb, euro_ncb=None):
+    """底部央行资产负债表板块(US/JP/CN/Eurosystem), 2x2 布局 + 欧元区五国央行子表。
+    统一当天汇率折 $B 横向可比。
+
+    ★2026-09-09: ECB 卡片已改名 Eurosystem —— 原名「欧洲央行 ECB」是错的,
+      数据源 ILM/W.U2.C 是 ECB 本部 + 20 家成员国央行的合并表(实测 €5,912B),
+      而德国央行一家就 €2,271B。见 external_data.fetch_ecb_balance_sheet docstring。
+    """
     if not cb:
         return '<p class="empty">央行资产负债表数据未就绪。</p>'
     fx = cb.get("_fx")
     order = ["US", "JP", "CN", "ECB"]
     cards = "".join(_cb_one_view(cb.get(cc, {}), fx=fx) for cc in order if cc in cb)
-    return cards or '<p class="empty">央行资产负债表数据未就绪。</p>'
+    if not cards:
+        return '<p class="empty">央行资产负债表数据未就绪。</p>'
+    return cards + _euro_ncb_html(euro_ncb)
 
 
 def _ms_num(v):
@@ -7224,6 +7543,72 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .cust-charts-3 {{ grid-template-columns: 1fr 1fr 1fr; }}
   @media (max-width: 720px) {{ .cust-charts, .cust-charts-3 {{ grid-template-columns: 1fr; }} }}
   @media (min-width: 721px) and (max-width: 1000px) {{ .cust-charts-3 {{ grid-template-columns: 1fr 1fr; }} }}
+  /* ★2026-09-09 欧元区拆分 / 官方vs私人 / 溯源(Chao 交易员视角改版) */
+  .cu-eusplit {{ margin: 18px 0 4px; padding: 14px 16px 12px; background: #efe9dd;
+    border: 1px solid #d8d0c3; border-radius: 10px; }}
+  .cu-eusplit-title {{ font-size: 14.5px; font-weight: 700; color: #4a443c; margin-bottom: 4px; }}
+  .cu-eusplit-sub {{ display: block; font-size: 11.5px; font-weight: 400; color: #8a8377; margin-top: 2px; }}
+  .cu-eusplit-read {{ margin-top: 10px; font-size: 12.5px; line-height: 1.85; color: #5c554b;
+    padding-top: 10px; border-top: 1px dashed #d8d0c3; }}
+  .cu-op {{ margin: 18px 0 4px; padding: 14px 16px 12px; background: #eae4d9;
+    border: 1px solid #d8d0c3; border-radius: 10px; }}
+  .cu-op-title {{ font-size: 14.5px; font-weight: 700; color: #4a443c; }}
+  .cu-op-sub {{ display: block; font-size: 11.5px; font-weight: 400; color: #8a8377; margin-top: 2px; }}
+  .cu-op-kpis {{ display: flex; gap: 26px; flex-wrap: wrap; margin: 10px 0 6px; }}
+  .cu-op-kpi {{ display: flex; flex-direction: column; gap: 1px; }}
+  .cu-op-kpi .k-lab {{ font-size: 11px; color: #8a8377; }}
+  .cu-op-kpi .k-val {{ font-size: 18px; font-weight: 700; color: #4a443c; }}
+  .cu-op-kpi .k-dlt {{ font-size: 11.5px; }}
+  .cu-op-kpi .k-dlt.r {{ color: #b5695c; }}
+  .cu-op-kpi .k-dlt.g {{ color: #6f8a6b; }}
+  .cu-op-leg {{ display: flex; gap: 20px; flex-wrap: wrap; font-size: 11.5px;
+    color: #6b655c; margin: 4px 0 2px; }}
+  .cu-op-leg i {{ display: inline-block; width: 18px; height: 3px; border-radius: 2px;
+    margin-right: 5px; vertical-align: middle; }}
+  .cu-op-read {{ margin-top: 8px; font-size: 12.5px; line-height: 1.85; color: #5c554b;
+    padding-top: 9px; border-top: 1px dashed #d8d0c3; }}
+  .cu-prov {{ margin: 16px 0 2px; padding: 12px 14px; background: #f2efe9;
+    border: 1px dashed #cfc6b8; border-radius: 9px; }}
+  .cu-prov-title {{ font-size: 13px; font-weight: 700; color: #4a443c; margin-bottom: 7px; }}
+  .cu-prov-row {{ display: flex; gap: 10px; padding: 5px 0; font-size: 11.5px;
+    line-height: 1.7; border-top: 1px solid #e6e0d4; }}
+  .cu-prov-row:first-of-type {{ border-top: none; }}
+  .cu-prov-nm {{ flex: 0 0 148px; font-weight: 600; color: #5c554b; }}
+  .cu-prov-body {{ flex: 1; color: #7a736a; word-break: break-word; }}
+  .cu-prov-body code {{ background: #e6e0d4; padding: 1px 5px; border-radius: 3px;
+    font-size: 10.5px; color: #5c554b; }}
+  .cu-prov-body a {{ color: #6b8fb5; text-decoration: none; border-bottom: 1px dotted #6b8fb5; }}
+  .cu-prov-note {{ margin-top: 8px; padding-top: 8px; border-top: 1px solid #e6e0d4;
+    font-size: 11px; line-height: 1.75; color: #8a8377; }}
+  /* ★2026-09-09 欧元区五国央行子表 */
+  .ncb-wrap {{ grid-column: 1 / -1; margin-top: 14px; padding: 14px 16px 12px;
+    background: #efe9dd; border: 1px solid #d8d0c3; border-radius: 10px; }}
+  .ncb-title {{ font-size: 14.5px; font-weight: 700; color: #4a443c; margin-bottom: 9px; }}
+  .ncb-sub {{ display: block; font-size: 11.5px; font-weight: 400; color: #8a8377; margin-top: 3px; }}
+  .ncb-head, .ncb-row {{ display: grid;
+    grid-template-columns: 26px minmax(150px,1.4fr) 108px 62px minmax(120px,1fr) 132px 74px;
+    align-items: center; gap: 8px; padding: 6px 2px; font-size: 12.5px; }}
+  .ncb-head {{ font-size: 10.5px; color: #8a8377; border-bottom: 1px solid #d8d0c3;
+    padding-bottom: 5px; }}
+  .ncb-row {{ border-bottom: 1px solid #e6e0d4; }}
+  .ncb-row:last-of-type {{ border-bottom: none; }}
+  .ncb-nm {{ color: #4a443c; font-weight: 600; }}
+  .ncb-val {{ text-align: right; font-weight: 700; font-size: 15px; color: #4a443c; }}
+  .ncb-val i {{ font-style: normal; font-size: 10px; color: #8a8377; margin-left: 2px; }}
+  .ncb-share {{ text-align: right; font-size: 11.5px; color: #8a8377; }}
+  .ncb-spark-wrap {{ display: block; height: 30px; }}
+  .ncb-spark {{ width: 100%; height: 30px; display: block; }}
+  .ncb-dlt {{ text-align: right; font-size: 11.5px; }}
+  .ncb-dlt.g {{ color: #6f8a6b; }}
+  .ncb-dlt.r {{ color: #b5695c; }}
+  .ncb-asof {{ text-align: right; font-size: 10.5px; color: #8a8377; }}
+  .ncb-read {{ margin-top: 10px; padding-top: 9px; border-top: 1px dashed #d8d0c3;
+    font-size: 12.5px; line-height: 1.85; color: #5c554b; }}
+  @media (max-width: 860px) {{
+    .ncb-head {{ display: none; }}
+    .ncb-row {{ grid-template-columns: 24px 1fr 96px; row-gap: 2px; }}
+    .ncb-spark-wrap, .ncb-share {{ display: none; }}
+  }}
   .cust-chart-col {{ background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px 8px; }}
   .cust-chart-full {{ margin-top: 12px; }}
   .cust-chart-span {{ font-size: 10px; color: var(--muted); margin-top: 4px; text-align: center; }}
@@ -7735,7 +8120,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="card liq-wrap">{liquidity}</div>
 
   <!-- ═══ 附三：四大央行资产负债表 (US/JP/CN/ECB, 2x2) ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>四大央行资产负债表 · 每日更新 (US/JP/CN/ECB · 2x2 · 当天汇率统一折$B)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="part-title"><span class="part-num">＋</span>四大央行资产负债表 · 每日更新 (US/JP/CN/Eurosystem · 2x2 + 欧元区五国央行 · 当天汇率统一折$B)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="bs-grid">{cb_balance}</div>
 
   <!-- ═══ 附三·一半：BIS 国际清算银行报告 (央行的央行 · 摘要+独立页) ═══ -->
@@ -7801,7 +8186,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title" id="sec-us-yield-century"><span class="part-num">＋</span>美国国债收益率百年周期 · Fed Funds/3M/10Y/30Y (40年长周期·1940大底/1980大顶/2020大底)<span class="freq-badge freq-quarterly">每季更新</span></div>
   <div class="card">{us_yield_century}</div>
   <!-- ═══ 附三·六：日本 / 中国 分国别持有美债 (TIC, 近10年) ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>日本 / 中国 / 欧盟 持有美债 · 近10年 + 2008长历史 (TIC 分国别口径)<span class="freq-badge freq-monthly">日/中 每月更新·滞后约2月 · 欧盟受口径限制滞后至上年末</span></div>
+  <div class="part-title"><span class="part-num">＋</span>日本 / 中国 / 欧元区 持有美债 · 央行 vs 私人 · 近10年 + 2008长历史 (TIC 分国别口径)<span class="freq-badge freq-monthly">每月更新 · 滞后约2月 · 三方同频</span></div>
   <div class="card">{country_ust}</div>
   <!-- ═══ 附三·十：四国国际投资头寸 IIP (对外资产/负债/净头寸) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>四国国际投资头寸 IIP · 过去十年 (美/日/德/中 对外资产·负债·净债权地位)<span class="freq-badge freq-quarterly">每年更新</span></div>

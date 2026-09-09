@@ -1150,7 +1150,14 @@ def _usd_convert(cc_data, factor, orig_unit):
 
 
 def fetch_ecb_balance_sheet(to_usd=True, usd_per_eur=None):
-    """ECB 欧洲央行资产负债表(完整分项版, 格式与另三国一致)。
+    """欧元体系 Eurosystem 资产负债表(完整分项版, 格式与另三国一致)。
+
+    ★★2026-09-09 改名(Chao 追问口径时发现标签撒谎):
+      原名「欧洲央行 ECB」是**错的** —— 数据源 ILM/W.U2.C 中
+      U2=整个欧元区、C=Eurosystem, 即 **ECB 本部 + 20 家成员国央行的合并表**,
+      不是 ECB 一家。实测合并总资产 €5,912B, 而德国央行一家就 €2,271B;
+      卡片上的「黄金 1,432B」主要是德/意/法等国央行的金库, 不在法兰克福。
+      看单国央行请用 fetch_euro_ncb_balance_sheets()。
     ★数据源: ECB 官方 Data Portal SDMX API 的 ILM 数据集(Eurosystem 周度合并财务报表),
       免费无key, wildcard 一次拉全部 43 分项(单条 series key 查询对维度取值敏感易 400, wildcard 最稳)。
       base: https://data-api.ecb.europa.eu/service/data/ILM/W.U2.C... 单位=百万欧元。
@@ -1250,7 +1257,7 @@ def fetch_ecb_balance_sheet(to_usd=True, usd_per_eur=None):
             pass
 
     if not got:
-        return {"name": "欧洲央行 ECB", "flag": "🇪🇺", "unit": "$B" if to_usd else "十亿€",
+        return {"name": "欧元体系 Eurosystem", "flag": "🇪🇺", "unit": "$B" if to_usd else "十亿€",
                 "period": "周度", "date": None, "assets": [], "liabilities": [],
                 "total_assets": None, "total_liab": None, "rates": rates, "status": "未找到"}
 
@@ -1258,7 +1265,7 @@ def fetch_ecb_balance_sheet(to_usd=True, usd_per_eur=None):
     liabs = [x for x in (_line(s[0], s[1], len(s) > 2 and s[2] == "sub") for s in LIABS) if x]
     ta = _line("总资产", total_key)
     return {
-        "name": "欧洲央行 ECB", "flag": "🇪🇺",
+        "name": "欧元体系 Eurosystem", "flag": "🇪🇺",
         "unit": "$B" if to_usd else "十亿€", "orig_unit": "十亿€",
         "period": "周度", "date": period,       # 如 2026-W32
         "assets": assets, "liabilities": liabs,
@@ -1267,6 +1274,114 @@ def fetch_ecb_balance_sheet(to_usd=True, usd_per_eur=None):
         "usd_per_eur": round(usd_per_eur, 4),
         "source": "ECB Data Portal ILM (Eurosystem 周度财务报表)",
     }
+
+
+def fetch_euro_ncb_balance_sheets(to_usd=True, usd_per_eur=None, months=78):
+    """欧元区五国央行(德/意/荷/西/芬)各自的资产负债表总资产 —— 月度序列。
+
+    ★2026-09-09 新增(Chao: 「把剩下 5 个国家单独做一个表, 并在子表下面再分别做
+      这五个国家的央行的资产负债表」)。
+
+    ★★口径警告(必须随数据一起显示, 否则会造成严重误读):
+      本函数的数字与「TIC 德国持有美债 107.8B」**不是包含关系, 也不是同一批持有人**。
+        - TIC「德国 107.8B」= 登记在德国的托管账户里的美债, 持有人是德国的
+          保险/养老金/基金/企业等**所有外国持有人**, 央行只占极小部分。
+        - 本函数 = 该国央行**自己**的资产负债表总资产。
+      实测佐证: Bundesbank 的「对非欧元区外币债权」(TTA008) 仅 €0.004B ——
+      **欧元区各国央行几乎不持有美债**(外汇储备已大部分上缴 ECB 统一管理)。
+      所以「德国央行在增持美债」这类推论不能从这两张表推出来。
+
+    数据源: ECB Data Portal SDMX, BSI 数据集 NCB 部门(BS_REP_SECTOR='N')。
+      key 模板: BSI/M.{CC}.N.N.T00.A.1.Z5.0000.Z01.E
+      标题实测 = "Total assets of the NCB, Stocks", 单位百万欧元, 月度。
+      ★为什么用 ECB 统一口径而不是各国央行自己的 API: 意/荷/西/芬 四家 API
+        端点各不相同且我实测的候选端点全部不可用(返回 HTML 页面而非数据);
+        ECB BSI 一套 key 模板五国通吃, 且口径统一可横向比较。
+      ★局限: BSI 的 NCB 部门只有 T00(总资产) 和 L40(发行债务证券) 两个科目,
+        **没有黄金/证券等分项**。德国的详细分项可另走 Bundesbank API
+        (BBBK11.D.TTA032 等), 但那样五国口径就不一致了, 故此处只做总资产。
+
+    返回 {CC: {name, flag, series:[(YYYY-MM, 值),...], latest, first, delta, delta_pct,
+               high, low, status, source, unit}}。抓不到标 status, 绝不编。
+    """
+    import requests
+
+    NCB = {
+        "DE": ("德国央行 Bundesbank", "🇩🇪"),
+        "IT": ("意大利央行 Banca d'Italia", "🇮🇹"),
+        "NL": ("荷兰央行 DNB", "🇳🇱"),
+        "ES": ("西班牙央行 Banco de España", "🇪🇸"),
+        "FI": ("芬兰央行 Suomen Pankki", "🇫🇮"),
+    }
+    out = {}
+
+    rate = None
+    if to_usd:
+        # 与 fetch_ecb_balance_sheet 用同一口径: FRED DEXUSEU(1欧元=X美元), 兜底 1.16
+        rate = usd_per_eur
+        if rate is None:
+            try:
+                from fetchers.fred import fetch_fred_latest
+                rate, _ = fetch_fred_latest("DEXUSEU")
+            except Exception:
+                rate = None
+        if not rate:
+            rate = 1.16
+    unit = "$B" if (to_usd and rate) else "十亿€"
+
+    for cc, (zh, flag) in NCB.items():
+        rec = {"name": zh, "flag": flag, "series": [], "status": "未找到",
+               "unit": unit,
+               "source": "ECB Data Portal BSI (NCB 部门总资产, 月度)"}
+        try:
+            u = ("https://data-api.ecb.europa.eu/service/data/BSI/"
+                 f"M.{cc}.N.N.T00.A.1.Z5.0000.Z01.E"
+                 f"?format=jsondata&lastNObservations={int(months)}")
+            r = requests.get(
+                u, timeout=45,
+                headers={"User-Agent": "Mozilla/5.0 (EcoVolChecker research)"})
+            if r.status_code != 200:
+                rec["status"] = f"HTTP {r.status_code}"
+                out[cc] = rec
+                continue
+            d = r.json()
+            ds = d.get("dataSets") or []
+            ser = (ds[0].get("series") or {}) if ds else {}
+            if not ser:
+                rec["status"] = "数据不足"
+                out[cc] = rec
+                continue
+            k0 = list(ser)[0]
+            obs = ser[k0].get("observations") or {}
+            tdim = ((d.get("structure") or {}).get("dimensions") or {}).get("observation") or []
+            times = [v.get("id") for v in (tdim[0].get("values") or [])] if tdim else []
+            pts = []
+            for i, v in sorted(obs.items(), key=lambda z: int(z[0])):
+                ti = int(i)
+                if ti >= len(times) or not v or v[0] is None:
+                    continue
+                val = float(v[0]) / 1000.0            # 百万€ → 十亿€
+                if to_usd and rate:
+                    val *= rate
+                pts.append((times[ti], round(val, 1)))
+            if len(pts) < 2:
+                rec["status"] = "数据不足"
+                out[cc] = rec
+                continue
+            vals = [v for _, v in pts]
+            rec.update({
+                "series": pts, "status": "ok",
+                "latest": pts[-1], "first": pts[0],
+                "delta": round(pts[-1][1] - pts[0][1], 1),
+                "delta_pct": (round((pts[-1][1] - pts[0][1]) / pts[0][1] * 100, 1)
+                              if pts[0][1] else None),
+                "high": round(max(vals), 1), "low": round(min(vals), 1),
+                "cadence_note": "月度更新 · 滞后约1-2月",
+            })
+        except Exception as e:
+            rec["status"] = f"抓取失败: {type(e).__name__}"
+        out[cc] = rec
+    return out
 
 
 def fetch_cb_balance_sheets(to_usd=True):
@@ -1882,6 +1997,124 @@ TIC_MFH_HIST_URL = "https://ticdata.treasury.gov/Publish/mfhhis01.txt"
 TIC_SLT_T5_URL = ("https://ticdata.treasury.gov/resource-center/"
                   "data-chart-center/tic/Documents/slt_table5.html")
 
+# ★★2026-09-09 重大修正(Chao 追问「欧盟到底哪个央行在增持美债」时挖出):
+#
+# 此前认定「Table 5 只列前20大, 德/意/荷/西/芬 落在 All Other, 故 EU9 只能退回
+# 年度存档表, 滞后至上年末(251 天)」—— **这个结论是错的, 因为我只查了一张表**。
+# 实测 Table 5 确实只有 4/9 国(法/比/卢/爱), 那部分判断没错;
+# 但 TIC 另有 **Table 3**, 含 **113 个国家/地区**、欧元区 9 国全齐、
+# 覆盖 2020-01 → 2026-06, 与日/中完全同频。
+#   → EU9 全口径可做到滞后约 2 月, 既不必砍成 4 国, 也不必估算。
+#   → 代价: Table 3 只回溯到 2020-01, 2008-2019 长历史仍需年度表拼接。
+#
+# ★Table 3 还独家提供**全球**「官方 vs 非官方」拆分(码 99990 / 99991):
+#     2020-01  官方 4169.9B  私人 2857.4B  官方占比 59.3%
+#     2026-06  官方 3778.1B  私人 5520.8B  官方占比 40.6%
+#   全球央行六年净减持约 392B, 私人净增约 2663B —— 这是回答「央行在做什么」的
+#   唯一官方口径。**注意: 官方/私人拆分只有全球总量, 113 个国家里没有任何一国
+#   带 official 拆分**, 所以「日本央行持有多少美债」TIC 给不出, 不是抓不到而是
+#   财政部不公布。要看单国央行行为必须去各国央行自己的资产负债表。
+TIC_SLT_T3_URL = "https://ticdata.treasury.gov/Publish/slt_table3.txt"
+
+
+def _parse_tic_table3(raw):
+    """解析 TIC Table 3(全国别月度, 113 个国家/地区) → {name: {'YYYY-MM': $B}}。
+
+    ★2026-09-09 新增。为什么需要它见 TIC_SLT_T3_URL 上方的长注释:
+      Table 5 只列前 20 大, 欧元区只有 4/9 国; Table 3 有 113 个条目、9 国全齐。
+
+    文件结构(tab 分隔):
+      行7  表头 : Country | Country Code | Date | Holdings | Net U.S. Sales | ...
+      行8  机器名: country | country_code | date | for_treas_pos | ...
+      数据行    : Austria | 10189 | 2026-06 | 5728 | -39 | 3687 | ...
+      第 4 列(idx 3) = for_treas_pos = 总持仓, 单位**百万美元**
+
+    ★列名必须按表头认, 别按加总猜: 那 3 组数是 总额/长期/短期, **不是**官方/私人。
+      我第一次就把 (1116683, 1046231, 70452) 误当成 总/官方/私人 —— 读了表头才发现
+      是 总/长期/短期(1046231+70452=1116683 恰好也吻合, 加总验证救不了这个错)。
+
+    两行全球汇总另存 key: 'OFFICIAL'(码99990) / 'PRIVATE'(码99991)。
+    解析失败一律返回空 dict, 由调用方回退, 绝不编造。
+    """
+    import re
+    out = {}
+    try:
+        for ln in raw.replace("\r", "").split("\n"):
+            c = ln.split("\t")
+            if len(c) < 4:
+                continue
+            nm = c[0].strip().strip('"')
+            dt = c[2].strip()
+            if not re.fullmatch(r"\d{4}-\d{2}", dt):
+                continue
+            try:
+                v = float(c[3].replace(",", "")) / 1000.0     # 百万$ → $B
+            except ValueError:
+                continue
+            if nm.startswith("Of Which: Foreign Official"):
+                key = "OFFICIAL"
+            elif nm.startswith("Of Which: Foreign Non-Official"):
+                key = "PRIVATE"
+            elif nm.startswith("Of Which") or nm.startswith("Grand Total"):
+                continue
+            else:
+                key = nm
+            out.setdefault(key, {})[dt] = v
+    except Exception:
+        return {}
+    return out
+
+
+def fetch_tic_official_vs_private():
+    """全球「外国官方(央行/主权基金) vs 外国私人」持有美债月度序列。
+
+    ★这是 TIC 唯一的官方/私人拆分, **只有全球总量, 不分国别**(码 99990/99991)。
+      Chao 2026-09-09 问「日本/美国央行和其他机构持有美债有没有区别」——
+      有区别且巨大, 但**分国拆分财政部不公布**, 只能看全球总量 + 各国央行自己的表。
+
+    实测(2026-09-09):
+      2020-01  官方 4169.9B  私人 2857.4B  官方占比 59.3%
+      2026-06  官方 3778.1B  私人 5520.8B  官方占比 40.6%
+      → 全球央行六年净减持 ~392B, 私人净增 ~2663B。
+    """
+    out = {"status": "未找到", "source": "US Treasury TIC Table 3 (monthly)",
+           "official": [], "private": [], "share": []}
+    import requests
+    try:
+        r = requests.get(
+            TIC_SLT_T3_URL, timeout=60,
+            headers={"User-Agent": "Mozilla/5.0 (EcoVolChecker research)"})
+        if r.status_code != 200:
+            out["status"] = f"HTTP {r.status_code}"
+            return out
+        d = _parse_tic_table3(r.text)
+    except Exception as e:
+        out["status"] = f"抓取失败: {type(e).__name__}"
+        return out
+
+    o, p = d.get("OFFICIAL", {}), d.get("PRIVATE", {})
+    both = sorted(set(o) & set(p))
+    if len(both) < 2:
+        out["status"] = "数据不足"
+        return out
+    out["official"] = [(m, round(o[m], 1)) for m in both]
+    out["private"] = [(m, round(p[m], 1)) for m in both]
+    out["share"] = [(m, round(100 * o[m] / (o[m] + p[m]), 2)) for m in both]
+    f, l = both[0], both[-1]
+    out.update({
+        "status": "ok",
+        "latest_month": l,
+        "official_latest": round(o[l], 1),
+        "private_latest": round(p[l], 1),
+        "share_latest": round(100 * o[l] / (o[l] + p[l]), 1),
+        "share_first": round(100 * o[f] / (o[f] + p[f]), 1),
+        "first_month": f,
+        "official_delta": round(o[l] - o[f], 1),
+        "private_delta": round(p[l] - p[f], 1),
+        "cadence_note": "月度更新 · 滞后约2月",
+    })
+    return out
+
 
 def _parse_tic_slt_table5(raw_html, key):
     """解析 TIC Table 5(当期 13 个月滚动窗口) -> {'YYYY-MM': float}。
@@ -1964,6 +2197,11 @@ def _parse_tic_country(raw, country_key):
     EU_MEMBERS = {"Germany", "France", "Italy", "Netherlands", "Belgium",
                   "Luxembourg", "Ireland", "Spain", "Finland",
                   "Belgium-Luxembourg"}
+    # ★2026-09-09 分组(交易员视角: 托管中心 vs 真实需求国信号相反, 见 fetch 内注释)
+    #   Belgium-Luxembourg 是早年合并行名, 归入托管中心。
+    EU_CUSTODY_M = {"Belgium", "Luxembourg", "Ireland", "Belgium-Luxembourg"}
+    EU_REAL_M = {"Germany", "France", "Italy", "Netherlands", "Spain", "Finland"}
+    _AGG = {"EU": EU_MEMBERS, "EU_CUSTODY": EU_CUSTODY_M, "EU_REAL": EU_REAL_M}
     lines = raw.replace("\r", "").split("\n")
     series = {}          # 单国: {月:值}
     eu_series = {}       # EU: {月: 累加值}
@@ -1980,8 +2218,8 @@ def _parse_tic_country(raw, country_key):
             cur_years = {i: int(c) for i, c in enumerate(cells) if re.fullmatch(r"\d{4}", c)}
             continue
         name = cells[0].strip('"').strip() if cells else ""
-        if country_key == "EU":
-            matched = name in EU_MEMBERS
+        if country_key in _AGG:
+            matched = name in _AGG[country_key]
         elif country_key == "Japan":
             matched = (name == "Japan")
         elif country_key == "China":
@@ -1999,11 +2237,11 @@ def _parse_tic_country(raw, country_key):
                 except ValueError:
                     continue
                 mk = f"{yy:04d}-{mm:02d}"
-                if country_key == "EU":
+                if country_key in _AGG:
                     eu_series[mk] = eu_series.get(mk, 0.0) + val
                 else:
                     series[mk] = val
-    return eu_series if country_key == "EU" else series
+    return eu_series if country_key in _AGG else series
 
 
 def fetch_country_ust_holdings(years=10):
@@ -2018,7 +2256,10 @@ def fetch_country_ust_holdings(years=10):
     import datetime
     out = {}
     meta = {"Japan": ("日本", "🇯🇵"), "China": ("中国大陆", "🇨🇳"),
-            "EU": ("欧盟(欧元区加总)", "🇪🇺")}
+            "EU": ("欧元区合计(9国)", "🇪🇺"),
+            # ★分组见下方 _EU_GROUPS 注释: 托管中心与真实需求国的信号含义相反, 必须分开
+            "EU_CUSTODY": ("欧元区托管中心", "🏦"),
+            "EU_REAL": ("欧元区真实需求国", "🇪🇺")}
     cutoff = (datetime.date.today().replace(day=1) -
               datetime.timedelta(days=int(years * 365.25) + 45)).strftime("%Y-%m")
     long_cutoff = "2008-01"  # 2008 起长历史
@@ -2041,6 +2282,64 @@ def fetch_country_ust_holdings(years=10):
             cur_html = r5.text
     except Exception:
         cur_html = None
+    # ★★Table 3(全国别月度, 113 个条目): 2026-09-09 新增, 优先级**高于** Table 5。
+    #   Table 5 只列前20大 → 欧元区只有 4/9 国(法比卢爱), 逼得 EU 退回年度存档表,
+    #   滞后 251 天。Table 3 九国全齐且到 2026-06 —— EU 全口径终于能与日/中同频。
+    #   代价: Table 3 只回溯 2020-01, 更早的长历史仍由 mfhhis01 年度表提供(两者互补)。
+    t3 = {}
+    try:
+        r3 = requests.get(
+            TIC_SLT_T3_URL,
+            headers={"User-Agent": "Mozilla/5.0 (EcoVolChecker research)"},
+            timeout=60)
+        if r3.status_code == 200 and "Country" in r3.text:
+            t3 = _parse_tic_table3(r3.text)
+    except Exception:
+        t3 = {}
+    # Table 3 里的行名 → 本函数的 key
+    _T3_NAME = {
+        "Japan": ["Japan"],
+        "China": ["China, Mainland"],
+        "EU": ["Germany", "France", "Italy", "Netherlands", "Belgium",
+               "Luxembourg", "Ireland", "Spain", "Finland"],
+        "EU_CUSTODY": ["Belgium", "Luxembourg", "Ireland"],
+        "EU_REAL": ["Germany", "France", "Italy", "Netherlands", "Spain", "Finland"],
+    }
+    # ★★欧元区分组(Chao 2026-09-09: 「你把我当做一个国债交易员, 按照我需要关注的点,
+    #   把欧盟的数据重新体现一下…现在滞后 251 天的数据全部拢在一起, 这是不可以接受的」)
+    #
+    #   交易员视角下, 欧元区 9 国**不是同一类持有人**, 拢成一个数会抹掉信号:
+    #     - 托管中心(比/卢/爱): 全世界的钱寄存在 Euroclear/Clearstream, 持仓变化
+    #       主要反映**第三国资金流向**(2014 年比利时暴涨被广泛认为是中国借道),
+    #       与欧洲自身需求无关。卢森堡持仓 434B 是本国 GDP 的 4.3 倍即为明证。
+    #     - 真实需求国(德/法/意/荷/西/芬): 持仓量级与经济体量匹配, 反映欧洲机构
+    #       (保险/养老金/基金)的真实配置行为, 是美欧利差与对冲成本的函数。
+    #   两组混在一起, 就无法区分「欧洲在买美债」和「别人借道欧洲在买美债」。
+    _EU_GROUPS = {
+        "EU_CUSTODY": (["Belgium", "Luxembourg", "Ireland"],
+                       "欧元区托管中心", "🏦",
+                       "比利时(Euroclear)/卢森堡(Clearstream)/爱尔兰 —— "
+                       "第三国资金借道寄存, 变化多反映境外资金流向而非欧洲自身需求"),
+        "EU_REAL": (["Germany", "France", "Italy", "Netherlands", "Spain", "Finland"],
+                    "欧元区真实需求国", "🇪🇺",
+                    "德/法/意/荷/西/芬 —— 持仓量级与经济体量匹配, "
+                    "反映欧洲保险/养老金/基金的真实配置(美欧利差与对冲成本驱动)"),
+    }
+
+    def _t3_series(k):
+        """从 Table 3 取某 key 的月度序列(EU 为 9 国逐月加总)。缺任一国的月份不计入,
+        避免用不完整的加总冒充全口径 —— 宁可少一个月, 不出一个错的数。"""
+        names = _T3_NAME.get(k) or []
+        got = [t3.get(n) or {} for n in names]
+        if not all(got):
+            return {}
+        if len(got) == 1:
+            return dict(got[0])
+        common = set(got[0])
+        for g in got[1:]:
+            common &= set(g)
+        return {m: sum(g[m] for g in got) for m in common}
+
     for key, (zh, flag) in meta.items():
         if not raw:
             out[key] = {"name": zh, "flag": flag, "series": [], "series_long": [],
@@ -2053,6 +2352,10 @@ def fetch_country_ust_holdings(years=10):
             if cur:
                 s.update(cur)          # 当期表优先(含官方修订值)
                 cur_ok = True
+        s3 = _t3_series(key)
+        if s3:
+            s.update(s3)               # ★Table 3 最优先: 全国别 + 当期
+            cur_ok = True
         pts = sorted((m, round(v, 1)) for m, v in s.items() if m >= cutoff)
         pts_long = sorted((m, round(v, 1)) for m, v in s.items() if m >= long_cutoff)
         if len(pts) < 2:
@@ -2070,13 +2373,32 @@ def fetch_country_ust_holdings(years=10):
             "high": round(max(vals), 1), "low": round(min(vals), 1),
             "status": "ok",
             "source": "US Treasury TIC Major Foreign Holders (monthly)",
-            # ★口径说明: EU=9国加总, 但 TIC Table 5(当期表)只列前20大持有国,
-            #   德/意/荷/西/芬 落在 "All Other" 无法还原 → EU 只能用年度存档表,
-            #   因而天然比日/中滞后约半年。这是**口径限制**, 不是抓取失败, 页面须如实说明。
+            # ★2026-09-09 起改用 Table 3(113 国全国别月度), EU 不再受前20大限制。
+            #   旧注释称「EU 只能用年度存档表滞后半年」——**已过时**, 保留在
+            #   TIC_SLT_T3_URL 上方作为错误记录。
             "lag_reason": (None if cur_ok else
                            "TIC 当期表(Table 5)仅列前20大持有国，欧元区多数成员国归入 All Other，"
                            "无法还原9国加总口径；故欧盟数据只能取自年度存档表，滞后至上一年年末。"),
             "cadence_note": ("月度更新 · 滞后约2月" if cur_ok else "年度存档表 · 滞后至上年末"),
+            # ★★溯源(Chao 2026-09-09: 「我所有的数据都需要可以回溯源头,
+            #   以及你抓取到这些数据的路径」)—— 每个数据点都要能查到出处。
+            "members": _T3_NAME.get(key) or [],
+            "provenance": {
+                "primary": TIC_SLT_T3_URL if s3 else TIC_SLT_T5_URL,
+                "primary_desc": ("TIC Table 3「U.S. Treasury Securities Held by "
+                                 "Foreign Residents」全国别月度表(113 个国家/地区)"
+                                 if s3 else
+                                 "TIC Table 5「Major Foreign Holders」当期表(前20大)"),
+                "history": TIC_MFH_HIST_URL,
+                "history_desc": "TIC mfhhis01「Major Foreign Holders」年度存档表(2000-至今)",
+                "column": "for_treas_pos(第4列, 总持仓, 百万美元→$B)",
+                "agg": ("逐月加总: " + " + ".join(_T3_NAME.get(key) or [])
+                        if len(_T3_NAME.get(key) or []) > 1 else "单一国家行"),
+                "note": ("TIC 为**托管口径**: 统计证券登记在哪国托管账户，"
+                         "非最终受益人。美国财政部原文: 'cannot attribute holdings "
+                         "with complete accuracy … held in a custodial account in a "
+                         "third country, the true ownership will not be reflected'。"),
+            },
         }
     return out
 
