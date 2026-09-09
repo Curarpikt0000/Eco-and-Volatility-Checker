@@ -147,7 +147,7 @@ def write_daily_page_content(date_str, payload):
 
     # 三大央行资产负债表摘要
     if payload.get("cb_balance_notes"):
-        blocks.append(_h2("＋ 三大央行资产负债表（US/JP/CN · 带环比）"))
+        blocks.append(_h2("＋ 央行资产负债表（US/JP/CN/Eurosystem + 欧元区五国央行 · 带环比）"))
         for para in payload["cb_balance_notes"].split("\n"):
             if para.strip():
                 blocks.append(_bullet(para.strip()))
