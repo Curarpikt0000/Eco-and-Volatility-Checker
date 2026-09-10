@@ -1,6 +1,6 @@
 {
  "table": "HDB_REPORT",
- "count": 20,
+ "count": 21,
  "rows": [
   {
    "uid": "rep|2026-08-11",
@@ -496,6 +496,31 @@
        "type": "text",
        "text": {
         "content": "# Eco & Volatility 每日宏观风险扫描 · 2026-09-07\n\n**综合信号 🟡 警戒 · 卖出触发 1/7** · 未达分批卖出阈值\n\n\n## ① 核心指标\n\n- vix: {'key': 'vix', 'value': 14.32, 'as_of': '2026-09-03', 'status': 'ok'}\n- fear_greed: {'value': 41.9, 'as_of': '2026-09-04', 'status': 'ok', 'extra': {'rating': 'fear'}, 'key': 'fear_greed'}\n- aaii_bull_bear: {'value': 2.2, 'as_of': '2026-09-02', 'status': 'ok', 'note': 'AAII bull 39.7%(+6.8) / bear 37.6%(-6.9) / neutral 22.7%(+0.1) (Wk of Sep 2); spread=+2.2(前周-11.5); bull七周来首次高于均值37.5%; bear连30周高于均值31.5%', 'key': 'aaii_bull_bear'}\n- put_call: {'value': 0.58, 'as_of': None, 'status': 'ok', 'source': 'CBOE official (via ScraperAPI)', 'key': 'put_call'}\n- bofa_fms_cash: {'value': 3.5, 'as_of': '2026-08', 'status': 'ok', 'key': 'bofa_fms_cash'}\n- sofr_iorb: {'key': 'sofr_iorb', 'value': 1.0, 'as_of': '2026-09-08', 'status': 'ok', 'extra': {'sofr': 3.66, 'iorb': 3.65, 'sofr_as_of': '2026-09-03', 'iorb_as_of': '2026-09-08'}}\n- margin_cost: {'key': 'margin_cost', 'value': 6.75, 'as_of': '2026-09-02', 'status': 'ok'}\n- bank_funding_stress: {'key': 'bank_funding_stress', 'value': 6.0, 'as_of': '2026-09-03', 'status': 'ok', 'extra': {'cp3m': 3.81, 'tbill3m': 3.75, 'sofr': 3.66, 'spread_bps': 6.0}}\n- margin_debt: {'value': 1417.0, 'as_of': '2026-07-31', 'status': 'ok', 'key': 'margin_debt'}\n- margin_gdp: {'key': 'margin_gdp', 'value': 4.36, 'as_of': '2026-09-07', 'status': 'ok'}\n- ipo_count: {'value': 238.0, 'as_of': '2026-YTD', 'status': 'ok', 'extra': {'source': 'stockanalysis', 'year': 2026}, 'key': 'ipo_count'}\n- insider: {'value': 1.191, 'as_of': None, 'status': 'ok', 'extra': {'source': 'openinsider', 'note': '近期榜前100笔口径,趋势用'}, 'key': 'insider'}\n- bofa_bull_bear: {'value': 9.7, 'as_of': '2026-08-07', 'status': 'ok', 'note': 'BofA Bull&Bear 9.7(自9.4), 2021年来最高, 远超8.0卖出阈值(第17次卖出信号"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "rep|2026-09-08",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-08"
+       }
+      }
+     ]
+    },
+    "摘要": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "# 每日宏观风险扫描 — 2026-09-08\n\n> 综合信号 **🟡 警戒** · 卖出触发 **1/7**（≥3 = 开始分批卖出）\n\n## ① 仪表盘\n- 短期 7/8 未警报 · 中期 2/7 · 长期 2/5\n- VIX 14.32 · Fear&Greed 41.9 · Put/Call 0.58 · BofA FMS 现金 3.5%\n- BofA Bull&Bear 9.7 · Buffett 214.0% · CAPE 41.41 · Margin/GDP 4.62%\n- HY OAS 2.65% · Margin Debt $1502.1B · LEI 0.58 · AAII 配置 71.05%\n\n## ② 警报统计\n短期 7/8 · 中期 2/7 · 长期 2/5\n\n## ③ 逐条解读\n- **vix**: VIX 14.32 低位，市场表面平静，但与债市压力背离——低波动+高债券收益率是典型的自满信号。\n- **fear_greed**: CNN 恐惧贪婪 41.9（fear 区），情绪偏谨慎，与 AAII 散户 71% 高仓位形成反差。\n- **aaii_bull_bear**: AAII 多空价差 +2.2（bull 39.7/bear 37.6），七周来 bull 首次高于均值，但仍低于历史 +6.5。\n- **put_call**: CBOE 股票 put/call 0.58，偏乐观区，期权盘对冲需求不高。\n- **bofa_fms_cash**: BofA 基金经理现金 3.5%，历史极低，触发 Cash Rule 卖出信号——机构满仓。\n- **sofr_iorb**: SOFR-IORB +1bp（SOFR 3.66/IORB 3.65），货币市场无挤压，回购利率正常。\n- **margin_cost**: 券商保证金利率 6.75%，融资成本平稳。\n- **bank_funding_stress**: 银行融资压力 6bp（CP-Tbill），流动性充裕，无银行间紧张。\n- **margin_debt**: FINRA 保证金债务 6 月 $1,502B 创历史新高（+6.1% MoM），7 月数据尚未发布。\n- **margin_gdp**: 保证金债务/GDP 4.62%，超 2021 峰值（3.97%），零售杠杆最伸展周期，🔴。\n- **ipo_count**: IPO 数量 YTD 238，发行活跃但非狂热。\n- **insider**: 内部人买卖比读数 1.191（脚本口径）；GuruFocus 官方 0.26（8月）显示内部人偏谨慎。\n- **bofa_bull_bear**: BofA Bull&Bear 9.7，2021 来最高，远超 8.0 卖出阈值，第 17 次卖出信号，🔴。\n- **hy_oas**: 高收益债利差 2.65%，历史极窄，信用市场毫无风险溢价——与股市自满一致。\n- **ad_line**: NYSE 广度无顶背离（RSP/SPY 确认），市场宽度尚健康。\n- **buffett**: 巴菲特指标 214%，极端高估，🔴。\n- **cape**: 席勒 CAPE 41.41，仅次于 2000 与 2021，估值处历史极端，🔴。\n- **yield_curve**: 10Y-2Y 利差 +0.41，曲线正斜率，无倒挂衰退信号。\n- **lei**: LEI 六个月增长率 +0.2%（Jan-Jul），四年多来首次转正，衰退风险后移。\n- **aaii_alloc**: AAII 股票配置 71.05%，连续 75 个月高于历史均值 61.5%，散户满仓，🔴。\n\n## ④ 短中长期综合结论\n**短期（1-3月）**: 短期（数周）：股市情绪指标一半亮红（BofA B&B 9.7、FMS 现金 3.5%、CAPE、巴菲特、AAII 满仓），但价格仍在高位、广度未背离，属典型\"高位自满\"而非崩盘前夜。动作：不追高，维持既有仓位，用现金/短债留出子弹；对 AI 高估值板块设移动止损。密切盯 9/16 FOMC——市场已上调加息概率至约 40-60%，若 Warsh 意外加息，高杠杆（保证金/GDP 4.62%）叠加低对冲将放大回撤。\n\n**中期（3-12月）**: 中"
        }
       }
      ]

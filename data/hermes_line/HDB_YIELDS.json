@@ -1,6 +1,6 @@
 {
  "table": "HDB_YIELDS",
- "count": 258,
+ "count": 260,
  "rows": [
   {
    "uid": "y|2025-09-08",
@@ -10306,16 +10306,96 @@
      ]
     },
     "US10Y": {
-     "number": null
+     "number": 4.78
     },
     "US30Y": {
-     "number": null
+     "number": 5.24
     },
     "JP10Y": {
      "number": 2.91
     },
     "JP30Y": {
      "number": 3.965
+    },
+    "利差": {
+     "number": 1.87
+    }
+   }
+  },
+  {
+   "uid": "y|2026-09-07",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-07"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/us_jp_yields.json .points"
+       }
+      }
+     ]
+    },
+    "US10Y": {
+     "number": null
+    },
+    "US30Y": {
+     "number": null
+    },
+    "JP10Y": {
+     "number": 2.935
+    },
+    "JP30Y": {
+     "number": 4.009
+    },
+    "利差": {
+     "number": null
+    }
+   }
+  },
+  {
+   "uid": "y|2026-09-08",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-08"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/us_jp_yields.json .points"
+       }
+      }
+     ]
+    },
+    "US10Y": {
+     "number": null
+    },
+    "US30Y": {
+     "number": null
+    },
+    "JP10Y": {
+     "number": 2.896
+    },
+    "JP30Y": {
+     "number": 3.961
     },
     "利差": {
      "number": null

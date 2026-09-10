@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-09-08",
+  "as_of": "2026-09-10",
   "politicians": [
     {
       "name": "Nancy Pelosi",
@@ -5428,8 +5428,8 @@
         {
           "ticker": "AAPL",
           "asset": "Apple Inc",
-          "dir_cn": "部分卖出",
-          "direction": "Sale (Partial)",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
           "txn_date": "01/10/2025",
           "amount_range": "$15,001 - $50,000"
         },

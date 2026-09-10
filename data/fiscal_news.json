@@ -1,6 +1,6 @@
 {
   "status": "ok",
-  "as_of": "2026-09-08",
+  "as_of": "2026-09-10",
   "source": "美日财政政策事件时间线。每日 cron agent 模式 web 检索权威源(路透/彭博/NHK/财务省/US Treasury/Congress)动态更新。绝不编造,每条带来源链接。",
   "note": "cron 每日抓取最新美日财政举措(债务上限/持续决议CR/政府关门/补充预算/国债发行计划等),按日期倒序保留最近 ~20 条。",
   "events": [
@@ -33,6 +33,16 @@
       "summary": "9/2众议院通过参议院此前(8/8)通过的短期拨款法案(CR),联邦政府资金延续至12月11日,中期选举前避免停摆。",
       "source_url": "https://www.nahro.org/news/congress-passes-continuing-resolution-keeping-government-open-until-december/",
       "source_name": "NAHRO"
+    },
+    {
+      "date": "2026-09-02",
+      "country": "US",
+      "flag": "🇺🇸",
+      "category": "拨款法案",
+      "title": "特朗普签署H.R.6500(2027持续拨款法), 政府资金正式延至12/11",
+      "summary": "总统于9月2日签署持续决议, 联邦机构按FY2026水平运转至十二月11日, 10/1全政府停摆风险正式解除; 下一资金悬崖=12/11(中期选举后)。",
+      "source_url": "https://www.fedtools.com/blog/government-shutdown-october-2026",
+      "source_name": "FedTools / Roll Call"
     },
     {
       "date": "2026-09-01",
