@@ -1,11 +1,11 @@
 {
  "status": "ok",
- "generated": "2026-09-04T11:06:43",
+ "generated": "2026-09-11T11:08:44",
  "source": "双通道: archive PDF(01-06→06-05 per-firm) + Notion Daily auto tracking(06-06→至今, 每日增量)",
- "data_range": "2026-01-06 → 2026-09-02",
+ "data_range": "2026-01-06 → 2026-09-09",
  "archive_pdfs_parsed": 133,
  "archive_max_date": "2026-06-05",
- "notion_rows_scanned": 1340,
+ "notion_rows_scanned": 1354,
  "unit": "contracts",
  "banks_all": [
   "BMO",
@@ -379,6 +379,16 @@
    "core_issued": 475,
    "core_stopped": 413,
    "days": 3
+  },
+  {
+   "week": "2026-09-07",
+   "all_net": 1,
+   "all_issued": 162,
+   "all_stopped": 161,
+   "core_net": 62,
+   "core_issued": 162,
+   "core_stopped": 100,
+   "days": 2
   }
  ],
  "silver": [
@@ -721,6 +731,16 @@
    "core_issued": 446,
    "core_stopped": 580,
    "days": 3
+  },
+  {
+   "week": "2026-09-07",
+   "all_net": -36,
+   "all_issued": 53,
+   "all_stopped": 89,
+   "core_net": -27,
+   "core_issued": 17,
+   "core_stopped": 44,
+   "days": 2
   }
  ]
 }

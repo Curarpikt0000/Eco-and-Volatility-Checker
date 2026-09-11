@@ -1,6 +1,6 @@
 {
  "table": "HDB_FISCAL_NEWS",
- "count": 19,
+ "count": 20,
  "rows": [
   {
    "uid": "fn|2026-09-09|财政部双倍长债回购正式生效(单次上限$2B->$4B), 应对长端收益率飙升",
@@ -158,6 +158,59 @@
     },
     "来源链接": {
      "url": "https://www.nahro.org/news/congress-passes-continuing-resolution-keeping-government-open-until-december/"
+    }
+   }
+  },
+  {
+   "uid": "fn|2026-09-02|特朗普签署H.R.6500(2027持续拨款法), 政府资金正式延至12/11",
+   "props": {
+    "标题": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-02｜特朗普签署H.R.6500(2027持续拨款法), 政府资金正式延至12/11"
+       }
+      }
+     ]
+    },
+    "日期": {
+     "date": {
+      "start": "2026-09-02"
+     }
+    },
+    "摘要": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "总统于9月2日签署持续决议, 联邦机构按FY2026水平运转至十二月11日, 10/1全政府停摆风险正式解除; 下一资金悬崖=12/11(中期选举后)。"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "FedTools / Roll Call"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "US"
+     }
+    },
+    "类别": {
+     "select": {
+      "name": "拨款法案"
+     }
+    },
+    "来源链接": {
+     "url": "https://www.fedtools.com/blog/government-shutdown-october-2026"
     }
    }
   },

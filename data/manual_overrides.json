@@ -3,53 +3,54 @@
     "value": 71.05,
     "as_of": "2026-08-31",
     "status": "ok",
-    "note": "AAII Stocks Total 71.05% (Aug 2026调查, 高于长期均值62.2%; 连续75个月高于历史均值61.5%)"
+    "note": "AAII Stocks Total 71.05% (Aug 2026调查, 股票+股票基金71.1%连续75个月高于历史均值61.5%; 债券配置下滑)"
   },
   "put_call": {
     "value": 0.67,
     "as_of": "2026-09-10",
-    "status": "ok",
-    "note": "CBOE官方 EQUITY put/call 0.67 (ScraperAPI抓官方daily页); 口径=equity, 较昨日0.48回升(恐慌情绪小幅升温/看涨情绪回落), 仍处偏低区间"
+    "status": "stale",
+    "note": "口径=CBOE官方EQUITY put/call。今日(9-11)未取到官方新值: ScraperAPI无key(SCRAPER_API_KEY不在.env)+CBOE官方daily页web_extract被Cloudflare挡返空。第三方转述(thetrading.tools)官方口径Sep3=equity 0.47但按纪律不采聚合/转述源。保留上次官方值0.67(9-10)待ScraperAPI恢复"
   },
   "insider": {
-    "value": 0.29,
-    "as_of": "2026-09-09",
+    "value": 0.3,
+    "as_of": "2026-09-01",
     "status": "ok",
-    "note": "GuruFocus insider buy/sell 0.29 (Sep 2026; 低于历史中位0.34, 区间0.12-2.01; 内部人偏谨慎, 较上月0.26小幅回升仍处低位)"
+    "note": "GuruFocus insider buy/sell 0.3 (As of 2026-09-01; 低于长期均值0.39约23%, 区间0.12-2.01; 内部人偏谨慎处低位)"
   },
   "lei": {
-    "value": 0.2,
-    "as_of": "2026-07-31",
+    "value": -0.7,
+    "as_of": "2026-04-30",
     "status": "ok",
-    "note": "LEI 7月+0.2%至99.5, 六个月增长率转正(+0.2% 1-7月)为四年多来首次(8/20发布)"
+    "note": "LEI六个月变化率-0.7%(2025-10至2026-04, 优于前期-1.0%); 4月LEI环比+0.1%至97.4; 六/十二个月增长率仍为负, 信号脆弱(5/22发布, Conference Board官方最新)"
   },
   "bofa_bull_bear": {
     "value": 9.7,
     "as_of": "2026-08-07",
     "status": "ok",
-    "note": "BofA Bull&Bear 9.7(自9.4), 2021年来最高, 远超8.0卖出阈值(第17次卖出信号); 广度扩散+高收益债流入+利差收窄推动; FMS现金3.5%近历史低位"
+    "note": "BofA Bull&Bear 8月峰值9.7, 2021年来最高, 远超8.0卖出阈值(第17次卖出信号); 9月初仍在卖出区(7月周读数9.5-9.6); 极端多头定位+高收益债流入+利差收窄推动"
   },
   "ad_line": {
-    "value": false,
-    "as_of": "2026-08-19",
+    "value": true,
+    "as_of": "2026-09-10",
     "status": "ok",
-    "note": "市场广度真数据(RSP/SPY东财API)判定: SPY 8/13创近高但广度确认(ratio距高点<2%), 无顶背离"
+    "note": "NYSE A/D顶背离确认(多源9-10): S&P接近纪录高但等权RSP近20日-3.58%vs SPY-1.90%差距扩大; 新52周高占比降至仅1-3%(健康牛市应10-12%); McClellan震荡器8月中转负未回升; 广度恶化"
   },
   "aaii_bull_bear": {
-    "value": 2.2,
-    "as_of": "2026-09-02",
+    "value": -1.3,
+    "as_of": "2026-09-10",
     "status": "ok",
-    "note": "AAII bull 39.7%(+6.8) / bear 37.6%(-6.9) / neutral 22.7%(+0.1) (Wk of Sep 2); spread=+2.2(前周-11.5); bull七周来首次高于均值37.5%; bear连30周高于均值31.5%"
+    "note": "AAII bull 38.0%(-1.8) / bear 39.3%(+1.8) / neutral 22.7%(持平) (Wk of Sep 10, Seeking Alpha); spread=-1.3(前周+2.1转负); 悲观回升略超乐观"
   },
   "margin_debt": {
-    "value": 1417.2,
-    "as_of": "2026-07-31",
+    "value": 1502.1,
+    "as_of": "2026-06-30",
     "status": "ok",
-    "note": "FINRA margin debt 7月$1,417.2B(官方最新), 环比-5.65%(-$84.9B, 自6月$1,502.1B历史新高回落); 仍高位, 占GDP约3.7%; 6月曾创历史新高后7月首次月度回落"
+    "note": "FINRA margin debt 6月$1,502.072B创1997年来历史新高, 环比+6.1%/同比+49.0%; 净投资者信贷-$1.06T创历史低位; 占GDP约4%超2021峰值; 7月数据FINRA尚未发布(每月第三周发布上月). 前值旧文件误标'7月1417.2B官方最新'但FINRA table无Jul行, 已按官方table纠正为6月真值"
   },
   "bofa_fms_cash": {
     "value": 3.5,
     "as_of": "2026-08",
-    "status": "ok"
+    "status": "ok",
+    "note": "BofA FMS现金水平3.5% (Aug 2026, 自7月3.6%; 1998年来第六低, 触发Cash Rule≤4.0%)"
   }
 }

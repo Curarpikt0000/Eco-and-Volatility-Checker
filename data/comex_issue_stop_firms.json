@@ -1,6 +1,6 @@
 {
  "status": "ok",
- "generated": "2026-09-04T11:07:32",
+ "generated": "2026-09-11T11:09:39",
  "source": "双通道: archive PDF(cme_delivery_parser x坐标精确 per-firm) + Notion「Daily auto tracking」Activity Note 增量",
  "unit": "合约手数",
  "note": "三金属(金/银/铂) × 全部机构(含非银) × 日粒度 per-firm 明细。供 top10 交货/接货方排名与日/周/月聚合。",
@@ -25,17 +25,17 @@
  ],
  "coverage": {
   "start": "2026-01-06",
-  "end": "2026-09-02",
-  "days": 140,
+  "end": "2026-09-09",
+  "days": 143,
   "archive_end": "2026-06-05",
   "archive_days": 91,
-  "notion_days": 49,
+  "notion_days": 52,
   "pdfs_found": 133,
   "pdfs_parsed": 133,
   "parse_failed": 0,
   "total_mismatches": 0,
-  "notion_rows": 1340,
-  "notion_used": 101,
+  "notion_rows": 1354,
+  "notion_used": 106,
   "notion_error": "",
   "notion_unmapped_firms": []
  },
@@ -7011,6 +7011,66 @@
      "s": 1,
      "s_c": 1
     }
+   },
+   "2026-09-08": {
+    "JP Morgan": {
+     "i": 162,
+     "s": 50,
+     "i_c": 162,
+     "s_c": 50
+    },
+    "Deutsche Bank": {
+     "i": 0,
+     "s": 48,
+     "s_h": 48
+    },
+    "Macquarie": {
+     "i": 0,
+     "s": 13,
+     "s_c": 13
+    },
+    "Wells Fargo": {
+     "i": 0,
+     "s": 14,
+     "s_h": 14
+    },
+    "Barclays": {
+     "i": 0,
+     "s": 31,
+     "s_c": 31
+    },
+    "RBC": {
+     "i": 0,
+     "s": 2,
+     "s_c": 2
+    },
+    "ADM": {
+     "i": 0,
+     "s": 4,
+     "s_c": 4
+    }
+   },
+   "2026-09-09": {
+    "ADM": {
+     "i": 3,
+     "s": 0,
+     "i_c": 3
+    },
+    "Deutsche Bank": {
+     "i": 0,
+     "s": 1,
+     "s_h": 1
+    },
+    "JP Morgan": {
+     "i": 0,
+     "s": 1,
+     "s_c": 1
+    },
+    "Barclays": {
+     "i": 0,
+     "s": 1,
+     "s_c": 1
+    }
    }
   },
   "Silver": {
@@ -13409,6 +13469,114 @@
      "i": 0,
      "s": 29,
      "s_h": 29
+    }
+   },
+   "2026-09-04": {
+    "Advantage": {
+     "i": 6,
+     "s": 22,
+     "i_c": 6,
+     "s_c": 22
+    },
+    "CME": {
+     "i": 35,
+     "s": 7,
+     "i_h": 35,
+     "s_h": 7
+    },
+    "ADM": {
+     "i": 6,
+     "s": 16,
+     "i_c": 6,
+     "s_c": 16
+    },
+    "Dorman": {
+     "i": 0,
+     "s": 2,
+     "s_c": 2
+    }
+   },
+   "2026-09-08": {
+    "Dorman": {
+     "i": 1,
+     "s": 0,
+     "i_c": 1
+    },
+    "RBC": {
+     "i": 14,
+     "s": 0,
+     "i_c": 14
+    },
+    "Advantage": {
+     "i": 16,
+     "s": 0,
+     "i_c": 16
+    },
+    "Deutsche Bank": {
+     "i": 0,
+     "s": 2,
+     "s_h": 2
+    },
+    "Wells Fargo": {
+     "i": 0,
+     "s": 22,
+     "s_h": 22
+    },
+    "ADM": {
+     "i": 0,
+     "s": 7,
+     "s_c": 7
+    }
+   },
+   "2026-09-09": {
+    "CME": {
+     "i": 200,
+     "s": 40,
+     "i_h": 200,
+     "s_h": 40
+    },
+    "Macquarie": {
+     "i": 22,
+     "s": 0,
+     "i_h": 22
+    },
+    "Dorman": {
+     "i": 1,
+     "s": 13,
+     "i_c": 1,
+     "s_c": 13
+    },
+    "HSBC": {
+     "i": 17,
+     "s": 0,
+     "i_c": 17
+    },
+    "StoneX": {
+     "i": 64,
+     "s": 0,
+     "i_h": 64
+    },
+    "Advantage": {
+     "i": 3,
+     "s": 108,
+     "i_c": 3,
+     "s_c": 108
+    },
+    "ADM": {
+     "i": 7,
+     "s": 88,
+     "i_c": 7,
+     "s_c": 88
+    },
+    "Deutsche Bank": {
+     "i": 0,
+     "s": 42,
+     "s_h": 42
+    },
+    "Wells Fargo": {
+     "i": 0,
+     "s": 23,
+     "s_h": 23
     }
    }
   },
