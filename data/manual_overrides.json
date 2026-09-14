@@ -12,16 +12,16 @@
     "note": "口径=CBOE官方EQUITY put/call。今日(9-11)未取到官方新值: ScraperAPI无key(SCRAPER_API_KEY不在.env)+CBOE官方daily页web_extract被Cloudflare挡返空。第三方转述(thetrading.tools)官方口径Sep3=equity 0.47但按纪律不采聚合/转述源。保留上次官方值0.67(9-10)待ScraperAPI恢复"
   },
   "insider": {
-    "value": 0.3,
-    "as_of": "2026-09-01",
+    "value": 0.26,
+    "as_of": "2026-08-31",
     "status": "ok",
-    "note": "GuruFocus insider buy/sell 0.3 (As of 2026-09-01; 低于长期均值0.39约23%, 区间0.12-2.01; 内部人偏谨慎处低位)"
+    "note": "GuruFocus insider buy/sell 0.26 (Aug 2026, 官网标题最新值; 显著低于长期均值0.39约33%, 区间0.12-2.01; 内部人处偏谨慎低位)"
   },
   "lei": {
-    "value": -0.7,
-    "as_of": "2026-04-30",
+    "value": 0.2,
+    "as_of": "2026-07-31",
     "status": "ok",
-    "note": "LEI六个月变化率-0.7%(2025-10至2026-04, 优于前期-1.0%); 4月LEI环比+0.1%至97.4; 六/十二个月增长率仍为负, 信号脆弱(5/22发布, Conference Board官方最新)"
+    "note": "LEI六个月增长率转正+0.2%(2026-01至07), 四年多来首次转正, 从前六个月-1.3%反转; 7月LEI环比+0.2%至99.5(过去六个月第四次上升); 消费者预期仍是拖累但AI相关商业投资支撑, GDP预测维持1.9%(Conference Board官方, 8/20发布)"
   },
   "bofa_bull_bear": {
     "value": 9.7,
@@ -42,10 +42,10 @@
     "note": "AAII bull 38.0%(-1.8) / bear 39.3%(+1.8) / neutral 22.7%(持平) (Wk of Sep 10, Seeking Alpha); spread=-1.3(前周+2.1转负); 悲观回升略超乐观"
   },
   "margin_debt": {
-    "value": 1502.1,
-    "as_of": "2026-06-30",
+    "value": 1417.2,
+    "as_of": "2026-07-31",
     "status": "ok",
-    "note": "FINRA margin debt 6月$1,502.072B创1997年来历史新高, 环比+6.1%/同比+49.0%; 净投资者信贷-$1.06T创历史低位; 占GDP约4%超2021峰值; 7月数据FINRA尚未发布(每月第三周发布上月). 前值旧文件误标'7月1417.2B官方最新'但FINRA table无Jul行, 已按官方table纠正为6月真值"
+    "note": "FINRA margin debt 7月$1,417.225B(官方xlsx最新, 8月第三周发布), 环比-5.6%(-$84.8B, 从6月历史新高1502.1B回落)/同比+38.6%; 净自由信贷-$994.8B(仍近历史极值); 占GDP约4.4%(超2000峰值3.0%/2021峰值3.8%). 6月创1997来历史新高后首次单月回落"
   },
   "bofa_fms_cash": {
     "value": 3.5,
