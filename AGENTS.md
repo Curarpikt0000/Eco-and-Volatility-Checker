@@ -64,6 +64,33 @@ Notion 3 时序 DB → 莫兰迪配色 dashboard（雷达图 + 仪表盘 + 6 部
 - eco-vol-01-daily-scan-report 每日 **11:00**(工作日)：抓数+KOL独立抓取+流动性+AI分析→写Notion 3DB+每日报告page内部+dashboard+GitHub副本+push→Telegram详细日报(6部分+分领域分析+KOL转向+流动性)。11点是为等 KOL/Economic Dashboard 的09:00数据跑完
 - eco-vol-weekly-report 周六 **11:00**：汇总一周→周报DB+GitHub+Telegram周报(重点状态变化)
 - eco-vol-selfheal 每小时 :20 自愈 watchdog(no_agent)
+- **eco-vol-commit-watch 工作日 12:45**(no_agent 纯脚本，`~/.hermes/scripts/eco_vol_commit_watch.sh`)：
+  兜底闸，查「当天 cron 跑了却没 commit/push」。**静默即正常**，只在异常时发消息。
+
+## ★★步骤8 提交必须走脚本(2026-09-14 立)
+**`scripts/daily_commit_push.sh <YYYY-MM-DD>`** —— cron prompt 步骤 8 已改为调它，
+**不要再手敲 `git add ... && git commit ... && git push`**。
+
+- **事故**：9/14 cron 11:00 正常跑完全部抓取与 dashboard 重建（52 个数据文件更新），
+  但 agent 在执行步骤 8 commit 那一刻**输出中断** —— 日志末尾停在残缺的
+  `<invoke name="terminal">`，无闭合无执行结果，**而 cron 仍记 `last_status=ok`**。
+  近一周同型静默失败 2 次（9/9、9/14）。数据全好，就差一个 commit，靠 Chao 问才发现。
+- **根因**：「提交」只是 prompt 里的一行命令，agent 中途断掉没有任何人知道。
+- **两道闸（Chao 选「丙」= 两个都要）**：
+  - **乙·脚本硬校验**：commit 后 HEAD 必须真的前进（exit 6）、push 后 local 必须 == remote（exit 8）；
+    `.env` 未忽略 exit 3；红线命中 exit 4；push 失败 exit 7。**让 `status=ok` 不能再撒谎**。
+  - **甲·外部兜底**：乙只能覆盖「跑到了那一步」的失败；9/14 是**没跑到就断了**，
+    连非零退出码都产生不了。故另有 `eco-vol-commit-watch` 从外部按**产物**判定
+    （数据文件 mtime + git log），不看任何 cron 状态标签。
+- **只 add 本次窗口产出**（mtime 判定，默认 90 分钟）+ 按路径二次排除
+  `data/hermes_line/HDB_*.json`（别的 agent 的）。**绝不 `git add -A / -u`**。
+- **★坑**：初版用 `git status --porcelain -uno`，`-uno` 会**排除未跟踪文件** →
+  某天新增的数据文件永远提交不上。真 repo 因文件都已跟踪而不暴露，
+  是在临时 repo 自测时才抓到的。已改 `-uall`（`-unormal` 只给目录名 `data/`，
+  喂给 `git add` 会连累别人的文件）。
+- 六条路径已实测：提交+push 成功 / 无改动不造空 commit / 排除他人文件 /
+  红线拦截 exit 4 / push 失败 exit 7 / local==remote 校验生效。
+  告警脚本的触发路径也单独实测过会响（不是永远不响的警报器）。
 
 ## 数据联动 (2026-08 扩展)
 - **KOL 独立数据源**：名册 `data/kol_registry.json`，Eco **每日自己 web_search 全量 active KOL** 判方向→写 data/kol_independent.json(不共用另一 agent 的 Notion 结论,准确性独立)。★**cron prompt 不写死 KOL 数量**(2026-08-14 Chao 加 Craig Hamilton-Parker 时踩坑:prompt 曾硬编码"88个KOL"4处,新增会漏抓)——已改为"读名册取 active==true 的全部",新增 KOL 自动纳入,增减名册无需改 cron。
