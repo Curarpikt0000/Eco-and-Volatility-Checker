@@ -990,3 +990,99 @@ AGENTS.md 的 Cron 段仍描述旧版日报口径，需 Chao 授权后补写。
 - [ ] 承接 9/08：四方对账门禁「cron 实抓」那一路是否已转全绿，仍未取得证据。
 - [ ] 承接 9/04：tesseract 持久化未落地（需 Chao 点头动 devpod 配置），重启即丢逐笔。
 - [ ] 检索词质量优化（非 bug）：24 人 `search_terms` 为带机构后缀长串。
+
+## 2026-09-14
+
+### 决策
+
+- ★**Chao 选「丙」= 甲＋乙两道闸都要**（针对「cron 跑了却没 commit」的静默失败）：
+  - **乙 · 治本**：步骤 8 的提交改走脚本 `scripts/daily_commit_push.sh`，
+    **commit 后校验 HEAD 真的前进、push 后校验 local == remote**，否则非零退出。
+    目的是**让 `last_status=ok` 不能再撒谎**。
+  - **甲 · 兜底**：外部 `no_agent` 纯脚本看门狗，按**产物**（数据文件 mtime + git log）判定，
+    不看任何 cron 状态标签。
+  - **为什么乙不够**：乙只覆盖「跑到了那一步」的失败；9/14 是**没跑到就断了**，
+    连非零退出码都产生不了 —— 这种情况只能靠外部按产物兜。
+- Chao 先答「1」= 授权立刻补提交当天产物；再答「丙」= 两道闸同时上。
+- AGENTS.md 写入首次审批超时被拒 → 按协议**未重试、未绕道**；Chao 回「OK」在场后重发才写入。
+
+### 事实与配置
+
+- ★**事故形态：agent 在工具调用中途断掉，而 cron 记 `ok`**。
+  9/14 cron 11:00 正常跑完全部抓取与 dashboard 重建（52 个数据文件更新、`docs/index.html` 11:20 重建），
+  **日志最后一行停在一个残缺的 `<invoke name="terminal">`** —— 无闭合标签、无执行结果，
+  正是准备执行 commit 的那一刻。近一周同型 2 次（9/9、9/14）。
+- **判据只认产物**：`git log` + 文件 mtime。用 git 实际记录对账才分得清
+  「跑了没提交」与「本来就不该跑」（9/12 是周六，日报排程 `1-5` 不含周六，那天无 daily commit 属正常）。
+- **`scripts/daily_commit_push.sh`** 退出码表：
+  `.env` 未忽略→3 / 红线命中→4 / add·commit 失败→5 /
+  **commit 后 HEAD 未前进→6** / push 失败→7 / **push 后 local≠remote→8**。
+  只 add mtime 落在窗口内（默认 90 分钟）的文件 + 按路径二次排除 `data/hermes_line/HDB_*.json`；
+  **绝不 `git add -A / -u`**。
+- **`~/.hermes/scripts/eco_vol_commit_watch.sh`**（cron `eco-vol-commit-watch`，工作日 12:45，`no_agent`）：
+  周末直接退出；12:30 前不判；判据1 = 今天 09:00 后 `data/`+`docs/` 被写文件数 <5 → 「没跑」；
+  判据2 = 跑了但 `git log` 无 `daily <today>` → 「跑了没提交」。**静默即正常**。
+- ★★**`git status --porcelain -uno` 会排除未跟踪文件**（自测在临时 repo 抓到的真 bug）：
+  某天新增的数据文件将**永远提交不上**。真 repo 因文件都已跟踪而不暴露。
+  已改 `-uall`（`-unormal` 只给到目录名 `data/`，喂给 `git add` 会连累别的 agent 的文件）。
+- 六条路径已实测：提交+push 成功 / 无改动不造空 commit / 排除他人文件 /
+  红线拦截 exit 4 / push 失败 exit 7 / local==remote 校验生效。
+  告警脚本的触发路径也单独造场景实测过**确实会响**。
+
+### 进展
+
+- `a67ccae` daily 2026-09-14（补提交）：29 个文件。13:32 那批 `HDB_*.json` 属别的 agent，未纳入。
+- `7cbad20` feat(cron)：步骤 8 改走脚本 + 双硬校验；cron prompt 同步（按字节位置切片替换，
+  避开 redactor 对邮箱的改写 —— 字符串匹配会失败）。
+- `ae0aaba` docs(AGENTS)：记录事故根因、两道闸分工、六条实测路径与 `-uno` 坑。
+
+### 待办
+
+- [ ] ★★**`a67ccae` 那次补提交自身漏了 6 个文件 —— 至今未进 git**（2026-09-15 归档时核实发现）：
+      `reports/2026-09-14.md` · `data/daily/2026-09-14.json` · `data/snapshots/2026-09-14.json` ·
+      `data/kol/daily/2026-09-14.json` · `dashboard/scan-2026-09-14.html` ·
+      `data/ai_analysis_2026-09-14.json`（均 9/14 11:17–11:21 落盘，`git log` 查无记录）。
+      `a67ccae` 的 29 个文件**逐个查 `--diff-filter=A` 全部是已跟踪文件的修改、0 个新增**
+      —— 与 `-uno` 口径的表现完全吻合。**修了脚本却没回头重查已经做过的那次补提交。**
+      后果：`eco-vol-commit-watch` 判据2 只看 `git log` 有无 `daily 2026-09-14`，**已存在 → 永不报警**；
+      而次日 cron 的 90 分钟窗口也抓不到 9/14 的 mtime ⇒ **这个洞会永久静默**。
+      补救（需 Chao 确认，涉及 push）：`bash scripts/daily_commit_push.sh 2026-09-14 2000`
+      —— 但该脚本按 mtime 取窗口，会一并带上其它旧改动，宜手工点名这 6 个文件。
+- [ ] 承接 9/09：`reports/2026-09-09.md` 与 `data/daily/2026-09-09.json` **至今仍不存在**
+      （非未提交，是文件本身没生成）；同日 `data/snapshots/` 与 `data/kol/daily/` 已在 git。原因未查。
+- [ ] 承接 9/08：四方对账门禁「cron 实抓」那一路是否已转全绿，仍未取得证据。
+- [ ] 承接 9/04：tesseract 持久化未落地（需 Chao 点头动 devpod 配置），重启即丢逐笔。
+
+## 2026-09-15
+
+### 决策
+
+- **Chao 指令：把 WRS 衰退指标放进 dashboard。**（尚在口径确认阶段，未开始写生产代码）
+- ★我给出三选项待 Chao 拍板，**Chao 尚未回复**：
+  甲＝叫「WRS · Walmart 衰退信号」+ 页面标注代理关系；
+  乙＝名字里直接带「代理」二字；丙＝拿不到标普原指数就不做。
+  我建议**甲**（方向已验证可靠，代理关系在溯源块讲清即可）。
+
+### 事实与配置
+
+- **WRS = Walmart Recession Signal**，Jim Paulsen（Leuthold Group 前首席投资策略师）提出。
+  口径取自一手原文：**Walmart 股价 ÷ S&P Global Luxury Index**（80 只奢侈品股）。
+  逻辑＝经济走弱时消费从奢侈品转向折扣零售 ⇒ WMT 相对跑赢 ⇒ WRS 上升。
+  Paulsen 2026-03 称该指标创 2008 年以来新高。
+- ★**分母的原指数拿不到**：S&P Global Luxury Index 是**标普专有指数**，不公开发布历史点位
+  （`^SPGLUXP` 在 Yahoo 404）。
+- ★**替代源 `LUXU.L`**：Amundi S&P Global Luxury ETF 的**美元份额**，Yahoo 有 10 年 2526 个日线点。
+  **选美元份额而非欧元份额 `GLUX.MI`** —— WMT 以美元报价，同币种相除才不会把欧元汇率波动混进信号。
+  两个必须如实标注的代价：①ETF 含费率与跟踪误差，不等于指数本身；
+  ②只回溯到 2016（ETF 成立）⇒ **不能声称复现 Paulsen 的「2008 年以来最高」**。
+- **Stooq 全线被挡**（本机数据中心 IP 的老问题）；Yahoo 通，WMT ✅、三大奢侈品龙头 ✅。
+- **原型实算**（`scratch/_proto_wrs.py`，2016-09-14 基准=100）：
+  历史最低 70.31（2021-12-08，疫后奢侈品狂欢）/ 161.22（2024-12-31）/ 173.33（2025-12-31）/
+  **历史最高 237.50（2026-05-19）** / **当前 195.47（2026-09-14）**；
+  近 10 年**分位 96.6%**、2026 年内 **+11.8%**。
+  ⇒ 2024 年起急升，**独立实现复现了 Paulsen 的结论方向**，口径对得上。
+
+### 待办
+
+- [ ] 等 Chao 在甲/乙/丙之间拍板后再写生产代码
+      （规划形态：折线图 + 当前分位 + 衰退期阴影 + 溯源块，并同步 cron 与 Notion）。
