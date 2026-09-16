@@ -9,7 +9,7 @@
     "value": 0.67,
     "as_of": "2026-09-10",
     "status": "stale",
-    "note": "口径=CBOE官方EQUITY put/call。今日(9-11)未取到官方新值: ScraperAPI无key(SCRAPER_API_KEY不在.env)+CBOE官方daily页web_extract被Cloudflare挡返空。第三方转述(thetrading.tools)官方口径Sep3=equity 0.47但按纪律不采聚合/转述源。保留上次官方值0.67(9-10)待ScraperAPI恢复"
+    "note": "口径=CBOE官方EQUITY put/call。今日(9-16)仍未取到官方EQUITY新值: CBOE官方daily页web_extract被Cloudflare挡(返导航壳)。CBOE官方market页可取当日TOTAL口径(9-16盘中total约0.91)但非equity,不能混用。第三方转述(thetrading.tools)官方Sep3=equity 0.47按纪律不采聚合/转述源。保留上次官方值0.67(9-10)待ScraperAPI/官方页恢复"
   },
   "insider": {
     "value": 0.26,
