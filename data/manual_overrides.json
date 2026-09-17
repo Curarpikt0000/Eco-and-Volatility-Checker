@@ -6,10 +6,10 @@
     "note": "AAII Stocks Total 71.05% (Aug 2026调查, 股票+股票基金71.1%连续75个月高于历史均值61.5%; 债券配置下滑)"
   },
   "put_call": {
-    "value": 0.67,
-    "as_of": "2026-09-10",
-    "status": "stale",
-    "note": "口径=CBOE官方EQUITY put/call。今日(9-16)仍未取到官方EQUITY新值: CBOE官方daily页web_extract被Cloudflare挡(返导航壳)。CBOE官方market页可取当日TOTAL口径(9-16盘中total约0.91)但非equity,不能混用。第三方转述(thetrading.tools)官方Sep3=equity 0.47按纪律不采聚合/转述源。保留上次官方值0.67(9-10)待ScraperAPI/官方页恢复"
+    "value": 0.56,
+    "as_of": "2026-09-15",
+    "status": "ok",
+    "note": "口径=CBOE官方EQUITY put/call=0.56 (selectedDate 2026-09-15, ScraperAPI直取官方daily页JSON)。总市场TOTAL=0.86/INDEX=1.01/ETP=0.99。equity 0.56偏低=股票期权看涨占优(风险偏好较高)"
   },
   "insider": {
     "value": 0.26,
@@ -24,10 +24,10 @@
     "note": "LEI六个月增长率转正+0.2%(2026-01至07), 四年多来首次转正, 从前六个月-1.3%反转; 7月LEI环比+0.2%至99.5(过去六个月第四次上升); 消费者预期仍是拖累但AI相关商业投资支撑, GDP预测维持1.9%(Conference Board官方, 8/20发布)"
   },
   "bofa_bull_bear": {
-    "value": 9.7,
-    "as_of": "2026-08-07",
+    "value": 9.5,
+    "as_of": "2026-09-15",
     "status": "ok",
-    "note": "BofA Bull&Bear 8月峰值9.7, 2021年来最高, 远超8.0卖出阈值(第17次卖出信号); 9月初仍在卖出区(7月周读数9.5-9.6); 极端多头定位+高收益债流入+利差收窄推动"
+    "note": "BofA Bull&Bear 9月读数9.5 (9/15 FMS官方), 仍远超8.0卖出阈值(持续卖出信号); 8月峰值曾达9.7(2021来最高); 极端多头定位+高收益债流入+利差收窄; 9月现金升至3.9%示极端看多略降温但仍在卖出区"
   },
   "ad_line": {
     "value": true,
@@ -42,15 +42,15 @@
     "note": "AAII bull 38.0%(-1.8) / bear 39.3%(+1.8) / neutral 22.7%(持平) (Wk of Sep 10, Seeking Alpha); spread=-1.3(前周+2.1转负); 悲观回升略超乐观"
   },
   "margin_debt": {
-    "value": 1417.2,
-    "as_of": "2026-07-31",
+    "value": 1453.832,
+    "as_of": "2026-08-31",
     "status": "ok",
-    "note": "FINRA margin debt 7月$1,417.225B(官方xlsx最新, 8月第三周发布), 环比-5.6%(-$84.8B, 从6月历史新高1502.1B回落)/同比+38.6%; 净自由信贷-$994.8B(仍近历史极值); 占GDP约4.4%(超2000峰值3.0%/2021峰值3.8%). 6月创1997来历史新高后首次单月回落"
+    "note": "FINRA margin debt 8月$1,453.832B (macromicro官方口径, 9月中发布), 环比+2.6%(+$37B, 从7月1417.2回升)/同比约+37%; 净自由信贷仍为负近历史极值; 距6月历史新高1502.1B约-3.2%. 单月回落后8月再度回升"
   },
   "bofa_fms_cash": {
-    "value": 3.5,
-    "as_of": "2026-08",
+    "value": 3.9,
+    "as_of": "2026-09",
     "status": "ok",
-    "note": "BofA FMS现金水平3.5% (Aug 2026, 自7月3.6%; 1998年来第六低, 触发Cash Rule≤4.0%)"
+    "note": "BofA FMS现金水平3.9% (Sep 2026, 9/15官方发布, 自8月3.5%上升; 极端夏季看多降温; BofA模型称升至4-5%中性带才可再加风险; 现仍<4.0仍偏低); 净超配股票49%/净低配债券-48%(2022年5月来最低)"
   }
 }
