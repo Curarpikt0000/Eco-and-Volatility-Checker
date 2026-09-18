@@ -160,7 +160,7 @@ HOW_TO_READ = {
     "yield_curve": "10Y-2Y 利差。倒挂(<0)历史预示衰退；由倒挂转正常是衰退临近的最后信号。",
     "lei": "<b>LEI=Leading Economic Index(Conference Board 领先经济指数)</b>，由10项领先分量合成。6个月变化率 <-4% 强烈预示衰退。领先实体经济约 7 个月。",
     "aaii_alloc": "家庭股票仓位。>70% 是历史仓位极值(2000年峰值区)，反向看空信号。",
-    "sofr_iorb": "货币市场压力计。<b>SOFR=Secured Overnight Financing Rate(担保隔夜融资利率)</b>−<b>IORB=Interest on Reserve Balances(准备金余额利率)</b>。≤0 正常🟢；7–17bps 心绞痛🟡(准备金趋紧)；>17bps 心肌梗塞🔴(钱荒/回购危机,如2019年9月)。是美联储缩表触底、流动性拐点的最灵敏信号。",
+    "sofr_iorb": "货币市场压力计。<b>SOFR=Secured Overnight Financing Rate(担保隔夜融资利率，有国债抵押)</b>−<b>EFFR=Effective Federal Funds Rate(联邦基金有效利率，银行间无抵押拆借的市场成交加权中位价)</b>。有抵押本该比无抵押便宜，故常态下该差为负或贴零；转正并走阔＝<b>押着最安全的抵押品借钱反而比无抵押还贵</b>，说明回购市场资金供给出问题。≤5bps 正常🟢；5–18bps 心绞痛🟡(回购趋紧)；>18bps 心肌梗塞🔴(钱荒)。阈值按 2018-04 至今 2,112 个交易日分位校准(P90/P99)，2019年9月回购危机时该利差曾冲到 +295bps。<b>★2026-09-18 由 SOFR−IORB 改为本口径</b>：IORB 是美联储行政设定的走廊上沿、阶梯状不动，EFFR 是每日市场成交价，对回购压力更灵敏；两口径中枢差约 5bp，跨该日的历史值不可直接比较。",
 }
 
 
@@ -279,6 +279,210 @@ def threshold_text(ind):
         return f"🟢>{warn}{us} · 🟡{trig}–{warn}{us} · 🔴≤{trig}{us}"
 
 
+
+def _liquidity_crisis_html(lq):
+    """每日流动性危机监测盘: SOFR−EFFR(资金面) + BBB/HY OAS(信用面) + 闪崩日标注。
+
+    ★2026-09-18 新增。Chao: 「我需要这两个来观察每天的流动性危机」。
+      资金面与信用面**同时**恶化才是真危机; 只有一边动 = 局部事件。
+    ★Oracle 单名 CDS 是付费数据拿不到 —— 用同评级 BBB 档 OAS 替代,
+      并叠 HY 作降级风险参照(Oracle 现 S&P BBB−, 距垃圾级一档)。
+    """
+    if not lq or lq.get("status") != "ok":
+        return ('<section class="sec"><h2>每日流动性危机监测</h2>'
+                '<div class="muted">数据未就绪</div></section>')
+
+    ser = lq.get("series") or {}
+    sofr = (ser.get("sofr_effr") or {}).get("data") or []
+    bbb = (ser.get("bbb_oas") or {}).get("data") or []
+    hy = (ser.get("hy_oas") or {}).get("data") or []
+    ig = (ser.get("ig_oas") or {}).get("data") or []
+    crash_days = lq.get("crash_days") or []
+    if not sofr or not bbb:
+        return ('<section class="sec"><h2>每日流动性危机监测</h2>'
+                '<div class="muted">数据不足</div></section>')
+
+    # ── 画布 ──
+    W, H = 1180, 380
+    PL, PR, PT, PB = 62, 62, 26, 46
+    iw, ih = W - PL - PR, H - PT - PB
+
+    alld = sorted({d for d, _ in sofr} | {d for d, _ in bbb})
+    d0, d1 = alld[0], alld[-1]
+    import datetime as _dt
+    t0 = _dt.date.fromisoformat(d0).toordinal()
+    t1 = _dt.date.fromisoformat(d1).toordinal()
+    span = max(1, t1 - t0)
+
+    def X(d):
+        return PL + iw * (_dt.date.fromisoformat(d).toordinal() - t0) / span
+
+    # 左轴 bp(SOFR−EFFR), 右轴 %(OAS)
+    lv = [v for _, v in sofr]
+    lmin, lmax = min(lv), max(lv)
+    lpad = max(2.0, (lmax - lmin) * 0.12)
+    lmin, lmax = lmin - lpad, lmax + lpad
+
+    rv = [v for _, v in bbb] + [v for _, v in hy] + [v for _, v in ig]
+    rmin, rmax = min(rv), max(rv)
+    rpad = max(0.05, (rmax - rmin) * 0.12)
+    rmin, rmax = max(0, rmin - rpad), rmax + rpad
+
+    def YL(v):
+        return PT + ih * (1 - (v - lmin) / (lmax - lmin))
+
+    def YR(v):
+        return PT + ih * (1 - (v - rmin) / (rmax - rmin))
+
+    def path(pts, yf):
+        if not pts:
+            return ""
+        return "M" + " L".join(f"{X(d):.1f},{yf(v):.1f}" for d, v in pts)
+
+    p = [f'<svg viewBox="0 0 {W} {H}" class="lqc-chart" preserveAspectRatio="xMidYMid meet" '
+         f'font-family="-apple-system,PingFang SC,Helvetica,sans-serif">']
+
+    # 网格 + 左右轴刻度
+    for i in range(5):
+        y = PT + ih * i / 4
+        p.append(f'<line x1="{PL}" y1="{y:.1f}" x2="{PL+iw}" y2="{y:.1f}" '
+                 f'stroke="#d8d2c6" stroke-width="0.6" stroke-dasharray="2,3"/>')
+        p.append(f'<text x="{PL-8}" y="{y+3.5:.1f}" font-size="10.5" fill="#8a8070" '
+                 f'text-anchor="end">{lmax - (lmax-lmin)*i/4:.0f}</text>')
+        p.append(f'<text x="{PL+iw+8}" y="{y+3.5:.1f}" font-size="10.5" fill="#8a8070" '
+                 f'text-anchor="start">{rmax - (rmax-rmin)*i/4:.2f}</text>')
+
+    # SOFR−EFFR 阈值带(绿/黄/红分界: 5bp / 18bp)
+    for thr, col, lab in ((5, "#c9a227", "警戒 +5bp"), (18, "#b5533c", "危机 +18bp")):
+        if lmin <= thr <= lmax:
+            y = YL(thr)
+            p.append(f'<line x1="{PL}" y1="{y:.1f}" x2="{PL+iw}" y2="{y:.1f}" '
+                     f'stroke="{col}" stroke-width="0.9" stroke-dasharray="5,4" opacity="0.55"/>')
+            p.append(f'<text x="{PL+4}" y="{y-4:.1f}" font-size="9.5" fill="{col}">{lab}</text>')
+    # 零轴
+    if lmin <= 0 <= lmax:
+        p.append(f'<line x1="{PL}" y1="{YL(0):.1f}" x2="{PL+iw}" y2="{YL(0):.1f}" '
+                 f'stroke="#9a9184" stroke-width="0.8"/>')
+
+    # ── 闪崩竖线(甲=贵金属 / 乙=美股 / 两类同崩加粗) ──
+    for c in crash_days:
+        d = c["d"]
+        if not (d0 <= d <= d1):
+            continue
+        x = X(d)
+        both = c.get("both")
+        grp = (c.get("groups") or [""])[0]
+        col = "#8c6d4f" if "贵金属" in grp else "#5a6b8c"
+        if both:
+            col = "#a04545"
+        p.append(f'<line x1="{x:.1f}" y1="{PT}" x2="{x:.1f}" y2="{PT+ih}" '
+                 f'stroke="{col}" stroke-width="{1.6 if both else 0.9}" '
+                 f'opacity="{0.55 if both else 0.32}"/>')
+        _tip = " / ".join("{0} {1:+.2f}%".format(i["asset"], i["ret"]) for i in c["items"])
+        p.append(f'<circle cx="{x:.1f}" cy="{PT+6}" r="{3.4 if both else 2.4}" '
+                 f'fill="{col}" opacity="0.85"><title>{d}  {_tip}</title></circle>')
+
+    # ── 曲线 ──
+    p.append(f'<path d="{path(ig, YR)}" fill="none" stroke="#b9b2a4" '
+             f'stroke-width="1.1" opacity="0.75"/>')
+    p.append(f'<path d="{path(hy, YR)}" fill="none" stroke="#c98b5e" stroke-width="1.5"/>')
+    p.append(f'<path d="{path(bbb, YR)}" fill="none" stroke="#7d5ba6" stroke-width="1.9"/>')
+    p.append(f'<path d="{path(sofr, YL)}" fill="none" stroke="#3f6b52" stroke-width="1.7"/>')
+
+    # x 轴月份刻度
+    seen = set()
+    for d in alld:
+        ym = d[:7]
+        if ym in seen:
+            continue
+        seen.add(ym)
+        if int(ym[5:]) % 3 != 1:
+            continue
+        x = X(d)
+        p.append(f'<line x1="{x:.1f}" y1="{PT+ih}" x2="{x:.1f}" y2="{PT+ih+4}" '
+                 f'stroke="#b0a696" stroke-width="0.8"/>')
+        p.append(f'<text x="{x:.1f}" y="{PT+ih+17}" font-size="10" fill="#8a8070" '
+                 f'text-anchor="middle">{ym}</text>')
+
+    p.append(f'<text x="{PL-8}" y="{PT-10}" font-size="10" fill="#6f665a" '
+             f'text-anchor="end">bp</text>')
+    p.append(f'<text x="{PL+iw+8}" y="{PT-10}" font-size="10" fill="#6f665a" '
+             f'text-anchor="start">%</text>')
+    p.append("</svg>")
+    chart = "".join(p)
+
+    # ── 图例 ──
+    leg = ('<div class="lqc-leg">'
+           '<span><i style="background:#3f6b52"></i>SOFR − EFFR（左轴 bp·资金面）</span>'
+           '<span><i style="background:#7d5ba6"></i>BBB 级 OAS（右轴 %·Oracle 同级）</span>'
+           '<span><i style="background:#c98b5e"></i>高收益 HY OAS（右轴 %）</span>'
+           '<span><i style="background:#b9b2a4"></i>投资级综合 OAS（右轴 %）</span>'
+           '<span><i style="background:#8c6d4f"></i>闪崩·贵金属</span>'
+           '<span><i style="background:#5a6b8c"></i>闪崩·美股</span>'
+           '<span><i style="background:#a04545"></i>贵金属与美股同日闪崩</span>'
+           '</div>')
+
+    # ── 当前读数 ──
+    def _last(s):
+        return (s or [(None, None)])[-1]
+
+    ls, lb, lh = _last(sofr), _last(bbb), _last(hy)
+    sv = ls[1] if ls[1] is not None else 0
+    s_light = "危机" if sv > 18 else ("趋紧" if sv > 5 else "正常")
+    s_cls = "bad" if sv > 18 else ("warn" if sv > 5 else "good")
+    cards = (
+        f'<div class="lqc-cards">'
+        f'<div class="lqc-c"><div class="lqc-k">资金面 SOFR−EFFR</div>'
+        f'<div class="lqc-v {s_cls}">{sv:+.1f} bp</div>'
+        f'<div class="lqc-s">{ls[0]} · {s_light}（≤5 正常 / 5–18 趋紧 / &gt;18 危机）</div></div>'
+        f'<div class="lqc-c"><div class="lqc-k">信用面 BBB OAS</div>'
+        f'<div class="lqc-v">{lb[1]:.2f} %</div>'
+        f'<div class="lqc-s">{lb[0]} · Oracle 同评级参照</div></div>'
+        f'<div class="lqc-c"><div class="lqc-k">风险偏好 HY OAS</div>'
+        f'<div class="lqc-v">{lh[1]:.2f} %</div>'
+        f'<div class="lqc-s">{lh[0]} · 与 BBB 之差 '
+        f'{(lh[1]-lb[1]):.2f} pct = 降级风险定价</div></div>'
+        f'<div class="lqc-c"><div class="lqc-k">窗口内闪崩</div>'
+        f'<div class="lqc-v">{len(crash_days)} 天</div>'
+        f'<div class="lqc-s">其中贵金属与美股同日 '
+        f'{sum(1 for c in crash_days if c.get("both"))} 天</div></div>'
+        f'</div>')
+
+    # ── 闪崩清单 ──
+    rows = []
+    for c in reversed(crash_days):
+        items = " · ".join(f'{i["asset"]} <b>{i["ret"]:+.2f}%</b>' for i in c["items"])
+        tag = ('<span class="lqc-tag both">跨类同崩</span>' if c.get("both")
+               else ('<span class="lqc-tag pm">贵金属</span>' if "贵金属" in (c.get("groups") or [""])[0]
+                     else '<span class="lqc-tag eq">美股</span>'))
+        rows.append(f'<tr><td class="lqc-d">{c["d"]}</td><td>{tag}</td><td>{items}</td></tr>')
+    table = ('<details class="lqc-det"><summary>闪崩日清单（'
+             f'{len(crash_days)} 天，阈值＝各资产日收益率 P1 分位，随数据自适应）</summary>'
+             '<table class="lqc-tb"><thead><tr><th>日期</th><th>类别</th>'
+             '<th>当日跌幅</th></tr></thead><tbody>'
+             + "".join(rows) + '</tbody></table></details>')
+
+    prov = lq.get("provenance") or {}
+    prov_html = ('<details class="lqc-det"><summary>数据溯源与口径</summary><ul class="lqc-prov">'
+                 + "".join(f'<li><b>{k}</b>：{v}</li>' for k, v in prov.items())
+                 + '</ul></details>')
+
+    return (
+        '<section class="sec" id="liquidity-crisis">'
+        '<h2>每日流动性危机监测'
+        '<span class="freq-badge">全部日更 · 2025-01 至今</span></h2>'
+        '<div class="sec-note">把<b>资金面</b>（回购市场缺不缺钱）和<b>信用面</b>'
+        '（愿不愿意借钱给高杠杆企业）画在同一张图上。'
+        '两者<b>同时</b>恶化才是真流动性危机；只有一边动，多半是局部事件。'
+        '竖线为闪崩日，贵金属与美股分色，贵金属与美股<b>同日一起</b>闪崩的用红色加粗——那才是系统性流动性事件，而非单一市场的事。</div>'
+        + cards + chart + leg
+        + '<div class="lqc-hint">曲线上方圆点可悬停查看该日各资产跌幅。'
+          'Oracle 单名 CDS 属付费数据无法取得，故以其<b>同评级 BBB 档 OAS</b> 为主线、'
+          'HY OAS 为降级风险参照——Oracle 现为 S&amp;P BBB−，距垃圾级仅一档。</div>'
+        + table + prov_html +
+        '</section>')
+
+
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
@@ -295,6 +499,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
+             liquidity_crisis=None, cot_mm=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
@@ -524,6 +729,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         country_ust=_country_ust_html(country_ust, tic_official_private),
         credit_impulse=_credit_impulse_html(credit_impulse),
         stress_panels=_stress_panels_html(stress_panels, ofr_fsi),
+        liquidity_crisis_html=_liquidity_crisis_html(liquidity_crisis),
         basis_trade=_basis_trade_html(basis_trade),
         comex_inventory=_comex_inventory_html(comex_inventory),
         debt_gdp=_debt_gdp_html(debt_gdp),
@@ -3170,7 +3376,7 @@ def _hf_leverage_html(hf):
         f'<b>图A</b>：对冲基金持有美债的总名义敞口已达 GDP 的 <b>~12.6%</b>（2015 年仅 6%），杠杆持续累积；'
         f'<b>图B</b>：其中<b>回购借款升破 $3.2 万亿</b>是加杠杆主渠道。<br>'
         f'<b>为何是风险信号</b>：这类杠杆在<b>回购利率跳升 / 保证金追缴</b>时会被迫平仓，'
-        f'2020 年 3 月「dash for cash」国债闪崩即源于此。敞口越高，一旦货币市场承压（见本页 SOFR−IORB、'
+        f'2020 年 3 月「dash for cash」国债闪崩即源于此。敞口越高，一旦货币市场承压（见本页 SOFR−EFFR、'
         f'银行融资利差），去杠杆引发的<b>国债流动性踩踏</b>风险越大。<br>'
         f'⚠️ 数据源为 SEC Form PF，<b>季度更新且滞后发布</b>（非日频），是结构性中长期风险指标。</div>'
         f'</div>'
@@ -3233,7 +3439,7 @@ def _cb_swaps_html(d):
         f'再借给本辖区缺美元的银行，到期换回。<br>'
         f'<b>怎么看：</b>平静期接近零；<b>某国央行突然大额动用 = 该辖区银行在离岸市场借不到美元</b>，'
         f'是美元荒的直接温度计。2008 / 2020 危机期间曾冲到数千亿美元级别。'
-        f'与 FIMA 回购、SOFR−IORB 利差互为佐证——三者同时走高才是真紧张。<br>'
+        f'与 FIMA 回购、SOFR−EFFR 利差互为佐证——三者同时走高才是真紧张。<br>'
         f'<b>口径：</b>按 ISO 周汇总成交额；金额为原始美元数除以 1e8（亿美元）。'
         f'数据源 <a class="src-lnk" href="https://www.newyorkfed.org/markets/desk-operations/central-bank-liquidity-swap-operations" '
         f'target="_blank" rel="noopener">纽约联储官方</a>（每日更新，免费 API）。</div>'
@@ -3630,7 +3836,7 @@ def _fiscal_budget_html(fb):
 def _maturing_treasury_html(mt):
     """私营部门(含Fed)1年内到期需展期的【可交易国债】规模: 过去一年月度柱状图(主) + 2001至今全周期折线(参考)。
     mt: fetch_maturing_treasury()。数据源 US Treasury MSPD table 3，按到期日筛≤1年加总 outstanding。"""
-    if not mt or mt.get("status") != "ok" or not mt.get("history_long"):
+    if not mt or not str(mt.get("status", "")).startswith("ok") or not mt.get("history_long"):
         st = (mt or {}).get("status", "数据未就绪")
         return f'<p class="empty">1年内到期可交易国债数据未就绪（{st}）。</p>'
     long = mt["history_long"]       # [(YYYY-MM,$T)]
@@ -6469,7 +6675,7 @@ def _corp_credit_html(cc):
 def _comex_inventory_html(ci):
     """COMEX & 上海贵金属库存 + GLD/SLV ETF 资金流。ci: fetch_comex_inventory()。
     3 库存双轴图(复用 _stress_panel_svg) + 2 ETF 周净流量柱状。绝不编: 缺失显示占位。"""
-    if not ci or ci.get("status") != "ok" or not ci.get("panels"):
+    if not ci or not str(ci.get("status", "")).startswith("ok") or not ci.get("panels"):
         return ('<p class="empty">COMEX/上海库存 + ETF 资金流数据同步中'
                 '（来源 comex-inventory-charts 公开数据，读到即填真值）。</p>')
     panels = ci.get("panels", {})
@@ -7583,6 +7789,30 @@ _TEMPLATE = r"""<!DOCTYPE html>
   /* ★2026-09-09 欧元区五国央行子表 */
   .ncb-wrap {{ grid-column: 1 / -1; margin-top: 14px; padding: 14px 16px 12px;
     background: #efe9dd; border: 1px solid #d8d0c3; border-radius: 10px; }}
+
+.lqc-chart{{width:100%;height:auto;display:block;margin:10px 0 6px}}
+.lqc-leg{{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:#6f665a;margin-bottom:10px}}
+.lqc-leg span{{display:inline-flex;align-items:center;gap:5px}}
+.lqc-leg i{{width:14px;height:3px;border-radius:2px;display:inline-block}}
+.lqc-cards{{display:flex;flex-wrap:wrap;gap:12px;margin:12px 0}}
+.lqc-c{{flex:1 1 200px;background:#eae4d9;border-radius:9px;padding:11px 13px}}
+.lqc-k{{font-size:12px;color:#7d7466;margin-bottom:3px}}
+.lqc-v{{font-size:21px;font-weight:650;color:#3b352c;letter-spacing:-.3px}}
+.lqc-v.good{{color:#3f6b52}}.lqc-v.warn{{color:#c9a227}}.lqc-v.bad{{color:#b5533c}}
+.lqc-s{{font-size:11.5px;color:#8a8070;margin-top:3px;line-height:1.45}}
+.lqc-hint{{font-size:12px;color:#7d7466;line-height:1.6;margin:6px 0 10px}}
+.lqc-det{{margin-top:9px;font-size:12.5px}}
+.lqc-det summary{{cursor:pointer;color:#6b6253;padding:5px 0}}
+.lqc-tb{{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px}}
+.lqc-tb th{{text-align:left;color:#7d7466;font-weight:600;padding:5px 8px;
+  border-bottom:1px solid #d8d2c6}}
+.lqc-tb td{{padding:5px 8px;border-bottom:1px solid #e6e0d5}}
+.lqc-d{{color:#6b6253;white-space:nowrap}}
+.lqc-tag{{font-size:11px;padding:1.5px 7px;border-radius:9px;white-space:nowrap}}
+.lqc-tag.pm{{background:#e8dcc9;color:#7a5c3c}}
+.lqc-tag.eq{{background:#dbe0ea;color:#465575}}
+.lqc-tag.both{{background:#efd6d2;color:#8e3b30}}
+.lqc-prov{{margin:6px 0 0 0;padding-left:18px;color:#6f665a;line-height:1.75;font-size:12px}}
   .ncb-title {{ font-size: 14.5px; font-weight: 700; color: #4a443c; margin-bottom: 9px; }}
   .ncb-sub {{ display: block; font-size: 11.5px; font-weight: 400; color: #8a8377; margin-top: 3px; }}
   .ncb-head, .ncb-row {{ display: grid;
@@ -8168,6 +8398,8 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="card">{stress_panels}</div>
   <!-- ═══ 附三·二B：基差套利去杠杆预警 ═══ -->
   <div class="part-title"><span class="part-num">＋</span>基差套利去杠杆预警 · 美债/日债 (SOFR 倒挂 + 持券 Carry + 波动触发 · 强平潮尾部风险 · 每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
+  <!-- ━━━ 每日流动性危机监测(SOFR−EFFR + BBB/HY OAS + 闪崩标注) ━━━ -->
+  {liquidity_crisis_html}
   <div class="card">{basis_trade}</div>
   <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)<span class="freq-badge freq-event">每次拍卖</span></div>

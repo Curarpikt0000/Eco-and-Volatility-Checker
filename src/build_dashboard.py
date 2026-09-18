@@ -500,6 +500,32 @@ def main():
         print(f"[dashboard] OFR FSI: status={ofr_fsi.get('status')} asof={ofr_fsi.get('asof')} latest={ofr_fsi.get('latest',{}).get('OFR FSI 总指数')}")
     except Exception as e:
         print(f"[dashboard] OFR FSI 跳过: {e}")
+    # ── 每日流动性危机监测(SOFR−EFFR 资金面 + BBB/HY OAS 信用面 + 闪崩日标注) ──
+    # ★2026-09-18 新增。Oracle 单名 CDS 付费拿不到 → 用同评级 BBB 档 OAS 替代。
+    liquidity_crisis = {}
+    try:
+        liquidity_crisis = ed.fetch_liquidity_crisis_panel(start="2025-01-01") or {}
+        _ls = (liquidity_crisis.get("series") or {})
+        _sf = (_ls.get("sofr_effr") or {}).get("latest")
+        _bb = (_ls.get("bbb_oas") or {}).get("latest")
+        _hy = (_ls.get("hy_oas") or {}).get("latest")
+        _cd = liquidity_crisis.get("crash_days") or []
+        print(f"[dashboard] 流动性危机盘: status={liquidity_crisis.get('status')} "
+              f"SOFR-EFFR={_sf} BBB_OAS={_bb} HY_OAS={_hy} "
+              f"闪崩日={len(_cd)}天(两类同崩{sum(1 for c in _cd if c.get('both'))}天)")
+    except Exception as e:
+        print(f"[dashboard] 流动性危机盘 跳过: {e}")
+
+    # ── COMEX/NYMEX 对冲基金(Managed Money)持仓 + 价格叠加 ──
+    # ★持仓周更(CFTC 周二持仓/周五发布) + 价格日更 —— 频率标签必须如实。
+    cot_mm = {}
+    try:
+        cot_mm = ed.fetch_cot_managed_money(years=3) or {}
+        _ok = [k for k, v in cot_mm.items() if v.get("status") == "ok"]
+        print(f"[dashboard] COT对冲基金持仓: {len(_ok)}/{len(cot_mm)} ok {_ok}")
+    except Exception as e:
+        print(f"[dashboard] COT对冲基金持仓 跳过: {e}")
+
     # ── 基差套利去杠杆预警(SOFR倒挂 + Carry空间 + 波动触发, 美债/日债) ──
     basis_trade = {}
     try:
@@ -639,6 +665,8 @@ def main():
         custody_accel=custody_accel,
         stress_panels=stress_panels,
         ofr_fsi=ofr_fsi,
+        liquidity_crisis=liquidity_crisis,
+        cot_mm=cot_mm,
         basis_trade=basis_trade,
         comex_inventory=comex_inventory,
         debt_gdp=debt_gdp,

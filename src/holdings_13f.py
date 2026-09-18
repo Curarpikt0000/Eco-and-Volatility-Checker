@@ -48,6 +48,13 @@ INSTITUTIONS = [
     {"kol": "Jim Simons (RenTec)", "fund": "Renaissance Technologies", "cik": "1037389", "sector": "量化多策略"},
     {"kol": "Ken Griffin", "fund": "Citadel Advisors", "cik": "1423053", "sector": "量化多策略"},
     {"kol": "Izzy Englander", "fund": "Millennium Management", "cik": "1273087", "sector": "量化多策略"},
+    # ── 2026-09-18 新增(Chao 指出 Palantir 侧的持仓值得看) ──
+    # ★注意: 是 **Peter Thiel**(Palantir 联合创始人/董事长)的家族办公室, 不是 CEO Alex Karp。
+    #   Karp 在 SEC 无 13F、不是投资管理人; Palantir 公司实体报过 13F 但 2023Q3 后停报。
+    #   CIK 1562087 经 SEC browse-edgar 实测确认(Thiel Macro LLC, State CA / Inc. DE, 29 份 13F)。
+    #   2026Q2 实测: 8 条持仓、合计 $418,666,506, 其中能源/电力 $300.7M = 71.8%
+    #   (Vista Energy / Vistra / AEP / DTE / FirstEnergy / CMS / X-Energy), 另 Amazon $118.0M 占 28.2%。
+    {"kol": "Peter Thiel", "fund": "Thiel Macro", "cik": "1562087", "sector": "科技成长"},
 ]
 
 

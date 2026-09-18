@@ -66,21 +66,29 @@ def fetch_all():
         time.sleep(0.5)
 
     # ── 派生指标 ──
-    # sofr_iorb = (SOFR - IORB) * 100 bps (货币市场压力)
+    # sofr_iorb = (SOFR - EFFR) * 100 bps (货币市场压力)
+    # ★2026-09-18 口径变更(Chao 要求): 分母由 IORB 改为 EFFR。
+    #   IORB=美联储行政设定的走廊上沿(阶梯状不动) → 测「准备金稀不稀缺」
+    #   EFFR=联邦基金市场成交加权中位价(每日微动) → 测「有抵押 vs 无抵押融资的相对价格」
+    #   后者对回购市场压力更灵敏。阈值已在 config 同步重校(warn 7→5, trigger 17→18),
+    #   依据: 2018-04 至今 2,112 日分位 P90=+5bp / P99=+18bp。
+    #   ★key 仍保留 "sofr_iorb" —— 改 key 会断掉 Notion 历史列与 dashboard 时序。
+    #     但两口径中枢差约 5bp(旧 −4.0 / 新 +1.2), 跨 2026-09-18 的历史不可直接比较。
     try:
         sofr_v, sofr_d = fred.fetch_fred_latest("SOFR")
-        iorb_v, iorb_d = fred.fetch_fred_latest("IORB")
-        if sofr_v is not None and iorb_v is not None:
-            spread_bps = round((sofr_v - iorb_v) * 100, 1)
+        effr_v, effr_d = fred.fetch_fred_latest("EFFR")
+        if sofr_v is not None and effr_v is not None:
+            spread_bps = round((sofr_v - effr_v) * 100, 1)
             results["sofr_iorb"] = {
                 "key": "sofr_iorb", "value": spread_bps,
-                "as_of": max(str(sofr_d), str(iorb_d)), "status": "ok",
-                "extra": {"sofr": sofr_v, "iorb": iorb_v,
-                          "sofr_as_of": str(sofr_d), "iorb_as_of": str(iorb_d)},
+                "as_of": max(str(sofr_d), str(effr_d)), "status": "ok",
+                "extra": {"sofr": sofr_v, "effr": effr_v,
+                          "sofr_as_of": str(sofr_d), "effr_as_of": str(effr_d),
+                          "basis": "SOFR-EFFR"},
             }
         else:
             results["sofr_iorb"] = {"key": "sofr_iorb", "value": None,
-                                    "as_of": None, "status": "SOFR/IORB取数失败"}
+                                    "as_of": None, "status": "SOFR/EFFR取数失败"}
     except Exception as e:
         results["sofr_iorb"] = {"key": "sofr_iorb", "value": None,
                                 "as_of": None, "status": f"错误:{e}"}

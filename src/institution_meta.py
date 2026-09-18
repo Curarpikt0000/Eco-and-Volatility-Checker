@@ -115,6 +115,17 @@ INST_META = {
         "desc_type": "多经理平台(pod shop)代表，伊兹·英格兰德，数百团队分散押注。",
         "desc_status": "多策略平台模式的标杆，管理规模巨大、机构影响力强。",
     },
+    # ── 2026-09-18 新增 ──
+    "Thiel Macro": {
+        "module": "科技成长",
+        "desc_type": "彼得·蒂尔(Palantir 联合创始人兼董事长、PayPal 联创)的家族办公室，"
+                     "持仓极度集中、主题驱动。★与 Palantir CEO Alex Karp 无关——"
+                     "Karp 在 SEC 无 13F 申报、非投资管理人。",
+        "desc_status": "2026Q2 仅 8 条持仓、合计 $4.19 亿，其中能源/电力占 71.8%"
+                       "（Vista Energy、Vistra、AEP、DTE、FirstEnergy、CMS、X-Energy），"
+                       "另有 Amazon 占 28.2%——押注 AI 算力带来的电力需求缺口，"
+                       "且买的是受监管公用事业与核电资产而非新能源概念股。",
+    },
 }
 
 # ── 政要持仓披露(数据源=国会交易披露 STOCK Act / PFD, 非13F) ──

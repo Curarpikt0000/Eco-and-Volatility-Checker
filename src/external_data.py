@@ -5098,6 +5098,291 @@ def fetch_basis_trade_monitor(cache_path=None, years=2):
     return out
 
 
+def fetch_liquidity_crisis_panel(start="2025-01-01", cache_path=None):
+    """每日流动性危机监测盘 —— SOFR−EFFR + 信用利差 + 闪崩日标注。
+
+    ★2026-09-18 新增(Chao: 「做一个去年1月份以来到今天的图, 尤其是闪崩的时间点帮我标注出来…
+      同一张图上增加 oracle CDS 或者信贷差的曲线(跟 oracle 同级别的)…
+      我需要这两个来观察每天的流动性危机」)。
+
+    ★★为什么不是 Oracle 单名 CDS:
+      单名 CDS(Oracle 5Y)属 Markit/ICE **付费**数据, 无免费合规源 —— 不硬凑、不伪造。
+      Chao 已同意用「跟 Oracle 同级别」的信用利差替代。
+      Oracle 真实评级(2026-09 实测核实):
+        S&P **BBB−**(2026-07 下调, 距垃圾级仅一档) / Moody's Baa2 负面展望 / Fitch BBB
+        债务 $129.5B ≈ 4.3× EBITDA (Reuters 2026-08-04)
+      故主线取 **BBB 档 OAS**(最贴 Oracle), 并叠 **HY OAS** 作参照 ——
+      Oracle 正卡在 BBB− 与垃圾级边界, 两线之间的距离就是市场给它的降级风险定价。
+
+    ★三条线的分工(都是日频, 可每天更新):
+      SOFR−EFFR  = 货币市场/回购的**资金面**压力(钱够不够)
+      BBB OAS    = 投资级末端的**信用面**压力(愿不愿意借给高杠杆企业)
+      HY OAS     = 垃圾级的信用面压力(风险偏好总开关)
+      资金面与信用面同时恶化 = 真流动性危机; 只有一个动 = 局部事件。
+
+    ★闪崩标注(Chao 选甲+乙两类都标):
+      甲 = 金银(GC=F / SI=F), 乙 = 美股(^GSPC / ^IXIC)
+      阈值**不拍脑袋**: 取各自 2025-01 以来日收益率分布的 **P1 分位**,
+      即「本窗口内最极端的 1% 交易日」, 可解释且随数据自适应。
+
+    返回 {series:{sofr_effr, bbb_oas, hy_oas, ig_oas}, crashes:[...],
+          latest:{...}, provenance:{...}, status}
+    """
+    import datetime as _dt
+    import json as _json
+    import urllib.request as _ur
+
+    def _px(sym, since):
+        h = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                           "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36"}
+        p1 = int(_dt.datetime(2024, 11, 1).timestamp())
+        p2 = int(_dt.datetime.now().timestamp())
+        u = (f"https://query1.finance.yahoo.com/v8/finance/chart/{sym}"
+             f"?period1={p1}&period2={p2}&interval=1d")
+        try:
+            d = _json.loads(_ur.urlopen(_ur.Request(u, headers=h), timeout=45)
+                            .read().decode("utf-8", "ignore"))
+            res = (d.get("chart") or {}).get("result") or []
+            ts = res[0].get("timestamp") or []
+            cl = ((res[0].get("indicators") or {}).get("quote") or [{}])[0].get("close") or []
+            return [(_dt.datetime.utcfromtimestamp(t).strftime("%Y-%m-%d"), float(c))
+                    for t, c in zip(ts, cl) if c is not None]
+        except Exception:
+            return []
+
+    out = {"series": {}, "crashes": [], "status": "ok", "start": start}
+
+    # ── ① 资金面: SOFR − EFFR(bp) ──
+    try:
+        sofr = dict(_fred_series("SOFR", start="2024-11-01"))
+        effr = dict(_fred_series("EFFR", start="2024-11-01"))
+        pts = [(d, round((sofr[d] - effr[d]) * 100, 1))
+               for d in sorted(set(sofr) & set(effr)) if d >= start]
+        out["series"]["sofr_effr"] = {
+            "name": "SOFR − EFFR", "unit": "bp", "axis": "left",
+            "desc": "货币市场/回购资金面压力。有抵押本该比无抵押便宜，转正=回购市场缺钱。",
+            "thresholds": {"warn": 5, "danger": 18},
+            "data": pts, "status": "ok" if pts else "无数据",
+        }
+    except Exception as e:
+        out["series"]["sofr_effr"] = {"name": "SOFR − EFFR", "data": [], "status": f"错误:{e}"}
+
+    # ── ② 信用面: ICE BofA 分评级 OAS(%) ──
+    for sid, key, nm, desc in [
+        ("BAMLC0A4CBBB", "bbb_oas", "BBB 级 OAS",
+         "投资级最末档信用利差。★Oracle 现为 S&P BBB−/Moody's Baa2，本线是其同级参照。"),
+        ("BAMLH0A0HYM2", "hy_oas", "高收益 HY OAS",
+         "垃圾级信用利差＝风险偏好总开关。Oracle 若再降一档即落入此区间。"),
+        ("BAMLC0A0CM", "ig_oas", "投资级综合 OAS",
+         "投资级整体信用利差，作基准对照。"),
+    ]:
+        try:
+            s = _fred_series(sid, start="2024-11-01")
+            pts = [(d, round(float(v), 3)) for d, v in s if d >= start]
+            out["series"][key] = {
+                "name": nm, "unit": "%", "axis": "right", "fred_id": sid,
+                "desc": desc, "data": pts, "status": "ok" if pts else "无数据",
+            }
+        except Exception as e:
+            out["series"][key] = {"name": nm, "data": [], "status": f"错误:{e}"}
+
+    # ── ③ 闪崩日(甲 金银 / 乙 美股), 阈值 = 各自 P1 分位 ──
+    CRASH = {
+        "GC=F": ("黄金", "甲·贵金属"), "SI=F": ("白银", "甲·贵金属"),
+        "^GSPC": ("标普500", "乙·美股"), "^IXIC": ("纳斯达克", "乙·美股"),
+    }
+    for sym, (zh, grp) in CRASH.items():
+        px = _px(sym, start)
+        if len(px) < 30:
+            continue
+        rets = []
+        for i in range(1, len(px)):
+            d, v = px[i]
+            pv = px[i - 1][1]
+            if pv:
+                rets.append((d, 100.0 * (v / pv - 1)))
+        win = [(d, r) for d, r in rets if d >= start]
+        if not win:
+            continue
+        vals = sorted(r for _, r in win)
+        p1 = vals[max(0, min(len(vals) - 1, int(len(vals) * 1 / 100)))]
+        for d, r in win:
+            if r <= p1:
+                out["crashes"].append({"d": d, "asset": zh, "group": grp,
+                                       "ret": round(r, 2), "threshold": round(p1, 2)})
+    out["crashes"].sort(key=lambda z: (z["d"], z["asset"]))
+
+    # 同日多资产合并(便于渲染成一条竖线)
+    merged = {}
+    for c in out["crashes"]:
+        merged.setdefault(c["d"], []).append(c)
+    out["crash_days"] = [
+        {"d": d, "n": len(v), "groups": sorted({x["group"] for x in v}),
+         "items": sorted(v, key=lambda z: z["ret"]),
+         "worst": min(x["ret"] for x in v),
+         "both": len({x["group"] for x in v}) > 1}
+        for d, v in sorted(merged.items())
+    ]
+
+    for k, v in out["series"].items():
+        if v.get("data"):
+            v["latest"] = v["data"][-1]
+
+    out["provenance"] = {
+        "sofr_effr": "FRED SOFR & EFFR(纽约联储)，日频，差值×100 转 bp",
+        "oas": "FRED ICE BofA US Corporate Index OAS：BAMLC0A4CBBB(BBB) / "
+               "BAMLH0A0HYM2(HY) / BAMLC0A0CM(IG)，日频，单位 %",
+        "oracle_note": "Oracle 单名 5Y CDS 属 Markit/ICE 付费数据，无免费合规源，"
+                       "故以同评级 BBB 档 OAS 替代并叠 HY 作降级风险参照。"
+                       "Oracle 评级：S&P BBB−(2026-07 下调，距垃圾级一档)、"
+                       "Moody's Baa2 负面展望、Fitch BBB；债务 $129.5B≈4.3×EBITDA"
+                       "（来源 Reuters 2026-08-04、S&P Global Ratings）。",
+        "crash": "闪崩日 = 各资产 2025-01 起日收益率分布的 P1 分位(最极端 1% 交易日)，"
+                 "阈值随数据自适应，非人为设定固定百分比。"
+                 "甲=金银(GC=F/SI=F)，乙=美股(^GSPC/^IXIC)，数据源 Yahoo Finance。",
+    }
+
+    if cache_path is None:
+        cache_path = os.path.join(os.path.dirname(__file__), "..", "data",
+                                  "liquidity_crisis.json")
+    try:
+        with open(cache_path, "w", encoding="utf-8") as f:
+            json.dump(out, f, ensure_ascii=False)
+    except Exception:
+        pass
+    return out
+
+
+def fetch_cot_managed_money(years=3, cache_path=None):
+    """COMEX/NYMEX 金·银·铂 —— 对冲基金(Managed Money)持仓 + 未平仓量 + 日频价格。
+
+    ★2026-09-18 新增(Chao: 「能否抓到对冲基金在 comex 上面的黄金白银和 pt 的
+      开仓量和价格叠加图, 并且每天更新」)。
+
+    ★★频率真相(必须随数据一起显示, 不许标成日更):
+      CFTC COT 是**周度**: 每周二收盘持仓, 当周周五 15:30 ET 发布。
+      「对冲基金持仓每天更新」在数据源层面不存在 —— 全世界都只有周度。
+      本函数的做法: **持仓周度台阶 + 价格日度曲线**叠加, 各自标注真实频率。
+
+    ★口径选择: 用 Disaggregated 而非 Legacy。
+      Legacy 的 non-commercial 把对冲基金 + CTA + 指数基金混在一起;
+      Disaggregated 的 **Managed Money** 才是纯对冲基金/CTA 这类投机资金,
+      另有 Swap Dealer(做市商/银行)可作对手方参照。
+      (项目原有 fetchers/cot.py 用的是 Legacy 口径, 两者并存、互不替代。)
+
+    ★铂金在 **NYMEX** 不在 COMEX —— 渲染时不可笼统写成 COMEX。
+
+    数据源:
+      持仓 = CFTC Socrata Disaggregated futures-only (72hh-3qpy), 免 key
+      价格 = Yahoo Finance 连续合约 GC=F / SI=F / PL=F, 日频
+
+    返回 {metal: {name, exchange, cot:[...], price:[(d,close)],
+                  latest:{...}, pctile:{...}, status, source}}
+    """
+    import datetime as _dt
+    import json as _json
+    import urllib.parse as _up
+    import urllib.request as _ur
+
+    UA = {"User-Agent": "EcoVolChecker research"}
+    COT_BASE = "publicreporting.cftc.gov/resource/72hh-3qpy.json"
+    METALS = {
+        "gold": ("黄金 Gold", "COMEX", "GOLD - COMMODITY EXCHANGE INC.", "GC=F"),
+        "silver": ("白银 Silver", "COMEX", "SILVER - COMMODITY EXCHANGE INC.", "SI=F"),
+        "platinum": ("铂金 Platinum", "NYMEX", "PLATINUM - NEW YORK MERCANTILE EXCHANGE", "PL=F"),
+    }
+    start = (_dt.date.today() - _dt.timedelta(days=int(years * 365.25))).isoformat()
+
+    def _cot(market):
+        u = "https://" + COT_BASE + "?" + _up.urlencode({
+            "$where": (f"market_and_exchange_names='{market}' "
+                       f"AND report_date_as_yyyy_mm_dd >= '{start}'"),
+            "$order": "report_date_as_yyyy_mm_dd", "$limit": 400})
+        try:
+            r = _ur.urlopen(_ur.Request(u, headers=UA), timeout=60)
+            return _json.loads(r.read().decode("utf-8", "ignore"))
+        except Exception:
+            return []
+
+    def _px(sym):
+        rng = f"{max(int(years), 1)}y"
+        u = (f"https://query1.finance.yahoo.com/v8/finance/chart/{sym}"
+             f"?range={rng}&interval=1d")
+        h = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                           "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36"}
+        try:
+            r = _ur.urlopen(_ur.Request(u, headers=h), timeout=45)
+            d = _json.loads(r.read().decode("utf-8", "ignore"))
+            res = (d.get("chart") or {}).get("result") or []
+            ts = res[0].get("timestamp") or []
+            cl = ((res[0].get("indicators") or {}).get("quote") or [{}])[0].get("close") or []
+            out = []
+            for t, c in zip(ts, cl):
+                if c is None:
+                    continue
+                out.append((_dt.datetime.utcfromtimestamp(t).strftime("%Y-%m-%d"), round(float(c), 2)))
+            return out
+        except Exception:
+            return []
+
+    def _i(r, k):
+        try:
+            return int(float(r.get(k, 0) or 0))
+        except Exception:
+            return 0
+
+    out = {}
+    for key, (zh, exch, market, sym) in METALS.items():
+        raw = _cot(market)
+        rec = {"name": zh, "exchange": exch, "symbol": sym, "cot": [], "price": [],
+               "status": "未找到",
+               "source": ("CFTC Disaggregated COT (周度·周二持仓/周五发布) + "
+                          "Yahoo Finance 连续合约 (日频)"),
+               "cadence_note": "持仓周更 · 价格日更"}
+        for r in raw:
+            d = (r.get("report_date_as_yyyy_mm_dd") or "")[:10]
+            if not d:
+                continue
+            ml, ms = _i(r, "m_money_positions_long_all"), _i(r, "m_money_positions_short_all")
+            sl = _i(r, "swap_positions_long_all")
+            ss = _i(r, "swap__positions_short_all") or _i(r, "swap_positions_short_all")
+            rec["cot"].append({
+                "d": d, "oi": _i(r, "open_interest_all"),
+                "mm_long": ml, "mm_short": ms, "mm_net": ml - ms,
+                "sd_long": sl, "sd_short": ss, "sd_net": sl - ss,
+                "pm_long": _i(r, "prod_merc_positions_long"),
+                "pm_short": _i(r, "prod_merc_positions_short"),
+            })
+        rec["price"] = _px(sym)
+        if len(rec["cot"]) >= 2:
+            last = rec["cot"][-1]
+            nets = [c["mm_net"] for c in rec["cot"]]
+            ois = [c["oi"] for c in rec["cot"]]
+            rec["latest"] = last
+            rec["prev"] = rec["cot"][-2]
+            # 历史分位: 当前 MM 净 / OI 在本窗口里的位置
+            rec["pctile"] = {
+                "mm_net": round(100.0 * sum(1 for v in nets if v <= last["mm_net"]) / len(nets), 1),
+                "oi": round(100.0 * sum(1 for v in ois if v <= last["oi"]) / len(ois), 1),
+            }
+            rec["mm_net_min"], rec["mm_net_max"] = min(nets), max(nets)
+            rec["oi_min"], rec["oi_max"] = min(ois), max(ois)
+            rec["status"] = "ok"
+        if rec["price"]:
+            rec["price_latest"] = rec["price"][-1]
+        out[key] = rec
+
+    if cache_path is None:
+        cache_path = os.path.join(os.path.dirname(__file__), "..", "data",
+                                  "cot_managed_money.json")
+    try:
+        with open(cache_path, "w", encoding="utf-8") as f:
+            json.dump(out, f, ensure_ascii=False)
+    except Exception:
+        pass
+    return out
+
+
 def fetch_comex_inventory(cache_path=None):
     """COMEX & 上海(SHFE/SGE)贵金属库存 + GLD/SLV ETF 资金流。
     数据源: 公开 GitHub Pages comex-inventory-charts(每日自动更新, 内联 CHARTS JSON)。
