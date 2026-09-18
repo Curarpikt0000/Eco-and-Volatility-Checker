@@ -1,0 +1,205 @@
+{
+  "date": "2026-09-18",
+  "results": {
+    "vix": {
+      "key": "vix",
+      "value": 17.71,
+      "as_of": "2026-09-16",
+      "status": "ok"
+    },
+    "fear_greed": {
+      "value": 28.7,
+      "as_of": "2026-09-17",
+      "status": "ok",
+      "extra": {
+        "rating": "fear"
+      },
+      "key": "fear_greed"
+    },
+    "aaii_bull_bear": {
+      "value": -1.3,
+      "as_of": "2026-09-10",
+      "status": "ok",
+      "note": "AAII bull 38.0%(-1.8) / bear 39.3%(+1.8) / neutral 22.7%(持平) (Wk of Sep 10, Seeking Alpha); spread=-1.3(前周+2.1转负); 悲观回升略超乐观",
+      "key": "aaii_bull_bear"
+    },
+    "put_call": {
+      "value": 0.52,
+      "as_of": null,
+      "status": "ok",
+      "source": "CBOE official (via ScraperAPI)",
+      "key": "put_call"
+    },
+    "bofa_fms_cash": {
+      "value": 3.9,
+      "as_of": "2026-09",
+      "status": "ok",
+      "note": "BofA FMS现金水平3.9% (Sep 2026, 9/15官方发布, 自8月3.5%上升; 极端夏季看多降温; BofA模型称升至4-5%中性带才可再加风险; 现仍<4.0仍偏低); 净超配股票49%/净低配债券-48%(2022年5月来最低)",
+      "key": "bofa_fms_cash"
+    },
+    "sofr_iorb": {
+      "key": "sofr_iorb",
+      "value": -28.0,
+      "as_of": "2026-09-18",
+      "status": "ok",
+      "extra": {
+        "sofr": 3.62,
+        "iorb": 3.9,
+        "sofr_as_of": "2026-09-16",
+        "iorb_as_of": "2026-09-18"
+      }
+    },
+    "margin_cost": {
+      "key": "margin_cost",
+      "value": 6.75,
+      "as_of": "2026-09-15",
+      "status": "ok"
+    },
+    "bank_funding_stress": {
+      "key": "bank_funding_stress",
+      "value": -9.0,
+      "as_of": "2026-09-16",
+      "status": "ok",
+      "extra": {
+        "cp3m": 3.9,
+        "tbill3m": 3.99,
+        "sofr": 3.62,
+        "spread_bps": -9.0
+      }
+    },
+    "margin_debt": {
+      "value": 1453.832,
+      "as_of": "2026-08-31",
+      "status": "ok",
+      "key": "margin_debt"
+    },
+    "margin_gdp": {
+      "key": "margin_gdp",
+      "value": 4.48,
+      "as_of": "2026-09-18",
+      "status": "ok"
+    },
+    "ipo_count": {
+      "value": 239.0,
+      "as_of": "2026-YTD",
+      "status": "ok",
+      "extra": {
+        "source": "stockanalysis",
+        "year": 2026
+      },
+      "key": "ipo_count"
+    },
+    "insider": {
+      "value": 0.016,
+      "as_of": null,
+      "status": "ok",
+      "extra": {
+        "source": "openinsider",
+        "note": "近期榜前100笔口径,趋势用"
+      },
+      "key": "insider"
+    },
+    "bofa_bull_bear": {
+      "value": 9.5,
+      "as_of": "2026-09-15",
+      "status": "ok",
+      "note": "BofA Bull&Bear 9月读数9.5 (9/15 FMS官方), 仍远超8.0卖出阈值(持续卖出信号); 8月峰值曾达9.7(2021来最高); 极端多头定位+高收益债流入+利差收窄; 9月现金升至3.9%示极端看多略降温但仍在卖出区",
+      "key": "bofa_bull_bear"
+    },
+    "hy_oas": {
+      "key": "hy_oas",
+      "value": 2.7,
+      "as_of": "2026-09-16",
+      "status": "ok"
+    },
+    "ad_line": {
+      "key": "ad_line",
+      "value": false,
+      "as_of": "2026-09-16",
+      "status": "ok",
+      "extra": {
+        "source": "NYSE A/D 腾落线(SP500 全成分股, Economic-Dashboard cron 真数据)",
+        "cumulative": 1087,
+        "advance_pct": 31.61,
+        "ad_net": -183,
+        "cum_recent_high": 2031,
+        "cum_lookback_high": 2031,
+        "cum_made_new_high": true,
+        "recent_advance_pct_avg": 47.4,
+        "breadth_confirmed": true,
+        "tickers": 503
+      }
+    },
+    "buffett": {
+      "value": 255.7,
+      "as_of": "2026-04-01",
+      "status": "ok",
+      "extra": {
+        "source": "FRED Z.1"
+      },
+      "key": "buffett"
+    },
+    "cape": {
+      "value": 40.99,
+      "as_of": "2026-09-17",
+      "status": "ok",
+      "key": "cape"
+    },
+    "yield_curve": {
+      "key": "yield_curve",
+      "value": 0.27,
+      "as_of": "2026-09-17",
+      "status": "ok"
+    },
+    "lei": {
+      "value": 0.57,
+      "as_of": "2026-08-01",
+      "status": "ok",
+      "extra": {
+        "cli_index": 100.96,
+        "source": "FRED OECD CLI",
+        "note": "OECD综合领先指标6月变化(替Conference Board付费LEI)"
+      },
+      "key": "lei"
+    },
+    "aaii_alloc": {
+      "value": 71.05,
+      "as_of": null,
+      "status": "ok",
+      "key": "aaii_alloc"
+    }
+  },
+  "cot": {
+    "gold": {
+      "as_of": "2026-09-08",
+      "open_interest": 411227,
+      "comm_long": 54403,
+      "comm_short": 324677,
+      "comm_net": -270274,
+      "noncomm_long": 261007,
+      "noncomm_short": 29047,
+      "noncomm_net": 231960,
+      "metal": "gold",
+      "comm_net_wow": -5556,
+      "comm_long_wow": -7047,
+      "comm_short_wow": -1491,
+      "comm_surge": false
+    },
+    "silver": {
+      "as_of": "2026-09-08",
+      "open_interest": 103250,
+      "comm_long": 31064,
+      "comm_short": 75972,
+      "comm_net": -44908,
+      "noncomm_long": 36245,
+      "noncomm_short": 10196,
+      "noncomm_net": 26049,
+      "metal": "silver",
+      "comm_net_wow": 372,
+      "comm_long_wow": -360,
+      "comm_short_wow": -732,
+      "comm_surge": false
+    }
+  },
+  "generated_at": "2026-09-18T02:05:18.092056"
+}
