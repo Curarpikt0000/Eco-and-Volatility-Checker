@@ -483,6 +483,179 @@ def _liquidity_crisis_html(lq):
         '</section>')
 
 
+
+def _cot_mm_one(key, m):
+    """单个金属: 价格日线(左轴) + MM 净持仓周度台阶(右轴) + OI 周度线。"""
+    import datetime as _dt
+    cot = m.get("cot") or []
+    price = m.get("price") or []
+    if len(cot) < 2 or len(price) < 2:
+        return f'<div class="cmm-one"><div class="cmm-t">{m.get("name","")}</div>' \
+               f'<p class="empty">数据不足</p></div>'
+
+    W, H = 1160, 300
+    PL, PR, PT, PB = 64, 70, 22, 40
+    iw, ih = W - PL - PR, H - PT - PB
+
+    d0 = min(cot[0]["d"], price[0][0])
+    d1 = max(cot[-1]["d"], price[-1][0])
+    t0 = _dt.date.fromisoformat(d0).toordinal()
+    span = max(1, _dt.date.fromisoformat(d1).toordinal() - t0)
+
+    def X(d):
+        return PL + iw * (_dt.date.fromisoformat(d).toordinal() - t0) / span
+
+    pv = [v for _, v in price]
+    pmin, pmax = min(pv), max(pv)
+    ppad = (pmax - pmin) * 0.1 or 1
+    pmin, pmax = pmin - ppad, pmax + ppad
+
+    nets = [c["mm_net"] for c in cot]
+    ois = [c["oi"] for c in cot]
+    nmin, nmax = min(nets + [0]), max(nets)
+    npad = (nmax - nmin) * 0.12 or 1
+    nmin, nmax = nmin - npad, nmax + npad
+
+    def YP(v):
+        return PT + ih * (1 - (v - pmin) / (pmax - pmin))
+
+    def YN(v):
+        return PT + ih * (1 - (v - nmin) / (nmax - nmin))
+
+    p = [f'<svg viewBox="0 0 {W} {H}" class="cmm-chart" preserveAspectRatio="xMidYMid meet" '
+         f'font-family="-apple-system,PingFang SC,Helvetica,sans-serif">']
+
+    for i in range(5):
+        y = PT + ih * i / 4
+        p.append(f'<line x1="{PL}" y1="{y:.1f}" x2="{PL+iw}" y2="{y:.1f}" '
+                 f'stroke="#d8d2c6" stroke-width="0.6" stroke-dasharray="2,3"/>')
+        p.append(f'<text x="{PL-8}" y="{y+3.5:.1f}" font-size="10" fill="#8a8070" '
+                 f'text-anchor="end">{pmax-(pmax-pmin)*i/4:,.0f}</text>')
+        p.append(f'<text x="{PL+iw+8}" y="{y+3.5:.1f}" font-size="10" fill="#8a8070" '
+                 f'text-anchor="start">{(nmax-(nmax-nmin)*i/4)/1000:,.0f}k</text>')
+
+    # MM 净持仓: 周度台阶面积(零轴基准, 正=净多 负=净空)
+    y0 = YN(0)
+    if nmin <= 0 <= nmax:
+        p.append(f'<line x1="{PL}" y1="{y0:.1f}" x2="{PL+iw}" y2="{y0:.1f}" '
+                 f'stroke="#9a9184" stroke-width="0.9"/>')
+    step = []
+    for i, c in enumerate(cot):
+        x = X(c["d"])
+        xn = X(cot[i + 1]["d"]) if i + 1 < len(cot) else PL + iw
+        y = YN(c["mm_net"])
+        step.append(f'{x:.1f},{y:.1f} {xn:.1f},{y:.1f}')
+    p.append(f'<polyline points="{" ".join(step)}" fill="none" stroke="#7d5ba6" '
+             f'stroke-width="1.5" opacity="0.9"/>')
+    p.append(f'<polygon points="{PL},{y0:.1f} {" ".join(step)} {PL+iw},{y0:.1f}" '
+             f'fill="#7d5ba6" opacity="0.13"/>')
+
+    # OI 周度线(用右轴, 但缩放到同轴范围以便共存 —— 单独标注)
+    omin, omax = min(ois), max(ois)
+    def YO(v):
+        return PT + ih * (1 - (v - omin) / ((omax - omin) or 1)) * 0.42 + ih * 0.03
+    p.append('<polyline points="' +
+             " ".join(f'{X(c["d"]):.1f},{YO(c["oi"]):.1f}' for c in cot) +
+             '" fill="none" stroke="#b08968" stroke-width="1.1" '
+             'stroke-dasharray="4,3" opacity="0.8"/>')
+
+    # 价格日线(左轴, 画最上层)
+    p.append('<path d="M' + " L".join(f'{X(d):.1f},{YP(v):.1f}' for d, v in price) +
+             '" fill="none" stroke="#3f6b52" stroke-width="1.6"/>')
+
+    seen = set()
+    for c in cot:
+        ym = c["d"][:7]
+        if ym in seen or int(ym[5:]) % 3 != 1:
+            continue
+        seen.add(ym)
+        x = X(c["d"])
+        p.append(f'<text x="{x:.1f}" y="{PT+ih+16}" font-size="9.5" fill="#8a8070" '
+                 f'text-anchor="middle">{ym}</text>')
+
+    p.append(f'<text x="{PL-8}" y="{PT-8}" font-size="9.5" fill="#6f665a" '
+             f'text-anchor="end">价格 $</text>')
+    p.append(f'<text x="{PL+iw+8}" y="{PT-8}" font-size="9.5" fill="#6f665a" '
+             f'text-anchor="start">MM净(手)</text>')
+    p.append("</svg>")
+
+    last, prev = m.get("latest") or {}, m.get("prev") or {}
+    pc = m.get("pctile") or {}
+    dn = last.get("mm_net", 0) - prev.get("mm_net", 0)
+    doi = last.get("oi", 0) - prev.get("oi", 0)
+    plast = m.get("price_latest") or ("", 0)
+    oi_p, net_p = pc.get("oi", 0), pc.get("mm_net", 0)
+    oi_flag = ("<b>极低</b>" if oi_p <= 10 else ("偏低" if oi_p <= 30 else
+               ("偏高" if oi_p >= 70 else "中性")))
+
+    stat = (
+        f'<div class="cmm-stat">'
+        f'<span><i>价格</i><b>{plast[1]:,.2f}</b><em>{plast[0]} 日更</em></span>'
+        f'<span><i>MM 净持仓</i><b>{last.get("mm_net",0):+,}</b>'
+        f'<em>{last.get("d","")} · 周环比 {dn:+,} · 近3年 P{net_p:.0f}</em></span>'
+        f'<span><i>未平仓 OI</i><b>{last.get("oi",0):,}</b>'
+        f'<em>周环比 {doi:+,} · 近3年 P{oi_p:.0f}（{oi_flag}）</em></span>'
+        f'<span><i>MM 多 / 空</i><b>{last.get("mm_long",0):,} / {last.get("mm_short",0):,}</b>'
+        f'<em>做市商(SD)净 {last.get("sd_net",0):+,}</em></span>'
+        f'</div>')
+
+    return (f'<div class="cmm-one">'
+            f'<div class="cmm-t">{m.get("name","")}'
+            f'<span class="cmm-ex">{m.get("exchange","")}</span></div>'
+            f'{stat}{"".join(p)}</div>')
+
+
+def _cot_mm_html(cm):
+    """COMEX/NYMEX 对冲基金(Managed Money)持仓 vs 价格叠加。
+
+    ★2026-09-18 新增。Chao 要「开仓量和价格叠加图, 每天更新」。
+      ★持仓做不到日更 —— CFTC COT 是周度(周二持仓/周五 15:30 ET 发布), 全世界都只有周度。
+        故做成「持仓周度台阶 + 价格日度曲线」, 频率标签分别如实标注。
+    ★口径用 Disaggregated 的 Managed Money(纯对冲基金/CTA),
+      不是 Legacy 的 non-commercial(混了指数基金)。
+    """
+    if not cm or not isinstance(cm, dict):
+        return ('<section class="sec"><h2>对冲基金持仓 vs 价格</h2>'
+                '<div class="muted">数据未就绪</div></section>')
+    oks = [(k, v) for k, v in cm.items() if isinstance(v, dict) and v.get("status") == "ok"]
+    if not oks:
+        return ('<section class="sec"><h2>对冲基金持仓 vs 价格</h2>'
+                '<div class="muted">数据未就绪</div></section>')
+
+    order = {"gold": 0, "silver": 1, "platinum": 2}
+    oks.sort(key=lambda z: order.get(z[0], 9))
+    charts = "".join(_cot_mm_one(k, v) for k, v in oks)
+
+    leg = ('<div class="cmm-leg">'
+           '<span><i style="background:#3f6b52"></i>价格（左轴 · <b>日更</b>）</span>'
+           '<span><i style="background:#7d5ba6"></i>Managed Money 净持仓（右轴 · <b>周更</b>）</span>'
+           '<span><i style="background:#b08968"></i>未平仓量 OI（周更 · 相对走势）</span>'
+           '</div>')
+
+    src0 = (oks[0][1].get("source") or "")
+    prov = ('<details class="lqc-det"><summary>数据溯源与口径</summary><ul class="lqc-prov">'
+            f'<li><b>持仓</b>：{src0}。数据集 CFTC Socrata Disaggregated futures-only '
+            '(<code>72hh-3qpy</code>)，免 key。</li>'
+            '<li><b>为何用 Managed Money 而非 non-commercial</b>：Legacy 口径的 '
+            'non-commercial 把对冲基金、CTA、指数基金混在一起；Disaggregated 的 '
+            'Managed Money 才是纯投机资金，Swap Dealer 则是其对手方（做市商/银行）。</li>'
+            '<li><b>频率</b>：CFTC 每周二收盘持仓、当周<b>周五 15:30 ET 发布</b>，'
+            '故持仓永远滞后 3–10 天，<b>日更在数据源层面不存在</b>；价格为日频。</li>'
+            '<li><b>交易所</b>：黄金/白银在 <b>COMEX</b>，铂金在 <b>NYMEX</b>，'
+            '均排除 MICRO 迷你合约。</li>'
+            '<li><b>分位</b>：P 值为该读数在近 3 年（约 156 期）中的历史分位。</li>'
+            '</ul></details>')
+
+    return ('<section class="sec" id="cot-managed-money">'
+            '<h2>对冲基金持仓 vs 价格'
+            '<span class="freq-badge">持仓周更 · 价格日更</span></h2>'
+            '<div class="sec-note">绿线是价格（日频），紫色台阶是对冲基金'
+            '（Managed Money）净持仓（周频），棕色虚线是未平仓量 OI 的相对走势。'
+            '<b>价格涨而 MM 净持仓不跟进</b>＝涨势缺乏投机资金背书；'
+            '<b>OI 持续收缩</b>＝整个市场在去杠杆，波动会被放大。</div>'
+            + leg + charts + prov + '</section>')
+
+
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
@@ -730,6 +903,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         credit_impulse=_credit_impulse_html(credit_impulse),
         stress_panels=_stress_panels_html(stress_panels, ofr_fsi),
         liquidity_crisis_html=_liquidity_crisis_html(liquidity_crisis),
+        cot_mm_html=_cot_mm_html(cot_mm),
         basis_trade=_basis_trade_html(basis_trade),
         comex_inventory=_comex_inventory_html(comex_inventory),
         debt_gdp=_debt_gdp_html(debt_gdp),
@@ -7813,6 +7987,23 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .lqc-tag.eq{{background:#dbe0ea;color:#465575}}
 .lqc-tag.both{{background:#efd6d2;color:#8e3b30}}
 .lqc-prov{{margin:6px 0 0 0;padding-left:18px;color:#6f665a;line-height:1.75;font-size:12px}}
+
+  .cmm-chart {{ width: 100%; height: auto; display: block; margin: 4px 0 2px; }}
+  .cmm-one {{ margin: 16px 0 20px; }}
+  .cmm-t {{ font-size: 14.5px; font-weight: 700; color: #4a443c; margin-bottom: 7px;
+    display: flex; align-items: center; gap: 8px; }}
+  .cmm-ex {{ font-size: 10.5px; font-weight: 600; color: #7a6f5d; background: #e6dfd2;
+    padding: 2px 8px; border-radius: 9px; letter-spacing: .02em; }}
+  .cmm-stat {{ display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 6px; }}
+  .cmm-stat span {{ flex: 1 1 190px; background: #eae4d9; border-radius: 8px;
+    padding: 8px 11px; display: flex; flex-direction: column; gap: 1px; }}
+  .cmm-stat i {{ font-style: normal; font-size: 11.5px; color: #7d7466; }}
+  .cmm-stat b {{ font-size: 17px; font-weight: 650; color: #3b352c; letter-spacing: -.2px; }}
+  .cmm-stat em {{ font-style: normal; font-size: 11px; color: #8a8070; line-height: 1.45; }}
+  .cmm-leg {{ display: flex; flex-wrap: wrap; gap: 15px; font-size: 12px;
+    color: #6f665a; margin: 4px 0 2px; }}
+  .cmm-leg span {{ display: inline-flex; align-items: center; gap: 5px; }}
+  .cmm-leg i {{ width: 14px; height: 3px; border-radius: 2px; display: inline-block; }}
   .ncb-title {{ font-size: 14.5px; font-weight: 700; color: #4a443c; margin-bottom: 9px; }}
   .ncb-sub {{ display: block; font-size: 11.5px; font-weight: 400; color: #8a8377; margin-top: 3px; }}
   .ncb-head, .ncb-row {{ display: grid;
@@ -8400,6 +8591,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title"><span class="part-num">＋</span>基差套利去杠杆预警 · 美债/日债 (SOFR 倒挂 + 持券 Carry + 波动触发 · 强平潮尾部风险 · 每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
   <!-- ━━━ 每日流动性危机监测(SOFR−EFFR + BBB/HY OAS + 闪崩标注) ━━━ -->
   {liquidity_crisis_html}
+  {cot_mm_html}
   <div class="card">{basis_trade}</div>
   <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)<span class="freq-badge freq-event">每次拍卖</span></div>
