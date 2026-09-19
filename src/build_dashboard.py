@@ -526,6 +526,22 @@ def main():
     except Exception as e:
         print(f"[dashboard] COT对冲基金持仓 跳过: {e}")
 
+    # ── 中国模式断代监控(旧引擎停摆 / 新引擎接续) ──
+    # ★月更: NBS 官方发布稿每月 15-16 日出; 东财宏观 API 同期更新。
+    # ★口径: NBS 分项为累计同比, 东财「固定资产投资」为单月同比 —— 两者不可混比。
+    china_regime = {}
+    try:
+        china_regime = ed.fetch_china_regime_shift() or {}
+        _bd = len(china_regime.get("breakdown") or [])
+        _mo = len(china_regime.get("monthly") or [])
+        print(f"[dashboard] 中国模式断代: status={china_regime.get('status')} "
+              f"期间={china_regime.get('period')} NBS分项={_bd} 东财月度={_mo} "
+              f"未获取={len(china_regime.get('unavailable') or [])}")
+        if china_regime.get("errors"):
+            print(f"[dashboard] 中国模式断代 告警: {china_regime['errors'][:3]}")
+    except Exception as e:
+        print(f"[dashboard] 中国模式断代 跳过: {e}")
+
     # ── 基差套利去杠杆预警(SOFR倒挂 + Carry空间 + 波动触发, 美债/日债) ──
     basis_trade = {}
     try:
@@ -667,6 +683,7 @@ def main():
         ofr_fsi=ofr_fsi,
         liquidity_crisis=liquidity_crisis,
         cot_mm=cot_mm,
+        china_regime=china_regime,
         basis_trade=basis_trade,
         comex_inventory=comex_inventory,
         debt_gdp=debt_gdp,

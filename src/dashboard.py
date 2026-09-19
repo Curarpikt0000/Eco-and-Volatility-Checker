@@ -656,6 +656,133 @@ def _cot_mm_html(cm):
             + leg + charts + prov + '</section>')
 
 
+
+def _china_regime_html(cn):
+    """中国模式断代监控 —— 旧引擎停摆 / 新引擎接续。"""
+    if not cn or not str(cn.get("status", "")).startswith("ok"):
+        return ('<p class="empty">中国模式断代数据同步中'
+                '（源：NBS 官方月度发布稿 + 东方财富宏观 API）。</p>')
+    bd = cn.get("breakdown") or []
+    mo = cn.get("monthly") or []
+    if not bd and not mo:
+        return '<p class="empty">中国模式断代：本期无数据。</p>'
+
+    period = cn.get("period") or "最新期"
+    by = {b["key"]: b for b in bd}
+    mby = {m["key"]: m for m in mo}
+
+    def v(k, src="bd"):
+        d = (by if src == "bd" else mby).get(k)
+        return d["value"] if d else None
+
+    # ── 判据: 旧引擎/新引擎 各自成色 ──
+    fai, infra, estate = v("fai_total"), v("infra"), v("estate_inv")
+    ip_p, manuf = v("ip_products"), v("manuf")
+    retail = v("retail_c", "mo")
+    old_dead = sum(1 for x in (fai, infra, estate, v("private")) if x is not None and x < 0)
+    new_alive = sum(1 for x in (ip_p, manuf) if x is not None and x > 0)
+
+    if old_dead >= 3 and new_alive <= 1:
+        verdict, vcls = "旧引擎全线收缩，新引擎尚未接续", "bad"
+    elif old_dead >= 2:
+        verdict, vcls = "旧引擎多数收缩，新引擎部分接续", "warn"
+    else:
+        verdict, vcls = "旧引擎尚未全面失速", "ok"
+
+    def fmt(x, unit="%"):
+        return "—" if x is None else f"{x:+.1f}{unit}" if unit == "%" else f"{x:.1f}{unit}"
+
+    # ── 分项表(按引擎分组) ──
+    GRP = [("old", "旧引擎 · 投资 / 地产 / 信贷"),
+           ("new", "新引擎 · 消费 / 产业升级"),
+           ("social", "社会压力 · 区域分化")]
+    rows = []
+    for eng, label in GRP:
+        items = [b for b in bd if b["engine"] == eng]
+        if not items:
+            continue
+        rows.append(f'<tr class="crs-grp"><td colspan="4">{label}</td></tr>')
+        for b in sorted(items, key=lambda x: x["value"]):
+            cls = "neg" if b["value"] < 0 else "pos"
+            pk = (f'<span class="crs-pk">伯金斯 2025-12 引 {b["perkins_ref"]}</span>'
+                  if b.get("perkins_ref") else "")
+            rows.append(
+                f'<tr><td class="crs-n">{b["name"]}</td>'
+                f'<td class="crs-v {cls}">{b["value"]:+.1f}%</td>'
+                f'<td class="crs-b">{b["basis"]}</td><td>{pk}</td></tr>')
+    table = "".join(rows)
+
+    # ── 月度总量卡 ──
+    cards = []
+    for m in mo:
+        arrow = ""
+        if m.get("mom") is not None:
+            arrow = f'<span class="crs-mom {"neg" if m["mom"] < 0 else "pos"}">{m["mom"]:+.2f}</span>'
+        cards.append(
+            f'<div class="crs-card"><div class="crs-card-n">{m["name"]}</div>'
+            f'<div class="crs-card-v">{m["value"]:.2f}<span class="crs-u">{m["unit"]}</span></div>'
+            f'<div class="crs-card-m">{m["ym"]} · {m["basis"]} {arrow}</div>'
+            f'<div class="crs-card-r">近12月 {m["yr_min"]:.1f} ~ {m["yr_max"]:.1f}（均 {m["yr_avg"]}）</div>'
+            f'</div>')
+
+    # ── 拿不到的(诚实边界) ──
+    una = "".join(
+        f'<li><b>{u["name"]}</b>　伯金斯引 <code>{u["perkins_ref"]}</code>'
+        f'<div class="crs-why">{u["reason"]}</div></li>'
+        for u in (cn.get("unavailable") or []))
+
+    # ── 出处 ──
+    srcs = "".join(
+        f'<li><a href="{d["url"]}" target="_blank" rel="noopener">{d["title"]}</a></li>'
+        for d in (cn.get("sources") or {}).values())
+
+    err = ""
+    if cn.get("errors"):
+        err = ('<div class="crs-err">抓取告警：'
+               + "；".join(cn["errors"][:4]) + "</div>")
+
+    return f"""
+<div class="crs-wrap">
+  <div class="crs-verdict {vcls}">
+    <div class="crs-verdict-t">{verdict}</div>
+    <div class="crs-verdict-s">
+      {period}累计同比：固投 {fmt(fai)}　地产 {fmt(estate)}　基建 {fmt(infra)}　
+      知识产权投资 {fmt(ip_p)}　社零 {fmt(retail)}
+    </div>
+  </div>
+
+  <p class="crs-intro">
+    Ryan Perkins《China's Economic Crossroads》(2025-12-08) 判断：中国已无法靠投资实现充分就业，
+    也无法在旧模式的失业问题解决前靠消费拉动增长；结局二元 —— 软着陆，或长期停滞加社会压力。
+    本板块把他引用的判据变成可月度跟踪的指标，并与他当时引用的数值逐项对照。
+  </p>
+
+  <table class="crs-table">
+    <thead><tr><th>分项</th><th>最新</th><th>口径</th><th>对照</th></tr></thead>
+    <tbody>{table}</tbody>
+  </table>
+  <div class="crs-note">以上为 NBS 官方发布稿原文数值，{period}累计同比。</div>
+
+  <div class="crs-cards">{"".join(cards)}</div>
+
+  <details class="crs-det">
+    <summary>伯金斯引用但公开源拿不到的（{len(cn.get("unavailable") or [])} 项，不以近似值冒充）</summary>
+    <ul class="crs-una">{una}</ul>
+  </details>
+
+  <details class="crs-det">
+    <summary>数据出处</summary>
+    <ul class="crs-src">{srcs}</ul>
+    <div class="crs-why">
+      月度总量来自东方财富宏观 API；分项来自 NBS 官方英文发布稿（每月 15-16 日更新）。
+      ★口径提示：东财「固定资产投资」字段为<b>单月同比</b>，与 NBS <b>累计同比</b>不是同一口径，
+      两者并列展示但不可直接比较。
+    </div>
+  </details>
+  {err}
+</div>"""
+
+
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
@@ -672,7 +799,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, cot_mm=None,
+             liquidity_crisis=None, cot_mm=None, china_regime=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
@@ -904,6 +1031,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         stress_panels=_stress_panels_html(stress_panels, ofr_fsi),
         liquidity_crisis_html=_liquidity_crisis_html(liquidity_crisis),
         cot_mm_html=_cot_mm_html(cot_mm),
+        china_regime_html=_china_regime_html(china_regime),
         basis_trade=_basis_trade_html(basis_trade),
         comex_inventory=_comex_inventory_html(comex_inventory),
         debt_gdp=_debt_gdp_html(debt_gdp),
@@ -7988,6 +8116,42 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .lqc-tag.both{{background:#efd6d2;color:#8e3b30}}
 .lqc-prov{{margin:6px 0 0 0;padding-left:18px;color:#6f665a;line-height:1.75;font-size:12px}}
 
+/* ── 中国模式断代 ── */
+.crs-wrap{{margin:8px 0 4px}}
+.crs-verdict{{padding:14px 18px;border-radius:10px;margin-bottom:14px;border-left:4px solid}}
+.crs-verdict.bad{{background:#f4e9e6;border-color:#a3705f}}
+.crs-verdict.warn{{background:#f3efe2;border-color:#b09a5f}}
+.crs-verdict.ok{{background:#e9efe8;border-color:#6f8f6a}}
+.crs-verdict-t{{font-size:17px;font-weight:600;color:#3d3a36;margin-bottom:6px}}
+.crs-verdict-s{{font-size:13px;color:#5f5a54;line-height:1.75}}
+.crs-intro{{font-size:13px;color:#5f5a54;line-height:1.85;margin:10px 0 16px}}
+.crs-table{{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:6px}}
+.crs-table th{{text-align:left;padding:7px 10px;color:#7a736b;font-weight:500;border-bottom:1px solid #ddd6ca;font-size:12px}}
+.crs-table td{{padding:7px 10px;border-bottom:1px solid #eee9e0}}
+.crs-grp td{{background:#f0ebe1;font-weight:600;color:#4a453f;font-size:12px;letter-spacing:.4px}}
+.crs-n{{color:#4a453f}}
+.crs-v{{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:600;text-align:right;width:92px}}
+.crs-v.neg{{color:#a3705f}}
+.crs-v.pos{{color:#5f7f5a}}
+.crs-b{{color:#8d857b;font-size:12px;width:80px}}
+.crs-pk{{color:#8d857b;font-size:12px}}
+.crs-note{{font-size:12px;color:#8d857b;margin:6px 0 18px}}
+.crs-cards{{display:grid;grid-template-columns:repeat(auto-fill,minmax(184px,1fr));gap:11px;margin-bottom:16px}}
+.crs-card{{background:#eae4d9;border-radius:9px;padding:11px 13px}}
+.crs-card-n{{font-size:12px;color:#6b645c;margin-bottom:5px}}
+.crs-card-v{{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:21px;font-weight:600;color:#3d3a36}}
+.crs-u{{font-size:12px;margin-left:2px;color:#7a736b}}
+.crs-card-m{{font-size:11px;color:#8d857b;margin-top:4px}}
+.crs-card-r{{font-size:11px;color:#9a938a;margin-top:3px}}
+.crs-mom{{margin-left:5px;font-family:ui-monospace,monospace}}
+.crs-mom.neg{{color:#a3705f}}
+.crs-mom.pos{{color:#5f7f5a}}
+.crs-det{{margin:10px 0;font-size:13px}}
+.crs-det summary{{cursor:pointer;color:#6b645c;padding:6px 0}}
+.crs-una li,.crs-src li{{margin:8px 0;line-height:1.7}}
+.crs-why{{font-size:12px;color:#8d857b;line-height:1.75;margin-top:4px}}
+.crs-err{{background:#f4e9e6;border-left:3px solid #a3705f;padding:9px 12px;font-size:12px;color:#7a5f52;border-radius:5px;margin-top:10px}}
+
   .cmm-chart {{ width: 100%; height: auto; display: block; margin: 4px 0 2px; }}
   .cmm-one {{ margin: 16px 0 20px; }}
   .cmm-t {{ font-size: 14.5px; font-weight: 700; color: #4a443c; margin-bottom: 7px;
@@ -8592,6 +8756,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ 每日流动性危机监测(SOFR−EFFR + BBB/HY OAS + 闪崩标注) ━━━ -->
   {liquidity_crisis_html}
   {cot_mm_html}
+  <!-- ━━━ 中国模式断代监控(旧引擎停摆 / 新引擎接续) ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>中国模式断代监控 · 旧引擎停摆与新引擎接续 (NBS 官方分项 + 东财宏观 · 对照 Perkins 2025-12 判据)<span class="freq-badge freq-monthly">每月更新</span></div>
+  <div class="card">{china_regime_html}</div>
   <div class="card">{basis_trade}</div>
   <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)<span class="freq-badge freq-event">每次拍卖</span></div>

@@ -1,12 +1,12 @@
 {
  "status": "ok",
- "generated": "2026-09-18T20:49:01",
+ "generated": "2026-09-19T15:47:31",
  "source": "UN Comtrade (UNSD) 免费 preview API — reporter=India cmd=HS7106(银) flow=进口, partner2=World",
  "unit": "tonnes",
  "note": "印度白银(HS7106)月度进口总量。口径=UN Comtrade partner2=World 净重(kg)→吨, 2024前两月=2932t 与 LBMA 公开数字完全吻合。某月未发布则跳过不补0。",
- "as_of": "2026-06",
- "latest_tonnes": 37.1,
- "n": 30,
+ "as_of": "2026-07",
+ "latest_tonnes": 98.4,
+ "n": 31,
  "max_tonnes": 2295.3,
  "points": [
   {
@@ -188,6 +188,12 @@
    "date": "2026-06",
    "tonnes": 37.1,
    "value_musd": 60.2
+  },
+  {
+   "period": "202607",
+   "date": "2026-07",
+   "tonnes": 98.4,
+   "value_musd": 171.6
   }
  ]
 }

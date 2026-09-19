@@ -6482,6 +6482,176 @@ def fetch_cips(months=36):
     return out
 
 
+# ══════════════════════════════════════════════════════════════════════
+# 中国模式断代监控 (Chao 2026-09-19)
+# ══════════════════════════════════════════════════════════════════════
+# ★需求背景: Ryan Perkins《China's Economic Crossroads》(2025-12-08) 判断 ——
+#   中国已无法靠投资实现充分就业, 也无法在旧模式的失业问题解决前靠消费拉动增长;
+#   结局二元: 软着陆 或 长期停滞+社会压力。他自己押"谨慎渐进的钢丝行走"。
+#   本模块把他引用的判据变成可月度跟踪的指标。
+#
+# ★两个数据源(2026-09-19 实测):
+#   ① 东方财富宏观 API   —— 月度总量, 最新 2026-08, 11 项
+#   ② NBS 官方英文发布稿 —— FAI/地产**分项**(基建/制造/民间/分区域), 一手权威
+#      NBS 的 easyquery JSON API 本机 403(数据中心 IP), 但英文发布稿 HTML 可达。
+#
+# ★口径铁律(开发时栽过两次, 务必遵守):
+#   伯金斯全文讲的是**累计同比**(FAI 3.8%)。东财 BASE_SAME 是**单月同比**,
+#   2026-08 为 -13.51%, 而官方累计口径是 -7.2% —— 差 6 个百分点。
+#   两者都是真数但**不可混用**, 本模块每项都带 basis 字段标注口径。
+#   同理社零必须用 RETAIL_ACCUMULATE_SAME(累计) 而非 RETAIL_TOTAL(绝对额)。
+#
+# ★诚实边界: 伯金斯引用但公开源确实拿不到的, 列在 unavailable 里显式呈现,
+#   绝不用近似指标冒充(尤其"高技术/绿色制造 FAI 占比 28%"这个他的核心门槛)。
+
+_CN_EM_SPECS = [
+    # key, 名称, reportName, 字段, 单位, 口径, 引擎, 伯金斯参照
+    ("fai_m",    "固定资产投资",   "RPT_ECONOMY_ASSET_INVEST",    "BASE_SAME",              "%", "单月同比", "old",    "3.8%"),
+    ("boom",     "国房景气指数",   "RPT_ECONOMY_BOOM_INDEX",      "BOOM_INDEX",             "点", "季度",    "old",    None),
+    ("retail_c", "社会消费品零售", "RPT_ECONOMY_TOTAL_RETAIL",    "RETAIL_ACCUMULATE_SAME", "%", "累计同比", "new",    None),
+    ("income_c", "居民可支配收入", "RPT_ECONOMY_INCOME",          "ACCUMULATE_SAME",        "%", "累计同比", "new",    None),
+    ("faith",    "消费者信心指数", "RPT_ECONOMY_FAITH_INDEX",     "CONSUMERS_FAITH_INDEX",  "点", "月度",    "new",    None),
+    ("indus_m",  "规上工业增加值", "RPT_ECONOMY_INDUS_GROW",      "BASE_SAME",              "%", "单月同比", "new",    "5.2%"),
+    ("cpi",      "CPI",            "RPT_ECONOMY_CPI",             "NATIONAL_SAME",          "%", "同比",    "price",  None),
+    ("ppi",      "PPI",            "RPT_ECONOMY_PPI",             "BASE_SAME",              "%", "同比",    "price",  None),
+    ("pmi",      "制造业 PMI",     "RPT_ECONOMY_PMI",             "MAKE_INDEX",             "点", "月度",    "policy", None),
+    ("m2",       "M2",             "RPT_ECONOMY_CURRENCY_SUPPLY", "BASIC_CURRENCY_SAME",    "%", "同比",    "policy", None),
+    ("tax",      "税收收入",       "RPT_ECONOMY_TAX",             "TAX_INCOME_SAME",        "%", "同比",    "policy", None),
+]
+
+# NBS 发布稿分项抽取规则
+# ★坑: 间隔符不能用 [^.]*? —— 金额 "29,309.2 billion" 里的小数点会提前终止匹配,
+#   导致最核心的 fai_total 永远抽不到。必须用 .{0,120}? 限长非贪婪。
+_CN_NBS_RULES = [
+    ("fai_total",   "固定资产投资 总",  r"national investment in fixed assets.{0,120}?year-on-year (decrease|increase) of ([\d.]+)%", "old",    "3.8%"),
+    ("infra",       "基建投资",         r"investment in infrastructure.{0,120}?(decreased|increased) by ([\d.]+)% year on year", "old",    "+6.4%"),
+    ("manuf",       "制造业投资",       r"investment in manufacturing (decreased|increased) by ([\d.]+)%", "new",    None),
+    ("private",     "民间投资",         r"non-governmental investment in fixed assets (decreased|increased) by ([\d.]+)%", "old",    None),
+    ("ip_products", "知识产权产品投资", r"investment in intellectual property products (increased|decreased) by ([\d.]+)%", "new",    "28% 高技术占比"),
+    ("northeast",   "东北地区投资",     r"investment in the northeastern region (decreased|increased) by ([\d.]+)%", "social", None),
+    ("estate_inv",  "房地产开发投资",   r"investment in real estate development was [\d,.]+ billion yuan, a year-on-year (decrease|increase) of ([\d.]+)%", "old", "-2.1%"),
+    ("new_starts",  "房屋新开工面积",   r"floor space of buildings newly started was [\d,.]+ million square meters, (down|up) ([\d.]+)%", "old", None),
+]
+
+_CN_UNAVAILABLE = [
+    {"name": "高技术/绿色制造 FAI 占比", "perkins_ref": "28%",
+     "reason": "★伯金斯判断「新引擎是否接上」的唯一量化门槛。公开源无此分项；"
+               "最接近的替代是 NBS「知识产权产品投资」增速，但那是增速不是占比，口径不同不可替代。"},
+    {"name": "青年失业率 16-24 岁", "perkins_ref": ">25%（CEI 自家估计）",
+     "reason": "World Bank 官方口径年度值约 15.8%，与 CEI 估计差约 10 个百分点；"
+               "2023 年官方口径改版（不含在校生）。两者不可混用，故不取。"},
+]
+
+_CN_ENGINE_LABEL = {
+    "old":    "旧引擎 · 投资/地产/信贷",
+    "new":    "新引擎 · 消费/产业升级",
+    "price":  "通缩漩涡 · 价格链条",
+    "policy": "政策空间",
+    "social": "社会压力 · 区域分化",
+}
+
+
+def _cn_em(report, size=40):
+    import requests
+    url = ("https://datacenter-web.eastmoney.com/api/data/v1/get?"
+           f"reportName={report}&columns=ALL&pageSize={size}"
+           "&sortColumns=REPORT_DATE&sortTypes=-1")
+    r = requests.get(url, timeout=45, headers={
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0 Safari/537.36",
+        "Referer": "https://data.eastmoney.com/"})
+    r.raise_for_status()
+    d = r.json()
+    if not d.get("success"):
+        raise RuntimeError("eastmoney success=false")
+    return (d.get("result") or {}).get("data") or []
+
+
+def _cn_plain(text):
+    import re, html as _h
+    t = re.sub(r"<script.*?</script>|<style.*?</style>", " ", text, flags=re.S)
+    return re.sub(r"\s+", " ", _h.unescape(re.sub(r"<[^>]+>", " ", t)))
+
+
+def fetch_china_regime_shift():
+    """中国模式断代监控：旧引擎停摆 / 新引擎接续 的月度跟踪。"""
+    import re, requests
+    from datetime import timezone, timedelta
+    _jst = datetime.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    out = {"status": "ok", "as_of": _jst, "period": None,
+           "monthly": [], "breakdown": [], "unavailable": list(_CN_UNAVAILABLE),
+           "sources": {}, "errors": [], "engine_label": dict(_CN_ENGINE_LABEL)}
+
+    # ① 东财月度总量
+    for key, name, rpt, field, unit, basis, eng, pk in _CN_EM_SPECS:
+        try:
+            rows = _cn_em(rpt)
+            s = [{"ym": (r.get("REPORT_DATE") or "")[:7], "v": float(r[field])}
+                 for r in rows if r.get(field) is not None]
+            s.reverse()
+            if not s:
+                out["errors"].append(f"东财/{name}: 字段 {field} 全空")
+                continue
+            last = s[-1]
+            prev = s[-2] if len(s) > 1 else None
+            yr = [x["v"] for x in s[-12:]]
+            out["monthly"].append({
+                "key": key, "name": name, "engine": eng, "unit": unit, "basis": basis,
+                "perkins_ref": pk, "ym": last["ym"], "value": last["v"],
+                "mom": round(last["v"] - prev["v"], 3) if prev else None,
+                "yr_min": min(yr), "yr_max": max(yr),
+                "yr_avg": round(sum(yr) / len(yr), 2),
+                "series": s[-36:], "source": "eastmoney:" + rpt,
+            })
+        except Exception as e:
+            out["errors"].append(f"东财/{name}: {type(e).__name__} {str(e)[:70]}")
+
+    # ② NBS 官方分项
+    try:
+        base = "https://www.stats.gov.cn/english/PressRelease/"
+        hdr = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                             "AppleWebKit/537.36 Chrome/120.0 Safari/537.36",
+               "Accept-Language": "en-US,en;q=0.9"}
+        lst = requests.get(base, timeout=50, headers=hdr)
+        lst.raise_for_status()
+        links = {}
+        for href, title in re.findall(r'href="(\./\d+/t\d+_\d+\.html)"[^>]*>\s*([^<]{8,140})', lst.text):
+            ti = re.sub(r"\s+", " ", title).strip()
+            if "Investment in Fixed Assets" in ti and "fai" not in links:
+                links["fai"] = (ti, base + href[2:])
+            elif "Investment in Real Estate" in ti and "estate" not in links:
+                links["estate"] = (ti, base + href[2:])
+        merged = {}
+        for which, (title, url) in links.items():
+            out["sources"][which] = {"title": title, "url": url}
+            page = requests.get(url, timeout=60, headers=hdr)
+            page.raise_for_status()
+            txt = _cn_plain(page.text)
+            for key, name, pat, eng, pk in _CN_NBS_RULES:
+                m = re.search(pat, txt, re.I)
+                if m:
+                    neg = m.group(1).lower() in ("decrease", "decreased", "down")
+                    merged[key] = {
+                        "key": key, "name": name, "engine": eng, "perkins_ref": pk,
+                        "value": -float(m.group(2)) if neg else float(m.group(2)),
+                        "unit": "%", "basis": "累计同比", "src": which,
+                    }
+            if not out["period"]:
+                mm = re.search(r"from January to (\w+) (\d{4})", title, re.I)
+                if mm:
+                    out["period"] = f"{mm.group(2)} 年 1-{mm.group(1)}"
+        out["breakdown"] = list(merged.values())
+        if not out["breakdown"]:
+            out["errors"].append("NBS: 发布稿解析出 0 项分项(页面格式可能已变)")
+    except Exception as e:
+        out["errors"].append(f"NBS: {type(e).__name__} {str(e)[:80]}")
+
+    if not out["monthly"] and not out["breakdown"]:
+        out["status"] = "error"
+    elif out["errors"]:
+        out["status"] = "ok(部分失败)"
+    return out
+
+
 if __name__ == "__main__":
     import json
     print("=== Credit Impulse 三国(信贷脉冲) ===")
