@@ -873,6 +873,113 @@ def _wrs_html(w):
 </div>"""
 
 
+
+def _ust_micro_line(items, W=880, H=150, PL=58, PR=10, PT=10, PB=22, color="#6b7f8a"):
+    """通用小折线, items=[{d,v}]。"""
+    if len(items) < 3:
+        return ""
+    vals = [p["v"] for p in items]
+    lo, hi = min(vals), max(vals)
+    rng = (hi - lo) or 1.0
+    iw, ih = W - PL - PR, H - PT - PB
+    def X(i): return PL + iw * i / max(len(items) - 1, 1)
+    def Y(v): return PT + ih * (1 - (v - lo) / rng)
+    pts = " ".join(f"{X(i):.1f},{Y(p['v']):.1f}" for i, p in enumerate(items))
+    grid = ""
+    for k in range(4):
+        v = lo + rng * k / 3
+        y = Y(v)
+        lab = f"{v:,.0f}" if abs(v) >= 1000 else f"{v:.2f}"
+        grid += (f'<line x1="{PL}" y1="{y:.1f}" x2="{W-PR}" y2="{y:.1f}" class="um-grid"/>'
+                 f'<text x="{PL-6}" y="{y+3.5:.1f}" class="um-yt">{lab}</text>')
+    xt = ""
+    seen = set()
+    for i, p in enumerate(items):
+        yr = p["d"][:4]
+        if yr not in seen and (i == 0 or i > 6):
+            seen.add(yr)
+            xt += f'<text x="{X(i):.1f}" y="{H-6}" class="um-xt">{yr}</text>'
+    return (f'<svg viewBox="0 0 {W} {H}" class="um-chart" preserveAspectRatio="xMidYMid meet">'
+            f'{grid}<polyline points="{pts}" style="stroke:{color}" class="um-line"/>'
+            f'<circle cx="{X(len(items)-1):.1f}" cy="{Y(vals[-1]):.1f}" r="3.6" '
+            f'style="fill:{color}"/>{xt}</svg>')
+
+
+def _ust_micro_html(m):
+    """国债市场微观结构 —— MS Exhibit 3(交易成本) / Exhibit 4(成交量)。"""
+    if not m or not str(m.get("status", "")).startswith("ok"):
+        err = ("：" + "；".join(m.get("errors", [])[:2])) if m and m.get("errors") else ""
+        return f'<p class="empty">国债微观结构数据同步中{err}。</p>'
+
+    vol = m.get("volume") or {}
+    cost = m.get("cost") or {}
+    bks = vol.get("buckets") or []
+    tot = vol.get("total")
+
+    # ── Exhibit 4: 成交量(真数据) ──
+    rows = ""
+    for b in bks:
+        cls = "pos" if b["vs_avg"] > 0 else "neg"
+        star = ' <span class="um-star">★ MS 2Y 对应桶</span>' if b.get("tag") else ""
+        rows += (f'<tr><td class="um-n">{b["name"]}{star}</td>'
+                 f'<td class="um-v">{b["latest"]:,.0f}</td>'
+                 f'<td class="um-v">{b["avg_52w"]:,.0f}</td>'
+                 f'<td class="um-v {cls}">{b["vs_avg"]:+.1f}%</td></tr>')
+    tot_line = ""
+    if tot:
+        c = "pos" if tot["vs_avg"] > 0 else "neg"
+        tot_line = (f'<tr class="um-tot"><td>{tot["name"]}</td>'
+                    f'<td class="um-v">{tot["latest"]:,.0f}</td>'
+                    f'<td class="um-v">{tot["avg_52w"]:,.0f}</td>'
+                    f'<td class="um-v {c}">{tot["vs_avg"]:+.1f}%</td></tr>')
+
+    # 主图用 2Y 桶
+    two = next((b for b in bks if b.get("tag")), bks[0] if bks else None)
+    chart2y = _ust_micro_line(two["series"], color="#6b7f8a") if two else ""
+
+    # ── Exhibit 3: 交易成本(代理) ──
+    cost_blocks = ""
+    for c in cost.get("series", []):
+        cost_blocks += (
+            f'<div class="um-cost-one">'
+            f'<div class="um-cost-h"><b>{c["name"]}</b>'
+            f'<span class="um-cost-v">{c["latest"]:.2f}{c["unit"]}</span>'
+            f'<span class="um-pct">3年分位 {c["pct_rank"]}%</span></div>'
+            f'<div class="um-cost-d">{c["desc"]}　·　{c["latest_date"]}　·　'
+            f'区间 {c["min"]:.2f} ~ {c["max"]:.2f}</div>'
+            f'{_ust_micro_line(c["series"], H=130, color="#a08b6a")}</div>')
+
+    return f"""
+<div class="um-wrap">
+  <div class="um-sec">
+    <div class="um-h">
+      <span class="um-badge real">真数据</span>
+      Exhibit 4 对口 · 一级交易商美债成交量（按剩余期限）
+    </div>
+    <div class="um-src">{vol.get("source","")}</div>
+    <div class="um-caliber">⚠ <b>口径差异</b>：{vol.get("caliber_note","")}</div>
+    <table class="um-table">
+      <thead><tr><th>期限桶</th><th>最新周成交<br><i>百万美元</i></th>
+        <th>52 周均值</th><th>偏离</th></tr></thead>
+      <tbody>{rows}{tot_line}</tbody>
+    </table>
+    <div class="um-cap">≤2 年桶周度成交量走势（对应 MS Exhibit 4 的 2Y OTR）</div>
+    {chart2y}
+  </div>
+
+  <div class="um-sec">
+    <div class="um-h">
+      <span class="um-badge proxy">代理指标</span>
+      Exhibit 3 对口 · 交易成本压力
+    </div>
+    <div class="um-proxy">⚠ <b>这不是买卖价差本身</b>：{cost.get("proxy_note","")}
+      <br><span class="um-excl">{cost.get("excluded_note","")}</span></div>
+    {cost_blocks}
+    <div class="um-src">{cost.get("source","")}</div>
+  </div>
+</div>"""
+
+
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
@@ -889,7 +996,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None,
+             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, ust_micro=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
@@ -1123,6 +1230,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         cot_mm_html=_cot_mm_html(cot_mm),
         china_regime_html=_china_regime_html(china_regime),
         wrs_html=_wrs_html(wrs),
+        ust_micro_html=_ust_micro_html(ust_micro),
         basis_trade=_basis_trade_html(basis_trade),
         comex_inventory=_comex_inventory_html(comex_inventory),
         debt_gdp=_debt_gdp_html(debt_gdp),
@@ -8270,6 +8378,44 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .wrs-xtick{{font-size:10px;fill:#9a938a;text-anchor:middle}}
 .wrs-foot{{font-size:11.5px;color:#8d857b;line-height:1.8;margin-top:6px}}
 
+/* ── 国债微观结构 Exhibit 3/4 ── */
+.um-wrap{{margin:6px 0}}
+.um-sec{{margin-bottom:22px}}
+.um-h{{font-size:14.5px;font-weight:700;color:#4a443c;display:flex;align-items:center;
+  gap:9px;flex-wrap:wrap;margin-bottom:5px}}
+.um-badge{{font-size:10.5px;font-weight:600;padding:2px 9px;border-radius:9px;letter-spacing:.3px}}
+.um-badge.real{{background:#dde7dc;color:#41613c}}
+.um-badge.proxy{{background:#f0e6cc;color:#87652a}}
+.um-src{{font-size:11.5px;color:#9a938a;margin-bottom:8px}}
+.um-caliber{{background:#f3efe2;border-left:3px solid #b09a5f;padding:9px 12px;border-radius:5px;
+  font-size:12px;color:#6b5f45;line-height:1.8;margin-bottom:11px}}
+.um-proxy{{background:#f4ece4;border-left:3px solid #a3855f;padding:10px 13px;border-radius:5px;
+  font-size:12px;color:#6b5a45;line-height:1.85;margin-bottom:12px}}
+.um-excl{{color:#8d857b;font-size:11.5px}}
+.um-table{{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:8px}}
+.um-table th{{text-align:right;padding:6px 10px;color:#7a736b;font-weight:500;font-size:11.5px;
+  border-bottom:1px solid #ddd6ca}}
+.um-table th:first-child{{text-align:left}}
+.um-table th i{{font-style:normal;font-size:10px;color:#9a938a}}
+.um-table td{{padding:6px 10px;border-bottom:1px solid #eee9e0}}
+.um-n{{color:#4a453f}}
+.um-v{{text-align:right;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}}
+.um-v.pos{{color:#5f7f5a}}
+.um-v.neg{{color:#a3705f}}
+.um-tot td{{background:#f0ebe1;font-weight:600}}
+.um-star{{font-size:10.5px;color:#87652a;background:#f0e6cc;padding:1px 7px;border-radius:8px;margin-left:6px}}
+.um-cap{{font-size:11.5px;color:#8d857b;margin:10px 0 2px}}
+.um-chart{{width:100%;height:auto;display:block}}
+.um-grid{{stroke:#e2dcd1;stroke-width:.7}}
+.um-line{{fill:none;stroke-width:1.6}}
+.um-yt{{font-size:9.5px;fill:#9a938a;text-anchor:end;font-family:ui-monospace,monospace}}
+.um-xt{{font-size:9.5px;fill:#9a938a;text-anchor:middle}}
+.um-cost-one{{margin-bottom:16px}}
+.um-cost-h{{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;font-size:13px;color:#4a453f}}
+.um-cost-v{{font-family:ui-monospace,monospace;font-size:17px;font-weight:600;color:#3d3a36}}
+.um-pct{{font-size:11px;color:#87652a;background:#f0e6cc;padding:1px 8px;border-radius:8px}}
+.um-cost-d{{font-size:11.5px;color:#8d857b;margin:3px 0 4px}}
+
   .cmm-chart {{ width: 100%; height: auto; display: block; margin: 4px 0 2px; }}
   .cmm-one {{ margin: 16px 0 20px; }}
   .cmm-t {{ font-size: 14.5px; font-weight: 700; color: #4a443c; margin-bottom: 7px;
@@ -8869,6 +9015,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·二·四：国债市场压力四联图 (对齐 Morgan Stanley 三图 + OFR官方压力指数, 竖向) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>国债市场收益率·波动性·压力 · 竖向四联图 (对齐 Morgan Stanley · 过去3年真实公开数据 · 每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{stress_panels}</div>
+  <!-- ━━━ 国债微观结构: MS Exhibit 3/4 对口 ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>国债市场微观结构 · 成交量与交易成本 (对齐 Morgan Stanley Exhibit 3/4 · 成交量为 NY Fed 官方真数据 · 价差为代理)<span class="freq-badge freq-weekly">每周更新</span></div>
+  <div class="card">{ust_micro_html}</div>
   <!-- ═══ 附三·二B：基差套利去杠杆预警 ═══ -->
   <div class="part-title"><span class="part-num">＋</span>基差套利去杠杆预警 · 美债/日债 (SOFR 倒挂 + 持券 Carry + 波动触发 · 强平潮尾部风险 · 每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
   <!-- ━━━ 每日流动性危机监测(SOFR−EFFR + BBB/HY OAS + 闪崩标注) ━━━ -->

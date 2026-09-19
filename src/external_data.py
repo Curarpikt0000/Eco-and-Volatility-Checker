@@ -6752,6 +6752,185 @@ def fetch_wrs_recession_signal():
     return out
 
 
+# ══════════════════════════════════════════════════════════════════════
+# 国债市场微观结构 · Morgan Stanley Exhibit 3/4 对口 (Chao 2026-09-19, 乙方案)
+# ══════════════════════════════════════════════════════════════════════
+# ★需求: MS 报告 Exhibit 3(BrokerTec 2Y OTR 日内买卖价差) 与
+#   Exhibit 4(2Y OTR 周度 DV01 成交量)。原 treasury_stress_panels 里用的是
+#   期限溢价/IG OAS/曲线/HY OAS —— 那是**价格类风险补偿**, 不是流动性微观结构,
+#   两者是不同维度。本模块补上真正的「成交量」与「交易成本」维度。
+#
+# ★Exhibit 4 = 真数据(不再是代理):
+#   纽约联储一级交易商调查 FR2004, markets.newyorkfed.org 官方免费 API。
+#   实测 702 个周度点(2013-04-03 起)。**按剩余期限分桶**:
+#     PDTRGSC-L2(≤2年, 对应 MS 的 2Y) / -G2L3 / -G3L6 / -G6L7 / -G7L11
+#   ⚠口径差: MS 用 **DV01 加权**成交量(久期风险敞口), NY Fed 是**名义金额**。
+#     方向一致但不是同一个数 —— 必须在图上标注, 不许说成等同。
+#   ⚠另: PDPOS* 是 POSITIONS(持仓), PDTR*/PDGSW* 才是 TRANSACTIONS(成交量)。
+#     开发时特意区分过, 别拿持仓冒充成交量。
+#
+# ★Exhibit 3 = 仍是代理, 但比原来贴近:
+#   BrokerTec 日内 bid-ask 是 CME 商业产品, 公开源确实没有。
+#   本轮排查过并**排除**: 克利夫兰联储 FSI 流动性分项(LQTYSD678FRBCLE)
+#     —— 看着对口, 但 metadata 显示 **2016-05-05 起 DISCONTINUED**, 不能用。
+#   选定两条公开代理:
+#     ① OFR FSI Funding 分项(官方, 日更, 2000 年起) = 融资/交易成本压力
+#     ② 10Y 日内波幅(^TNX high-low, bp) = 价格发现成本, 价差走阔时同步放大
+#   两者都不是 bid-ask 本身, 图上明确标注。
+
+_UST_MICRO_BUCKETS = [
+    ("PDTRGSC-L2",    "≤2 年", "★对应 MS Exhibit 4 的 2Y"),
+    ("PDTRGSC-G2L3",  "2-3 年", ""),
+    ("PDTRGSC-G3L6",  "3-6 年", ""),
+    ("PDTRGSC-G6L7",  "6-7 年", ""),
+    ("PDTRGSC-G7L11", "7-11 年", ""),
+]
+_UST_MICRO_TOTAL = ("PDGSWOEXTTOT", "全部合计")
+
+
+def _nyfed_pd(keyid):
+    import json as _j, urllib.request
+    u = f"https://markets.newyorkfed.org/api/pd/get/{keyid}.json"
+    req = urllib.request.Request(u, headers={
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                      "AppleWebKit/537.36 Chrome/120.0 Safari/537.36"})
+    with urllib.request.urlopen(req, timeout=55) as r:
+        d = _j.loads(r.read())
+    rows = ((d.get("pd") or {}).get("timeseries")) or []
+    out = []
+    for x in rows:
+        v = x.get("value")
+        if v in (None, "", "*"):
+            continue
+        try:
+            out.append({"d": x["asofdate"], "v": float(v)})
+        except (ValueError, KeyError):
+            continue
+    return out
+
+
+def _ofr_funding():
+    import json as _j, urllib.request, datetime as _dt
+    u = "https://www.financialresearch.gov/financial-stress-index/data/fsi.json"
+    req = urllib.request.Request(u, headers={
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                      "AppleWebKit/537.36 Chrome/120.0 Safari/537.36"})
+    with urllib.request.urlopen(req, timeout=55) as r:
+        d = _j.loads(r.read())
+    blk = d.get("Funding") or {}
+    pts = blk.get("data") or []
+    out = []
+    for ms, v in pts:
+        if v is None:
+            continue
+        out.append({"d": _dt.datetime.utcfromtimestamp(ms / 1000).strftime("%Y-%m-%d"),
+                    "v": float(v)})
+    return out
+
+
+def _tnx_intraday_range(rng="3y"):
+    """10Y 日内波幅(bp) = (high - low) * 100。价差走阔时同步放大。"""
+    import json as _j, urllib.request, datetime as _dt
+    u = (f"https://query1.finance.yahoo.com/v8/finance/chart/%5ETNX"
+         f"?range={rng}&interval=1d")
+    req = urllib.request.Request(u, headers={
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                      "AppleWebKit/537.36 Chrome/120.0 Safari/537.36"})
+    with urllib.request.urlopen(req, timeout=50) as r:
+        d = _j.loads(r.read())
+    rr = d["chart"]["result"][0]
+    ts = rr.get("timestamp") or []
+    q = (rr.get("indicators") or {}).get("quote") or [{}]
+    hi, lo = q[0].get("high") or [], q[0].get("low") or []
+    out = []
+    for t, h, l in zip(ts, hi, lo):
+        if h is None or l is None:
+            continue
+        out.append({"d": _dt.datetime.utcfromtimestamp(t).strftime("%Y-%m-%d"),
+                    "v": round((h - l) * 100, 2)})
+    return out
+
+
+def fetch_ust_microstructure(years=3):
+    """国债市场微观结构: 成交量(Exhibit 4 真数据) + 交易成本代理(Exhibit 3)。"""
+    from datetime import timezone, timedelta
+    _jst = datetime.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    cutoff = (datetime.date.today() - datetime.timedelta(days=int(years * 365.25))).isoformat()
+    out = {"status": "ok", "as_of": _jst, "years": years,
+           "volume": {"buckets": [], "total": None, "is_proxy": False,
+                      "caliber_note": ("MS Exhibit 4 用 **DV01 加权**成交量（久期风险敞口），"
+                                       "本图为纽约联储 FR2004 的**名义金额**成交量。"
+                                       "方向一致，但不是同一个数，不可直接比对数值。"),
+                      "source": "纽约联储一级交易商调查 FR2004（markets.newyorkfed.org 官方 API）"},
+           "cost": {"series": [], "is_proxy": True,
+                    "proxy_note": ("MS Exhibit 3 用 BrokerTec 日内 bid-ask 价差（CME 商业数据，"
+                                   "公开源不可得）。此处用两条公开代理：OFR 金融压力指数 Funding 分项"
+                                   "（官方日更）与 10Y 日内波幅（价格发现成本）。"
+                                   "均非 bid-ask 本身，只反映交易成本方向。"),
+                    "excluded_note": ("已排查并排除：克利夫兰联储 FSI 流动性利差分项"
+                                      "（LQTYSD678FRBCLE）—— 看似对口，但 2016-05-05 起已停更。"),
+                    "source": "OFR Financial Stress Index · Yahoo Finance ^TNX"},
+           "errors": []}
+
+    # ── Exhibit 4: 分桶成交量(真数据) ──
+    try:
+        for kid, name, tag in _UST_MICRO_BUCKETS:
+            s = [p for p in _nyfed_pd(kid) if p["d"] >= cutoff]
+            if not s:
+                out["errors"].append(f"NYFed/{name}: 窗口内无数据")
+                continue
+            last = s[-1]["v"]
+            vals = [p["v"] for p in s]
+            yr = vals[-52:] if len(vals) >= 52 else vals
+            out["volume"]["buckets"].append({
+                "key": kid, "name": name, "tag": tag,
+                "latest": last, "latest_date": s[-1]["d"],
+                "avg_52w": round(sum(yr) / len(yr), 1),
+                "vs_avg": round((last / (sum(yr) / len(yr)) - 1) * 100, 1),
+                "max": max(vals), "min": min(vals), "n": len(s),
+                "series": s,
+            })
+        tot = [p for p in _nyfed_pd(_UST_MICRO_TOTAL[0]) if p["d"] >= cutoff]
+        if tot:
+            vals = [p["v"] for p in tot]
+            yr = vals[-52:] if len(vals) >= 52 else vals
+            out["volume"]["total"] = {
+                "name": _UST_MICRO_TOTAL[1], "latest": tot[-1]["v"],
+                "latest_date": tot[-1]["d"], "avg_52w": round(sum(yr) / len(yr), 1),
+                "vs_avg": round((tot[-1]["v"] / (sum(yr) / len(yr)) - 1) * 100, 1),
+                "n": len(tot), "series": tot,
+            }
+    except Exception as e:
+        out["errors"].append(f"NYFed 成交量: {type(e).__name__} {str(e)[:70]}")
+
+    # ── Exhibit 3: 交易成本代理 ──
+    for label, fn, unit, desc in [
+        ("OFR Funding 压力", _ofr_funding, "", "OFR 金融压力指数融资分项（官方，日更）"),
+        ("10Y 日内波幅", _tnx_intraday_range, "bp", "10 年期收益率日内高低差（价格发现成本）"),
+    ]:
+        try:
+            s = [p for p in fn() if p["d"] >= cutoff]
+            if not s:
+                out["errors"].append(f"{label}: 窗口内无数据"); continue
+            vals = [p["v"] for p in s]
+            cur = vals[-1]
+            pct = round(sum(1 for v in vals if v <= cur) / len(vals) * 100, 1)
+            out["cost"]["series"].append({
+                "name": label, "unit": unit, "desc": desc,
+                "latest": cur, "latest_date": s[-1]["d"], "pct_rank": pct,
+                "max": max(vals), "min": min(vals), "n": len(s),
+                "series": s[::max(1, len(s) // 400)],
+            })
+        except Exception as e:
+            out["errors"].append(f"{label}: {type(e).__name__} {str(e)[:60]}")
+
+    if not out["volume"]["buckets"] and not out["cost"]["series"]:
+        out["status"] = "error"
+    elif out["errors"]:
+        out["status"] = "ok(部分失败)"
+    return out
+
+
 if __name__ == "__main__":
     import json
     print("=== Credit Impulse 三国(信贷脉冲) ===")

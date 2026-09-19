@@ -526,6 +526,22 @@ def main():
     except Exception as e:
         print(f"[dashboard] COT对冲基金持仓 跳过: {e}")
 
+    # ── 国债微观结构: MS Exhibit 3/4 对口(乙方案) ──
+    # ★Exhibit 4 = 真数据(NY Fed FR2004 周度成交量, 按期限分桶);
+    #   Exhibit 3 = 代理(BrokerTec bid-ask 是 CME 商业数据)。两者在图上分别打
+    #   「真数据」/「代理指标」徽章, 不许混为一谈。
+    ust_micro = {}
+    try:
+        ust_micro = ed.fetch_ust_microstructure(years=3) or {}
+        _b = len((ust_micro.get("volume") or {}).get("buckets") or [])
+        _c = len((ust_micro.get("cost") or {}).get("series") or [])
+        print(f"[dashboard] 国债微观结构: status={ust_micro.get('status')} "
+              f"成交量桶={_b} 成本代理={_c}")
+        if ust_micro.get("errors"):
+            print(f"[dashboard] 国债微观结构 告警: {ust_micro['errors'][:3]}")
+    except Exception as e:
+        print(f"[dashboard] 国债微观结构 跳过: {e}")
+
     # ── WRS · Walmart 衰退信号(甲方案: 分母用 ETF 代理, 图上标注) ──
     # ★Paulsen 原式分母 S&P Global Luxury Index 是专有指数(spglobal 403 / Yahoo ^SPGLUX 404),
     #   用追踪该指数的 LUXU.L(Amundi UCITS ETF, USD 计价)代理。只用方向与分位, 不比绝对值。
@@ -700,6 +716,7 @@ def main():
         cot_mm=cot_mm,
         china_regime=china_regime,
         wrs=wrs,
+        ust_micro=ust_micro,
         basis_trade=basis_trade,
         comex_inventory=comex_inventory,
         debt_gdp=debt_gdp,
