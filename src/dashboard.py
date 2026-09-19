@@ -783,6 +783,96 @@ def _china_regime_html(cn):
 </div>"""
 
 
+
+def _wrs_html(w):
+    """WRS · Walmart 衰退信号(分母用 ETF 代理, 甲方案: 图上明确标注)。"""
+    if not w or not str(w.get("status", "")).startswith("ok"):
+        err = ("：" + "；".join(w.get("errors", [])[:2])) if w and w.get("errors") else ""
+        return f'<p class="empty">WRS 衰退信号数据同步中{err}。</p>'
+    ser = w.get("series") or []
+    if len(ser) < 20:
+        return '<p class="empty">WRS：历史点不足，暂不成图。</p>'
+
+    vals = [p["v"] for p in ser]
+    lo, hi = min(vals), max(vals)
+    rng = (hi - lo) or 1.0
+    W, H, PL, PR, PT, PB = 900, 260, 52, 14, 14, 26
+    iw, ih = W - PL - PR, H - PT - PB
+
+    def X(i): return PL + iw * i / max(len(ser) - 1, 1)
+    def Y(v): return PT + ih * (1 - (v - lo) / rng)
+
+    pts = " ".join(f"{X(i):.1f},{Y(p['v']):.1f}" for i, p in enumerate(ser))
+    # 峰值标记
+    pk_i = max(range(len(ser)), key=lambda i: ser[i]["v"])
+    pk = ser[pk_i]
+
+    # y 轴刻度
+    ticks = ""
+    for k in range(5):
+        v = lo + rng * k / 4
+        y = Y(v)
+        ticks += (f'<line x1="{PL}" y1="{y:.1f}" x2="{W-PR}" y2="{y:.1f}" class="wrs-grid"/>'
+                  f'<text x="{PL-7}" y="{y+3.5:.1f}" class="wrs-ytick">{v:.2f}</text>')
+    # x 轴年份
+    xt = ""
+    seen = set()
+    for i, p in enumerate(ser):
+        yr = p["d"][:4]
+        if yr not in seen and (i == 0 or i > 8):
+            seen.add(yr)
+            xt += f'<text x="{X(i):.1f}" y="{H-8}" class="wrs-xtick">{yr}</text>'
+
+    lvl = w.get("level", "green")
+    cur, pct = w["latest"], w["pct_rank"]
+    newhigh = w.get("is_new_high")
+
+    # ★诚实标注: 当前是否创新高
+    hi_txt = ("<b>当前即历史最高</b>" if newhigh else
+              f'历史峰值 <b>{w["peak"]:.4f}</b>（{w["peak_date"]}），当前<b>未</b>创新高')
+
+    def sgn(x):
+        return "—" if x is None else f'<span class="{"up" if x>0 else "down"}">{x:+.2f}%</span>'
+
+    return f"""
+<div class="wrs-wrap">
+  <div class="wrs-head">
+    <div class="wrs-title">WRS · Walmart 衰退信号
+      <span class="wrs-lvl {lvl}">{w.get("level_txt","")}　分位 {pct}%</span>
+    </div>
+    <div class="wrs-formula">WRS ＝ Walmart 股价 ÷ 奢侈品指数　·　比值上行 = 消费降级 = 衰退压力上升</div>
+  </div>
+
+  <div class="wrs-proxy">
+    ⚠ <b>分母为代理指标</b>：Jim Paulsen 原式用 <b>S&amp;P Global Luxury Index</b>（S&amp;P 专有指数，
+    公开源不可得）。本图分母为 <b>{w["denominator"]["name"]}（{w["denominator"]["sym"]}）</b>
+    —— 该 ETF 追踪的正是该指数，且与 Walmart 同为 <b>USD</b> 计价（无汇率噪声）。
+    但 ETF 存在管理费、跟踪误差与折溢价，<b>绝对水平不可与 Paulsen 原值直接比对</b>，
+    此处只用其<b>方向与历史分位</b>。
+  </div>
+
+  <div class="wrs-stat">
+    <span>最新 <b>{cur:.4f}</b><i>{w["latest_date"]}</i></span>
+    <span>历史分位 <b>{pct}%</b><i>{w["n"]} 个交易日 · 自 {w["start"]}</i></span>
+    <span>近 3 月 <b>{sgn(w.get("chg_3m"))}</b><i>季度动能</i></span>
+    <span>近 1 年 <b>{sgn(w.get("chg_1y"))}</b><i>年度动能</i></span>
+  </div>
+
+  <svg viewBox="0 0 {W} {H}" class="wrs-chart" preserveAspectRatio="xMidYMid meet">
+    {ticks}
+    <polyline points="{pts}" class="wrs-line"/>
+    <circle cx="{X(pk_i):.1f}" cy="{Y(pk['v']):.1f}" r="3.4" class="wrs-peak"/>
+    <circle cx="{X(len(ser)-1):.1f}" cy="{Y(vals[-1]):.1f}" r="4" class="wrs-now"/>
+    {xt}
+  </svg>
+
+  <div class="wrs-foot">
+    区间 {lo:.4f} ~ {hi:.4f}　·　{hi_txt}　·　
+    实心点＝当前值，空心点＝历史峰值。数据源 Yahoo Finance 日线，随 dashboard 每日更新。
+  </div>
+</div>"""
+
+
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
@@ -799,7 +889,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, cot_mm=None, china_regime=None,
+             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
@@ -1032,6 +1122,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         liquidity_crisis_html=_liquidity_crisis_html(liquidity_crisis),
         cot_mm_html=_cot_mm_html(cot_mm),
         china_regime_html=_china_regime_html(china_regime),
+        wrs_html=_wrs_html(wrs),
         basis_trade=_basis_trade_html(basis_trade),
         comex_inventory=_comex_inventory_html(comex_inventory),
         debt_gdp=_debt_gdp_html(debt_gdp),
@@ -8152,6 +8243,33 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .crs-why{{font-size:12px;color:#8d857b;line-height:1.75;margin-top:4px}}
 .crs-err{{background:#f4e9e6;border-left:3px solid #a3705f;padding:9px 12px;font-size:12px;color:#7a5f52;border-radius:5px;margin-top:10px}}
 
+/* ── WRS Walmart 衰退信号 ── */
+.wrs-wrap{{margin:6px 0}}
+.wrs-head{{margin-bottom:10px}}
+.wrs-title{{font-size:15px;font-weight:700;color:#4a443c;display:flex;align-items:center;gap:10px;flex-wrap:wrap}}
+.wrs-lvl{{font-size:11px;font-weight:600;padding:2px 9px;border-radius:9px}}
+.wrs-lvl.red{{background:#efd6d2;color:#8e3b30}}
+.wrs-lvl.amber{{background:#f0e6cc;color:#87652a}}
+.wrs-lvl.green{{background:#dde7dc;color:#41613c}}
+.wrs-formula{{font-size:12px;color:#7a736b;margin-top:5px}}
+.wrs-proxy{{background:#f3efe2;border-left:3px solid #b09a5f;padding:10px 13px;border-radius:5px;
+  font-size:12px;color:#6b5f45;line-height:1.85;margin:10px 0 12px}}
+.wrs-stat{{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}}
+.wrs-stat span{{flex:1 1 168px;background:#eae4d9;border-radius:8px;padding:9px 12px;
+  font-size:12px;color:#6b645c;display:flex;flex-direction:column;gap:2px}}
+.wrs-stat b{{font-size:17px;color:#3d3a36;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}}
+.wrs-stat i{{font-style:normal;font-size:11px;color:#9a938a}}
+.wrs-stat .up{{color:#a3705f}}
+.wrs-stat .down{{color:#5f7f5a}}
+.wrs-chart{{width:100%;height:auto;display:block;margin:4px 0}}
+.wrs-grid{{stroke:#ddd6ca;stroke-width:.7}}
+.wrs-line{{fill:none;stroke:#8a6f5c;stroke-width:1.7}}
+.wrs-now{{fill:#8e3b30}}
+.wrs-peak{{fill:none;stroke:#8a6f5c;stroke-width:1.6}}
+.wrs-ytick{{font-size:10px;fill:#8d857b;text-anchor:end;font-family:ui-monospace,monospace}}
+.wrs-xtick{{font-size:10px;fill:#9a938a;text-anchor:middle}}
+.wrs-foot{{font-size:11.5px;color:#8d857b;line-height:1.8;margin-top:6px}}
+
   .cmm-chart {{ width: 100%; height: auto; display: block; margin: 4px 0 2px; }}
   .cmm-one {{ margin: 16px 0 20px; }}
   .cmm-t {{ font-size: 14.5px; font-weight: 700; color: #4a443c; margin-bottom: 7px;
@@ -8759,6 +8877,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ 中国模式断代监控(旧引擎停摆 / 新引擎接续) ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>中国模式断代监控 · 旧引擎停摆与新引擎接续 (NBS 官方分项 + 东财宏观 · 对照 Perkins 2025-12 判据)<span class="freq-badge freq-monthly">每月更新</span></div>
   <div class="card">{china_regime_html}</div>
+  <!-- ━━━ WRS · Walmart 衰退信号(分母 ETF 代理, 已标注) ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>WRS · Walmart 衰退信号 (Walmart ÷ 奢侈品指数 · Jim Paulsen 口径 · 分母用 ETF 代理)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{wrs_html}</div>
   <div class="card">{basis_trade}</div>
   <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)<span class="freq-badge freq-event">每次拍卖</span></div>

@@ -6652,6 +6652,106 @@ def fetch_china_regime_shift():
     return out
 
 
+# ══════════════════════════════════════════════════════════════════════
+# WRS · Walmart 衰退信号 (Chao 2026-09-19, 甲方案)
+# ══════════════════════════════════════════════════════════════════════
+# ★口径来源: Jim Paulsen (Leuthold Group 前首席投资策略师) 提出的
+#   WRS = Walmart 股价 / S&P Global Luxury Index (80 只奢侈品股)
+#   逻辑: 经济走弱时消费从奢侈品转向折扣零售 → 比值上行 = 衰退压力上升。
+#
+# ★★分母是代理, 不是原指数 —— 这是甲方案的核心, 必须在图上标注:
+#   S&P Global Luxury Index 是 S&P 专有指数, 免费源拿不到(实测 spglobal 403、
+#   Yahoo ^SPGLUX 404)。本实现用 **LUXU.L = Amundi S&P Global Luxury UCITS ETF**,
+#   它**追踪的正是该指数**且以 USD 计价(与 WMT 同币种, 无需汇率换算),
+#   是最贴近原口径的公开代理。但 ETF 有管理费/跟踪误差/流动性折溢价,
+#   **绝对水平与 Paulsen 原值不可直接比对**, 只看方向与分位。
+#
+# ★实测(2026-09-19): 共同交易日 2467 天(2016-09 至今), 当前 0.4858,
+#   分位 95.9%, 历史峰值 0.6012 在 2026-05-19 —— **当前不是创新高**, 不许说成创新高。
+
+_WRS_NUM = ("WMT", "Walmart")
+_WRS_DEN = ("LUXU.L", "Amundi S&P Global Luxury UCITS ETF")
+
+
+def _wrs_yahoo(sym, rng="10y"):
+    import json as _j, urllib.request, datetime as _dt
+    u = (f"https://query1.finance.yahoo.com/v8/finance/chart/{sym}"
+         f"?range={rng}&interval=1d")
+    req = urllib.request.Request(u, headers={
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                      "AppleWebKit/537.36 Chrome/120.0 Safari/537.36"})
+    with urllib.request.urlopen(req, timeout=45) as r:
+        d = _j.loads(r.read())
+    rr = (d.get("chart") or {}).get("result")
+    if not rr:
+        raise RuntimeError(f"{sym}: 无 result")
+    rr = rr[0]
+    ts = rr.get("timestamp") or []
+    cl = ((rr.get("indicators") or {}).get("quote") or [{}])[0].get("close") or []
+    out = {}
+    for t, c in zip(ts, cl):
+        if c is not None:
+            out[_dt.datetime.utcfromtimestamp(t).strftime("%Y-%m-%d")] = float(c)
+    if not out:
+        raise RuntimeError(f"{sym}: 无收盘价")
+    return out, (rr.get("meta") or {}).get("currency", "?")
+
+
+def fetch_wrs_recession_signal():
+    """WRS · Walmart 衰退信号 = WMT / 奢侈品指数代理。"""
+    from datetime import timezone, timedelta
+    _jst = datetime.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    out = {"status": "ok", "as_of": _jst,
+           "numerator": {"sym": _WRS_NUM[0], "name": _WRS_NUM[1]},
+           "denominator": {"sym": _WRS_DEN[0], "name": _WRS_DEN[1]},
+           "is_proxy": True,
+           "proxy_note": ("分母为代理：Paulsen 原式用 S&P Global Luxury Index（S&P 专有指数，"
+                          "公开源不可得）。此处用追踪该指数的 Amundi UCITS ETF（LUXU.L，USD 计价）"
+                          "替代，方向与分位可用，绝对水平与原式不可直接比对。"),
+           "series": [], "errors": []}
+    try:
+        num, c1 = _wrs_yahoo(_WRS_NUM[0])
+        den, c2 = _wrs_yahoo(_WRS_DEN[0])
+        out["numerator"]["currency"] = c1
+        out["denominator"]["currency"] = c2
+        if c1 != c2:
+            out["errors"].append(f"币种不一致 {c1} vs {c2}，比值含汇率噪声")
+        common = sorted(set(num) & set(den))
+        if len(common) < 100:
+            out["status"] = "error"
+            out["errors"].append(f"共同交易日仅 {len(common)} 天，不足以成图")
+            return out
+        ser = [{"d": d, "v": round(num[d] / den[d], 6)} for d in common]
+        vals = [x["v"] for x in ser]
+        cur = vals[-1]
+        hi, lo = max(vals), min(vals)
+        pct = round(sum(1 for v in vals if v <= cur) / len(vals) * 100, 1)
+        # 峰值日期(诚实标注: 当前未必是新高)
+        peak_i = max(range(len(vals)), key=lambda i: vals[i])
+        # 近一年/近三月变化
+        def _ago(n):
+            return ser[-n]["v"] if len(ser) > n else None
+        y1, m3 = _ago(252), _ago(63)
+        out.update({
+            "latest_date": ser[-1]["d"], "latest": cur,
+            "hi": hi, "lo": lo, "pct_rank": pct,
+            "peak_date": ser[peak_i]["d"], "peak": vals[peak_i],
+            "is_new_high": cur >= hi - 1e-9,
+            "chg_3m": round((cur / m3 - 1) * 100, 2) if m3 else None,
+            "chg_1y": round((cur / y1 - 1) * 100, 2) if y1 else None,
+            "n": len(ser), "start": ser[0]["d"],
+            "series": ser[::5],          # 5 日抽样, 控体积
+        })
+        # 信号灯: 分位越高 = 衰退压力越大
+        if pct >= 90:   out["level"], out["level_txt"] = "red", "高位"
+        elif pct >= 70: out["level"], out["level_txt"] = "amber", "偏高"
+        else:           out["level"], out["level_txt"] = "green", "中低"
+    except Exception as e:
+        out["status"] = "error"
+        out["errors"].append(f"{type(e).__name__}: {str(e)[:100]}")
+    return out
+
+
 if __name__ == "__main__":
     import json
     print("=== Credit Impulse 三国(信贷脉冲) ===")

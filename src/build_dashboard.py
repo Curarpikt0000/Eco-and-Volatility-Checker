@@ -526,6 +526,21 @@ def main():
     except Exception as e:
         print(f"[dashboard] COT对冲基金持仓 跳过: {e}")
 
+    # ── WRS · Walmart 衰退信号(甲方案: 分母用 ETF 代理, 图上标注) ──
+    # ★Paulsen 原式分母 S&P Global Luxury Index 是专有指数(spglobal 403 / Yahoo ^SPGLUX 404),
+    #   用追踪该指数的 LUXU.L(Amundi UCITS ETF, USD 计价)代理。只用方向与分位, 不比绝对值。
+    wrs = {}
+    try:
+        wrs = ed.fetch_wrs_recession_signal() or {}
+        if str(wrs.get("status", "")).startswith("ok"):
+            print(f"[dashboard] WRS衰退信号: {wrs['latest']:.4f} @ {wrs['latest_date']} "
+                  f"分位{wrs['pct_rank']}% 灯={wrs.get('level')} 创新高={wrs.get('is_new_high')} "
+                  f"n={wrs['n']} (分母代理={wrs['denominator']['sym']})")
+        else:
+            print(f"[dashboard] WRS衰退信号 失败: {wrs.get('errors')}")
+    except Exception as e:
+        print(f"[dashboard] WRS衰退信号 跳过: {e}")
+
     # ── 中国模式断代监控(旧引擎停摆 / 新引擎接续) ──
     # ★月更: NBS 官方发布稿每月 15-16 日出; 东财宏观 API 同期更新。
     # ★口径: NBS 分项为累计同比, 东财「固定资产投资」为单月同比 —— 两者不可混比。
@@ -684,6 +699,7 @@ def main():
         liquidity_crisis=liquidity_crisis,
         cot_mm=cot_mm,
         china_regime=china_regime,
+        wrs=wrs,
         basis_trade=basis_trade,
         comex_inventory=comex_inventory,
         debt_gdp=debt_gdp,
