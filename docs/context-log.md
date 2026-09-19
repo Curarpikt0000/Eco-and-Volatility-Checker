@@ -1302,3 +1302,143 @@ AGENTS.md 的 Cron 段仍描述旧版日报口径，需 Chao 授权后补写。
 - [ ] 承接 9/09：`reports/2026-09-09.md` 与 `data/daily/2026-09-09.json` 至今不存在，原因未查。
 - [ ] 承接 9/08：四方对账门禁「cron 实抓」那一路是否已转全绿，仍未取得证据。
 - [ ] 承接 9/04：tesseract 持久化未落地（需 Chao 点头动 devpod 配置），重启即丢逐笔。
+
+---
+
+## 2026-09-19
+
+### 决策
+
+- **公网发布通道从 GitHub Pages 迁到 Cloudflare Pages（Chao 选甲）**。
+  起因：Chao 问「html 在 vibe 内外做一个备份我们有吗」，实测发现
+  `curarpikt0000.github.io/Eco-and-Volatility-Checker/` 与 repo 本身**匿名 404**，
+  而认证访问一切正常（`disabled=false`、`archived=false`、Pages `status=built`）。
+  ★**纠正我自己的措辞**：这不是「被封禁」，也不是我们发布方法违规 ——
+  逐条核对官方限额（站点 1GB / 源仓库 1GB / 每小时 10 次 build / 带宽 100GB），
+  实测 26MB、单日峰值 9 次 build，**没有一条踩线**。Chao 确认 GitHub **没有寄违规信**，
+  只给了文档链接 ⇒ 更像账号级匿名可见性限制，不是处罚。
+- **内网 vibe 备份挂进每日 cron（Chao 回「yes」→ 后又以「甲」再确认）**，
+  与 Cloudflare 一起做成**步骤 8b**，两条命令各自独立判退出码，非零在日报标红。
+- **搬站范围（Chao 回「①挂 ②搬」）**：不复制 14 个仓库，只把**产物 HTML** 推 Cloudflare。
+  ★我先否掉了 Chao 提的「完全复制所有 GitHub 仓库每天双推」方案 —— 他的痛点是
+  「非公司电脑能打开网页」，需要公网可达的只是 `docs/index.html` 一个产物，不是整个 repo。
+- **中国模式断代 section（Chao 回「甲」→「2」）**：先用能稳定月更的源建 section，
+  分项从 CF40/NBS 新闻稿抓（乙方案后被「2」确认），**拿不到的显式列出不用近似值冒充**。
+- **WRS 衰退指标接入（Chao「2 甲」，经 clarify 逐项确认）**：甲＝分母用 ETF 代理 + 图上标注。
+  ★「2 甲」一开始我不确定指什么，**没有猜**，用 clarify 问清后才动手。
+- **国债微观结构对口 MS Exhibit 3/4（Chao 回「乙」）**：Exhibit 4 换真数据，
+  Exhibit 3 继续用代理但升级并把标注提到图上。
+- **美元指数 vs 黄金双轴图（Chao 指定「1 GC=F 2 都可以 3 号的」）**：
+  黄金用 `GC=F`，事件标注走**丙方案**＝价格先算异动日、再联网查当天新闻，
+  绝不凭 LLM 记忆写 2026 年事件。
+- **事件检索范围放宽（Chao 主动纠正）**：「不一定非得跟黄金密切相关，
+  查导致金融市场流动性/震荡的大事件也可以」—— 这句是关键，3 月暴跌真因是**伊朗战争**，
+  只搜「gold」搜不出来。
+
+### 事实与配置
+
+- **三个访问入口**（Cloudflare 为主入口）：
+  - 公网 `https://eco-volatility-checker.pages.dev`（任何设备、无需登录）
+  - 内网 `https://vibe-mcp.uberinternal.com/api/vibe/blob/eco-volatility-checker/index.html`
+  - GitHub Pages（匿名 404，恢复后自动继续可用，无需改动）
+- **发布脚本两支**，均以「匿名 curl 取回 + sha256 与本地逐字节比对」为唯一成功判据：
+  - `~/.hermes/scripts/publish_cf_pages.sh <project> <src>` —— 通用，10 个项目共用。
+    退出码 0 成功/未变跳过 · 3 源缺失 · 4 红线 · 5 凭证缺失 · 6 wrangler 缺失 ·
+    7 部署失败 · 8 线上实测未通过。公网版**额外扫 Uber 内部标识**
+    （`uberinternal.com` / `code.uber.internal` / `@uber.com`）命中即拒发。
+  - `scripts/publish_vibe.sh` —— 内网 vibe，四条路径实测过。
+- **凭证**：`CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` 在 `~/.hermes/.env`（不回显）。
+  ★**我此前说「本机连 Cloudflare API 403 是 IP 被封」是错的** —— 那个 403 来自
+  无认证请求 `/user` 端点，是缺认证的正常拒绝。带 token 一路畅通，向 Chao 更正过。
+- ★**token 的 `/user/tokens/verify` 报 "Invalid API Token" 但实际能用** ——
+  account-scoped token 的正常表现（有账号资源权限、无自查权限）。
+  判据应当是**直接测真正要用的那个操作**（创建 Pages 项目），一次成功。
+- **wrangler 4.129.0 装在 `~/.hermes/tools/node_modules/.bin/wrangler`**（持久位置）。
+  ★原装 `/tmp` 重启即失，迁走后**发布脚本的搜索路径没同步改** → 当天报
+  `wrangler NOT FOUND` exit 6。现持久路径排在搜索列表最前。
+- **Cloudflare 侧现有 10 个 Pages 项目**（实测 API 列举，全部 `latest_deployment success`）：
+  eco-volatility-checker / war-kol / forecast-checker / science-kol / ai-daily-board /
+  huangji-jingshi / chao-kol-dashboard / comex-inventory-charts / tokyo-child-event /
+  ai-2027-cn / ai-2040-cn / kol-dashboard / stock-tracker。
+- ★★**`*.pages.dev` 是全球共享命名空间**：`kol-dashboard.pages.dev` 实为**别人的站**
+  （「OUTDOOR MAN KOL 分析中心」），HTTP 200 但 sha 对不上 —— **是 sha 闸拦下的**。
+  已改用 `chao-kol-dashboard.pages.dev`。**只看 HTTP 200 会让 Chao 打开一个陌生网站。**
+- ★**「主文件 sha 对了」≠「页面能用」**：`chao-kol-dashboard` 首发只传了 `index.html`，
+  页面靠 `fetch('data.json')` 取 3.5MB 数据 → 打开是空壳，而我的 sha 闸**照样通过**
+  （index.html 确实传对了）。判据覆盖面不够，不是判据写错。
+- **中国模式断代 section 数据源与口径**（`fetch_china_regime_shift()`）：
+  - NBS 官方英文发布稿 → 8 项 FAI/地产分项（**累计同比**，一手权威）
+  - 东方财富宏观 API → 11 项月度总量（**单月同比**）
+  - ★两种 basis **不可混比**（同一项两者差约 6 个百分点），每项标注 basis
+  - ★NBS 官方 API 本机全 403（数据中心 IP，同 CBOE 老问题）；东财 API 21 个接口全通
+  - **2 项显式拿不到**：高技术制造 FAI 占比、青年失业率（CEI 口径），不以近似值冒充
+  - 实测（2026 年 1-8 月累计同比）：FAI −7.2% / 房地产开发投资 −19.9% / 基建 −4.0% /
+    民间投资 −10.1% / 新开工 −24.8% / 知识产权产品投资 +9.2%（唯一正增长的投资分项）/
+    工业增加值 +5.2% / 社零 +1.1% / 东北地区投资 −25.5%
+  - ★**一条反证如实标出**：CPI +0.8%、PPI **+3.8%**（近 12 月由 −2.3% 回正）⇒
+    原作者的「产能过剩 → 通缩漩涡」在 2026-08 **数据上不成立**，不替他圆
+- **WRS = WMT ÷ LUXU.L**（`fetch_wrs_recession_signal()`）：
+  - Paulsen 原式分母 S&P Global Luxury Index 是**标普专有**，`^SPGLUX` 404、spglobal 403
+  - 代理选 **`LUXU.L` = Amundi S&P Global Luxury UCITS ETF**，追踪的正是该指数，
+    且 **USD 计价**与 WMT 同币种（无汇率噪声）。实测 9 个候选里只有它同时满足两条
+  - 数据：2467 个共同交易日（2016-09-19 起），最新 **0.4858 @2026-09-17**，
+    分位 **95.9%（红灯）**，峰值 0.6012 @2026-05-19 ⇒ **当前未创新高**，图上明确标注
+  - ★通道坑：Stooq 全线返回 HTML 非 CSV（**全失败＝通道问题不是代码问题**），
+    改用项目已有的 **Yahoo Finance chart API**（项目内已有 3 处现成用例）
+- **国债微观结构**（`fetch_ust_microstructure(years=3)`）：
+  - Exhibit 4 = **真数据**：NY Fed FR2004 一级交易商周度成交量，702 个周度点（2013-04 起），
+    按剩余期限分桶 ≤2Y / 2-3Y / 3-6Y / 6-7Y / 7-11Y + 合计
+  - ★口径差异上图不上 note：**MS 用 DV01 加权（久期敞口），NY Fed 是名义金额，不可直接比数值**
+  - ★开发时须区分 `PDPOS*`＝持仓、`PDTR*`/`PDGSW*`＝成交量，**不拿持仓冒充成交量**
+  - Exhibit 3 = 仍是代理（BrokerTec 日内 bid-ask 是 CME 商业数据，公开源确无），
+    用 OFR FSI Funding 分项 + 10Y 日内波幅
+  - ★**排除克利夫兰联储 FSI 流动性利差 `LQTYSD678FRBCLE`** —— 名字完美对口但
+    **2016-05-05 已停更**，仍能正常返回历史、图上零报错。排除理由也写进图里
+  - 真数据/代理**分别打绿色/黄色徽章**视觉分级（原三联图的代理标注只藏在 note 里看不到）
+- **美元指数 vs 黄金**（`fetch_dxy_gold_events(start="2026-01-01")`，事件落盘 `data/dxy_gold_events.json`）：
+  - 黄金 `GC=F`（COMEX 期货，左轴）+ 美元指数 `DX-Y.NYB`（ICE，右轴），179 个 YTD 交易日
+  - YTD：黄金 4329.60 → 4424.90（+2.2%）、DXY 98.42 → 100.22（+1.8%）
+  - **31 个异动日**＝|日收益| ≥ 1.8σ（σ 取两年：黄金 1.526%/日、DXY 0.421%/日）
+  - **37 条事件标注**＝31 条异动事件 + 6 次 FOMC；**0 个未覆盖**
+  - 出处核实四步：①价格先算异动日 ②联网检索当天新闻 ③**父 agent 用 web_extract 逐条实测 URL**
+    （36/37 可访问且标题吻合，不采信子 agent 自报）④1 条抓取失败 → 降级 medium 并在图上
+    标「出处未能二次核实」，**不删不假装**
+  - 更新节奏：**价格日更（已随日报自动跑）、事件周更**；事件文件 mtime > 8 天在图上报警
+  - ★**2026 年的真实主线（核实后才看清，与直觉相反）**：鹰派 Fed（01-30 提名 Warsh，
+    黄金当日 −10.78% 全年最大单日）+ 03-02 美以空袭伊朗推高通胀 ⇒ 市场全年交易加息 ⇒
+    金价 5300 → 4000。**战争没有推高金价，反而通过通胀预期压垮了它。**
+    其他节点：03-19 FOMC 仅预测年内降息一次（金 −5.93%，连跌第七日）、
+    06-05 非农 +17.2 万（金银双杀、标普 −2.6%，Chao 截图那个数是真的，BLS 官方）、
+    06-10 CPI 同比 4.2% 三年新高、09-16 FOMC 加息 25bp 至 3.75-4.00%
+- ★**CSS 前缀撞名**：`dg-*` 已被「世界前十经济体 债务/GDP」板块占用，
+  我新加的 `.dg-wrap{margin:6px 0}` 会覆盖它的 `display:flex` 破坏既有布局。
+  已把新 section 的 28 个类名全改 `dxg-*`。
+  ★**没有套用当天早些时候「同类计数异常＝CSS 定义块假警报」的结论，先查了位置** ——
+  查出来这次是**真撞名**。判据复用前必须重新验证。
+- **门禁形参数演进**：53 → 54（中国断代）→ 55（WRS）→ 57（国债微观结构 + 美元黄金）。
+  `build_dashboard.py` 的门禁会检查 `generate()` 全部形参是否都已传入。
+
+### 进展
+
+- `b1195dd` 中国模式断代监控 section（22 files，804 insertions；验收 29/29 零回归）
+- `115e6ef` WRS Walmart 衰退信号（甲方案，验收 24/24 零回归）
+- `b2ac9d5` 国债微观结构 MS Exhibit 3/4 对口（乙方案，验收 30/30 零回归）
+- `4d6d5bd` 美元指数 vs 黄金双轴图 + 37 条事件标注（验收 26/26；并入国债微观结构）
+- 三处发布全部打通并做到 **sha 三方一致**（线上 Cloudflare == 本地 docs == 内网 vibe）：
+  当日最终 `22dfd534ea68`，7,384,590 bytes，vibe v8
+- 11 个站点迁 Cloudflare Pages 完成，逐个 sha256 校验通过
+- cron `eco-vol-01-daily-scan-report` prompt 新增**步骤 8b**（Cloudflare + vibe 双发布）
+- 零回归基线保持：COMEX 库存 412→412、KOL 326→326
+
+### 待办
+
+- [ ] **事件标注的周更 cron 未建**（价格已随日报日更）。建议周一跑，只核实最近 7 天新异动日，约 2-3 分钟。
+      已两次向 Chao 提议「要我现在建吗」，未收到回复。
+- [ ] **其余 10 个站点是否要逐个查「分离式依赖文件漏传」** —— 已向 Chao 提议写一个检查器
+      （抓每个页面里的 `fetch(...)` 与本地 `src/href` 引用逐个验证 200），未收到回复。
+- [ ] GitHub 账号匿名 404 的真实原因仍未确认（Chao 说没收到信，只有文档链接）。
+      目前不影响使用（认证访问正常、公网已由 Cloudflare 承接）。
+- [ ] 承接 9/15：WRS 已于本日落地（甲方案），此条**关闭**。
+- [ ] 承接 9/09：`reports/2026-09-09.md` 与 `data/daily/2026-09-09.json` 至今不存在，原因未查。
+- [ ] 承接 9/08：四方对账门禁「cron 实抓」那一路是否已转全绿，仍未取得证据。
+- [ ] 承接 9/04：tesseract 持久化未落地（需 Chao 点头动 devpod 配置），重启即丢逐笔。
