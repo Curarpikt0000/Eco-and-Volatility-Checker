@@ -542,6 +542,24 @@ def main():
     except Exception as e:
         print(f"[dashboard] 国债微观结构 跳过: {e}")
 
+    # ── 美元指数 vs 黄金 双轴 + 事件标注(丙方案: 日历打底 + 异动反查) ──
+    # ★事件绝不凭 LLM 记忆写 —— 来源是 data/dxy_gold_events.json,
+    #   由「价格异动日 → 联网检索 → 父 agent 逐条 web_extract 验 URL」产出。
+    #   价格日更, 事件周更(文件 mtime > 8 天会在图上提示过期)。
+    dxy_gold = {}
+    try:
+        dxy_gold = ed.fetch_dxy_gold_events() or {}
+        _ev = len(dxy_gold.get("events") or [])
+        _an = len(dxy_gold.get("anomalies") or [])
+        _un = len(dxy_gold.get("uncovered") or [])
+        print(f"[dashboard] 美元vs黄金: status={dxy_gold.get('status')} "
+              f"价格点={len(dxy_gold.get('series') or [])} 异动日={_an} "
+              f"事件={_ev} 未覆盖={_un} 事件过期={dxy_gold.get('events_stale')}")
+        if dxy_gold.get("errors"):
+            print(f"[dashboard] 美元vs黄金 告警: {dxy_gold['errors'][:3]}")
+    except Exception as e:
+        print(f"[dashboard] 美元vs黄金 跳过: {e}")
+
     # ── WRS · Walmart 衰退信号(甲方案: 分母用 ETF 代理, 图上标注) ──
     # ★Paulsen 原式分母 S&P Global Luxury Index 是专有指数(spglobal 403 / Yahoo ^SPGLUX 404),
     #   用追踪该指数的 LUXU.L(Amundi UCITS ETF, USD 计价)代理。只用方向与分位, 不比绝对值。
@@ -717,6 +735,7 @@ def main():
         china_regime=china_regime,
         wrs=wrs,
         ust_micro=ust_micro,
+        dxy_gold=dxy_gold,
         basis_trade=basis_trade,
         comex_inventory=comex_inventory,
         debt_gdp=debt_gdp,

@@ -6931,6 +6931,144 @@ def fetch_ust_microstructure(years=3):
     return out
 
 
+# ══════════════════════════════════════════════════════════════════════
+# 美元指数 vs 黄金 双轴图 + 大事件标注 (Chao 2026-09-19, 丙方案)
+# ══════════════════════════════════════════════════════════════════════
+# ★需求: 对齐中文财经视频里那张 TradingView 叠加图 —— 金价与 DXY 同图双轴,
+#   并标注年初至今影响两者的大事件。
+#
+# ★事件从哪来(这是本模块最容易造假的部分, 纪律必须写死):
+#   **绝不凭 LLM 记忆写 2026 年发生了什么。** 两条来源:
+#   ① 日历事件: FOMC 议息日等已知日程 —— 联网核实后落盘 data/dxy_gold_events.json
+#   ② 异动事件: 先用**真实价格**算出异动日(|日收益| >= 1.8σ, σ 取两年),
+#      再对这些日子联网检索当天新闻, 抓到出处才写。
+#   两者都带 url + confidence(high/medium/none), 前端只渲染有出处的,
+#   confidence=none 的显示为「未找到明确触发事件」, 不硬凑。
+#
+# ★为什么是"价格先行": 让数据指出"这天有事", 而不是我想一个事件再去套价格。
+#   这样标注的日期必定对应真实异动, 不会出现"标了个大事但当天其实没动"。
+#
+# ★更新节奏(Chao 定): 价格**日更**(随 dashboard 每日构建);
+#   事件**周更**(联网检索成本高且事件不会天天有) —— 事件文件 mtime 超 8 天会在图上提示。
+
+_DG_GOLD = ("GC=F", "COMEX 黄金期货")
+_DG_DXY  = ("DX-Y.NYB", "ICE 美元指数 DXY")
+_DG_EVENTS_FILE = "data/dxy_gold_events.json"
+_DG_SIGMA_TH = 1.8
+
+
+def _dg_yahoo(sym, rng="2y"):
+    import json as _j, urllib.request, datetime as _dt
+    u = f"https://query1.finance.yahoo.com/v8/finance/chart/{sym}?range={rng}&interval=1d"
+    req = urllib.request.Request(u, headers={
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                      "AppleWebKit/537.36 Chrome/120.0 Safari/537.36"})
+    with urllib.request.urlopen(req, timeout=50) as r:
+        d = _j.loads(r.read())
+    rr = d["chart"]["result"][0]
+    ts = rr.get("timestamp") or []
+    cl = ((rr.get("indicators") or {}).get("quote") or [{}])[0].get("close") or []
+    return {_dt.datetime.utcfromtimestamp(t).strftime("%Y-%m-%d"): float(c)
+            for t, c in zip(ts, cl) if c is not None}
+
+
+def fetch_dxy_gold_events(start="2026-01-01", events_path=None):
+    """美元指数 vs 黄金 双轴走势 + 已核实事件标注。"""
+    import os as _os, json as _j, statistics as _stat
+    from datetime import timezone, timedelta
+    _jst = datetime.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    out = {"status": "ok", "as_of": _jst, "start": start,
+           "gold": {"sym": _DG_GOLD[0], "name": _DG_GOLD[1]},
+           "dxy": {"sym": _DG_DXY[0], "name": _DG_DXY[1]},
+           "series": [], "events": [], "anomalies": [],
+           "events_stale": False, "events_updated": None,
+           "sigma": {}, "errors": [],
+           "method_note": ("事件标注不靠记忆：先用真实价格算出异动日（|日收益| ≥ "
+                           f"{_DG_SIGMA_TH}σ，σ 取两年日波动），再对这些日子联网检索当天新闻，"
+                           "抓到出处才标注。每条事件都带原文链接；核实不到的显示为"
+                           "「未找到明确触发事件」，不硬凑。"),
+           "cadence_note": "价格每日更新；事件每周重新联网核实一次。"}
+
+    try:
+        g = _dg_yahoo(_DG_GOLD[0])
+        x = _dg_yahoo(_DG_DXY[0])
+    except Exception as e:
+        out["status"] = "error"
+        out["errors"].append(f"价格抓取失败: {type(e).__name__} {str(e)[:70]}")
+        return out
+
+    days = sorted(set(g) & set(x))
+    if len(days) < 60:
+        out["status"] = "error"
+        out["errors"].append(f"共同交易日仅 {len(days)} 天")
+        return out
+
+    # 两年 sigma(更稳), 只在窗口内标异动
+    def _rets(s):
+        return {days[i]: (s[days[i]] / s[days[i-1]] - 1) * 100 for i in range(1, len(days))}
+    gr, xr = _rets(g), _rets(x)
+    g_sd = _stat.pstdev(list(gr.values())) or 1.0
+    x_sd = _stat.pstdev(list(xr.values())) or 1.0
+    out["sigma"] = {"gold": round(g_sd, 3), "dxy": round(x_sd, 3), "th": _DG_SIGMA_TH}
+
+    win = [d for d in days if d >= start]
+    out["series"] = [{"d": d, "g": round(g[d], 2), "x": round(x[d], 3)} for d in win]
+
+    for d in win[1:]:
+        if d not in gr or d not in xr:
+            continue
+        zg, zx = gr[d] / g_sd, xr[d] / x_sd
+        if abs(zg) >= _DG_SIGMA_TH or abs(zx) >= _DG_SIGMA_TH:
+            out["anomalies"].append({
+                "d": d, "gold_pct": round(gr[d], 2), "dxy_pct": round(xr[d], 2),
+                "zg": round(zg, 2), "zx": round(zx, 2),
+                "gold": round(g[d], 2), "dxy": round(x[d], 3),
+                "score": round(max(abs(zg), abs(zx)), 2),
+            })
+    out["anomalies"].sort(key=lambda r: r["d"])
+
+    # ── 读已核实事件(离线文件, 由周更任务写入) ──
+    p = events_path or _os.path.join(_os.path.dirname(_os.path.dirname(
+        _os.path.abspath(__file__))), _DG_EVENTS_FILE)
+    if _os.path.exists(p):
+        try:
+            ev = _j.load(open(p, encoding="utf-8"))
+            items = ev.get("events") if isinstance(ev, dict) else ev
+            out["events"] = [e for e in (items or []) if e.get("date", "") >= start]
+            out["events_updated"] = (ev.get("updated") if isinstance(ev, dict) else None)
+            age_days = (datetime.datetime.now().timestamp() - _os.path.getmtime(p)) / 86400
+            out["events_stale"] = age_days > 8
+            out["events_age_days"] = round(age_days, 1)
+        except Exception as e:
+            out["errors"].append(f"事件文件解析失败: {type(e).__name__}")
+    else:
+        out["errors"].append("事件文件不存在（尚未跑过事件核实任务）")
+
+    # 把事件挂到最近交易日 + 标出该日真实涨跌
+    byday = {s["d"]: s for s in out["series"]}
+    anod = {a["d"]: a for a in out["anomalies"]}
+    for e in out["events"]:
+        d = e.get("date")
+        e["on_chart"] = d in byday
+        if d in byday:
+            e["gold"] = byday[d]["g"]
+            e["dxy"] = byday[d]["x"]
+        if d in anod:
+            e["gold_pct"] = anod[d]["gold_pct"]
+            e["dxy_pct"] = anod[d]["dxy_pct"]
+            e["is_anomaly"] = True
+        else:
+            e["is_anomaly"] = False
+
+    # 未被事件覆盖的异动日(诚实展示"有异动但没查到原因")
+    covered = {e.get("date") for e in out["events"] if e.get("confidence") in ("high", "medium")}
+    out["uncovered"] = [a for a in out["anomalies"] if a["d"] not in covered]
+
+    if out["errors"]:
+        out["status"] = "ok(部分失败)"
+    return out
+
+
 if __name__ == "__main__":
     import json
     print("=== Credit Impulse 三国(信贷脉冲) ===")

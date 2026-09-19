@@ -980,6 +980,144 @@ def _ust_micro_html(m):
 </div>"""
 
 
+
+def _dxy_gold_html(dg):
+    """美元指数 vs 黄金 双轴走势 + 已核实事件标注。"""
+    if not dg or not str(dg.get("status", "")).startswith("ok"):
+        err = ("：" + "；".join(dg.get("errors", [])[:2])) if dg and dg.get("errors") else ""
+        return f'<p class="empty">美元/黄金数据同步中{err}。</p>'
+    ser = dg.get("series") or []
+    if len(ser) < 20:
+        return '<p class="empty">美元/黄金：数据点不足。</p>'
+
+    evs = [e for e in (dg.get("events") or [])
+           if e.get("confidence") in ("high", "medium") and e.get("on_chart")]
+    evs.sort(key=lambda e: e["date"])
+
+    W, H = 960, 340
+    PL, PR, PT, PB = 58, 62, 44, 30
+    iw, ih = W - PL - PR, H - PT - PB
+    gs = [p["g"] for p in ser]; xs = [p["x"] for p in ser]
+    glo, ghi = min(gs), max(gs); xlo, xhi = min(xs), max(xs)
+    gr = (ghi - glo) or 1.0; xr = (xhi - xlo) or 1.0
+    idx = {p["d"]: i for i, p in enumerate(ser)}
+
+    def X(i): return PL + iw * i / max(len(ser) - 1, 1)
+    def YG(v): return PT + ih * (1 - (v - glo) / gr)
+    def YX(v): return PT + ih * (1 - (v - xlo) / xr)
+
+    gold_pts = " ".join(f"{X(i):.1f},{YG(p['g']):.1f}" for i, p in enumerate(ser))
+    dxy_pts  = " ".join(f"{X(i):.1f},{YX(p['x']):.1f}" for i, p in enumerate(ser))
+
+    # 左轴(黄金) / 右轴(DXY)
+    axis = ""
+    for k in range(5):
+        yv = glo + gr * k / 4
+        y = YG(yv)
+        axis += (f'<line x1="{PL}" y1="{y:.1f}" x2="{W-PR}" y2="{y:.1f}" class="dxg-grid"/>'
+                 f'<text x="{PL-7}" y="{y+3.5:.1f}" class="dxg-yl">{yv:,.0f}</text>')
+        xv = xlo + xr * k / 4
+        axis += (f'<text x="{W-PR+7}" y="{YX(xv)+3.5:.1f}" class="dxg-yr">{xv:.1f}</text>')
+    # 月份刻度
+    xt = ""; seen = set()
+    for i, p in enumerate(ser):
+        m = p["d"][:7]
+        if m not in seen:
+            seen.add(m)
+            xt += f'<text x="{X(i):.1f}" y="{H-10}" class="dxg-xt">{p["d"][5:7]}月</text>'
+
+    # ── 事件标记: 交替上下两层, 避免重叠 ──
+    marks = ""; labels = ""
+    lane = 0
+    prev_x = -99
+    for n, e in enumerate(evs, 1):
+        i = idx.get(e["date"])
+        if i is None: continue
+        x = X(i)
+        yg = YG(e.get("gold", ser[i]["g"]))
+        # 密集时上下交替
+        if x - prev_x < 34:
+            lane = (lane + 1) % 3
+        else:
+            lane = 0
+        prev_x = x
+        ly = PT - 8 - lane * 12
+        cls = "cal" if e.get("kind") == "calendar" else ("med" if e.get("confidence") == "medium" else "hi")
+        marks += (f'<line x1="{x:.1f}" y1="{ly+4:.1f}" x2="{x:.1f}" y2="{yg:.1f}" class="dxg-vl {cls}"/>'
+                  f'<circle cx="{x:.1f}" cy="{yg:.1f}" r="3.2" class="dxg-dot {cls}"/>')
+        labels += (f'<text x="{x:.1f}" y="{ly:.1f}" class="dxg-num {cls}">{n}</text>')
+
+    # ── 事件清单(编号对应图上标记) ──
+    rows = ""
+    for n, e in enumerate(evs, 1):
+        cls = "cal" if e.get("kind") == "calendar" else ("med" if e.get("confidence") == "medium" else "hi")
+        badge = ("日历" if e.get("kind") == "calendar"
+                 else ("待核" if e.get("confidence") == "medium" else "已核"))
+        chg = ""
+        if e.get("gold_pct") is not None:
+            gc = "up" if e["gold_pct"] > 0 else "down"
+            dc = "up" if (e.get("dxy_pct") or 0) > 0 else "down"
+            chg = (f'<span class="dxg-chg {gc}">金 {e["gold_pct"]:+.2f}%</span>'
+                   f'<span class="dxg-chg {dc}">汇 {e.get("dxy_pct",0):+.2f}%</span>')
+        link = (f'<a href="{e["url"]}" target="_blank" rel="noopener">{e.get("source","出处")}</a>'
+                if e.get("url") else '<span class="dxg-nolink">无出处</span>')
+        note = f'<div class="dxg-vn">⚠ {e["verify_note"]}</div>' if e.get("verify_note") else ""
+        rows += (f'<tr><td class="dxg-i {cls}">{n}</td>'
+                 f'<td class="dxg-d">{e["date"]}<span class="dxg-bg {cls}">{badge}</span></td>'
+                 f'<td class="dxg-e"><b>{e.get("event","")}</b>{chg}'
+                 f'<div class="dxg-dt">{e.get("detail","")}</div>{note}</td>'
+                 f'<td class="dxg-s">{link}</td></tr>')
+
+    unc = dg.get("uncovered") or []
+    unc_line = ""
+    if unc:
+        unc_line = (f'<div class="dxg-unc">另有 <b>{len(unc)}</b> 个异动日未找到明确触发事件（'
+                    + "、".join(u["d"] for u in unc[:8])
+                    + ("…" if len(unc) > 8 else "") + '）—— 如实列出，不硬凑。</div>')
+
+    stale = ""
+    if dg.get("events_stale"):
+        stale = (f'<div class="dxg-stale">⚠ 事件清单已 {dg.get("events_age_days","?")} 天未更新'
+                 f'（应每周重新核实一次）</div>')
+
+    g0, g1 = ser[0]["g"], ser[-1]["g"]
+    x0, x1 = ser[0]["x"], ser[-1]["x"]
+    return f"""
+<div class="dxg-wrap">
+  <div class="dxg-stat">
+    <span>黄金 {dg["gold"]["sym"]}<b>{g1:,.2f}</b>
+      <i>年初 {g0:,.0f} → {(g1/g0-1)*100:+.1f}%</i></span>
+    <span>美元指数 {dg["dxy"]["sym"]}<b>{x1:.2f}</b>
+      <i>年初 {x0:.2f} → {(x1/x0-1)*100:+.1f}%</i></span>
+    <span>已标注事件<b>{len(evs)}</b><i>{dg["start"]} 至今</i></span>
+    <span>异动日<b>{len(dg.get("anomalies") or [])}</b>
+      <i>|日收益| ≥ {dg["sigma"]["th"]}σ</i></span>
+  </div>
+
+  <div class="dxg-legend">
+    <span class="dxg-lg gold">— 黄金（左轴，美元/盎司）</span>
+    <span class="dxg-lg dxy">— 美元指数（右轴）</span>
+    <span class="dxg-lg hi">● 已核实事件</span>
+    <span class="dxg-lg cal">● FOMC 日历</span>
+  </div>
+
+  <svg viewBox="0 0 {W} {H}" class="dxg-chart" preserveAspectRatio="xMidYMid meet">
+    {axis}
+    <polyline points="{gold_pts}" class="dxg-gold"/>
+    <polyline points="{dxy_pts}" class="dxg-dxy"/>
+    {marks}{labels}{xt}
+  </svg>
+
+  <div class="dxg-method">{dg.get("method_note","")}<br>{dg.get("cadence_note","")}</div>
+  {stale}{unc_line}
+
+  <details class="dxg-det" open>
+    <summary>事件明细（{len(evs)} 条，编号对应图上标记）</summary>
+    <table class="dxg-table"><tbody>{rows}</tbody></table>
+  </details>
+</div>"""
+
+
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
@@ -996,7 +1134,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, ust_micro=None,
+             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, ust_micro=None, dxy_gold=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
@@ -1231,6 +1369,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         china_regime_html=_china_regime_html(china_regime),
         wrs_html=_wrs_html(wrs),
         ust_micro_html=_ust_micro_html(ust_micro),
+        dxy_gold_html=_dxy_gold_html(dxy_gold),
         basis_trade=_basis_trade_html(basis_trade),
         comex_inventory=_comex_inventory_html(comex_inventory),
         debt_gdp=_debt_gdp_html(debt_gdp),
@@ -8416,6 +8555,65 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .um-pct{{font-size:11px;color:#87652a;background:#f0e6cc;padding:1px 8px;border-radius:8px}}
 .um-cost-d{{font-size:11.5px;color:#8d857b;margin:3px 0 4px}}
 
+/* ── 美元指数 vs 黄金 + 事件标注 ── */
+.dxg-wrap{{margin:6px 0}}
+.dxg-stat{{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}}
+.dxg-stat span{{flex:1 1 172px;background:#eae4d9;border-radius:8px;padding:9px 12px;
+  font-size:12px;color:#6b645c;display:flex;flex-direction:column;gap:2px}}
+.dxg-stat b{{font-size:18px;color:#3d3a36;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}}
+.dxg-stat i{{font-style:normal;font-size:11px;color:#9a938a}}
+.dxg-legend{{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;margin-bottom:4px}}
+.dxg-lg.gold{{color:#b08a3e}}
+.dxg-lg.dxy{{color:#5b7d94}}
+.dxg-lg.hi{{color:#8e3b30}}
+.dxg-lg.cal{{color:#5f7f5a}}
+.dxg-chart{{width:100%;height:auto;display:block}}
+.dxg-grid{{stroke:#e2dcd1;stroke-width:.7}}
+.dxg-gold{{fill:none;stroke:#b08a3e;stroke-width:1.8}}
+.dxg-dxy{{fill:none;stroke:#5b7d94;stroke-width:1.5}}
+.dxg-yl{{font-size:9.5px;fill:#b08a3e;text-anchor:end;font-family:ui-monospace,monospace}}
+.dxg-yr{{font-size:9.5px;fill:#5b7d94;text-anchor:start;font-family:ui-monospace,monospace}}
+.dxg-xt{{font-size:9.5px;fill:#9a938a;text-anchor:middle}}
+.dxg-vl{{stroke-width:.8;stroke-dasharray:2.5 2.5;opacity:.55}}
+.dxg-vl.hi{{stroke:#8e3b30}}
+.dxg-vl.cal{{stroke:#5f7f5a}}
+.dxg-vl.med{{stroke:#a3855f}}
+.dxg-dot.hi{{fill:#8e3b30}}
+.dxg-dot.cal{{fill:#5f7f5a}}
+.dxg-dot.med{{fill:#a3855f}}
+.dxg-num{{font-size:9px;text-anchor:middle;font-weight:700}}
+.dxg-num.hi{{fill:#8e3b30}}
+.dxg-num.cal{{fill:#5f7f5a}}
+.dxg-num.med{{fill:#a3855f}}
+.dxg-method{{font-size:11.5px;color:#8d857b;line-height:1.85;margin:10px 0 6px;
+  background:#f3efe2;border-left:3px solid #b09a5f;padding:9px 12px;border-radius:5px}}
+.dxg-stale{{background:#f4e9e6;border-left:3px solid #a3705f;padding:8px 12px;
+  font-size:12px;color:#7a5f52;border-radius:5px;margin-bottom:8px}}
+.dxg-unc{{font-size:11.5px;color:#8d857b;margin-bottom:8px;line-height:1.8}}
+.dxg-det{{margin-top:8px;font-size:13px}}
+.dxg-det summary{{cursor:pointer;color:#6b645c;padding:6px 0}}
+.dxg-table{{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:4px}}
+.dxg-table td{{padding:8px 9px;border-bottom:1px solid #eee9e0;vertical-align:top}}
+.dxg-i{{width:24px;font-weight:700;font-family:ui-monospace,monospace;text-align:right}}
+.dxg-i.hi{{color:#8e3b30}}
+.dxg-i.cal{{color:#5f7f5a}}
+.dxg-i.med{{color:#a3855f}}
+.dxg-d{{width:104px;color:#6b645c;font-family:ui-monospace,monospace;font-size:11.5px}}
+.dxg-bg{{display:block;margin-top:3px;font-size:10px;padding:1px 6px;border-radius:7px;
+  width:fit-content;font-family:system-ui,sans-serif}}
+.dxg-bg.hi{{background:#dde7dc;color:#41613c}}
+.dxg-bg.cal{{background:#dbe4ea;color:#3f5a6b}}
+.dxg-bg.med{{background:#f0e6cc;color:#87652a}}
+.dxg-e b{{color:#3d3a36}}
+.dxg-chg{{margin-left:8px;font-size:11px;font-family:ui-monospace,monospace}}
+.dxg-chg.up{{color:#5f7f5a}}
+.dxg-chg.down{{color:#a3705f}}
+.dxg-dt{{color:#7a736b;line-height:1.75;margin-top:3px;font-size:11.5px}}
+.dxg-vn{{color:#8e3b30;font-size:11px;margin-top:3px}}
+.dxg-s{{width:96px;font-size:11.5px}}
+.dxg-s a{{color:#5b7d94}}
+.dxg-nolink{{color:#b3aba0}}
+
   .cmm-chart {{ width: 100%; height: auto; display: block; margin: 4px 0 2px; }}
   .cmm-one {{ margin: 16px 0 20px; }}
   .cmm-t {{ font-size: 14.5px; font-weight: 700; color: #4a443c; margin-bottom: 7px;
@@ -9029,6 +9227,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ WRS · Walmart 衰退信号(分母 ETF 代理, 已标注) ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>WRS · Walmart 衰退信号 (Walmart ÷ 奢侈品指数 · Jim Paulsen 口径 · 分母用 ETF 代理)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{wrs_html}</div>
+  <!-- ━━━ 美元指数 vs 黄金 + 年初至今大事件标注 ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>美元指数 vs 黄金 · 年初至今大事件标注 (双轴叠加 · 事件由价格异动反查并逐条核实出处)<span class="freq-badge freq-daily">价格每日 · 事件每周</span></div>
+  <div class="card">{dxy_gold_html}</div>
   <div class="card">{basis_trade}</div>
   <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)<span class="freq-badge freq-event">每次拍卖</span></div>
