@@ -542,6 +542,22 @@ def main():
     except Exception as e:
         print(f"[dashboard] 国债微观结构 跳过: {e}")
 
+    # ── 黄金 ETF 分地区资金流(WGC 官方 fsapi) ──
+    # ★与市面流传的 WGC「Gold ETF flows」图同源, 实测复核 6/12=-24.7t、6/26=-38.2t 吻合。
+    # ★白银无权威免费源(WGC ?metal=silver 返 200 但内容仍是黄金 —— 陷阱),
+    #   故只做黄金, 白银在图上显式说明, 不用代理冒充。
+    gold_etf_flows = {}
+    try:
+        gold_etf_flows = ed.fetch_gold_etf_flows_by_region() or {}
+        _t = (gold_etf_flows.get("totals") or {}).get("ytd") or {}
+        print(f"[dashboard] 黄金ETF分地区流: status={gold_etf_flows.get('status')} "
+              f"数据日={gold_etf_flows.get('as_of_data')} 周数={len(gold_etf_flows.get('weeks') or [])} "
+              f"YTD合计={_t.get('total')}t (北美{_t.get('北美')}/欧洲{_t.get('欧洲')}/亚洲{_t.get('亚洲')})")
+        if gold_etf_flows.get("errors"):
+            print(f"[dashboard] 黄金ETF分地区流 告警: {gold_etf_flows['errors'][:3]}")
+    except Exception as e:
+        print(f"[dashboard] 黄金ETF分地区流 跳过: {e}")
+
     # ── 美元指数 vs 黄金 双轴 + 事件标注(丙方案: 日历打底 + 异动反查) ──
     # ★事件绝不凭 LLM 记忆写 —— 来源是 data/dxy_gold_events.json,
     #   由「价格异动日 → 联网检索 → 父 agent 逐条 web_extract 验 URL」产出。
@@ -736,6 +752,7 @@ def main():
         wrs=wrs,
         ust_micro=ust_micro,
         dxy_gold=dxy_gold,
+        gold_etf_flows=gold_etf_flows,
         basis_trade=basis_trade,
         comex_inventory=comex_inventory,
         debt_gdp=debt_gdp,

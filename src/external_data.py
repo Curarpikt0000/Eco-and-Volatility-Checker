@@ -5422,18 +5422,31 @@ def fetch_comex_inventory(cache_path=None):
             print(f"[comex_inventory] 缓存回退也失败: {e}")
         return {"status": "未获取", "as_of": None, "note": note}
 
-    url = "https://curarpikt0000.github.io/comex-inventory-charts/"
+    # ★2026-09-19: 个人 GitHub 账号被反滥用系统限制匿名访问 → github.io 全线 404,
+    #   本 fetcher 曾静默回退缓存(吃 3 天前旧数据)。改为**双源**: Cloudflare 主 + GitHub 备。
+    #   Cloudflare 站是同一产物的镜像(实测含完整 const CHARTS), 不受账号限制影响。
+    urls = ["https://comex-inventory-charts.pages.dev/",
+            "https://curarpikt0000.github.io/comex-inventory-charts/"]
     html = None
-    try:
-        import subprocess
-        r = subprocess.run(["curl", "-s", "--max-time", "30", "-H", "User-Agent: Mozilla/5.0", url],
-                           capture_output=True, text=True, timeout=35)
-        if r.returncode == 0 and r.stdout:
-            html = r.stdout
-    except Exception:
-        html = None
+    src_used = None
+    tried = []
+    import subprocess
+    for u in urls:
+        try:
+            r = subprocess.run(["curl", "-s", "-L", "--max-time", "30",
+                                "-H", "User-Agent: Mozilla/5.0", u],
+                               capture_output=True, text=True, timeout=35)
+            body = r.stdout if r.returncode == 0 else ""
+            # ★判据不是"拿到 200/非空", 而是**内容里真有 CHARTS**。
+            #   GitHub 被限制后返回的是 404 页面, 非空但无数据 —— 光看非空会误判成功。
+            if body and "const CHARTS" in body:
+                html, src_used = body, u
+                break
+            tried.append(f"{u.split('/')[2]}:{'无CHARTS' if body else '空'}")
+        except Exception as e:
+            tried.append(f"{u.split('/')[2]}:{type(e).__name__}")
     if not html:
-        return _fallback("comex-inventory-charts 页面抓取失败")
+        return _fallback(f"comex-inventory-charts 全部源失败 ({'; '.join(tried)})")
 
     try:
         mc = _re.search(r'const CHARTS = (\{.*?\});\s*\nconst SUMMARY', html, _re.S)
@@ -5509,7 +5522,7 @@ def fetch_comex_inventory(cache_path=None):
     out = {"status": "ok", "as_of": as_of, "summary": summary,
            "panels": {k: v for k, v in panels.items() if v},
            "flows": {k: v for k, v in flows.items() if v},
-           "source_url": url, "fetched_at": _dt.datetime.now().isoformat()}
+           "source_url": src_used, "fetched_at": _dt.datetime.now().isoformat()}
     try:
         with open(cache_path, "w") as f:
             _json.dump(out, f, ensure_ascii=False, default=str)
@@ -7063,6 +7076,148 @@ def fetch_dxy_gold_events(start="2026-01-01", events_path=None):
     # 未被事件覆盖的异动日(诚实展示"有异动但没查到原因")
     covered = {e.get("date") for e in out["events"] if e.get("confidence") in ("high", "medium")}
     out["uncovered"] = [a for a in out["anomalies"] if a["d"] not in covered]
+
+    if out["errors"]:
+        out["status"] = "ok(部分失败)"
+    return out
+
+
+# ══════════════════════════════════════════════════════════════════════
+# 黄金 ETF 分地区资金流 (WGC 官方 fsapi) — Chao 2026-09-19, 丙方案
+# ══════════════════════════════════════════════════════════════════════
+# ★数据源: https://fsapi.gold.org/api/v11/charts/etfv2/revised/flows-chart2
+#   这是世界黄金协会(WGC) Goldhub「Gold ETF flows」图表的**官方数据后端**,
+#   免费、无需 key。与 Chao 提供的财经视频截图中那张 WGC 图同源。
+#   实测复核: 2026-06-12 = -24.7t、2026-06-26 = -38.2t, 与截图标注逐字吻合。
+#
+# ★提供: 北美/欧洲/亚洲/其他 四地区独立序列 + 金价(右轴), 双单位(吨/美元),
+#   四种频率(周/月/季/年)。周度 454 点, 2018-01 至今。
+#
+# ★★白银为何没有同类数据(踩坑记录, 别再重复找):
+#   1. WGC 只管黄金。`?metal=silver` **返回 HTTP 200 但内容与黄金一字不差**
+#      (参数被静默忽略) —— 这是陷阱, 不验证就会把黄金数据当白银用。
+#      判据: 比对两端点最新值完全相等 + 'Gold Price (rhs)' 仍是 ~4400/oz。
+#   2. Silver Institute 无同类周度分地区 API(页面无数据文件/无 api 路径)。
+#   3. iShares(SLV)/Sprott(PSLV)/abrdn(SIVR) 官方持仓接口均返回 HTML 壳或 404;
+#      SPDR 只发 PDF; Yahoo quoteSummary 全线 401 拿不到 AUM。
+#   结论: 白银的权威周度分地区 flows 基本只在彭博/路透终端。本模块**只做黄金**,
+#   白银在 dashboard 上显式说明「无权威免费源」, 不用代理数据冒充。
+
+_WGC_FLOWS = "https://fsapi.gold.org/api/v11/charts/etfv2/revised/flows-chart2"
+_WGC_HOLD  = "https://fsapi.gold.org/api/v11/charts/etfv2/revised/holdings-chart2"
+_WGC_REGIONS = ("North America", "Europe", "Asia", "Other")
+_WGC_CN = {"North America": "北美", "Europe": "欧洲", "Asia": "亚洲",
+           "Other": "其他", "Gold Price (rhs)": "金价"}
+
+
+def _wgc_get(url):
+    import json as _j, urllib.request, ssl as _ssl
+    ctx = _ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = _ssl.CERT_NONE
+    req = urllib.request.Request(url, headers={
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                      "AppleWebKit/537.36 Chrome/120.0 Safari/537.36",
+        "Accept": "application/json,*/*",
+        "Referer": "https://www.gold.org/"})
+    with urllib.request.urlopen(req, timeout=45, context=ctx) as r:
+        return _j.loads(r.read())
+
+
+def fetch_gold_etf_flows_by_region(weeks=52):
+    """黄金 ETF 分地区周度资金流(WGC 官方)。"""
+    import datetime as _dt
+    from datetime import timezone, timedelta
+    _jst = _dt.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    out = {"status": "ok", "as_of": _jst, "regions": [], "weeks": [],
+           "as_of_data": None, "totals": {}, "errors": [],
+           "silver_note": ("白银无权威免费的分地区周度 flows：WGC 只覆盖黄金"
+                           "（其 ?metal=silver 参数返回 200 但内容仍是黄金数据）；"
+                           "Silver Institute 无同类 API；各发行商(iShares/Sprott/abrdn/SPDR)"
+                           "持仓接口返回 HTML 壳、PDF 或 401。故本板块只做黄金，"
+                           "不用代理数据冒充白银。"),
+           "source": "World Gold Council (Goldhub) 官方 fsapi",
+           "source_url": "https://www.gold.org/goldhub/data/gold-etfs-holdings-and-flows"}
+
+    try:
+        d = _wgc_get(_WGC_FLOWS)
+    except Exception as e:
+        out["status"] = "error"
+        out["errors"].append(f"WGC flows 抓取失败: {type(e).__name__} {str(e)[:70]}")
+        return out
+
+    try:
+        cd = d["chartData"]
+        out["as_of_data"] = cd.get("asOfDate")
+        ser = cd["data"]["Weekly"]["series"]["tonnes"]
+    except Exception as e:
+        out["status"] = "error"
+        out["errors"].append(f"WGC flows 结构异常: {type(e).__name__}")
+        return out
+
+    def _d(ms):
+        return _dt.datetime.utcfromtimestamp(ms / 1000).strftime("%Y-%m-%d")
+
+    by = {}
+    for s in ser:
+        by[s.get("name")] = {_d(p[0]): p[1] for p in (s.get("data") or []) if p and p[0]}
+
+    missing = [r for r in _WGC_REGIONS if r not in by]
+    if missing:
+        out["errors"].append(f"缺地区序列: {missing}")
+    dates = sorted(by.get("North America") or by.get(list(by)[0]) or {})
+    if not dates:
+        out["status"] = "error"
+        out["errors"].append("无日期序列")
+        return out
+
+    win = dates[-weeks:]
+    px = by.get("Gold Price (rhs)", {})
+    rows = []
+    for dt in win:
+        vals = {r: round(by.get(r, {}).get(dt, 0.0), 2) for r in _WGC_REGIONS}
+        rows.append({"d": dt, **{_WGC_CN[r]: vals[r] for r in _WGC_REGIONS},
+                     "total": round(sum(vals.values()), 2),
+                     "px": round(px.get(dt, 0.0), 2)})
+    out["weeks"] = rows
+    out["regions"] = [_WGC_CN[r] for r in _WGC_REGIONS]
+
+    # 汇总: 最新周 / 近4周 / 近13周 / YTD
+    def _sum(n=None, ytd=False):
+        sel = [r for r in rows if r["d"][:4] == rows[-1]["d"][:4]] if ytd else rows[-n:]
+        return {k: round(sum(r[k] for r in sel), 1)
+                for k in list(_WGC_CN[x] for x in _WGC_REGIONS) + ["total"]}
+    out["totals"] = {"latest": {k: rows[-1][k] for k in
+                                list(_WGC_CN[x] for x in _WGC_REGIONS) + ["total"]},
+                     "w4": _sum(4), "w13": _sum(13), "ytd": _sum(ytd=True)}
+
+    # 极值: 本年最大流入/流出周 + 全序列排名(用于判断"创纪录"这类说法)
+    allr = [{"d": dt, "total": round(sum(by.get(r, {}).get(dt, 0.0)
+                                         for r in _WGC_REGIONS), 2)} for dt in dates]
+    srt = sorted(allr, key=lambda r: r["total"])
+    out["extremes"] = {
+        "worst_all": srt[:5], "best_all": srt[-5:][::-1],
+        "latest_rank_out": sum(1 for r in allr if r["total"] < allr[-1]["total"]) + 1,
+        "n_all": len(allr), "hist_start": dates[0],
+    }
+
+    # 持仓总量(另一端点, 拿不到不致命)
+    try:
+        h = _wgc_get(_WGC_HOLD)
+        hs = h["chartData"]["data"]["Weekly"]
+        ht = hs.get("tonnes") or (hs.get("series") or {}).get("tonnes")
+        if isinstance(ht, list) and ht:
+            tot = {}
+            for s in ht:
+                for p in (s.get("data") or []):
+                    if p and p[0]:
+                        tot[_d(p[0])] = tot.get(_d(p[0]), 0.0) + (p[1] or 0.0)
+            if tot:
+                k = max(tot)
+                out["holdings_total_t"] = round(tot[k], 1)
+                out["holdings_as_of"] = k
+    except Exception as e:
+        out["errors"].append(f"持仓端点跳过: {type(e).__name__}")
 
     if out["errors"]:
         out["status"] = "ok(部分失败)"

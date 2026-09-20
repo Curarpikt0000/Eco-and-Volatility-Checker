@@ -1118,6 +1118,140 @@ def _dxy_gold_html(dg):
 </div>"""
 
 
+
+def _gold_etf_region_html(gf):
+    """黄金 ETF 分地区周度资金流(WGC 官方) + 金价叠加。"""
+    if not gf or not str(gf.get("status", "")).startswith("ok"):
+        err = ("：" + "；".join(gf.get("errors", [])[:2])) if gf and gf.get("errors") else ""
+        return f'<p class="empty">WGC 黄金 ETF 资金流数据同步中{err}。</p>'
+    wk = gf.get("weeks") or []
+    if len(wk) < 8:
+        return '<p class="empty">WGC 黄金 ETF 资金流：数据点不足。</p>'
+
+    REG = ["北美", "欧洲", "亚洲", "其他"]
+    COL = {"北美": "#7d94a8", "欧洲": "#9a8c6e", "亚洲": "#8d9c86", "其他": "#b0a49a"}
+    W, H = 960, 320
+    PL, PR, PT, PB = 54, 60, 22, 40
+    iw, ih = W - PL - PR, H - PT - PB
+
+    # 堆叠柱: 正负分别向上/向下堆
+    lo = min(min(0, sum(r[k] for k in REG if r[k] < 0)) for r in wk)
+    hi = max(max(0, sum(r[k] for k in REG if r[k] > 0)) for r in wk)
+    pad = (hi - lo) * 0.08 or 1
+    lo, hi = lo - pad, hi + pad
+    def Y(v): return PT + ih * (1 - (v - lo) / (hi - lo))
+    bw = iw / len(wk) * 0.66
+    def X(i): return PL + iw * (i + 0.5) / len(wk)
+
+    bars = ""
+    for i, r in enumerate(wk):
+        x = X(i) - bw / 2
+        up = dn = 0.0
+        for k in REG:
+            v = r[k]
+            if v >= 0:
+                y0, y1 = Y(up + v), Y(up); up += v
+            else:
+                y0, y1 = Y(dn), Y(dn + v); dn += v
+            h = abs(y1 - y0)
+            if h < 0.35: continue
+            bars += (f'<rect x="{x:.1f}" y="{min(y0,y1):.1f}" width="{bw:.1f}" '
+                     f'height="{h:.1f}" fill="{COL[k]}" opacity=".9"><title>'
+                     f'{r["d"]} {k} {v:+.2f} 吨</title></rect>')
+
+    # 金价折线(右轴)
+    pxs = [r["px"] for r in wk if r["px"]]
+    pline = ""
+    if len(pxs) > 4:
+        plo, phi = min(pxs), max(pxs)
+        pr_ = (phi - plo) or 1
+        def YP(v): return PT + ih * (1 - (v - plo) / pr_) * 0.92 + ih * 0.04
+        pts = " ".join(f"{X(i):.1f},{YP(r['px']):.1f}" for i, r in enumerate(wk) if r["px"])
+        pline = f'<polyline points="{pts}" class="gef-px"/>'
+        for k in range(3):
+            v = plo + pr_ * k / 2
+            pline += f'<text x="{W-PR+6}" y="{YP(v)+3.5:.1f}" class="gef-yr">{v:,.0f}</text>'
+
+    grid = f'<line x1="{PL}" y1="{Y(0):.1f}" x2="{W-PR}" y2="{Y(0):.1f}" class="gef-zero"/>'
+    for k in range(5):
+        v = lo + (hi - lo) * k / 4
+        grid += (f'<line x1="{PL}" y1="{Y(v):.1f}" x2="{W-PR}" y2="{Y(v):.1f}" class="gef-grid"/>'
+                 f'<text x="{PL-7}" y="{Y(v)+3.5:.1f}" class="gef-yl">{v:+.0f}</text>')
+    xt = ""; seen = set()
+    for i, r in enumerate(wk):
+        m = r["d"][:7]
+        if m not in seen:
+            seen.add(m)
+            xt += f'<text x="{X(i):.1f}" y="{H-14}" class="gef-xt">{r["d"][5:7]}月</text>'
+
+    t = gf.get("totals") or {}
+    def _cell(dd, lab):
+        tv = dd.get("total", 0)
+        cls = "in" if tv > 0 else "out"
+        cells = "".join(f'<span class="gef-r"><i style="background:{COL[k]}"></i>'
+                        f'{k} <b class="{"in" if dd.get(k,0)>0 else "out"}">{dd.get(k,0):+.1f}</b></span>'
+                        for k in REG)
+        return (f'<div class="gef-card"><div class="gef-lab">{lab}</div>'
+                f'<div class="gef-tot {cls}">{tv:+.1f} <small>吨</small></div>'
+                f'<div class="gef-rs">{cells}</div></div>')
+
+    ex = gf.get("extremes") or {}
+    rank = ""
+    if ex.get("latest_rank_out"):
+        rank = (f'最新一周在 {ex["n_all"]} 周历史中流出排名第 <b>{ex["latest_rank_out"]}</b>'
+                f'（样本自 {ex.get("hist_start","")}）')
+    worst = "、".join(f'{r["d"]} {r["total"]:.1f}t' for r in (ex.get("worst_all") or [])[:3])
+
+    rows = "".join(
+        f'<tr><td>{r["d"]}</td>'
+        + "".join(f'<td class="{"in" if r[k]>0 else "out"}">{r[k]:+.2f}</td>' for k in REG)
+        + f'<td class="gef-tt {"in" if r["total"]>0 else "out"}">{r["total"]:+.2f}</td>'
+          f'<td class="gef-px-c">{r["px"]:,.0f}</td></tr>'
+        for r in wk[::-1][:16])
+
+    return f"""
+<div class="gef-wrap">
+  <div class="gef-src">
+    数据源：<b>{gf.get("source","")}</b> —— 与市面上流传的 WGC「Gold ETF flows」图<b>同源</b>。
+    实测复核：2026-06-12 = −24.7 吨、2026-06-26 = −38.2 吨，与公开图表标注逐字吻合。
+    数据日 <b>{gf.get("as_of_data","")}</b>（WGC 每周更新）·
+    <a href="{gf.get("source_url","")}" target="_blank" rel="noopener">官方页面</a>
+  </div>
+
+  <div class="gef-cards">
+    {_cell(t.get("latest", {}), "最新一周")}
+    {_cell(t.get("w4", {}), "近 4 周累计")}
+    {_cell(t.get("w13", {}), "近 13 周累计")}
+    {_cell(t.get("ytd", {}), "年初至今累计")}
+  </div>
+
+  <div class="gef-legend">
+    {"".join(f'<span><i style="background:{COL[k]}"></i>{k}</span>' for k in REG)}
+    <span><i class="gef-pxi"></i>金价（右轴，美元/盎司）</span>
+  </div>
+
+  <svg viewBox="0 0 {W} {H}" class="gef-chart" preserveAspectRatio="xMidYMid meet">
+    {grid}{bars}{pline}{xt}
+    <text x="{PL-7}" y="{PT-6}" class="gef-unit">吨</text>
+  </svg>
+
+  <div class="gef-ctx">{rank}　·　历史最大单周流出：{worst}</div>
+
+  <div class="gef-silver">
+    <b>为什么没有白银？</b>{gf.get("silver_note","")}
+  </div>
+
+  <details class="gef-det">
+    <summary>近 16 周明细（吨）</summary>
+    <table class="gef-table">
+      <thead><tr><th>周</th>{"".join(f"<th>{k}</th>" for k in REG)}
+        <th>合计</th><th>金价</th></tr></thead>
+      <tbody>{rows}</tbody>
+    </table>
+  </details>
+</div>"""
+
+
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
@@ -1134,7 +1268,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, ust_micro=None, dxy_gold=None,
+             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
@@ -1358,7 +1492,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         comex_issue_stop=_comex_issue_stop_html(comex_issue_stop),
         comex_firms_top10=_comex_firms_top10_html(comex_firms_top10),
         fiscal_budget=_fiscal_budget_html(fiscal_budget),
-        bis_section=_bis_section_html(bis_latest, "https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/", bis_all),
+        bis_section=_bis_section_html(bis_latest, "https://eco-volatility-checker.pages.dev/bis/", bis_all),
         cb_swaps=_cb_swaps_html(cb_swaps),
         kol_roster=_kol_roster_table_html(_kol_hist_index),
         country_ust=_country_ust_html(country_ust, tic_official_private),
@@ -1370,6 +1504,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         wrs_html=_wrs_html(wrs),
         ust_micro_html=_ust_micro_html(ust_micro),
         dxy_gold_html=_dxy_gold_html(dxy_gold),
+        gold_etf_region_html=_gold_etf_region_html(gold_etf_flows),
         basis_trade=_basis_trade_html(basis_trade),
         comex_inventory=_comex_inventory_html(comex_inventory),
         debt_gdp=_debt_gdp_html(debt_gdp),
@@ -8614,6 +8749,49 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .dxg-s a{{color:#5b7d94}}
 .dxg-nolink{{color:#b3aba0}}
 
+/* ── 黄金 ETF 分地区资金流 (WGC) ── */
+.gef-wrap{{margin:6px 0}}
+.gef-src{{font-size:11.5px;color:#7a736b;line-height:1.85;background:#eef1ea;
+  border-left:3px solid #8d9c86;padding:9px 12px;border-radius:5px;margin-bottom:10px}}
+.gef-src a{{color:#5b7d94}}
+.gef-cards{{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:10px}}
+.gef-card{{flex:1 1 202px;background:#eae4d9;border-radius:8px;padding:9px 12px}}
+.gef-lab{{font-size:11.5px;color:#8d857b;margin-bottom:2px}}
+.gef-tot{{font-size:20px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;margin-bottom:5px}}
+.gef-tot small{{font-size:11px;color:#9a938a}}
+.gef-tot.in,.gef-table td.in,.gef-r b.in{{color:#5f7f5a}}
+.gef-tot.out,.gef-table td.out,.gef-r b.out{{color:#a3705f}}
+.gef-rs{{display:flex;flex-direction:column;gap:2px}}
+.gef-r{{font-size:11px;color:#7a736b;display:flex;align-items:center;gap:5px}}
+.gef-r i{{width:8px;height:8px;border-radius:2px;display:inline-block;flex:none}}
+.gef-r b{{font-family:ui-monospace,monospace;margin-left:auto}}
+.gef-legend{{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:#6b645c;margin-bottom:4px}}
+.gef-legend span{{display:flex;align-items:center;gap:5px}}
+.gef-legend i{{width:10px;height:10px;border-radius:2px;display:inline-block}}
+.gef-pxi{{background:#b08a3e;height:2px!important;width:16px!important;border-radius:0!important}}
+.gef-chart{{width:100%;height:auto;display:block}}
+.gef-grid{{stroke:#e2dcd1;stroke-width:.7}}
+.gef-zero{{stroke:#b3aba0;stroke-width:1.1}}
+.gef-px{{fill:none;stroke:#b08a3e;stroke-width:1.7}}
+.gef-yl{{font-size:9.5px;fill:#8d857b;text-anchor:end;font-family:ui-monospace,monospace}}
+.gef-yr{{font-size:9.5px;fill:#b08a3e;text-anchor:start;font-family:ui-monospace,monospace}}
+.gef-xt{{font-size:9.5px;fill:#9a938a;text-anchor:middle}}
+.gef-unit{{font-size:10px;fill:#9a938a;text-anchor:end}}
+.gef-ctx{{font-size:11.5px;color:#8d857b;margin:8px 0;line-height:1.8}}
+.gef-silver{{font-size:11.5px;color:#7a5f52;line-height:1.85;background:#f4efe6;
+  border-left:3px solid #b09a5f;padding:9px 12px;border-radius:5px;margin:8px 0}}
+.gef-silver b{{color:#6b5340}}
+.gef-det{{margin-top:8px;font-size:13px}}
+.gef-det summary{{cursor:pointer;color:#6b645c;padding:6px 0}}
+.gef-table{{width:100%;border-collapse:collapse;font-size:12px;margin-top:4px}}
+.gef-table th{{text-align:right;padding:6px 8px;border-bottom:1px solid #ded7cb;
+  color:#8d857b;font-weight:600;font-size:11px}}
+.gef-table th:first-child,.gef-table td:first-child{{text-align:left}}
+.gef-table td{{text-align:right;padding:5px 8px;border-bottom:1px solid #eee9e0;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace}}
+.gef-tt{{font-weight:700}}
+.gef-px-c{{color:#b08a3e}}
+
   .cmm-chart {{ width: 100%; height: auto; display: block; margin: 4px 0 2px; }}
   .cmm-one {{ margin: 16px 0 20px; }}
   .cmm-t {{ font-size: 14.5px; font-weight: 700; color: #4a443c; margin-bottom: 7px;
@@ -9140,7 +9318,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="card">{market_breadth}</div>
 
   <!-- ═══ 附一·零：本周 KOL 观点全景(按模块+多空, Eco 独立每日快照) ═══ -->
-  <div class="part-title part-title-flex"><span><span class="part-num">＋</span>本周 KOL 观点全景 · 按模块 (多空方向卡片)</span><span class="freq-badge freq-daily" style="margin-left:0">每日更新</span><a class="kol-dash-btn" href="https://curarpikt0000.github.io/kol-dashboard/" target="_blank" rel="noopener">📊 打开 KOL Dashboard →</a></div>
+  <div class="part-title part-title-flex"><span><span class="part-num">＋</span>本周 KOL 观点全景 · 按模块 (多空方向卡片)</span><span class="freq-badge freq-daily" style="margin-left:0">每日更新</span><a class="kol-dash-btn" href="https://chao-kol-dashboard.pages.dev/" target="_blank" rel="noopener">📊 打开 KOL Dashboard →</a></div>
   <div class="card">{kol_views}</div>
 
   <!-- ═══ 附一：本周 KOL 状态变化(模块化, Eco 独立每日快照周对比) ═══ -->
@@ -9171,7 +9349,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="bs-grid">{cb_balance}</div>
 
   <!-- ═══ 附三·一半：BIS 国际清算银行报告 (央行的央行 · 摘要+独立页) ═══ -->
-  <div class="part-title part-title-flex"><span><span class="part-num">＋</span>BIS 国际清算银行报告 · 最新要点 (Quarterly Review 季度综述)</span><span class="freq-badge freq-quarterly" style="margin-left:0">每季度更新</span><a class="kol-dash-btn" href="https://curarpikt0000.github.io/Eco-and-Volatility-Checker/bis/" target="_blank" rel="noopener">📄 查看 BIS 报告全库 →</a></div>
+  <div class="part-title part-title-flex"><span><span class="part-num">＋</span>BIS 国际清算银行报告 · 最新要点 (Quarterly Review 季度综述)</span><span class="freq-badge freq-quarterly" style="margin-left:0">每季度更新</span><a class="kol-dash-btn" href="https://eco-volatility-checker.pages.dev/bis/" target="_blank" rel="noopener">📄 查看 BIS 报告全库 →</a></div>
   {bis_section}
 
   <!-- ═══ 附三·二：三国货币供应量 M0/M1/M2 (央行资负表的延伸: 从"央行造多少底钱"到"社会流通多少钱") ═══ -->
@@ -9230,6 +9408,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ 美元指数 vs 黄金 + 年初至今大事件标注 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>美元指数 vs 黄金 · 年初至今大事件标注 (双轴叠加 · 事件由价格异动反查并逐条核实出处)<span class="freq-badge freq-daily">价格每日 · 事件每周</span></div>
   <div class="card">{dxy_gold_html}</div>
+  <!-- ━━━ 黄金 ETF 分地区资金流 (WGC 官方) ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>黄金 ETF 分地区资金流 (北美/欧洲/亚洲/其他 · 世界黄金协会官方周度吨数)<span class="freq-badge freq-weekly">每周更新</span></div>
+  <div class="card">{gold_etf_region_html}</div>
   <div class="card">{basis_trade}</div>
   <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)<span class="freq-badge freq-event">每次拍卖</span></div>
