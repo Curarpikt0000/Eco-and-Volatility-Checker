@@ -1442,3 +1442,91 @@ AGENTS.md 的 Cron 段仍描述旧版日报口径，需 Chao 授权后补写。
 - [ ] 承接 9/09：`reports/2026-09-09.md` 与 `data/daily/2026-09-09.json` 至今不存在，原因未查。
 - [ ] 承接 9/08：四方对账门禁「cron 实抓」那一路是否已转全绿，仍未取得证据。
 - [ ] 承接 9/04：tesseract 持久化未落地（需 Chao 点头动 devpod 配置），重启即丢逐笔。
+
+## 2026-09-20
+
+### 决策
+
+- Chao 看到 WGC「Gold ETF flows」分地区周度流量截图后问：有没有免费 API/数据源能拿到
+  **不同大洲（北美/亚洲/欧洲）黄金与白银 ETF 的流入流出**（现有只有 GLD/SLV 两只）。
+  给出甲/乙/丙三方案后 **Chao 选「丙」**＝先做黄金官方源，**再花一轮穷尽白银的权威免费源，
+  找不到才退回代理**。→ 白银最终确认无权威免费源，按纪律**不做代理冒充**，页面显式说明。
+- Chao 追加两张截图需求（COMEX 期权 + Money Manager 期货多仓），并明确说
+  **「如果找不到的话，不做也没关系」**，且要求把原图的「两周对比」改成**按周时间轴柱状图**。
+  → 我给了甲/乙/丙方案并倾向丙，**截至归档时 Chao 尚未拍板**（见待办）。
+
+### 事实与配置
+
+- **黄金 ETF 分地区资金流（新 section，已上线）**
+  - 数据源＝**WGC 世界黄金协会官方 `fsapi.gold.org`**（Goldhub 图表后端，免费无 key），
+    正是 Chao 截图那张图的数据后端：
+    `https://fsapi.gold.org/api/v11/charts/etfv2/revised/flows-chart2`（另有 `holdings-chart2`）
+  - `series.tonnes` 按地区分组＝北美/欧洲/亚洲/其他 + 全球 + 金价；双单位（吨/美元）；
+    四种频率（周/月/季/年）；周度 454 点，2018-01 至 2026-09-11
+  - **与截图逐字复核吻合**：2026-06-12 = −24.7t、2026-06-26 = −38.2t
+  - ★**顺带证伪一个流行说法**：「6/26 创 2022-09 以来纪录」严格讲是**第二**，
+    2022-09-30 为 −38.4t，差 0.2t
+  - YTD 结构（与「西方定价」直觉相反）：亚洲 +104.3t（最大买家）/ 欧洲 +96.6t / 北美仅 +4.6t；
+    合计 +210.0t。近 4 周合计 +109.1t
+  - CSS 前缀 `gef-`，**插入前先做了占用预检（0 次占用）**——承接 9/19 `dg-*` 撞名的教训
+- ★★**白银：穷尽后确认无权威免费源（排除理由已写进代码注释与页面）**
+  - `WGC ?metal=silver` **返回 200、结构合法、长度与黄金几乎一样 —— 但内容是黄金**。
+    判据＝**两端点逐值比对全等**（北美 −1.235 / 欧洲 7.207 / 亚洲 2.817 一字不差）
+    + 价格字段仍是 ~4400（白银在 50 附近）。**参数被服务端静默忽略。**
+  - 其余全败：Silver Institute 无数据文件/无 API · iShares SLV ajax 返 HTML 壳 ·
+    Sprott PSLV 404 · abrdn SIVR 504 · SPDR 只发 PDF · Yahoo quoteSummary 全线 401
+- ★★**GitHub 账号匿名限制的连带影响：全仓扫描出 3 处，全部 404**
+  （扫描词 `curarpikt0000` / `github.io` / `raw.githubusercontent`）
+  | 位置 | 性质 | 真实影响 |
+  |---|---|---|
+  | `comex-inventory-charts` | **数据源** | **GLD/SLV 资金流一直在吃缓存**（`status=ok(缓存)`，as_of 滞后 2-3 天，页面看不出异常） |
+  | `.../Eco-and-Volatility-Checker/bis/` | 页面外链 | 「查看 BIS 报告全库」点了 404 |
+  | `kol-dashboard` | 页面外链 | 「打开 KOL Dashboard」点了 404 |
+  - 三个 Cloudflare 替身均 200 且含真数据：`comex-inventory-charts.pages.dev` /
+    `chao-kol-dashboard.pages.dev` / `eco-volatility-checker.pages.dev`
+  - ★`eco-volatility-checker.pages.dev/bis/` 起初看着像 SPA 回落首页，**核实后确为真页面**才采用
+  - `external_data.py` 原逻辑**只试单个 URL**，改成**真双源轮询**（Cloudflare 主 + GitHub 备）
+  - ★★**成功判据不写「HTTP 200 / 非空」**——GitHub 被限制后返回的 404 页面非空但无数据，
+    只看非空会误判成功。改为**内容里必须真含 `const CHARTS`**
+  - ★**反测过容错真的会接管**：把主源替换成必然失败的地址（`*.invalid`），
+    确认命中源落到备源。修复后 `status` 由 `ok(缓存)` 恢复为 `ok`
+  - ★**BIS 死链改了调用点后产物里仍残留** —— 真因是 `dashboard.py` 模板里**另有一份硬编码**
+    （第 9352 行）。**是验证产物才发现的，只改调用点＝没改完**。
+    源码里现仅剩 `external_data.py` 那处双源备源（正确保留）
+- **COMEX 期权 / Money Manager 数据源探明（方案未定，代码未写）**
+  - Money Manager 净多可直接做：CFTC COT 已在用，张数→吨换算（1 张 = 100 oz，1 吨 = 32,150.7 oz），
+    周度可回溯 3 年。实测 2026-09-15 = 414.0t、2026-08-25 峰值 450.2t、2026-06-16 = 353.7t
+    ★**截图标注「近 350 吨」对上**；★**截图字幕「加了 50 吨」不准，实际 353.7→414.0 是加了 60 吨**
+  - 期权部分＝**Futures AND Options 减 Futures Only**。
+    ★**口径坑**：`6dca-aqww` 是 **Legacy 口径**（noncomm/comm）**不能与 Disaggregated 相减**；
+    正确对子是 `kh3c-gbw2`（Disaggregated Futures-Only）与 `72hh-3qpy`（F&O），两者都含 MM 字段。
+    同为 2022-08-02 的 OI 差 154,078 张即期权部分。**验了 14 周，期权 OI 差 0 次为负**（口径不匹配会出负数）
+  - ❌ **GLD ETF 期权做不出时间轴**：属股票期权，不归 CFTC 管。
+    Yahoo options 401；OCC 200 但只有全市场总量无 GLD 单券；
+    **CBOE 200 可拿真数据**（7,676 合约，Call OI 308 万 / Put OI 178 万 / PCR 0.576）
+    —— **但只有当下快照没有历史**
+  - ★**AGENTS.md 待更正一条**：记着「CBOE 本机 IP 被全封」，**本次该端点通了**
+  - 两个未决口径：① 截图是 US$bn，CFTC 给的是张数，换美元是我自己乘金价、非官方数；
+    ② SHFE 前 20 净多需另找源，本轮未探
+- **门禁形参数 57 → 58**（`build_dashboard.py` 校验 `generate()` 全部形参已传入）
+
+### 进展
+
+- `0e8987c` 黄金 ETF 分地区资金流（WGC 官方）+ 修复 GitHub 死链导致的静默数据过期
+  （4 files，477 insertions；验收 27/27 零回归，产物中 `curarpikt0000.github.io` 残留 **0 条**）
+- 三处发布 **sha 三方一致**：线上 Cloudflare == 本地 docs == 内网 vibe v9
+  ＝ `b1b94fd0b4dc`，7,420,087 bytes；GitHub `0e8987c`，local == remote
+- 零回归基线保持（COMEX 412、KOL 326、美元 vs 黄金、国债微观结构、WRS、中国断代）
+
+### 待办
+
+- [ ] **期权两张图的方案 Chao 未选**（甲＝只做能做实的两个；乙＝甲+美元口径标注；
+      丙＝乙+从今起每周存 GLD 期权快照攒历史）。我倾向丙。**数据源已探明，动手即可。**
+- [ ] SHFE 前 20 净多的数据源未探（截图里有）。
+- [ ] AGENTS.md 里「CBOE 本机 IP 被全封」一条需据本轮实测更正。
+- [ ] 承接 9/19：事件标注的周更 cron 未建（价格已日更）；两次提议未获回复。
+- [ ] 承接 9/19：其余 10 个 Cloudflare 站点是否逐个查「分离式依赖文件漏传」，提议未获回复。
+- [ ] 承接 9/19：GitHub 账号匿名 404 的真实原因仍未确认（公网已由 Cloudflare 承接，不影响使用）。
+- [ ] 承接 9/09：`reports/2026-09-09.md` 与 `data/daily/2026-09-09.json` 至今不存在，原因未查。
+- [ ] 承接 9/08：四方对账门禁「cron 实抓」那一路是否转全绿，仍未取得证据。
+- [ ] 承接 9/04：tesseract 持久化未落地（需 Chao 点头动 devpod 配置），重启即丢逐笔。
