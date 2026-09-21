@@ -542,6 +542,21 @@ def main():
     except Exception as e:
         print(f"[dashboard] 国债微观结构 跳过: {e}")
 
+    # ── COMEX 期货期权持仓(CFTC, 非 IV) ──
+    # ★COMEX 期货期权的 IV 属 CME 商业数据, 免费源全封 —— 详见 fetcher 注释。
+    #   这里给的是 Managed Money 在期权上的多空方向, 口径经 170 周验证。
+    comex_optpos = {}
+    try:
+        comex_optpos = ed.fetch_comex_option_positions() or {}
+        _m = comex_optpos.get("metals") or {}
+        _d = " ".join(f"{v.get('cn')}:{v.get('dir')}({v['latest']['net_opt']:,})"
+                      for v in _m.values())
+        print(f"[dashboard] COMEX期权持仓: status={comex_optpos.get('status')} [{_d}]")
+        if comex_optpos.get("errors"):
+            print(f"[dashboard] COMEX期权持仓 告警: {comex_optpos['errors'][:3]}")
+    except Exception as e:
+        print(f"[dashboard] COMEX期权持仓 跳过: {e}")
+
     # ── 贵金属 ETF 期权: ATM IV 期限结构 + 25D 偏斜(CBOE 真数据) ──
     # ★无免费历史源(CBOE 只有当下快照; Alpha Vantage 历史为付费端点,
     #   其免费实时接口返回 XXYYZZ/2099-99-99 占位假数据 —— 陷阱)。
@@ -770,6 +785,7 @@ def main():
         dxy_gold=dxy_gold,
         gold_etf_flows=gold_etf_flows,
         pm_optvol=pm_optvol,
+        comex_optpos=comex_optpos,
         basis_trade=basis_trade,
         comex_inventory=comex_inventory,
         debt_gdp=debt_gdp,

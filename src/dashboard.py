@@ -1374,6 +1374,95 @@ def _pm_optvol_html(pv):
 </div>"""
 
 
+
+def _comex_optpos_html(cx):
+    """COMEX 期货期权持仓(Managed Money 方向) —— 注意这不是 IV。"""
+    if not cx or not str(cx.get("status", "")).startswith("ok"):
+        err = ("：" + "；".join(cx.get("errors", [])[:2])) if cx and cx.get("errors") else ""
+        return f'<p class="empty">COMEX 期货期权持仓数据同步中{err}。</p>'
+    ms = cx.get("metals") or {}
+    if not ms:
+        return '<p class="empty">COMEX 期货期权持仓：无可用数据。</p>'
+
+    COL = {"gold": "#b08a3e", "silver": "#7d94a8"}
+
+    def _bars(key, v):
+        """期权净多周度柱状图(正上负下, 零轴居中)。"""
+        ser = v.get("series") or []
+        ser = ser[-104:]
+        vals = [x["net_opt"] for x in ser]
+        if len(vals) < 4:
+            return ""
+        W, H = 940, 200
+        PL, PR, PT, PB = 62, 16, 16, 30
+        iw, ih = W - PL - PR, H - PT - PB
+        lo, hi = min(vals + [0]), max(vals + [0])
+        pad = (hi - lo) * 0.10 or 1
+        lo, hi = lo - pad, hi + pad
+        def Y(y): return PT + ih * (1 - (y - lo) / (hi - lo))
+        bw = max(iw / len(ser) * 0.78, 1.2)
+        y0 = Y(0)
+        bars = ""
+        for i, x in enumerate(ser):
+            cx_ = PL + iw * (i + 0.5) / len(ser)
+            yv = Y(x["net_opt"])
+            top, h = (yv, y0 - yv) if x["net_opt"] >= 0 else (y0, yv - y0)
+            fill = COL[key] if x["net_opt"] >= 0 else "#a3705f"
+            bars += (f'<rect x="{cx_-bw/2:.1f}" y="{top:.1f}" width="{bw:.1f}" '
+                     f'height="{max(h,0.6):.1f}" fill="{fill}" opacity=".82">'
+                     f'<title>{x["d"]}  期权净多 {x["net_opt"]:,} 张</title></rect>')
+        grid = ""
+        for k in range(4):
+            gv = lo + (hi - lo) * k / 3
+            grid += (f'<line x1="{PL}" y1="{Y(gv):.1f}" x2="{W-PR}" y2="{Y(gv):.1f}" class="cxo-g"/>'
+                     f'<text x="{PL-6}" y="{Y(gv)+3.5:.1f}" class="cxo-yl">{gv:,.0f}</text>')
+        zero = f'<line x1="{PL}" y1="{y0:.1f}" x2="{W-PR}" y2="{y0:.1f}" class="cxo-z"/>'
+        xt = ""
+        for i in (0, len(ser)//2, len(ser)-1):
+            xt += (f'<text x="{PL + iw*(i+0.5)/len(ser):.1f}" y="{H-10}" '
+                   f'class="cxo-xt">{ser[i]["d"]}</text>')
+        return f"""
+  <div class="cxo-block">
+    <div class="cxo-t">{v.get("cn")} · Managed Money 期权净多（张，正=净多 / 负=净空）</div>
+    <svg viewBox="0 0 {W} {H}" class="cxo-chart" preserveAspectRatio="xMidYMid meet">
+      {grid}{zero}{bars}{xt}
+    </svg>
+  </div>"""
+
+    cards, charts = "", ""
+    for key in ("gold", "silver"):
+        v = ms.get(key)
+        if not v:
+            continue
+        L = v["latest"]
+        dcls = "bull" if v["dir"] == "净多" else ("bear" if v["dir"] == "净空" else "")
+        warn = (f'<div class="cxo-warn">⚠ {v["caveat"]}</div>' if v.get("caveat") else "")
+        cards += (f'<div class="cxo-card"><div class="cxo-ct">'
+                  f'<i style="background:{COL[key]}"></i>{v["cn"]}'
+                  f'<small>{L["d"]}</small></div>'
+                  f'<div class="cxo-row"><span>MM 净多（期货）</span>'
+                  f'<b>{L["net_fut"]:,} 张</b></div>'
+                  f'<div class="cxo-row"><span>折合吨位</span>'
+                  f'<b>{L["tonnes"]:,.1f} 吨</b></div>'
+                  f'<div class="cxo-row"><span>期权部分净多</span>'
+                  f'<b class="{dcls}">{L["net_opt"]:,} 张　{v["dir"]}</b></div>'
+                  f'<div class="cxo-row"><span>近两年分位</span>'
+                  f'<b>{v["pct"]}%</b></div>'
+                  f'<div class="cxo-sub">样本 {v["n"]} 周 · 期权 OI 差为负 '
+                  f'{v["neg_weeks"]} 周{"（口径成立）" if not v["neg_weeks"] else ""}</div>'
+                  f'{warn}</div>')
+        charts += _bars(key, v)
+
+    return f"""
+<div class="cxo-wrap">
+  <div class="cxo-notiv"><b>这不是隐含波动率。</b>{cx.get("not_iv_note","")}</div>
+  <div class="cxo-cards">{cards}</div>
+  {charts}
+  <div class="cxo-method">{cx.get("method_note","")} 数据源：{cx.get("source","")}。
+    持仓为 CFTC 周度报告（每周五发布、数据截至周二），非日更。</div>
+</div>"""
+
+
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
@@ -1390,7 +1479,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None,
+             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
@@ -1628,6 +1717,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         dxy_gold_html=_dxy_gold_html(dxy_gold),
         gold_etf_region_html=_gold_etf_region_html(gold_etf_flows),
         pm_optvol_html=_pm_optvol_html(pm_optvol),
+        comex_optpos_html=_comex_optpos_html(comex_optpos),
         basis_trade=_basis_trade_html(basis_trade),
         comex_inventory=_comex_inventory_html(comex_inventory),
         debt_gdp=_debt_gdp_html(debt_gdp),
@@ -8953,6 +9043,33 @@ _TEMPLATE = r"""<!DOCTYPE html>
   background:#f4efe6;border-left:3px solid #a3855f;padding:9px 12px;border-radius:5px}}
 .pv-hist b{{color:#6b5340}}
 
+/* ── COMEX 期货期权持仓 ── */
+.cxo-wrap{{margin:6px 0}}
+.cxo-notiv{{font-size:11.5px;color:#7a5f52;line-height:1.85;margin-bottom:10px;
+  background:#f4efe6;border-left:3px solid #a3855f;padding:9px 12px;border-radius:5px}}
+.cxo-notiv b{{color:#8e3b30}}
+.cxo-cards{{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:10px}}
+.cxo-card{{flex:1 1 260px;background:#eae4d9;border-radius:8px;padding:10px 12px}}
+.cxo-ct{{display:flex;align-items:center;gap:6px;font-weight:600;color:#3d3a36;
+  font-size:13px;margin-bottom:6px}}
+.cxo-ct i{{width:10px;height:10px;border-radius:2px;display:inline-block}}
+.cxo-ct small{{margin-left:auto;font-weight:400;color:#9a938a;font-size:11px}}
+.cxo-row{{display:flex;justify-content:space-between;font-size:11.5px;color:#7a736b;padding:2px 0}}
+.cxo-row b{{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#3d3a36}}
+.cxo-row b.bull{{color:#5f7f5a}}
+.cxo-row b.bear{{color:#a3705f}}
+.cxo-sub{{font-size:10.5px;color:#9a938a;margin-top:5px;border-top:1px solid #ded7cb;padding-top:4px}}
+.cxo-warn{{font-size:10.5px;color:#8e3b30;margin-top:3px}}
+.cxo-block{{margin:10px 0}}
+.cxo-t{{font-size:12px;color:#6b645c;margin-bottom:2px}}
+.cxo-chart{{width:100%;height:auto;display:block}}
+.cxo-g{{stroke:#e2dcd1;stroke-width:.7}}
+.cxo-z{{stroke:#b3aba0;stroke-width:1.1}}
+.cxo-yl{{font-size:9.5px;fill:#8d857b;text-anchor:end;font-family:ui-monospace,monospace}}
+.cxo-xt{{font-size:10px;fill:#6b645c;text-anchor:middle}}
+.cxo-method{{font-size:11.5px;color:#8d857b;line-height:1.85;margin-top:8px;
+  background:#f3efe2;border-left:3px solid #b09a5f;padding:9px 12px;border-radius:5px}}
+
   .cmm-chart {{ width: 100%; height: auto; display: block; margin: 4px 0 2px; }}
   .cmm-one {{ margin: 16px 0 20px; }}
   .cmm-t {{ font-size: 14.5px; font-weight: 700; color: #4a443c; margin-bottom: 7px;
@@ -9575,6 +9692,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ 贵金属 ETF 期权波动率: ATM IV 期限结构 + 25D 偏斜 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>贵金属 ETF 期权波动率 (GLD/SLV/IAU · ATM IV 期限结构 + 25D 偏斜)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{pm_optvol_html}</div>
+  <!-- ━━━ COMEX 期货期权持仓(非 IV) ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>COMEX 期货期权持仓 (金/银 · Managed Money 方向，非隐含波动率)<span class="freq-badge freq-weekly">持仓周更</span></div>
+  <div class="card">{comex_optpos_html}</div>
   <div class="card">{basis_trade}</div>
   <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)<span class="freq-badge freq-event">每次拍卖</span></div>
