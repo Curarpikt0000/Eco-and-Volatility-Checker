@@ -7533,6 +7533,272 @@ def fetch_comex_option_positions(weeks=104):
     return out
 
 
+# ══════════════════════════════════════════════════════════════════════
+# 全球货币供应量(五大经济体聚合) + 加速度  (Chao 2026-09-21)
+# ══════════════════════════════════════════════════════════════════════
+# ★★口径声明(务必随图展示):「全球货币供应」**没有官方单一口径**。
+#   IMF/BIS/世界银行都不发布这个数。本模块是**自行聚合五大经济体、
+#   按当期汇率折美元**的构造值, 不是任何机构的官方发布。
+#
+# ★数据源(均已实测可用):
+#   美国 M2    FRED M2SL                      月  1959-01~  十亿美元
+#   欧元区 M3  ECB SDMX BSI                   月  1996-01~  百万欧元
+#   日本 M2    BOJ MD02 第9列(存量列)          月  2003-04~  亿日元
+#   英国 M4    BoE IADB LPMAUYM               月  1996-01~  百万英镑
+#   中国 M2    东方财富 RPT_ECONOMY_CURRENCY   月  2008-01~  亿元
+#   汇率       FRED DEXUSEU/DEXJPUS/DEXUSUK/DEXCHUS
+#
+# ★★三个历史缺口是**数据本身的边界**, 不是抓漏(已逐一查证):
+#   ① 欧元区 1996-1998 无数据 —— **欧元 1999-01 才诞生**, 之前不存在 EUR 汇率。
+#      任何号称"1996 年全球 M2"的图, 这一段要么用马克/法郎折算要么是估的。
+#   ② 日本 1996-2003 —— BOJ 该表 1980 起的列是**同比增速%**,
+#      **存量列 2003-04 才开始**。★第一次解析抓到的 "2"、"1.2" 就是增速,
+#      靠数量级检查(M2 应在 1.2e7 亿円)才发现, 否则会把增速当存量画成图。
+#   ③ 中国 1996-2007 —— 东财只到 2008; 世界银行有年度值(1996: 76,095 亿元)可插值。
+#   → 图上按时段标明"本段包含哪几国", 绝不假装 30 年都完整。
+#
+# ★加速度 = 同比增速的变化率(二阶导): accel_t = yoy_t − yoy_{t-12}
+#   正值 = 放水在加速; 负值 = 放水在减速(即便 yoy 仍为正)。
+
+_GMS_START = "1996-01"
+
+
+def _gms_fred(sid, key, start="1996-01-01"):
+    import json as _j, ssl as _ssl, urllib.request
+    ctx = _ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = _ssl.CERT_NONE
+    u = (f"https://api.stlouisfed.org/fred/series/observations?series_id={sid}"
+         f"&api_key={key}&file_type=json&observation_start={start}")
+    with urllib.request.urlopen(u, timeout=60, context=ctx) as r:
+        d = _j.loads(r.read())
+    return {o["date"][:7]: float(o["value"])
+            for o in d.get("observations", []) if o["value"] not in (".", "")}
+
+
+def _gms_get(u, t=70):
+    import ssl as _ssl, urllib.request
+    ctx = _ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = _ssl.CERT_NONE
+    req = urllib.request.Request(u, headers={
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                      "AppleWebKit/537.36 Chrome/120.0 Safari/537.36"})
+    with urllib.request.urlopen(req, timeout=t, context=ctx) as r:
+        return r.read()
+
+
+def fetch_global_money_supply():
+    """五大经济体 M2/M3/M4 聚合(折美元) + 同比 + 加速度。"""
+    import os as _os, re as _re, csv as _csv, io as _io, json as _j
+    import html as _html, datetime as _dt
+    from datetime import timezone, timedelta
+    _jst = _dt.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+
+    out = {"status": "ok", "as_of": _jst, "countries": {}, "series": [],
+           "errors": [], "coverage": [],
+           "caliber_note": ("「全球货币供应」无官方单一口径 —— IMF/BIS/世界银行均不发布该数。"
+                            "本图为**自行聚合五大经济体、按当期汇率折美元**的构造值，"
+                            "非任何机构官方发布。"),
+           "gap_note": ("三段历史缺口属数据本身边界：① 欧元区 1996-1998 —— "
+                        "**欧元 1999 年才诞生**，此前无 EUR 汇率；"
+                        "② 日本 1996-2003 —— BOJ 表中 1980 年起的是同比增速列，"
+                        "M2 **存量列 2003-04 才开始**；"
+                        "③ 中国 1996-2007 —— 月度源起于 2008。"
+                        "图中按时段标明覆盖国数，未做无依据外推。"),
+           "accel_note": ("加速度 = 同比增速的年度变化（yoyₜ − yoyₜ₋₁₂）。"
+                          "正值＝放水在提速；负值＝放水在减速（即便同比仍为正）。")}
+
+    key = ""
+    for _p in ("/home/user/Projects/Eco-and-Volatility-Checker/.env", ".env"):
+        try:
+            for ln in open(_p):
+                if ln.startswith("FRED_API_KEY"):
+                    key = ln.split("=", 1)[1].strip().strip('"\'')
+            if key:
+                break
+        except Exception:
+            pass
+    if not key:
+        out["status"] = "error"
+        out["errors"].append("FRED_API_KEY 缺失")
+        return out
+
+    src = {}
+    # ① 美国 M2 (十亿美元 → 万亿美元 ÷1000)
+    try:
+        src["US"] = (_gms_fred("M2SL", key), 1e-3, None, "美国 M2", "FRED M2SL")
+    except Exception as e:
+        out["errors"].append(f"US: {type(e).__name__}")
+
+    # ② 欧元区 M3 (百万欧元 → 万亿欧元 ÷1e6)
+    try:
+        b = _gms_get("https://data-api.ecb.europa.eu/service/data/BSI/"
+                     "M.U2.Y.V.M30.X.1.U2.2300.Z01.E?format=csvdata&startPeriod=1996-01")
+        ez = {r["TIME_PERIOD"]: float(r["OBS_VALUE"])
+              for r in _csv.DictReader(_io.StringIO(b.decode("utf-8", "ignore")))
+              if r.get("OBS_VALUE")}
+        src["EZ"] = (ez, 1e-6, ("EUR", False), "欧元区 M3", "ECB SDMX")
+    except Exception as e:
+        out["errors"].append(f"EZ: {type(e).__name__}")
+
+    # ③ 日本 M2 (亿日元 → 万亿日元 ÷1e4) —— ★第9列是存量, 前面几列是增速%
+    try:
+        t = _gms_get("https://www.stat-search.boj.or.jp/ssi/mtshtml/"
+                     "md02_m_1_en.html").decode("utf-8", "ignore")
+        jp = {}
+        for row in _re.findall(r"<tr[^>]*>(.*?)</tr>", t, _re.S):
+            cells = [_re.sub(r"<[^>]+>", "", _html.unescape(c)).strip()
+                     for c in _re.findall(r"<t[hd][^>]*>(.*?)</t[hd]>", row, _re.S)]
+            if cells and _re.match(r"^\d{4}/\s*\d{1,2}$", cells[0]) and len(cells) > 9:
+                y, m = _re.match(r"^(\d{4})/\s*(\d{1,2})$", cells[0]).groups()
+                v = cells[9].replace(",", "")
+                try:
+                    fv = float(v)
+                except Exception:
+                    continue
+                # ★数量级护栏: M2 存量应 > 1e6 亿円; 小于说明抓到了增速列
+                if fv > 1e6:
+                    jp[f"{y}-{int(m):02d}"] = fv
+        if not jp:
+            raise ValueError("BOJ 第9列未解析出存量(可能页面结构变化)")
+        src["JP"] = (jp, 1e-4, ("JPY", True), "日本 M2", "BOJ MD02")
+    except Exception as e:
+        out["errors"].append(f"JP: {type(e).__name__} {str(e)[:50]}")
+
+    # ④ 英国 M4 (百万英镑 → 万亿英镑 ÷1e6)
+    try:
+        b = _gms_get("https://www.bankofengland.co.uk/boeapps/iadb/fromshowcolumns.asp?"
+                     "csv.x=yes&Datefrom=01/Jan/1996&Dateto=01/Dec/2026"
+                     "&SeriesCodes=LPMAUYM&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N")
+        gb = {}
+        for r in _csv.DictReader(_io.StringIO(b.decode("utf-8", "ignore"))):
+            try:
+                d0 = _dt.datetime.strptime((r.get("DATE") or "").strip(), "%d %b %Y")
+                gb[d0.strftime("%Y-%m")] = float(r["LPMAUYM"])
+            except Exception:
+                pass
+        if not gb:
+            raise ValueError("BoE CSV 解析出 0 行")
+        src["GB"] = (gb, 1e-6, ("GBP", False), "英国 M4", "BoE LPMAUYM")
+    except Exception as e:
+        out["errors"].append(f"GB: {type(e).__name__} {str(e)[:50]}")
+
+    # ⑤ 中国 M2 (亿元 → 万亿元 ÷1e4)
+    try:
+        b = _gms_get("https://datacenter-web.eastmoney.com/api/data/v1/get?"
+                     "reportName=RPT_ECONOMY_CURRENCY_SUPPLY&columns=ALL"
+                     "&pageSize=400&sortColumns=REPORT_DATE&sortTypes=1")
+        cn = {}
+        for r in (_j.loads(b).get("result") or {}).get("data") or []:
+            d0 = (r.get("REPORT_DATE") or "")[:7]
+            v = r.get("BASIC_CURRENCY")
+            if d0 and v:
+                cn[d0] = float(v)
+        if not cn:
+            raise ValueError("东财返回 0 行")
+        src["CN"] = (cn, 1e-4, ("CNY", True), "中国 M2", "东方财富")
+    except Exception as e:
+        out["errors"].append(f"CN: {type(e).__name__} {str(e)[:50]}")
+
+    if not src:
+        out["status"] = "error"
+        return out
+
+    # 汇率
+    fx = {}
+    for nm, sid in (("EUR", "DEXUSEU"), ("JPY", "DEXJPUS"),
+                    ("GBP", "DEXUSUK"), ("CNY", "DEXCHUS")):
+        try:
+            fx[nm] = _gms_fred(sid, key, "1990-01-01")
+        except Exception as e:
+            out["errors"].append(f"FX {nm}: {type(e).__name__}")
+
+    # 元数据
+    for cc, (d, sc, fxk, cn_name, srcname) in src.items():
+        out["countries"][cc] = {"name": cn_name, "src": srcname,
+                                "n": len(d), "first": min(d) if d else None,
+                                "last": max(d) if d else None}
+
+    # 逐月折美元
+    months = sorted({m for d, *_ in src.values() for m in d if m >= _GMS_START})
+    rows = []
+    for m in months:
+        tot, parts, miss = 0.0, {}, []
+        for cc, (d, sc, fxk, *_r) in src.items():
+            if m not in d:
+                miss.append(cc)
+                continue
+            local = d[m] * sc                       # → 万亿本币
+            if fxk is None:
+                usd = local                          # 美国本来就是美元
+            else:
+                nm, inv = fxk
+                rk = [k for k in fx.get(nm, {}) if k <= m]
+                if not rk:
+                    miss.append(cc)
+                    continue
+                rate = fx[nm][max(rk)]
+                usd = local / rate if inv else local * rate
+            parts[cc] = round(usd, 3)
+            tot += usd
+        rows.append({"m": m, "total": round(tot, 3), "parts": parts,
+                     "n_cty": len(parts), "missing": miss})
+
+    # 同比 + 加速度
+    by_m = {r["m"]: r for r in rows}
+    for r in rows:
+        y, mm = r["m"].split("-")
+        prev = by_m.get(f"{int(y)-1}-{mm}")
+        # ★只在**覆盖国家集合相同**时算同比, 否则国家数变化会伪装成货币暴增
+        if prev and prev["total"] > 0 and set(prev["parts"]) == set(r["parts"]):
+            r["yoy"] = round((r["total"] / prev["total"] - 1) * 100, 2)
+        else:
+            r["yoy"] = None
+    for r in rows:
+        y, mm = r["m"].split("-")
+        prev = by_m.get(f"{int(y)-1}-{mm}")
+        r["accel"] = (round(r["yoy"] - prev["yoy"], 2)
+                      if (r.get("yoy") is not None and prev
+                          and prev.get("yoy") is not None) else None)
+
+    # ★★剔除尾部「未满员」月份(2026-08 只有中日发布 → 61 万亿, 画上去是断崖假象)。
+    #   判据: 从尾部往前, 只要该月覆盖国数 < 历史最大覆盖国数, 就丢弃;
+    #   一旦遇到满员月即停(只砍尾巴, 不动中间的真实历史缺口)。
+    _maxn = max((r["n_cty"] for r in rows), default=0)
+    _dropped = []
+    while rows and rows[-1]["n_cty"] < _maxn:
+        _dropped.append(rows[-1]["m"])
+        rows.pop()
+    if _dropped:
+        out["tail_dropped"] = list(reversed(_dropped))
+        out["tail_note"] = (f"末尾 {len(_dropped)} 个月（{_dropped[-1]}"
+                            f"{'~' + _dropped[0] if len(_dropped) > 1 else ''}）"
+                            f"因部分经济体尚未发布当月数据而暂不显示——"
+                            f"若强行纳入会呈现虚假暴跌。")
+
+    out["series"] = rows
+    # 覆盖度分段
+    cur, seg = None, None
+    for r in rows:
+        k = tuple(sorted(r["parts"]))
+        if k != cur:
+            if seg:
+                out["coverage"].append(seg)
+            cur = k
+            seg = {"from": r["m"], "to": r["m"], "cty": list(k)}
+        else:
+            seg["to"] = r["m"]
+    if seg:
+        out["coverage"].append(seg)
+
+    last = rows[-1] if rows else {}
+    out["latest"] = last
+    if out["errors"]:
+        out["status"] = "ok(部分失败)"
+    return out
+
+
 if __name__ == "__main__":
     import json
     print("=== Credit Impulse 三国(信贷脉冲) ===")

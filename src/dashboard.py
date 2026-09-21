@@ -1463,6 +1463,164 @@ def _comex_optpos_html(cx):
 </div>"""
 
 
+
+def _global_money_html(gm):
+    """全球货币供应(五大经济体聚合) + 加速度。"""
+    if not gm or not str(gm.get("status", "")).startswith("ok"):
+        err = ("：" + "；".join(gm.get("errors", [])[:2])) if gm and gm.get("errors") else ""
+        return f'<p class="empty">全球货币供应数据同步中{err}。</p>'
+    ser = gm.get("series") or []
+    if len(ser) < 24:
+        return '<p class="empty">全球货币供应：样本不足。</p>'
+
+    COL = {"US": "#b08a3e", "EZ": "#7d94a8", "CN": "#a3705f",
+           "JP": "#8d9c86", "GB": "#9a8ba8"}
+    NM = {"US": "美国 M2", "EZ": "欧元区 M3", "CN": "中国 M2",
+          "JP": "日本 M2", "GB": "英国 M4"}
+    ORDER = ["US", "EZ", "CN", "JP", "GB"]
+
+    W, H = 940, 300
+    PL, PR, PT, PB = 62, 18, 20, 34
+    iw, ih = W - PL - PR, H - PT - PB
+    n = len(ser)
+
+    def X(i): return PL + iw * i / max(n - 1, 1)
+
+    def xticks(fmt_y=True):
+        out, seen = "", set()
+        for i, r in enumerate(ser):
+            y = r["m"][:4]
+            if y in seen or int(y) % 4:
+                continue
+            seen.add(y)
+            out += (f'<line x1="{X(i):.1f}" y1="{PT}" x2="{X(i):.1f}" y2="{PT+ih}" '
+                    f'class="gms-vg"/>'
+                    f'<text x="{X(i):.1f}" y="{H-12}" class="gms-xt">{y}</text>')
+        return out
+
+    # ── 图① 分国堆叠面积 ──
+    tmax = max(r["total"] for r in ser)
+    def Y1(v): return PT + ih * (1 - v / (tmax * 1.06))
+    layers, base = "", [0.0] * n
+    for cc in ORDER:
+        top = []
+        for i, r in enumerate(ser):
+            base[i] += r["parts"].get(cc, 0.0)
+            top.append(base[i])
+        up = " ".join(f"{X(i):.1f},{Y1(v):.1f}" for i, v in enumerate(top))
+        dn = " ".join(f"{X(i):.1f},{Y1(v):.1f}"
+                      for i, v in reversed(list(enumerate(
+                          [b - r["parts"].get(cc, 0.0) for b, r in zip(top, ser)]))))
+        layers = (f'<polygon points="{up} {dn}" fill="{COL[cc]}" opacity=".78">'
+                  f'<title>{NM[cc]}</title></polygon>') + layers
+    g1 = ""
+    for k in range(5):
+        v = tmax * 1.06 * k / 4
+        g1 += (f'<line x1="{PL}" y1="{Y1(v):.1f}" x2="{W-PR}" y2="{Y1(v):.1f}" class="gms-g"/>'
+               f'<text x="{PL-6}" y="{Y1(v)+3.5:.1f}" class="gms-yl">{v:.0f}</text>')
+
+    # ── 图② 同比 + 加速度 ──
+    yy = [r["yoy"] for r in ser if r.get("yoy") is not None]
+    aa = [r["accel"] for r in ser if r.get("accel") is not None]
+    H2 = 260
+    ih2 = H2 - PT - PB
+    lo2 = min(yy + aa + [0]) * 1.1
+    hi2 = max(yy + aa + [0]) * 1.1
+    def Y2(v): return PT + ih2 * (1 - (v - lo2) / (hi2 - lo2))
+    g2 = ""
+    for k in range(5):
+        v = lo2 + (hi2 - lo2) * k / 4
+        g2 += (f'<line x1="{PL}" y1="{Y2(v):.1f}" x2="{W-PR}" y2="{Y2(v):.1f}" class="gms-g"/>'
+               f'<text x="{PL-6}" y="{Y2(v)+3.5:.1f}" class="gms-yl">{v:.0f}</text>')
+    g2 += f'<line x1="{PL}" y1="{Y2(0):.1f}" x2="{W-PR}" y2="{Y2(0):.1f}" class="gms-z"/>'
+    # 加速度柱
+    bars = ""
+    bw = max(iw / n * 0.7, 0.8)
+    y0 = Y2(0)
+    for i, r in enumerate(ser):
+        a = r.get("accel")
+        if a is None:
+            continue
+        yv = Y2(a)
+        top, hh = (yv, y0 - yv) if a >= 0 else (y0, yv - y0)
+        fill = "#a3855f" if a >= 0 else "#8ba39a"
+        bars += (f'<rect x="{X(i)-bw/2:.1f}" y="{top:.1f}" width="{bw:.1f}" '
+                 f'height="{max(hh,0.5):.1f}" fill="{fill}" opacity=".62">'
+                 f'<title>{r["m"]} 加速度 {a:+.2f}</title></rect>')
+    # 同比线
+    pts = [(X(i), Y2(r["yoy"])) for i, r in enumerate(ser) if r.get("yoy") is not None]
+    line = ('<polyline points="' + " ".join(f"{x:.1f},{y:.1f}" for x, y in pts) +
+            '" class="gms-ln"/>') if len(pts) > 2 else ""
+
+    xt2, seen2 = "", set()
+    for i, r in enumerate(ser):
+        y = r["m"][:4]
+        if y in seen2 or int(y) % 4:
+            continue
+        seen2.add(y)
+        xt2 += f'<text x="{X(i):.1f}" y="{H2-12}" class="gms-xt">{y}</text>'
+
+    # ── 覆盖度条 ──
+    cov = ""
+    for c in (gm.get("coverage") or []):
+        cov += (f'<div class="gms-cov-row"><span class="gms-cov-p">'
+                f'{c["from"]} ~ {c["to"]}</span>'
+                f'<span class="gms-cov-n">{len(c["cty"])} 国</span>'
+                f'<span class="gms-cov-c">{"、".join(NM.get(x,x) for x in c["cty"])}</span>'
+                f'</div>')
+
+    L = gm.get("latest") or ser[-1]
+    acc = L.get("accel")
+    acls = "up" if (acc is not None and acc > 0) else ("dn" if acc is not None else "")
+    aword = ("放水提速" if (acc is not None and acc > 0)
+             else "放水减速" if acc is not None else "—")
+
+    cards = (f'<div class="gms-card"><div class="gms-k">五国合计</div>'
+             f'<div class="gms-v">{L["total"]:,.1f}<small> 万亿美元</small></div>'
+             f'<div class="gms-s">{L["m"]}</div></div>'
+             f'<div class="gms-card"><div class="gms-k">同比增速</div>'
+             f'<div class="gms-v">{L.get("yoy","—")}<small>%</small></div>'
+             f'<div class="gms-s">较去年同月</div></div>'
+             f'<div class="gms-card"><div class="gms-k">加速度</div>'
+             f'<div class="gms-v {acls}">{f"{acc:+.2f}" if acc is not None else "—"}</div>'
+             f'<div class="gms-s">{aword}</div></div>')
+
+    parts = "".join(
+        f'<div class="gms-p"><i style="background:{COL[c]}"></i>{NM[c]}'
+        f'<b>{L["parts"].get(c,0):,.1f}</b></div>'
+        for c in ORDER if c in L.get("parts", {}))
+
+    tail = (f'<div class="gms-tail">⏳ {gm["tail_note"]}</div>'
+            if gm.get("tail_note") else "")
+
+    return f"""
+<div class="gms-wrap">
+  <div class="gms-caliber"><b>口径说明：</b>{gm.get("caliber_note","")}</div>
+  <div class="gms-cards">{cards}</div>
+  <div class="gms-parts">{parts}</div>
+  {tail}
+
+  <div class="gms-block">
+    <div class="gms-t">① 五大经济体货币存量（折万亿美元，堆叠）</div>
+    <svg viewBox="0 0 {W} {H}" class="gms-chart" preserveAspectRatio="xMidYMid meet">
+      {g1}{xticks()}{layers}
+    </svg>
+  </div>
+
+  <div class="gms-block">
+    <div class="gms-t">② 同比增速（线）与加速度（柱）——
+      柱在零轴上方＝放水在提速，下方＝在减速</div>
+    <svg viewBox="0 0 {W} {H2}" class="gms-chart" preserveAspectRatio="xMidYMid meet">
+      {g2}{bars}{line}{xt2}
+    </svg>
+  </div>
+
+  <div class="gms-covbox"><div class="gms-covt">各时段实际覆盖国家</div>{cov}</div>
+  <div class="gms-gap"><b>历史缺口：</b>{gm.get("gap_note","")}</div>
+  <div class="gms-acc">{gm.get("accel_note","")}</div>
+</div>"""
+
+
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
@@ -1480,6 +1638,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
              liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+    global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
@@ -1718,6 +1877,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         gold_etf_region_html=_gold_etf_region_html(gold_etf_flows),
         pm_optvol_html=_pm_optvol_html(pm_optvol),
         comex_optpos_html=_comex_optpos_html(comex_optpos),
+        global_money_html=_global_money_html(global_money),
         basis_trade=_basis_trade_html(basis_trade),
         comex_inventory=_comex_inventory_html(comex_inventory),
         debt_gdp=_debt_gdp_html(debt_gdp),
@@ -9070,6 +9230,49 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .cxo-method{{font-size:11.5px;color:#8d857b;line-height:1.85;margin-top:8px;
   background:#f3efe2;border-left:3px solid #b09a5f;padding:9px 12px;border-radius:5px}}
 
+/* ── 全球货币供应 ── */
+.gms-wrap{{margin:6px 0}}
+.gms-caliber{{font-size:11.5px;color:#7a5f52;line-height:1.85;margin-bottom:10px;
+  background:#f4efe6;border-left:3px solid #a3855f;padding:9px 12px;border-radius:5px}}
+.gms-caliber b{{color:#8e3b30}}
+.gms-cards{{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:8px}}
+.gms-card{{flex:1 1 170px;background:#eae4d9;border-radius:8px;padding:10px 12px}}
+.gms-k{{font-size:11px;color:#8d857b;margin-bottom:3px}}
+.gms-v{{font-size:20px;font-weight:600;color:#3d3a36;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace}}
+.gms-v small{{font-size:11px;font-weight:400;color:#9a938a;margin-left:3px}}
+.gms-v.up{{color:#8e3b30}}
+.gms-v.dn{{color:#5f7f5a}}
+.gms-s{{font-size:10.5px;color:#9a938a;margin-top:2px}}
+.gms-parts{{display:flex;flex-wrap:wrap;gap:12px;font-size:11.5px;color:#6b645c;
+  margin-bottom:8px}}
+.gms-p{{display:flex;align-items:center;gap:5px}}
+.gms-p i{{width:10px;height:10px;border-radius:2px;display:inline-block}}
+.gms-p b{{font-family:ui-monospace,monospace;color:#3d3a36;margin-left:2px}}
+.gms-tail{{font-size:11px;color:#7a5f52;background:#f4e9e6;border-left:3px solid #a3705f;
+  padding:7px 11px;border-radius:5px;margin-bottom:8px;line-height:1.8}}
+.gms-block{{margin:10px 0}}
+.gms-t{{font-size:12px;color:#6b645c;margin-bottom:2px;line-height:1.7}}
+.gms-chart{{width:100%;height:auto;display:block}}
+.gms-g{{stroke:#e2dcd1;stroke-width:.7}}
+.gms-vg{{stroke:#ece6dc;stroke-width:.6}}
+.gms-z{{stroke:#b3aba0;stroke-width:1.1}}
+.gms-ln{{fill:none;stroke:#8e3b30;stroke-width:1.8}}
+.gms-yl{{font-size:9.5px;fill:#8d857b;text-anchor:end;font-family:ui-monospace,monospace}}
+.gms-xt{{font-size:10px;fill:#6b645c;text-anchor:middle}}
+.gms-covbox{{background:#f3efe2;border-radius:6px;padding:9px 12px;margin-top:10px}}
+.gms-covt{{font-size:11.5px;color:#6b645c;margin-bottom:5px;font-weight:600}}
+.gms-cov-row{{display:flex;gap:10px;font-size:11px;color:#7a736b;padding:2px 0;
+  align-items:baseline}}
+.gms-cov-p{{font-family:ui-monospace,monospace;color:#3d3a36;min-width:140px}}
+.gms-cov-n{{color:#8e3b30;min-width:38px}}
+.gms-cov-c{{color:#8d857b}}
+.gms-gap{{font-size:11.5px;color:#7a5f52;line-height:1.85;margin-top:8px;
+  background:#f4efe6;border-left:3px solid #a3855f;padding:9px 12px;border-radius:5px}}
+.gms-gap b{{color:#8e3b30}}
+.gms-acc{{font-size:11.5px;color:#8d857b;line-height:1.85;margin-top:8px;
+  background:#f3efe2;border-left:3px solid #b09a5f;padding:9px 12px;border-radius:5px}}
+
   .cmm-chart {{ width: 100%; height: auto; display: block; margin: 4px 0 2px; }}
   .cmm-one {{ margin: 16px 0 20px; }}
   .cmm-t {{ font-size: 14.5px; font-weight: 700; color: #4a443c; margin-bottom: 7px;
@@ -9695,6 +9898,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ COMEX 期货期权持仓(非 IV) ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>COMEX 期货期权持仓 (金/银 · Managed Money 方向，非隐含波动率)<span class="freq-badge freq-weekly">持仓周更</span></div>
   <div class="card">{comex_optpos_html}</div>
+  <!-- ━━━ 全球货币供应(五大经济体聚合) + 加速度 ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>全球货币供应与放水加速度 (美/欧/日/英/中 · 30 年)<span class="freq-badge freq-monthly">月度更新</span></div>
+  <div class="card">{global_money_html}</div>
   <div class="card">{basis_trade}</div>
   <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)<span class="freq-badge freq-event">每次拍卖</span></div>

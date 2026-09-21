@@ -542,6 +542,21 @@ def main():
     except Exception as e:
         print(f"[dashboard] 国债微观结构 跳过: {e}")
 
+    # ── 全球货币供应(五大经济体聚合 + 加速度) ──
+    # ★「全球 M2」无官方口径, 为自聚合构造值; 三段历史缺口是数据边界非抓漏。
+    global_money = {}
+    try:
+        global_money = ed.fetch_global_money_supply() or {}
+        _L = global_money.get("latest") or {}
+        print(f"[dashboard] 全球货币供应: status={global_money.get('status')} "
+              f"最新={_L.get('m')} 合计={_L.get('total')}万亿USD "
+              f"同比={_L.get('yoy')}% 加速度={_L.get('accel')} "
+              f"点数={len(global_money.get('series') or [])}")
+        if global_money.get("errors"):
+            print(f"[dashboard] 全球货币供应 告警: {global_money['errors'][:3]}")
+    except Exception as e:
+        print(f"[dashboard] 全球货币供应 跳过: {e}")
+
     # ── COMEX 期货期权持仓(CFTC, 非 IV) ──
     # ★COMEX 期货期权的 IV 属 CME 商业数据, 免费源全封 —— 详见 fetcher 注释。
     #   这里给的是 Managed Money 在期权上的多空方向, 口径经 170 周验证。
@@ -786,6 +801,7 @@ def main():
         gold_etf_flows=gold_etf_flows,
         pm_optvol=pm_optvol,
         comex_optpos=comex_optpos,
+        global_money=global_money,
         basis_trade=basis_trade,
         comex_inventory=comex_inventory,
         debt_gdp=debt_gdp,
