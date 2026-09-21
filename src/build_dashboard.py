@@ -542,6 +542,22 @@ def main():
     except Exception as e:
         print(f"[dashboard] 国债微观结构 跳过: {e}")
 
+    # ── 贵金属 ETF 期权: ATM IV 期限结构 + 25D 偏斜(CBOE 真数据) ──
+    # ★无免费历史源(CBOE 只有当下快照; Alpha Vantage 历史为付费端点,
+    #   其免费实时接口返回 XXYYZZ/2099-99-99 占位假数据 —— 陷阱)。
+    #   故每日快照累积, 落 Notion DB_OPTVOL(tools/snapshot_optvol.py)。
+    pm_optvol = {}
+    try:
+        pm_optvol = ed.fetch_pm_option_vol() or {}
+        _tk = pm_optvol.get("tickers") or {}
+        _s = " ".join(f"{k}:{v.get('shape')}" for k, v in _tk.items())
+        print(f"[dashboard] 贵金属期权波动率: status={pm_optvol.get('status')} "
+              f"标的={len(_tk)} 形态=[{_s}]")
+        if pm_optvol.get("errors"):
+            print(f"[dashboard] 贵金属期权波动率 告警: {pm_optvol['errors'][:3]}")
+    except Exception as e:
+        print(f"[dashboard] 贵金属期权波动率 跳过: {e}")
+
     # ── 黄金 ETF 分地区资金流(WGC 官方 fsapi) ──
     # ★与市面流传的 WGC「Gold ETF flows」图同源, 实测复核 6/12=-24.7t、6/26=-38.2t 吻合。
     # ★白银无权威免费源(WGC ?metal=silver 返 200 但内容仍是黄金 —— 陷阱),
@@ -753,6 +769,7 @@ def main():
         ust_micro=ust_micro,
         dxy_gold=dxy_gold,
         gold_etf_flows=gold_etf_flows,
+        pm_optvol=pm_optvol,
         basis_trade=basis_trade,
         comex_inventory=comex_inventory,
         debt_gdp=debt_gdp,

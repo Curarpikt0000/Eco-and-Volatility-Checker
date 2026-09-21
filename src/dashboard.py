@@ -1252,6 +1252,120 @@ def _gold_etf_region_html(gf):
 </div>"""
 
 
+
+def _pm_optvol_html(pv):
+    """贵金属期权: ATM IV 期限结构 + 25D 偏斜(CBOE 真数据)。"""
+    if not pv or not str(pv.get("status", "")).startswith("ok"):
+        err = ("：" + "；".join(pv.get("errors", [])[:2])) if pv and pv.get("errors") else ""
+        return f'<p class="empty">贵金属期权波动率数据同步中{err}。</p>'
+    tks = pv.get("tickers") or {}
+    if not tks:
+        return '<p class="empty">贵金属期权：无可用数据。</p>'
+
+    COL = {"GLD": "#b08a3e", "SLV": "#7d94a8", "IAU": "#8d9c86"}
+    ORDER = [t for t in ("GLD", "SLV", "IAU") if t in tks]
+
+    def _chart(field, title, unit, zero_line=False):
+        W, H = 940, 290
+        PL, PR, PT, PB = 58, 26, 26, 40
+        iw, ih = W - PL - PR, H - PT - PB
+        labs, vals = [], []
+        for tk in ORDER:
+            arr = tks[tk].get("term" if field == "atm" else "skew") or []
+            for x in arr:
+                if x.get(field) is not None:
+                    vals.append(x[field])
+                    if x["t"] not in labs:
+                        labs.append(x["t"])
+        if not vals or len(labs) < 2:
+            return f'<p class="empty">{title}：数据不足。</p>'
+        order = ["1M", "3M", "6M", "12M", "18M", "24M"]
+        labs = [l for l in order if l in labs]
+        lo, hi = min(vals), max(vals)
+        if zero_line:
+            lo, hi = min(lo, 0), max(hi, 0)
+        pad = (hi - lo) * 0.14 or 1
+        lo, hi = lo - pad, hi + pad
+
+        def X(i): return PL + iw * i / max(len(labs) - 1, 1)
+        def Y(v): return PT + ih * (1 - (v - lo) / (hi - lo))
+
+        grid = ""
+        for k in range(5):
+            v = lo + (hi - lo) * k / 4
+            grid += (f'<line x1="{PL}" y1="{Y(v):.1f}" x2="{W-PR}" y2="{Y(v):.1f}" class="pv-grid"/>'
+                     f'<text x="{PL-7}" y="{Y(v)+3.5:.1f}" class="pv-yl">{v:.1f}</text>')
+        if zero_line and lo < 0 < hi:
+            grid += f'<line x1="{PL}" y1="{Y(0):.1f}" x2="{W-PR}" y2="{Y(0):.1f}" class="pv-zero"/>'
+        xt = "".join(f'<text x="{X(i):.1f}" y="{H-14}" class="pv-xt">{l}</text>'
+                     for i, l in enumerate(labs))
+
+        lines = ""
+        for tk in ORDER:
+            arr = tks[tk].get("term" if field == "atm" else "skew") or []
+            m = {x["t"]: x.get(field) for x in arr if x.get(field) is not None}
+            pts = [(X(i), Y(m[l])) for i, l in enumerate(labs) if l in m]
+            if len(pts) < 2:
+                continue
+            path = " ".join(f"{x:.1f},{y:.1f}" for x, y in pts)
+            lines += f'<polyline points="{path}" class="pv-ln" stroke="{COL[tk]}"/>'
+            for i, l in enumerate(labs):
+                if l in m:
+                    lines += (f'<circle cx="{X(i):.1f}" cy="{Y(m[l]):.1f}" r="3" '
+                              f'fill="{COL[tk]}"><title>{tk} {l} {m[l]:.2f}{unit}</title></circle>')
+        return f"""
+  <div class="pv-block">
+    <div class="pv-t">{title}</div>
+    <svg viewBox="0 0 {W} {H}" class="pv-chart" preserveAspectRatio="xMidYMid meet">
+      {grid}{lines}{xt}
+      <text x="{PL-7}" y="{PT-8}" class="pv-unit">{unit}</text>
+    </svg>
+  </div>"""
+
+    cards = ""
+    for tk in ORDER:
+        v = tks[tk]
+        term = {x["t"]: x.get("atm") for x in (v.get("term") or [])}
+        skew = {x["t"]: x.get("skew") for x in (v.get("skew") or [])}
+        sh = v.get("shape") or "—"
+        shc = "inv" if sh == "倒挂" else "nor"
+        s12 = skew.get("12M")
+        bias = ("偏多" if s12 is not None and s12 < 0 else
+                "偏空" if s12 is not None else "—")
+        bc = "bull" if bias == "偏多" else ("bear" if bias == "偏空" else "")
+        dup = (f'<div class="pv-warn">⚠ {v["dup_note"]}</div>' if v.get("dup_note") else "")
+        cards += (f'<div class="pv-card"><div class="pv-ct">'
+                  f'<i style="background:{COL[tk]}"></i>{tk}'
+                  f'<small>现价 {v.get("spot")}</small></div>'
+                  f'<div class="pv-row"><span>1M ATM IV</span>'
+                  f'<b>{term.get("1M","—")}%</b></div>'
+                  f'<div class="pv-row"><span>12M ATM IV</span>'
+                  f'<b>{term.get("12M","—")}%</b></div>'
+                  f'<div class="pv-row"><span>期限结构</span>'
+                  f'<b class="{shc}">{sh}</b></div>'
+                  f'<div class="pv-row"><span>12M 25D 偏斜</span>'
+                  f'<b class="{bc}">{s12 if s12 is not None else "—"}　{bias}</b></div>'
+                  f'<div class="pv-sub">到期日 {v.get("n_exp")} · 合约 {v.get("n_contract")}</div>'
+                  f'{dup}</div>')
+
+    legend = "".join(f'<span><i style="background:{COL[t]}"></i>{t}</span>' for t in ORDER)
+
+    return f"""
+<div class="pv-wrap">
+  <div class="pv-cards">{cards}</div>
+  <div class="pv-legend">{legend}</div>
+
+  {_chart("atm", "① ATM 隐含波动率 期限结构（近月 &gt; 远月 = 倒挂，市场预期近期震荡）", "%")}
+  {_chart("skew", "② 25-Delta 偏斜：Put IV − Call IV（正值 = 看跌期权更贵 = 偏空）", "pt", True)}
+
+  <div class="pv-method">{pv.get("method_note","")}</div>
+  <div class="pv-hist">
+    <b>历史说明：</b>{pv.get("hist_note","")}
+    数据源：{pv.get("source","")}。
+  </div>
+</div>"""
+
+
 def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=None,
              daily_notes=None, kol_changes=None, liquidity=None, cb_balance=None,
              holdings=None, custody=None, auctions=None, money_supply=None, m2_history=None,
@@ -1268,7 +1382,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None,
+             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
     ai_reads: {key: 通用解读}(第3部分); ai_conclusions: 短中长结论(第4部分)。
@@ -1505,6 +1619,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         ust_micro_html=_ust_micro_html(ust_micro),
         dxy_gold_html=_dxy_gold_html(dxy_gold),
         gold_etf_region_html=_gold_etf_region_html(gold_etf_flows),
+        pm_optvol_html=_pm_optvol_html(pm_optvol),
         basis_trade=_basis_trade_html(basis_trade),
         comex_inventory=_comex_inventory_html(comex_inventory),
         debt_gdp=_debt_gdp_html(debt_gdp),
@@ -8792,6 +8907,42 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .gef-tt{{font-weight:700}}
 .gef-px-c{{color:#b08a3e}}
 
+/* ── 贵金属期权波动率(ATM IV 期限结构 + 25D 偏斜) ── */
+.pv-wrap{{margin:6px 0}}
+.pv-cards{{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:10px}}
+.pv-card{{flex:1 1 210px;background:#eae4d9;border-radius:8px;padding:10px 12px}}
+.pv-ct{{display:flex;align-items:center;gap:6px;font-weight:600;color:#3d3a36;
+  font-size:13px;margin-bottom:6px}}
+.pv-ct i{{width:10px;height:10px;border-radius:2px;display:inline-block}}
+.pv-ct small{{margin-left:auto;font-weight:400;color:#9a938a;font-size:11px}}
+.pv-row{{display:flex;justify-content:space-between;font-size:11.5px;color:#7a736b;
+  padding:2px 0}}
+.pv-row b{{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#3d3a36}}
+.pv-row b.inv{{color:#a3705f}}
+.pv-row b.nor{{color:#5f7f5a}}
+.pv-row b.bull{{color:#5f7f5a}}
+.pv-row b.bear{{color:#a3705f}}
+.pv-sub{{font-size:10.5px;color:#9a938a;margin-top:5px;
+  border-top:1px solid #ded7cb;padding-top:4px}}
+.pv-warn{{font-size:10.5px;color:#8e3b30;margin-top:3px}}
+.pv-legend{{display:flex;gap:14px;font-size:11.5px;color:#6b645c;margin-bottom:2px}}
+.pv-legend span{{display:flex;align-items:center;gap:5px}}
+.pv-legend i{{width:10px;height:10px;border-radius:2px;display:inline-block}}
+.pv-block{{margin:10px 0}}
+.pv-t{{font-size:12px;color:#6b645c;margin-bottom:2px}}
+.pv-chart{{width:100%;height:auto;display:block}}
+.pv-grid{{stroke:#e2dcd1;stroke-width:.7}}
+.pv-zero{{stroke:#b3aba0;stroke-width:1.1;stroke-dasharray:3 3}}
+.pv-ln{{fill:none;stroke-width:1.9}}
+.pv-yl{{font-size:9.5px;fill:#8d857b;text-anchor:end;font-family:ui-monospace,monospace}}
+.pv-xt{{font-size:10.5px;fill:#6b645c;text-anchor:middle}}
+.pv-unit{{font-size:10px;fill:#9a938a;text-anchor:end}}
+.pv-method{{font-size:11.5px;color:#8d857b;line-height:1.85;margin-top:8px;
+  background:#f3efe2;border-left:3px solid #b09a5f;padding:9px 12px;border-radius:5px}}
+.pv-hist{{font-size:11.5px;color:#7a5f52;line-height:1.85;margin-top:8px;
+  background:#f4efe6;border-left:3px solid #a3855f;padding:9px 12px;border-radius:5px}}
+.pv-hist b{{color:#6b5340}}
+
   .cmm-chart {{ width: 100%; height: auto; display: block; margin: 4px 0 2px; }}
   .cmm-one {{ margin: 16px 0 20px; }}
   .cmm-t {{ font-size: 14.5px; font-weight: 700; color: #4a443c; margin-bottom: 7px;
@@ -9411,6 +9562,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ 黄金 ETF 分地区资金流 (WGC 官方) ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>黄金 ETF 分地区资金流 (北美/欧洲/亚洲/其他 · 世界黄金协会官方周度吨数)<span class="freq-badge freq-weekly">每周更新</span></div>
   <div class="card">{gold_etf_region_html}</div>
+  <!-- ━━━ 贵金属 ETF 期权波动率: ATM IV 期限结构 + 25D 偏斜 ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>贵金属 ETF 期权波动率 (GLD/SLV/IAU · ATM IV 期限结构 + 25D 偏斜)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{pm_optvol_html}</div>
   <div class="card">{basis_trade}</div>
   <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)<span class="freq-badge freq-event">每次拍卖</span></div>

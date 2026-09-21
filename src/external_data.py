@@ -7224,6 +7224,274 @@ def fetch_gold_etf_flows_by_region(weeks=52):
     return out
 
 
+# ══════════════════════════════════════════════════════════════════════
+# 贵金属期权波动率: 25D 偏斜 + ATM IV 期限结构 (Chao 2026-09-21)
+# ══════════════════════════════════════════════════════════════════════
+# ★数据源: CBOE cdn delayed quotes —— 逐合约含 iv + delta, 实测真数据。
+#   https://cdn.cboe.com/api/global/delayed_quotes/options/{TICKER}.json
+#
+# ★两张图对应 Chao 提供的截图:
+#   图A 25D 偏斜 = 25-delta put IV − 25-delta call IV
+#       正值=看跌期权更贵=偏空; 负值=偏多。用 delta **线性插值**到 |delta|=0.25,
+#       比取最近点准(合约 delta 不会正好等于 0.25)。
+#   图B ATM IV 期限结构 = 各到期日 |delta|=0.5 处的 IV, 排成 1M/3M/6M/12M/18M/24M。
+#       近月 > 远月 = 倒挂(市场预期近期震荡); 反之为正常上倾。
+#
+# ★★历史限制(重要, 别再重复找):
+#   CBOE 只有**当下快照**。`?date=YYYY-MM-DD` 返回 200 但 timestamp 与现价
+#   和不带参数时完全相同 —— 参数被静默忽略, 不是历史数据。
+#   /historical_data/ 与 /historical_options/ 均 403。
+#   Alpha Vantage: HISTORICAL_OPTIONS 是**付费端点**(免费 key 返回
+#   "This is a premium endpoint"); REALTIME_OPTIONS 免费档返回的是
+#   **占位假数据**(contractID=XXYYZZ..., expiration=2099-99-99, 价格全 100) —— 陷阱。
+#   ORATS 401, Nasdaq Data Link 403。
+#   → 结论: 偏斜与期限结构**无免费历史**, 只能每日快照自行积累(落 Notion DB_OPTVOL)。
+#   → 可回填一年的只有: FRED GVZCLS(CBOE 黄金ETF波动率指数, 官方) 与
+#     GLD/SLV 30日已实现波动率(自算, 字段名带 RV 标明非隐含波动率)。
+#   ★白银官方 VXSLVCLS 已于 2022-02 DISCONTINUED(近一年 0 点), 不可用。
+
+_PMV_TICKERS = ["GLD", "SLV", "IAU"]   # SGOL 到期日仅 4 个, 无法构建期限结构, 排除
+_PMV_TENORS = [("1M", 30), ("3M", 91), ("6M", 182), ("12M", 365), ("18M", 548), ("24M", 730)]
+
+
+def _pmv_chain(tk):
+    import json as _j, re as _re, ssl as _ssl, urllib.request, datetime as _dt
+    ctx = _ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = _ssl.CERT_NONE
+    u = f"https://cdn.cboe.com/api/global/delayed_quotes/options/{tk}.json"
+    req = urllib.request.Request(u, headers={
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                      "AppleWebKit/537.36 Chrome/120.0 Safari/537.36"})
+    with urllib.request.urlopen(req, timeout=50, context=ctx) as r:
+        d = _j.loads(r.read())
+    dd = d.get("data", {})
+    rows = []
+    for o in dd.get("options", []):
+        m = _re.match(r"^[A-Z]+(\d{6})([CP])(\d{8})$", o.get("option", ""))
+        if not m:
+            continue
+        e = m.group(1)
+        try:
+            exp = _dt.date(2000 + int(e[:2]), int(e[2:4]), int(e[4:6]))
+        except Exception:
+            continue
+        iv, dl = o.get("iv"), o.get("delta")
+        if not iv or dl is None:
+            continue
+        rows.append({"exp": exp, "cp": m.group(2), "k": int(m.group(3)) / 1000.0,
+                     "iv": float(iv), "d": float(dl), "oi": o.get("open_interest", 0)})
+    return dd.get("current_price"), d.get("timestamp"), rows
+
+
+def _pmv_interp(arr, target):
+    """在 |delta|=target 处线性插值 IV。"""
+    pts = sorted([(abs(x["d"]), x["iv"]) for x in arr if 0.01 < abs(x["d"]) < 0.99])
+    if len(pts) < 2:
+        return None
+    for i in range(len(pts) - 1):
+        (d0, v0), (d1, v1) = pts[i], pts[i + 1]
+        if d0 <= target <= d1:
+            return v0 if d1 == d0 else v0 + (v1 - v0) * (target - d0) / (d1 - d0)
+    return min(pts, key=lambda p: abs(p[0] - target))[1]
+
+
+def fetch_pm_option_vol():
+    """贵金属期权: 25D 偏斜 + ATM IV 期限结构(CBOE 真数据, 当下快照)。"""
+    import datetime as _dt
+    from datetime import timezone, timedelta
+    from collections import defaultdict
+    _jst = _dt.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    today = _dt.date.today()
+    out = {"status": "ok", "as_of": _jst, "date": today.isoformat(),
+           "tickers": {}, "errors": [],
+           "source": "CBOE delayed quotes (逐合约 IV + delta)",
+           "hist_note": ("偏斜与期限结构**无免费历史源**：CBOE 只提供当下快照"
+                         "（?date= 参数返回 200 但内容不变，实为忽略）；"
+                         "Alpha Vantage 历史期权为付费端点，其免费实时接口返回占位假数据。"
+                         "故这两项自 2026-09-21 起每日快照累积；"
+                         "可回溯一年的只有 GVZ（FRED 官方）与 30 日已实现波动率（自算）。"),
+           "method_note": ("25D 偏斜 = 25-delta put IV − 25-delta call IV，"
+                           "正值＝看跌期权更贵＝偏空。ATM 取 |delta|=0.5。"
+                           "两者均按 delta **线性插值**求得，非取最近合约。")}
+
+    for tk in _PMV_TICKERS:
+        try:
+            spot, ts, rows = _pmv_chain(tk)
+        except Exception as e:
+            out["errors"].append(f"{tk}: {type(e).__name__} {str(e)[:60]}")
+            continue
+        if not rows:
+            out["errors"].append(f"{tk}: 无有效合约")
+            continue
+        by = defaultdict(list)
+        for r in rows:
+            by[r["exp"]].append(r)
+        term, skew = [], []
+        for lab, dte in _PMV_TENORS:
+            cand = [(abs((e - today).days - dte), e) for e in by if (e - today).days >= 5]
+            if not cand:
+                continue
+            cand.sort()
+            e = cand[0][1]
+            arr = by[e]
+            d = (e - today).days
+            cs = [x for x in arr if x["cp"] == "C"]
+            ps = [x for x in arr if x["cp"] == "P"]
+            if len(cs) < 3 or len(ps) < 3:
+                continue
+            ac, ap = _pmv_interp(cs, 0.50), _pmv_interp(ps, 0.50)
+            c25, p25 = _pmv_interp(cs, 0.25), _pmv_interp(ps, 0.25)
+            atm = (ac + ap) / 2 * 100 if (ac and ap) else None
+            sk = (p25 - c25) * 100 if (p25 and c25) else None
+            term.append({"t": lab, "dte": d, "exp": e.isoformat(),
+                         "atm": round(atm, 2) if atm else None})
+            skew.append({"t": lab, "dte": d,
+                         "put": round(p25 * 100, 2) if p25 else None,
+                         "call": round(c25 * 100, 2) if c25 else None,
+                         "skew": round(sk, 2) if sk is not None else None})
+        # ★去重: 到期日不足时多个 tenor 会落到同一到期 —— 不可当成不同期限展示
+        seen, term2, skew2 = set(), [], []
+        for a, b in zip(term, skew):
+            if a["exp"] in seen:
+                continue
+            seen.add(a["exp"])
+            term2.append(a)
+            skew2.append(b)
+        dropped = len(term) - len(term2)
+        vals = [x["atm"] for x in term2 if x["atm"]]
+        shape = None
+        if len(vals) >= 3:
+            shape = "倒挂" if vals[0] > vals[-1] else "正常上倾"
+        out["tickers"][tk] = {
+            "spot": spot, "quote_ts": ts, "term": term2, "skew": skew2,
+            "shape": shape, "n_exp": len(by), "n_contract": len(rows),
+            "dup_dropped": dropped,
+            "dup_note": (f"有 {dropped} 个期限因到期日不足而落在同一到期，已剔除"
+                         if dropped else ""),
+        }
+
+    if not out["tickers"]:
+        out["status"] = "error"
+    elif out["errors"]:
+        out["status"] = "ok(部分失败)"
+    return out
+
+
+# ══════════════════════════════════════════════════════════════════════
+# COMEX 期货期权持仓 (Chao 2026-09-21) —— 注意: 这不是 IV
+# ══════════════════════════════════════════════════════════════════════
+# ★★为什么没有 IV(踩坑记录, 别再重复找):
+#   COMEX 期货期权的隐含波动率是 **CME 的商业数据产品**, 免费源全封:
+#     CME 官网 API 403 / CME ftp settlement 403 / CME datamine 需订阅 /
+#     Barchart 403 / Yahoo 期货期权链 401(v7+v6 × 三种 symbol 全试) /
+#     CBOE 只覆盖股票与 ETF 期权, 不含期货期权 /
+#     ScraperAPI 能绕 IP 封锁但 CME 把请求导向中文营销页, 不是 API 响应。
+#   → 绝不拿 GLD/SLV 的 ETF 期权 IV 冒充 "COMEX 期货期权 IV"(口径完全不同)。
+#
+# ★本模块给的是**持仓方向**, 回答「Managed Money 在期权上加多还是加空」:
+#   期权部分 = Disagg(Futures AND Options) − Disagg(Futures Only)
+#   两者同为 CFTC 官方 Disaggregated 口径, 含相同的 m_money 字段, 可相减。
+#   ★已在 **170 周(2023-06 至今, 3年+)** 长样本验证: 金银两市场
+#     期权 OI 差均 **0 次为负** —— 若口径不匹配必然出现负数, 故口径成立。
+#   (注: 6dca-aqww 是 Legacy 口径 noncomm/comm, 不含 m_money, 不能与 Disagg 混减)
+#
+# ★单位换算: COMEX 黄金 1 张 = 100 金衡盎司; 白银 1 张 = 5000 盎司;
+#   1 吨 = 32150.7 金衡盎司。吨口径用于对齐市面上 WGC/行研图表的「吨」表述。
+
+_CXO_MKTS = {"gold": ("GOLD - COMMODITY EXCHANGE INC.", 100.0, "金"),
+             "silver": ("SILVER - COMMODITY EXCHANGE INC.", 5000.0, "银")}
+_CXO_FAO = "kh3c-gbw2"   # Disaggregated Futures AND Options
+_CXO_FO  = "72hh-3qpy"   # Disaggregated Futures Only
+_CXO_OZ_PER_TONNE = 32150.7
+
+
+def _cxo_pull(ds, mkt, limit=170):
+    import json as _j, ssl as _ssl, urllib.request, urllib.parse
+    ctx = _ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = _ssl.CERT_NONE
+    u = (f"https://publicreporting.cftc.gov/resource/{ds}.json?$limit={limit}"
+         f"&$order=report_date_as_yyyy_mm_dd%20DESC"
+         f"&market_and_exchange_names={urllib.parse.quote(mkt)}")
+    req = urllib.request.Request(u, headers={
+        "User-Agent": "Mozilla/5.0 Chrome/120.0", "Accept": "application/json"})
+    with urllib.request.urlopen(req, timeout=70, context=ctx) as r:
+        rows = _j.loads(r.read())
+    out = {}
+    for x in rows:
+        d = (x.get("report_date_as_yyyy_mm_dd") or "")[:10]
+        try:
+            out[d] = {
+                "l": float(x["m_money_positions_long_all"]),
+                "s": float(x["m_money_positions_short_all"]),
+                "oi": float(x["open_interest_all"]),
+            }
+        except Exception:
+            pass
+    return out
+
+
+def fetch_comex_option_positions(weeks=104):
+    """COMEX 金/银 期货期权持仓(Managed Money 方向)。"""
+    import datetime as _dt
+    from datetime import timezone, timedelta
+    _jst = _dt.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    out = {"status": "ok", "as_of": _jst, "metals": {}, "errors": [],
+           "not_iv_note": ("本板块是**持仓方向**不是隐含波动率。COMEX 期货期权的 IV 属 "
+                           "CME 商业数据，免费源全部封闭（CME API/ftp 403、Barchart 403、"
+                           "Yahoo 期货期权链 401、CBOE 不覆盖期货期权），"
+                           "故不以 ETF 期权 IV 冒充。"),
+           "method_note": ("期权部分 = CFTC Disaggregated（期货+期权）− （仅期货），"
+                           "两者同口径同字段。已在 170 周（3 年+）样本验证："
+                           "金银期权 OI 差均 0 次为负，口径成立。"),
+           "source": "CFTC 官方 Socrata（publicreporting.cftc.gov）"}
+
+    for key, (mkt, oz, cn) in _CXO_MKTS.items():
+        try:
+            fao = _cxo_pull(_CXO_FAO, mkt, weeks)
+            fo = _cxo_pull(_CXO_FO, mkt, weeks)
+        except Exception as e:
+            out["errors"].append(f"{key}: {type(e).__name__} {str(e)[:60]}")
+            continue
+        common = sorted(set(fao) & set(fo))
+        if len(common) < 8:
+            out["errors"].append(f"{key}: 共同周仅 {len(common)}")
+            continue
+        series, neg = [], 0
+        for d in common:
+            a, b = fao[d], fo[d]
+            net_ao = a["l"] - a["s"]
+            net_fo = b["l"] - b["s"]
+            oi_opt = a["oi"] - b["oi"]
+            if oi_opt < 0:
+                neg += 1
+            series.append({
+                "d": d,
+                "net_fut": round(net_fo),
+                "net_opt": round(net_ao - net_fo),
+                "oi_opt": round(oi_opt),
+                "oi_all": round(a["oi"]),
+                "tonnes": round(net_fo * oz / _CXO_OZ_PER_TONNE, 1),
+            })
+        last = series[-1]
+        opts = [x["net_opt"] for x in series]
+        out["metals"][key] = {
+            "cn": cn, "series": series, "latest": last,
+            "neg_weeks": neg, "n": len(series),
+            "dir": "净多" if last["net_opt"] > 0 else ("净空" if last["net_opt"] < 0 else "中性"),
+            "opt_min": min(opts), "opt_max": max(opts),
+            "pct": round(sum(1 for v in opts if v < last["net_opt"]) / len(opts) * 100, 1),
+            "caveat": (f"期权 OI 差有 {neg} 周为负，口径可能不匹配" if neg else ""),
+        }
+
+    if not out["metals"]:
+        out["status"] = "error"
+    elif out["errors"]:
+        out["status"] = "ok(部分失败)"
+    return out
+
+
 if __name__ == "__main__":
     import json
     print("=== Credit Impulse 三国(信贷脉冲) ===")
