@@ -102,9 +102,18 @@ def upsert(db_id, title_value, props, title_field="Date", skip_none=True):
     return pid
 
 
-def read_back(db_id, title_value, field):
-    """读回验证：re-query 该行确认某数值字段真值。"""
-    pid = query_by_title(db_id, title_value)
+def read_back(db_id, title_value, field, title_field="Date"):
+    """读回验证：re-query 该行确认某数值字段真值。
+
+    ★2026-09-21 修: 此前漏了 title_field 参数, 内部 query_by_title 恒用默认 "Date"。
+      后果 —— 对 title 字段非 "Date" 的 DB(如 DB_GLOBALM2 用 "Month"),
+      数据明明写入成功, read_back 却恒返回 None, 表现为「写入报 ok=367 fail=0
+      但读回是 None」。这是**假的写后读回校验**: 它不会误报成功, 但会把成功
+      误报成失败, 而更危险的是 —— 若有人据此认为"读回 None 是正常的"而忽略它,
+      真正的写入失败就再也发现不了了。
+      upsert() 一直有 title_field 参数, 是 read_back 漏了, 两者必须对称。
+    """
+    pid = query_by_title(db_id, title_value, title_field)
     if not pid:
         return None
     st, body = _req("GET", f"/pages/{pid}")

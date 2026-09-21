@@ -62,7 +62,7 @@ def main():
         time.sleep(0.12)
 
     print(f"\n完成: ok={ok} fail={fail} / {len(ser)}")
-    chk = read_back(db, ser[-1]["m"], "五国合计_万亿USD")
+    chk = read_back(db, ser[-1]["m"], "五国合计_万亿USD", title_field="Month")
     print(f"读回 {ser[-1]['m']} 合计 = {chk} (应为 {ser[-1]['total']})")
     return 0
 

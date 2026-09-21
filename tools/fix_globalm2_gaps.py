@@ -70,4 +70,5 @@ for m in missing:
     time.sleep(0.15)
 
 print(f"\n补写 ok={ok} fail={fail}")
-print(f"读回 2026-07 合计 = {read_back(DB, '2026-07', '五国合计_万亿USD')}")
+print(f"读回 2026-07 合计 = "
+      f"{read_back(DB, '2026-07', '五国合计_万亿USD', title_field='Month')}")
