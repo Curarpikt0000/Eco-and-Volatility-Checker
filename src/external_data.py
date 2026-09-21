@@ -6658,6 +6658,47 @@ def fetch_china_regime_shift():
     except Exception as e:
         out["errors"].append(f"NBS: {type(e).__name__} {str(e)[:80]}")
 
+    # ★★缓存回退(2026-09-21 修): NBS 偶发 RemoteDisconnected → breakdown 直接变 0 项,
+    #   而 status 仍是 "ok(部分失败)", 页面照常渲染但少掉 8 项官方分项 —— 静默降级。
+    #   纪律(项目既有): 抓不到时必须**保留旧真值**, 不能覆盖成空。
+    import os as _os, json as _j
+    # ★路径解析: __file__ 在被临时复制到别处执行时会失准(反测时踩到),
+    #   故先试 __file__ 推导, 再回退到 cwd 下的 data/。
+    _cands = []
+    try:
+        _cands.append(_os.path.join(
+            _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))),
+            "data", "china_regime_shift.json"))
+    except Exception:
+        pass
+    _cands.append(_os.path.join(_os.getcwd(), "data", "china_regime_shift.json"))
+    _cp = next((p for p in _cands if _os.path.exists(p)), _cands[0])
+    if out["breakdown"]:
+        # 抓到了 → 落盘供下次回退
+        try:
+            _os.makedirs(_os.path.dirname(_cp), exist_ok=True)
+            _j.dump({"breakdown": out["breakdown"], "period": out.get("period"),
+                     "sources": out.get("sources"),
+                     "saved_at": datetime.datetime.now().isoformat()},
+                    open(_cp, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        except Exception as e:
+            out["errors"].append(f"缓存写入失败(不影响本次): {type(e).__name__}")
+    elif _os.path.exists(_cp):
+        # 没抓到 → 读回缓存, 并**明确标注是缓存**(不假装是当期新数)
+        try:
+            _c = _j.load(open(_cp, encoding="utf-8"))
+            if _c.get("breakdown"):
+                out["breakdown"] = _c["breakdown"]
+                out["period"] = out.get("period") or _c.get("period")
+                out["sources"] = out.get("sources") or _c.get("sources") or {}
+                _age = (datetime.datetime.now().timestamp() - _os.path.getmtime(_cp)) / 86400
+                out["breakdown_cached"] = True
+                out["breakdown_cache_age_days"] = round(_age, 1)
+                out["errors"].append(
+                    f"NBS 实时抓取失败 → 分项回退缓存({_age:.1f} 天前), 已在页面标注")
+        except Exception as e:
+            out["errors"].append(f"缓存读取失败: {type(e).__name__}")
+
     if not out["monthly"] and not out["breakdown"]:
         out["status"] = "error"
     elif out["errors"]:

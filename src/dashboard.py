@@ -741,8 +741,16 @@ def _china_regime_html(cn):
         err = ('<div class="crs-err">抓取告警：'
                + "；".join(cn["errors"][:4]) + "</div>")
 
+    # ★缓存标注: NBS 抓取失败时分项走缓存, 必须让人看见是旧数据, 不能悄悄用
+    _cache_bar = ""
+    if cn.get("breakdown_cached"):
+        _cache_bar = (f'<div class="crs-cached">⚠ NBS 官方发布稿本次抓取失败，'
+                      f'下方 8 项官方分项为 <b>{cn.get("breakdown_cache_age_days","?")} 天前缓存</b>，'
+                      f'非本次实时取得；东财月度数据不受影响。</div>')
+
     return f"""
 <div class="crs-wrap">
+  {_cache_bar}
   <div class="crs-verdict {vcls}">
     <div class="crs-verdict-t">{verdict}</div>
     <div class="crs-verdict-s">
@@ -8707,6 +8715,8 @@ _TEMPLATE = r"""<!DOCTYPE html>
 /* ── 中国模式断代 ── */
 .crs-wrap{{margin:8px 0 4px}}
 .crs-verdict{{padding:14px 18px;border-radius:10px;margin-bottom:14px;border-left:4px solid}}
+.crs-cached{{background:#f4e9e6;border-left:3px solid #a3705f;padding:9px 12px;border-radius:5px;font-size:11.5px;color:#7a5f52;line-height:1.8;margin-bottom:10px}}
+.crs-cached b{{color:#8e3b30}}
 .crs-verdict.bad{{background:#f4e9e6;border-color:#a3705f}}
 .crs-verdict.warn{{background:#f3efe2;border-color:#b09a5f}}
 .crs-verdict.ok{{background:#e9efe8;border-color:#6f8f6a}}

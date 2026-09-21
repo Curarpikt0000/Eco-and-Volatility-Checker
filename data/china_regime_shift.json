@@ -1,0 +1,96 @@
+{
+ "breakdown": [
+  {
+   "key": "fai_total",
+   "name": "固定资产投资 总",
+   "engine": "old",
+   "perkins_ref": "3.8%",
+   "value": -7.2,
+   "unit": "%",
+   "basis": "累计同比",
+   "src": "fai"
+  },
+  {
+   "key": "infra",
+   "name": "基建投资",
+   "engine": "old",
+   "perkins_ref": "+6.4%",
+   "value": -4.0,
+   "unit": "%",
+   "basis": "累计同比",
+   "src": "fai"
+  },
+  {
+   "key": "manuf",
+   "name": "制造业投资",
+   "engine": "new",
+   "perkins_ref": null,
+   "value": -2.3,
+   "unit": "%",
+   "basis": "累计同比",
+   "src": "fai"
+  },
+  {
+   "key": "private",
+   "name": "民间投资",
+   "engine": "old",
+   "perkins_ref": null,
+   "value": -10.1,
+   "unit": "%",
+   "basis": "累计同比",
+   "src": "fai"
+  },
+  {
+   "key": "ip_products",
+   "name": "知识产权产品投资",
+   "engine": "new",
+   "perkins_ref": "28% 高技术占比",
+   "value": 9.2,
+   "unit": "%",
+   "basis": "累计同比",
+   "src": "fai"
+  },
+  {
+   "key": "northeast",
+   "name": "东北地区投资",
+   "engine": "social",
+   "perkins_ref": null,
+   "value": -25.5,
+   "unit": "%",
+   "basis": "累计同比",
+   "src": "fai"
+  },
+  {
+   "key": "estate_inv",
+   "name": "房地产开发投资",
+   "engine": "old",
+   "perkins_ref": "-2.1%",
+   "value": -19.9,
+   "unit": "%",
+   "basis": "累计同比",
+   "src": "estate"
+  },
+  {
+   "key": "new_starts",
+   "name": "房屋新开工面积",
+   "engine": "old",
+   "perkins_ref": null,
+   "value": -24.8,
+   "unit": "%",
+   "basis": "累计同比",
+   "src": "estate"
+  }
+ ],
+ "period": "2026 年 1-August",
+ "sources": {
+  "fai": {
+   "title": "2.Investment in Fixed Assets from January to August 2026",
+   "url": "https://www.stats.gov.cn/english/PressRelease/202609/t20260916_1965343.html"
+  },
+  "estate": {
+   "title": "3.Investment in Real Estate Development from January to August 2026",
+   "url": "https://www.stats.gov.cn/english/PressRelease/202609/t20260916_1965342.html"
+  }
+ },
+ "saved_at": "2026-09-21T21:29:12.875957"
+}
