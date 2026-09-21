@@ -78,6 +78,47 @@ def latest_ai_analysis(snap_date=None):
     return ai.get("reads") or {}, ai.get("conclusions"), ai.get("notes") or {}
 
 
+def assert_no_literal_markdown(html_path):
+    """★2026-09-21 门禁: 产物里不得出现字面 Markdown 星号。
+
+    为什么要做成门禁 —— 这个问题我逐个出口修了三轮(25→13→8), 每轮都以为修完了。
+    病根: 「页面上有没有星号」只能看产物才知道, 而渲染出口是发散的
+    (KOL 简介 / KOL 言论 / 名录档案 / 关注焦点 / 各 section 说明文案…),
+    靠人肉枚举必然漏一个。数据侧(kol_registry / kol_store_export)是 Notion
+    单向镜像不能改, 只能在渲染层逐出口用 _esc_md。
+    把「有没有漏」变成开机自检, 下次任何人从任何新出口引入 Markdown 文本,
+    构建时立刻可见 —— 比"记得检查"可靠。
+
+    只警告不中断(与上面的形参门禁一致): 星号是显示瑕疵不是数据错误,
+    不值得让整个 dashboard 生不出来。
+    """
+    import re as _re
+    try:
+        h = open(html_path, encoding="utf-8").read()
+    except Exception as e:
+        print(f"[dashboard] ⚠️ Markdown 门禁: 读产物失败 {type(e).__name__}")
+        return
+    pat = _re.compile(r"\*\*([^*\n]{2,80})\*\*")
+    hits = pat.findall(h)
+    if not hits:
+        print("[dashboard] ✅ 门禁: 产物无字面 Markdown 星号")
+        return
+    print(f"[dashboard] ⚠️⚠️ 门禁: 产物有 {len(hits)} 处**字面 Markdown 星号**"
+          f"(页面会显示成一堆 ** 而非粗体)")
+    seen = set()
+    for x in hits:
+        k = x[:30]
+        if k in seen:
+            continue
+        seen.add(k)
+        p = h.find("**" + x + "**")
+        cls = _re.findall(r'class="([a-z0-9\- ]{2,40})"', h[max(0, p - 600):p])
+        print(f"[dashboard]      ** {x[:48]} **  <- class=「{cls[-1] if cls else '?'}」")
+        if len(seen) >= 6:
+            break
+    print("[dashboard]      修法: 该出口的 _esc(...) 改为 _esc_md(...)")
+
+
 def assert_no_missing_kwargs(passed_kwargs):
     """★2026-09-07 门禁: generate() 形参 vs 本脚本实际传参, 缺了就 LOUD 报警。
 
@@ -837,6 +878,8 @@ def main():
     assert_no_missing_kwargs(gen_kwargs)
     out = dash.generate(snap, checks, hit, gstats, overall, **gen_kwargs)
     print(f"[dashboard] 生成: {out}")
+    # ★产物门禁: 字面 Markdown 星号(页面会显示成 ** 而非粗体)
+    assert_no_literal_markdown(out)
     return out
 
 

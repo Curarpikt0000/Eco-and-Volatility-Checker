@@ -24,6 +24,36 @@ def _esc(s):
     return html.escape(str(s), quote=True)
 
 
+def _strip_md(s):
+    """剥掉 Markdown 粗体标记, 只留文字 —— 用于**进 JSON payload** 的文本。
+
+    ★为什么 payload 不能用 _esc_md(2026-09-21): payload 由 json.dumps 序列化后
+      内嵌进 <script>, 前端用 textContent / 拼字符串渲染。往里塞 <b> 要么被当
+      纯文本原样显示(比 ** 更难看), 要么就得让前端 innerHTML —— 那是 XSS 面。
+      所以 payload 侧的正确做法是**剥掉标记**, 只有直接产出 HTML 的地方才转 <b>。
+    """
+    if s is None:
+        return ""
+    return re.sub(r"\*\*([^*\n]{1,120}?)\*\*", r"\1", str(s))
+
+
+def _esc_md(s):
+    """先 HTML 转义, 再把 Markdown 的 **粗体** 渲染成 <b>。
+
+    ★为什么需要(2026-09-21): 数据文件(如 data/kol_profiles.json 的人物档案)里
+      写的是 Markdown 语法, 但 HTML 不认 ** —— 直接 _esc() 输出会让读者在页面上
+      看到一堆字面星号 `**BG2Pod**`。实测产物里有 13 处。
+    ★为什么在渲染层做而不是改数据: kol_registry / kol_profiles 属 Notion 侧 SSOT
+      的单向镜像, 本 agent 不得自行改动(见 AGENTS.md 名册铁律)。
+    ★顺序不能反: 必须**先转义后替换**, 否则先插入的 <b> 会被转义成 &lt;b&gt;。
+      转义后原文里的真 `<` 已变 &lt;, 此时再插 <b> 是安全的, 不构成注入面。
+    """
+    if s is None:
+        return ""
+    t = html.escape(str(s), quote=True)
+    return re.sub(r"\*\*([^*\n]{1,120}?)\*\*", r"<b>\1</b>", t)
+
+
 # ── 数据新鲜度徽章 ────────────────────────────────────────────
 # ★铁律配套设施: 低频源(季度/月度)天然滞后, 但页头写"每日更新"会让读者误以为
 #   每个数字都是今天的。此处按各源的【自然更新频率】给出容忍阈值, 超阈值才标徽章:
@@ -73,9 +103,9 @@ def _stale_badge(as_of, freq="daily", label=None, known_reason=False):
     icon = "🔴" if sev == "red" else "🟡"
     txt = f"{icon} 数据滞后 {days} 天"
     if sev == "red":
-        # ★2026-08-21 更正: 此处原注释断言"TIC 官方本身未出新月, 抓取链路完好" —— **是错的**。
-        #   实测 mfhhis01.txt 只是**历史存档表**(内容止于上一年年末), 当年月度在 slt_table5,
-        #   官方 2026-08-17 已发 2026-06。教训: 红标超阈值时**先去官网核实最新一期**,
+        # ★2026-08-21 更正: 此处原注释断言"TIC 官方本身未出新月, 抓取链路完好" —— <b>是错的</b>。
+        #   实测 mfhhis01.txt 只是<b>历史存档表</b>(内容止于上一年年末), 当年月度在 slt_table5,
+        #   官方 2026-08-17 已发 2026-06。教训: 红标超阈值时<b>先去官网核实最新一期</b>,
         #   绝不假设"源就是这么慢"(详见 ChaoWiki frontend/data-dashboard-publishing §8.1)。
         if known_reason:
             txt += "（原因见下方说明）"
@@ -284,7 +314,7 @@ def _liquidity_crisis_html(lq):
     """每日流动性危机监测盘: SOFR−EFFR(资金面) + BBB/HY OAS(信用面) + 闪崩日标注。
 
     ★2026-09-18 新增。Chao: 「我需要这两个来观察每天的流动性危机」。
-      资金面与信用面**同时**恶化才是真危机; 只有一边动 = 局部事件。
+      资金面与信用面<b>同时</b>恶化才是真危机; 只有一边动 = 局部事件。
     ★Oracle 单名 CDS 是付费数据拿不到 —— 用同评级 BBB 档 OAS 替代,
       并叠 HY 作降级风险参照(Oracle 现 S&P BBB−, 距垃圾级一档)。
     """
@@ -1978,13 +2008,13 @@ def _cycle_kol_html(kol_views, kol_history=None):
             region = (k.get("forecast_region") or "").strip()
             inst = (k.get("institution") or k.get("bio") or "").strip()
             url = (k.get("source_url") or "").strip()
-            focus = _esc(k.get("focus") or "")
+            focus = _esc_md(k.get("focus") or "")   # ★_esc_md: 名册文本含 Markdown 粗体
             # 方向 / 言论: 有才显示, 没有明确标"待采集"
             if v:
                 d = (v.get("direction") or "").strip() or "—"
                 cls = {"强烈看多":"kv-bull2","看多":"kv-bull","分歧":"kv-mixed","中性":"kv-mixed",
                        "看空":"kv-bear","强烈看空":"kv-bear2","另类预言":"kv-mixed"}.get(d, "kv-mixed")
-                body = _esc((v.get("comments") or "").strip()) or "—"
+                body = _esc_md((v.get("comments") or "").strip()) or "—"
                 tg = _esc(_tg_str(v.get("targets")))
                 dir_html = f'<span class="kol-dir {cls}">{_esc(d)}</span>'
                 tg_html = f'<div class="kol-targets">🎯 {tg}</div>' if tg else ""
@@ -2005,7 +2035,7 @@ def _cycle_kol_html(kol_views, kol_history=None):
                 f'<div class="cyc-meta">{rg}<span class="cyc-freq">{freq}更新</span>'
                 f'<span class="cyc-school">{school}</span>{hint}</div>'
                 f'<div class="kol-comment">{body}</div>{tg_html}{fc}'
-                + (f'<div class="kol-standing">🏛 {_esc(inst)}</div>' if inst else "")
+                + (f'<div class="kol-standing">🏛 {_esc_md(inst)}</div>' if inst else "")
                 + link + '</div>'
             )
         return (f'<div class="cyc-block"><div class="cyc-block-title">{title}'
@@ -2021,8 +2051,8 @@ def _tg_str(v):
     """targets 归一为字符串。
 
     ★2026-08-24 线上 build 崩溃根因: 深度重抓时部分子 agent 把 targets 写成了
-      **数组**(如 ["黄金$6000","白银$120"]), 而三处渲染都直接 .strip() → AttributeError。
-      上游数据形状不可控(人写/LLM 写/历史遗留混杂), 所以在**渲染层**做类型兜底:
+      <b>数组</b>(如 ["黄金$6000","白银$120"]), 而三处渲染都直接 .strip() → AttributeError。
+      上游数据形状不可控(人写/LLM 写/历史遗留混杂), 所以在<b>渲染层</b>做类型兜底:
       list/tuple → 顿号连接; None → 空串; 其它 → str()。
       不去改上游数据: 数组本身是合法表达, 改了反而丢结构。
     """
@@ -2105,7 +2135,7 @@ def _kol_history_payload(kol_history):
         for _x in (json.load(open(_ip, encoding="utf-8")).get("all") or []):
             _n = (_x.get("kol") or "").strip()
             if _n and _x.get("detail"):
-                _deep[_n] = {"d": _x.get("detail") or "",
+                _deep[_n] = {"d": _strip_md(_x.get("detail") or ""),
                              "src": [s for s in (_x.get("sources") or []) if s.get("url")][:4],
                              "date": _x.get("date") or ""}
     except Exception:
@@ -2131,9 +2161,11 @@ def _kol_history_payload(kol_history):
             if not srcs and r.get("source"):
                 srcs = [{"url": r.get("source")}]
             rows.append([r.get("first_date", ""), last,
-                         r.get("direction", ""), r.get("comments", ""),
-                         r.get("targets", ""), r.get("source", ""), det, srcs[:4]])
-        out[kol] = {"s": m.get("standing", ""), "f": m.get("focus", ""), "h": rows}
+                         r.get("direction", ""), _strip_md(r.get("comments", "")),
+                         r.get("targets", ""), r.get("source", ""),
+                         _strip_md(det), srcs[:4]])
+        out[kol] = {"s": _strip_md(m.get("standing", "")),
+                    "f": _strip_md(m.get("focus", "")), "h": rows}
     # </ 会提前闭合 <script> 标签 → 转义(XSS/断标签双重防护)
     return json.dumps(out, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 
@@ -2165,7 +2197,7 @@ def _kol_standing_html(meta, kol):
     standing = m.get("standing", "")
     if not standing:
         return ""
-    return f'<div class="kol-standing">🏛 {_esc(standing)}</div>'
+    return f'<div class="kol-standing">🏛 {_esc_md(standing)}</div>'
 
 
 _PERIOD_LABEL = {"day": "本日", "week": "本周", "month": "本月"}
@@ -2261,7 +2293,7 @@ def _kol_changes_html(kol_changes, period="week"):
             targets = _tg_str(ch.get("targets"))
             extra = ""
             if comment:
-                extra += f'<div class="kol-cmt">{_esc(comment)}</div>'
+                extra += f'<div class="kol-cmt">{_esc_md(comment)}</div>'
             if targets:
                 extra += f'<div class="kol-tgt">标的：{_esc(targets)}</div>'
             # Bug1 修复: 状态变化卡片补背景介绍(与"观点全景"板块口径一致, 均取名册 institution/bio)
@@ -2366,7 +2398,7 @@ def _kol_views_html(views, period="week"):
                     since_html = f'<span class="kol-since">自 {_esc(since)} 持此观点</span>'
             extra = ""
             if comment:
-                extra += f'<div class="kol-cmt">{_esc(comment)}</div>'
+                extra += f'<div class="kol-cmt">{_esc_md(comment)}</div>'
             if targets:
                 extra += f'<div class="kol-tgt">标的：{_esc(targets)}</div>'
             _standing = _kol_standing_html(_meta, v.get("kol", ""))
@@ -3724,7 +3756,7 @@ def _gold_premium_html(gp):
         f'<div class="cust-wrap">'
         f'<div class="cust-chart-col cust-chart-full">'
         f'<div class="cust-chart-title">印度 &amp; 中国黄金 Domestic Premium/Discount (US$/oz)'
-        # ★2026-09-08 修(Chao 报「这张图没有每日更新啊」): 原标「🟢 每日」是**错的承诺**。
+        # ★2026-09-08 修(Chao 报「这张图没有每日更新啊」): 原标「🟢 每日」是<b>错的承诺</b>。
         #   WGC 官方方法论 PDF 原文: "We publish the data monthly, but the file contains
         #   daily data" / "Indian premium/discount data is calculated and reported weekly"
         #   —— 源头就是周更/月更, 只是文件内装日频序列。标成「每日」等于向读者承诺了
@@ -4051,7 +4083,7 @@ def _us_yield_century_html(yc):
 def _comex_firms_top10_html(cf):
     """需求B(Chao 2026-08-22): 三金属 × top10 发货方/接货方 × 日/周/月/全期。
 
-    cf: fetch_comex_issue_stop_firms()。排名按**总量**(非净额)。
+    cf: fetch_comex_issue_stop_firms()。排名按<b>总量</b>(非净额)。
     每个金属一块, 块内左右两栏(发货榜/接货榜), 顶部时间粒度 tab 切换。
     铂金交割极稀疏(常常整周无交割), 窗口内无数据时如实显示"该窗口无交割",
     绝不用其它窗口的数字充数。
@@ -4073,7 +4105,7 @@ def _comex_firms_top10_html(cf):
         for n, r in enumerate(rows, 1):
             w = r["lots"] / mx * 100
             tag = "" if r.get("is_bank") else '<span class="tf-nb">非银</span>'
-            # ★2026-08-22(Chao): 主显**吨**便于直接口算, 手数放小字括号保留可追溯性
+            # ★2026-08-22(Chao): 主显<b>吨</b>便于直接口算, 手数放小字括号保留可追溯性
             t = r.get("tonnes")
             t_txt = f'{t:,.2f}' if isinstance(t, (int, float)) else "—"
             # ★账户类型徽章 C(客户盘)/H(自营盘)/U(未知) —— 按占比标注主导类型
@@ -4190,15 +4222,15 @@ def _comex_firms_top10_html(cf):
 
 
 def _ch_gap_summary(cf=None):
-    """从**原始 json 文件**实算「哪些日期没有 C/H 拆分」，供说明文字动态生成。
+    """从<b>原始 json 文件</b>实算「哪些日期没有 C/H 拆分」，供说明文字动态生成。
 
     ★2026-09-08(Chao 问「你不是已经有了 c h 了么，看看还有必要吗」): 页面上原本写死
-    「{notion_days} 天的 Notion 增量段原始记录中没有 ORG 字段」——**这句话已经过时**。
+    「{notion_days} 天的 Notion 增量段原始记录中没有 ORG 字段」——<b>这句话已经过时</b>。
     实测: archive 段(≤archive_end) 缺 0 天; Notion 段的缺口全部止于 2026-08-19,
     因为上游 cme_delivery_parser 在 8/21 改为输出「Advantage(C)发5」格式后, 解析器的
     兼容逻辑就一直正常工作(实测 8/26、8/28、9/02 的 i_c/s_c/i_h/s_h 都在)。
     写死 notion_days 会把「早就修好的历史缺口」说成「整段都没有」, 与今天上午黄金
-    premium 那个假「每日更新」标签是同一类病: **说明文字与真实状态脱节**。
+    premium 那个假「每日更新」标签是同一类病: <b>说明文字与真实状态脱节</b>。
 
     ★★踩坑(同日): 第一版传 fetch_comex_issue_stop_firms() 的返回值进来, 结果渲染出
     「all ~ w 区间内 Gold 4 天」这种垃圾 —— 因为**那个返回值的 metals 已经是按窗口
@@ -4255,9 +4287,9 @@ def _ch_gap_text(cf=None):
 def _comex_firms_who_html():
     """★2026-08-22(Chao): 「不同的机构代表哪些利益集团」——交割席位的阵营背景说明。
 
-    ★纪律: 只写**本数据集中真实出现过的机构**(已核对归一后的 34 家名单), 不凑不编;
+    ★纪律: 只写<b>本数据集中真实出现过的机构</b>(已核对归一后的 34 家名单), 不凑不编;
       阵营归类基于机构公开身份(LBMA 做市商资格 / 清算所 / FCM 经纪商等公开事实),
-      对其交割动机的解读**明确标注为一般性行为逻辑, 不是对某家的指控**。
+      对其交割动机的解读<b>明确标注为一般性行为逻辑, 不是对某家的指控</b>。
     """
     groups = [
         ("清算所自身", "#8a8578",
@@ -4445,7 +4477,7 @@ def _fiscal_news_html(fn):
             f'<span class="fn-cat" style="color:{bar};">{_esc(ev.get("category",""))}</span>'
             f'</div>'
             f'<div class="fn-title">{_esc(ev.get("title",""))}</div>'
-            f'<div class="fn-sum">{_esc(ev.get("summary",""))}</div>'
+            f'<div class="fn-sum">{_esc_md(ev.get("summary",""))}</div>'
             f'<div class="fn-src">{src_link}</div>'
             f'</div>'
         )
@@ -4536,7 +4568,7 @@ def _cb_swaps_html(d):
 
     Chao:「我刚刚发现有一个指标我们好像遗失掉了，叫"央行货币互换"…
           你能不能看一下你是否可以把这个数据拿到，然后每天去爬取。」
-    数据源 = 纽约联储官方 API(免费无 key)。**抓不到就显示未就绪, 绝不用旧值冒充。**
+    数据源 = 纽约联储官方 API(免费无 key)。<b>抓不到就显示未就绪, 绝不用旧值冒充。</b>
     """
     if not isinstance(d, dict) or d.get("status") not in ("ok", "empty"):
         msg = (d or {}).get("error") or "数据未就绪"
@@ -4607,13 +4639,13 @@ def _kol_roster_table_html(hist_keys=None):
     Chao 指定的 13 个维度(一个都不能少):
       姓名 / 编号 / 领域 / 在世年份 / 现任头衔 / 代表性成就 / 荣誉 /
       主要活动范围 / 观点 / 追踪价值 / 机构名称 / 书籍 / 代表性言论(仅当年)
-    缺失处理(Chao 明确): 年龄查不到 → 标「未公开」;已故者 → **必须特别标出「已故」**。
+    缺失处理(Chao 明确): 年龄查不到 → 标「未公开」;已故者 → <b>必须特别标出「已故」</b>。
 
-    ★自动同步: 直接读 data/kol_registry.json 的 active 全量, **不写死人数**。
+    ★自动同步: 直接读 data/kol_registry.json 的 active 全量, <b>不写死人数</b>。
       名册由每日 cron 步骤 0 从 Notion「KOL List」单向镜像 ——
       Notion 侧新增 KOL, 次日自动多一张卡, 无需改代码。
     ★档案正文取自 data/kol_profiles.json(逐人联网检索撰写);
-      该文件缺某人时, 卡片只显示名册已有字段并标「档案待补」, **绝不用模型猜写**。
+      该文件缺某人时, 卡片只显示名册已有字段并标「档案待补」, <b>绝不用模型猜写</b>。
     """
     import os as _os
     _dir = _os.path.dirname(__file__)
@@ -4672,8 +4704,9 @@ def _kol_roster_table_html(hist_keys=None):
     def _row(label, val, cls=""):
         if not val:
             return ""
+        # ★_esc_md 而非 _esc: 档案正文里写的是 Markdown, HTML 不认 ** 会字面显示
         return (f'<div class="kp-r{cls}"><span class="kp-k">{label}</span>'
-                f'<span class="kp-v">{_esc(val)}</span></div>')
+                f'<span class="kp-v">{_esc_md(val)}</span></div>')
 
     blocks = []
     for d, g in sorted(groups.items(), key=lambda x: -len(x[1])):
@@ -4789,7 +4822,7 @@ def _bis_section_html(bis_latest, page_url, bis_all=None):
         pdf = r.get("pdf_url", "")
         pdf_link = (f'　·　<a class="src-lnk" href="{_esc(pdf)}" target="_blank" rel="noopener">原文 PDF</a>'
                     if pdf else "")
-        pts = "".join(f'<li>{_esc(p)}</li>' for p in r["summary"])
+        pts = "".join(f'<li>{_esc_md(p)}</li>' for p in r["summary"])
         panes.append(
             f'<div class="bis-pane{act}" data-bis="{i}">'
             f'<div class="bis-meta"><b>{_esc(r.get("title",""))}</b>'
@@ -5301,7 +5334,7 @@ def _official_private_svg(off, priv, w=1050, h=230):
 def _official_private_block(op):
     """全球 官方 vs 私人 持有美债。op: fetch_tic_official_vs_private()。
 
-    ★这是 TIC 唯一的央行/非央行拆分, **只有全球总量, 没有分国**——
+    ★这是 TIC 唯一的央行/非央行拆分, <b>只有全球总量, 没有分国</b>——
       Chao 2026-09-09 问「日本/美国央行和其他机构持有美债有没有区别」,
       答案是有且巨大, 但分国拆分美国财政部不公布(见函数 docstring)。
     """
@@ -6825,11 +6858,11 @@ def _cn_liq_html(cl):
       图1 OMO 逆回购分品种柱状 · 日频
       图2 DR007 折线 · 日频
       图3 MLF 月度操作柱状 · 事件频
-      图4 SFISF 股市托底工具 · 事件频（**替换原 PSL**）
+      图4 SFISF 股市托底工具 · 事件频（<b>替换原 PSL</b>）
 
     ★ PSL 已下架（Chao：「已经是过时的了」）—— 工具本身在清退，官网停更 448 天。
     ★ SFISF = 券商/基金/险资拿股票资产抵押换国债，钱只能投股市 → 最直接的官方托市工具。
-    ★ 每个子图都标**更新频率**（Chao 明确要求），避免把事件频当日频读。
+    ★ 每个子图都标<b>更新频率</b>（Chao 明确要求），避免把事件频当日频读。
     """
     if not cl or cl.get("status") != "ok":
         err = (cl or {}).get("error") or ""
@@ -6905,8 +6938,8 @@ def _cn_liq_html(cl):
     h.append(_cn_sfisf_html(sf))
 
     # ── 图5 A股两融余额（Chao 2026-08-25 指定）──
-    # 定位：SFISF 停发独立公告后，用**日频**杠杆资金活跃度回答「钱在进还是在退」。
-    # 这是**代理指标不是 SFISF 本身** —— 标题与说明必须写清，避免口径混淆。
+    # 定位：SFISF 停发独立公告后，用<b>日频</b>杠杆资金活跃度回答「钱在进还是在退」。
+    # 这是<b>代理指标不是 SFISF 本身</b> —— 标题与说明必须写清，避免口径混淆。
     mgr = (cl.get("margin") or [])
     if mgr:
         h.append('<div class="part-title" style="font-size:14px;margin-top:12px">'
@@ -6938,10 +6971,10 @@ def _cn_liq_html(cl):
                  f'数据源：上交所官方每日 ETF 规模表。'
                  f'{f"覆盖约 {_n} 个交易日。" if _n else ""}'
                  f'<b>注意：代理指标，不等于 SFISF 本身。</b></p>')
-        # ★ 2026 年这条曲线断崖式下行是**真实事件**不是数据故障，必须写明，
+        # ★ 2026 年这条曲线断崖式下行是<b>真实事件</b>不是数据故障，必须写明，
         #   否则读图的人第一反应是"抓错了"。已用公开报道逐点交叉验证：
         #   我们的 2025-12-31=888.30 / 2026-01-21=719.78 / 2026-01-27=575.33 /
-        #   2026-08-10=248.61，与媒体披露数字**完全一致**。
+        #   2026-08-10=248.61，与媒体披露数字<b>完全一致</b>。
         h.append('<p class="oil-meta" style="border-left:3px solid #c9a961;'
                  'padding-left:9px;color:#c9a961">'
                  '<b>读图提示：2026 年的断崖是真实事件，不是数据故障。</b>'
@@ -6962,7 +6995,7 @@ def _etf_share_svg(series, names, w=940, h=250):
 
     ★ 归一化到「首日=100」再画：三只量级差 5 倍（300ETF 238 亿份 vs 500ETF 49 亿份），
       直接画绝对值会让小的那条压成一条直线，看不出变化。
-      归一化后比较的是**各自的相对增减**，这正是我们要看的「进出方向」。
+      归一化后比较的是<b>各自的相对增减</b>，这正是我们要看的「进出方向」。
     """
     codes = [c for c in ("510300", "510050", "510500") if series.get(c)]
     if not codes:
@@ -7078,8 +7111,8 @@ def _cn_delta_table(dl, sf):
     """周 / 月 / 半年 三口径变动对比表。
 
     ★ 流量与存量分开算（口径不同，混用会得出荒谬结论）：
-      - DR007 是**价格点位** → 比最新 vs N 天前的点位
-      - OMO 是**流量** → 比本区间投放总额 vs 上一区间总额
+      - DR007 是<b>价格点位</b> → 比最新 vs N 天前的点位
+      - OMO 是<b>流量</b> → 比本区间投放总额 vs 上一区间总额
         （若对 OMO 也用点位法，会出现"较上周 -100%"，其实只是当天没操作）
     """
     rows = []
@@ -7118,7 +7151,7 @@ def _cn_delta_table(dl, sf):
                      "净额对比",
                      _fmt_delta(n30, "亿", dec=0), _fmt_delta(n90, "亿", dec=0),
                      _fmt_delta(n180, "亿", dec=0)))
-    # ★ A股两融余额（Chao 2026-08-25 指定）：SFISF 停发独立公告后的**日频**杠杆资金代理。
+    # ★ A股两融余额（Chao 2026-08-25 指定）：SFISF 停发独立公告后的<b>日频</b>杠杆资金代理。
     #   存量指标 → 比点位差，不做区间求和。数据一直在 B2，此前从未渲染。
     mg = dl.get("margin") or {}
     g7, g30, g180 = mg.get("7d"), mg.get("30d"), mg.get("180d")
@@ -7164,7 +7197,7 @@ def _cn_sfisf_html(sf):
 
     ★ Chao 的用途是「短期看有没有剧增，观察托底股市」。
       当前官方只披露过 2 次操作（2024-10 / 2025-01），此后 600 天无新操作 ——
-      **「没有剧增」本身就是答案**，必须显式说出来，而不是留个空图让人以为抓挂了。
+      <b>「没有剧增」本身就是答案</b>，必须显式说出来，而不是留个空图让人以为抓挂了。
     """
     if not sf:
         return ('<p class="empty">SFISF 暂无操作记录。'
@@ -7185,7 +7218,7 @@ def _cn_sfisf_html(sf):
 
     # 判定语——直接回答「有没有剧增」
     # ★ 2026-08-25 口径订正：不能说「未启用」。2025-05-07 央行公告已将 SFISF(5000亿)
-    #   与股票回购增持再贷款(3000亿)**合并为 8000 亿总额度统一使用**，此后不再单独
+    #   与股票回购增持再贷款(3000亿)<b>合并为 8000 亿总额度统一使用</b>，此后不再单独
     #   发布 SFISF 操作公告 —— 所以空窗期的准确含义是「无独立公告」，而非「央行没操作」。
     #   交叉印证：中证协 2026-04 披露「截至 2025 年末累计操作 1050 亿」，与本表 500+550
     #   完全一致，说明官网 2 条即为独立公告全量；同期货币政策委员会例会已不再提及该工具。
@@ -7913,9 +7946,9 @@ def _euro_ncb_html(ncb):
 
     ★2026-09-09 新增(Chao 要求)。**必须与上方 Eurosystem 卡片、
       以及 TIC 持有美债表区分清楚**, 三者口径完全不同:
-        - Eurosystem 卡片 = ECB 本部 + 20 家成员国央行的**合并**表
-        - 本表 = 五国央行**各自**的总资产(可横向比较, 也能看出谁占大头)
-        - TIC「德国持有美债 107.8B」= 德国**所有**外国持有人(保险/养老金/基金),
+        - Eurosystem 卡片 = ECB 本部 + 20 家成员国央行的<b>合并</b>表
+        - 本表 = 五国央行<b>各自</b>的总资产(可横向比较, 也能看出谁占大头)
+        - TIC「德国持有美债 107.8B」= 德国<b>所有</b>外国持有人(保险/养老金/基金),
           与德国央行无关 —— 实测德国央行「对非欧元区外币债权」仅 €0.004B。
     """
     if not ncb:
@@ -10007,9 +10040,9 @@ mkRadar('rLong', RADAR.long);
 // ═══ 自动生成左侧模块索引栏(按主题分组 + 可折叠) ═══
 (function() {{
   // ★2026-08-25(Chao 报「左边目录和右边 chart 又开始跳动」)：根因是本行以前抓的是
-  // **全部** .part-title —— 但 .part-title 这个类同时被两种东西用：
+  // <b>全部</b> .part-title —— 但 .part-title 这个类同时被两种东西用：
   //   ① 顶级 section 标题（模板里写死，带 <span class="part-num">＋</span>）  46 个
-  //   ② **图内小标题**（_cn_liq_html / AI 信用维度等函数内生成，无 part-num）  6 个
+  //   ② <b>图内小标题</b>（_cn_liq_html / AI 信用维度等函数内生成，无 part-num）  6 个
   // ②本不该进导航。它们不匹配任何 GROUPS 关键词 → 全掉进「其他」，
   // 而「其他」按"首个成员 DOM 位置"排序会插在页面中部，于是向下滚动时
   // 高亮在「其他」和真实分组之间来回窜 —— 这就是"跳动"。
@@ -10019,12 +10052,12 @@ mkRadar('rLong', RADAR.long);
   var box = document.getElementById('sidenav-links');
   if (!titles.length || !box) return;
 
-  // ★2026-08-22(Chao): 左侧菜单顺序必须与右侧内容 DOM 顺序**完全一致**。
+  // ★2026-08-22(Chao): 左侧菜单顺序必须与右侧内容 DOM 顺序<b>完全一致</b>。
   // 旧实现按 GROUPS 数组的固定顺序渲染分组, 与页面实际排布脱节 ——
   // 往下 browse 时高亮会在分组间来回跳(实测 3 次向上跳跃), 且 7 个 section
   // 未命中任何关键词掉进「其他」, 而「其他」渲染在最底部 → 读到页面中部
   // 高亮突然窜到菜单最下面。
-  // 现在改为: 分组按其**首个成员在 DOM 中的位置**排序(首次出现即建组),
+  // 现在改为: 分组按其<b>首个成员在 DOM 中的位置</b>排序(首次出现即建组),
   // 组内成员也按 DOM 顺序 → 菜单自上而下 === 页面自上而下。
   // 「机构与政要持仓」由 Chao 指定固定放最后(在「其他」之下), 用 pinLast 标记。
   var GROUPS = [

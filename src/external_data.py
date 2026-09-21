@@ -22,7 +22,7 @@ KOL_BACKFILL_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "kol", 
 def _tgs(v, limit=None):
     """targets 归一为字符串(上游可能是 str / list / None)。
 
-    ★2026-08-24: 深度重抓时部分记录的 targets 被写成**数组**。
+    ★2026-08-24: 深度重抓时部分记录的 targets 被写成<b>数组</b>。
       对 list 做 [:150] 不报错但会静默切成子列表, 比直接崩更难发现;
       对 list 做 .strip() 则直接 AttributeError(线上 build 实崩)。
       故所有取用点统一走本函数。
@@ -761,7 +761,7 @@ def _latest_row(db_id, title_field="Date"):
 def _pct_change(series, key, days):
     """时序在 N 个自然日前 vs 最新 的变动。
 
-    ★ 用**自然日回溯**而非"往前数 N 个点"：日频序列有周末与节假日缺口，
+    ★ 用<b>自然日回溯</b>而非"往前数 N 个点"：日频序列有周末与节假日缺口，
       数点会让「过去一周」实际跨越十几天，口径失真。
     返回 (最新值, 基准值, 绝对变动, 百分比变动) —— 找不到基准就返回 None，不外推。
     """
@@ -795,7 +795,7 @@ def _pct_change(series, key, days):
 
 
 def _omo_weekly_sum(omo, days):
-    """OMO 是流量不是存量 → 比「最新值变动」应看**区间投放总额**。
+    """OMO 是流量不是存量 → 比「最新值变动」应看<b>区间投放总额</b>。
 
     ★ 存量指标(DR007/余额)看点位变动；流量指标(逆回购投放)看区间求和。
       混用会得出荒谬结论（比如"逆回购较上周-100%"其实只是当天没操作）。
@@ -832,18 +832,18 @@ def fetch_china_liquidity(days=400):
     """B2 中国流动性时序 → 四条曲线（Chao 2026-08-25 要求）。
 
     三层融资渠道 + 一个股市稳定工具：
-      ① OMO   逆回购，日频，短期     → 隔夜 / 7天 分品种（**流量**）
-      ② DR007 银行间质押回购利率，日频 → 短期资金**价格**（存量点位）
+      ① OMO   逆回购，日频，短期     → 隔夜 / 7天 分品种（<b>流量</b>）
+      ② DR007 银行间质押回购利率，日频 → 短期资金<b>价格</b>（存量点位）
       ③ MLF   中期借贷便利，月频      → 中期投放（流量）
-      ④ SFISF 证券基金保险互换便利     → **股市托底工具**，看有无剧增
+      ④ SFISF 证券基金保险互换便利     → <b>股市托底工具</b>，看有无剧增
 
     ★ PSL 已于 2026-08-25 下架（Chao：「已经是过时的了，或者说不太需要了」）：
       余额自 2024-02 峰值 34,022 亿腰斩到 2025-05 的 17,939 亿，官网停更 448 天，
       工具本身在清退。抓取器 `pboc_mlf_psl_scraper` 保留（数据仍在写 B2），
-      **只是不再渲染到 dashboard**。
+      <b>只是不再渲染到 dashboard</b>。
 
-    ★ 频率混装的坑：B2 是**日频**表，但 MLF/SFISF 是**事件频**指标，
-      只在公告日/操作日那一行有值，其余日子为 None。**这不是缺数**。
+    ★ 频率混装的坑：B2 是<b>日频</b>表，但 MLF/SFISF 是<b>事件频</b>指标，
+      只在公告日/操作日那一行有值，其余日子为 None。<b>这不是缺数</b>。
       下游必须 dropna 后再连线，否则折线会断成一堆孤点。
     """
     out = {"status": "未获取", "omo": [], "dr007": [], "mlf": [], "sfisf": [],
@@ -896,7 +896,7 @@ def fetch_china_liquidity(days=400):
                                  "rate_bp": _n(p, "SFISF_中标费率_bp")})
         # ★ A股两融余额（Chao 2026-08-25）：数据一直在 B2 同一张表里（543 条 / 2024-06 起），
         #   但从未渲染到 dashboard —— 「数据已有」≠「已在看板上」。
-        #   用途：SFISF 停发独立公告后，两融是**日频**的杠杆资金活跃度代理，
+        #   用途：SFISF 停发独立公告后，两融是<b>日频</b>的杠杆资金活跃度代理，
         #   能回答「资金在进还是在退」，比季度/年度的 SFISF 口径灵敏得多。
         v = _n(p, "A股两融余额_万亿")
         if v is not None:
@@ -911,7 +911,7 @@ def fetch_china_liquidity(days=400):
                        default=None)
 
     # ── MLF 净投放（Chao 2026-08-25：「总投放量，但是有到期量，对吗？」）──
-    # ★ 到期量不是估算，是**精确推算**：MLF 全部为 1 年期（实测 20/20 条 tenor 均为「1年」），
+    # ★ 到期量不是估算，是<b>精确推算</b>：MLF 全部为 1 年期（实测 20/20 条 tenor 均为「1年」），
     #   所以本月到期量 ≡ 12 个月前的操作量。数据来自我们自己已入库的同一序列。
     #   净投放 = 本月操作量 − 12 个月前操作量 —— 这才是对银行体系流动性的真实影响：
     #   投放 5000 亿但到期 6000 亿，实为净回笼 1000 亿，只看投放会得出反向结论。
@@ -937,16 +937,16 @@ def fetch_china_liquidity(days=400):
         "mlf_net": {f"{d}d": _pct_change(
             [x for x in out["mlf"] if x.get("net") is not None], "net", d)
             for d in (30, 90, 180)},
-        # 两融是**存量**（余额），比点位差，不是区间求和
+        # 两融是<b>存量</b>（余额），比点位差，不是区间求和
         "margin": {f"{d}d": _pct_change(out["margin"], "v", d)
                    for d in (7, 30, 180)},
     }
 
     # ── 宽基 ETF 份额（Chao 2026-08-25，B 方案）──
-    # ★ 只看**份额**不看规模/价格：规模=净值×份额会被指数涨跌污染
+    # ★ 只看<b>份额</b>不看规模/价格：规模=净值×份额会被指数涨跌污染
     #   （指数涨10%、份额没动，规模也涨10%，看着像流入其实没有）。
     #   份额增加 = 真有人申购 = 真金白银进场。这是判断国家队在不在场唯一干净的口径。
-    # 数据由 src/fetchers/etf_share.py 采自**上交所官方**每日 ETF 规模表，落盘 data/etf_share.json。
+    # 数据由 src/fetchers/etf_share.py 采自<b>上交所官方</b>每日 ETF 规模表，落盘 data/etf_share.json。
     out["etf"] = _load_etf_share()
     if out["etf"].get("series"):
         out["deltas"]["etf"] = {
@@ -964,13 +964,13 @@ def _load_etf_share():
     """读 data/etf_share.json → {series: {code: [{date, v}]}, names: {...}}。
 
     文件由 etf_share.py 采集器维护（键为 YYYYMMDD，值为 {code: 亿份}）。
-    这里只做读取与格式转换，**不在渲染路径里发网络请求**——
+    这里只做读取与格式转换，<b>不在渲染路径里发网络请求</b>——
     否则 dashboard 构建会被上游限流拖垮。
 
     ★★ 缺口护栏（2026-08-25 实测教训）：回填未跑完时序列会「两端有、中间空」，
        相邻两点跨越数月缺口，画出来就是一根 −72% 的悬崖 —— 看着像巨额赎回，
        实际只是没采到。这类假象比缺数据危险得多（会直接导致误判）。
-       故：**相邻两点间隔 > 20 天即判定为缺口，从缺口处截断，只保留最近的连续段**，
+       故：<b>相邻两点间隔 > 20 天即判定为缺口，从缺口处截断，只保留最近的连续段</b>，
        并回报 gap_trimmed 供上层标注。宁可少画一段，也不画出假崩盘。
     """
     path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
@@ -981,7 +981,7 @@ def _load_etf_share():
         with open(path, encoding="utf-8") as f:
             raw = json.load(f)
     except (OSError, ValueError) as e:
-        # ★ 只吞「文件读不到 / JSON 坏了」这两类**数据问题**。
+        # ★ 只吞「文件读不到 / JSON 坏了」这两类<b>数据问题</b>。
         #   绝不用裸 except：那样代码里的 NameError/TypeError 会被伪装成
         #   "读取失败"，看板照常渲染，bug 永远浮不上来（2026-08-25 实际踩到）。
         return {"status": f"读取失败: {type(e).__name__}", "series": {}}
@@ -1153,8 +1153,8 @@ def fetch_ecb_balance_sheet(to_usd=True, usd_per_eur=None):
     """欧元体系 Eurosystem 资产负债表(完整分项版, 格式与另三国一致)。
 
     ★★2026-09-09 改名(Chao 追问口径时发现标签撒谎):
-      原名「欧洲央行 ECB」是**错的** —— 数据源 ILM/W.U2.C 中
-      U2=整个欧元区、C=Eurosystem, 即 **ECB 本部 + 20 家成员国央行的合并表**,
+      原名「欧洲央行 ECB」是<b>错的</b> —— 数据源 ILM/W.U2.C 中
+      U2=整个欧元区、C=Eurosystem, 即 <b>ECB 本部 + 20 家成员国央行的合并表</b>,
       不是 ECB 一家。实测合并总资产 €5,912B, 而德国央行一家就 €2,271B;
       卡片上的「黄金 1,432B」主要是德/意/法等国央行的金库, 不在法兰克福。
       看单国央行请用 fetch_euro_ncb_balance_sheets()。
@@ -1283,12 +1283,12 @@ def fetch_euro_ncb_balance_sheets(to_usd=True, usd_per_eur=None, months=78):
       这五个国家的央行的资产负债表」)。
 
     ★★口径警告(必须随数据一起显示, 否则会造成严重误读):
-      本函数的数字与「TIC 德国持有美债 107.8B」**不是包含关系, 也不是同一批持有人**。
+      本函数的数字与「TIC 德国持有美债 107.8B」<b>不是包含关系, 也不是同一批持有人</b>。
         - TIC「德国 107.8B」= 登记在德国的托管账户里的美债, 持有人是德国的
-          保险/养老金/基金/企业等**所有外国持有人**, 央行只占极小部分。
-        - 本函数 = 该国央行**自己**的资产负债表总资产。
+          保险/养老金/基金/企业等<b>所有外国持有人</b>, 央行只占极小部分。
+        - 本函数 = 该国央行<b>自己</b>的资产负债表总资产。
       实测佐证: Bundesbank 的「对非欧元区外币债权」(TTA008) 仅 €0.004B ——
-      **欧元区各国央行几乎不持有美债**(外汇储备已大部分上缴 ECB 统一管理)。
+      <b>欧元区各国央行几乎不持有美债</b>(外汇储备已大部分上缴 ECB 统一管理)。
       所以「德国央行在增持美债」这类推论不能从这两张表推出来。
 
     数据源: ECB Data Portal SDMX, BSI 数据集 NCB 部门(BS_REP_SECTOR='N')。
@@ -1298,7 +1298,7 @@ def fetch_euro_ncb_balance_sheets(to_usd=True, usd_per_eur=None, months=78):
         端点各不相同且我实测的候选端点全部不可用(返回 HTML 页面而非数据);
         ECB BSI 一套 key 模板五国通吃, 且口径统一可横向比较。
       ★局限: BSI 的 NCB 部门只有 T00(总资产) 和 L40(发行债务证券) 两个科目,
-        **没有黄金/证券等分项**。德国的详细分项可另走 Bundesbank API
+        <b>没有黄金/证券等分项</b>。德国的详细分项可另走 Bundesbank API
         (BBBK11.D.TTA032 等), 但那样五国口径就不一致了, 故此处只做总资产。
 
     返回 {CC: {name, flag, series:[(YYYY-MM, 值),...], latest, first, delta, delta_pct,
@@ -1474,7 +1474,7 @@ def fetch_cb_liquidity_swaps(years=1):
               本周成交额是 1.21 亿美元, 欧洲央行在 8月19号成交了 1.19 亿美元。」
     实测两个数字与官方 API 完全吻合(W34=1.21亿 / 08-19 ECB=1.19亿), 已交叉验证。
 
-    为什么重要: 美联储与外国央行的美元互换额度是**离岸美元荒的直接温度计**。
+    为什么重要: 美联储与外国央行的美元互换额度是<b>离岸美元荒的直接温度计</b>。
       平时接近零; 一旦某国央行大额动用, 说明该辖区银行体系在境外市场借不到美元。
       2008/2020 危机期间曾冲到数千亿美元。与 FIMA 回购、SOFR-IORB 利差互为佐证。
 
@@ -1482,7 +1482,7 @@ def fetch_cb_liquidity_swaps(years=1):
       端点: /api/fxs/all/search.json?startDate=&endDate=
       ★注意 /latest.json 常返回空数组(只在当日有新操作时才有值), 不能用作主源;
         必须用 search.json 按日期区间拉取。
-    单位: 原始 amount 为**美元**(非百万/十亿), 直接除 1e8 得"亿美元"。
+    单位: 原始 amount 为<b>美元</b>(非百万/十亿), 直接除 1e8 得"亿美元"。
     """
     import datetime as _dt
     out = {"status": "error", "as_of": None, "ops": [], "weekly": [],
@@ -1991,7 +1991,7 @@ def write_custody_notion(cust=None):
 # 单位: 十亿美元($B)。绝不编: 抓不到标 status。
 TIC_MFH_HIST_URL = "https://ticdata.treasury.gov/Publish/mfhhis01.txt"
 # ★2026-08-21 修复(Chao 报"图上说滞后233天,右上角却写每月更新"):
-# mfhhis01.txt 是**历史存档表**, 只到上一自然年年末(2026-07 更新时内容仍止于 2025-12),
+# mfhhis01.txt 是<b>历史存档表</b>, 只到上一自然年年末(2026-07 更新时内容仍止于 2025-12),
 # 当年月度必须另取 slt_table5(13 个月滚动窗口)。只用存档表会让数据永远落后半年以上,
 # 且 2026 全年真值缺失 —— 属"静默陈旧", 违反项目铁律。两源合并, 当期表优先。
 TIC_SLT_T5_URL = ("https://ticdata.treasury.gov/resource-center/"
@@ -2000,14 +2000,14 @@ TIC_SLT_T5_URL = ("https://ticdata.treasury.gov/resource-center/"
 # ★★2026-09-09 重大修正(Chao 追问「欧盟到底哪个央行在增持美债」时挖出):
 #
 # 此前认定「Table 5 只列前20大, 德/意/荷/西/芬 落在 All Other, 故 EU9 只能退回
-# 年度存档表, 滞后至上年末(251 天)」—— **这个结论是错的, 因为我只查了一张表**。
+# 年度存档表, 滞后至上年末(251 天)」—— <b>这个结论是错的, 因为我只查了一张表</b>。
 # 实测 Table 5 确实只有 4/9 国(法/比/卢/爱), 那部分判断没错;
-# 但 TIC 另有 **Table 3**, 含 **113 个国家/地区**、欧元区 9 国全齐、
+# 但 TIC 另有 <b>Table 3</b>, 含 <b>113 个国家/地区</b>、欧元区 9 国全齐、
 # 覆盖 2020-01 → 2026-06, 与日/中完全同频。
 #   → EU9 全口径可做到滞后约 2 月, 既不必砍成 4 国, 也不必估算。
 #   → 代价: Table 3 只回溯到 2020-01, 2008-2019 长历史仍需年度表拼接。
 #
-# ★Table 3 还独家提供**全球**「官方 vs 非官方」拆分(码 99990 / 99991):
+# ★Table 3 还独家提供<b>全球</b>「官方 vs 非官方」拆分(码 99990 / 99991):
 #     2020-01  官方 4169.9B  私人 2857.4B  官方占比 59.3%
 #     2026-06  官方 3778.1B  私人 5520.8B  官方占比 40.6%
 #   全球央行六年净减持约 392B, 私人净增约 2663B —— 这是回答「央行在做什么」的
@@ -2027,9 +2027,9 @@ def _parse_tic_table3(raw):
       行7  表头 : Country | Country Code | Date | Holdings | Net U.S. Sales | ...
       行8  机器名: country | country_code | date | for_treas_pos | ...
       数据行    : Austria | 10189 | 2026-06 | 5728 | -39 | 3687 | ...
-      第 4 列(idx 3) = for_treas_pos = 总持仓, 单位**百万美元**
+      第 4 列(idx 3) = for_treas_pos = 总持仓, 单位<b>百万美元</b>
 
-    ★列名必须按表头认, 别按加总猜: 那 3 组数是 总额/长期/短期, **不是**官方/私人。
+    ★列名必须按表头认, 别按加总猜: 那 3 组数是 总额/长期/短期, <b>不是</b>官方/私人。
       我第一次就把 (1116683, 1046231, 70452) 误当成 总/官方/私人 —— 读了表头才发现
       是 总/长期/短期(1046231+70452=1116683 恰好也吻合, 加总验证救不了这个错)。
 
@@ -2068,9 +2068,9 @@ def _parse_tic_table3(raw):
 def fetch_tic_official_vs_private():
     """全球「外国官方(央行/主权基金) vs 外国私人」持有美债月度序列。
 
-    ★这是 TIC 唯一的官方/私人拆分, **只有全球总量, 不分国别**(码 99990/99991)。
+    ★这是 TIC 唯一的官方/私人拆分, <b>只有全球总量, 不分国别</b>(码 99990/99991)。
       Chao 2026-09-09 问「日本/美国央行和其他机构持有美债有没有区别」——
-      有区别且巨大, 但**分国拆分财政部不公布**, 只能看全球总量 + 各国央行自己的表。
+      有区别且巨大, 但<b>分国拆分财政部不公布</b>, 只能看全球总量 + 各国央行自己的表。
 
     实测(2026-09-09):
       2020-01  官方 4169.9B  私人 2857.4B  官方占比 59.3%
@@ -2282,7 +2282,7 @@ def fetch_country_ust_holdings(years=10):
             cur_html = r5.text
     except Exception:
         cur_html = None
-    # ★★Table 3(全国别月度, 113 个条目): 2026-09-09 新增, 优先级**高于** Table 5。
+    # ★★Table 3(全国别月度, 113 个条目): 2026-09-09 新增, 优先级<b>高于</b> Table 5。
     #   Table 5 只列前20大 → 欧元区只有 4/9 国(法比卢爱), 逼得 EU 退回年度存档表,
     #   滞后 251 天。Table 3 九国全齐且到 2026-06 —— EU 全口径终于能与日/中同频。
     #   代价: Table 3 只回溯 2020-01, 更早的长历史仍由 mfhhis01 年度表提供(两者互补)。
@@ -2308,9 +2308,9 @@ def fetch_country_ust_holdings(years=10):
     # ★★欧元区分组(Chao 2026-09-09: 「你把我当做一个国债交易员, 按照我需要关注的点,
     #   把欧盟的数据重新体现一下…现在滞后 251 天的数据全部拢在一起, 这是不可以接受的」)
     #
-    #   交易员视角下, 欧元区 9 国**不是同一类持有人**, 拢成一个数会抹掉信号:
+    #   交易员视角下, 欧元区 9 国<b>不是同一类持有人</b>, 拢成一个数会抹掉信号:
     #     - 托管中心(比/卢/爱): 全世界的钱寄存在 Euroclear/Clearstream, 持仓变化
-    #       主要反映**第三国资金流向**(2014 年比利时暴涨被广泛认为是中国借道),
+    #       主要反映<b>第三国资金流向</b>(2014 年比利时暴涨被广泛认为是中国借道),
     #       与欧洲自身需求无关。卢森堡持仓 434B 是本国 GDP 的 4.3 倍即为明证。
     #     - 真实需求国(德/法/意/荷/西/芬): 持仓量级与经济体量匹配, 反映欧洲机构
     #       (保险/养老金/基金)的真实配置行为, 是美欧利差与对冲成本的函数。
@@ -2374,7 +2374,7 @@ def fetch_country_ust_holdings(years=10):
             "status": "ok",
             "source": "US Treasury TIC Major Foreign Holders (monthly)",
             # ★2026-09-09 起改用 Table 3(113 国全国别月度), EU 不再受前20大限制。
-            #   旧注释称「EU 只能用年度存档表滞后半年」——**已过时**, 保留在
+            #   旧注释称「EU 只能用年度存档表滞后半年」——<b>已过时</b>, 保留在
             #   TIC_SLT_T3_URL 上方作为错误记录。
             "lag_reason": (None if cur_ok else
                            "TIC 当期表(Table 5)仅列前20大持有国，欧元区多数成员国归入 All Other，"
@@ -2394,7 +2394,7 @@ def fetch_country_ust_holdings(years=10):
                 "column": "for_treas_pos(第4列, 总持仓, 百万美元→$B)",
                 "agg": ("逐月加总: " + " + ".join(_T3_NAME.get(key) or [])
                         if len(_T3_NAME.get(key) or []) > 1 else "单一国家行"),
-                "note": ("TIC 为**托管口径**: 统计证券登记在哪国托管账户，"
+                "note": ("TIC 为<b>托管口径</b>: 统计证券登记在哪国托管账户，"
                          "非最终受益人。美国财政部原文: 'cannot attribute holdings "
                          "with complete accuracy … held in a custodial account in a "
                          "third country, the true ownership will not be reflected'。"),
@@ -2467,7 +2467,7 @@ def fetch_treasury_auctions(history_days=420):
         st, term, ad = x.get("security_type"), x.get("security_term"), x.get("auction_date")
         # ★2026-09-07 修: 剔除 TIPS(通胀保值债券)。
         #   TIPS 的 security_type 同样是 Note/Bond、security_term 同样是 10-Year/30-Year,
-        #   靠这两个字段过不掉。但它报的是**实际收益率**(扣通胀)且发行规模小得多,
+        #   靠这两个字段过不掉。但它报的是<b>实际收益率</b>(扣通胀)且发行规模小得多,
         #   混进来会污染名义券曲线 —— 实测两条脏数据:
         #     10-Year 2026-07-23  规模 21.0B  收益率 2.438%  (邻月名义券 42.0B / 4.68%)
         #     30-Year 2026-02-19  规模  9.0B  收益率 2.473%  (邻月名义券 25.0B / 5.22%)
@@ -3922,7 +3922,7 @@ def fetch_silver_imports_data(json_path=None):
 def _fetch_gold_premium_api():
     """★2026-09-08 新增: 从 WGC 官方 API 抓 premium 增量。
 
-    背景(Chao 报「这张图没有每日更新啊」): 本指标原设计是**纯手工** ——
+    背景(Chao 报「这张图没有每日更新啊」): 本指标原设计是<b>纯手工</b> ——
     「用户从 goldhub 下 xlsx → 人工重跑 parse 脚本」, 从未自动化过, 结果停在
     2026-08-14 断更 25 天, 页面却标着「每日更新」。
 
@@ -3931,14 +3931,14 @@ def _fetch_gold_premium_api():
     页内 fetch 仍 403 —— 说明是 IP 段被 CDN 拉黑, 不是指纹问题。
     自己猜的 API 路径(v13/charts/premium 等)全 404。
 
-    真正的解法是**从页面 HTML 里挖出真实端点**(而不是猜):
+    真正的解法是<b>从页面 HTML 里挖出真实端点</b>(而不是猜):
         https://fsapi.gold.org/api/v11/charts/local-gold-price-premiums
     该域名未被封(页面自己在用), 直连 200, 返回
         chartData.india_premdisc / china_premdisc = [[epoch_ms, value], ...]
         chartData.asOfDate
     实测 260 点滚动窗口(近 1 年)、asOfDate=2026-09-04。
 
-    ★注意只有近 1 年 —— 所以调用方必须与既有 xlsx 历史**合并**而非覆盖,
+    ★注意只有近 1 年 —— 所以调用方必须与既有 xlsx 历史<b>合并</b>而非覆盖,
     否则会把印度 2012 起、中国 2003 起的长历史截断。
     """
     import urllib.request
@@ -4003,7 +4003,7 @@ def fetch_gold_premium(india_path=None, china_path=None):
     # ★2026-09-08: 先用官方 API 抓增量, 与本地 xlsx 历史合并。
     #   API 只给近 1 年(260 点)滚动窗口, 本地 xlsx 有印度 2012 / 中国 2003 起长历史,
     #   所以是 merge 而非 replace —— 覆盖会截断十几年历史。
-    #   同一天两边都有时**以 API 为准**(官方口径可能回溯修订, 如 2025-01 印度方法论重算)。
+    #   同一天两边都有时<b>以 API 为准</b>(官方口径可能回溯修订, 如 2025-01 印度方法论重算)。
     api_note = ""
     try:
         api_ind, api_chn, api_asof = _fetch_gold_premium_api()
@@ -4159,12 +4159,12 @@ def fetch_market_breadth(cache_path=None, lookback_days=250, nh_window=20):
     注: akshare 封装被东财挡, 但原生 push2his API 实测通, 故直接请求(带重试)。
 
     市场广度含义: RSP/SPY 比值下行 = 少数大权重股领涨、多数股走弱(广度恶化),
-    与 NYSE A/D 腾落线「顶背离」同义, 但这是**连续可量化真数据**, 可画折线、可复现判定。
+    与 NYSE A/D 腾落线「顶背离」同义, 但这是<b>连续可量化真数据</b>, 可画折线、可复现判定。
 
     数值化背离判定(可复现规则, 不靠 AI 主观):
       在最近 nh_window 个交易日内,
-      若 S&P(用 SPY 代理)创下近 lookback_days 新高, 但 RSP/SPY 广度比 **未**同步创新高
-      (广度比距其近 lookback 高点还差 > 2%), 则判定为 **顶背离(divergence=True)**。
+      若 S&P(用 SPY 代理)创下近 lookback_days 新高, 但 RSP/SPY 广度比 <b>未</b>同步创新高
+      (广度比距其近 lookback 高点还差 > 2%), 则判定为 <b>顶背离(divergence=True)</b>。
       否则 divergence=False(广度确认)。
 
     返回 {status, as_of, divergence(bool), evidence{...}, spy_points:[(d,close)],
@@ -4289,14 +4289,14 @@ def fetch_market_breadth(cache_path=None, lookback_days=250, nh_window=20):
 def fetch_silver_bank_positions(cache_path=None, weeks=520):
     """白银做市商(bullion banks = commercial)头寸方向 —— CFTC COT commercial 净持仓。
 
-    ★这是「投行/做市商在 COMEX 白银上是接货还是压价」的**一手官方真数据等价物**,
+    ★这是「投行/做市商在 COMEX 白银上是接货还是压价」的<b>一手官方真数据等价物</b>,
     语义覆盖 Michael Lynch(@DtDS_WSS) 的 "cumulative & monthly issues and stops by bullion
     banks" 图想说的核心(做市商头寸方向), 但用 CFTC 官方 Socrata(免key/可回溯到1986/可每周更新),
     而非被 CME 封禁的 issues/stops 逐日抓取。
 
     含义: commercial(商业套保, 主体是 bullion banks) 净持仓通常为净空(对冲实物多头)。
-      - 净空**扩大** = 做市商加空压价 / 卖压增强(与图里 "Issued" 交货压价同向)
-      - 净空**收窄/转多** = 做市商减空 / 被逼平 (与图里 "Stopped" 接货 squeeze 同向)
+      - 净空<b>扩大</b> = 做市商加空压价 / 卖压增强(与图里 "Issued" 交货压价同向)
+      - 净空<b>收窄/转多</b> = 做市商减空 / 被逼平 (与图里 "Stopped" 接货 squeeze 同向)
     绝不编造: 抓不到读上次缓存真值, 绝不覆盖成空。
 
     返回 {status, as_of, source, unit, latest_net, latest_wow, peak_short_date,
@@ -4419,7 +4419,7 @@ def fetch_gold_exports(cache_path=None):
     """美国黄金出口(Nonmonetary gold) —— FRED IEAXGG 季度真数据(1999→今, Mil USD)。
 
     ★对应用户图「各国黄金运回家·2025-26 美国出口货币黄金飙升」。图作者原标 Monetary gold,
-    但 FRED 无此序列; 真正对应该暴涨现象的是 **Nonmonetary gold**(非货币黄金 = 民间/商业实物金
+    但 FRED 无此序列; 真正对应该暴涨现象的是 <b>Nonmonetary gold</b>(非货币黄金 = 民间/商业实物金
     出口, 非央行储备金)。本函数用 FRED 官方真序列 IEAXGG + 真标题, 诚实标注(不照抄不准的
     Monetary)。免 key(fredgraph.csv 直连), 可回溯, 每季更新。
 
@@ -4527,10 +4527,10 @@ def fetch_comex_issue_stop_firms(cache_path=None):
      + Notion「Daily auto tracking」增量, 覆盖 2026-01-06 起)。
 
     与 fetch_comex_issue_stop_weekly 的区别: 那个是大行汇总的周度净值曲线;
-    这个保留 **每家机构** 明细(含 StoneX/Marex 等非银)且含 **铂金**,
+    这个保留 <b>每家机构</b> 明细(含 StoneX/Marex 等非银)且含 <b>铂金</b>,
     用于排 top10 榜单。
 
-    ★排名口径(Chao 2026-08-22 定): 按 **总量** 排, 不按净额。
+    ★排名口径(Chao 2026-08-22 定): 按 <b>总量</b> 排, 不按净额。
       「top10 发货方」= 该窗口内 issued 累计最大的十家;
       「top10 接货方」= stopped 累计最大的十家。
       净额会让大进大出的做市商掉榜, 不符合"谁交货最多"的直觉。
@@ -5106,23 +5106,23 @@ def fetch_liquidity_crisis_panel(start="2025-01-01", cache_path=None):
       我需要这两个来观察每天的流动性危机」)。
 
     ★★为什么不是 Oracle 单名 CDS:
-      单名 CDS(Oracle 5Y)属 Markit/ICE **付费**数据, 无免费合规源 —— 不硬凑、不伪造。
+      单名 CDS(Oracle 5Y)属 Markit/ICE <b>付费</b>数据, 无免费合规源 —— 不硬凑、不伪造。
       Chao 已同意用「跟 Oracle 同级别」的信用利差替代。
       Oracle 真实评级(2026-09 实测核实):
-        S&P **BBB−**(2026-07 下调, 距垃圾级仅一档) / Moody's Baa2 负面展望 / Fitch BBB
+        S&P <b>BBB−</b>(2026-07 下调, 距垃圾级仅一档) / Moody's Baa2 负面展望 / Fitch BBB
         债务 $129.5B ≈ 4.3× EBITDA (Reuters 2026-08-04)
-      故主线取 **BBB 档 OAS**(最贴 Oracle), 并叠 **HY OAS** 作参照 ——
+      故主线取 <b>BBB 档 OAS</b>(最贴 Oracle), 并叠 <b>HY OAS</b> 作参照 ——
       Oracle 正卡在 BBB− 与垃圾级边界, 两线之间的距离就是市场给它的降级风险定价。
 
     ★三条线的分工(都是日频, 可每天更新):
-      SOFR−EFFR  = 货币市场/回购的**资金面**压力(钱够不够)
-      BBB OAS    = 投资级末端的**信用面**压力(愿不愿意借给高杠杆企业)
+      SOFR−EFFR  = 货币市场/回购的<b>资金面</b>压力(钱够不够)
+      BBB OAS    = 投资级末端的<b>信用面</b>压力(愿不愿意借给高杠杆企业)
       HY OAS     = 垃圾级的信用面压力(风险偏好总开关)
       资金面与信用面同时恶化 = 真流动性危机; 只有一个动 = 局部事件。
 
     ★闪崩标注(Chao 选甲+乙两类都标):
       甲 = 金银(GC=F / SI=F), 乙 = 美股(^GSPC / ^IXIC)
-      阈值**不拍脑袋**: 取各自 2025-01 以来日收益率分布的 **P1 分位**,
+      阈值<b>不拍脑袋</b>: 取各自 2025-01 以来日收益率分布的 <b>P1 分位</b>,
       即「本窗口内最极端的 1% 交易日」, 可解释且随数据自适应。
 
     返回 {series:{sofr_effr, bbb_oas, hy_oas, ig_oas}, crashes:[...],
@@ -5260,13 +5260,13 @@ def fetch_cot_managed_money(years=3, cache_path=None):
       开仓量和价格叠加图, 并且每天更新」)。
 
     ★★频率真相(必须随数据一起显示, 不许标成日更):
-      CFTC COT 是**周度**: 每周二收盘持仓, 当周周五 15:30 ET 发布。
+      CFTC COT 是<b>周度</b>: 每周二收盘持仓, 当周周五 15:30 ET 发布。
       「对冲基金持仓每天更新」在数据源层面不存在 —— 全世界都只有周度。
-      本函数的做法: **持仓周度台阶 + 价格日度曲线**叠加, 各自标注真实频率。
+      本函数的做法: <b>持仓周度台阶 + 价格日度曲线</b>叠加, 各自标注真实频率。
 
     ★口径选择: 用 Disaggregated 而非 Legacy。
       Legacy 的 non-commercial 把对冲基金 + CTA + 指数基金混在一起;
-      Disaggregated 的 **Managed Money** 才是纯对冲基金/CTA 这类投机资金,
+      Disaggregated 的 <b>Managed Money</b> 才是纯对冲基金/CTA 这类投机资金,
       另有 Swap Dealer(做市商/银行)可作对手方参照。
       (项目原有 fetchers/cot.py 用的是 Legacy 口径, 两者并存、互不替代。)
 
@@ -5423,7 +5423,7 @@ def fetch_comex_inventory(cache_path=None):
         return {"status": "未获取", "as_of": None, "note": note}
 
     # ★2026-09-19: 个人 GitHub 账号被反滥用系统限制匿名访问 → github.io 全线 404,
-    #   本 fetcher 曾静默回退缓存(吃 3 天前旧数据)。改为**双源**: Cloudflare 主 + GitHub 备。
+    #   本 fetcher 曾静默回退缓存(吃 3 天前旧数据)。改为<b>双源</b>: Cloudflare 主 + GitHub 备。
     #   Cloudflare 站是同一产物的镜像(实测含完整 const CHARTS), 不受账号限制影响。
     urls = ["https://comex-inventory-charts.pages.dev/",
             "https://curarpikt0000.github.io/comex-inventory-charts/"]
@@ -5437,7 +5437,7 @@ def fetch_comex_inventory(cache_path=None):
                                 "-H", "User-Agent: Mozilla/5.0", u],
                                capture_output=True, text=True, timeout=35)
             body = r.stdout if r.returncode == 0 else ""
-            # ★判据不是"拿到 200/非空", 而是**内容里真有 CHARTS**。
+            # ★判据不是"拿到 200/非空", 而是<b>内容里真有 CHARTS</b>。
             #   GitHub 被限制后返回的是 404 页面, 非空但无数据 —— 光看非空会误判成功。
             if body and "const CHARTS" in body:
                 html, src_used = body, u
@@ -5769,7 +5769,7 @@ def fetch_corporate_credit(years=3):
 #     美光科技 / 博通 / 微软 / 亚马逊 / 甲骨文 / 台积电 / 英伟达。
 #   - 无官方中文名但中文财经媒体有稳定通行译名的用通行译名:
 #     星座能源(CEG, 维基/雪球/国家核安全局均用) / 奇异维诺瓦(GEV, 中文维基条目名)。
-#   - ★没有任何通行中文名的**保留英文原名**, 绝不自己编音译:
+#   - ★没有任何通行中文名的<b>保留英文原名</b>, 绝不自己编音译:
 #     CoreWeave / Equinix / Digital Realty / Vistra / AMD / Meta / Alphabet。
 #     中文维基与百度百科的条目名就是英文原文, 硬造"科尔维""亿速"之类反而误导。
 #   ★★VST 的坑: 搜"Vistra 中文名"会命中「瑞致达」, 那是 Vistra Group Holdings
@@ -6505,13 +6505,13 @@ def fetch_cips(months=36):
 #
 # ★两个数据源(2026-09-19 实测):
 #   ① 东方财富宏观 API   —— 月度总量, 最新 2026-08, 11 项
-#   ② NBS 官方英文发布稿 —— FAI/地产**分项**(基建/制造/民间/分区域), 一手权威
+#   ② NBS 官方英文发布稿 —— FAI/地产<b>分项</b>(基建/制造/民间/分区域), 一手权威
 #      NBS 的 easyquery JSON API 本机 403(数据中心 IP), 但英文发布稿 HTML 可达。
 #
 # ★口径铁律(开发时栽过两次, 务必遵守):
-#   伯金斯全文讲的是**累计同比**(FAI 3.8%)。东财 BASE_SAME 是**单月同比**,
+#   伯金斯全文讲的是<b>累计同比</b>(FAI 3.8%)。东财 BASE_SAME 是<b>单月同比</b>,
 #   2026-08 为 -13.51%, 而官方累计口径是 -7.2% —— 差 6 个百分点。
-#   两者都是真数但**不可混用**, 本模块每项都带 basis 字段标注口径。
+#   两者都是真数但<b>不可混用</b>, 本模块每项都带 basis 字段标注口径。
 #   同理社零必须用 RETAIL_ACCUMULATE_SAME(累计) 而非 RETAIL_TOTAL(绝对额)。
 #
 # ★诚实边界: 伯金斯引用但公开源确实拿不到的, 列在 unavailable 里显式呈现,
@@ -6660,7 +6660,7 @@ def fetch_china_regime_shift():
 
     # ★★缓存回退(2026-09-21 修): NBS 偶发 RemoteDisconnected → breakdown 直接变 0 项,
     #   而 status 仍是 "ok(部分失败)", 页面照常渲染但少掉 8 项官方分项 —— 静默降级。
-    #   纪律(项目既有): 抓不到时必须**保留旧真值**, 不能覆盖成空。
+    #   纪律(项目既有): 抓不到时必须<b>保留旧真值</b>, 不能覆盖成空。
     import os as _os, json as _j
     # ★路径解析: __file__ 在被临时复制到别处执行时会失准(反测时踩到),
     #   故先试 __file__ 推导, 再回退到 cwd 下的 data/。
@@ -6684,7 +6684,7 @@ def fetch_china_regime_shift():
         except Exception as e:
             out["errors"].append(f"缓存写入失败(不影响本次): {type(e).__name__}")
     elif _os.path.exists(_cp):
-        # 没抓到 → 读回缓存, 并**明确标注是缓存**(不假装是当期新数)
+        # 没抓到 → 读回缓存, 并<b>明确标注是缓存</b>(不假装是当期新数)
         try:
             _c = _j.load(open(_cp, encoding="utf-8"))
             if _c.get("breakdown"):
@@ -6715,13 +6715,13 @@ def fetch_china_regime_shift():
 #
 # ★★分母是代理, 不是原指数 —— 这是甲方案的核心, 必须在图上标注:
 #   S&P Global Luxury Index 是 S&P 专有指数, 免费源拿不到(实测 spglobal 403、
-#   Yahoo ^SPGLUX 404)。本实现用 **LUXU.L = Amundi S&P Global Luxury UCITS ETF**,
-#   它**追踪的正是该指数**且以 USD 计价(与 WMT 同币种, 无需汇率换算),
+#   Yahoo ^SPGLUX 404)。本实现用 <b>LUXU.L = Amundi S&P Global Luxury UCITS ETF</b>,
+#   它<b>追踪的正是该指数</b>且以 USD 计价(与 WMT 同币种, 无需汇率换算),
 #   是最贴近原口径的公开代理。但 ETF 有管理费/跟踪误差/流动性折溢价,
-#   **绝对水平与 Paulsen 原值不可直接比对**, 只看方向与分位。
+#   <b>绝对水平与 Paulsen 原值不可直接比对</b>, 只看方向与分位。
 #
 # ★实测(2026-09-19): 共同交易日 2467 天(2016-09 至今), 当前 0.4858,
-#   分位 95.9%, 历史峰值 0.6012 在 2026-05-19 —— **当前不是创新高**, 不许说成创新高。
+#   分位 95.9%, 历史峰值 0.6012 在 2026-05-19 —— <b>当前不是创新高</b>, 不许说成创新高。
 
 _WRS_NUM = ("WMT", "Walmart")
 _WRS_DEN = ("LUXU.L", "Amundi S&P Global Luxury UCITS ETF")
@@ -6811,22 +6811,22 @@ def fetch_wrs_recession_signal():
 # ══════════════════════════════════════════════════════════════════════
 # ★需求: MS 报告 Exhibit 3(BrokerTec 2Y OTR 日内买卖价差) 与
 #   Exhibit 4(2Y OTR 周度 DV01 成交量)。原 treasury_stress_panels 里用的是
-#   期限溢价/IG OAS/曲线/HY OAS —— 那是**价格类风险补偿**, 不是流动性微观结构,
+#   期限溢价/IG OAS/曲线/HY OAS —— 那是<b>价格类风险补偿</b>, 不是流动性微观结构,
 #   两者是不同维度。本模块补上真正的「成交量」与「交易成本」维度。
 #
 # ★Exhibit 4 = 真数据(不再是代理):
 #   纽约联储一级交易商调查 FR2004, markets.newyorkfed.org 官方免费 API。
-#   实测 702 个周度点(2013-04-03 起)。**按剩余期限分桶**:
+#   实测 702 个周度点(2013-04-03 起)。<b>按剩余期限分桶</b>:
 #     PDTRGSC-L2(≤2年, 对应 MS 的 2Y) / -G2L3 / -G3L6 / -G6L7 / -G7L11
-#   ⚠口径差: MS 用 **DV01 加权**成交量(久期风险敞口), NY Fed 是**名义金额**。
+#   ⚠口径差: MS 用 <b>DV01 加权</b>成交量(久期风险敞口), NY Fed 是<b>名义金额</b>。
 #     方向一致但不是同一个数 —— 必须在图上标注, 不许说成等同。
 #   ⚠另: PDPOS* 是 POSITIONS(持仓), PDTR*/PDGSW* 才是 TRANSACTIONS(成交量)。
 #     开发时特意区分过, 别拿持仓冒充成交量。
 #
 # ★Exhibit 3 = 仍是代理, 但比原来贴近:
 #   BrokerTec 日内 bid-ask 是 CME 商业产品, 公开源确实没有。
-#   本轮排查过并**排除**: 克利夫兰联储 FSI 流动性分项(LQTYSD678FRBCLE)
-#     —— 看着对口, 但 metadata 显示 **2016-05-05 起 DISCONTINUED**, 不能用。
+#   本轮排查过并<b>排除</b>: 克利夫兰联储 FSI 流动性分项(LQTYSD678FRBCLE)
+#     —— 看着对口, 但 metadata 显示 <b>2016-05-05 起 DISCONTINUED</b>, 不能用。
 #   选定两条公开代理:
 #     ① OFR FSI Funding 分项(官方, 日更, 2000 年起) = 融资/交易成本压力
 #     ② 10Y 日内波幅(^TNX high-low, bp) = 价格发现成本, 价差走阔时同步放大
@@ -6912,8 +6912,8 @@ def fetch_ust_microstructure(years=3):
     cutoff = (datetime.date.today() - datetime.timedelta(days=int(years * 365.25))).isoformat()
     out = {"status": "ok", "as_of": _jst, "years": years,
            "volume": {"buckets": [], "total": None, "is_proxy": False,
-                      "caliber_note": ("MS Exhibit 4 用 **DV01 加权**成交量（久期风险敞口），"
-                                       "本图为纽约联储 FR2004 的**名义金额**成交量。"
+                      "caliber_note": ("MS Exhibit 4 用 <b>DV01 加权</b>成交量（久期风险敞口），"
+                                       "本图为纽约联储 FR2004 的<b>名义金额</b>成交量。"
                                        "方向一致，但不是同一个数，不可直接比对数值。"),
                       "source": "纽约联储一级交易商调查 FR2004（markets.newyorkfed.org 官方 API）"},
            "cost": {"series": [], "is_proxy": True,
@@ -6992,9 +6992,9 @@ def fetch_ust_microstructure(years=3):
 #   并标注年初至今影响两者的大事件。
 #
 # ★事件从哪来(这是本模块最容易造假的部分, 纪律必须写死):
-#   **绝不凭 LLM 记忆写 2026 年发生了什么。** 两条来源:
+#   <b>绝不凭 LLM 记忆写 2026 年发生了什么。</b> 两条来源:
 #   ① 日历事件: FOMC 议息日等已知日程 —— 联网核实后落盘 data/dxy_gold_events.json
-#   ② 异动事件: 先用**真实价格**算出异动日(|日收益| >= 1.8σ, σ 取两年),
+#   ② 异动事件: 先用<b>真实价格</b>算出异动日(|日收益| >= 1.8σ, σ 取两年),
 #      再对这些日子联网检索当天新闻, 抓到出处才写。
 #   两者都带 url + confidence(high/medium/none), 前端只渲染有出处的,
 #   confidence=none 的显示为「未找到明确触发事件」, 不硬凑。
@@ -7002,8 +7002,8 @@ def fetch_ust_microstructure(years=3):
 # ★为什么是"价格先行": 让数据指出"这天有事", 而不是我想一个事件再去套价格。
 #   这样标注的日期必定对应真实异动, 不会出现"标了个大事但当天其实没动"。
 #
-# ★更新节奏(Chao 定): 价格**日更**(随 dashboard 每日构建);
-#   事件**周更**(联网检索成本高且事件不会天天有) —— 事件文件 mtime 超 8 天会在图上提示。
+# ★更新节奏(Chao 定): 价格<b>日更</b>(随 dashboard 每日构建);
+#   事件<b>周更</b>(联网检索成本高且事件不会天天有) —— 事件文件 mtime 超 8 天会在图上提示。
 
 _DG_GOLD = ("GC=F", "COMEX 黄金期货")
 _DG_DXY  = ("DX-Y.NYB", "ICE 美元指数 DXY")
@@ -7127,7 +7127,7 @@ def fetch_dxy_gold_events(start="2026-01-01", events_path=None):
 # 黄金 ETF 分地区资金流 (WGC 官方 fsapi) — Chao 2026-09-19, 丙方案
 # ══════════════════════════════════════════════════════════════════════
 # ★数据源: https://fsapi.gold.org/api/v11/charts/etfv2/revised/flows-chart2
-#   这是世界黄金协会(WGC) Goldhub「Gold ETF flows」图表的**官方数据后端**,
+#   这是世界黄金协会(WGC) Goldhub「Gold ETF flows」图表的<b>官方数据后端</b>,
 #   免费、无需 key。与 Chao 提供的财经视频截图中那张 WGC 图同源。
 #   实测复核: 2026-06-12 = -24.7t、2026-06-26 = -38.2t, 与截图标注逐字吻合。
 #
@@ -7135,13 +7135,13 @@ def fetch_dxy_gold_events(start="2026-01-01", events_path=None):
 #   四种频率(周/月/季/年)。周度 454 点, 2018-01 至今。
 #
 # ★★白银为何没有同类数据(踩坑记录, 别再重复找):
-#   1. WGC 只管黄金。`?metal=silver` **返回 HTTP 200 但内容与黄金一字不差**
+#   1. WGC 只管黄金。`?metal=silver` <b>返回 HTTP 200 但内容与黄金一字不差</b>
 #      (参数被静默忽略) —— 这是陷阱, 不验证就会把黄金数据当白银用。
 #      判据: 比对两端点最新值完全相等 + 'Gold Price (rhs)' 仍是 ~4400/oz。
 #   2. Silver Institute 无同类周度分地区 API(页面无数据文件/无 api 路径)。
 #   3. iShares(SLV)/Sprott(PSLV)/abrdn(SIVR) 官方持仓接口均返回 HTML 壳或 404;
 #      SPDR 只发 PDF; Yahoo quoteSummary 全线 401 拿不到 AUM。
-#   结论: 白银的权威周度分地区 flows 基本只在彭博/路透终端。本模块**只做黄金**,
+#   结论: 白银的权威周度分地区 flows 基本只在彭博/路透终端。本模块<b>只做黄金</b>,
 #   白银在 dashboard 上显式说明「无权威免费源」, 不用代理数据冒充。
 
 _WGC_FLOWS = "https://fsapi.gold.org/api/v11/charts/etfv2/revised/flows-chart2"
@@ -7273,20 +7273,20 @@ def fetch_gold_etf_flows_by_region(weeks=52):
 #
 # ★两张图对应 Chao 提供的截图:
 #   图A 25D 偏斜 = 25-delta put IV − 25-delta call IV
-#       正值=看跌期权更贵=偏空; 负值=偏多。用 delta **线性插值**到 |delta|=0.25,
+#       正值=看跌期权更贵=偏空; 负值=偏多。用 delta <b>线性插值</b>到 |delta|=0.25,
 #       比取最近点准(合约 delta 不会正好等于 0.25)。
 #   图B ATM IV 期限结构 = 各到期日 |delta|=0.5 处的 IV, 排成 1M/3M/6M/12M/18M/24M。
 #       近月 > 远月 = 倒挂(市场预期近期震荡); 反之为正常上倾。
 #
 # ★★历史限制(重要, 别再重复找):
-#   CBOE 只有**当下快照**。`?date=YYYY-MM-DD` 返回 200 但 timestamp 与现价
+#   CBOE 只有<b>当下快照</b>。`?date=YYYY-MM-DD` 返回 200 但 timestamp 与现价
 #   和不带参数时完全相同 —— 参数被静默忽略, 不是历史数据。
 #   /historical_data/ 与 /historical_options/ 均 403。
-#   Alpha Vantage: HISTORICAL_OPTIONS 是**付费端点**(免费 key 返回
+#   Alpha Vantage: HISTORICAL_OPTIONS 是<b>付费端点</b>(免费 key 返回
 #   "This is a premium endpoint"); REALTIME_OPTIONS 免费档返回的是
-#   **占位假数据**(contractID=XXYYZZ..., expiration=2099-99-99, 价格全 100) —— 陷阱。
+#   <b>占位假数据</b>(contractID=XXYYZZ..., expiration=2099-99-99, 价格全 100) —— 陷阱。
 #   ORATS 401, Nasdaq Data Link 403。
-#   → 结论: 偏斜与期限结构**无免费历史**, 只能每日快照自行积累(落 Notion DB_OPTVOL)。
+#   → 结论: 偏斜与期限结构<b>无免费历史</b>, 只能每日快照自行积累(落 Notion DB_OPTVOL)。
 #   → 可回填一年的只有: FRED GVZCLS(CBOE 黄金ETF波动率指数, 官方) 与
 #     GLD/SLV 30日已实现波动率(自算, 字段名带 RV 标明非隐含波动率)。
 #   ★白银官方 VXSLVCLS 已于 2022-02 DISCONTINUED(近一年 0 点), 不可用。
@@ -7347,14 +7347,14 @@ def fetch_pm_option_vol():
     out = {"status": "ok", "as_of": _jst, "date": today.isoformat(),
            "tickers": {}, "errors": [],
            "source": "CBOE delayed quotes (逐合约 IV + delta)",
-           "hist_note": ("偏斜与期限结构**无免费历史源**：CBOE 只提供当下快照"
+           "hist_note": ("偏斜与期限结构<b>无免费历史源</b>：CBOE 只提供当下快照"
                          "（?date= 参数返回 200 但内容不变，实为忽略）；"
                          "Alpha Vantage 历史期权为付费端点，其免费实时接口返回占位假数据。"
                          "故这两项自 2026-09-21 起每日快照累积；"
                          "可回溯一年的只有 GVZ（FRED 官方）与 30 日已实现波动率（自算）。"),
            "method_note": ("25D 偏斜 = 25-delta put IV − 25-delta call IV，"
                            "正值＝看跌期权更贵＝偏空。ATM 取 |delta|=0.5。"
-                           "两者均按 delta **线性插值**求得，非取最近合约。")}
+                           "两者均按 delta <b>线性插值</b>求得，非取最近合约。")}
 
     for tk in _PMV_TICKERS:
         try:
@@ -7423,18 +7423,18 @@ def fetch_pm_option_vol():
 # COMEX 期货期权持仓 (Chao 2026-09-21) —— 注意: 这不是 IV
 # ══════════════════════════════════════════════════════════════════════
 # ★★为什么没有 IV(踩坑记录, 别再重复找):
-#   COMEX 期货期权的隐含波动率是 **CME 的商业数据产品**, 免费源全封:
+#   COMEX 期货期权的隐含波动率是 <b>CME 的商业数据产品</b>, 免费源全封:
 #     CME 官网 API 403 / CME ftp settlement 403 / CME datamine 需订阅 /
 #     Barchart 403 / Yahoo 期货期权链 401(v7+v6 × 三种 symbol 全试) /
 #     CBOE 只覆盖股票与 ETF 期权, 不含期货期权 /
 #     ScraperAPI 能绕 IP 封锁但 CME 把请求导向中文营销页, 不是 API 响应。
 #   → 绝不拿 GLD/SLV 的 ETF 期权 IV 冒充 "COMEX 期货期权 IV"(口径完全不同)。
 #
-# ★本模块给的是**持仓方向**, 回答「Managed Money 在期权上加多还是加空」:
+# ★本模块给的是<b>持仓方向</b>, 回答「Managed Money 在期权上加多还是加空」:
 #   期权部分 = Disagg(Futures AND Options) − Disagg(Futures Only)
 #   两者同为 CFTC 官方 Disaggregated 口径, 含相同的 m_money 字段, 可相减。
-#   ★已在 **170 周(2023-06 至今, 3年+)** 长样本验证: 金银两市场
-#     期权 OI 差均 **0 次为负** —— 若口径不匹配必然出现负数, 故口径成立。
+#   ★已在 <b>170 周(2023-06 至今, 3年+)</b> 长样本验证: 金银两市场
+#     期权 OI 差均 <b>0 次为负</b> —— 若口径不匹配必然出现负数, 故口径成立。
 #   (注: 6dca-aqww 是 Legacy 口径 noncomm/comm, 不含 m_money, 不能与 Disagg 混减)
 #
 # ★单位换算: COMEX 黄金 1 张 = 100 金衡盎司; 白银 1 张 = 5000 盎司;
@@ -7479,7 +7479,7 @@ def fetch_comex_option_positions(weeks=104):
     from datetime import timezone, timedelta
     _jst = _dt.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
     out = {"status": "ok", "as_of": _jst, "metals": {}, "errors": [],
-           "not_iv_note": ("本板块是**持仓方向**不是隐含波动率。COMEX 期货期权的 IV 属 "
+           "not_iv_note": ("本板块是<b>持仓方向</b>不是隐含波动率。COMEX 期货期权的 IV 属 "
                            "CME 商业数据，免费源全部封闭（CME API/ftp 403、Barchart 403、"
                            "Yahoo 期货期权链 401、CBOE 不覆盖期货期权），"
                            "故不以 ETF 期权 IV 冒充。"),
@@ -7536,7 +7536,7 @@ def fetch_comex_option_positions(weeks=104):
 # ══════════════════════════════════════════════════════════════════════
 # 全球货币供应量(五大经济体聚合) + 加速度  (Chao 2026-09-21)
 # ══════════════════════════════════════════════════════════════════════
-# ★★口径声明(务必随图展示):「全球货币供应」**没有官方单一口径**。
+# ★★口径声明(务必随图展示):「全球货币供应」<b>没有官方单一口径</b>。
 #   IMF/BIS/世界银行都不发布这个数。本模块是**自行聚合五大经济体、
 #   按当期汇率折美元**的构造值, 不是任何机构的官方发布。
 #
@@ -7548,11 +7548,11 @@ def fetch_comex_option_positions(weeks=104):
 #   中国 M2    东方财富 RPT_ECONOMY_CURRENCY   月  2008-01~  亿元
 #   汇率       FRED DEXUSEU/DEXJPUS/DEXUSUK/DEXCHUS
 #
-# ★★三个历史缺口是**数据本身的边界**, 不是抓漏(已逐一查证):
-#   ① 欧元区 1996-1998 无数据 —— **欧元 1999-01 才诞生**, 之前不存在 EUR 汇率。
+# ★★三个历史缺口是<b>数据本身的边界</b>, 不是抓漏(已逐一查证):
+#   ① 欧元区 1996-1998 无数据 —— <b>欧元 1999-01 才诞生</b>, 之前不存在 EUR 汇率。
 #      任何号称"1996 年全球 M2"的图, 这一段要么用马克/法郎折算要么是估的。
-#   ② 日本 1996-2003 —— BOJ 该表 1980 起的列是**同比增速%**,
-#      **存量列 2003-04 才开始**。★第一次解析抓到的 "2"、"1.2" 就是增速,
+#   ② 日本 1996-2003 —— BOJ 该表 1980 起的列是<b>同比增速%</b>,
+#      <b>存量列 2003-04 才开始</b>。★第一次解析抓到的 "2"、"1.2" 就是增速,
 #      靠数量级检查(M2 应在 1.2e7 亿円)才发现, 否则会把增速当存量画成图。
 #   ③ 中国 1996-2007 —— 东财只到 2008; 世界银行有年度值(1996: 76,095 亿元)可插值。
 #   → 图上按时段标明"本段包含哪几国", 绝不假装 30 年都完整。
@@ -7598,12 +7598,12 @@ def fetch_global_money_supply():
     out = {"status": "ok", "as_of": _jst, "countries": {}, "series": [],
            "errors": [], "coverage": [],
            "caliber_note": ("「全球货币供应」无官方单一口径 —— IMF/BIS/世界银行均不发布该数。"
-                            "本图为**自行聚合五大经济体、按当期汇率折美元**的构造值，"
+                            "本图为<b>自行聚合五大经济体、按当期汇率折美元</b>的构造值，"
                             "非任何机构官方发布。"),
            "gap_note": ("三段历史缺口属数据本身边界：① 欧元区 1996-1998 —— "
-                        "**欧元 1999 年才诞生**，此前无 EUR 汇率；"
+                        "<b>欧元 1999 年才诞生</b>，此前无 EUR 汇率；"
                         "② 日本 1996-2003 —— BOJ 表中 1980 年起的是同比增速列，"
-                        "M2 **存量列 2003-04 才开始**；"
+                        "M2 <b>存量列 2003-04 才开始</b>；"
                         "③ 中国 1996-2007 —— 月度源起于 2008。"
                         "图中按时段标明覆盖国数，未做无依据外推。"),
            "accel_note": ("加速度 = 同比增速的年度变化（yoyₜ − yoyₜ₋₁₂）。"
@@ -7750,7 +7750,7 @@ def fetch_global_money_supply():
     for r in rows:
         y, mm = r["m"].split("-")
         prev = by_m.get(f"{int(y)-1}-{mm}")
-        # ★只在**覆盖国家集合相同**时算同比, 否则国家数变化会伪装成货币暴增
+        # ★只在<b>覆盖国家集合相同</b>时算同比, 否则国家数变化会伪装成货币暴增
         if prev and prev["total"] > 0 and set(prev["parts"]) == set(r["parts"]):
             r["yoy"] = round((r["total"] / prev["total"] - 1) * 100, 2)
         else:
