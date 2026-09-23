@@ -1706,3 +1706,89 @@ AGENTS.md 的 Cron 段仍描述旧版日报口径，需 Chao 授权后补写。
 - [ ] 承接 9/09：`reports/2026-09-09.md` 与 `data/daily/2026-09-09.json` 至今不存在，原因未查。
 - [ ] 承接 9/08：四方对账门禁「cron 实抓」那一路是否转全绿，仍未取得证据。
 - [ ] 承接 9/04：tesseract 持久化未落地（需 Chao 点头动 devpod 配置），重启即丢逐笔。
+
+---
+
+## 2026-09-22
+
+### 事实与配置
+
+- ★★**Michael Lynch（@DtDS_WSS · EconAnalytics）COMEX 白银 issues & stops 图 —— 实测确认无原始序列可取，
+  且他本人已停更 208 天**。Chao 发来该图并问「这个数据我们不能从 Michael Lynch 的 API 拿么」。
+  - **我此前的答法是照抄项目里的旧记录**（`data/comex_silver_issues_ref.json` 的
+    `update_nature` 字段写着「CME 官方封禁脚本抓取，无免 key 每日源 / 图为嵌入 PNG，不公开原始序列」），
+    **没有自己实测过他到底有没有 API** —— Chao 的追问逼出了这一轮实测。
+  - 实测结果：**Substack 公开 API 是通的**（`/api/v1/archive` + `/api/v1/posts/by-id`），
+    23 篇文章、18 篇相关、**全部 `audience: everyone` 无付费墙**，正文 `body_html` 可取（单篇 3.2 万字符）。
+    ★字段坑：正文不在响应顶层，在嵌套的 `post` dict 里（顶层取 `body_html` 为空，会让人误判「拿不到正文」）。
+  - **但正文里 `<table>` × 0、`<img>` × 6** —— 所有数据都做成图片贴上去，一个数据表都没有。
+    正文里的数字是叙述性的（「4,583 contracts or 22.9 million oz」这种），不构成可回填的序列。
+  - ★**他已停更**：`archive` API 翻到底共 23 篇，最老 2025-02-28、**最新 2026-02-26，距今 208 天**。
+    发文频率是明显衰减曲线（2025-03 六篇 → 2026-02 最后一篇 → 此后 7 个月空白）。
+    **两条独立通道互证**（archive API + RSS feed），最新一篇日期完全一致。
+    ★我第一次读列表时把顺序说反了（Substack `archive` 是**最新在前**），当场被自己的复核纠正。
+  - 结论：旧记录的判断**没被推翻，但现在是实测过的而不是照抄的**。
+    Chao 已先行说明「如果拿不到 2016-2025 的，就算了」。
+- **WGC 周报第 24 页确认是 skew 图，三种 25D 偏斜口径必须显式对齐**：
+  页面原文 `Gold options delta skew` / `GLD & IAU 1M Skew (25D C-P IVOL)`（ETF，滚动 30 天到期）/
+  `GCA / GC1 25D C-P IVOL`（COMEX 期货，活跃近月），**5-day average 不是单日**，
+  双轴 = Delta skew (−6~+6) + Spot gold ($3,000~$5,500)。
+  与 9/21 待办里的「高盛 put/call 比值 >1 偏空」「WGC C−P >0 偏多」合起来是三口径，方向不一致。
+- **项目已有三个 COMEX issue/stop 相关函数**（此前未在本日志登记过）：
+  `fetch_comex_silver_issues_ref` / `fetch_comex_issue_stop_firms` / `fetch_comex_issue_stop_weekly`；
+  其中 `data/comex_silver_issues_ref.json` = **从公开图手抄的 18 个关键锚点静态参考**（as_of 2026-04-15），
+  文件里 `note` 已如实写明「非实时」。
+- ChaoWiki 侧当日收拢一次（`d611be5`，local == remote）。
+  ★**hook 提示 2 个文件、实际要提 3 个** —— README 里新增的那行正是引用 `[[headless-visual-acceptance]]`，
+  而那个文件还未跟踪；**只按提示清单提交会造成 wiki 断链**。
+
+---
+
+## 2026-09-23
+
+### 事实与配置
+
+- **Chao 问「看看 KOL 卡片是否有更新，给他们全套更新 backfill」** —— 我先探清现状再动手
+  （backfill 属写入类操作，不盲跑），探测结果如下（均为机械算出，非目测）：
+  - **卡片有更新，但绝大多数是 5 天前的**：当时 146 条里 **136 条停在 09-17**、9 条 09-21、**当天只有 1 人**。
+    页面渲染本身正常（`kol-line` × 227、`kp-r` × 1310）。
+  - **一年历史覆盖率 24.0%**（`apply_1yr_backfill.py --stat`）：满一年 35 人 / 不足一年 82 人 / 完全无历史 29 人。
+  - ★**「131 个 backfill 文件 vs 146 人」不能直接相减**：set-diff 实算缺口是 **26 人**，另有 **11 个孤儿文件**
+    （文件在、名册里没有）。再排除 **2 个命名变体假缺口**（`charlesnenner` ←→ `charles_nenner`、
+    某机构名条目 ←→ `goldman_sachs`）后，**真缺 24 人**。
+    **直接按 26 人跑会给已有历史的人重复建档。**
+  - **15 人方向为「未找到」**（其中 11 人自 09-17 起就没抓到过），与「14 人缺 detail」高度重合 ——
+    **这不是 bug**：名单里有微软副总裁、芝大教授、**已故历史学家**，这些人本来就不发表市场方向观点。
+- ★★**关键约束：`apply_1yr_backfill.py` 与 `backfill_kol_detail.py` 两个脚本自己不产出任何文字**
+  （代码 docstring 明写「真正的摘要由调用方用 web_search + web_extract 产出，脚本自身不生成任何文字」）。
+  ⇒ **「全套 backfill」= 逐人联网检索，不是跑个脚本就完事**：24 人 × 一年窗口需派子 agent 批量做，
+  量级是几小时；若连「不足一年」的 82 人一起补，是 106 人的检索量。
+  **不把这一点先说清就动手，等于给出一个无法按期完成的承诺。**
+- **当日 web_search 后端间歇故障**（`data/kol_independent.json` 的 `_note` 落有原文）：
+  主会话只成功深度刷新 **3 人**（内容/人物匹配确凿），其余 **143 人沿用最近真实快照并打 `carried_forward`**
+  —— **标记为沿用而非编造**；**子 agent headless 批处理当日空转无产出，已放弃**。
+  ⇒ 这正是那份「136 人停在 09-17」快照的成因，属 AGENTS.md 已记载的 search 后端故障形态。
+- **名册 146 → 150**（`1938b1e` 当日 daily 提交，`data/kol_registry.json` +72 行 / 4 人），
+  来源是 Notion SSOT 单向同步（cron 步骤 0），本 agent 未自行增删任何人。
+  新增 4 人分别属 CFR 国际资本流 / 前情报分析官 / 中国市场 / 希腊前财长一类。
+- `carried_forward_from` 已是 `kol_independent.json` 的正式字段（条目 keys 含
+  `direction / targets / comments / detail / detail_status / sources / date / carried_forward_from`）。
+
+### 进展
+
+- `8deef98` daily 2026-09-22 · `1938b1e` daily 2026-09-23（每日管道两天均正常落盘 + push，
+  含 `data/kol/daily/2026-09-22.json`、`2026-09-23.json` 快照）。
+- 探测脚本落在 `scratch/_kol_gap.py` / `scratch/_kol_gap2.py`（set-diff + 孤儿/命名变体识别），
+  可复用于下次名册对账。
+
+### 待办
+
+- [ ] ★**KOL backfill 范围未拍板** —— 已给 Chao 三方案：**甲**只补 24 个完全无历史者 /
+      **乙** 24 + 82 人全补满（106 人，4 倍工作量、分多轮）/ **丙**先只诊断日更为何只更新 1 人。
+      我倾向 **丙 → 甲**（日更管道不确认是活的，补完历史明天照样停在原地）。**截至归档未见回复。**
+- [ ] ★**「未找到」15 人里含已故者与本就不发表市场观点者，应在名册侧处理而不是反复抓** ——
+      但名册 SSOT 在 Notion、本 agent 不得自行增删，需 Chao 或另一 agent 在 Notion 侧决定。
+- [ ] 承接 9/21 全部未办项（`fetch_wgc_weekly_iv` 未提交未接线 / `.env` 缺 `DB_COMEXOPT` /
+      `snapshot_optvol.py` 未挂 cron / Alpha Vantage key 建议更换 / SHFE 前 20 净多源未探 /
+      AGENTS.md 中「CBOE 全封」一条待据实更正 / 事件标注周更 cron 未建 /
+      `reports/2026-09-09.md` 缺失原因未查 / 四方对账 cron 实抓那一路无证据 / tesseract 持久化）。
