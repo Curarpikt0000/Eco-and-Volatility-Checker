@@ -1792,3 +1792,55 @@ AGENTS.md 的 Cron 段仍描述旧版日报口径，需 Chao 授权后补写。
       `snapshot_optvol.py` 未挂 cron / Alpha Vantage key 建议更换 / SHFE 前 20 净多源未探 /
       AGENTS.md 中「CBOE 全封」一条待据实更正 / 事件标注周更 cron 未建 /
       `reports/2026-09-09.md` 缺失原因未查 / 四方对账 cron 实抓那一路无证据 / tesseract 持久化）。
+
+---
+
+## 2026-09-24
+
+### 决策
+
+- ★**Chao 当场推翻日报里的「FIMA 海外回购 $318.4B（−30.8B）← 值得注意」** ——
+  他的原话是「**FIMA 使用量我记得很小**」。他记得没错，这是一个**方向完全相反的口径错误**，
+  不是数值误差。
+- 我据此给出三条改法并**征求是否动手**（口径错误涉及 fetcher + 日报文案 + 可能的 Notion 字段名）：
+  ①`WLRRAFOIAL` 正名为「外国央行逆回购（存放于 Fed）」并注明属**负债侧**；
+  ②**另加一行真 FIMA**（`WORAL`），标「Fed 向外国央行放款，常态≈0，跳升＝海外美元荒」；
+  ③页面与日报解读文案跟着改。
+  **截至归档未见回复，尚未动任何代码。**
+
+### 事实与配置
+
+- ★★**两个 FRED 序列是相反的东西，此前被当成同一个**（本轮实测，`fetch_fred_history`，带 key API）：
+
+  | | `WORAL`（真 FIMA） | `WLRRAFOIAL`（日报抓的那个） |
+  |---|---|---|
+  | 科目 | Repurchase agreements – foreign official | **Reverse** repos – Foreign official and intl accounts |
+  | 表侧 | **资产** | **负债** |
+  | 方向 | Fed **借美元给**外国央行 | 外国央行把美元**存在** Fed |
+  | 量级 | 09-02 `0` / 09-09 `6` / 09-16 `255` / 09-23 `1`（**单位百万美元**，即 $0.255B 级） | 09-02 `357,217` / 09-09 `349,231` / 09-16 `318,428` / 09-23 `320,264`（$B 级） |
+
+  ⇒ 标成「FIMA 海外回购」＝把「外国央行**存钱**」说成「外国央行**借钱**」。
+- ★**解读方向也跟着反了**：日报写「FIMA −30.8B（−8.8%）← 值得注意」，按 FIMA 口径读像是
+  「海外美元应急借款大降＝压力缓解」；**实际发生的是外国央行从 Fed 逆回购池撤走 $308 亿**
+  （更可能是在**动用**美元：干预汇市 / 买美债 / 转投他处），与「压力缓解」不是一回事。
+  而**真 FIMA 同期反而从 $6M 升到 $255M** —— 量级仍极小，但**方向是升**。
+- ★★**根因在上游、不在本项目**：`Economic-Dashboard/src/config.py:89` 把
+  `"WLRRAFOIAL"` 映射到 B7 的字段名 **`资产_FIMA_B`**（注释还写着「FIMA 海外官方+国际账户逆回购余额」）。
+  本项目 `src/external_data.py:1071` 的 `CB_BS_SPEC["US"]["assets"]` 只是读这个字段、
+  显示为「FIMA 海外回购」。**Eco 侧改显示名治不了根**，字段名 `资产_FIMA_B` 本身就把
+  负债科目命名成了资产科目；上游 `run_weekly_fed.py` 还派生了 `ΔFIMA_WoW_B`、
+  `daily_brief.py:171` 直接据此发「⚠️ FIMA 海外美元回购 周变 … 海外美元流动性趋紧/缓解」告警。
+  ⇒ **改动跨两个项目**，且 Economic-Dashboard 侧有历史行与 Notion 字段名要一并考虑。
+- 该错误的上游痕迹可追到 2026-08-12 —— Economic-Dashboard 当时做过一次
+  「FIMA 数据源修正 `WLRRAL`→`WLRRAFOIAL`」并回填 115 行历史。
+  **那次修正把「总逆回购」换成了「外国官方逆回购」，确实更精确了，但两者都不是 FIMA**
+  —— 修得更准，却没改掉名字里的错。
+
+### 待办
+
+- [ ] ★**FIMA 口径错误待 Chao 拍板是否改**（三条改法已给，见上）。改动须跨项目：
+      Economic-Dashboard `config.py` 字段名 + `run_weekly_fed.py` 派生 + `daily_brief.py` 告警文案 +
+      Notion B7 字段名 + 本项目 `external_data.py` 显示名与表侧归属（现挂在 assets 下）。
+- [ ] 承接 9/23 全部未办项（KOL backfill 范围三方案未拍板 / 「未找到」15 人名册侧处理 /
+      9/21 遗留的 `fetch_wgc_weekly_iv` 未接线、`.env` 缺 `DB_COMEXOPT`、`snapshot_optvol.py` 未挂 cron、
+      AGENTS.md「CBOE 全封」待更正、tesseract 持久化等）。
