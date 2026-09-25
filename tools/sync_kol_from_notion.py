@@ -182,13 +182,23 @@ def main(apply_it):
             if r.get("主要分析方向 / 监控维度"):
                 hit["focus"] = r["主要分析方向 / 监控维度"]
             hit["active"] = True
+            # ★2026-09-25: Notion「KOL / 机构」可能只填机构介绍或「人名（长简介）」。
+            #   short_name/search_terms 是本地独有字段(本分支保留不覆盖);
+            #   但若 search_terms 仍等于整段长串, 自动收成括号前人名, 避免拿百字简介当搜索词。
+            _dn = hit.get("display_name", "")
+            if not hit.get("short_name") and re.search(r"[（(]", _dn):
+                hit["short_name"] = re.split(r"[（(]", _dn)[0].strip()
+            if hit.get("search_terms") in ([_dn], [name]) and hit.get("short_name"):
+                hit["search_terms"] = [hit["short_name"]]
             hit["_sot"] = "Notion KOL List (mirror)"
             new_reg.append(hit)
             kept += 1
         else:
+            _sn = re.split(r"[（(]", name)[0].strip() or name
             new_reg.append({
                 "id": slugify(name),
                 "display_name": name,
+                "short_name": _sn,
                 "notion_select_name": name,
                 "domain": r.get("领域", ""),
                 "notion_domain": r.get("领域", ""),
@@ -196,7 +206,7 @@ def main(apply_it):
                 "institution": r.get("核心背景 / 身份", ""),
                 "bio": r.get("核心背景 / 身份", ""),
                 "focus": r.get("主要分析方向 / 监控维度", ""),
-                "search_terms": [name],
+                "search_terms": [_sn],
                 "active": True,
                 "added_date": datetime.now().strftime("%Y-%m-%d"),
                 "_sot": "Notion KOL List (mirror)",

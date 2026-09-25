@@ -2031,7 +2031,7 @@ def _cycle_kol_html(kol_views, kol_history=None):
             drill = ' kol-drill" tabindex="0" role="button"' if nhist else '"'
             cards += (
                 f'<div class="kol-item cyc-item{drill} data-kol="{_esc(nm)}">'
-                f'<div class="kol-item-head"><span class="kol-name">{_esc(nm)}</span>{dir_html}</div>'
+                f'<div class="kol-item-head"><span class="kol-name">{_esc(_kol_disp(nm))}</span>{dir_html}</div>'
                 f'<div class="cyc-meta">{rg}<span class="cyc-freq">{freq}更新</span>'
                 f'<span class="cyc-school">{school}</span>{hint}</div>'
                 f'<div class="kol-comment">{body}</div>{tg_html}{fc}'
@@ -2164,7 +2164,7 @@ def _kol_history_payload(kol_history):
                          r.get("direction", ""), _strip_md(r.get("comments", "")),
                          r.get("targets", ""), r.get("source", ""),
                          _strip_md(det), srcs[:4]])
-        out[kol] = {"s": _strip_md(m.get("standing", "")),
+        out[kol] = {"n": _kol_disp(kol), "s": _strip_md(m.get("standing", "")),
                     "f": _strip_md(m.get("focus", "")), "h": rows}
     # </ 会提前闭合 <script> 标签 → 转义(XSS/断标签双重防护)
     return json.dumps(out, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
@@ -2189,6 +2189,33 @@ def _kol_meta():
     except Exception:
         return {}
     return out
+
+
+_KOL_SHORT_CACHE = None
+
+
+def _kol_disp(name):
+    """卡片可见标题用的短名。display_name 仍是全链路 join key(快照/backfill/payload),
+    这里只换「显示」。★2026-09-25(Chao 问「KOL名字怎么这么长」): Notion「KOL / 机构」
+    字段有 5 行只填了机构介绍(如「The Trends Research Institute（1980…）创办人兼董事」
+    实为 Gerald Celente), 另有 29 人是「人名（长简介）」, 原样当标题。名册 short_name
+    由 tools/add_kol_short_names.py 维护; 无 short_name 时退回括号前部分。"""
+    global _KOL_SHORT_CACHE
+    n = (name or "").strip()
+    if _KOL_SHORT_CACHE is None:
+        _KOL_SHORT_CACHE = {}
+        try:
+            import os as _os
+            _rp = _os.path.join(_os.path.dirname(__file__), "..", "data", "kol_registry.json")
+            for _k in json.load(open(_rp, encoding="utf-8")).get("kols", []):
+                _d = (_k.get("display_name") or "").strip()
+                if _d and _k.get("short_name"):
+                    _KOL_SHORT_CACHE[_d] = _k["short_name"].strip()
+        except Exception:
+            pass
+    if n in _KOL_SHORT_CACHE:
+        return _KOL_SHORT_CACHE[n]
+    return re.split(r"[（(]", n)[0].strip() or n
 
 
 def _kol_standing_html(meta, kol):
@@ -2319,14 +2346,14 @@ def _kol_changes_html(kol_changes, period="week"):
                 _path_html = (f'<div class="kol-shift">{_esc(_pathv)}</div>'
                               if _pathv else "")
                 cards += f"""<div class="kol-item kol-drill" data-kol="{_esc(ch['kol'])}" tabindex="0" role="button">
-                  <div class="kol-line"><b>{_esc(ch['kol'])}</b> {_sb}</div>
+                  <div class="kol-line"><b>{_esc(_kol_disp(ch['kol']))}</b> {_sb}</div>
                   {_path_html}
                   {extra}
                   <div class="kol-more">点击查看该 KOL 全部观点 →</div>
                 </div>"""
                 continue
             cards += f"""<div class="kol-item kol-drill" data-kol="{_esc(ch['kol'])}" tabindex="0" role="button">
-              <div class="kol-line"><b>{_esc(ch['kol'])}</b> {_shift_badge(ch['prev_dir'], ch['new_dir'])} <span class="kol-date">{_esc(ch['date'])}</span></div>
+              <div class="kol-line"><b>{_esc(_kol_disp(ch['kol']))}</b> {_shift_badge(ch['prev_dir'], ch['new_dir'])} <span class="kol-date">{_esc(ch['date'])}</span></div>
               <div class="kol-shift"><span class="kdir kdir-{pc}">{_esc(ch['prev_dir'])}</span> → <span class="kdir kdir-{nc}">{_esc(ch['new_dir'])}</span></div>
               {extra}
               <div class="kol-more">点击查看该 KOL 全部观点 →</div>
@@ -2405,7 +2432,7 @@ def _kol_views_html(views, period="week"):
             if _standing:
                 extra += _standing
             cards += f"""<div class="kol-item kol-drill" data-kol="{_esc(v['kol'])}" tabindex="0" role="button">
-              <div class="kol-line"><b>{_esc(v['kol'])}</b> <span class="kv-badge {bcls}">{_esc(btxt)}</span> {since_html}</div>
+              <div class="kol-line"><b>{_esc(_kol_disp(v['kol']))}</b> <span class="kv-badge {bcls}">{_esc(btxt)}</span> {since_html}</div>
               {extra}
               <div class="kol-more">点击查看该 KOL 全部观点 →</div>
             </div>"""
@@ -4754,7 +4781,7 @@ def _kol_roster_table_html(hist_keys=None):
             cards.append(
                 f'<div class="kp-card{drill_cls}"{drill_attr} style="border-left-color:{col}">'
                 f'<div class="kp-hd"><span class="kp-num">#{num_txt}</span>'
-                f'<span class="kp-nm">{_esc(k.get("display_name") or "")}</span>'
+                f'<span class="kp-nm">{_esc(_kol_disp(k.get("display_name") or ""))}</span>'
                 f'{dead_tag}</div>'
                 f'{body}{more}</div>')
         blocks.append(
@@ -10338,7 +10365,7 @@ mkRadar('rLong', RADAR.long);
 
   function open(kol) {{
     var d = DATA[kol];
-    elName.textContent = kol;
+    elName.textContent = (d && d.n) ? d.n : kol;
     if (!d || !d.h || !d.h.length) {{
       elBio.innerHTML = '';
       elCount.textContent = '';
