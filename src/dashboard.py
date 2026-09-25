@@ -332,94 +332,142 @@ def _liquidity_crisis_html(lq):
         return ('<section class="sec"><h2>每日流动性危机监测</h2>'
                 '<div class="muted">数据不足</div></section>')
 
-    # ── 画布 ──
-    W, H = 1180, 380
-    PL, PR, PT, PB = 62, 62, 26, 46
-    iw, ih = W - PL - PR, H - PT - PB
-
-    alld = sorted({d for d, _ in sofr} | {d for d, _ in bbb})
-    d0, d1 = alld[0], alld[-1]
+    # ════════════════════════════════════════════════════════════════
+    # ★2026-09-25 重做(Chao 四点):
+    #   1 鼠标悬停要看到「这天发生了什么」 → 事件说明来自 data/liquidity_crisis_events.json
+    #     (每条带真实出处, 子 agent web_extract 核实) + 美元/黄金事件库 dxy_gold_events.json
+    #   2 BBB 曲线过分平滑 → 原来 BBB(0.9~1.5%) 与 HY(2.6~4.6%) 共用一根右轴, BBB 被压成一条线。
+    #     改为上下两栏: 上栏 资金面 SOFR−EFFR + 黄金价格; 下栏 信用面, BBB 独占左轴(自适应放大),
+    #     HY 在右轴 —— BBB 的每一次抬升都看得见
+    #   3 黄金曲线加进图(原需求「闪崩时点」本来就含金银, 只有竖线没价格)
+    #   4 鼠标放任一曲线任一点 → 显示该点横坐标(日期)+纵坐标(各线数值)
+    #     实现: 每个交易日一条透明全高竖条(data-tip), 复用全站 data-tip 事件委托
+    # ════════════════════════════════════════════════════════════════
     import datetime as _dt
+    gold = (ser.get("gold") or {}).get("data") or []
+    W = 1180
+    PL, PR = 64, 70
+    iw = W - PL - PR
+    H1, H2, GAP, PT, PB = 250, 190, 30, 24, 44
+    top1, top2 = PT, PT + H1 + GAP
+    H = top2 + H2 + PB
+
+    alld = sorted({d for d, _ in sofr} | {d for d, _ in bbb} | {d for d, _ in gold})
+    d0, d1 = alld[0], alld[-1]
     t0 = _dt.date.fromisoformat(d0).toordinal()
-    t1 = _dt.date.fromisoformat(d1).toordinal()
-    span = max(1, t1 - t0)
+    span = max(1, _dt.date.fromisoformat(d1).toordinal() - t0)
 
     def X(d):
         return PL + iw * (_dt.date.fromisoformat(d).toordinal() - t0) / span
 
-    # 左轴 bp(SOFR−EFFR), 右轴 %(OAS)
-    lv = [v for _, v in sofr]
-    lmin, lmax = min(lv), max(lv)
-    lpad = max(2.0, (lmax - lmin) * 0.12)
-    lmin, lmax = lmin - lpad, lmax + lpad
+    def _rng(vals, pad_frac=0.10, floor_pad=0.0):
+        lo, hi = min(vals), max(vals)
+        pad = max(floor_pad, (hi - lo) * pad_frac)
+        return lo - pad, hi + pad
 
-    rv = [v for _, v in bbb] + [v for _, v in hy] + [v for _, v in ig]
-    rmin, rmax = min(rv), max(rv)
-    rpad = max(0.05, (rmax - rmin) * 0.12)
-    rmin, rmax = max(0, rmin - rpad), rmax + rpad
+    s_lo, s_hi = _rng([v for _, v in sofr], 0.10, 2.0)
+    g_lo, g_hi = _rng([v for _, v in gold], 0.06, 1.0) if gold else (0, 1)
+    b_lo, b_hi = _rng([v for _, v in bbb], 0.10, 0.02)
+    h_lo, h_hi = _rng([v for _, v in hy], 0.08, 0.05) if hy else (0, 1)
 
-    def YL(v):
-        return PT + ih * (1 - (v - lmin) / (lmax - lmin))
+    def Y(v, lo, hi, top, h):
+        return top + h * (1 - (v - lo) / ((hi - lo) or 1))
 
-    def YR(v):
-        return PT + ih * (1 - (v - rmin) / (rmax - rmin))
+    def path(pts, lo, hi, top, h):
+        return ("M" + " L".join(f"{X(d):.1f},{Y(v, lo, hi, top, h):.1f}" for d, v in pts)) if pts else ""
 
-    def path(pts, yf):
-        if not pts:
-            return ""
-        return "M" + " L".join(f"{X(d):.1f},{yf(v):.1f}" for d, v in pts)
+    # ── 事件库: 本图专属(闪崩/资金面尖峰/信用峰值) + 美元黄金事件库 ──
+    import json as _json, os as _os
+    ev = {}
+    _base = _os.path.join(_os.path.dirname(__file__), "..", "data")
+    for fn in ("dxy_gold_events.json", "liquidity_crisis_events.json"):   # 后者优先覆盖
+        try:
+            for e in _json.load(open(_os.path.join(_base, fn), encoding="utf-8")).get("events", []):
+                if e.get("date") and e.get("event") and e.get("event") != "原因未查实":
+                    ev.setdefault(e["date"], []).append(e)
+        except Exception as _e:
+            print(f"[dashboard] 流动性危机 事件库 {fn} 读取失败 {type(_e).__name__}: {_e}")
+    crash_map = {c["d"]: c for c in crash_days}
 
+    sm, bm, hm, gm = dict(sofr), dict(bbb), dict(hy), dict(gold)
     p = [f'<svg viewBox="0 0 {W} {H}" class="lqc-chart" preserveAspectRatio="xMidYMid meet" '
          f'font-family="-apple-system,PingFang SC,Helvetica,sans-serif">']
 
-    # 网格 + 左右轴刻度
-    for i in range(5):
-        y = PT + ih * i / 4
-        p.append(f'<line x1="{PL}" y1="{y:.1f}" x2="{PL+iw}" y2="{y:.1f}" '
-                 f'stroke="#d8d2c6" stroke-width="0.6" stroke-dasharray="2,3"/>')
-        p.append(f'<text x="{PL-8}" y="{y+3.5:.1f}" font-size="10.5" fill="#8a8070" '
-                 f'text-anchor="end">{lmax - (lmax-lmin)*i/4:.0f}</text>')
-        p.append(f'<text x="{PL+iw+8}" y="{y+3.5:.1f}" font-size="10.5" fill="#8a8070" '
-                 f'text-anchor="start">{rmax - (rmax-rmin)*i/4:.2f}</text>')
-
-    # SOFR−EFFR 阈值带(绿/黄/红分界: 5bp / 18bp)
-    for thr, col, lab in ((5, "#c9a227", "警戒 +5bp"), (18, "#b5533c", "危机 +18bp")):
-        if lmin <= thr <= lmax:
-            y = YL(thr)
+    def grid(top, h, lo_l, hi_l, lo_r, hi_r, fl, fr):
+        for i in range(5):
+            y = top + h * i / 4
             p.append(f'<line x1="{PL}" y1="{y:.1f}" x2="{PL+iw}" y2="{y:.1f}" '
-                     f'stroke="{col}" stroke-width="0.9" stroke-dasharray="5,4" opacity="0.55"/>')
-            p.append(f'<text x="{PL+4}" y="{y-4:.1f}" font-size="9.5" fill="{col}">{lab}</text>')
-    # 零轴
-    if lmin <= 0 <= lmax:
-        p.append(f'<line x1="{PL}" y1="{YL(0):.1f}" x2="{PL+iw}" y2="{YL(0):.1f}" '
-                 f'stroke="#9a9184" stroke-width="0.8"/>')
+                     f'stroke="#d8d2c6" stroke-width="0.6" stroke-dasharray="2,3"/>')
+            p.append(f'<text x="{PL-8}" y="{y+3.5:.1f}" font-size="10.5" fill="#8a8070" '
+                     f'text-anchor="end">{fl(hi_l - (hi_l-lo_l)*i/4)}</text>')
+            p.append(f'<text x="{PL+iw+8}" y="{y+3.5:.1f}" font-size="10.5" fill="#8a8070" '
+                     f'text-anchor="start">{fr(hi_r - (hi_r-lo_r)*i/4)}</text>')
 
-    # ── 闪崩竖线(甲=贵金属 / 乙=美股 / 两类同崩加粗) ──
+    # ── 上栏: SOFR−EFFR(左 bp) + 黄金(右 $/oz) ──
+    grid(top1, H1, s_lo, s_hi, g_lo, g_hi, lambda v: f"{v:.0f}", lambda v: f"{v:,.0f}")
+    for thr, col, lab in ((5, "#c9a227", "警戒 +5bp"), (18, "#b5533c", "危机 +18bp")):
+        if s_lo <= thr <= s_hi:
+            y = Y(thr, s_lo, s_hi, top1, H1)
+            p.append(f'<line x1="{PL}" y1="{y:.1f}" x2="{PL+iw}" y2="{y:.1f}" stroke="{col}" '
+                     f'stroke-width="0.9" stroke-dasharray="5,4" opacity="0.55"/>')
+            p.append(f'<text x="{PL+4}" y="{y-4:.1f}" font-size="9.5" fill="{col}">{lab}</text>')
+    if s_lo <= 0 <= s_hi:
+        y0 = Y(0, s_lo, s_hi, top1, H1)
+        p.append(f'<line x1="{PL}" y1="{y0:.1f}" x2="{PL+iw}" y2="{y0:.1f}" stroke="#9a9184" stroke-width="0.8"/>')
+    p.append(f'<text x="{PL}" y="{top1-8}" font-size="11" fill="#4a4338" font-weight="600">'
+             f'资金面 SOFR − EFFR（左 bp） × 黄金价格（右 $/oz）</text>')
+
+    # ── 下栏: BBB(左 %, 独占轴) + HY(右 %) ──
+    grid(top2, H2, b_lo, b_hi, h_lo, h_hi, lambda v: f"{v:.2f}", lambda v: f"{v:.2f}")
+    p.append(f'<text x="{PL}" y="{top2-8}" font-size="11" fill="#4a4338" font-weight="600">'
+             f'信用面 BBB 级 OAS（左 %·Oracle 同级，独立刻度） × 高收益 HY OAS（右 %）</text>')
+
+    # ── 闪崩竖线(贯穿两栏) ──
     for c in crash_days:
         d = c["d"]
         if not (d0 <= d <= d1):
             continue
         x = X(d)
         both = c.get("both")
-        grp = (c.get("groups") or [""])[0]
-        col = "#8c6d4f" if "贵金属" in grp else "#5a6b8c"
-        if both:
-            col = "#a04545"
-        p.append(f'<line x1="{x:.1f}" y1="{PT}" x2="{x:.1f}" y2="{PT+ih}" '
-                 f'stroke="{col}" stroke-width="{1.6 if both else 0.9}" '
-                 f'opacity="{0.55 if both else 0.32}"/>')
-        _tip = " / ".join("{0} {1:+.2f}%".format(i["asset"], i["ret"]) for i in c["items"])
-        p.append(f'<circle cx="{x:.1f}" cy="{PT+6}" r="{3.4 if both else 2.4}" '
-                 f'fill="{col}" opacity="0.85"><title>{d}  {_tip}</title></circle>')
+        col = "#a04545" if both else ("#8c6d4f" if "贵金属" in (c.get("groups") or [""])[0] else "#5a6b8c")
+        for tp, hh in ((top1, H1), (top2, H2)):
+            p.append(f'<line x1="{x:.1f}" y1="{tp}" x2="{x:.1f}" y2="{tp+hh}" stroke="{col}" '
+                     f'stroke-width="{1.6 if both else 1.0}" opacity="{0.55 if both else 0.38}"/>')
+        p.append(f'<circle cx="{x:.1f}" cy="{top1+6}" r="{3.6 if both else 2.8}" fill="{col}" opacity="0.9"/>')
+
+    # ── 事件小三角(非闪崩但有事件说明的日子, 标在上栏顶部) ──
+    for d in sorted(ev):
+        if d0 <= d <= d1 and d not in crash_map:
+            x = X(d)
+            p.append(f'<path d="M{x-3.2:.1f},{top1-1} L{x+3.2:.1f},{top1-1} L{x:.1f},{top1+5}Z" '
+                     f'fill="#6b8fb5" opacity="0.75"/>')
 
     # ── 曲线 ──
-    p.append(f'<path d="{path(ig, YR)}" fill="none" stroke="#b9b2a4" '
-             f'stroke-width="1.1" opacity="0.75"/>')
-    p.append(f'<path d="{path(hy, YR)}" fill="none" stroke="#c98b5e" stroke-width="1.5"/>')
-    p.append(f'<path d="{path(bbb, YR)}" fill="none" stroke="#7d5ba6" stroke-width="1.9"/>')
-    p.append(f'<path d="{path(sofr, YL)}" fill="none" stroke="#3f6b52" stroke-width="1.7"/>')
+    if gold:
+        p.append(f'<path d="{path(gold, g_lo, g_hi, top1, H1)}" fill="none" stroke="#c9a227" '
+                 f'stroke-width="1.5" opacity="0.9"/>')
+    p.append(f'<path d="{path(sofr, s_lo, s_hi, top1, H1)}" fill="none" stroke="#3f6b52" stroke-width="1.6"/>')
+    if hy:
+        p.append(f'<path d="{path(hy, h_lo, h_hi, top2, H2)}" fill="none" stroke="#c98b5e" stroke-width="1.4"/>')
+    p.append(f'<path d="{path(bbb, b_lo, b_hi, top2, H2)}" fill="none" stroke="#7d5ba6" stroke-width="2.0"/>')
 
-    # x 轴月份刻度
+    # 峰值标注(BBB / HY / SOFR−EFFR / 黄金)
+    def peak(pts, lo, hi, top, h, col, fmt):
+        if not pts:
+            return
+        d, v = max(pts, key=lambda z: z[1])
+        x, y = X(d), Y(v, lo, hi, top, h)
+        p.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3" fill="{col}"/>')
+        anchor = "end" if x > PL + iw * 0.85 else "start"
+        dx = -6 if anchor == "end" else 6
+        p.append(f'<text x="{x+dx:.1f}" y="{y-5:.1f}" font-size="10" fill="{col}" '
+                 f'text-anchor="{anchor}">峰 {fmt(v)}（{d}）</text>')
+    peak(sofr, s_lo, s_hi, top1, H1, "#3f6b52", lambda v: f"{v:+.0f}bp")
+    peak(gold, g_lo, g_hi, top1, H1, "#a8861c", lambda v: f"${v:,.0f}")
+    peak(bbb, b_lo, b_hi, top2, H2, "#7d5ba6", lambda v: f"{v:.2f}%")
+    peak(hy, h_lo, h_hi, top2, H2, "#c98b5e", lambda v: f"{v:.2f}%")
+
+    # x 轴月份
     seen = set()
     for d in alld:
         ym = d[:7]
@@ -429,27 +477,61 @@ def _liquidity_crisis_html(lq):
         if int(ym[5:]) % 3 != 1:
             continue
         x = X(d)
-        p.append(f'<line x1="{x:.1f}" y1="{PT+ih}" x2="{x:.1f}" y2="{PT+ih+4}" '
-                 f'stroke="#b0a696" stroke-width="0.8"/>')
-        p.append(f'<text x="{x:.1f}" y="{PT+ih+17}" font-size="10" fill="#8a8070" '
-                 f'text-anchor="middle">{ym}</text>')
+        p.append(f'<text x="{x:.1f}" y="{top2+H2+17}" font-size="10" fill="#8a8070" text-anchor="middle">{ym}</text>')
+        p.append(f'<line x1="{x:.1f}" y1="{top2+H2}" x2="{x:.1f}" y2="{top2+H2+4}" stroke="#b0a696" stroke-width="0.8"/>')
 
-    p.append(f'<text x="{PL-8}" y="{PT-10}" font-size="10" fill="#6f665a" '
-             f'text-anchor="end">bp</text>')
-    p.append(f'<text x="{PL+iw+8}" y="{PT-10}" font-size="10" fill="#6f665a" '
-             f'text-anchor="start">%</text>')
+    # ── 悬停: 每个交易日一条透明全高竖条, 显示 日期 + 四条线数值 + 当天事件/闪崩 ──
+    # 用 ffill 让没有交易的线(如 OAS 美国假日)显示最近值并注明日期
+    def _ff(m):
+        last = [None, None]
+        out_ = {}
+        for d in alld:
+            if d in m:
+                last = [d, m[d]]
+            out_[d] = tuple(last)
+        return out_
+    fs, fb, fh, fg = _ff(sm), _ff(bm), _ff(hm), _ff(gm)
+    xs = [X(d) for d in alld]
+    for i, d in enumerate(alld):
+        xl = (xs[i - 1] + xs[i]) / 2 if i else PL
+        xr = (xs[i] + xs[i + 1]) / 2 if i + 1 < len(xs) else PL + iw
+        def _v(tpl, fmt):
+            dd, vv = tpl
+            if vv is None:
+                return "—"
+            return fmt(vv) + ("" if dd == d else f"（{dd[5:]}）")
+        lines = [f"SOFR−EFFR {_v(fs[d], lambda v: f'{v:+.1f} bp')}",
+                 f"BBB OAS {_v(fb[d], lambda v: f'{v:.2f}%')}",
+                 f"HY OAS {_v(fh[d], lambda v: f'{v:.2f}%')}"]
+        if gold:
+            lines.append(f"黄金 {_v(fg[d], lambda v: f'${v:,.1f}')}")
+        extra = []
+        if d in crash_map:
+            extra.append("⚡ 闪崩：" + " / ".join(f"{it['asset']} {it['ret']:+.2f}%" for it in crash_map[d]["items"]))
+        for e in ev.get(d, []):
+            src = e.get("source") or ""
+            extra.append(f"📌 {e['event']}" + (f"（{src}）" if src else ""))
+            if e.get("detail"):
+                extra.append(e["detail"][:150])
+        # 两层转义: 内层把外部文本转成安全 HTML 并用 <br> 连接; 外层再转义整串放进属性。
+        #   浏览器 getAttribute 解掉外层 → 前端 innerHTML 只看到 <br> 和已转义的外部文本, 无注入面。
+        _inner = "<br>".join(_esc(x) for x in (lines + extra))
+        tip = _esc(d) + "||" + _esc(_inner)
+        p.append(f'<rect x="{xl:.1f}" y="{top1}" width="{max(0.6, xr-xl):.2f}" height="{top2+H2-top1}" '
+                 f'fill="transparent" data-tip="{tip}"/>')
     p.append("</svg>")
     chart = "".join(p)
 
     # ── 图例 ──
     leg = ('<div class="lqc-leg">'
-           '<span><i style="background:#3f6b52"></i>SOFR − EFFR（左轴 bp·资金面）</span>'
-           '<span><i style="background:#7d5ba6"></i>BBB 级 OAS（右轴 %·Oracle 同级）</span>'
-           '<span><i style="background:#c98b5e"></i>高收益 HY OAS（右轴 %）</span>'
-           '<span><i style="background:#b9b2a4"></i>投资级综合 OAS（右轴 %）</span>'
+           '<span><i style="background:#3f6b52"></i>SOFR − EFFR（上栏左轴 bp·资金面）</span>'
+           '<span><i style="background:#c9a227"></i>黄金 COMEX 连续（上栏右轴 $/oz）</span>'
+           '<span><i style="background:#7d5ba6"></i>BBB 级 OAS（下栏左轴 %·Oracle 同级）</span>'
+           '<span><i style="background:#c98b5e"></i>高收益 HY OAS（下栏右轴 %）</span>'
            '<span><i style="background:#8c6d4f"></i>闪崩·贵金属</span>'
            '<span><i style="background:#5a6b8c"></i>闪崩·美股</span>'
            '<span><i style="background:#a04545"></i>贵金属与美股同日闪崩</span>'
+           '<span><i style="background:#6b8fb5"></i>▼ 有事件说明的日子</span>'
            '</div>')
 
     # ── 当前读数 ──
@@ -506,7 +588,7 @@ def _liquidity_crisis_html(lq):
         '两者<b>同时</b>恶化才是真流动性危机；只有一边动，多半是局部事件。'
         '竖线为闪崩日，贵金属与美股分色，贵金属与美股<b>同日一起</b>闪崩的用红色加粗——那才是系统性流动性事件，而非单一市场的事。</div>'
         + cards + chart + leg
-        + '<div class="lqc-hint">曲线上方圆点可悬停查看该日各资产跌幅。'
+        + '<div class="lqc-hint">鼠标放在图上任意位置，会显示该日的四条线数值；闪崩日和标了 ▼ 的日子还会显示当天发生了什么及出处。'
           'Oracle 单名 CDS 属付费数据无法取得，故以其<b>同评级 BBB 档 OAS</b> 为主线、'
           'HY OAS 为降级风险参照——Oracle 现为 S&amp;P BBB−，距垃圾级仅一档。</div>'
         + table + prov_html +
@@ -9597,6 +9679,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
     max-width: 260px;
   }}
   #chart-tip.show {{ opacity: 1; }}
+  /* 多行 tooltip(流动性危机图: 四条线数值 + 当天事件说明) —— 仅内容含 <br> 时启用, 不影响其他图 */
+  #chart-tip.multi {{ white-space: normal; max-width: 380px; font-weight: 400; }}
+  #chart-tip.multi .tip-v {{ font-weight: 500; font-size: 12px; line-height: 1.55; }}
   #chart-tip .tip-d {{ color: #c9c2b2; font-size: 11px; }}
   #chart-tip .tip-v {{ font-weight: 700; font-size: 13px; }}
   /* 数据元素 hover 视觉反馈 */
@@ -10236,6 +10321,7 @@ mkRadar('rLong', RADAR.long);
     if (d) html += '<div class="tip-d">' + d + '</div>';
     if (v) html += '<div class="tip-v">' + v + '</div>';
     tip.innerHTML = html || raw;
+    if (v.indexOf('<br>') >= 0) tip.classList.add('multi'); else tip.classList.remove('multi');
     tip.classList.add('show');
     move(ev);
   }}

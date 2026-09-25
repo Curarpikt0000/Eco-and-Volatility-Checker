@@ -3110,11 +3110,15 @@ def _fetch_move_history(start):
 
 
 def _weekly_resample(pts, agg="last"):
-    """把日度 [(date,val)] 降采样到周度, 减少折线噪声。agg: last|mean|max。
+    """把日度 [(date,val)] 降采样到周度, 减少折线噪声。agg: last|mean|max|peak。
     ★日期标签用该周【真实观测末日】而非名义周五 —— 名义周五会把当前未完成周
       (如周一 08-17)标成未来日期 08-21, 造成 as-of 显示未来、图表 X 轴外推。
       节假日周同理(周四收盘则标周四), 更贴合真实数据。
-    返回 [(week_date, val)]。"""
+    ★agg="peak"(2026-09-25, Chao:「我要看的就是这些突出的抬升点, 确保数据正确」):
+      每周保留周末值, 另外若周内日度最高/最低比周末值更极端, 把该极端日也作为独立点保留
+      (用它的真实日期)。这样周中尖峰不会被削掉——此前 MOVE 日度高 141.67/139.88 被画成 137.26,
+      OFR FSI 日度高 +2.743(2025-04-07)被画成 1.60。图上高/低/现 = 真实日度极值。
+    返回 [(date, val)]。"""
     import datetime as _dt
     from collections import defaultdict
     buckets = defaultdict(list)
@@ -3131,6 +3135,18 @@ def _weekly_resample(pts, agg="last"):
         rows = sorted(buckets[wk])          # 按真实日期排序
         vs = [v for _, v in rows]
         real_last_date = rows[-1][0]        # ★该周真实观测末日
+        if agg == "peak":
+            last_v = vs[-1]
+            keep = {real_last_date: last_v}
+            hi_d, hi_v = max(rows, key=lambda x: x[1])
+            lo_d, lo_v = min(rows, key=lambda x: x[1])
+            if hi_v > last_v:
+                keep[hi_d] = hi_v
+            if lo_v < last_v:
+                keep[lo_d] = lo_v
+            for d_, v_ in sorted(keep.items()):
+                out.append((d_, round(v_, 4)))
+            continue
         if agg == "mean":
             val = sum(vs) / len(vs)
         elif agg == "max":
@@ -3168,7 +3184,7 @@ def fetch_treasury_stress_panels(years=3):
         "unit_left": "MOVE 指数", "unit_right": "收益率 %",
         "series": [
             {"name": "MOVE 指数", "color": "#c17d6a", "axis": "left",
-             "dash": True, "points": _mk(move, agg="last")},
+             "dash": True, "points": _mk(move, agg="peak")},   # peak: 周中尖峰不削(Chao 要看抬升点)
             {"name": "10年收益率", "color": "#6b8fb5", "axis": "right",
              "points": _mk(dgs10, agg="last")},
             {"name": "2年收益率", "color": "#7fa085", "axis": "right",
@@ -3309,7 +3325,7 @@ def fetch_ofr_fsi(years=3):
               "Funding": "#8a7fa8", "Safe assets": "#7fa085", "Volatility": "#6b8fb5"}
     series = []
     for col, zh in want.items():
-        wp = _weekly_resample(series_pts[col], agg="last") if series_pts[col] else []
+        wp = _weekly_resample(series_pts[col], agg="peak") if series_pts[col] else []   # peak: 保留周中尖峰
         series.append({
             "name": (f"OFR FSI 总指数" if col == "OFR FSI" else zh),
             "color": colors[col],
@@ -4973,7 +4989,8 @@ def fetch_basis_trade_monitor(cache_path=None, years=2):
     trigger_series = []
     if move:
         trigger_series.append({"name": "MOVE 债市波动率", "color": "#c17d6a", "axis": "left",
-                               "width": 2.0, "points": _wk(move)})
+                               "width": 2.0,
+                               "points": [{"date": d, "v": round(v, 4)} for d, v in _weekly_resample(move, agg="peak")]})
     # Fed 准备金(万亿$) — 从 FRED WRESBAL(周度, 百万$→万亿$)
     reserves = _fred_series_hist("WRESBAL", start)
     if reserves:
@@ -5215,6 +5232,20 @@ def fetch_liquidity_crisis_panel(start="2025-01-01", cache_path=None):
                 out["crashes"].append({"d": d, "asset": zh, "group": grp,
                                        "ret": round(r, 2), "threshold": round(p1, 2)})
     out["crashes"].sort(key=lambda z: (z["d"], z["asset"]))
+
+    # ── ④ 黄金价格(COMEX 连续 GC=F, 美元/盎司) ──
+    # ★2026-09-25 Chao:「黄金的曲线是不是也应该在这个图上」—— 闪崩标注本来就含金银,
+    #   只有竖线没有价格线, 看不出崩之前涨了多少、崩完回到哪。与闪崩识别同源(同一次 Yahoo 拉取口径)。
+    try:
+        gpx = [(d, round(v, 2)) for d, v in _px("GC=F", start) if d >= start]
+        out["series"]["gold"] = {
+            "name": "黄金 COMEX 连续", "unit": "$/oz", "axis": "gold", "sym": "GC=F",
+            "desc": "COMEX 黄金期货连续合约收盘价(Yahoo GC=F), 日频。",
+            "data": gpx, "status": "ok" if gpx else "无数据",
+        }
+    except Exception as e:
+        out["series"]["gold"] = {"name": "黄金 COMEX 连续", "data": [],
+                                 "status": f"错误:{type(e).__name__}:{e}"}
 
     # 同日多资产合并(便于渲染成一条竖线)
     merged = {}
