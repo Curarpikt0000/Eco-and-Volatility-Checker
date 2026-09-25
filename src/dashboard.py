@@ -245,6 +245,24 @@ def load_history(snap_dir, key, days=21):
     return out[-days:] if out else out
 
 
+def _hover_bands(xs, tips, top, height, x_min=None, x_max=None):
+    """★2026-09-25(Chao「所有图鼠标凑上去至少显示横纵坐标」复查补漏):
+    通用 hover 命中带 —— 每个数据点一条透明全高竖条(左右边界=与相邻点的中点),
+    复用全站 data-tip 事件委托。多线图一次悬停可同时显示该日所有序列数值。
+    xs: 升序像素横坐标; tips: 已 _esc 的 "横坐标||纵坐标(可含<br>)"。
+    必须拼在 SVG 最后(最上层)才能接住鼠标。"""
+    n = len(xs)
+    if n == 0:
+        return ""
+    out = []
+    for i, x in enumerate(xs):
+        l = (xs[i - 1] + x) / 2 if i > 0 else (x_min if x_min is not None else x - 3)
+        r = (x + xs[i + 1]) / 2 if i < n - 1 else (x_max if x_max is not None else x + 3)
+        out.append(f'<rect x="{l:.1f}" y="{top:.1f}" width="{max(r - l, 0.6):.2f}" '
+                   f'height="{height:.1f}" fill="transparent" data-tip="{tips[i]}"/>')
+    return "".join(out)
+
+
 def sparkline_svg(points, direction="high_bad", w=140, h=36, unit=""):
     """生成 mini 折线 SVG。points: [(date,val),...]。莫兰迪色。
     ★带 tooltip: 每点覆盖一条透明全高 hit-band(rect), 复用全站 data-tip 事件委托机制。
@@ -689,6 +707,18 @@ def _cot_mm_one(key, m):
              f'text-anchor="end">价格 $</text>')
     p.append(f'<text x="{PL+iw+8}" y="{PT-8}" font-size="9.5" fill="#6f665a" '
              f'text-anchor="start">MM净(手)</text>')
+    # hover: 每个价格日一条命中带; 周度持仓取「截至当日最近一期」(as-of, 不插值不编造)
+    _xs, _tips, _ci = [], [], -1
+    for d, v in price:
+        while _ci + 1 < len(cot) and cot[_ci + 1]["d"] <= d:
+            _ci += 1
+        _t = f'价格 ${v:,.2f}'
+        if _ci >= 0:
+            _c = cot[_ci]
+            _t += (f'<br>MM 净持仓 {_c["mm_net"]:+,} 手<br>未平仓 OI {_c["oi"]:,} 手'
+                   f'<br>（持仓周度 · 截至 {_c["d"]}）')
+        _xs.append(X(d)); _tips.append(f'{_esc(d)}||{_esc(_t)}')
+    p.append(_hover_bands(_xs, _tips, PT, ih, PL, PL + iw))
     p.append("</svg>")
 
     last, prev = m.get("latest") or {}, m.get("prev") or {}
@@ -984,6 +1014,7 @@ def _wrs_html(w):
     <circle cx="{X(pk_i):.1f}" cy="{Y(pk['v']):.1f}" r="3.4" class="wrs-peak"/>
     <circle cx="{X(len(ser)-1):.1f}" cy="{Y(vals[-1]):.1f}" r="4" class="wrs-now"/>
     {xt}
+    {_hover_bands([X(i) for i in range(len(ser))], [f"{_esc(p['d'])}||WRS {p['v']:.4f}" for p in ser], PT, ih, PL, W - PR)}
   </svg>
 
   <div class="wrs-foot">
@@ -994,7 +1025,7 @@ def _wrs_html(w):
 
 
 
-def _ust_micro_line(items, W=880, H=150, PL=58, PR=10, PT=10, PB=22, color="#6b7f8a"):
+def _ust_micro_line(items, W=880, H=150, PL=58, PR=10, PT=10, PB=22, color="#6b7f8a", unit=""):
     """通用小折线, items=[{d,v}]。"""
     if len(items) < 3:
         return ""
@@ -1019,10 +1050,14 @@ def _ust_micro_line(items, W=880, H=150, PL=58, PR=10, PT=10, PB=22, color="#6b7
         if yr not in seen and (i == 0 or i > 6):
             seen.add(yr)
             xt += f'<text x="{X(i):.1f}" y="{H-6}" class="um-xt">{yr}</text>'
+    _fv = (lambda v: f"{v:,.0f}" if abs(v) >= 1000 else f"{v:.2f}")
+    hits = _hover_bands([X(i) for i in range(len(items))],
+                        [f'{_esc(p["d"])}||{_fv(p["v"])}{_esc(unit)}' for p in items],
+                        PT, ih, PL, W - PR)
     return (f'<svg viewBox="0 0 {W} {H}" class="um-chart" preserveAspectRatio="xMidYMid meet">'
             f'{grid}<polyline points="{pts}" style="stroke:{color}" class="um-line"/>'
             f'<circle cx="{X(len(items)-1):.1f}" cy="{Y(vals[-1]):.1f}" r="3.6" '
-            f'style="fill:{color}"/>{xt}</svg>')
+            f'style="fill:{color}"/>{xt}{hits}</svg>')
 
 
 def _ust_micro_html(m):
@@ -1055,7 +1090,7 @@ def _ust_micro_html(m):
 
     # 主图用 2Y 桶
     two = next((b for b in bks if b.get("tag")), bks[0] if bks else None)
-    chart2y = _ust_micro_line(two["series"], color="#6b7f8a") if two else ""
+    chart2y = _ust_micro_line(two["series"], color="#6b7f8a", unit=" 百万美元") if two else ""
 
     # ── Exhibit 3: 交易成本(代理) ──
     cost_blocks = ""
@@ -1067,7 +1102,7 @@ def _ust_micro_html(m):
             f'<span class="um-pct">3年分位 {c["pct_rank"]}%</span></div>'
             f'<div class="um-cost-d">{c["desc"]}　·　{c["latest_date"]}　·　'
             f'区间 {c["min"]:.2f} ~ {c["max"]:.2f}</div>'
-            f'{_ust_micro_line(c["series"], H=130, color="#a08b6a")}</div>')
+            f'{_ust_micro_line(c["series"], H=130, color="#a08b6a", unit=c.get("unit", ""))}</div>')
 
     return f"""
 <div class="um-wrap">
@@ -1226,6 +1261,7 @@ def _dxy_gold_html(dg):
     <polyline points="{gold_pts}" class="dxg-gold"/>
     <polyline points="{dxy_pts}" class="dxg-dxy"/>
     {marks}{labels}{xt}
+    {_hover_bands([X(i) for i in range(len(ser))], [f"{_esc(p['d'])}||黄金 ${p['g']:,.2f}&lt;br&gt;美元指数 {p['x']:.2f}" for p in ser], PT, ih, PL, W - PR)}
   </svg>
 
   <div class="dxg-method">{dg.get("method_note","")}<br>{dg.get("cadence_note","")}</div>
@@ -1276,8 +1312,8 @@ def _gold_etf_region_html(gf):
             h = abs(y1 - y0)
             if h < 0.35: continue
             bars += (f'<rect x="{x:.1f}" y="{min(y0,y1):.1f}" width="{bw:.1f}" '
-                     f'height="{h:.1f}" fill="{COL[k]}" opacity=".9"><title>'
-                     f'{r["d"]} {k} {v:+.2f} 吨</title></rect>')
+                     f'height="{h:.1f}" fill="{COL[k]}" opacity=".9" '
+                     f'data-tip="{_esc(r["d"])} · {k}||{v:+.2f} 吨（当周合计 {r["total"]:+.2f} 吨）"/>')
 
     # 金价折线(右轴)
     pxs = [r["px"] for r in wk if r["px"]]
@@ -1288,6 +1324,9 @@ def _gold_etf_region_html(gf):
         def YP(v): return PT + ih * (1 - (v - plo) / pr_) * 0.92 + ih * 0.04
         pts = " ".join(f"{X(i):.1f},{YP(r['px']):.1f}" for i, r in enumerate(wk) if r["px"])
         pline = f'<polyline points="{pts}" class="gef-px"/>'
+        pline += "".join(f'<circle class="tip-hit" cx="{X(i):.1f}" cy="{YP(r["px"]):.1f}" r="6" '
+                         f'data-tip="{_esc(r["d"])} · 金价||${r["px"]:,.0f}/盎司"/>'
+                         for i, r in enumerate(wk) if r["px"])
         for k in range(3):
             v = plo + pr_ * k / 2
             pline += f'<text x="{W-PR+6}" y="{YP(v)+3.5:.1f}" class="gef-yr">{v:,.0f}</text>'
@@ -1431,8 +1470,9 @@ def _pm_optvol_html(pv):
             lines += f'<polyline points="{path}" class="pv-ln" stroke="{COL[tk]}"/>'
             for i, l in enumerate(labs):
                 if l in m:
-                    lines += (f'<circle cx="{X(i):.1f}" cy="{Y(m[l]):.1f}" r="3" '
-                              f'fill="{COL[tk]}"><title>{tk} {l} {m[l]:.2f}{unit}</title></circle>')
+                    lines += (f'<circle cx="{X(i):.1f}" cy="{Y(m[l]):.1f}" r="3" fill="{COL[tk]}"/>'
+                              f'<circle class="tip-hit" cx="{X(i):.1f}" cy="{Y(m[l]):.1f}" r="8" '
+                              f'data-tip="{tk} · 期限 {l}||{m[l]:.2f} {unit}"/>')
         return f"""
   <div class="pv-block">
     <div class="pv-t">{title}</div>
@@ -1521,8 +1561,10 @@ def _comex_optpos_html(cx):
             top, h = (yv, y0 - yv) if x["net_opt"] >= 0 else (y0, yv - y0)
             fill = COL[key] if x["net_opt"] >= 0 else "#a3705f"
             bars += (f'<rect x="{cx_-bw/2:.1f}" y="{top:.1f}" width="{bw:.1f}" '
-                     f'height="{max(h,0.6):.1f}" fill="{fill}" opacity=".82">'
-                     f'<title>{x["d"]}  期权净多 {x["net_opt"]:,} 张</title></rect>')
+                     f'height="{max(h,0.6):.1f}" fill="{fill}" opacity=".82"/>')
+        bars += _hover_bands([PL + iw * (i + 0.5) / len(ser) for i in range(len(ser))],
+                             [f'{_esc(x["d"])}||期权净多 {x["net_opt"]:,} 张' for x in ser],
+                             PT, ih, PL, W - PR)
         grid = ""
         for k in range(4):
             gv = lo + (hi - lo) * k / 3
@@ -1657,8 +1699,7 @@ def _global_money_html(gm):
         top, hh = (yv, y0 - yv) if a >= 0 else (y0, yv - y0)
         fill = "#a3855f" if a >= 0 else "#8ba39a"
         bars += (f'<rect x="{X(i)-bw/2:.1f}" y="{top:.1f}" width="{bw:.1f}" '
-                 f'height="{max(hh,0.5):.1f}" fill="{fill}" opacity=".62">'
-                 f'<title>{r["m"]} 加速度 {a:+.2f}</title></rect>')
+                 f'height="{max(hh,0.5):.1f}" fill="{fill}" opacity=".62"/>')
     # 同比线
     pts = [(X(i), Y2(r["yoy"])) for i, r in enumerate(ser) if r.get("yoy") is not None]
     line = ('<polyline points="' + " ".join(f"{x:.1f},{y:.1f}" for x, y in pts) +
@@ -1671,6 +1712,19 @@ def _global_money_html(gm):
             continue
         seen2.add(y)
         xt2 += f'<text x="{X(i):.1f}" y="{H2-12}" class="gms-xt">{y}</text>'
+
+    # hover 命中带(两图): ①合计+分国 ②同比+加速度
+    def _f(v, fmt):
+        return "—" if v is None else format(v, fmt)
+    hits1 = _hover_bands(
+        [X(i) for i in range(n)],
+        [_esc(r["m"]) + "||" + f'合计 {r["total"]:,.1f} 万亿美元' + "".join(
+            f'&lt;br&gt;{NM[c]} {r["parts"][c]:,.1f}' for c in ORDER if c in r["parts"])
+         for r in ser], PT, ih, PL, W - PR)
+    hits2 = _hover_bands(
+        [X(i) for i in range(n)],
+        [f'{_esc(r["m"])}||同比 {_f(r.get("yoy"), ".2f")}%&lt;br&gt;加速度 {_f(r.get("accel"), "+.2f")}'
+         for r in ser], PT, ih2, PL, W - PR)
 
     # ── 覆盖度条 ──
     cov = ""
@@ -1715,7 +1769,7 @@ def _global_money_html(gm):
   <div class="gms-block">
     <div class="gms-t">① 五大经济体货币存量（折万亿美元，堆叠）</div>
     <svg viewBox="0 0 {W} {H}" class="gms-chart" preserveAspectRatio="xMidYMid meet">
-      {g1}{xticks()}{layers}
+      {g1}{xticks()}{layers}{hits1}
     </svg>
   </div>
 
@@ -1723,7 +1777,7 @@ def _global_money_html(gm):
     <div class="gms-t">② 同比增速（线）与加速度（柱）——
       柱在零轴上方＝放水在提速，下方＝在减速</div>
     <svg viewBox="0 0 {W} {H2}" class="gms-chart" preserveAspectRatio="xMidYMid meet">
-      {g2}{bars}{line}{xt2}
+      {g2}{bars}{line}{xt2}{hits2}
     </svg>
   </div>
 
@@ -5435,9 +5489,15 @@ def _official_private_svg(off, priv, w=1050, h=230):
             x = pad_l + (iw * i / max(n - 1, 1))
             xl.append(f'<text x="{x:.1f}" y="{h-8}" text-anchor="middle" '
                       f'font-size="9.5" fill="#8a8377">{off[i][0]}</text>')
+    _pm = dict(priv)
+    hits = _hover_bands(
+        [pad_l + (iw * i / max(n - 1, 1)) for i in range(n)],
+        [f'{_esc(d)}||外国官方 ${v:,.0f}B'
+         + (f'&lt;br&gt;外国私人 ${_pm[d]:,.0f}B' if d in _pm else "")
+         for d, v in off], pad_t, ih, pad_l, w - pad_r)
     return (f'<svg viewBox="0 0 {w} {h}" class="cu-svg" role="img">'
             f'{"".join(grid)}{path(priv, "#8f9bb3")}{path(off, "#c08a7d")}'
-            f'{"".join(xl)}</svg>')
+            f'{"".join(xl)}{hits}</svg>')
 
 
 def _official_private_block(op):
