@@ -1068,12 +1068,16 @@ CB_BS_SPEC = {
             ("美国国债 Treasuries", "资产_Treasuries_B"),
             ("短期国债 Bills（RMP 储备管理购买）", "资产_Bills_B", "sub"),
             ("MBS 抵押债", "资产_MBS_B"),
-            ("FIMA 海外回购", "资产_FIMA_B"),
+            # ★2026-09-25 口径更正(Chao:「FIMA 使用量我记得很小」): 真 FIMA = WORAL(资产侧,
+            #   Fed 借美元给外国央行, 常态≈0)。此前这里显示的「FIMA 海外回购 $318B」读的是
+            #   B7 字段 资产_FIMA_B = WLRRAFOIAL, 实为**负债侧**外国官方逆回购池 → 已移到负债侧并正名。
+            ("FIMA 回购便利（真·Fed 借给外国央行）", "资产_FIMA真_B"),
             ("SRF 常备回购", "资产_SRF_B"),
         ],
         "liabilities": [
             ("准备金 Reserves", "负债_Reserves_B"),
             ("隔夜逆回购 ON RRP", "负债_ON_RRP_B"),
+            ("外国官方逆回购池（外国央行存放）", "资产_FIMA_B"),   # 字段名是上游历史遗留, 实为负债侧 WLRRAFOIAL
             ("财政部账户 TGA", "负债_TGA_B"),
             ("流通货币 Currency", "负债_Currency_B"),
         ],
@@ -7818,3 +7822,247 @@ if __name__ == "__main__":
     print(json.dumps(fetch_foreign_custody_ust(), ensure_ascii=False, indent=2, default=str))
     print("\n=== 美国国债拍卖 ===")
     print(json.dumps(fetch_treasury_auctions(), ensure_ascii=False, indent=2, default=str))
+
+
+# ══════════════════════════════════════════════════════════════════
+# WGC Weekly Markets Monitor —— ETF / COMEX 期货 ATM IV 期限结构(周更)
+# ══════════════════════════════════════════════════════════════════
+_WMM_LIST_URL = "https://www.gold.org/goldhub/gold-focus"
+
+# ★IGLN/SGOL 长端为平推值(2026-09-21 实测: 12M/18M/24M 的 PDF y 坐标完全相同,
+#   不是三个独立报价)。这两个标的流动性差(SGOL 本项目自算侧也因"只有 4 个到期日"
+#   被排除), Bloomberg 侧多半是用末个有效值前向填充。页面必须标注,
+#   否则读者会把它当成四条同等真实的曲线。
+
+
+def _wmm_cache_path():
+    """双候选路径(照 fetch_china_regime_shift 的做法)。
+    ★为什么不只用 __file__: 反测/工具脚本可能从别处导入本模块,
+      __file__ 推导会算到错误目录 —— 今天在中国断代那里已经栽过一次。"""
+    import os as _os
+    c = [_os.path.abspath(_os.path.join(_os.path.dirname(__file__), "..",
+                                        "data", "wgc_weekly_iv.json")),
+         _os.path.join(_os.getcwd(), "data", "wgc_weekly_iv.json")]
+    for p in c:
+        if _os.path.exists(p):
+            return p
+    return c[0]
+
+
+def _wmm_latest_pdf_url():
+    """从 gold-focus 列表页找最新一期 WMM 的 PDF 直链。
+    ★跳过 'no-release' 期(WGC 确实会停发, 实测有 weekly-markets-monitor-no-release)。"""
+    import re as _re
+    import requests
+    try:
+        r = requests.get(_WMM_LIST_URL, timeout=55,
+                         headers={"User-Agent": "Mozilla/5.0 (EcoVolChecker research)"})
+        if r.status_code != 200:
+            return None, None
+        html = r.text
+    except Exception:
+        return None, None
+    _errs = []
+    seen, uniq = set(), []
+    for m in _re.finditer(
+            r'href="(/goldhub/gold-focus/\d{4}/\d{2}/weekly-markets-monitor[^"]*)"', html):
+        u = m.group(1)
+        if u not in seen:
+            seen.add(u)
+            uniq.append(u)
+    for u in uniq[:5]:
+        if "no-release" in u:
+            continue
+        try:
+            p = requests.get("https://www.gold.org" + u, timeout=55,
+                             headers={"User-Agent": "Mozilla/5.0 (EcoVolChecker research)"})
+            if p.status_code != 200:
+                continue
+            m = _re.search(r'href="(/download/file/\d+/WMM_[^"]+\.pdf)"', p.text)
+            if m:
+                return "https://www.gold.org" + m.group(1), u
+        except Exception as _e:
+            # ★不吞: 记下真实异常类型, 否则只看到"未找到链接"会往错方向排查
+            #   (2026-09-21 实测: NameError 被吞掉, 我查了三轮正则)
+            _errs.append("%s: %s" % (type(_e).__name__, _e))
+            continue
+    if _errs:
+        print("[external_data] WMM 详情页异常: %s" % _errs[:3])
+    return None, None
+
+
+def _wmm_parse(blob):
+    """解析 WMM PDF 里的 ATM IV 期限结构图(ETF 左 / 期货 右)。
+
+    ★方法: 轴刻度文字 bbox **中心**做 y→% 线性标定; 折线按颜色分组;
+      x 吸附到期限刻度; 图例色块反查 ticker。
+    ★坑(2026-09-21 实测): 文字 bbox 的 x 是左边缘, 而数据点落在文字中心,
+      差约半个字宽(6.6pt)。用左边缘吸附会全部落空 —— 必须用 (x0+x1)/2。
+    ★硬校验: 反推值必须落在该图 y 轴范围内, 否则整条丢弃(宁缺毋错)。
+    """
+    import re as _re
+    from collections import defaultdict
+    try:
+        import pymupdf as _fz
+    except ImportError:
+        try:
+            import fitz as _fz
+        except ImportError:
+            return {"error": "pymupdf 未安装"}
+    try:
+        doc = _fz.open(stream=blob, filetype="pdf")
+    except Exception as e:
+        return {"error": f"PDF 打开失败 {type(e).__name__}"}
+
+    tgt = None
+    for i, pg in enumerate(doc):
+        if "ATM IV term structure" in pg.get_text():
+            tgt = i
+            break
+    if tgt is None:
+        return {"error": "未找到 ATM IV term structure 页"}
+
+    pg = doc[tgt]
+    ylab, xlab, legends = [], [], []
+    for b in pg.get_text("dict")["blocks"]:
+        for l in b.get("lines", []):
+            for s in l.get("spans", []):
+                t = s["text"].strip()
+                x0, y0, x1, y1 = s["bbox"]
+                cx, cy = (x0 + x1) / 2.0, (y0 + y1) / 2.0
+                if _re.fullmatch(r"\d{2}", t) and cy > 200:
+                    ylab.append((cx, cy, int(t)))
+                elif t in ("1M", "3M", "6M", "12M", "18M", "24M"):
+                    xlab.append((cx, cy, t))
+                elif "Equity" in t or "COMDTY" in t:
+                    legends.append({"tk": t.split()[0], "x0": x0, "cy": cy})
+
+    draws = pg.get_drawings()
+    legend_map = {}
+    for g in legends:
+        best = None
+        for d in draws:
+            col = d.get("fill") or d.get("color")
+            if col is None:
+                continue
+            if max(col) - min(col) < 0.02 and col[0] > 0.7:
+                continue
+            rc = d["rect"]
+            if (g["x0"] - 30) <= rc.x1 <= (g["x0"] - 1) and abs((rc.y0 + rc.y1) / 2 - g["cy"]) <= 7:
+                dist = g["x0"] - rc.x1
+                if best is None or dist < best[0]:
+                    best = (dist, tuple(round(c, 3) for c in col))
+        if best:
+            legend_map[best[1]] = g["tk"]
+
+    out = {"page": tgt + 1, "series": {}, "flat_tail": [],
+           "legend_matched": len(legend_map), "legend_total": len(legends)}
+    for grp, lo, hi in (("etf", 60, 480), ("futures", 490, 900)):
+        ys = sorted([(cy, v) for cx, cy, v in ylab if lo <= cx <= hi], key=lambda z: z[0])
+        xs = sorted([(cx, t) for cx, cy, t in xlab if lo <= cx <= hi], key=lambda z: z[0])
+        if len(ys) < 2 or len(xs) < 4:
+            continue
+        (ya, va), (yb, vb) = ys[0], ys[-1]
+        alo, ahi = min(v for _, v in ys), max(v for _, v in ys)
+        grouped = defaultdict(list)
+        for d in draws:
+            col = d.get("color")
+            if col is None:
+                continue
+            if max(col) - min(col) < 0.02 and col[0] > 0.7:
+                continue
+            pts = []
+            for it in d["items"]:
+                if it[0] == "l":
+                    for p in (it[1], it[2]):
+                        if lo <= p.x <= hi and 260 <= p.y <= 445:
+                            pts.append((round(p.x, 1), round(p.y, 2)))
+            if len(pts) >= 6:
+                grouped[tuple(round(c, 3) for c in col)].extend(pts)
+        order = [t for _, t in xs]
+        for col, pts in grouped.items():
+            tk = legend_map.get(col)
+            if not tk:
+                continue
+            snap = {}
+            for px, py in sorted(set(pts)):
+                bx, bt = min(xs, key=lambda z: abs(z[0] - px))
+                if abs(bx - px) <= 9:
+                    snap.setdefault(bt, []).append(py)
+            if len(snap) < 5:
+                continue
+            vals = {}
+            for t in order:
+                if t in snap:
+                    yy = sum(snap[t]) / len(snap[t])
+                    vals[t] = round(va + (yy - ya) * (vb - va) / (yb - ya), 2)
+            if not all(alo - 1.5 <= v <= ahi + 1.5 for v in vals.values()):
+                continue
+            tail = [snap[t][0] for t in ("12M", "18M", "24M") if t in snap]
+            if len(tail) >= 3 and len(set(tail)) == 1:
+                out["flat_tail"].append(tk)
+            out["series"][tk] = {"group": grp, "iv": vals}
+    return out
+
+
+def fetch_wgc_weekly_iv(cache_path=None):
+    """WGC Weekly Markets Monitor 的 ATM IV 期限结构(ETF + COMEX 期货)。
+
+    ★为什么做(2026-09-21 Chao 指出这图出自 WGC 周报): 本项目的 IV 是 CBOE
+      逐合约自算, WGC 周报里有同类图(源 = Bloomberg)。两者并排 = 交叉验证 ——
+      对得上说明自算算法可信, 对不上就是算法有问题。实测四个点差 <1pt。
+    ★额外价值: 周报含 GC1 COMDTY(COMEX 黄金期货 IV)。本项目此前排查八条路径
+      全封(CME API/ftp 403、Barchart 403、Yahoo 401、CBOE 不覆盖期货期权),
+      判定 CME 的 IV 是商业数据拿不到 —— WGC 买来印在公开 PDF 里, 每周免费更新。
+    ★频率差异: WGC 周更(周一), 本项目 CBOE 日更。页面必须分别标明, 不能混为一谈。
+    """
+    import os as _os
+    out = {"status": "ok", "source": "WGC Weekly Markets Monitor(数据源 Bloomberg)",
+           "freq": "weekly", "series": {}, "flat_tail": [], "warnings": [],
+           "flat_tail_note": "长端多期相同 = 该标的流动性不足, 源侧前向填充, 非独立报价"}
+    cp = cache_path or _wmm_cache_path()
+    try:
+        import re as _re
+        pdf_url, page_url = _wmm_latest_pdf_url()
+        if not pdf_url:
+            raise RuntimeError("未找到 WMM PDF 链接")
+        out["pdf_url"] = pdf_url
+        out["page_url"] = ("https://www.gold.org" + page_url) if page_url else ""
+        m = _re.search(r"WMM_(\d{1,2})_([A-Za-z]+)_(\d{4})", pdf_url)
+        if m:
+            out["issue"] = "%s %s %s" % (m.group(1), m.group(2), m.group(3))
+        import urllib.request as _ur
+        req = _ur.Request(pdf_url, headers={"User-Agent": "Mozilla/5.0 (EcoVolChecker research)"})
+        with _ur.urlopen(req, timeout=120) as r:
+            if r.status != 200:
+                raise RuntimeError("PDF HTTP %s" % r.status)
+            blob = r.read()
+        if not blob.startswith(b"%PDF"):
+            raise RuntimeError("返回的不是 PDF(可能是反爬页)")
+        out["pdf_bytes"] = len(blob)
+        pa = _wmm_parse(blob)
+        if pa.get("error"):
+            raise RuntimeError(pa["error"])
+        if not pa.get("series"):
+            raise RuntimeError("解析到 0 条曲线")
+        out.update({k: pa[k] for k in ("series", "flat_tail", "page",
+                                       "legend_matched", "legend_total")})
+        out["as_of"] = datetime.date.today().isoformat()
+        try:
+            _os.makedirs(_os.path.dirname(cp), exist_ok=True)
+            json.dump(out, open(cp, "w"), ensure_ascii=False, indent=1)
+        except Exception:
+            pass
+    except Exception as e:
+        try:
+            cached = json.load(open(cp))
+        except Exception:
+            cached = None
+        if cached and cached.get("series"):
+            cached["status"] = "ok(缓存)"
+            cached["cached"] = True
+            cached["warnings"] = ["本次抓取失败(%s: %s), 显示缓存" % (type(e).__name__, e)]
+            return cached
+        out["status"] = "error"
+        out["warnings"].append("%s: %s" % (type(e).__name__, e))
+    return out

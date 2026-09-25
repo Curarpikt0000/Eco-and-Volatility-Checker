@@ -13,3 +13,7 @@ data/_daily_cache_*.json
 # —— 本地留痕即可，不进 git，否则每次回填都多一份 MB 级重复文件
 *.bak
 *.json.[0-9]*.bak
+# 改名/短名修复的一次性备份(2026-09-25), 只留本机不进 git
+data/.rename_bak/
+data/kol_registry.json.bak_*
+data/notion_kol_rename_backup_*.json

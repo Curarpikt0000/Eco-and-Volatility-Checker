@@ -147,7 +147,45 @@ def main(apply_it):
     #   避免长 Notion 串误吞短的无关本地名。
     used = set()
     exact = {}
+    # ★2026-09-25(Chao: 「KOL 都是人, 机构只是备注」→ Notion 5 行改名):
+    #   只按名字匹配时, Notion 侧改名 = 「移出旧人 + 新建新人」, id / 历史 / 快照 join 全断。
+    #   Notion「编号」是行的稳定身份 → **先按编号匹配**, 编号相同名字不同即视为改名:
+    #   保留本地条目(id/search_terms/short_name 等本地字段), 只换 display_name,
+    #   旧名记进 _prev_display_names, 并在 --apply 时迁移派生数据里的 kol 字段(见 migrate_renames)。
+    renames = []
+    by_num = {}
+    for k in local:
+        n = k.get("notion_list_num")
+        if n:
+            by_num.setdefault(str(n), []).append(k)
     for r in notion:
+        n = str(r.get("编号") or "")
+        cand = by_num.get(n) or []
+        if len(cand) != 1:
+            continue
+        lk = cand[0]
+        key_old = norm(lk.get("display_name", ""))
+        if key_old in used:
+            continue
+        new_name = r["KOL / 机构"]
+        old_name = lk.get("display_name", "")
+        # 只有「新旧名互不包含」才算真改名。本地名本来就常是 Notion 名去掉后缀的短版
+        # (如「Craig Hamilton-Parker」⊂「Craig Hamilton-Parker（英国灵媒…）」), 那由下方
+        # 既有的名字匹配处理, 这里不碰 —— 否则会把几十个正常行误判成改名。
+        no, nn = norm(old_name), norm(new_name)
+        if old_name == new_name or (no and (no in nn or nn in no)):
+            continue
+        renames.append((old_name, new_name))
+        prev = lk.setdefault("_prev_display_names", [])
+        if old_name and old_name not in prev:
+            prev.append(old_name)
+        lk["display_name"] = new_name
+        lk["notion_select_name"] = new_name
+        exact[new_name] = lk
+        used.add(key_old)
+    for r in notion:
+        if r["KOL / 机构"] in exact:
+            continue
         key = norm(r["KOL / 机构"])
         if key in lmap:
             exact[r["KOL / 机构"]] = lmap[key]
@@ -224,6 +262,9 @@ def main(apply_it):
     print(f"● 移出(本地有 Notion 无): {len(removed)}")
     for k in removed:
         print("    -", k.get("display_name"))
+    print(f"● 改名(同编号, Notion 侧改了名字): {len(renames)}")
+    for o, n in renames:
+        print(f"    ~ {o[:40]}  →  {n[:60]}")
 
     if not apply_it:
         print("\n[预演] 未写盘。加 --apply 生效。")
@@ -243,7 +284,51 @@ def main(apply_it):
         reg["kols"] = new_reg
         json.dump(reg, open(REG, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
     print(f"✓ 已写入 {REG} ({len(new_reg)} 人)")
+    if renames:
+        migrate_renames(renames)
     return 0
+
+
+def migrate_renames(renames):
+    """改名后把派生数据里 kol == 旧名 的字段改成新名, 使快照/历史/变化继续 join 到同一人。
+    只动 key 恰好为 "kol" 且值与旧名完全相等的字段; 迁移前整文件备份到 data/.rename_bak/。"""
+    import glob, shutil
+    mp = dict(renames)
+    bak_dir = os.path.join(ROOT, "data", ".rename_bak", datetime.now().strftime("%Y%m%d_%H%M%S"))
+    files = [os.path.join(ROOT, "data", "kol_independent.json")]
+    files += glob.glob(os.path.join(ROOT, "data", "kol", "daily", "*.json"))
+    files += glob.glob(os.path.join(ROOT, "data", "daily", "*.json"))
+    files += glob.glob(os.path.join(ROOT, "data", "kol", "backfill", "*.json"))
+    total = 0
+    for f in files:
+        try:
+            raw = open(f, encoding="utf-8").read()
+        except Exception:
+            continue
+        if not any(o in raw for o in mp):
+            continue
+        d = json.loads(raw)
+        cnt = [0]
+
+        def walk(o):
+            if isinstance(o, dict):
+                for k, v in o.items():
+                    if k == "kol" and isinstance(v, str) and v in mp:
+                        o[k] = mp[v]
+                        cnt[0] += 1
+                    else:
+                        walk(v)
+            elif isinstance(o, list):
+                for v in o:
+                    walk(v)
+        walk(d)
+        if cnt[0]:
+            os.makedirs(bak_dir, exist_ok=True)
+            shutil.copy2(f, os.path.join(bak_dir, os.path.basename(os.path.dirname(f)) + "__" + os.path.basename(f)))
+            json.dump(d, open(f, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+            total += cnt[0]
+            print(f"  迁移 {os.path.relpath(f, ROOT)}: {cnt[0]} 处")
+    print(f"✓ 改名迁移完成: {total} 处 kol 字段(备份 {os.path.relpath(bak_dir, ROOT)})")
 
 
 if __name__ == "__main__":

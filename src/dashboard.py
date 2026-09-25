@@ -2504,9 +2504,9 @@ def _liquidity_html(liq):
     # 关键变动文本
     notes = liq.get("risk_notes", {})
     if notes.get("关键变动"):
-        parts.append(f'<div class="liq-note"><b>关键变动</b><br>{_esc(notes["关键变动"]).replace(chr(10), "<br>")}</div>')
+        parts.append(f'<div class="liq-note"><b>关键变动</b><br>{_esc_md(notes["关键变动"]).replace(chr(10), "<br>")}</div>')
     if notes.get("AI短评"):
-        parts.append(f'<div class="liq-note"><b>AI 短评</b><br>{_esc(notes["AI短评"]).replace(chr(10), "<br>")}</div>')
+        parts.append(f'<div class="liq-note"><b>AI 短评</b><br>{_esc_md(notes["AI短评"]).replace(chr(10), "<br>")}</div>')
     return "".join(parts) or '<p class="empty">流动性数据未就绪。</p>'
 
 
@@ -4646,7 +4646,7 @@ def _cb_swaps_html(d):
         f'再借给本辖区缺美元的银行，到期换回。<br>'
         f'<b>怎么看：</b>平静期接近零；<b>某国央行突然大额动用 = 该辖区银行在离岸市场借不到美元</b>，'
         f'是美元荒的直接温度计。2008 / 2020 危机期间曾冲到数千亿美元级别。'
-        f'与 FIMA 回购、SOFR−EFFR 利差互为佐证——三者同时走高才是真紧张。<br>'
+        f'与 FIMA 回购便利（真 FIMA，常态≈0）、SOFR−EFFR 利差互为佐证——三者同时走高才是真紧张。<br>'
         f'<b>口径：</b>按 ISO 周汇总成交额；金额为原始美元数除以 1e8（亿美元）。'
         f'数据源 <a class="src-lnk" href="https://www.newyorkfed.org/markets/desk-operations/central-bank-liquidity-swap-operations" '
         f'target="_blank" rel="noopener">纽约联储官方</a>（每日更新，免费 API）。</div>'
