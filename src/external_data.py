@@ -1071,13 +1071,13 @@ CB_BS_SPEC = {
             # ★2026-09-25 口径更正(Chao:「FIMA 使用量我记得很小」): 真 FIMA = WORAL(资产侧,
             #   Fed 借美元给外国央行, 常态≈0)。此前这里显示的「FIMA 海外回购 $318B」读的是
             #   B7 字段 资产_FIMA_B = WLRRAFOIAL, 实为**负债侧**外国官方逆回购池 → 已移到负债侧并正名。
-            ("FIMA 回购便利（真·Fed 借给外国央行）", "资产_FIMA真_B"),
+            ("FIMA 回购便利（Fed 借美元给外国央行）", "资产_FIMA真_B"),   # FRED H41RESPPALGTRFNWW(非 WORAL)
             ("SRF 常备回购", "资产_SRF_B"),
         ],
         "liabilities": [
             ("准备金 Reserves", "负债_Reserves_B"),
             ("隔夜逆回购 ON RRP", "负债_ON_RRP_B"),
-            ("外国官方逆回购池（外国央行存放）", "资产_FIMA_B"),   # 字段名是上游历史遗留, 实为负债侧 WLRRAFOIAL
+            ("外国官方及国际账户逆回购（外国央行存放）", "资产_FIMA_B"),   # 字段名是上游历史遗留, 实为负债侧 WLRRAFOIAL
             ("财政部账户 TGA", "负债_TGA_B"),
             ("流通货币 Currency", "负债_Currency_B"),
         ],
