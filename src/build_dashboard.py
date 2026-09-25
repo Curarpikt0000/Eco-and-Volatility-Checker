@@ -394,17 +394,30 @@ def main():
     # ── 真 A/D 腾落线(Economic-Dashboard cron, SP500 全成分股) ──
     ad_line_real = {}
     try:
-        # 先 git fetch + fast-forward Economic-Dashboard 拿当日 A/D 数据(只读消费方)
+        # 先 git fetch + fast-forward Economic-Dashboard 拿当日 A/D 数据
+        # ★2026-09-25 事故: 这里原是 `git reset --hard origin/main`, 把 Economic-Dashboard 当「只读消费」仓库,
+        #   但它是活跃开发仓库 —— 13:26 在那里本地提交的 FIMA 口径修正(3a369a7)在 13:28 本构建启动时被静默抹掉,
+        #   reflog 里 9/21 起 20 次「reset: moving to origin/main」全是本行造成(工作区改动也会被一起丢弃)。
+        #   改为: 仅在「工作区干净 + 本地无未推提交」时 ff-only 前进; 否则保留现状只打印警告, 读现有本地文件。
         import subprocess as _sp
         _ed_repo = os.path.expanduser("~/Projects/Economic-Dashboard")
         if os.path.isdir(_ed_repo):
             try:
-                _sp.run(["git", "-C", _ed_repo, "fetch", "origin", "main", "--quiet"],
-                        timeout=40, check=False)
-                _sp.run(["git", "-C", _ed_repo, "reset", "--hard", "origin/main", "--quiet"],
-                        timeout=20, check=False)
+                def _g(*a, t=40):
+                    return _sp.run(["git", "-C", _ed_repo, *a], capture_output=True, text=True, timeout=t)
+                _g("fetch", "origin", "main", "--quiet")
+                _dirty = _g("status", "--porcelain").stdout.strip()
+                _ahead = _g("rev-list", "--count", "origin/main..HEAD").stdout.strip()
+                if _dirty or (_ahead and _ahead != "0"):
+                    print(f"[dashboard] A/D git sync 跳过: Economic-Dashboard 有本地改动"
+                          f"(未提交 {len(_dirty.splitlines())} 项 / 未推提交 {_ahead}), 不动它, 用现有本地文件")
+                else:
+                    _m = _g("merge", "--ff-only", "--quiet", "origin/main", t=20)
+                    if _m.returncode != 0:
+                        print(f"[dashboard] A/D git sync 警告: ff-only 失败(rc={_m.returncode}) "
+                              f"{(_m.stderr or '').strip()[:160]}; 用现有本地文件")
             except Exception as _ge:
-                print(f"[dashboard] A/D git sync 警告(用现有本地文件): {_ge}")
+                print(f"[dashboard] A/D git sync 警告({type(_ge).__name__}, 用现有本地文件): {_ge}")
         ad_line_real = ed.fetch_ad_line_real() or {}
         print(f"[dashboard] A/D 腾落线(真): status={ad_line_real.get('status')} "
               f"as_of={ad_line_real.get('as_of')} divergence={ad_line_real.get('divergence')} "
