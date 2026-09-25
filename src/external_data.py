@@ -4334,6 +4334,27 @@ def fetch_silver_bank_positions(cache_path=None, weeks=520):
         except Exception:
             return None
 
+    # ★2026-09-25 Chao「在这张图上叠加白银价格走势」: Yahoo SI=F 连续合约日线(chart API v8 直连)。
+    # 抓不到读上次缓存价格, 绝不编造; 价格与 COT 抓取互不影响。
+    def _silver_px():
+        import datetime as _dt, urllib.request as _ur
+        u = "https://query1.finance.yahoo.com/v8/finance/chart/SI=F?range=10y&interval=1d"
+        try:
+            r = _ur.urlopen(_ur.Request(u, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                                                    "AppleWebKit/537.36 Chrome/120 Safari/537.36"}), timeout=45)
+            res = json.loads(r.read().decode("utf-8", "ignore"))["chart"]["result"][0]
+            cl = res["indicators"]["quote"][0]["close"]
+            return [[_dt.datetime.utcfromtimestamp(t).strftime("%Y-%m-%d"), round(float(c), 3)]
+                    for t, c in zip(res.get("timestamp") or [], cl) if c is not None]
+        except Exception:
+            return []
+    price = _silver_px()
+    if len(price) < 20:
+        price = (_load_cache() or {}).get("price") or []
+        price_status = "缓存" if price else "未获取"
+    else:
+        price_status = "ok"
+
     pts = []
     try:
         from fetchers import cot as _cot
@@ -4387,6 +4408,9 @@ def fetch_silver_bank_positions(cache_path=None, weeks=520):
         "peak_short_net": (peak_short or {}).get("comm_net"),
         "inventory_note": inv_note,
         "points": pts,
+        "price": price,
+        "price_status": price_status,
+        "price_source": "Yahoo Finance · SI=F COMEX 白银连续合约 日收盘(美元/盎司)",
     }
     try:
         with open(cache_path, "w", encoding="utf-8") as f:

@@ -4063,6 +4063,83 @@ def _bis_gold_swaps_html(bg):
     )
 
 
+def _silver_net_price_svg(pts, px, W=1160, H=320):
+    """白银做市商净持仓(左轴, 周度) + 白银价格(右轴, 日线) 双轴图。
+    ★2026-09-25 Chao 要求叠加价格。悬停: 每个价格日一条命中带, 显示当日金价 +
+    截至当日最近一期 COT 净持仓(注明截至日, 不插值)。"""
+    import datetime as _dt
+    PL, PR, PT, PB = 70, 64, 24, 34
+    iw, ih = W - PL - PR, H - PT - PB
+    d0 = min(pts[0]["date"], px[0][0]); d1 = max(pts[-1]["date"], px[-1][0])
+    t0 = _dt.date.fromisoformat(d0).toordinal()
+    span = max(1, _dt.date.fromisoformat(d1).toordinal() - t0)
+    def X(d): return PL + iw * (_dt.date.fromisoformat(d).toordinal() - t0) / span
+    nets = [p["comm_net"] for p in pts]
+    nlo, nhi = min(nets + [0]), max(nets + [0])
+    npad = (nhi - nlo) * 0.08 or 1; nlo, nhi = nlo - npad, nhi + npad
+    pv = [v for _, v in px]
+    plo, phi = min(pv), max(pv)
+    ppad = (phi - plo) * 0.08 or 1; plo, phi = plo - ppad, phi + ppad
+    def YN(v): return PT + ih * (1 - (v - nlo) / (nhi - nlo))
+    def YP(v): return PT + ih * (1 - (v - plo) / (phi - plo))
+    NC, PC = "#6b8fb5", "#8a8f98"
+    p = [f'<svg viewBox="0 0 {W} {H}" class="sbp-chart" preserveAspectRatio="xMidYMid meet" '
+         f'style="width:100%;height:auto;display:block" '
+         f'font-family="-apple-system,PingFang SC,Helvetica,sans-serif">']
+    for k in range(5):
+        y = PT + ih * k / 4
+        p.append(f'<line x1="{PL}" y1="{y:.1f}" x2="{PL+iw}" y2="{y:.1f}" stroke="#d8d2c6" '
+                 f'stroke-width="0.6" stroke-dasharray="2,3"/>')
+        p.append(f'<text x="{PL-8}" y="{y+3.5:.1f}" font-size="10" fill="{NC}" text-anchor="end">'
+                 f'{nhi-(nhi-nlo)*k/4:,.0f}</text>')
+        p.append(f'<text x="{PL+iw+8}" y="{y+3.5:.1f}" font-size="10" fill="{PC}" text-anchor="start">'
+                 f'${phi-(phi-plo)*k/4:,.0f}</text>')
+    if nlo < 0 < nhi:
+        p.append(f'<line x1="{PL}" y1="{YN(0):.1f}" x2="{PL+iw}" y2="{YN(0):.1f}" stroke="#9a9184" stroke-width="0.9"/>')
+        p.append(f'<text x="{PL+iw-4}" y="{YN(0)-4:.1f}" font-size="9.5" fill="#6f665a" text-anchor="end">净持仓 0</text>')
+    # 净持仓: 零轴到曲线的面积 + 线
+    npts = " ".join(f'{X(q["date"]):.1f},{YN(q["comm_net"]):.1f}' for q in pts)
+    p.append(f'<polygon points="{X(pts[0]["date"]):.1f},{YN(0):.1f} {npts} '
+             f'{X(pts[-1]["date"]):.1f},{YN(0):.1f}" fill="{NC}" opacity="0.12"/>')
+    p.append(f'<polyline points="{npts}" fill="none" stroke="{NC}" stroke-width="1.6"/>')
+    # 价格: 日线, 画上层
+    p.append('<polyline points="' + " ".join(f'{X(d):.1f},{YP(v):.1f}' for d, v in px) +
+             f'" fill="none" stroke="{PC}" stroke-width="1.3" opacity="0.95"/>')
+    # 最新点
+    p.append(f'<circle cx="{X(pts[-1]["date"]):.1f}" cy="{YN(nets[-1]):.1f}" r="3.4" fill="{NC}" stroke="#fff"/>')
+    p.append(f'<circle cx="{X(px[-1][0]):.1f}" cy="{YP(pv[-1]):.1f}" r="3.4" fill="{PC}" stroke="#fff"/>')
+    # x 轴年份
+    seen = set()
+    for d, _ in px:
+        if d[:4] not in seen and d[5:7] == "01":
+            seen.add(d[:4])
+            p.append(f'<text x="{X(d):.1f}" y="{H-12}" font-size="10" fill="#8a8070" text-anchor="middle">{d[:4]}</text>')
+    p.append(f'<text x="{PL-8}" y="{PT-9}" font-size="10" fill="{NC}" text-anchor="end">净持仓(合约)</text>')
+    p.append(f'<text x="{PL+iw+8}" y="{PT-9}" font-size="10" fill="{PC}" text-anchor="start">白银 $/oz</text>')
+    # 图例
+    p.append(f'<rect x="{PL+4}" y="{PT-1}" width="380" height="18" rx="3" fill="#f4efe4" opacity="0.88"/>')
+    p.append(f'<line x1="{PL+10}" y1="{PT+8}" x2="{PL+28}" y2="{PT+8}" stroke="{NC}" stroke-width="2.4"/>'
+             f'<text x="{PL+32}" y="{PT+12}" font-size="10.5" fill="{NC}">做市商净持仓（左轴 · 周度）</text>'
+             f'<line x1="{PL+190}" y1="{PT+8}" x2="{PL+208}" y2="{PT+8}" stroke="{PC}" stroke-width="2.4"/>'
+             f'<text x="{PL+212}" y="{PT+12}" font-size="10.5" fill="{PC}">白银价格 SI=F（右轴 · 日线）</text>')
+    # hover
+    xs, tips, ci = [], [], -1
+    for d, v in px:
+        while ci + 1 < len(pts) and pts[ci + 1]["date"] <= d:
+            ci += 1
+        t = f'白银 ${v:,.2f}/oz'
+        if ci >= 0:
+            q = pts[ci]
+            t += (f'<br>做市商净持仓 {q["comm_net"]:+,} 合约'
+                  + (f'<br>（多 {q["comm_long"]:,} / 空 {q["comm_short"]:,}）'
+                     if q.get("comm_long") is not None and q.get("comm_short") is not None else "")
+                  + f'<br>持仓周度 · 截至 {q["date"]}')
+        xs.append(X(d)); tips.append(f'{_esc(d)}||{_esc(t)}')
+    p.append(_hover_bands(xs, tips, PT, ih, PL, PL + iw))
+    p.append("</svg>")
+    return "".join(p)
+
+
 def _silver_bank_positions_html(sb):
     """白银做市商头寸 section: CFTC COT commercial 净持仓折线(净空区), 一手官方真数据。
     sb: fetch_silver_bank_positions()。绝不编造, 抓不到读缓存真值。"""
@@ -4072,10 +4149,15 @@ def _silver_bank_positions_html(sb):
     if not pts:
         return '<p class="empty">白银做市商头寸(CFTC COT)数据未就绪。</p>'
     line_pts = [(p["date"], p["comm_net"]) for p in pts]
-    svg = _yield_curves_svg({
-        "commnet": {"status": "ok", "name": "商业(做市商)净持仓(合约)", "color": "#6b8fb5",
-                    "dash": "none", "points": line_pts, "latest": sb.get("latest_net")},
-    }, yunit="")
+    # ★2026-09-25 叠加白银价格(右轴)。价格为日线, 裁到 COT 起点之后; 悬停同时显示两者(as-of)。
+    px = [(d, v) for d, v in (sb.get("price") or []) if d >= pts[0]["date"]]
+    if len(px) >= 20:
+        svg = _silver_net_price_svg(pts, px)
+    else:
+        svg = _yield_curves_svg({
+            "commnet": {"status": "ok", "name": "商业(做市商)净持仓(合约)", "color": "#6b8fb5",
+                        "dash": "none", "points": line_pts, "latest": sb.get("latest_net")},
+        }, yunit="")
     net = sb.get("latest_net"); asof = sb.get("as_of", "")
     wow = sb.get("latest_wow")
     peak = sb.get("peak_short_net"); peakd = sb.get("peak_short_date", "")
@@ -4091,15 +4173,20 @@ def _silver_bank_positions_html(sb):
     else:
         dir_txt = '—'
     status_badge = ('🟡 缓存(CFTC暂未更新)' if sb.get("status") == "缓存" else '🟢 每周 · CFTC 官方')
+    _px_line = ""
+    if len(px) >= 20:
+        _pxs = ('（价格源暂不可达，显示上次缓存）' if sb.get("price_status") == "缓存" else "")
+        _px_line = (f' · 白银价格 <b style="color:#8a8f98">${px[-1][1]:,.2f}</b>/oz（{_esc(px[-1][0])}，'
+                    f'{_esc(sb.get("price_source", ""))}）{_pxs}')
     return (
         f'<div class="cust-wrap">'
         f'<div class="cust-chart-col cust-chart-full">'
-        f'<div class="cust-chart-title">白银做市商(bullion banks)净持仓 · CFTC COT commercial（合约 · 近10年）'
+        f'<div class="cust-chart-title">白银做市商(bullion banks)净持仓 · CFTC COT commercial（合约 · 近10年）× 白银价格'
         f'<span class="chart-freq freq-w">{status_badge}</span></div>'
         f'{svg}'
         f'<div class="oil-meta">最新（{_esc(asof)}）：净持仓 <b style="color:#6b8fb5">{net:,}</b> 合约'
         f'（多 {lg:,} / 空 {sh:,} · OI {oi:,}） · 周环比 {dir_txt} · '
-        f'历史最深净空 <b>{peak:,}</b>（{_esc(peakd)}）</div>'
+        f'历史最深净空 <b>{peak:,}</b>（{_esc(peakd)}）{_px_line}</div>'
         f'<div class="oil-src">数据源：{_esc(sb.get("source",""))} · '
         f'<a class="src-lnk" href="https://publicreporting.cftc.gov/" target="_blank" rel="noopener">CFTC Public Reporting ↗</a> · '
         f'{_esc(sb.get("inventory_note",""))}</div>'
