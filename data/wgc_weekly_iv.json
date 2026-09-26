@@ -1,0 +1,88 @@
+{
+ "status": "ok",
+ "source": "WGC Weekly Markets Monitor(数据源 Bloomberg)",
+ "freq": "weekly",
+ "series": {
+  "GLD": {
+   "group": "etf",
+   "iv": {
+    "1M": 20.53,
+    "3M": 22.79,
+    "6M": 23.33,
+    "12M": 23.31,
+    "18M": 23.99,
+    "24M": 24.31
+   }
+  },
+  "IAU": {
+   "group": "etf",
+   "iv": {
+    "1M": 20.69,
+    "3M": 22.48,
+    "6M": 22.8,
+    "12M": 23.94,
+    "18M": 24.61,
+    "24M": 25.13
+   }
+  },
+  "IGLN": {
+   "group": "etf",
+   "iv": {
+    "1M": 21.71,
+    "3M": 23.08,
+    "6M": 23.08,
+    "12M": 23.08,
+    "18M": 23.08,
+    "24M": 23.08
+   }
+  },
+  "SGOL": {
+   "group": "etf",
+   "iv": {
+    "1M": 21.39,
+    "3M": 23.9,
+    "6M": 24.85,
+    "12M": 24.86,
+    "18M": 24.86,
+    "24M": 24.86
+   }
+  },
+  "GC1": {
+   "group": "futures",
+   "iv": {
+    "1M": 22.33,
+    "3M": 22.82,
+    "6M": 22.92,
+    "12M": 23.47,
+    "18M": 23.82,
+    "24M": 24.0
+   }
+  },
+  "AUA1": {
+   "group": "futures",
+   "iv": {
+    "1M": 30.12,
+    "3M": 26.3,
+    "6M": 29.69,
+    "12M": 29.86,
+    "18M": 29.86,
+    "24M": 29.86
+   }
+  }
+ },
+ "flat_tail": [
+  "IGLN",
+  "SGOL",
+  "AUA1"
+ ],
+ "warnings": [],
+ "flat_tail_note": "长端多期相同 = 该标的流动性不足, 源侧前向填充, 非独立报价",
+ "pdf_url": "https://www.gold.org/download/file/21158/WMM_21_September_2026_All_together_now.pdf",
+ "page_url": "https://www.gold.org/goldhub/gold-focus/2026/09/weekly-markets-monitor-all-together-now",
+ "issue": "21 September 2026",
+ "pdf_bytes": 2304162,
+ "page": 23,
+ "legend_matched": 6,
+ "legend_total": 6,
+ "as_of": "2026-09-21"
+}
