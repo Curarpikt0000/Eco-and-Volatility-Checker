@@ -1934,7 +1934,10 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
                 r = results.get(ind["key"], {})
                 lt = signals.light(ind, r.get("value"))
                 read = ai_reads.get(ind["key"]) or ind.get("note", "")
-                html += f'<div class="interp-item"><span class="ii-sig">{lt}</span><b>{ind["name_zh"]}</b> <span class="ii-val">{fmt_val(ind, r)}</span><p>{read}</p></div>'
+                # ★2026-09-28: 原样拼接 → 指标说明里的 **粗体** 显示成字面星号(门禁报 6 处)。
+                # 改 _esc_md: 先转义再渲染 **→<b>。实测 note/AI 解读里的 "<" 全是小于号(如 "<4.0")而非标签,
+                # 转义后显示不变且更安全。
+                html += f'<div class="interp-item"><span class="ii-sig">{lt}</span><b>{ind["name_zh"]}</b> <span class="ii-val">{fmt_val(ind, r)}</span><p>{_esc_md(read)}</p></div>'
         return html
 
     # ── 卖出触发表 ──
