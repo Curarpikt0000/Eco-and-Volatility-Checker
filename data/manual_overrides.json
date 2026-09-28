@@ -6,10 +6,10 @@
     "note": "AAII Stocks Total 71.05% (Aug 2026调查, 股票+股票基金71.1%连续75个月高于历史均值61.5%; 债券配置下滑)"
   },
   "put_call": {
-    "value": 0.47,
+    "value": 0.52,
     "as_of": "2026-09-25",
     "status": "ok",
-    "note": "口径=CBOE官方EQUITY put/call=0.47 (Jina直取官方daily页, 2026-09-25)。equity 0.47偏低=股票期权看涨占优(风险偏好仍偏高); TOTAL 0.78 / INDEX 0.93 / ETP 0.93; SPX+SPXW 1.04"
+    "note": "口径=CBOE官方EQUITY put/call=0.52 (ScraperAPI直取官方daily页, 最近交易日, 2026-09-28周日取得)。equity 0.52偏低=股票期权仍看涨占优(风险偏好偏高); TOTAL 0.77。较上次0.47小幅回升(看跌保护略增)"
   },
   "insider": {
     "value": 0.26,
