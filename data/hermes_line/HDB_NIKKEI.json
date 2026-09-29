@@ -1,348 +1,7 @@
 {
  "table": "HDB_NIKKEI",
- "count": 244,
+ "count": 242,
  "rows": [
-  {
-   "uid": "nk|2025-09-10",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2025-09-10"
-       }
-      }
-     ]
-    },
-    "收盘": {
-     "number": 43837.67
-    },
-    "涨跌幅": {
-     "number": null
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "FRED NIKKEI225 (日经225指数,日频)"
-       }
-      }
-     ]
-    }
-   }
-  },
-  {
-   "uid": "nk|2025-09-11",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2025-09-11"
-       }
-      }
-     ]
-    },
-    "收盘": {
-     "number": 44372.5
-    },
-    "涨跌幅": {
-     "number": 1.22
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "FRED NIKKEI225 (日经225指数,日频)"
-       }
-      }
-     ]
-    }
-   }
-  },
-  {
-   "uid": "nk|2025-09-12",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2025-09-12"
-       }
-      }
-     ]
-    },
-    "收盘": {
-     "number": 44768.12
-    },
-    "涨跌幅": {
-     "number": 0.892
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "FRED NIKKEI225 (日经225指数,日频)"
-       }
-      }
-     ]
-    }
-   }
-  },
-  {
-   "uid": "nk|2025-09-16",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2025-09-16"
-       }
-      }
-     ]
-    },
-    "收盘": {
-     "number": 44902.27
-    },
-    "涨跌幅": {
-     "number": 0.3
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "FRED NIKKEI225 (日经225指数,日频)"
-       }
-      }
-     ]
-    }
-   }
-  },
-  {
-   "uid": "nk|2025-09-17",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2025-09-17"
-       }
-      }
-     ]
-    },
-    "收盘": {
-     "number": 44790.38
-    },
-    "涨跌幅": {
-     "number": -0.249
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "FRED NIKKEI225 (日经225指数,日频)"
-       }
-      }
-     ]
-    }
-   }
-  },
-  {
-   "uid": "nk|2025-09-18",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2025-09-18"
-       }
-      }
-     ]
-    },
-    "收盘": {
-     "number": 45303.43
-    },
-    "涨跌幅": {
-     "number": 1.145
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "FRED NIKKEI225 (日经225指数,日频)"
-       }
-      }
-     ]
-    }
-   }
-  },
-  {
-   "uid": "nk|2025-09-19",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2025-09-19"
-       }
-      }
-     ]
-    },
-    "收盘": {
-     "number": 45045.81
-    },
-    "涨跌幅": {
-     "number": -0.569
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "FRED NIKKEI225 (日经225指数,日频)"
-       }
-      }
-     ]
-    }
-   }
-  },
-  {
-   "uid": "nk|2025-09-22",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2025-09-22"
-       }
-      }
-     ]
-    },
-    "收盘": {
-     "number": 45493.66
-    },
-    "涨跌幅": {
-     "number": 0.994
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "FRED NIKKEI225 (日经225指数,日频)"
-       }
-      }
-     ]
-    }
-   }
-  },
-  {
-   "uid": "nk|2025-09-24",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2025-09-24"
-       }
-      }
-     ]
-    },
-    "收盘": {
-     "number": 45630.31
-    },
-    "涨跌幅": {
-     "number": 0.3
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "FRED NIKKEI225 (日经225指数,日频)"
-       }
-      }
-     ]
-    }
-   }
-  },
-  {
-   "uid": "nk|2025-09-25",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2025-09-25"
-       }
-      }
-     ]
-    },
-    "收盘": {
-     "number": 45754.93
-    },
-    "涨跌幅": {
-     "number": 0.273
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "FRED NIKKEI225 (日经225指数,日频)"
-       }
-      }
-     ]
-    }
-   }
-  },
-  {
-   "uid": "nk|2025-09-26",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2025-09-26"
-       }
-      }
-     ]
-    },
-    "收盘": {
-     "number": 45354.99
-    },
-    "涨跌幅": {
-     "number": -0.874
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "FRED NIKKEI225 (日经225指数,日频)"
-       }
-      }
-     ]
-    }
-   }
-  },
   {
    "uid": "nk|2025-09-29",
    "props": {
@@ -360,7 +19,7 @@
      "number": 45043.75
     },
     "涨跌幅": {
-     "number": -0.686
+     "number": null
     },
     "数据源": {
      "rich_text": [
@@ -7553,6 +7212,285 @@
     },
     "涨跌幅": {
      "number": 0.197
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "FRED NIKKEI225 (日经225指数,日频)"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "nk|2026-09-11",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-11"
+       }
+      }
+     ]
+    },
+    "收盘": {
+     "number": 64011.34
+    },
+    "涨跌幅": {
+     "number": -1.93
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "FRED NIKKEI225 (日经225指数,日频)"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "nk|2026-09-14",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-14"
+       }
+      }
+     ]
+    },
+    "收盘": {
+     "number": 63492.99
+    },
+    "涨跌幅": {
+     "number": -0.81
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "FRED NIKKEI225 (日经225指数,日频)"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "nk|2026-09-15",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-15"
+       }
+      }
+     ]
+    },
+    "收盘": {
+     "number": 63484.1
+    },
+    "涨跌幅": {
+     "number": -0.014
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "FRED NIKKEI225 (日经225指数,日频)"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "nk|2026-09-16",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-16"
+       }
+      }
+     ]
+    },
+    "收盘": {
+     "number": 63923.0
+    },
+    "涨跌幅": {
+     "number": 0.691
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "FRED NIKKEI225 (日经225指数,日频)"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "nk|2026-09-17",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-17"
+       }
+      }
+     ]
+    },
+    "收盘": {
+     "number": 64136.25
+    },
+    "涨跌幅": {
+     "number": 0.334
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "FRED NIKKEI225 (日经225指数,日频)"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "nk|2026-09-18",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-18"
+       }
+      }
+     ]
+    },
+    "收盘": {
+     "number": 65018.95
+    },
+    "涨跌幅": {
+     "number": 1.376
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "FRED NIKKEI225 (日经225指数,日频)"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "nk|2026-09-24",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-24"
+       }
+      }
+     ]
+    },
+    "收盘": {
+     "number": 65513.99
+    },
+    "涨跌幅": {
+     "number": 0.761
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "FRED NIKKEI225 (日经225指数,日频)"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "nk|2026-09-25",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-25"
+       }
+      }
+     ]
+    },
+    "收盘": {
+     "number": 66364.2
+    },
+    "涨跌幅": {
+     "number": 1.298
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "FRED NIKKEI225 (日经225指数,日频)"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "nk|2026-09-28",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-28"
+       }
+      }
+     ]
+    },
+    "收盘": {
+     "number": 65877.62
+    },
+    "涨跌幅": {
+     "number": -0.733
     },
     "数据源": {
      "rich_text": [

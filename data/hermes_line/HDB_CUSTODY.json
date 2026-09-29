@@ -3,68 +3,6 @@
  "count": 523,
  "rows": [
   {
-   "uid": "cu|2016-09-07",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2016-09-07"
-       }
-      }
-     ]
-    },
-    "托管余额_十亿": {
-     "number": 2854.7
-    },
-    "周变化_十亿": {
-     "number": null
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "NY Fed via fetch_foreign_custody_ust"
-       }
-      }
-     ]
-    }
-   }
-  },
-  {
-   "uid": "cu|2016-09-14",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2016-09-14"
-       }
-      }
-     ]
-    },
-    "托管余额_十亿": {
-     "number": 2827.2
-    },
-    "周变化_十亿": {
-     "number": -27.5
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "NY Fed via fetch_foreign_custody_ust"
-       }
-      }
-     ]
-    }
-   }
-  },
-  {
    "uid": "cu|2016-09-21",
    "props": {
     "日期": {
@@ -81,7 +19,7 @@
      "number": 2827.1
     },
     "周变化_十亿": {
-     "number": -0.1
+     "number": null
     },
     "数据源": {
      "rich_text": [
@@ -16202,6 +16140,68 @@
     },
     "周变化_十亿": {
      "number": -11.1
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "NY Fed via fetch_foreign_custody_ust"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "cu|2026-09-16",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-16"
+       }
+      }
+     ]
+    },
+    "托管余额_十亿": {
+     "number": 2608.8
+    },
+    "周变化_十亿": {
+     "number": 18.7
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "NY Fed via fetch_foreign_custody_ust"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "cu|2026-09-23",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-23"
+       }
+      }
+     ]
+    },
+    "托管余额_十亿": {
+     "number": 2597.5
+    },
+    "周变化_十亿": {
+     "number": -11.3
     },
     "数据源": {
      "rich_text": [

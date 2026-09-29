@@ -1,6 +1,6 @@
 {
  "table": "HDB_COT",
- "count": 28,
+ "count": 34,
  "rows": [
   {
    "uid": "cot|gold|2026-06-02",
@@ -1165,6 +1165,258 @@
     },
     "周变化": {
      "number": -227.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "CFTC COT via data/snapshots/"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "cot|gold|2026-09-08",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-08"
+       }
+      }
+     ]
+    },
+    "品种": {
+     "select": {
+      "name": "gold"
+     }
+    },
+    "商业净持仓": {
+     "number": -270274.0
+    },
+    "大户净持仓": {
+     "number": 231960.0
+    },
+    "未平仓合约": {
+     "number": 411227.0
+    },
+    "周变化": {
+     "number": -5556.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "CFTC COT via data/snapshots/"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "cot|silver|2026-09-08",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-08"
+       }
+      }
+     ]
+    },
+    "品种": {
+     "select": {
+      "name": "silver"
+     }
+    },
+    "商业净持仓": {
+     "number": -44908.0
+    },
+    "大户净持仓": {
+     "number": 26049.0
+    },
+    "未平仓合约": {
+     "number": 103250.0
+    },
+    "周变化": {
+     "number": 372.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "CFTC COT via data/snapshots/"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "cot|gold|2026-09-15",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-15"
+       }
+      }
+     ]
+    },
+    "品种": {
+     "select": {
+      "name": "gold"
+     }
+    },
+    "商业净持仓": {
+     "number": -261721.0
+    },
+    "大户净持仓": {
+     "number": 230338.0
+    },
+    "未平仓合约": {
+     "number": 409899.0
+    },
+    "周变化": {
+     "number": 8553.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "CFTC COT via data/snapshots/"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "cot|silver|2026-09-15",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-15"
+       }
+      }
+     ]
+    },
+    "品种": {
+     "select": {
+      "name": "silver"
+     }
+    },
+    "商业净持仓": {
+     "number": -42700.0
+    },
+    "大户净持仓": {
+     "number": 25326.0
+    },
+    "未平仓合约": {
+     "number": 103745.0
+    },
+    "周变化": {
+     "number": 2208.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "CFTC COT via data/snapshots/"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "cot|gold|2026-09-22",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-22"
+       }
+      }
+     ]
+    },
+    "品种": {
+     "select": {
+      "name": "gold"
+     }
+    },
+    "商业净持仓": {
+     "number": -262903.0
+    },
+    "大户净持仓": {
+     "number": 225853.0
+    },
+    "未平仓合约": {
+     "number": 412800.0
+    },
+    "周变化": {
+     "number": -1182.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "CFTC COT via data/snapshots/"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "cot|silver|2026-09-22",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-22"
+       }
+      }
+     ]
+    },
+    "品种": {
+     "select": {
+      "name": "silver"
+     }
+    },
+    "商业净持仓": {
+     "number": -44754.0
+    },
+    "大户净持仓": {
+     "number": 25444.0
+    },
+    "未平仓合约": {
+     "number": 106474.0
+    },
+    "周变化": {
+     "number": -2054.0
     },
     "数据源": {
      "rich_text": [

@@ -3,14 +3,14 @@
  "count": 3,
  "rows": [
   {
-   "uid": "ms|2026-07|US",
+   "uid": "ms|2026-08|US",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-07｜US"
+        "content": "2026-08｜US"
        }
       }
      ]
@@ -21,13 +21,13 @@
      }
     },
     "M0": {
-     "number": 5523.9
+     "number": 5411.6
     },
     "M1": {
-     "number": 19886.4
+     "number": 19991.1
     },
     "M2": {
-     "number": 23218.0
+     "number": 23342.8
     },
     "数据源": {
      "rich_text": [
@@ -41,20 +41,20 @@
     },
     "月份": {
      "date": {
-      "start": "2026-07-01"
+      "start": "2026-08-01"
      }
     }
    }
   },
   {
-   "uid": "ms|2026-07|JP",
+   "uid": "ms|2026-08|JP",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-07｜JP"
+        "content": "2026-08｜JP"
        }
       }
      ]
@@ -65,40 +65,40 @@
      }
     },
     "M0": {
-     "number": 3554.5
+     "number": 3454.6
     },
     "M1": {
-     "number": 6985.5
+     "number": 6918.8
     },
     "M2": {
-     "number": 8308.2
+     "number": 8247.9
     },
     "数据源": {
      "rich_text": [
       {
        "type": "text",
        "text": {
-        "content": "BOJ 官方 PDF (Money Stock 速报 2026-08-12 发布; Monetary Base 2026-08-04 发布)"
+        "content": "BOJ 官方 Time-Series CSV (Money Stock md02 2026-08 速报; Monetary Base md01 2026-08); M2同比+2.0%/M1同比-0.1%/M3同比+1.2%/基础货币同比-15.7%(QT持续)"
        }
       }
      ]
     },
     "月份": {
      "date": {
-      "start": "2026-07-01"
+      "start": "2026-08-01"
      }
     }
    }
   },
   {
-   "uid": "ms|2026-07|CN",
+   "uid": "ms|2026-08|CN",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-07｜CN"
+        "content": "2026-08｜CN"
        }
       }
      ]
@@ -109,27 +109,27 @@
      }
     },
     "M0": {
-     "number": 2208.4
+     "number": 2209.8
     },
     "M1": {
-     "number": 17205.1
+     "number": 17250.8
     },
     "M2": {
-     "number": 52975.8
+     "number": 53167.9
     },
     "数据源": {
      "rich_text": [
       {
        "type": "text",
        "text": {
-        "content": "PBoC 2026年7月金融统计数据报告 (2026-08-14 发布, M2同比+7.7%/M1同比+4%); 新华网/人民网/证券时报交叉印证"
+        "content": "PBoC 2026年8月金融统计数据报告 (2026-09-14 发布, M2同比+7.5%/M1同比+4.1%/M0同比+11.2%); 新华网官方全文交叉印证"
        }
       }
      ]
     },
     "月份": {
      "date": {
-      "start": "2026-07-01"
+      "start": "2026-08-01"
      }
     }
    }
