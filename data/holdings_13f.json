@@ -1,5 +1,5 @@
 {
-  "date": "2026-09-28",
+  "date": "2026-09-29",
   "institutions": [
     {
       "kol": "Warren Buffett",
@@ -169,14 +169,14 @@
       ],
       "exits": [
         {
-          "issuer": "Chubb Ltd Switz",
+          "issuer": "Bank America Corp",
           "value": 0,
           "shares": 0,
-          "prev_shares": 34249183,
+          "prev_shares": 513624165,
           "action": "❌清仓",
           "pct": -100.0,
-          "ticker": "CB",
-          "cusip": "H1467J104"
+          "ticker": "BAC",
+          "cusip": "060505104"
         },
         {
           "issuer": "Constellation Brands Inc",
@@ -189,14 +189,14 @@
           "cusip": "21036P108"
         },
         {
-          "issuer": "Bank America Corp",
+          "issuer": "Chubb Ltd Switz",
           "value": 0,
           "shares": 0,
-          "prev_shares": 513624165,
+          "prev_shares": 34249183,
           "action": "❌清仓",
           "pct": -100.0,
-          "ticker": "BAC",
-          "cusip": "060505104"
+          "ticker": "CB",
+          "cusip": "H1467J104"
         }
       ]
     },
@@ -398,64 +398,64 @@
       ],
       "exits": [
         {
-          "issuer": "Sun Ctry Airls Hldgs Inc",
+          "issuer": "Atlassian Corporation",
           "value": 0,
           "shares": 0,
-          "prev_shares": 384328,
+          "prev_shares": 15623,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "866683105"
+          "cusip": "049468101"
         },
         {
-          "issuer": "Tesla Inc",
+          "issuer": "Knight-Swift Transn Hldgs In",
           "value": 0,
           "shares": 0,
-          "prev_shares": 2017,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "TSLA",
-          "cusip": "88160R101"
-        },
-        {
-          "issuer": "Sunrun Inc",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 154410,
+          "prev_shares": 4406,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "86771W105"
+          "cusip": "499049104"
         },
         {
-          "issuer": "Inspire Med Sys Inc",
+          "issuer": "Innospec Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 173533,
+          "prev_shares": 5950,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "457730109"
+          "cusip": "45768S105"
         },
         {
-          "issuer": "Arcosa Inc",
+          "issuer": "Nomad Foods Ltd",
           "value": 0,
           "shares": 0,
-          "prev_shares": 22588,
+          "prev_shares": 57795,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "039653100"
+          "cusip": "G6564A105"
         },
         {
-          "issuer": "Goldman Sachs Group Inc",
+          "issuer": "Brookfield Corp",
           "value": 0,
           "shares": 0,
-          "prev_shares": 4154,
+          "prev_shares": 477453,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "BN",
+          "cusip": "11271J107"
+        },
+        {
+          "issuer": "Rayonier Inc",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 43978,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "38141G104"
+          "cusip": "754907103"
         }
       ]
     },
@@ -553,24 +553,24 @@
           "cusip": "116794207"
         },
         {
-          "issuer": "Lauder Estee Cos Inc",
+          "issuer": "Regeneron Pharmaceuticals",
           "value": 0,
           "shares": 0,
-          "prev_shares": 650000,
+          "prev_shares": 215000,
           "action": "❌清仓",
           "pct": -100.0,
-          "ticker": "EL",
-          "cusip": "518439104"
+          "ticker": "REGN",
+          "cusip": "75886F107"
         },
         {
-          "issuer": "Mercadolibre Inc",
+          "issuer": "Jd.Com Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 3000,
+          "prev_shares": 1000000,
           "action": "❌清仓",
           "pct": -100.0,
-          "ticker": "MLB1",
-          "cusip": "58733R102"
+          "ticker": "JD",
+          "cusip": "47215P106"
         },
         {
           "issuer": "Meta Platforms Inc",
@@ -583,14 +583,14 @@
           "cusip": "30303M102"
         },
         {
-          "issuer": "Alibaba Group Hldg Ltd",
+          "issuer": "Mercadolibre Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 250000,
+          "prev_shares": 3000,
           "action": "❌清仓",
           "pct": -100.0,
-          "ticker": "BABA",
-          "cusip": "01609W102"
+          "ticker": "MLB1",
+          "cusip": "58733R102"
         }
       ],
       "new_buys": [
@@ -657,46 +657,6 @@
       ],
       "exits": [
         {
-          "issuer": "Lauder Estee Cos Inc",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 650000,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "EL",
-          "cusip": "518439104"
-        },
-        {
-          "issuer": "Mercadolibre Inc",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 3000,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "MLB1",
-          "cusip": "58733R102"
-        },
-        {
-          "issuer": "Meta Platforms Inc",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 100000,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "META",
-          "cusip": "30303M102"
-        },
-        {
-          "issuer": "Alibaba Group Hldg Ltd",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 250000,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "BABA",
-          "cusip": "01609W102"
-        },
-        {
           "issuer": "Regeneron Pharmaceuticals",
           "value": 0,
           "shares": 0,
@@ -715,6 +675,46 @@
           "pct": -100.0,
           "ticker": "JD",
           "cusip": "47215P106"
+        },
+        {
+          "issuer": "Meta Platforms Inc",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 100000,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "META",
+          "cusip": "30303M102"
+        },
+        {
+          "issuer": "Mercadolibre Inc",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 3000,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "MLB1",
+          "cusip": "58733R102"
+        },
+        {
+          "issuer": "Asml Holding N V",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 25000,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "ASML",
+          "cusip": "N07059210"
+        },
+        {
+          "issuer": "Unitedhealth Group Inc",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 370000,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "UNH",
+          "cusip": "91324P102"
         }
       ]
     },
@@ -916,64 +916,64 @@
       ],
       "exits": [
         {
-          "issuer": "Voyager Technologies Inc",
+          "issuer": "Enhabit Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 51600,
+          "prev_shares": 1118674,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "92892B103"
+          "cusip": "29332G102"
         },
         {
-          "issuer": "Stubhub Hldgs Inc",
+          "issuer": "Digitalocean Hldgs Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 125000,
+          "prev_shares": 23095000,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "86384P109"
+          "cusip": "25402DAB8"
         },
         {
-          "issuer": "Onestream Inc",
+          "issuer": "Purecycle Technologies Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 1830222,
+          "prev_shares": 20797,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "68278B107"
+          "cusip": "74623V103"
         },
         {
-          "issuer": "Clear Channel Outdoor Hldgs",
+          "issuer": "Comcast Corp New",
           "value": 0,
           "shares": 0,
-          "prev_shares": 5407175,
+          "prev_shares": 14389,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "18453H106"
+          "cusip": "20030N101"
         },
         {
-          "issuer": "Circle Internet Group Inc",
+          "issuer": "Udemy Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 75686,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "CRCL",
-          "cusip": "172573107"
-        },
-        {
-          "issuer": "Blackstone Secd Lending Fd",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 867500,
+          "prev_shares": 1921574,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "09261X102"
+          "cusip": "902685106"
+        },
+        {
+          "issuer": "National Storage Affiliates",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 317432,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "",
+          "cusip": "637870106"
         }
       ]
     },
@@ -1185,26 +1185,6 @@
           "cusip": "78462F103"
         },
         {
-          "issuer": "Brera Holdings Plc",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 9687877,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "",
-          "cusip": "G13311116"
-        },
-        {
-          "issuer": "Palo Alto Networks Inc",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 10866,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "",
-          "cusip": "697435105"
-        },
-        {
           "issuer": "Intercontinental Exchange Inc",
           "value": 0,
           "shares": 0,
@@ -1225,6 +1205,16 @@
           "cusip": "72352L106"
         },
         {
+          "issuer": "Brera Holdings Plc",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 9687877,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "",
+          "cusip": "G13311116"
+        },
+        {
           "issuer": "Salesforce Inc",
           "value": 0,
           "shares": 0,
@@ -1233,6 +1223,16 @@
           "pct": -100.0,
           "ticker": "",
           "cusip": "79466L302"
+        },
+        {
+          "issuer": "Palo Alto Networks Inc",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 10866,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "",
+          "cusip": "697435105"
         }
       ]
     },
@@ -1583,26 +1583,6 @@
       ],
       "exits": [
         {
-          "issuer": "Sandisk Corp",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 281250,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "SNDK",
-          "cusip": "80004C200"
-        },
-        {
-          "issuer": "Unitedhealth Group Inc",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 90000,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "UNH",
-          "cusip": "91324P102"
-        },
-        {
           "issuer": "Lyft Inc",
           "value": 0,
           "shares": 0,
@@ -1613,34 +1593,54 @@
           "cusip": "55087P104"
         },
         {
-          "issuer": "Pdd Holdings Inc",
+          "issuer": "Ball Corp",
           "value": 0,
           "shares": 0,
-          "prev_shares": 900000,
+          "prev_shares": 837000,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "722304102"
+          "cusip": "058498106"
         },
         {
-          "issuer": "Jd.Com Inc",
+          "issuer": "Rtx Corporation",
           "value": 0,
           "shares": 0,
-          "prev_shares": 1305000,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "JD",
-          "cusip": "47215P106"
-        },
-        {
-          "issuer": "Kraneshares Trust",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 1080000,
+          "prev_shares": 342000,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "500767306"
+          "cusip": "75513E101"
+        },
+        {
+          "issuer": "L3Harris Technologies Inc",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 198000,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "",
+          "cusip": "502431109"
+        },
+        {
+          "issuer": "Deutsche Bk Ag",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 257616,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "",
+          "cusip": "D18190898"
+        },
+        {
+          "issuer": "Corning Inc",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 1129500,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "GLW",
+          "cusip": "219350105"
         }
       ]
     },
@@ -1842,26 +1842,6 @@
       ],
       "exits": [
         {
-          "issuer": "Stubhub Hldgs Inc",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 1367177,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "",
-          "cusip": "86384P109"
-        },
-        {
-          "issuer": "Lattice Semiconductor Corp",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 323135,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "",
-          "cusip": "518415104"
-        },
-        {
           "issuer": "Echostar Corp",
           "value": 0,
           "shares": 0,
@@ -1870,6 +1850,36 @@
           "pct": -100.0,
           "ticker": "ECHO",
           "cusip": "278768106"
+        },
+        {
+          "issuer": "Option Care Health Inc",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 1868550,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "",
+          "cusip": "68404L201"
+        },
+        {
+          "issuer": "Humana Inc",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 137505,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "",
+          "cusip": "444859102"
+        },
+        {
+          "issuer": "Lyondellbasell Industries Nv",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 131435,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "",
+          "cusip": "N53745100"
         },
         {
           "issuer": "Mercadolibre Inc",
@@ -1882,24 +1892,14 @@
           "cusip": "58733R102"
         },
         {
-          "issuer": "Lumentum Hldgs Inc",
+          "issuer": "Cloudflare Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 6963,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "LITE",
-          "cusip": "55024U109"
-        },
-        {
-          "issuer": "Figure Technology Solutio",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 1150415,
+          "prev_shares": 52535,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "349381103"
+          "cusip": "18915M107"
         }
       ]
     },
@@ -2101,6 +2101,36 @@
       ],
       "exits": [
         {
+          "issuer": "Newmont Corp",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 1855,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "NEM",
+          "cusip": "651639106"
+        },
+        {
+          "issuer": "Vanguard Whitehall Fds",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 1397,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "",
+          "cusip": "921946406"
+        },
+        {
+          "issuer": "National Fuel Gas Co",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 59954,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "",
+          "cusip": "636180101"
+        },
+        {
           "issuer": "Schwab Strategic Trust",
           "value": 0,
           "shares": 0,
@@ -2121,16 +2151,6 @@
           "cusip": "67077M108"
         },
         {
-          "issuer": "Prosperity Bancshares Inc",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 301825,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "",
-          "cusip": "743606105"
-        },
-        {
           "issuer": "Seabridge Gold Inc",
           "value": 0,
           "shares": 0,
@@ -2139,26 +2159,6 @@
           "pct": -100.0,
           "ticker": "",
           "cusip": "811916105"
-        },
-        {
-          "issuer": "Bank America Corp",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 8867,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "BAC",
-          "cusip": "060505104"
-        },
-        {
-          "issuer": "Gildan Activewear Inc",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 115939,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "",
-          "cusip": "375916103"
         }
       ]
     },
@@ -2361,34 +2361,14 @@
       ],
       "exits": [
         {
-          "issuer": "Klarna Group Plc",
+          "issuer": "Bullish",
           "value": 0,
           "shares": 0,
-          "prev_shares": 175000,
+          "prev_shares": 100000,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "G5279N105"
-        },
-        {
-          "issuer": "Xanadu Quantum Technolo Ltd",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 500000,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "",
-          "cusip": "98390R102"
-        },
-        {
-          "issuer": "Robinhood Ventures Fd I",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 400000,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "",
-          "cusip": "770701100"
+          "cusip": "G16910120"
         },
         {
           "issuer": "Lumentum Hldgs Inc",
@@ -2401,6 +2381,36 @@
           "cusip": "55024U109"
         },
         {
+          "issuer": "Paypay Corp",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 400000,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "",
+          "cusip": "70450C101"
+        },
+        {
+          "issuer": "Etoro Group Ltd",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 80000,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "",
+          "cusip": "G32089107"
+        },
+        {
+          "issuer": "Figure Technology Solutio",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 200000,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "",
+          "cusip": "349381103"
+        },
+        {
           "issuer": "Netskope Inc",
           "value": 0,
           "shares": 0,
@@ -2409,16 +2419,6 @@
           "pct": -100.0,
           "ticker": "",
           "cusip": "64119N608"
-        },
-        {
-          "issuer": "Figma Inc",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 60000,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "",
-          "cusip": "316841105"
         }
       ]
     },
@@ -2621,16 +2621,6 @@
       ],
       "exits": [
         {
-          "issuer": "Ishares Bitcoin Trust Etf",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 67226,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "",
-          "cusip": "46438F101"
-        },
-        {
           "issuer": "Solstice Advanced Matls Inc",
           "value": 0,
           "shares": 0,
@@ -2639,6 +2629,16 @@
           "pct": -100.0,
           "ticker": "",
           "cusip": "83443Q103"
+        },
+        {
+          "issuer": "C H Robinson Worldwide In",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 573010,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "",
+          "cusip": "12541W209"
         },
         {
           "issuer": "Visa Inc",
@@ -2661,14 +2661,14 @@
           "cusip": "16935C109"
         },
         {
-          "issuer": "C H Robinson Worldwide In",
+          "issuer": "Ishares Bitcoin Trust Etf",
           "value": 0,
           "shares": 0,
-          "prev_shares": 573010,
+          "prev_shares": 67226,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "12541W209"
+          "cusip": "46438F101"
         }
       ]
     },
@@ -2871,14 +2871,14 @@
       ],
       "exits": [
         {
-          "issuer": "Arm Holdings Plc",
+          "issuer": "Netflix Inc.",
           "value": 0,
           "shares": 0,
-          "prev_shares": 452384,
+          "prev_shares": 131960,
           "action": "❌清仓",
           "pct": -100.0,
-          "ticker": "",
-          "cusip": "042068205"
+          "ticker": "NFLX",
+          "cusip": "64110L106"
         },
         {
           "issuer": "Tower Semiconductor Ltd",
@@ -2891,24 +2891,24 @@
           "cusip": "M87915274"
         },
         {
-          "issuer": "Ciena Corp",
+          "issuer": "Arm Holdings Plc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 231267,
+          "prev_shares": 452384,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "171779309"
+          "cusip": "042068205"
         },
         {
-          "issuer": "Advanced Energy Inds",
+          "issuer": "Roblox Corp",
           "value": 0,
           "shares": 0,
-          "prev_shares": 1022112,
+          "prev_shares": 3532184,
           "action": "❌清仓",
           "pct": -100.0,
-          "ticker": "AEIS",
-          "cusip": "007973100"
+          "ticker": "RBLX",
+          "cusip": "771049103"
         },
         {
           "issuer": "Microsoft Corp",
@@ -2921,14 +2921,14 @@
           "cusip": "594918104"
         },
         {
-          "issuer": "Netflix Inc.",
+          "issuer": "Advanced Energy Inds",
           "value": 0,
           "shares": 0,
-          "prev_shares": 131960,
+          "prev_shares": 1022112,
           "action": "❌清仓",
           "pct": -100.0,
-          "ticker": "NFLX",
-          "cusip": "64110L106"
+          "ticker": "AEIS",
+          "cusip": "007973100"
         }
       ]
     },
@@ -3321,14 +3321,34 @@
       ],
       "exits": [
         {
-          "issuer": "Nvidia Corporation",
+          "issuer": "Broadcom Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 190000,
+          "prev_shares": 50000,
           "action": "❌清仓",
           "pct": -100.0,
-          "ticker": "NVDA",
-          "cusip": "67066G104"
+          "ticker": "AVGO",
+          "cusip": "11135F101"
+        },
+        {
+          "issuer": "Lam Research Corp",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 75000,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "LRCX",
+          "cusip": "512807306"
+        },
+        {
+          "issuer": "Claritev Corporation",
+          "value": 0,
+          "shares": 0,
+          "prev_shares": 44000,
+          "action": "❌清仓",
+          "pct": -100.0,
+          "ticker": "",
+          "cusip": "62548M209"
         },
         {
           "issuer": "Sharkninja Inc",
@@ -3341,34 +3361,14 @@
           "cusip": "G8068L108"
         },
         {
-          "issuer": "Vaneck Etf Trust",
+          "issuer": "Kla Corp",
           "value": 0,
           "shares": 0,
-          "prev_shares": 40000,
+          "prev_shares": 11000,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "92189F676"
-        },
-        {
-          "issuer": "Broadcom Inc",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 50000,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "AVGO",
-          "cusip": "11135F101"
-        },
-        {
-          "issuer": "Claritev Corporation",
-          "value": 0,
-          "shares": 0,
-          "prev_shares": 44000,
-          "action": "❌清仓",
-          "pct": -100.0,
-          "ticker": "",
-          "cusip": "62548M209"
+          "cusip": "482480100"
         },
         {
           "issuer": "Meta Platforms Inc",
@@ -3719,64 +3719,64 @@
       ],
       "exits": [
         {
-          "issuer": "Thryv Hldgs Inc",
+          "issuer": "Jayud Global Logistics Ltd",
           "value": 0,
           "shares": 0,
-          "prev_shares": 115113,
+          "prev_shares": 13400,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "886029206"
+          "cusip": "G5084H111"
         },
         {
-          "issuer": "Annaly Capital Management In",
+          "issuer": "Moderna Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 448222,
+          "prev_shares": 881200,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "035710839"
+          "cusip": "60770K107"
         },
         {
-          "issuer": "Clear Channel Outdoor Hldgs",
+          "issuer": "Cosmos Health Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 2725692,
+          "prev_shares": 390500,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "18453H106"
+          "cusip": "221413305"
         },
         {
-          "issuer": "Grace Therapeutics Inc",
+          "issuer": "Werner Enterprises Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 243910,
+          "prev_shares": 38063,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "00439U104"
+          "cusip": "950755108"
         },
         {
-          "issuer": "Intercont Cayman Ltd",
+          "issuer": "Curtiss Wright Corp",
           "value": 0,
           "shares": 0,
-          "prev_shares": 413900,
+          "prev_shares": 3800,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "G48049103"
+          "cusip": "231561101"
         },
         {
-          "issuer": "Thermo Fisher Scientific Inc",
+          "issuer": "Church & Dwight Co Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 138964,
+          "prev_shares": 190713,
           "action": "❌清仓",
           "pct": -100.0,
-          "ticker": "TMO",
-          "cusip": "883556102"
+          "ticker": "",
+          "cusip": "171340102"
         }
       ]
     },
@@ -3979,64 +3979,64 @@
       ],
       "exits": [
         {
-          "issuer": "Horizon Quantum Holdings Ltd",
+          "issuer": "Guardian Metal Res Plc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 251228,
+          "prev_shares": 78383,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "Y4000A102"
+          "cusip": "401382106"
         },
         {
-          "issuer": "Bbh Trust",
+          "issuer": "Mynd Ai Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 28518,
+          "prev_shares": 18611,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "05528C667"
+          "cusip": "628988107"
         },
         {
-          "issuer": "Intercont Cayman Ltd",
+          "issuer": "Mastech Hldgs Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 59889,
+          "prev_shares": 10959,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "G48049103"
+          "cusip": "57633B100"
         },
         {
-          "issuer": "Dogness International Corp",
+          "issuer": "Profusa Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 61619,
+          "prev_shares": 30844,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "G2788T111"
+          "cusip": "74319X207"
         },
         {
-          "issuer": "Loop Inds Inc",
+          "issuer": "Smart Digital Group Ltd",
           "value": 0,
           "shares": 0,
-          "prev_shares": 68475,
+          "prev_shares": 15939,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "543518104"
+          "cusip": "G5006S104"
         },
         {
-          "issuer": "Ekso Bionics Hldgs Inc",
+          "issuer": "Sleep Number Corp",
           "value": 0,
           "shares": 0,
-          "prev_shares": 31813,
+          "prev_shares": 144785,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "282644400"
+          "cusip": "83125X103"
         }
       ]
     },
@@ -4239,64 +4239,64 @@
       ],
       "exits": [
         {
-          "issuer": "Krystal Biotech Inc",
+          "issuer": "Innospec Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 4119,
+          "prev_shares": 61427,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "501147102"
+          "cusip": "45768S105"
         },
         {
-          "issuer": "Thryv Hldgs Inc",
+          "issuer": "Edgewise Therapeutics Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 261104,
+          "prev_shares": 342867,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "886029206"
+          "cusip": "28036F105"
         },
         {
-          "issuer": "Ton Strategy Co",
+          "issuer": "Firstcash Holdings Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 217125,
+          "prev_shares": 16845,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "92337U302"
+          "cusip": "33768G107"
         },
         {
-          "issuer": "Katapult Holdings Inc",
+          "issuer": "Highwoods Pptys Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 140000,
+          "prev_shares": 317160,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "485859110"
+          "cusip": "431284108"
         },
         {
-          "issuer": "Arrow Finl Corp",
+          "issuer": "Sailpoint Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 49794,
+          "prev_shares": 2920960,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "042744102"
+          "cusip": "78781J109"
         },
         {
-          "issuer": "Lincoln Edl Svcs Corp",
+          "issuer": "Grail Inc",
           "value": 0,
           "shares": 0,
-          "prev_shares": 161582,
+          "prev_shares": 24840,
           "action": "❌清仓",
           "pct": -100.0,
           "ticker": "",
-          "cusip": "533535100"
+          "cusip": "384747101"
         }
       ]
     },

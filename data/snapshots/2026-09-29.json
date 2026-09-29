@@ -1,0 +1,206 @@
+{
+  "date": "2026-09-29",
+  "results": {
+    "vix": {
+      "key": "vix",
+      "value": 14.21,
+      "as_of": "2026-09-22",
+      "status": "ok"
+    },
+    "fear_greed": {
+      "value": 33.9,
+      "as_of": "2026-09-28",
+      "status": "ok",
+      "extra": {
+        "rating": "fear"
+      },
+      "key": "fear_greed"
+    },
+    "aaii_bull_bear": {
+      "value": -24.5,
+      "as_of": "2026-09-18",
+      "status": "ok",
+      "note": "AAII bull 28.8% / bear 53.3% / spread=-24.5 (Week ending 2026-09-17, 官网9/18发布)。★大逆转:较9/2的+2.1骤降至-24.5=2025年5月来最低;bullish一年低点,spread连续9周低于长期均值+6.5;19.1%持仓者称现金远高于常态。触发因素=Fed 2023来首次加息+油价高企+S&P距纪录高约-2%",
+      "key": "aaii_bull_bear"
+    },
+    "put_call": {
+      "value": 0.58,
+      "as_of": null,
+      "status": "ok",
+      "source": "CBOE official (via ScraperAPI)",
+      "key": "put_call"
+    },
+    "bofa_fms_cash": {
+      "value": 3.9,
+      "as_of": "2026-09",
+      "status": "ok",
+      "note": "BofA FMS现金水平3.9% (Sep 2026, 9/15官方发布, 自8月3.5%上升; 极端夏季看多降温; BofA模型称升至4-5%中性带才可再加风险; 现仍<4.0仍偏低); 净超配股票49%/净低配债券-48%(2022年5月来最低)",
+      "key": "bofa_fms_cash"
+    },
+    "sofr_iorb": {
+      "key": "sofr_iorb",
+      "value": 2.0,
+      "as_of": "2026-09-25",
+      "status": "ok",
+      "extra": {
+        "sofr": 3.9,
+        "effr": 3.88,
+        "sofr_as_of": "2026-09-25",
+        "effr_as_of": "2026-09-25",
+        "basis": "SOFR-EFFR"
+      }
+    },
+    "margin_cost": {
+      "key": "margin_cost",
+      "value": 7.0,
+      "as_of": "2026-09-25",
+      "status": "ok"
+    },
+    "bank_funding_stress": {
+      "key": "bank_funding_stress",
+      "value": 0.0,
+      "as_of": "2026-09-25",
+      "status": "ok",
+      "extra": {
+        "cp3m": 4.08,
+        "tbill3m": 4.08,
+        "sofr": 3.9,
+        "spread_bps": 0.0
+      }
+    },
+    "margin_debt": {
+      "value": 1453.832,
+      "as_of": "2026-08-31",
+      "status": "ok",
+      "key": "margin_debt"
+    },
+    "margin_gdp": {
+      "key": "margin_gdp",
+      "value": 4.48,
+      "as_of": "2026-09-29",
+      "status": "ok"
+    },
+    "ipo_count": {
+      "value": 249.0,
+      "as_of": "2026-YTD",
+      "status": "ok",
+      "extra": {
+        "source": "stockanalysis",
+        "year": 2026
+      },
+      "key": "ipo_count"
+    },
+    "insider": {
+      "value": 0.264,
+      "as_of": null,
+      "status": "ok",
+      "extra": {
+        "source": "openinsider",
+        "note": "近期榜前100笔口径,趋势用"
+      },
+      "key": "insider"
+    },
+    "bofa_bull_bear": {
+      "value": 9.7,
+      "as_of": "2026-09-25",
+      "status": "ok",
+      "note": "BofA Bull&Bear 9.7 (2026-08峰值/2021来最高, 多源确认; 远超8.0卖出阈值持续卖出信号)。驱动=高收益债强劲流入+全球HY/AT1利差收窄+股指广度改善。9月FMS composite情绪从8.0降至7.0(风险偏好降温), 现金升至3.9%(<4.0现金卖出信号仍激活), 净超配股票49%(自56%回落)/净低配债券-48%(2022-05来最低)。首要尾部风险由AI泡沫换为债券收益率无序上升(33%)",
+      "key": "bofa_bull_bear"
+    },
+    "hy_oas": {
+      "key": "hy_oas",
+      "value": 2.93,
+      "as_of": "2026-09-25",
+      "status": "ok"
+    },
+    "ad_line": {
+      "key": "ad_line",
+      "value": false,
+      "as_of": "2026-09-24",
+      "status": "ok",
+      "extra": {
+        "source": "NYSE A/D 腾落线(SP500 全成分股, Economic-Dashboard cron 真数据)",
+        "cumulative": 995,
+        "advance_pct": 34.59,
+        "ad_net": -154,
+        "cum_recent_high": 2031,
+        "cum_lookback_high": 2031,
+        "cum_made_new_high": true,
+        "recent_advance_pct_avg": 46.0,
+        "breadth_confirmed": true,
+        "tickers": 503
+      }
+    },
+    "buffett": {
+      "value": 255.7,
+      "as_of": "2026-04-01",
+      "status": "ok",
+      "extra": {
+        "source": "FRED Z.1"
+      },
+      "key": "buffett"
+    },
+    "cape": {
+      "value": 41.16,
+      "as_of": "2026-09-28",
+      "status": "ok",
+      "key": "cape"
+    },
+    "yield_curve": {
+      "key": "yield_curve",
+      "value": 0.32,
+      "as_of": "2026-09-28",
+      "status": "ok"
+    },
+    "lei": {
+      "value": 0.57,
+      "as_of": "2026-08-01",
+      "status": "ok",
+      "extra": {
+        "cli_index": 100.96,
+        "source": "FRED OECD CLI",
+        "note": "OECD综合领先指标6月变化(替Conference Board付费LEI)"
+      },
+      "key": "lei"
+    },
+    "aaii_alloc": {
+      "value": 71.05,
+      "as_of": null,
+      "status": "ok",
+      "key": "aaii_alloc"
+    }
+  },
+  "cot": {
+    "gold": {
+      "as_of": "2026-09-22",
+      "open_interest": 412800,
+      "comm_long": 57458,
+      "comm_short": 320361,
+      "comm_net": -262903,
+      "noncomm_long": 253982,
+      "noncomm_short": 28129,
+      "noncomm_net": 225853,
+      "metal": "gold",
+      "comm_net_wow": -1182,
+      "comm_long_wow": 1041,
+      "comm_short_wow": 2223,
+      "comm_surge": false
+    },
+    "silver": {
+      "as_of": "2026-09-22",
+      "open_interest": 106474,
+      "comm_long": 31176,
+      "comm_short": 75930,
+      "comm_net": -44754,
+      "noncomm_long": 34701,
+      "noncomm_short": 9257,
+      "noncomm_net": 25444,
+      "metal": "silver",
+      "comm_net_wow": -2054,
+      "comm_long_wow": -651,
+      "comm_short_wow": 1403,
+      "comm_surge": false
+    }
+  },
+  "generated_at": "2026-09-29T02:05:22.797252"
+}
