@@ -44,6 +44,16 @@ DIR_MAP = {"看涨": "看涨", "看多": "看涨", "偏多": "看涨", "强烈�
            "中性": "中性", "观望": "中性"}
 
 
+import unicodedata
+
+
+def fold(s):
+    """去重音: Sløk→slok, Stöferle→stoeferle。姓名关键词和网页正文两边都折叠后再比。"""
+    s = s.replace("ø", "o").replace("Ø", "O").replace("ß", "ss")
+    s = s.replace("ö", "oe").replace("ü", "ue").replace("ä", "ae")
+    return "".join(c for c in unicodedata.normalize("NFKD", s) if not unicodedata.combining(c))
+
+
 def registry():
     r = json.load(open(os.path.join(ROOT, "data", "kol_registry.json"), encoding="utf-8"))["kols"]
     return {k["id"]: k for k in r}
@@ -61,17 +71,28 @@ def surname_keys(k):
     short = (k.get("short_name") or k["display_name"].split("（")[0]).strip()
     short = re.sub(r"^(Dr\.|Prof\.)\s*", "", short)
     short = re.sub(r"\s*(教授|博士)$", "", short)
+    # ★2026-09-30 修: 名字含「/」(如「Doomberg / Kuppy」「Robert Prechter / Elliott Wave International」)
+    #   时原来只取整串最后一个词 → 得到 'kuppy' / 'international', 误杀 18 条。现在每段各取姓;
+    #   另加去重音变体(Sløk→slok: 网页常写 Slok), 防止非 ASCII 字母对不上。
     keys = set()
-    if re.search(r"[\u4e00-\u9fff]", short):
-        keys.add(short)
-    else:
-        parts = [p for p in re.split(r"\s+", short) if p and not p.endswith(".")]
-        if parts:
-            keys.add(parts[-1].lower())
-    for t in k.get("search_terms") or []:
-        t = t.strip()
-        if t and not re.search(r"[\u4e00-\u9fff]", t):
-            keys.add(t.split()[-1].lower())
+    segs = [short] + list(k.get("search_terms") or [])
+    for seg in segs:
+        for part in re.split(r"\s*/\s*", seg or ""):
+            part = part.strip()
+            if not part:
+                continue
+            if re.search(r"[\u4e00-\u9fff]", part):
+                keys.add(part)
+                continue
+            words = [w for w in re.split(r"\s+", part) if w and not w.endswith(".")]
+            if not words:
+                continue
+            last = words[-1].lower()
+            if last not in ("international", "research", "capital", "group", "llc", "inc"):
+                keys.add(last if len(words) > 1 else words[0].lower())
+            if len(words) > 2:  # 机构名(Elliott Wave International)再收一个整串
+                keys.add(part.lower())
+    keys |= {fold(x) for x in keys}
     return {x for x in keys if len(x) >= 2}
 
 
@@ -90,13 +111,25 @@ def fetch(url):
         return 0, ""
 
 
+JS_SHELL_HOSTS = ("x.com", "twitter.com", "www.linkedin.com", "linkedin.com")
+
+
 def check_url(url, keys):
+    # ★2026-09-30 修: x.com 对无登录抓取返回 16 万字节的 JS 空壳(200, 无正文),
+    #   原逻辑把「>3000 字节且无姓名」判成拒收, 误杀 9 条。这类站点只做存在性判断。
+    host = re.sub(r"^https?://([^/]+).*", r"\1", url).lower()
+    if host in JS_SHELL_HOSTS:
+        st, _ = fetch(url)
+        if st in (404, 410, -1):
+            return "reject", f"http {st}"
+        return "unverifiable", f"js-shell {st}"
     st, body = fetch(url)
     if st in (404, 410, -1):
         return "reject", f"http {st}"
     if st == 200:
         low = body.lower()
-        if any(k.lower() in low for k in keys):
+        flow = fold(low)
+        if any(k.lower() in low or fold(k.lower()) in flow for k in keys):
             return "ok", "200+name"
         if len(body) < 3000:  # JS 壳页面/同意页，判不了
             return "unverifiable", "200 shell"
