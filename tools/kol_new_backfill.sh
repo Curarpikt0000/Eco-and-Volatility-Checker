@@ -21,7 +21,7 @@ D="scratch/kol_bf_auto_$DAY"
 LEDGER=data/kol_backfill_ledger.json
 MIN_MONTHS=${KOL_BF_MIN_MONTHS:-3}
 MAX_TRY=2
-PER=2; PAR=3
+PER=2; PAR=${KOL_BF_PAR:-3}
 BATCH_TIMEOUT=${KOL_BF_BATCH_TIMEOUT:-3000}   # 单批 50 分钟；cron 脚本上限 60 分钟，留 10 分钟给入库+提交
 DRY=${KOL_BF_DRY:-0}          # 1 = 不调 LLM（子进程写假产出），只验证链路
 NOPUSH=${KOL_BF_NOPUSH:-0}    # 1 = 不 commit/push（沙箱）
