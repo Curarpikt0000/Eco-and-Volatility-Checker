@@ -37,7 +37,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "src"))
 import kol_store  # noqa: E402
 
-WIN_START = "2025-09-29"
+WIN_START = (dt.date.today() - dt.timedelta(days=365)).isoformat()   # 滚动一年(原固定 2025-09-29; 自动回填每天跑需滚动)
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36"
 DIR_MAP = {"看涨": "看涨", "看多": "看涨", "偏多": "看涨", "强烈看多": "看涨",
            "看跌": "看跌", "看空": "看跌", "偏空": "看跌", "强烈看空": "看跌",

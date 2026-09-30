@@ -8121,3 +8121,90 @@ def fetch_wgc_weekly_iv(cache_path=None):
         out["status"] = "error"
         out["warnings"].append("%s: %s" % (type(e).__name__, e))
     return out
+
+
+
+# ════════════════════════════════════════════════════════════════════
+# 道指 ÷ 黄金 · 标普500 ÷ 黄金  50 年比值（Chao 2026-09-30）
+# ════════════════════════════════════════════════════════════════════
+# 月度序列 = 历史底表 data/stock_gold_ratio_base.json（1976-01 起，已完结月份，
+#   道指/标普月末收盘，黄金伦敦金月均价）+ Yahoo 日线追加底表之后的月份：
+#   股指取月末(当月则取最新)收盘，黄金取 GC=F 当月日收盘均值（与底表"月均价"同口径）。
+# 另给"今日比值"= 最新股指收盘 ÷ 最新 GC=F 收盘（日报/卡片用）。
+# Yahoo 失败 → 用上次成功的缓存 data/stock_gold_ratio_cache.json，并标 warnings；绝不编。
+
+def _sgr_yahoo(sym, rng="1y"):
+    import json as _j, urllib.request, datetime as _dt
+    u = (f"https://query1.finance.yahoo.com/v8/finance/chart/{sym}?range={rng}&interval=1d")
+    req = urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/124"})
+    with urllib.request.urlopen(req, timeout=40) as r:
+        d = _j.loads(r.read())
+    rr = ((d.get("chart") or {}).get("result") or [None])[0]
+    if not rr:
+        raise RuntimeError(f"{sym}: 无 result")
+    out = {}
+    for t, c in zip(rr.get("timestamp") or [], ((rr.get("indicators") or {}).get("quote") or [{}])[0].get("close") or []):
+        if c is not None:
+            out[_dt.datetime.utcfromtimestamp(t).strftime("%Y-%m-%d")] = float(c)
+    if not out:
+        raise RuntimeError(f"{sym}: 无收盘价")
+    return out
+
+
+def fetch_stock_gold_ratio(base_path=None, cache_path=None):
+    from datetime import timezone, timedelta
+    root = os.path.join(os.path.dirname(__file__), "..", "data")
+    base_path = base_path or os.path.join(root, "stock_gold_ratio_base.json")
+    cache_path = cache_path or os.path.join(root, "stock_gold_ratio_cache.json")
+    jst = datetime.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    out = {"status": "ok", "as_of": jst, "warnings": [], "rows": []}
+    try:
+        base = json.load(open(base_path))
+    except Exception as e:
+        out["status"] = "error"; out["warnings"].append(f"底表缺失: {e}")
+        return out
+    rows = {r["m"]: dict(r, src="base") for r in base["rows"]}
+    last_base = max(rows)
+    try:
+        dj, sp, gc = _sgr_yahoo("%5EDJI"), _sgr_yahoo("%5EGSPC"), _sgr_yahoo("GC%3DF")
+        months = sorted({d[:7] for d in gc if d[:7] > last_base})
+        for m in months:
+            gd = [v for d, v in gc.items() if d[:7] == m]
+            dd = [dj[d] for d in sorted(dj) if d[:7] == m]
+            ss = [sp[d] for d in sorted(sp) if d[:7] == m]
+            if gd and dd and ss:
+                rows[m] = {"m": m, "dow": round(dd[-1], 2), "spx": round(ss[-1], 2),
+                           "gold": round(sum(gd) / len(gd), 2), "src": "yahoo", "gold_days": len(gd)}
+        ld = max(d for d in dj if d in gc)
+        ls = max(d for d in sp if d in gc)
+        out["today"] = {"dow_date": ld, "dow": round(dj[ld], 2), "gold_dow_day": round(gc[ld], 2),
+                        "dow_gold": round(dj[ld] / gc[ld], 3),
+                        "spx_date": ls, "spx": round(sp[ls], 2), "gold_spx_day": round(gc[ls], 2),
+                        "spx_gold": round(sp[ls] / gc[ls], 4)}
+    except Exception as e:
+        try:
+            c = json.load(open(cache_path))
+            c.setdefault("warnings", []).append(f"本次 Yahoo 抓取失败({type(e).__name__}: {e})，显示 {c.get('as_of')} 缓存")
+            c["status"] = "ok(cache)"
+            return c
+        except Exception:
+            out["warnings"].append(f"Yahoo 失败且无缓存: {type(e).__name__}: {e}；仅显示底表")
+    ser = []
+    for m in sorted(rows):
+        r = rows[m]
+        ser.append({"m": m, "dow": r["dow"], "spx": r["spx"], "gold": r["gold"],
+                    "dg": round(r["dow"] / r["gold"], 4), "sg": round(r["spx"] / r["gold"], 5), "src": r["src"]})
+    out["rows"] = ser
+    for k in ("dg", "sg"):
+        v = [x[k] for x in ser]
+        imax = max(range(len(v)), key=lambda i: v[i]); imin = min(range(len(v)), key=lambda i: v[i])
+        cur = out.get("today", {}).get("dow_gold" if k == "dg" else "spx_gold", v[-1])
+        out[k] = {"max": v[imax], "max_m": ser[imax]["m"], "min": v[imin], "min_m": ser[imin]["m"],
+                  "median": sorted(v)[len(v) // 2], "latest_month": v[-1],
+                  "pct_rank": round(sum(1 for x in v if x <= cur) / len(v) * 100, 1)}
+    if out["status"] == "ok" and "today" in out:
+        try:
+            json.dump(out, open(cache_path, "w"), ensure_ascii=False)
+        except Exception:
+            pass
+    return out

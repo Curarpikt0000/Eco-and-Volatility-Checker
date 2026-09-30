@@ -691,6 +691,19 @@ def main():
     except Exception as e:
         print(f"[dashboard] WRS衰退信号 跳过: {e}")
 
+    # ── 股指 ÷ 黄金 50 年比值(Chao 2026-09-30: 每日更新) ──
+    stock_gold = {}
+    try:
+        stock_gold = ed.fetch_stock_gold_ratio() or {}
+        if stock_gold.get("rows"):
+            _td = stock_gold.get("today", {})
+            print(f"[dashboard] 股指/黄金比值: {len(stock_gold['rows'])} 个月 道/金 今日 {_td.get('dow_gold')} "
+                  f"标/金 {_td.get('spx_gold')} @ {_td.get('dow_date')} status={stock_gold.get('status')}")
+        else:
+            print(f"[dashboard] 股指/黄金比值 失败: {stock_gold.get('warnings')}")
+    except Exception as e:
+        print(f"[dashboard] 股指/黄金比值 跳过: {e}")
+
     # ── 中国模式断代监控(旧引擎停摆 / 新引擎接续) ──
     # ★月更: NBS 官方发布稿每月 15-16 日出; 东财宏观 API 同期更新。
     # ★口径: NBS 分项为累计同比, 东财「固定资产投资」为单月同比 —— 两者不可混比。
@@ -850,6 +863,7 @@ def main():
         cot_mm=cot_mm,
         china_regime=china_regime,
         wrs=wrs,
+        stock_gold=stock_gold,
         ust_micro=ust_micro,
         dxy_gold=dxy_gold,
         gold_etf_flows=gold_etf_flows,

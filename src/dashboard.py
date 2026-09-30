@@ -1025,6 +1025,82 @@ def _wrs_html(w):
 
 
 
+
+def _stock_gold_html(o):
+    """道指÷黄金 · 标普500÷黄金 50 年月度比值(对数坐标)。每点悬停显示 月份 + 比值 + 股指/金价。"""
+    import math
+    if not o or not o.get("rows"):
+        err = "；".join((o or {}).get("warnings", [])[:2])
+        return f'<p class="empty">股指/黄金比值数据同步中{("：" + _esc(err)) if err else ""}。</p>'
+    rows = o["rows"]
+    td = o.get("today") or {}
+    W, H, PL, PR, PT, PB = 900, 230, 48, 16, 12, 24
+    iw, ih = W - PL - PR, H - PT - PB
+    n = len(rows)
+
+    def X(i): return PL + iw * i / max(n - 1, 1)
+
+    def panel(key, name, color, today_v, today_date, fmt, ticks):
+        vals = [r[key] for r in rows]
+        lo, hi = math.log10(min(vals) / 1.25), math.log10(max(vals) * 1.25)
+
+        def Y(v): return PT + ih * (1 - (math.log10(v) - lo) / (hi - lo))
+        st = o[key]
+        pts = " ".join(f"{X(i):.1f},{Y(v):.1f}" for i, v in enumerate(vals))
+        g = ""
+        for t in ticks:
+            if min(vals) / 1.25 <= t <= max(vals) * 1.25:
+                g += (f'<line x1="{PL}" y1="{Y(t):.1f}" x2="{W-PR}" y2="{Y(t):.1f}" class="sgr-grid"/>'
+                      f'<text x="{PL-6}" y="{Y(t)+3.5:.1f}" class="sgr-yt">{t:g}</text>')
+        med = st["median"]
+        g += (f'<line x1="{PL}" y1="{Y(med):.1f}" x2="{W-PR}" y2="{Y(med):.1f}" class="sgr-med"/>'
+              f'<text x="{PL+4}" y="{Y(med)-4:.1f}" class="sgr-medt">50 年中位数 {fmt(med)}</text>')
+        xt = ""
+        for i, r in enumerate(rows):
+            if r["m"].endswith("-01") and int(r["m"][:4]) % 5 == 0:
+                xt += f'<text x="{X(i):.1f}" y="{H-6}" class="sgr-xt">{r["m"][:4]}</text>'
+        marks = ""
+        for m_key, lab in (("max_m", "峰值"), ("min_m", "谷底")):
+            i = next(k for k, r in enumerate(rows) if r["m"] == st[m_key])
+            marks += (f'<circle cx="{X(i):.1f}" cy="{Y(vals[i]):.1f}" r="3" fill="{color}"/>'
+                      f'<text x="{X(i)+7:.1f}" y="{Y(vals[i])+4:.1f}" class="sgr-lab">{rows[i]["m"]} {fmt(vals[i])}</text>')
+        marks += f'<circle cx="{X(n-1):.1f}" cy="{Y(vals[-1]):.1f}" r="3.8" fill="{color}" stroke="#fff" stroke-width="1.2"/>'
+        tips = []
+        for r in rows:
+            gl = "伦敦金月均" if r["src"] == "base" else "COMEX 期金当月均"
+            idx = f'道指 {r["dow"]:,.0f}' if key == "dg" else f'标普 {r["spx"]:,.0f}'
+            tips.append(_esc(f'{r["m"]}') + "||" + _esc(f'{name} {fmt(r[key])}') + "<br>" +
+                        _esc(f'{idx} ÷ 金价 ${r["gold"]:,.0f}（{gl}）'))
+        band = _hover_bands([X(i) for i in range(n)], tips, PT, ih, PL, W - PR)
+        stat = (f'<div class="sgr-stat"><span>今日 <b>{fmt(today_v)}</b><i>{_esc(today_date)} 收盘</i></span>'
+                f'<span>50 年分位 <b>{st["pct_rank"]}%</b><i>1976 年至今 {n} 个月</i></span>'
+                f'<span>峰值 <b>{fmt(st["max"])}</b><i>{st["max_m"]}</i></span>'
+                f'<span>谷底 <b>{fmt(st["min"])}</b><i>{st["min_m"]}</i></span></div>')
+        return (f'<div class="sgr-title">{name}</div>{stat}'
+                f'<svg viewBox="0 0 {W} {H}" class="sgr-chart" preserveAspectRatio="xMidYMid meet">'
+                f'{g}<polyline points="{pts}" fill="none" stroke="{color}" stroke-width="1.5"/>{marks}{xt}{band}</svg>')
+
+    f1 = lambda v: f"{v:.1f}"
+    f2 = lambda v: f"{v:.2f}"
+    dg_today = td.get("dow_gold", o["dg"]["latest_month"])
+    sg_today = td.get("spx_gold", o["sg"]["latest_month"])
+    warn = ""
+    if o.get("warnings"):
+        warn = f'<p class="sgr-warn">⚠ {_esc("；".join(o["warnings"][:2]))}</p>'
+    return f"""
+<div class="sgr-wrap">
+  {warn}
+  {panel("dg", "道琼斯工业指数 ÷ 黄金", "#4a6fa5", dg_today, td.get("dow_date", rows[-1]["m"]), f1, [1, 2, 5, 10, 20, 50])}
+  {panel("sg", "标普 500 ÷ 黄金", "#7a8f5a", sg_today, td.get("spx_date", rows[-1]["m"]), f2, [0.1, 0.2, 0.5, 1, 2, 5])}
+  <div class="sgr-foot">
+    比值＝指数点 ÷ 金价（美元/盎司），对数坐标；比值越低＝股票相对黄金越便宜。月度序列：股指取月末收盘，
+    黄金取当月均价（1976-01 至 2026-08 为伦敦金月均价，之后为 COMEX 期金当月日收盘均值）；
+    「今日」＝最新股指收盘 ÷ 同日期金收盘。数据：道指 1976–1991 fja05680/dow-sp500-100-years，
+    1992 起 Yahoo ^DJI；标普 Yahoo ^GSPC；黄金 datasets/gold-prices（LBMA）+ Yahoo GC=F。随 dashboard 每日更新。
+  </div>
+</div>"""
+
+
 def _ust_micro_line(items, W=880, H=150, PL=58, PR=10, PT=10, PB=22, color="#6b7f8a", unit=""):
     """通用小折线, items=[{d,v}]。"""
     if len(items) < 3:
@@ -1803,7 +1879,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -2041,6 +2117,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         cot_mm_html=_cot_mm_html(cot_mm),
         china_regime_html=_china_regime_html(china_regime),
         wrs_html=_wrs_html(wrs),
+        stock_gold_html=_stock_gold_html(stock_gold),
         ust_micro_html=_ust_micro_html(ust_micro),
         dxy_gold_html=_dxy_gold_html(dxy_gold),
         gold_etf_region_html=_gold_etf_region_html(gold_etf_flows),
@@ -9293,6 +9370,19 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .crs-err{{background:#f4e9e6;border-left:3px solid #a3705f;padding:9px 12px;font-size:12px;color:#7a5f52;border-radius:5px;margin-top:10px}}
 
 /* ── WRS Walmart 衰退信号 ── */
+.sgr-wrap{{margin:6px 0}}
+.sgr-title{{font-size:15px;font-weight:700;color:#4a443c;margin:14px 0 6px}}
+.sgr-stat{{display:flex;gap:22px;flex-wrap:wrap;font-size:12px;color:#6b645a;margin-bottom:4px}}
+.sgr-stat b{{font-size:15px;color:#3d372f;margin:0 3px}}.sgr-stat i{{font-style:normal;color:#9a9288;font-size:11px}}
+.sgr-chart{{width:100%;height:auto;display:block}}
+.sgr-grid{{stroke:#eceae5;stroke-width:1}}
+.sgr-med{{stroke:#a8a29a;stroke-width:1;stroke-dasharray:4 3}}
+.sgr-medt{{font-size:10px;fill:#8a837a}}
+.sgr-yt{{font-size:10px;fill:#8a837a;text-anchor:end}}
+.sgr-xt{{font-size:10px;fill:#8a837a;text-anchor:middle}}
+.sgr-lab{{font-size:10px;fill:#4a443c}}
+.sgr-foot{{font-size:11px;color:#8a837a;margin-top:10px;line-height:1.6}}
+.sgr-warn{{font-size:12px;color:#8e3b30;margin:0 0 6px}}
 .wrs-wrap{{margin:6px 0}}
 .wrs-head{{margin-bottom:10px}}
 .wrs-title{{font-size:15px;font-weight:700;color:#4a443c;display:flex;align-items:center;gap:10px;flex-wrap:wrap}}
@@ -10181,6 +10271,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ WRS · Walmart 衰退信号(分母 ETF 代理, 已标注) ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>WRS · Walmart 衰退信号 (Walmart ÷ 奢侈品指数 · Jim Paulsen 口径 · 分母用 ETF 代理)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{wrs_html}</div>
+  <!-- ━━━ 道指/标普 ÷ 黄金 50 年比值 ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>股指 ÷ 黄金 · 50 年比值 (道指÷金价 · 标普500÷金价 · 月度对数坐标 · 1976 年至今)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{stock_gold_html}</div>
   <!-- ━━━ 美元指数 vs 黄金 + 年初至今大事件标注 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>美元指数 vs 黄金 · 年初至今大事件标注 (双轴叠加 · 事件由价格异动反查并逐条核实出处)<span class="freq-badge freq-daily">价格每日 · 事件每周</span></div>
   <div class="card">{dxy_gold_html}</div>

@@ -14,3 +14,18 @@
     kol_store 只写当天快照，**不要用 `ingest_daily_dir()` 默认参数回扫整个 daily 目录**(会一次灌入全部历史快照)。
   - 自测：`KOL_PREFETCH_DATE=2099-01-01 KOL_PREFETCH_DRY=1 bash ~/.hermes/scripts/eco_vol_kol_prefetch.sh`(不调 LLM，验证拉起/等待/合并/STATUS 链路；测完删 scratch/kol_deep_2099-01-01)。
 ```
+
+---
+## 待写入 AGENTS.md「## Cron (JST)」段（2026-09-30 追加，同样待 Chao 审批）
+
+- **eco-vol-kol-new-backfill 工作日 14:00**（no_agent，`~/.hermes/scripts/eco_vol_kol_new_backfill.sh` → `tools/kol_new_backfill.sh`）：
+  Chao 2026-09-30「每次新增一个 KOL 都需要 backfill 他们的言论」。名册里过去 365 天覆盖 < 3 个月的人
+  （11:00 步骤 0 刚从 Notion 同步进来的新人天然命中）→ 每批 2 人、3 批并行起 hermes 子进程按
+  `scratch/kol_bf_gap110/INSTRUCTIONS.md` 铁律回填 → `tools/kol_bf_ingest.py --apply` 出处实测门禁入库 →
+  只提交 `data/kol_store.sqlite` + `data/kol_backfill_ledger.json` 并校验 local==remote。
+  每天最多 6 人（保证 1 小时脚本上限内跑完），其余顺延；账本里每人最多试 2 次（公开信息确实少的人不无限烧配额）。
+  没人要补 = 完全静默；有人 = 发每人入库条数；失败 = ❌ 一行。自测：`KOL_BF_ROOT=<沙箱> KOL_BF_DRY=1 KOL_BF_NOPUSH=1`，
+  DRY 对正式目录会被脚本拒绝（exit 2）——★初版沙箱测试曾因 ROOT 写死把 7 条假数据写进真库，已删并加此保险。
+- **股指 ÷ 黄金 50 年比值**（随日报 build_dashboard 每日更新）：`ed.fetch_stock_gold_ratio()`，底表
+  `data/stock_gold_ratio_base.json`（1976-01~2026-08，道指/标普月末 + 伦敦金月均），之后月份 Yahoo 日线追加
+  （黄金=GC=F 当月均价）；Yahoo 失败读 `data/stock_gold_ratio_cache.json` 并标「缓存」。
