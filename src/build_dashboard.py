@@ -717,6 +717,18 @@ def main():
     except Exception as e:
         print(f"[dashboard] 信心vsTFP 跳过: {e}")
 
+    # ── LLM Token 支出指数(Silicon Data, 每日抓取追加自建历史) ──
+    llm_token = {}
+    try:
+        llm_token = ed.fetch_llm_token_index() or {}
+        if llm_token.get("series"):
+            print(f"[dashboard] LLM Token指数: {len(llm_token['series'])} 天 最新 {llm_token['latest']} "
+                  f"新增{llm_token.get('added')} 修订{llm_token.get('revised')} warn={llm_token.get('warnings')}")
+        else:
+            print(f"[dashboard] LLM Token指数 失败: {llm_token.get('warnings')}")
+    except Exception as e:
+        print(f"[dashboard] LLM Token指数 跳过: {e}")
+
     # ── 中国模式断代监控(旧引擎停摆 / 新引擎接续) ──
     # ★月更: NBS 官方发布稿每月 15-16 日出; 东财宏观 API 同期更新。
     # ★口径: NBS 分项为累计同比, 东财「固定资产投资」为单月同比 —— 两者不可混比。
@@ -878,6 +890,7 @@ def main():
         wrs=wrs,
         stock_gold=stock_gold,
         tfp_sentiment=tfp_sentiment,
+        llm_token=llm_token,
         ust_micro=ust_micro,
         dxy_gold=dxy_gold,
         gold_etf_flows=gold_etf_flows,

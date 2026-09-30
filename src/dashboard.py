@@ -1177,6 +1177,60 @@ def _tfp_sentiment_html(o):
 </div>"""
 
 
+
+def _llm_token_html(o):
+    """Silicon Data LLM Token 支出指数(日度, 美元/百万 token): 全市场 + 开源 + 闭源三线, 每日悬停。"""
+    ser = (o or {}).get("series") or []
+    if len(ser) < 3:
+        err = "；".join((o or {}).get("warnings", [])[:2])
+        return f'<p class="empty">LLM Token 指数同步中{("：" + _esc(err)) if err else ""}。</p>'
+    W, H, PL, PR, PT, PB = 900, 260, 46, 16, 14, 24
+    iw, ih = W - PL - PR, H - PT - PB
+    n = len(ser)
+    hi = max(max(x["prop"] for x in ser), max(x["all"] for x in ser)) * 1.08
+    lo = 0.0
+
+    def X(i): return PL + iw * i / max(n - 1, 1)
+    def Y(v): return PT + ih * (1 - (v - lo) / (hi - lo))
+    g = ""
+    step = 0.5 if hi <= 3 else 1.0
+    v = 0.0
+    while v <= hi:
+        g += (f'<line x1="{PL}" y1="{Y(v):.1f}" x2="{W-PR}" y2="{Y(v):.1f}" class="sgr-grid"/>'
+              f'<text x="{PL-6}" y="{Y(v)+3.5:.1f}" class="sgr-yt">${v:.1f}</text>')
+        v += step
+    xt = "".join(f'<text x="{X(i):.1f}" y="{H-6}" class="sgr-xt">{x["d"][5:]}</text>'
+                 for i, x in enumerate(ser) if i % max(1, n // 8) == 0 or i == n - 1)
+    lines = ""
+    for k, col, wd, dash in (("prop", "#b07a5a", 1.3, ""), ("all", "#1f3a68", 2.0, ""), ("open", "#7a8f5a", 1.3, "")):
+        pts = " ".join(f"{X(i):.1f},{Y(x[k]):.1f}" for i, x in enumerate(ser))
+        lines += f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="{wd}"/>'
+    tips = [_esc(x["d"]) + "||" + _esc(f"全市场 ${x['all']:.4f}") + "<br>" +
+            _esc(f"闭源模型 ${x['prop']:.4f} · 开源模型 ${x['open']:.4f}（每百万 token）") for x in ser]
+    band = _hover_bands([X(i) for i in range(n)], tips, PT, ih, PL, W - PR)
+    L, lo_x, hi_x = o["latest"], o["lo"], o["hi"]
+    c7 = o.get("chg_7d")
+    warn = f'<p class="sgr-warn">⚠ {_esc("；".join(o["warnings"][:2]))}</p>' if o.get("warnings") else ""
+    return f"""
+<div class="tfs-wrap">
+  {warn}
+  <div class="sgr-stat">
+    <span>全市场 <b>${L['all']:.4f}</b><i>{L['d']} · 每百万 token</i></span>
+    <span>近 7 日 <b>{'—' if c7 is None else f'{c7:+.1f}%'}</b><i>全市场</i></span>
+    <span>闭源 / 开源 <b>${L['prop']:.2f} / ${L['open']:.2f}</b><i>闭源约为开源 {L['prop']/L['open']:.1f} 倍</i></span>
+    <span>本站存档区间 <b>${lo_x['all']:.2f} ~ ${hi_x['all']:.2f}</b><i>{ser[0]['d']} 起 · 低点 {lo_x['d']}</i></span>
+  </div>
+  <div class="tfs-legend"><i class="l1"></i>全市场（用量加权）<i style="border-color:#b07a5a"></i>闭源模型<i style="border-color:#7a8f5a"></i>开源模型</div>
+  <svg viewBox="0 0 {W} {H}" class="sgr-chart" preserveAspectRatio="xMidYMid meet">{g}{lines}{xt}{band}</svg>
+  <div class="sgr-foot">
+    Silicon Data LLM Token Expenditure Index（Bloomberg 代码 SDLLMTK）：全市场按实际用量加权的每百万 token 价格，反映「花出去的钱」而非标价，
+    模型结构向便宜模型迁移也会拉低它。官方只公开滚动 7 天、不提供历史下载，本站每天抓取追加自建历史；
+    2026-08-22 之前的数据（彭博图中 2025-12 约 $1.05、2026-05 下旬高点约 $2.05）拿不到逐日原值，未画入。
+    8/22–9/28 种子数据取自第三方每日存档，与官方页面重叠日逐日核对一致。随 dashboard 每日更新。
+  </div>
+</div>"""
+
+
 def _ust_micro_line(items, W=880, H=150, PL=58, PR=10, PT=10, PB=22, color="#6b7f8a", unit=""):
     """通用小折线, items=[{d,v}]。"""
     if len(items) < 3:
@@ -1955,7 +2009,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -2195,6 +2249,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         wrs_html=_wrs_html(wrs),
         stock_gold_html=_stock_gold_html(stock_gold),
         tfp_sentiment_html=_tfp_sentiment_html(tfp_sentiment),
+        llm_token_html=_llm_token_html(llm_token),
         ust_micro_html=_ust_micro_html(ust_micro),
         dxy_gold_html=_dxy_gold_html(dxy_gold),
         gold_etf_region_html=_gold_etf_region_html(gold_etf_flows),
@@ -10363,6 +10418,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ 密歇根信心 vs 全要素生产率相对趋势 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>消费者信心 vs 全要素生产率 (密歇根信心 · TFP 相对趋势 · 复刻 BofA Chart 10 · 1978 年至今)<span class="freq-badge freq-daily">每日检查</span></div>
   <div class="card">{tfp_sentiment_html}</div>
+  <!-- ━━━ LLM Token 支出指数 ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>AI 算力价格 · LLM Token 支出指数 (Silicon Data SDLLMTK · 美元/百万 token · 全市场/闭源/开源)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{llm_token_html}</div>
   <!-- ━━━ 美元指数 vs 黄金 + 年初至今大事件标注 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>美元指数 vs 黄金 · 年初至今大事件标注 (双轴叠加 · 事件由价格异动反查并逐条核实出处)<span class="freq-badge freq-daily">价格每日 · 事件每周</span></div>
   <div class="card">{dxy_gold_html}</div>

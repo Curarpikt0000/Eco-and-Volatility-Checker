@@ -8292,3 +8292,73 @@ def fetch_tfp_sentiment(cache_dir=None):
             pr = [(x[k], qmean(x["q"])) for x in out["tfp"] if qmean(x["q"]) is not None]
             out[f"corr_{k}"] = round(float(_np.corrcoef([a for a, _ in pr], [b for _, b in pr])[0, 1]), 2)
     return out
+
+
+
+# ════════════════════════════════════════════════════════════════════
+# LLM Token 支出指数（Silicon Data SDLLMTK，Chao 2026-09-30）
+# ════════════════════════════════════════════════════════════════════
+# 官方 portal 只给滚动 7 天、无历史下载 → 本项目每天抓一次追加进 data/llm_token_index.json 自建历史。
+# 种子：2026-08-22 起第三方每日存档(与 portal 重叠日逐日一致)。抓取失败 → 用已存历史并标 warnings。
+_SDL_URL = "https://portal.silicondata.com/token-indexes-chart"
+_SDL_TOK = {"expenditure": "all", "open_expenditure": "open", "closed_expenditure": "prop"}
+
+
+def fetch_llm_token_index(path=None):
+    import re, time, requests
+    from datetime import timezone, timedelta
+    path = path or os.path.join(os.path.dirname(__file__), "..", "data", "llm_token_index.json")
+    jst = datetime.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    try:
+        store = json.load(open(path))
+    except Exception:
+        store = {"rows": {}}
+    out = {"status": "ok", "as_of": jst, "warnings": [], "added": 0, "revised": 0}
+    Q = r'\\*"'
+    re_idx = re.compile(Q + "indexes" + Q + r"\s*:\s*\{(.*?)\}", re.S)
+    re_pair = re.compile(Q + r"(\d{4}-\d{2}-\d{2})" + Q + r"\s*:\s*" + Q + r"([0-9]+\.[0-9]+)" + Q)
+    got = {}
+    s = requests.Session()
+    s.headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0 Safari/537.36"
+    for tok, col in _SDL_TOK.items():
+        try:
+            r = s.get(_SDL_URL, params={"token": tok, "_": str(int(time.time() * 1000))},
+                      headers={"Cache-Control": "no-cache", "Pragma": "no-cache"}, timeout=45)
+            r.raise_for_status()
+            if tok not in r.text:
+                raise RuntimeError("返回页未回显所请求的 token")
+            m = re_idx.search(r.text)
+            pairs = re_pair.findall(m.group(1)) if m else []
+            if not pairs:
+                raise RuntimeError("页面里没解析到 indexes 数据(格式可能变了)")
+            for d, v in pairs:
+                got.setdefault(d, {})[col] = float(v)
+        except Exception as e:
+            out["warnings"].append(f"{col}: {type(e).__name__} {str(e)[:60]}")
+    rows = store.setdefault("rows", {})
+    for d, vals in got.items():
+        if set(vals) != {"all", "open", "prop"}:
+            continue
+        old = rows.get(d)
+        if old is None:
+            rows[d] = dict(vals, src="portal"); out["added"] += 1
+        elif any(abs(old.get(k, -1) - vals[k]) > 1e-9 for k in vals):
+            rows[d] = dict(vals, src="portal(revised)"); out["revised"] += 1
+    if got and (out["added"] or out["revised"]):
+        try:
+            json.dump(store, open(path, "w"), ensure_ascii=False, indent=0)
+        except Exception as e:
+            out["warnings"].append(f"写回失败: {e}")
+    if not got:
+        out["warnings"].insert(0, "本次 Silicon Data 抓取失败，显示已存历史")
+    ser = [dict(d=d, **{k: rows[d][k] for k in ("all", "open", "prop")}) for d in sorted(rows)]
+    out["series"] = ser
+    out["source_note"] = store.get("seed_note", "")
+    if ser:
+        v = [x["all"] for x in ser]
+        out["latest"] = ser[-1]
+        out["lo"] = min(ser, key=lambda x: x["all"]); out["hi"] = max(ser, key=lambda x: x["all"])
+        out["chg_7d"] = round((v[-1] / v[-8] - 1) * 100, 1) if len(v) >= 8 else None
+    else:
+        out["status"] = "error"
+    return out
