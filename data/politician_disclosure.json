@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-09-29",
+  "as_of": "2026-09-30",
   "politicians": [
     {
       "name": "Nancy Pelosi",
@@ -4948,16 +4948,16 @@
         {
           "ticker": "AAPL",
           "asset": "Apple Inc",
-          "dir_cn": "部分卖出",
-          "direction": "Sale (Partial)",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
           "txn_date": "10/07/2025",
           "amount_range": "$15,001 - $50,000"
         },
         {
           "ticker": "GOOGL",
           "asset": "Alphabet Inc. - Class A Common Stock",
-          "dir_cn": "部分卖出",
-          "direction": "Sale (Partial)",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
           "txn_date": "10/07/2025",
           "amount_range": "$15,001 - $50,000"
         },
@@ -4978,68 +4978,68 @@
           "amount_range": "$15,001 - $50,000"
         },
         {
-          "ticker": "AAPL",
-          "asset": "Apple Inc. - Common Stock",
-          "dir_cn": "部分卖出",
-          "direction": "Sale (Partial)",
-          "txn_date": "08/26/2024",
+          "ticker": "TSCO",
+          "asset": "Tractor Supply Company",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "01/10/2025",
           "amount_range": "$15,001 - $50,000"
         },
         {
-          "ticker": "MDT",
-          "asset": "Medtronic plc. Ordinary Shares",
+          "ticker": "CARR",
+          "asset": "Carrier Global Corp",
           "dir_cn": "卖出",
           "direction": "Sale (Full)",
-          "txn_date": "08/26/2024",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "CVS",
-          "asset": "CVS Health Corporation Common Stock",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "08/26/2024",
+          "txn_date": "01/10/2025",
           "amount_range": "$1,001 - $15,000"
         },
         {
-          "ticker": "UPS",
-          "asset": "United Parcel Service, Inc. Common Stock",
+          "ticker": "TXN",
+          "asset": "Texas Instruments Incorporated - Common Stock",
           "dir_cn": "卖出",
           "direction": "Sale (Full)",
-          "txn_date": "08/26/2024",
+          "txn_date": "01/10/2025",
           "amount_range": "$15,001 - $50,000"
         },
         {
-          "ticker": "EIBLX",
-          "asset": "Eaton Vance Floating Rate Fund Insti Share\n                                        \n                                        \n                                        \n                                            \n                                                \n                                                    Company: EATON VANCE FLOATING RATE CLASS I",
+          "ticker": "DEO",
+          "asset": "Diageo Plc ADR",
           "dir_cn": "卖出",
           "direction": "Sale (Full)",
-          "txn_date": "08/26/2024",
-          "amount_range": "$50,001 - $100,000"
+          "txn_date": "01/10/2025",
+          "amount_range": "$15,001 - $50,000"
         },
         {
-          "ticker": "ABNFX",
-          "asset": "The Bond Fd of America Class F-2 Shares\n                                        \n                                        \n                                        \n                                            \n                                                \n                                                    Company: AMERICAN BOND FUND OF AMERICA CL F2",
-          "dir_cn": "买入",
-          "direction": "Purchase",
-          "txn_date": "08/26/2024",
-          "amount_range": "$50,001 - $100,000"
-        },
-        {
-          "ticker": "INTC",
-          "asset": "Intel Corp",
+          "ticker": "MSFT",
+          "asset": "Microsoft Corp",
           "dir_cn": "卖出",
           "direction": "Sale (Full)",
-          "txn_date": "05/13/2024",
-          "amount_range": "$100,001 - $250,000"
+          "txn_date": "01/10/2025",
+          "amount_range": "$15,001 - $50,000"
         },
         {
-          "ticker": "INTC",
-          "asset": "Intel Corp",
-          "dir_cn": "部分卖出",
-          "direction": "Sale (Partial)",
-          "txn_date": "05/13/2024",
-          "amount_range": "$100,001 - $250,000"
+          "ticker": "AAPL",
+          "asset": "Apple Inc",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "01/10/2025",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "ADBE",
+          "asset": "Adobe Inc. - Common Stock",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "10/29/2024",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "AAPL",
+          "asset": "Apple Inc. - Common Stock",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "10/29/2024",
+          "amount_range": "$15,001 - $50,000"
         }
       ],
       "n_filings": 22,
