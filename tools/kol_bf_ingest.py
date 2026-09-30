@@ -82,16 +82,24 @@ def surname_keys(k):
             if not part:
                 continue
             if re.search(r"[\u4e00-\u9fff]", part):
-                keys.add(part)
-                continue
+                # ★2026-09-30 修: 中英混写名(「Shaun Rein 雷小山」)原来整串当关键词 → 英文页面永远对不上,
+                #   10 条全误杀。拆开: 中文部分整体收, 英文部分走下面的取姓逻辑。
+                for cj in re.findall(r"[\u4e00-\u9fff·・]{2,}", part):   # 带间隔号的整串保留(罗伯特·普莱切特), 不拆出泛名「罗伯特」
+                    keys.add(cj)
+                part = re.sub(r"[\u4e00-\u9fff·・]+", " ", part).strip()
+                if not part:
+                    continue
             words = [w for w in re.split(r"\s+", part) if w and not w.endswith(".")]
             if not words:
                 continue
             last = words[-1].lower()
-            if last not in ("international", "research", "capital", "group", "llc", "inc"):
+            # ★2026-09-30: search_terms 常是「人名 + 话题词」(Doug McMillon Fed)，取最后一词会得到 fed/economy 这类泛词 → 任何财经页都命中。
+            if last not in ("international", "research", "capital", "group", "llc", "inc", "fed", "economy", "gold", "silver",
+                            "inflation", "rates", "market", "markets", "stocks", "outlook", "interview", "podcast",
+                            "forecast", "oil", "dollar", "bitcoin", "china", "ai", "recession", "bonds", "yields"):
                 keys.add(last if len(words) > 1 else words[0].lower())
-            if len(words) > 2:  # 机构名(Elliott Wave International)再收一个整串
-                keys.add(part.lower())
+            if len(words) > 2 and words[-1].lower() in ("international", "research", "capital", "group", "llc", "inc"):
+                keys.add(part.lower())  # 只有机构名(Elliott Wave International)才收整串; 「人名+话题词」不收
     keys |= {fold(x) for x in keys}
     return {x for x in keys if len(x) >= 2}
 
@@ -126,10 +134,20 @@ def check_url(url, keys):
     st, body = fetch(url)
     if st in (404, 410, -1):
         return "reject", f"http {st}"
+    if st == 200 and body[:5] == "%PDF-":
+        # ★2026-09-30: PDF(财报电话会纪要等)正文是压缩流, 文本匹配必然失败 → 判不了, 不当成张冠李戴拒收
+        return "unverifiable", "200 pdf"
     if st == 200:
         low = body.lower()
         flow = fold(low)
-        if any(k.lower() in low or fold(k.lower()) in flow for k in keys):
+        # ★2026-09-30 修: 改为「整词」匹配。原来是子串 in, 短姓(Rein)会命中 reinvest/reinforce 等常见词,
+        #   对照组里维基「Gold」页、美联储新闻页这两条假链接都被放行。英文关键词两侧须非字母; 中文仍子串。
+        def _hit(k, text):
+            k = k.lower()
+            if re.search(r"[\u4e00-\u9fff]", k):
+                return k in text
+            return re.search(r"(?<![a-z])" + re.escape(k) + r"(?![a-z])", text) is not None
+        if any(_hit(k, low) or _hit(fold(k), flow) for k in keys):
             return "ok", "200+name"
         if len(body) < 3000:  # JS 壳页面/同意页，判不了
             return "unverifiable", "200 shell"
