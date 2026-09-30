@@ -1231,6 +1231,110 @@ def _llm_token_html(o):
 </div>"""
 
 
+
+def _ai_capex_html(o):
+    """中美 AI 资本开支(季度, 美元十亿; 美国五家堆叠 vs 中国三家堆叠) + 美国数据中心建设支出(月度, 折年率)。"""
+    tbl = [r for r in (o or {}).get("table", []) if r.get("us") is not None and r.get("cn") is not None]
+    dc = (o or {}).get("dc") or []
+    if len(tbl) < 4:
+        err = "；".join((o or {}).get("warnings", [])[:2])
+        return f'<p class="empty">中美 AI 资本开支同步中{("：" + _esc(err)) if err else ""}。</p>'
+    US_C = {"亚马逊": "#2f4b7c", "微软": "#4a6fa5", "谷歌": "#6f93c4", "Meta": "#9ab4d8", "甲骨文": "#c5d4ea"}
+    CN_C = {"阿里": "#b0613e", "腾讯": "#d08f6a", "百度": "#e8bfa3"}
+    W, H, PL, PR, PT, PB = 900, 300, 50, 16, 14, 26
+    iw, ih = W - PL - PR, H - PT - PB
+    n = len(tbl)
+    top = max(r["us"] for r in tbl) * 1.1
+    slot = iw / n
+    bw = slot * 0.36
+
+    def Y(v): return PT + ih * (1 - v / top)
+    g = ""
+    stepv = 50 if top > 150 else 25
+    v = 0
+    while v <= top:
+        g += (f'<line x1="{PL}" y1="{Y(v):.1f}" x2="{W-PR}" y2="{Y(v):.1f}" class="sgr-grid"/>'
+              f'<text x="{PL-6}" y="{Y(v)+3.5:.1f}" class="sgr-yt">${v:g}B</text>')
+        v += stepv
+    bars, xt, xs, tips = "", "", [], []
+    for i, r in enumerate(tbl):
+        x0 = PL + slot * i + slot * 0.12
+        base = 0.0
+        for nm, col in US_C.items():
+            val = r["us_parts"][nm]
+            bars += f'<rect x="{x0:.1f}" y="{Y(base+val):.1f}" width="{bw:.1f}" height="{Y(base)-Y(base+val):.2f}" fill="{col}"/>'
+            base += val
+        base = 0.0
+        x1 = x0 + bw + slot * 0.04
+        for nm, col in CN_C.items():
+            val = r["cn_parts_rmb"][nm] / r["fx"]
+            bars += f'<rect x="{x1:.1f}" y="{Y(base+val):.1f}" width="{bw:.1f}" height="{max(Y(base)-Y(base+val),0.3):.2f}" fill="{col}"/>'
+            base += val
+        if r["q"].endswith("Q1") or i == n - 1:
+            xt += f'<text x="{PL + slot*(i+0.5):.1f}" y="{H-8}" class="sgr-xt">{r["q"][:4]} {r["q"][4:]}</text>'
+        xs.append(PL + slot * (i + 0.5))
+        us_d = " · ".join(f"{k} {v:.1f}" for k, v in r["us_parts"].items())
+        cn_d = " · ".join(f"{k} {v:.1f}" for k, v in r["cn_parts_rmb"].items())
+        tips.append(_esc(r["q"]) + "||" + _esc(f"美国五家 ${r['us']:.1f}B · 中国三家 ${r['cn']:.1f}B · 美/中 {r['us']/r['cn']:.1f} 倍") +
+                    "<br>" + _esc(f"美国（十亿美元）：{us_d}") + "<br>" +
+                    _esc(f"中国（十亿人民币）：{cn_d}；汇率 {r['fx']:.3f}"))
+    band = _hover_bands(xs, tips, PT, ih, PL, W - PR)
+    L = tbl[-1]; F = next((r for r in tbl if r["q"] == f"{int(L['q'][:4])-1}{L['q'][4:]}"), None)
+    yoy = lambda a, b: f"{(a/b-1)*100:+.0f}%" if b else "—"
+    leg = "".join(f'<i style="background:{c};border:none;height:9px;width:12px"></i>{k}' for k, c in US_C.items())
+    leg += '<span style="width:14px"></span>' + "".join(f'<i style="background:{c};border:none;height:9px;width:12px"></i>{k}' for k, c in CN_C.items())
+    # 月度数据中心
+    dc_html = ""
+    d2 = [x for x in dc if x["m"] >= "2014-01"]
+    if len(d2) > 12:
+        W2, H2 = 900, 200
+        ih2 = H2 - PT - PB
+        top2 = max(x["v"] for x in d2) * 1.12
+        X2 = lambda i: PL + iw * i / (len(d2) - 1)
+        Y2 = lambda v: PT + ih2 * (1 - v / top2)
+        g2 = ""
+        v = 0
+        while v <= top2:
+            g2 += (f'<line x1="{PL}" y1="{Y2(v):.1f}" x2="{W2-PR}" y2="{Y2(v):.1f}" class="sgr-grid"/>'
+                   f'<text x="{PL-6}" y="{Y2(v)+3.5:.1f}" class="sgr-yt">${v:g}B</text>')
+            v += 20
+        pts = " ".join(f"{X2(i):.1f},{Y2(x['v']):.1f}" for i, x in enumerate(d2))
+        xt2 = "".join(f'<text x="{X2(i):.1f}" y="{H2-8}" class="sgr-xt">{x["m"][:4]}</text>'
+                      for i, x in enumerate(d2) if x["m"].endswith("-01") and int(x["m"][:4]) % 2 == 0)
+        tips2 = [_esc(x["m"]) + "||" + _esc(f"数据中心建设支出 ${x['v']:.1f}B（折年率）" + (f"·{x['flag']}" if x["flag"] else "")) for x in d2]
+        band2 = _hover_bands([X2(i) for i in range(len(d2))], tips2, PT, ih2, PL, W2 - PR)
+        ld = d2[-1]; ly = next((x for x in d2 if x["m"] == f"{int(ld['m'][:4])-1}{ld['m'][4:]}"), None)
+        dc_html = f"""
+  <div class="sgr-title">美国数据中心建设支出（月度，经季调折年率）</div>
+  <div class="sgr-stat"><span>最新 <b>${ld['v']:.1f}B</b><i>{ld['m']} {ld['flag']}</i></span>
+    <span>同比 <b>{yoy(ld['v'], ly['v']) if ly else '—'}</b><i>较 {ly['m'] if ly else '—'}（${ly['v']:.1f}B）</i></span>
+    <span>2014 年起 <b>{d2[0]['v']:.1f} → {ld['v']:.1f}</b><i>十亿美元</i></span></div>
+  <svg viewBox="0 0 {W2} {H2}" class="sgr-chart" preserveAspectRatio="xMidYMid meet">{g2}
+    <polyline points="{pts}" fill="none" stroke="#2f4b7c" stroke-width="1.6"/>{xt2}{band2}</svg>"""
+    warn = f'<p class="sgr-warn">⚠ {_esc("；".join(o["warnings"][:2]))}</p>' if o.get("warnings") else ""
+    return f"""
+<div class="tfs-wrap">
+  {warn}
+  <div class="sgr-title">中美科技巨头资本开支（季度，十亿美元）</div>
+  <div class="sgr-stat">
+    <span>美国五家 <b>${L['us']:.1f}B</b><i>{L['q']} · 同比 {yoy(L['us'], F['us']) if F else '—'}</i></span>
+    <span>中国三家 <b>${L['cn']:.1f}B</b><i>{L['q']} · 同比 {yoy(L['cn'], F['cn']) if F else '—'}</i></span>
+    <span>美 / 中 <b>{L['us']/L['cn']:.1f} 倍</b><i>{L['q']}</i></span>
+    <span>近四季合计 <b>${sum(r['us'] for r in tbl[-4:]):.0f}B / ${sum(r['cn'] for r in tbl[-4:]):.0f}B</b><i>美国 / 中国</i></span>
+  </div>
+  <div class="tfs-legend">{leg}</div>
+  <svg viewBox="0 0 {W} {H}" class="sgr-chart" preserveAspectRatio="xMidYMid meet">{g}{bars}{xt}{band}</svg>
+  {dc_html}
+  <div class="sgr-foot">
+    资本开支＝现金流量表「购置固定资产」类支出（含数据中心、服务器，也含非 AI 部分，与原图高盛「AI capex」口径不完全相同）。
+    季度按自然季归属（甲骨文财季 6–8 月记为三季度，其余同理），各季要等五家都发布才计入。美国五家：SEC 官方 XBRL 财务数据；
+    中国三家：阿里、百度取 SEC 6-K 原文，腾讯取季报新闻稿表格，阿里/腾讯各季加总与年报逐一相符；人民币按当季美元兑人民币均价（FRED DEXCHUS）折算。
+    字节跳动未上市、不公布资本开支，未计入；原图 2026–2027 年为高盛预测，本图只画已发布数据。
+    数据中心：美国统计局 C30 私营建筑支出「Data center」项（经季调折年率，最新月为初值，之后会修订）。季报每季、数据中心每月更新，随 dashboard 每日检查。
+  </div>
+</div>"""
+
+
 def _ust_micro_line(items, W=880, H=150, PL=58, PR=10, PT=10, PB=22, color="#6b7f8a", unit=""):
     """通用小折线, items=[{d,v}]。"""
     if len(items) < 3:
@@ -2009,7 +2113,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -2250,6 +2354,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         stock_gold_html=_stock_gold_html(stock_gold),
         tfp_sentiment_html=_tfp_sentiment_html(tfp_sentiment),
         llm_token_html=_llm_token_html(llm_token),
+        ai_capex_html=_ai_capex_html(ai_capex),
         ust_micro_html=_ust_micro_html(ust_micro),
         dxy_gold_html=_dxy_gold_html(dxy_gold),
         gold_etf_region_html=_gold_etf_region_html(gold_etf_flows),
@@ -10418,6 +10523,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ 密歇根信心 vs 全要素生产率相对趋势 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>消费者信心 vs 全要素生产率 (密歇根信心 · TFP 相对趋势 · 复刻 BofA Chart 10 · 1978 年至今)<span class="freq-badge freq-daily">每日检查</span></div>
   <div class="card">{tfp_sentiment_html}</div>
+  <!-- ━━━ 中美 AI 资本开支 ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>中美 AI 投资 · 科技巨头资本开支 (美国五家 vs 阿里/腾讯/百度 · 季度 + 美国数据中心建设月度)<span class="freq-badge freq-daily">每日检查</span></div>
+  <div class="card">{ai_capex_html}</div>
   <!-- ━━━ LLM Token 支出指数 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>AI 算力价格 · LLM Token 支出指数 (Silicon Data SDLLMTK · 美元/百万 token · 全市场/闭源/开源)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{llm_token_html}</div>

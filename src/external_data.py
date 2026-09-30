@@ -8362,3 +8362,191 @@ def fetch_llm_token_index(path=None):
     else:
         out["status"] = "error"
     return out
+
+
+
+# ════════════════════════════════════════════════════════════════════
+# 中美 AI 资本开支（季度）+ 美国数据中心建设支出（月度）  Chao 2026-09-30 选方案 C
+# ════════════════════════════════════════════════════════════════════
+# 美国五家: SEC companyfacts XBRL(官方), 单季=直接季度事实, 否则 YTD 差分; 与第三方逐季比对 0 差异。
+# 中国三家: data/cn_ai_capex_seed.json(阿里/腾讯四季加总与年报逐一相符) + 每日尝试从官方原文追加新季度:
+#   阿里/百度=EDGAR 6-K ex99-1 正文/表; 腾讯=PRNewswire 季报「Capital expenditures (d)」表首列。
+# 汇率: FRED DEXCHUS 季度均值。数据中心: 美国统计局 C30「Value of Private Construction Put in Place, SA」Data center 列。
+_AIC_US = {"亚马逊": (1018724, "PaymentsToAcquireProductiveAssets"),
+           "微软": (789019, "PaymentsToAcquirePropertyPlantAndEquipment"),
+           "谷歌": (1652044, "PaymentsToAcquirePropertyPlantAndEquipment"),
+           "Meta": (1326801, "PaymentsToAcquirePropertyPlantAndEquipment"),
+           "甲骨文": (1341439, "PaymentsToAcquirePropertyPlantAndEquipment")}
+_SEC_H = {"User-Agent": "Eco-Volatility-Checker research contact@example.com"}
+
+
+def _aic_cq(end):
+    d = datetime.date.fromisoformat(end) - datetime.timedelta(days=40)
+    return f"{d.year}Q{(d.month - 1) // 3 + 1}"
+
+
+def _aic_us_quarters(cik, concept):
+    import urllib.request
+    u = json.load(urllib.request.urlopen(urllib.request.Request(
+        f"https://data.sec.gov/api/xbrl/companyconcept/CIK{cik:010d}/us-gaap/{concept}.json", headers=_SEC_H), timeout=40))["units"]["USD"]
+    facts = {}
+    for x in u:
+        if x.get("form") in ("10-Q", "10-K", "10-Q/A", "10-K/A") and "start" in x:
+            facts[(x["start"], x["end"])] = x["val"]
+    dd = lambda a, b: (datetime.date.fromisoformat(b) - datetime.date.fromisoformat(a)).days
+    q = {e: v for (s, e), v in facts.items() if 80 <= dd(s, e) <= 100}
+    for (s, e), v in facts.items():
+        if dd(s, e) > 100 and e not in q:
+            prev = [(e2, v2) for (s2, e2), v2 in facts.items() if s2 == s and e2 < e]
+            if prev:
+                e2, v2 = max(prev)
+                if 80 <= dd(e2, e) <= 100:
+                    q[e] = v - v2
+    return {_aic_cq(e): (v / 1e9, e) for e, v in q.items()}
+
+
+def _aic_cn_update(seed, warns):
+    """尝试从官方原文追加中国三家的新季度。只追加 seed 里没有的季度; 失败只记 warning。"""
+    import urllib.request, re as _re, html as _h, subprocess, time as _t
+    def T(b): return _re.sub(r"\s+", " ", _h.unescape(_re.sub(r"<[^>]+>", " ", b.decode("utf-8", "ignore"))))
+    def sec(u):
+        _t.sleep(0.2); return urllib.request.urlopen(urllib.request.Request(u, headers=_SEC_H), timeout=40).read()
+    M = {"March": 1, "June": 2, "September": 3, "December": 4}
+    added = []
+    for name, cik in (("alibaba", 1577552), ("baidu", 1329099)):
+        try:
+            r = json.loads(sec(f"https://data.sec.gov/submissions/CIK{cik:010d}.json"))["filings"]["recent"]
+            recent = [(r["filingDate"][i], r["accessionNumber"][i]) for i in range(len(r["form"])) if r["form"][i] == "6-K"][:6]
+            for fd, acc in recent:
+                a = acc.replace("-", "")
+                items = json.loads(sec(f"https://www.sec.gov/Archives/edgar/data/{cik}/{a}/index.json"))["directory"]["item"]
+                for d in [x["name"] for x in items if x["name"].lower().endswith(".htm") and "99" in x["name"]][:1]:
+                    t = T(sec(f"https://www.sec.gov/Archives/edgar/data/{cik}/{a}/{d}"))
+                    if name == "alibaba":
+                        m = _re.search(r"quarter ended (March|June|September|December) 3[01], (\d{4})[^.]{0,200}?capital expenditures? (?:of|were|was) RMB\s?([\d,]+) million", t)
+                        if m:
+                            k = f"{m.group(2)}Q{M[m.group(1)]}"
+                            if k not in seed[name]:
+                                seed[name][k] = float(m.group(3).replace(",", "")) / 1000; added.append(f"阿里 {k}")
+                    else:
+                        mq = _re.search(r"Announces (First|Second|Third|Fourth) Quarter(?: and Full Year)? (\d{4}) Results", t)
+                        mc = _re.search(r"Less: Capital expenditures((?: \([\d,]+ \)){9,12})", t)
+                        if mq and mc:
+                            k = f"{mq.group(2)}Q{ {'First': 1, 'Second': 2, 'Third': 3, 'Fourth': 4}[mq.group(1)] }"
+                            nums = [float(x.replace(",", "")) / 1000 for x in _re.findall(r"\(([\d,]+) \)", mc.group(1))]
+                            if k not in seed[name]:
+                                seed[name][k] = nums[8]; added.append(f"百度 {k}")
+        except Exception as e:
+            warns.append(f"{name} 新季度检查失败: {type(e).__name__}")
+    try:
+        lst = subprocess.run(["curl", "-sL", "-m", "30", "-A", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/124",
+                              "https://www.prnewswire.com/news/tencent/"], capture_output=True, timeout=40).stdout.decode("utf-8", "ignore")
+        for slug in sorted(set(_re.findall(r"tencent-announces-(\d{4})-(?:annual-and-)?(first|second|third|fourth)-quarter[a-z-]*results-\d+\.html", lst))):
+            pass
+        for m in _re.finditer(r"(tencent-announces-(\d{4})-(?:annual-and-)?(first|second|third|fourth)-quarter[a-z-]*results-\d+\.html)", lst):
+            k = f"{m.group(2)}Q{ {'first': 1, 'second': 2, 'third': 3, 'fourth': 4}[m.group(3)] }"
+            if k in seed["tencent"]:
+                continue
+            for base in ("https://www.prnewswire.com/apac/news-releases/", "https://www.prnewswire.com/news-releases/"):
+                h = subprocess.run(["curl", "-sL", "-m", "30", "-A", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/124", base + m.group(1)],
+                                   capture_output=True, timeout=40).stdout
+                mc = _re.search(r"Capital expenditures \(d\) ([\d,]+) ", T(h))
+                if mc:
+                    seed["tencent"][k] = float(mc.group(1).replace(",", "")) / 1000; added.append(f"腾讯 {k}"); break
+    except Exception as e:
+        warns.append(f"腾讯 新季度检查失败: {type(e).__name__}")
+    return added
+
+
+def fetch_ai_capex(cache_dir=None):
+    import time, urllib.request
+    from datetime import timezone, timedelta
+    root = cache_dir or os.path.join(os.path.dirname(__file__), "..", "data")
+    jst = datetime.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    out = {"status": "ok", "as_of": jst, "warnings": [], "us": {}, "cn": {}, "fx": {}, "dc": []}
+    cache = os.path.join(root, "ai_capex_cache.json")
+    # 美国
+    for nm, (cik, con) in _AIC_US.items():
+        try:
+            out["us"][nm] = {k: v[0] for k, v in _aic_us_quarters(cik, con).items() if k >= "2023Q1"}
+        except Exception as e:
+            out["warnings"].append(f"{nm} SEC 失败: {type(e).__name__}")
+    if len(out["us"]) < 5:
+        try:
+            c = json.load(open(cache))
+            for nm in _AIC_US:
+                if nm not in out["us"] and nm in c.get("us", {}):
+                    out["us"][nm] = c["us"][nm]; out["warnings"].append(f"{nm} 用缓存（{c.get('as_of')}）")
+        except Exception:
+            pass
+    # 中国
+    seed_p = os.path.join(root, "cn_ai_capex_seed.json")
+    try:
+        seed = json.load(open(seed_p))
+        added = _aic_cn_update(seed, out["warnings"])
+        if added:
+            json.dump(seed, open(seed_p, "w"), ensure_ascii=False, indent=1)
+            out["cn_added"] = added
+        out["cn"] = {"阿里": seed["alibaba"], "腾讯": seed["tencent"], "百度": seed["baidu"]}
+    except Exception as e:
+        out["warnings"].append(f"中国种子数据缺失: {e}")
+    # 汇率
+    try:
+        fx = _fred_series_hist("DEXCHUS", "2023-01-01")
+        acc = {}
+        for d, v in fx:
+            k = f"{d[:4]}Q{(int(d[5:7]) - 1) // 3 + 1}"
+            acc.setdefault(k, []).append(v)
+        out["fx"] = {k: sum(v) / len(v) for k, v in acc.items()}
+    except Exception as e:
+        out["warnings"].append(f"汇率失败: {e}")
+    # 数据中心(月度)
+    xlsx = os.path.join(root, "census_private_construction_sa.xlsx")
+    if not (os.path.exists(xlsx) and time.time() - os.path.getmtime(xlsx) < 86400):
+        try:
+            b = urllib.request.urlopen(urllib.request.Request("https://www.census.gov/construction/c30/xlsx/privsatime.xlsx",
+                                                               headers={"User-Agent": "Mozilla/5.0"}), timeout=60).read()
+            if b[:2] != b"PK":
+                raise RuntimeError("不是 xlsx")
+            open(xlsx + ".tmp", "wb").write(b); os.replace(xlsx + ".tmp", xlsx)
+        except Exception as e:
+            out["warnings"].append(f"美国统计局下载失败（{type(e).__name__}），用缓存文件")
+    try:
+        import openpyxl
+        ws = openpyxl.load_workbook(xlsx, read_only=True, data_only=True).active
+        rows = list(ws.iter_rows(values_only=True))
+        hi = next(i for i, r in enumerate(rows) if r and r[0] == "Date")
+        ci = list(rows[hi]).index("Data center")
+        mon = {"Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4, "May": 5, "Jun": 6, "Jul": 7, "Aug": 8, "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12}
+        dc = []
+        for r in rows[hi + 1:]:
+            if not r or not r[0] or not isinstance(r[ci], (int, float)):
+                continue
+            s = str(r[0]); mm = mon.get(s[:3])
+            if not mm:
+                continue
+            yy = 2000 + int(s[4:6]); flag = s[6:].strip()
+            dc.append({"m": f"{yy}-{mm:02d}", "v": r[ci] / 1000, "flag": {"p": "初值", "r": "修订"}.get(flag, "")})
+        out["dc"] = sorted(dc, key=lambda x: x["m"])
+    except Exception as e:
+        out["warnings"].append(f"数据中心数据解析失败: {e}")
+    # 汇总
+    qs = sorted({k for d in out["us"].values() for k in d} | {k for d in out["cn"].values() for k in d})
+    tbl = []
+    for k in qs:
+        us = [out["us"][n].get(k) for n in _AIC_US]
+        cn = [out["cn"].get(n, {}).get(k) for n in ("阿里", "腾讯", "百度")]
+        fx = out["fx"].get(k)
+        row = {"q": k, "us_parts": dict(zip(_AIC_US, us)), "cn_parts_rmb": dict(zip(("阿里", "腾讯", "百度"), cn)), "fx": fx}
+        row["us"] = sum(us) if all(x is not None for x in us) else None
+        row["cn_rmb"] = sum(cn) if all(x is not None for x in cn) else None
+        row["cn"] = row["cn_rmb"] / fx if (row["cn_rmb"] is not None and fx) else None
+        if row["us"] is not None or row["cn"] is not None:
+            tbl.append(row)
+    out["table"] = tbl
+    if out["us"] and len(out["us"]) == 5:
+        try:
+            json.dump({"as_of": jst, "us": out["us"]}, open(cache, "w"), ensure_ascii=False)
+        except Exception:
+            pass
+    return out

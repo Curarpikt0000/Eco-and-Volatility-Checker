@@ -729,6 +729,19 @@ def main():
     except Exception as e:
         print(f"[dashboard] LLM Token指数 跳过: {e}")
 
+    # ── 中美 AI 资本开支(季度) + 美国数据中心建设(月度) ──
+    ai_capex = {}
+    try:
+        ai_capex = ed.fetch_ai_capex() or {}
+        _t = [r for r in ai_capex.get("table", []) if r.get("us") and r.get("cn")]
+        if _t:
+            print(f"[dashboard] 中美AI资本开支: {len(_t)} 季 最新 {_t[-1]['q']} 美 {_t[-1]['us']:.1f}B 中 {_t[-1]['cn']:.1f}B "
+                  f"数据中心 {ai_capex['dc'][-1] if ai_capex.get('dc') else None} 新增季度 {ai_capex.get('cn_added')} warn={ai_capex.get('warnings')}")
+        else:
+            print(f"[dashboard] 中美AI资本开支 失败: {ai_capex.get('warnings')}")
+    except Exception as e:
+        print(f"[dashboard] 中美AI资本开支 跳过: {e}")
+
     # ── 中国模式断代监控(旧引擎停摆 / 新引擎接续) ──
     # ★月更: NBS 官方发布稿每月 15-16 日出; 东财宏观 API 同期更新。
     # ★口径: NBS 分项为累计同比, 东财「固定资产投资」为单月同比 —— 两者不可混比。
@@ -891,6 +904,7 @@ def main():
         stock_gold=stock_gold,
         tfp_sentiment=tfp_sentiment,
         llm_token=llm_token,
+        ai_capex=ai_capex,
         ust_micro=ust_micro,
         dxy_gold=dxy_gold,
         gold_etf_flows=gold_etf_flows,
