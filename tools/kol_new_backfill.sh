@@ -37,10 +37,18 @@ D, LEDGER, MINM, MAXT, CAP = sys.argv[1], sys.argv[2], int(sys.argv[3]), int(sys
 reg = json.load(open("data/kol_registry.json"))["kols"]
 led = json.load(open(LEDGER)) if os.path.exists(LEDGER) else {}
 today = dt.date.today(); since = (today - dt.timedelta(days=365)).isoformat()
-win = [(today.replace(day=1) - dt.timedelta(days=31 * i)).strftime("%Y-%m") for i in range(12)]
-win = sorted(set(win))[-12:]
+# ★2026-09-30 修: 原来按「每步减 31 天」倒推月份, 从 9/1 起会跳过 2026-06(8/1-31=7/1, 7/1-31=5/31),
+#   子 agent 因此把 John Lee 6 月那条真言论当「不在缺失月」自己删了。改为逐月整数运算: 最近 12 个自然月。
+win = []
+y, m = today.year, today.month
+for _ in range(12):
+    win.append(f"{y}-{m:02d}")
+    y, m = (y, m - 1) if m > 1 else (y - 1, 12)
+win = sorted(win)
 cov = {}
-for name, d in sqlite3.connect("data/kol_store.sqlite").execute("select kol_name,date from opinion where date>=?", (since,)):
+# ★覆盖只算真言论: 每日快照「未找到」占位行不算(Kevin Murphy 曾因占位行被当成已有 8/9 月)
+for name, d in sqlite3.connect("data/kol_store.sqlite").execute(
+        "select kol_name,date from opinion where date>=? and coalesce(direction,'')<>'未找到'", (since,)):
     cov.setdefault(name, set()).add(d[:7])
 todo = []
 for k in reg:
