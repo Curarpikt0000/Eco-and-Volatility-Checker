@@ -155,8 +155,11 @@ EOF
 if [ "$NOPUSH" != "1" ]; then
   git add data/kol_store.sqlite "$LEDGER"
   if ! git diff --cached --quiet; then
-    git commit -q -m "kol: 新 KOL 自动一年期回填 $DAY（$N 人）" || { echo "❌ 新KOL回填: commit 失败"; exit 1; }
-    PUSH_OUT=$(git push -q origin HEAD 2>&1) || { echo "❌ 新KOL回填: push 失败 $PUSH_OUT"; exit 1; }
+    # ★cron 环境没有交互式签名凭据, /etc/gitconfig 的 commit.gpgsign=true(x509) 会让 commit 直接失败
+    #   (2026-09-30 首跑即栽: "gpg failed to sign the data")。与 scripts/daily_commit_push.sh 同做法: 本次提交不签名。
+    CERR=$(git -c commit.gpgsign=false commit -q -m "kol: 新 KOL 自动一年期回填 $DAY（$N 人）" 2>&1) \
+      || { echo "❌ 新KOL回填: 数据已入库但 commit 失败: $CERR"; echo "FAIL $(date '+%F %T') commit" > "$D/STATUS"; exit 1; }
+    PUSH_OUT=$(git push -q origin HEAD 2>&1) || { echo "❌ 新KOL回填: push 失败 $PUSH_OUT"; echo "FAIL $(date '+%F %T') push" > "$D/STATUS"; exit 1; }
     git fetch -q
     [ "$(git rev-parse HEAD)" = "$(git rev-parse '@{u}')" ] || { echo "❌ 新KOL回填: push 后 local≠remote"; exit 1; }
   fi
