@@ -203,6 +203,26 @@ def build_notion_indicator_row(date_str, results):
 def write_indicators(date_str, results):
     db = c.NOTION_DB["indicators"]
     props = build_notion_indicator_row(date_str, results)
+    # ★2026-09-30 自愈: config 里新增/改名的指标列若 Notion 表没有, 先补列再写(纯增量, 不删旧列)。
+    #   根因事故: 9/18 SOFR 口径切换把 name_en 改成 "SOFR minus EFFR Spread", 表里只有旧列,
+    #   Notion 对未知属性整行 400 → 9/21 起指标行连续缺失 8 天。
+    try:
+        st, meta = nw._req("GET", f"/databases/{db}")
+        if st == 200:
+            have = meta.get("properties", {})
+            add = {}
+            for k in props:
+                if k in have:
+                    continue
+                if k.endswith(" 信号"):
+                    add[k] = {"select": {"options": [{"name": n} for n in ("🟢", "🟡", "🔴", "⚪")]}}
+                else:
+                    add[k] = {"number": {"format": "number"}}
+            if add:
+                st2, _ = nw._req("PATCH", f"/databases/{db}", {"properties": add})
+                print(f"[notion] 指标表自动补列 {sorted(add)} → {st2}", flush=True)
+    except Exception as e:  # noqa: BLE001  补列失败不阻断, 下面 upsert 会如实报失败
+        print(f"[notion] 补列检查异常: {e}", flush=True)
     pid = nw.upsert(db, date_str, props)
     return pid
 
@@ -308,10 +328,16 @@ def main():
         print(f"  {signals.light(ind, r.get('value'))} {ind['key']:16s} {r.get('value')} ({r.get('status')})", flush=True)
 
     if not args.no_notion:
-        write_indicators(date_str, results)
+        # ★2026-09-30: 此前不看返回值, 指标行被 Notion 400 整行拒收(9/18 改 name_en 后缺列)
+        #   仍打印「指标+报告已写」, 9/21~9/30 连续 8 天指标行全缺没人发现。现在失败必须显式报出。
+        ipid = write_indicators(date_str, results)
         wc = write_cot(cot_results)
         write_report(date_str, results, cot_results, checks, hit, gstats, overall)
-        print(f"[notion] 指标+报告已写; COT写入: {wc}", flush=True)
+        if ipid:
+            print(f"[notion] 指标+报告已写; COT写入: {wc}", flush=True)
+        else:
+            print(f"[notion] ❌ 指标行写入失败(整行被拒, 常见原因: config 改了 name_en 但 Notion 表没加列 —"
+                  f" 跑 scratch/fix_notion_sofr_col.py 查缺列); 报告已写; COT写入: {wc}", flush=True)
 
     return snap, checks, hit, gstats, overall
 

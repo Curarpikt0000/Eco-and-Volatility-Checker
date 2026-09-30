@@ -20,6 +20,7 @@
   --format json 供程序用；md 供直接贴进日报。
 """
 import argparse
+import re
 import collections
 import datetime as dt
 import json
@@ -76,7 +77,7 @@ def load(since, today, per_kol):
     return out
 
 
-def to_md(items, since, today):
+def to_md(items, since, today, full=True):
     secs = collections.defaultdict(list)
     for o in items:
         secs[o["sector"]].append(o)
@@ -89,6 +90,12 @@ def to_md(items, since, today):
             thin = "（公开信息有限）" if o["status"] == "thin" else ""
             lines.append(f"- {o['kol']}（{o['src_date'][5:]}，{o['direction'][:12]}）{o['comments']}{t}{thin}"
                          + (f" [出处]({o['url']})" if o["url"] else ""))
+            # ★2026-09-30 Chao「KOL 回报要更多细节，他们具体当天说了什么」：带上 detail
+            #   (子 agent 读原文写的结构化摘要：论据 / 数字 / 时间窗口 / 标的)。只照录, 不改写。
+            if full and o.get("detail"):
+                det = re.sub(r"\s*\n\s*", " ", o["detail"]).strip()
+                det = det.replace("公开信息有限, 仅检索到: ", "").replace("公开信息有限，仅检索到：", "")
+                lines.append(f"  　原话要点：{det}")
     return "\n".join(lines)
 
 
@@ -99,12 +106,13 @@ def main():
     ap.add_argument("--today", default=today.isoformat())
     ap.add_argument("--per-kol", type=int, default=2)
     ap.add_argument("--format", choices=["md", "json"], default="md")
+    ap.add_argument("--brief", action="store_true", help="只要一句话观点, 不带原话要点")
     a = ap.parse_args()
     items = load(a.since, a.today, a.per_kol)
     if a.format == "json":
         print(json.dumps(items, ensure_ascii=False, indent=1))
     else:
-        print(to_md(items, a.since, a.today))
+        print(to_md(items, a.since, a.today, full=not a.brief))
 
 
 if __name__ == "__main__":
