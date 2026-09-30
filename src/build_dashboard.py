@@ -704,6 +704,19 @@ def main():
     except Exception as e:
         print(f"[dashboard] 股指/黄金比值 跳过: {e}")
 
+    # ── 密歇根信心 vs TFP 相对趋势(复刻 BofA Chart 10, Chao 2026-09-30) ──
+    tfp_sentiment = {}
+    try:
+        tfp_sentiment = ed.fetch_tfp_sentiment() or {}
+        if tfp_sentiment.get("tfp"):
+            _lt = tfp_sentiment["tfp"][-1]
+            print(f"[dashboard] 信心vsTFP: TFP {_lt['q']} 普通 {_lt['raw']*100:+.2f}% 剔除开工率 {_lt['util']*100:+.2f}% "
+                  f"UMCSENT {tfp_sentiment['umcsent'][-1] if tfp_sentiment.get('umcsent') else None} warn={tfp_sentiment.get('warnings')}")
+        else:
+            print(f"[dashboard] 信心vsTFP 失败: {tfp_sentiment.get('warnings')}")
+    except Exception as e:
+        print(f"[dashboard] 信心vsTFP 跳过: {e}")
+
     # ── 中国模式断代监控(旧引擎停摆 / 新引擎接续) ──
     # ★月更: NBS 官方发布稿每月 15-16 日出; 东财宏观 API 同期更新。
     # ★口径: NBS 分项为累计同比, 东财「固定资产投资」为单月同比 —— 两者不可混比。
@@ -864,6 +877,7 @@ def main():
         china_regime=china_regime,
         wrs=wrs,
         stock_gold=stock_gold,
+        tfp_sentiment=tfp_sentiment,
         ust_micro=ust_micro,
         dxy_gold=dxy_gold,
         gold_etf_flows=gold_etf_flows,

@@ -8208,3 +8208,87 @@ def fetch_stock_gold_ratio(base_path=None, cache_path=None):
         except Exception:
             pass
     return out
+
+
+
+# ════════════════════════════════════════════════════════════════════
+# 密歇根消费者信心 vs 美国全要素生产率相对趋势（复刻 BofA Chart 10，Chao 2026-09-30）
+# ════════════════════════════════════════════════════════════════════
+# TFP: 旧金山联储 Fernald 季度 TFP（quarterly_tfp.xlsx，商业部门），两个口径都算：
+#   dtfp（普通）与 dtfp_util（剔除开工率），年化对数增速 /400 累加成对数水平。
+# 趋势: 每季用过去 40 季对数水平线性拟合，偏离＝实际−拟合（无未来信息）。BofA 未公布算法，图上注明。
+# 信心: FRED UMCSENT 月度。
+# 每日运行: xlsx 每季更新一次，本地缓存 24h 内不重下；下载失败用缓存文件并标「缓存」。
+
+_TFP_URL = "https://www.frbsf.org/wp-content/uploads/quarterly_tfp.xlsx"
+
+
+def fetch_tfp_sentiment(cache_dir=None):
+    import time, urllib.request
+    import numpy as _np
+    from datetime import timezone, timedelta
+    root = cache_dir or os.path.join(os.path.dirname(__file__), "..", "data")
+    xlsx = os.path.join(root, "fernald_quarterly_tfp.xlsx")
+    jst = datetime.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    out = {"status": "ok", "as_of": jst, "warnings": [], "tfp": [], "umcsent": []}
+    fresh = os.path.exists(xlsx) and time.time() - os.path.getmtime(xlsx) < 86400
+    if not fresh:
+        try:
+            req = urllib.request.Request(_TFP_URL, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/124"})
+            with urllib.request.urlopen(req, timeout=60) as r:
+                blob = r.read()
+            if blob[:2] != b"PK" or len(blob) < 100000:
+                raise RuntimeError(f"下载内容不是 xlsx（{len(blob)} 字节）")
+            tmp = xlsx + ".tmp"
+            open(tmp, "wb").write(blob); os.replace(tmp, xlsx)
+        except Exception as e:
+            if os.path.exists(xlsx):
+                out["warnings"].append(f"旧金山联储 TFP 下载失败（{type(e).__name__}），用缓存文件（"
+                                       + datetime.datetime.fromtimestamp(os.path.getmtime(xlsx)).strftime("%Y-%m-%d") + "）")
+            else:
+                out["status"] = "error"; out["warnings"].append(f"TFP 下载失败且无缓存: {e}")
+    if os.path.exists(xlsx):
+        try:
+            import openpyxl
+            wb = openpyxl.load_workbook(xlsx, read_only=True, data_only=True)
+            rows = list(wb["quarterly"].iter_rows(values_only=True))
+            hdr = [str(c) for c in rows[1]]
+            ci, cu = hdr.index("dtfp"), hdr.index("dtfp_util")
+            prod = next((str(r[0]) for r in list(wb["readme"].iter_rows(values_only=True))[:6]
+                         if r and r[1] and "Produced on" in str(r[1])), None)
+            vint = next((str(r[1]) for r in list(wb["readme"].iter_rows(values_only=True))[:6]
+                         if r and len(r) > 1 and r[1] and "Produced on" in str(r[1])), "")
+            q = [(r[0], r[ci], r[cu]) for r in rows[2:] if r[0] and ":Q" in str(r[0])
+                 and r[ci] is not None and r[cu] is not None]
+            d = [x[0] for x in q]
+            res = {}
+            for k, col in (("raw", 1), ("util", 2)):
+                lv = _np.cumsum([x[col] / 400 for x in q])
+                dev = [None] * len(lv)
+                for i in range(39, len(lv)):
+                    w = lv[i - 39:i + 1]
+                    dev[i] = float(w[-1] - _np.polyval(_np.polyfit(_np.arange(40), w, 1), 39))
+                res[k] = dev
+            out["tfp"] = [{"q": d[i], "raw": round(res["raw"][i], 5), "util": round(res["util"][i], 5)}
+                          for i in range(len(d)) if res["raw"][i] is not None and d[i] >= "1978:Q1"]
+            import re as _re
+            m = _re.search(r"Produced on ([A-Za-z]+ \d{1,2}, \d{4})", vint)
+            out["tfp_vintage"] = m.group(1) if m else ""
+        except Exception as e:
+            out["status"] = "error"; out["warnings"].append(f"TFP 解析失败: {type(e).__name__}: {e}")
+    try:
+        um = _fred_series_hist("UMCSENT", "1978-01-01")
+        out["umcsent"] = [{"m": dd[:7], "v": v} for dd, v in um]
+        if len(out["umcsent"]) < 100:
+            out["warnings"].append(f"UMCSENT 点数异常少: {len(out['umcsent'])}")
+    except Exception as e:
+        out["warnings"].append(f"UMCSENT 失败: {e}")
+    if out["tfp"] and out["umcsent"]:
+        um = {x["m"]: x["v"] for x in out["umcsent"]}
+        def qmean(qq):
+            y, n = qq.split(":Q"); v = [um.get(f"{y}-{(int(n)-1)*3+k:02d}") for k in (1, 2, 3)]
+            v = [x for x in v if x is not None]; return sum(v) / len(v) if v else None
+        for k in ("raw", "util"):
+            pr = [(x[k], qmean(x["q"])) for x in out["tfp"] if qmean(x["q"]) is not None]
+            out[f"corr_{k}"] = round(float(_np.corrcoef([a for a, _ in pr], [b for _, b in pr])[0, 1]), 2)
+    return out

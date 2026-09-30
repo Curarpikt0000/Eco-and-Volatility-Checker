@@ -1101,6 +1101,82 @@ def _stock_gold_html(o):
 </div>"""
 
 
+
+def _tfp_sentiment_html(o):
+    """密歇根信心(左轴,月) vs TFP 相对趋势(右轴,季, 普通+剔除开工率两口径)。每月一个悬停点。"""
+    if not o or not o.get("tfp") or not o.get("umcsent"):
+        err = "；".join((o or {}).get("warnings", [])[:2])
+        return f'<p class="empty">生产率/信心数据同步中{("：" + _esc(err)) if err else ""}。</p>'
+    um = [x for x in o["umcsent"] if x["m"] >= "1978-01"]
+    tq = {x["q"]: x for x in o["tfp"]}
+    W, H, PL, PR, PT, PB = 900, 300, 44, 50, 14, 24
+    iw, ih = W - PL - PR, H - PT - PB
+    n = len(um)
+
+    def X(i): return PL + iw * i / max(n - 1, 1)
+    def YL(v): return PT + ih * (1 - (v - 40) / 80)          # 40~120
+    def YR(v): return PT + ih * (1 - (v + 0.06) / 0.11)      # -6%~+5%
+
+    def qof(m):
+        return f"{m[:4]}:Q{(int(m[5:7]) - 1) // 3 + 1}"
+    g = ""
+    for v in range(40, 121, 20):
+        g += (f'<line x1="{PL}" y1="{YL(v):.1f}" x2="{W-PR}" y2="{YL(v):.1f}" class="tfs-grid"/>'
+              f'<text x="{PL-6}" y="{YL(v)+3.5:.1f}" class="tfs-yl">{v}</text>')
+    for v in (-0.06, -0.04, -0.02, 0, 0.02, 0.04):
+        g += f'<text x="{W-PR+6}" y="{YR(v)+3.5:.1f}" class="tfs-yr">{v*100:+.0f}%</text>'.replace("+0%", "0%")
+    g += f'<line x1="{PL}" y1="{YR(0):.1f}" x2="{W-PR}" y2="{YR(0):.1f}" class="tfs-zero"/>'
+    xt = "".join(f'<text x="{X(i):.1f}" y="{H-6}" class="tfs-xt">{x["m"][:4]}</text>'
+                 for i, x in enumerate(um) if x["m"].endswith("-01") and int(x["m"][:4]) % 4 == 0)
+    sent = " ".join(f"{X(i):.1f},{YL(x['v']):.1f}" for i, x in enumerate(um))
+
+    def step(key):
+        pts, last = [], None
+        for i, x in enumerate(um):
+            t = tq.get(qof(x["m"]))
+            if t is None:
+                continue
+            y = YR(t[key])
+            if last is not None and abs(y - last) > 1e-6:
+                pts.append(f"{X(i):.1f},{last:.1f}")
+            pts.append(f"{X(i):.1f},{y:.1f}"); last = y
+        return " ".join(pts)
+    tips = []
+    for x in um:
+        t = tq.get(qof(x["m"]))
+        extra = (f"<br>" + _esc(f"TFP 相对趋势（{qof(x['m']).replace(':', ' ')}）：普通 {t['raw']*100:+.1f}% · 剔除开工率 {t['util']*100:+.1f}%")
+                 if t else "<br>" + _esc("TFP：该季尚未发布"))
+        tips.append(_esc(x["m"]) + "||" + _esc(f"消费者信心 {x['v']:.1f}") + extra)
+    band = _hover_bands([X(i) for i in range(n)], tips, PT, ih, PL, W - PR)
+    lt = o["tfp"][-1]; lu = um[-1]
+    lo = min(um, key=lambda x: x["v"])
+    warn = f'<p class="sgr-warn">⚠ {_esc("；".join(o["warnings"][:2]))}</p>' if o.get("warnings") else ""
+    return f"""
+<div class="tfs-wrap">
+  {warn}
+  <div class="sgr-stat">
+    <span>消费者信心 <b>{lu['v']:.1f}</b><i>{lu['m']} · 1978 年以来最低 {lo['v']:.1f}（{lo['m']}）</i></span>
+    <span>TFP 相对趋势·普通 <b>{lt['raw']*100:+.1f}%</b><i>{lt['q'].replace(':', ' ')}</i></span>
+    <span>TFP 相对趋势·剔除开工率 <b>{lt['util']*100:+.1f}%</b><i>{lt['q'].replace(':', ' ')}</i></span>
+    <span>相关系数 <b>{o.get('corr_raw', '—')}</b><i>信心 vs TFP 普通口径（季度，1978 年起）</i></span>
+  </div>
+  <div class="tfs-legend"><i class="l1"></i>密歇根消费者信心指数（左轴，月度）<i class="l2"></i>TFP 相对趋势·普通（右轴，季度）<i class="l3"></i>TFP 相对趋势·剔除开工率（右轴）</div>
+  <svg viewBox="0 0 {W} {H}" class="sgr-chart" preserveAspectRatio="xMidYMid meet">
+    {g}
+    <polyline points="{step('util')}" fill="none" stroke="#9fc5e8" stroke-width="1.2" stroke-dasharray="3 2"/>
+    <polyline points="{step('raw')}" fill="none" stroke="#5b9bd5" stroke-width="1.6"/>
+    <polyline points="{sent}" fill="none" stroke="#1f3a68" stroke-width="1.3"/>
+    {xt}{band}
+  </svg>
+  <div class="sgr-foot">
+    复刻 BofA Global Research「全要素生产率低于趋势水平」（Chart 10）。TFP＝旧金山联储 Fernald 季度 TFP（美国商业部门，{_esc(o.get('tfp_vintage', ''))} 版），
+    趋势＝每季用过去 10 年（40 季）对数水平线性拟合，右轴为偏离该趋势的百分比；BofA 未公布趋势算法与口径，本图为公开数据复刻，
+    数值与原图不完全一致——普通口径与剔除开工率口径差异可达 2 个百分点，一并列出。信心指数：FRED UMCSENT。
+    TFP 每季更新、信心指数每月更新，随 dashboard 每日检查。
+  </div>
+</div>"""
+
+
 def _ust_micro_line(items, W=880, H=150, PL=58, PR=10, PT=10, PB=22, color="#6b7f8a", unit=""):
     """通用小折线, items=[{d,v}]。"""
     if len(items) < 3:
@@ -1879,7 +1955,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -2118,6 +2194,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         china_regime_html=_china_regime_html(china_regime),
         wrs_html=_wrs_html(wrs),
         stock_gold_html=_stock_gold_html(stock_gold),
+        tfp_sentiment_html=_tfp_sentiment_html(tfp_sentiment),
         ust_micro_html=_ust_micro_html(ust_micro),
         dxy_gold_html=_dxy_gold_html(dxy_gold),
         gold_etf_region_html=_gold_etf_region_html(gold_etf_flows),
@@ -9370,6 +9447,15 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .crs-err{{background:#f4e9e6;border-left:3px solid #a3705f;padding:9px 12px;font-size:12px;color:#7a5f52;border-radius:5px;margin-top:10px}}
 
 /* ── WRS Walmart 衰退信号 ── */
+.tfs-wrap{{margin:6px 0}}
+.tfs-grid{{stroke:#eceae5;stroke-width:1}}
+.tfs-zero{{stroke:#9fc5e8;stroke-width:1;stroke-dasharray:4 3}}
+.tfs-yl{{font-size:10px;fill:#8a837a;text-anchor:end}}
+.tfs-yr{{font-size:10px;fill:#5b8fc0;text-anchor:start}}
+.tfs-xt{{font-size:10px;fill:#8a837a;text-anchor:middle}}
+.tfs-legend{{font-size:11px;color:#6b645a;margin:6px 0 2px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}}
+.tfs-legend i{{display:inline-block;width:18px;height:0;border-top:2px solid;margin-right:4px;vertical-align:middle}}
+.tfs-legend .l1{{border-color:#1f3a68}}.tfs-legend .l2{{border-color:#5b9bd5}}.tfs-legend .l3{{border-color:#9fc5e8;border-top-style:dashed}}
 .sgr-wrap{{margin:6px 0}}
 .sgr-title{{font-size:15px;font-weight:700;color:#4a443c;margin:14px 0 6px}}
 .sgr-stat{{display:flex;gap:22px;flex-wrap:wrap;font-size:12px;color:#6b645a;margin-bottom:4px}}
@@ -10274,6 +10360,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ 道指/标普 ÷ 黄金 50 年比值 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>股指 ÷ 黄金 · 50 年比值 (道指÷金价 · 标普500÷金价 · 月度对数坐标 · 1976 年至今)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{stock_gold_html}</div>
+  <!-- ━━━ 密歇根信心 vs 全要素生产率相对趋势 ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>消费者信心 vs 全要素生产率 (密歇根信心 · TFP 相对趋势 · 复刻 BofA Chart 10 · 1978 年至今)<span class="freq-badge freq-daily">每日检查</span></div>
+  <div class="card">{tfp_sentiment_html}</div>
   <!-- ━━━ 美元指数 vs 黄金 + 年初至今大事件标注 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>美元指数 vs 黄金 · 年初至今大事件标注 (双轴叠加 · 事件由价格异动反查并逐条核实出处)<span class="freq-badge freq-daily">价格每日 · 事件每周</span></div>
   <div class="card">{dxy_gold_html}</div>
