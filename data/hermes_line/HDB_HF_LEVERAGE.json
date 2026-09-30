@@ -1,6 +1,6 @@
 {
  "table": "HDB_HF_LEVERAGE",
- "count": 53,
+ "count": 54,
  "rows": [
   {
    "uid": "hf|2013-03-31",
@@ -1677,10 +1677,10 @@
      }
     },
     "杠杆倍数": {
-     "number": 13.03
+     "number": 12.36
     },
     "回购敞口_十亿": {
-     "number": 2.738
+     "number": 2.803
     },
     "数据源": {
      "rich_text": [
@@ -1821,7 +1821,7 @@
      }
     },
     "杠杆倍数": {
-     "number": 13.33
+     "number": 13.34
     },
     "回购敞口_十亿": {
      "number": 3.165
@@ -1860,7 +1860,7 @@
      "number": 13.54
     },
     "回购敞口_十亿": {
-     "number": 3.379
+     "number": 3.38
     },
     "数据源": {
      "rich_text": [
@@ -1893,10 +1893,46 @@
      }
     },
     "杠杆倍数": {
-     "number": 12.65
+     "number": 12.69
     },
     "回购敞口_十亿": {
-     "number": 3.243
+     "number": 3.249
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "OFR Hedge Fund Monitor (SEC Form PF, 季度) · FRED GDP"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "hf|2026-06-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-30"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2026-06-30"
+     }
+    },
+    "杠杆倍数": {
+     "number": 12.2
+    },
+    "回购敞口_十亿": {
+     "number": 3.382
     },
     "数据源": {
      "rich_text": [
