@@ -8550,3 +8550,65 @@ def fetch_ai_capex(cache_dir=None):
         except Exception:
             pass
     return out
+
+
+
+# ════════════════════════════════════════════════════════════════════
+# 金油比（黄金 ÷ WTI 原油）1971 起  Chao 2026-10-01
+# ════════════════════════════════════════════════════════════════════
+# 底表 data/gold_oil_ratio_base.json: 黄金=伦敦金月均价(与股金比同源), 原油=FRED WTISPLC 月均。
+# 底表之后的月份: 黄金=Yahoo GC=F 当月日收盘均值, 原油=FRED DCOILWTICO 当月日均(同为月均口径)。
+# 今日比值 = 最新 GC=F ÷ 最新 DCOILWTICO（取两者都有的最近一天）。失败用缓存并标注, 绝不编。
+def fetch_gold_oil_ratio(base_path=None, cache_path=None):
+    from datetime import timezone, timedelta
+    import statistics as _st
+    root = os.path.join(os.path.dirname(__file__), "..", "data")
+    base_path = base_path or os.path.join(root, "gold_oil_ratio_base.json")
+    cache_path = cache_path or os.path.join(root, "gold_oil_ratio_cache.json")
+    jst = datetime.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    out = {"status": "ok", "as_of": jst, "warnings": [], "rows": []}
+    try:
+        base = json.load(open(base_path))
+    except Exception as e:
+        out.update(status="error"); out["warnings"].append(f"底表缺失: {e}"); return out
+    rows = {r["m"]: dict(r, src="base") for r in base["rows"]}
+    last_base = max(rows)
+    try:
+        gc = _sgr_yahoo("GC%3DF", "1y")
+        oil = {d: v for d, v in _fred_series_hist("DCOILWTICO", f"{last_base[:4]}-01-01") if v is not None and v > 0}
+        if not oil:
+            raise RuntimeError("FRED DCOILWTICO 无数据")
+        for m in sorted({d[:7] for d in gc if d[:7] > last_base}):
+            gd = [v for d, v in gc.items() if d[:7] == m]
+            od = [v for d, v in oil.items() if d[:7] == m]
+            if gd and od:
+                rows[m] = {"m": m, "gold": round(sum(gd) / len(gd), 2), "oil": round(sum(od) / len(od), 3),
+                           "src": "live", "days": f"金{len(gd)}天/油{len(od)}天"}
+        both = sorted(d for d in oil if d in gc)
+        if both:
+            d = both[-1]
+            out["today"] = {"date": d, "gold": round(gc[d], 2), "oil": round(oil[d], 2), "ratio": round(gc[d] / oil[d], 2)}
+    except Exception as e:
+        try:
+            c = json.load(open(cache_path))
+            c.setdefault("warnings", []).append(f"本次抓取失败({type(e).__name__}: {str(e)[:60]})，显示 {c.get('as_of')} 缓存")
+            c["status"] = "ok(cache)"
+            return c
+        except Exception:
+            out["warnings"].append(f"实时数据失败且无缓存: {type(e).__name__}；仅显示底表")
+    ser = [{"m": m, "gold": rows[m]["gold"], "oil": rows[m]["oil"], "r": round(rows[m]["gold"] / rows[m]["oil"], 3),
+            "src": rows[m]["src"]} for m in sorted(rows)]
+    out["rows"] = ser
+    v = [x["r"] for x in ser]
+    cur = out.get("today", {}).get("ratio", v[-1])
+    imax = max(range(len(v)), key=lambda i: v[i]); imin = min(range(len(v)), key=lambda i: v[i])
+    out["stats"] = {"mean": round(_st.mean(v), 2), "median": round(_st.median(v), 2),
+                    "max": v[imax], "max_m": ser[imax]["m"], "min": v[imin], "min_m": ser[imin]["m"],
+                    "pct_rank": round(sum(1 for x in v if x <= cur) / len(v) * 100, 1),
+                    "mean_ex2020": round(_st.mean([x["r"] for x in ser if not ("2020-03" <= x["m"] <= "2020-05")]), 2)}
+    if out["status"] == "ok" and "today" in out:
+        try:
+            json.dump(out, open(cache_path, "w"), ensure_ascii=False)
+        except Exception:
+            pass
+    return out

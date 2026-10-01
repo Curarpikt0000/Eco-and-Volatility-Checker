@@ -1335,6 +1335,56 @@ def _ai_capex_html(o):
 </div>"""
 
 
+
+def _gold_oil_html(o):
+    """金油比(黄金 ÷ WTI, 月度, 1971 起) 对数轴 + 长期均值/中位线, 每月悬停。"""
+    import math
+    ser = (o or {}).get("rows") or []
+    if len(ser) < 24:
+        err = "；".join((o or {}).get("warnings", [])[:2])
+        return f'<p class="empty">金油比同步中{("：" + _esc(err)) if err else ""}。</p>'
+    st = o["stats"]; td = o.get("today") or {}
+    W, H, PL, PR, PT, PB = 900, 300, 46, 16, 14, 26
+    iw, ih = W - PL - PR, H - PT - PB
+    n = len(ser)
+    lo, hi = math.log10(5), math.log10(120)
+    X = lambda i: PL + iw * i / (n - 1)
+    Y = lambda v: PT + ih * (1 - (math.log10(v) - lo) / (hi - lo))
+    g = ""
+    for v in (5, 10, 20, 40, 80):
+        g += (f'<line x1="{PL}" y1="{Y(v):.1f}" x2="{W-PR}" y2="{Y(v):.1f}" class="sgr-grid"/>'
+              f'<text x="{PL-6}" y="{Y(v)+3.5:.1f}" class="sgr-yt">{v}</text>')
+    for v, lab, dash in ((st["mean"], f"1971 年以来均值 {st['mean']:.1f}", "5,4"), (st["median"], f"中位数 {st['median']:.1f}", "2,3")):
+        g += (f'<line x1="{PL}" y1="{Y(v):.1f}" x2="{W-PR}" y2="{Y(v):.1f}" stroke="#b07a5a" stroke-width="1" stroke-dasharray="{dash}"/>'
+              f'<text x="{W-PR-4}" y="{Y(v)-4:.1f}" class="sgr-yt" text-anchor="end" fill="#b07a5a">{lab}</text>')
+    xt = "".join(f'<text x="{X(i):.1f}" y="{H-8}" class="sgr-xt">{x["m"][:4]}</text>'
+                 for i, x in enumerate(ser) if x["m"].endswith("-01") and int(x["m"][:4]) % 5 == 0)
+    pts = " ".join(f"{X(i):.1f},{Y(max(x['r'],5.01)):.1f}" for i, x in enumerate(ser))
+    tips = [_esc(x["m"]) + "||" + _esc(f"金油比 {x['r']:.1f}") + "<br>" +
+            _esc(f"黄金 ${x['gold']:,.0f}/盎司 · WTI ${x['oil']:.2f}/桶（月均）" + ("" if x["src"] == "base" else "·本月实时")) for x in ser]
+    band = _hover_bands([X(i) for i in range(n)], tips, PT, ih, PL, W - PR)
+    cur = td.get("ratio", ser[-1]["r"])
+    oil_at_mean = (td.get("gold") or ser[-1]["gold"]) / st["mean"]
+    warn = f'<p class="sgr-warn">⚠ {_esc("；".join(o["warnings"][:2]))}</p>' if o.get("warnings") else ""
+    return f"""
+<div class="tfs-wrap">
+  {warn}
+  <div class="sgr-stat">
+    <span>今日金油比 <b>{cur:.1f}</b><i>{_esc(td.get('date',''))} · 金 ${td.get('gold',0):,.0f} / WTI ${td.get('oil',0):.2f}</i></span>
+    <span>历史分位 <b>{st['pct_rank']:.0f}%</b><i>1971 年以来 {n} 个月</i></span>
+    <span>长期均值 / 中位 <b>{st['mean']:.1f} / {st['median']:.1f}</b><i>剔除 2020 年 3–5 月后均值 {st['mean_ex2020']:.1f}</i></span>
+    <span>回到均值需 <b>WTI ${oil_at_mean:.0f}</b><i>金价不变时；或金价 ${cur and (td.get('oil') or ser[-1]['oil'])*st['mean']:,.0f}（油价不变）</i></span>
+  </div>
+  <svg viewBox="0 0 {W} {H}" class="sgr-chart" preserveAspectRatio="xMidYMid meet">{g}
+    <polyline points="{pts}" fill="none" stroke="#1f3a68" stroke-width="1.5"/>{xt}{band}</svg>
+  <div class="sgr-foot">
+    金油比＝1 盎司黄金能换几桶 WTI 原油（对数纵轴）。最高 {st['max']:.0f}（{st['max_m']}，疫情期间油价跌到个位数）、最低 {st['min']:.1f}（{st['min_m']}，油价 $130+）。
+    1973 年以前原油为管制标价，波动小。黄金：伦敦金月均价（datasets/gold-prices），当月用 COMEX 期货日收盘均值；
+    原油：FRED WTISPLC 月均，当月用 FRED DCOILWTICO 日均。「今日」取两者都有报价的最近一天。随 dashboard 每日更新。
+  </div>
+</div>"""
+
+
 def _ust_micro_line(items, W=880, H=150, PL=58, PR=10, PT=10, PB=22, color="#6b7f8a", unit=""):
     """通用小折线, items=[{d,v}]。"""
     if len(items) < 3:
@@ -2113,7 +2163,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -2355,6 +2405,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         tfp_sentiment_html=_tfp_sentiment_html(tfp_sentiment),
         llm_token_html=_llm_token_html(llm_token),
         ai_capex_html=_ai_capex_html(ai_capex),
+        gold_oil_html=_gold_oil_html(gold_oil),
         ust_micro_html=_ust_micro_html(ust_micro),
         dxy_gold_html=_dxy_gold_html(dxy_gold),
         gold_etf_region_html=_gold_etf_region_html(gold_etf_flows),
@@ -10517,6 +10568,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ WRS · Walmart 衰退信号(分母 ETF 代理, 已标注) ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>WRS · Walmart 衰退信号 (Walmart ÷ 奢侈品指数 · Jim Paulsen 口径 · 分母用 ETF 代理)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{wrs_html}</div>
+  <!-- ━━━ 金油比 ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>金油比 · 黄金 ÷ WTI 原油 (1971 起 · 月度 · 对数轴)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{gold_oil_html}</div>
   <!-- ━━━ 道指/标普 ÷ 黄金 50 年比值 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>股指 ÷ 黄金 · 50 年比值 (道指÷金价 · 标普500÷金价 · 月度对数坐标 · 1976 年至今)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{stock_gold_html}</div>

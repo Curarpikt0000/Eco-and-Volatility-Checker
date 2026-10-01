@@ -742,6 +742,14 @@ def main():
     except Exception as e:
         print(f"[dashboard] 中美AI资本开支 跳过: {e}")
 
+    # ── 金油比(1971 起) ──
+    gold_oil = {}
+    try:
+        gold_oil = ed.fetch_gold_oil_ratio() or {}
+        print(f"[dashboard] 金油比: {len(gold_oil.get('rows', []))} 月 今日 {gold_oil.get('today')} warn={gold_oil.get('warnings')}")
+    except Exception as e:
+        print(f"[dashboard] 金油比 跳过: {e}")
+
     # ── 中国模式断代监控(旧引擎停摆 / 新引擎接续) ──
     # ★月更: NBS 官方发布稿每月 15-16 日出; 东财宏观 API 同期更新。
     # ★口径: NBS 分项为累计同比, 东财「固定资产投资」为单月同比 —— 两者不可混比。
@@ -905,6 +913,7 @@ def main():
         tfp_sentiment=tfp_sentiment,
         llm_token=llm_token,
         ai_capex=ai_capex,
+        gold_oil=gold_oil,
         ust_micro=ust_micro,
         dxy_gold=dxy_gold,
         gold_etf_flows=gold_etf_flows,
