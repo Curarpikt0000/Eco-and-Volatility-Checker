@@ -22,12 +22,12 @@ SEC runs two hosts with **different User-Agent strictness**:
 Measured this session:
 
 ```
-UA "EcoVolChecker research (contact: you@example.com)"   -> Archives HTTP 403
-UA "Eco-Volatility-Checker <your-email@example.com>"     -> Archives HTTP 200
+UA "EcoVolChecker research (contact: ANONYMIZED_EMAIL_ADDRESS_0_6)"   -> Archives HTTP 403
+UA "Eco-Volatility-Checker ANONYMIZED_EMAIL_ADDRESS_0_5"     -> Archives HTTP 200
 ```
 
 ```python
-_SEC_UA = {"User-Agent": "Eco-Volatility-Checker <your-email@example.com>"}   # email is MANDATORY
+_SEC_UA = {"User-Agent": "Eco-Volatility-Checker ANONYMIZED_EMAIL_ADDRESS_0_5"}   # email is MANDATORY
 ```
 
 Why this is worse than a normal 403: helpers that read raw filings are usually wrapped in

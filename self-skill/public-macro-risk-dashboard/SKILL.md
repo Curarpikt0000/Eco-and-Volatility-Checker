@@ -26,7 +26,7 @@ Chao's PUBLIC-DATA daily market risk-scanner (sibling to `economic-dashboard-dai
 
 ## The public-data corollaries (what makes this DIFFERENT from the internal pipeline)
 
-1. **Publish to a PUBLIC channel (GitHub Pages / Cloudflare Pages), never to a login-gated internal host.** Public macro indicators belong on the public repo. Pattern: `dashboard.py` writes `dashboard/index.html` AND `docs/index.html`; Cloudflare Pages via `ops/hermes-scripts/publish_cf_pages.sh` (verifies live HTTP 200 + sha256 match). A no-auth `curl` returning HTTP 200 confirms it is live.
+1. **Publish to a PUBLIC channel (GitHub Pages / Cloudflare Pages), never to a login-gated internal host.** Use `ops/hermes-scripts/publish_cf_pages.sh` (verifies live HTTP 200 + sha256 match).
 2. **Data snapshots DO go into git** (they're public) — this is the opposite of internal projects where data never leaves the VM. `.env` still never.
 3. **Cross-link sibling Notion pipelines as READ-ONLY data sources.** Same Notion token can read the KOL tracker DB and Economic-Dashboard liquidity DBs. `src/external_data.py` reads them for the daily report's KOL-stance-change + liquidity sections.
 

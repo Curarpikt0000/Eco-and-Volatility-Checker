@@ -1,5 +1,6 @@
 {
- "_note": "由 ~/.hermes/cron/jobs.json 导出(2026-10-01)。<PROJECT_ROOT>=接手方自己的 clone 路径；deliver=origin 表示发回创建该 job 的 Telegram 话题，接手方须改成自己的投递目标。no_agent=true 的 job 只跑脚本(120s~1h 超时内)，不调 LLM。 公网版不含 eco-vol-codex-delivery-watch（它负责同步到作者的公司内部仓库与内部发布入口，接手方不需要）。<HERMES_SCRIPTS>=接手方放脚本的目录(默认 <HERMES_SCRIPTS>)。",
+ "_note": "由 ~/.hermes/cron/jobs.json 自动导出（scripts/handover_refresh.py 每日更新）。<PROJECT_ROOT>=接手方自己的 clone 路径；<HERMES_SCRIPTS>=脚本目录(默认 ~/.hermes/scripts)；deliver=origin 表示发回创建该 job 的 Telegram 话题，接手方须改成自己的投递目标。公网版不含 eco-vol-codex-delivery-watch（同步到作者公司内部仓库用）。",
+ "exported": "2026-10-01",
  "jobs": [
   {
    "name": "eco-vol-01-daily-scan-report",

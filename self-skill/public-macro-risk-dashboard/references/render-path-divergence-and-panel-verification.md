@@ -41,7 +41,7 @@ Do NOT try to read a 17k-char one-liner. Extract and diff programmatically
 import json, re, inspect, sys
 sys.path.insert(0, 'src')
 
-jobs = json.load(open('/home/user/.hermes/cron/jobs.json'))
+jobs = json.load(open('~/.hermes/cron/jobs.json'))
 jobs = jobs if isinstance(jobs, list) else jobs.get('jobs', jobs)
 jobs = list(jobs.values()) if isinstance(jobs, dict) else jobs
 prompt = next(j for j in jobs if j['name'] == '<job name>')['prompt']

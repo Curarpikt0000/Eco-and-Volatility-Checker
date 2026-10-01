@@ -352,7 +352,7 @@ Eco dashboard then reads cross-project), two commits are needed and one gotcha b
   `cp scratch/<name>.py <sibling-repo>/src/<name>.py` before committing so it actually enters git.
 - Commit the generated JSON in the SIBLING repo's `data/` (data归属跟着采集脚本走), and commit the
   fetch/render/wiring in the dashboard repo separately. Two repos, two `git push` (both personal public).
-- The dashboard fetch fn reads the sibling JSON by ABSOLUTE path (`/home/user/Projects/<sibling>/data/...`);
+- The dashboard fetch fn reads the sibling JSON by ABSOLUTE path (`~/Projects/<sibling>/data/...`);
   keep the cache-fallback contract so a missing sibling file degrades gracefully, never errors the build.
 
 ## GitHub Pages deploy lag (Chao asks "是不是还没更新")

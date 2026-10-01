@@ -82,9 +82,9 @@ for g in d["groups"]:
 
 ```python
 # ✗ data.sec.gov 能过，Archives 一律 403
-{"User-Agent": "EcoVolChecker research (contact: you@example.com)"}
+{"User-Agent": "EcoVolChecker research (contact: ANONYMIZED_EMAIL_ADDRESS_0_6)"}
 # ✓ 两个域名都过
-{"User-Agent": "Eco-Volatility-Checker <your-email@example.com>"}
+{"User-Agent": "Eco-Volatility-Checker ANONYMIZED_EMAIL_ADDRESS_0_5"}
 ```
 实测对照（同一 URL）：前者 `HTTP Error 403: Forbidden`，后者 `200`。
 **新增任何 SEC 端点后，先单独测一次 Archives 域名**，别假设 `data.sec.gov` 能过就都能过。

@@ -24,7 +24,7 @@ import sys
 import urllib.request
 
 # 坑①: 必须含真实邮箱。缺邮箱时 Archives 域名一律 403，且失败是静默的。
-SEC_UA = {"User-Agent": "Eco-Volatility-Checker <your-email@example.com>"}
+SEC_UA = {"User-Agent": "Eco-Volatility-Checker ANONYMIZED_EMAIL_ADDRESS_0_5"}
 
 # 坑②: IFRS 与 US-GAAP 标签名不同，两套都试
 OCF_TAGS = [
