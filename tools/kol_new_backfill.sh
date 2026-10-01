@@ -96,7 +96,7 @@ display 字段里有机构/头衔，用来排除同名的人。
 对名单里每个人按规格检索，**每做完一个人立即用 write_file 落盘** $D/out/<id>.json（裸 JSON 数组），不要攒到最后。
 每条的 source 必须是你亲自 web_extract 打开过、页面里确有此人此观点的 URL；日期只认原文发布日。找不到就少写，写 [] 也可以。
 全部完成后按规格「完成后回报」每人一行，最后一行写: DONE $B"
-  timeout "$BATCH_TIMEOUT" hermes -z "$PROMPT" --provider custom -m claude-opus-5-5 > "$D/log_$B.txt" 2>&1
+  timeout "$BATCH_TIMEOUT" hermes -z "$PROMPT" --provider custom -m "${KOL_MODEL:-claude-sonnet-5}" > "$D/log_$B.txt" 2>&1
   echo "EXIT $B $?" >> "$D/log_$B.txt"
 }
 
