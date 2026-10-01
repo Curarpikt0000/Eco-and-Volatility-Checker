@@ -8612,3 +8612,52 @@ def fetch_gold_oil_ratio(base_path=None, cache_path=None):
         except Exception:
             pass
     return out
+
+
+
+# ════════════════════════════════════════════════════════════════════
+# 美国货运: 铁路(AAR 周度, 10 类商品+联运) + 公路(ATA 卡车吨位/Cass 发货量 月度)  Chao 2026-10-01
+# ════════════════════════════════════════════════════════════════════
+def fetch_us_freight():
+    import sys as _sys, urllib.request
+    from datetime import timezone, timedelta
+    root = os.path.join(os.path.dirname(__file__), "..")
+    jst = datetime.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    out = {"status": "ok", "as_of": jst, "warnings": [], "rail": {}, "road": {}}
+    # 铁路: 增量抓最新周报
+    try:
+        _sys.path.insert(0, os.path.join(root, "tools"))
+        import aar_rail_weekly as _a
+        p = _a.OUT
+        store = json.load(open(p)) if os.path.exists(p) else {"weeks": {}, "src": {}}
+        have = set(store.get("src", {}).values())
+        new = 0
+        for u, d in _a.list_pdfs()[-6:]:
+            if u in have:
+                continue
+            try:
+                b = urllib.request.urlopen(urllib.request.Request(u, headers=_a.UA), timeout=60).read()
+                wk, rec = _a.parse(b)
+                store["weeks"][wk] = rec; store.setdefault("src", {})[wk] = u; new += 1
+            except Exception as e:
+                out["warnings"].append(f"AAR {d} 周报解析失败: {str(e)[:50]}")
+        if new:
+            json.dump(store, open(p, "w"), ensure_ascii=False, indent=0)
+        out["rail_new"] = new
+    except Exception as e:
+        out["warnings"].append(f"AAR 周报检查失败（{type(e).__name__}），用已存数据")
+        try:
+            store = json.load(open(os.path.join(root, "data", "aar_rail_weekly.json")))
+        except Exception:
+            store = {"weeks": {}}
+    wk = {k: v for k, v in store.get("weeks", {}).items() if k >= "2021-07-01"}
+    out["rail"] = {"weeks": [dict(d=k, **wk[k]) for k in sorted(wk)]}
+    # 公路(月度): ATA 卡车吨位指数 + Cass 发货量指数
+    for sid, key in (("TRUCKD11", "ata"), ("FRGSHPUSM649NCIS", "cass")):
+        try:
+            out["road"][key] = [{"m": d[:7], "v": v} for d, v in _fred_series_hist(sid, "2021-01-01")]
+        except Exception as e:
+            out["warnings"].append(f"FRED {sid} 失败: {type(e).__name__}")
+    if not out["rail"]["weeks"]:
+        out["status"] = "error"
+    return out

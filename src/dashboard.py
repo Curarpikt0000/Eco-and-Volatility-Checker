@@ -1385,6 +1385,66 @@ def _gold_oil_html(o):
 </div>"""
 
 
+
+def _us_freight_html(o):
+    """美国货运: 铁路周度(AAR, 10 类商品 + 联运, 按钮筛选 + 周/4周均线切换) + 公路月度(ATA 吨位 / Cass 发货量)。"""
+    import json as _json
+    wk = ((o or {}).get("rail") or {}).get("weeks") or []
+    if len(wk) < 20:
+        err = "；".join((o or {}).get("warnings", [])[:2])
+        return f'<p class="empty">美国货运数据同步中{("：" + _esc(err)) if err else ""}。</p>'
+    ZH = {"Total Traffic": "铁路总运量", "Total Carloads": "车皮合计", "Intermodal": "联运(集装箱/拖车)",
+          "Chemicals": "化工品", "Coal": "煤炭", "Farm Products excl. Grain, and Food": "农产品(除谷物)及食品",
+          "Forest Products": "林产品", "Grain": "谷物", "Metallic Ores and Metals": "金属矿及金属",
+          "Motor Vehicles and Parts": "汽车及零部件", "Nonmetallic Minerals": "非金属矿",
+          "Petroleum and Petroleum Products": "石油及制品", "Other": "其他"}
+    keys = list(ZH)
+    rail = {"d": [x["d"] for x in wk], "s": {k: [x[k] for x in wk] for k in keys}}
+    road = (o or {}).get("road") or {}
+    data = _json.dumps({"rail": rail, "zh": ZH, "ata": road.get("ata", []), "cass": road.get("cass", [])},
+                       ensure_ascii=False, separators=(",", ":"))
+    btns = "".join(f'<button type="button" class="frt-b{" on" if k == "Total Traffic" else ""}" data-k="{_esc(k)}">{_esc(ZH[k])}</button>' for k in keys)
+    L = wk[-1]
+    import datetime as _d
+    _t = _d.date.fromisoformat(L["d"]) - _d.timedelta(days=364)   # 去年同一周(差 52 周, 与 AAR 口径一致)
+    prev = next((x for x in wk if abs((_d.date.fromisoformat(x["d"]) - _t).days) <= 3), None)
+    yoy = lambda k: (f"{(L[k]/prev[k]-1)*100:+.1f}%" if prev and prev.get(k) else "—")
+    ata = road.get("ata") or []; cass = road.get("cass") or []
+    def myoy(s):
+        if len(s) < 13: return "—"
+        a, b = s[-1], next((x for x in s if x["m"] == f"{int(s[-1]['m'][:4])-1}{s[-1]['m'][4:]}"), None)
+        return f"{(a['v']/b['v']-1)*100:+.1f}%" if b else "—"
+    warn = f'<p class="sgr-warn">⚠ {_esc("；".join(o["warnings"][:2]))}</p>' if o.get("warnings") else ""
+    return f"""
+<div class="tfs-wrap frt-wrap">
+  {warn}
+  <div class="sgr-stat">
+    <span>铁路总运量 <b>{L['Total Traffic']:,}</b><i>周截至 {L['d']} · 同比 {yoy('Total Traffic')}</i></span>
+    <span>车皮 / 联运 <b>{L['Total Carloads']:,} / {L['Intermodal']:,}</b><i>同比 {yoy('Total Carloads')} / {yoy('Intermodal')}</i></span>
+    <span>卡车吨位指数 <b>{ata[-1]['v'] if ata else '—'}</b><i>{ata[-1]['m'] if ata else ''} · 同比 {myoy(ata)}（ATA，2015=100）</i></span>
+    <span>Cass 发货量 <b>{cass[-1]['v'] if cass else '—'}</b><i>{cass[-1]['m'] if cass else ''} · 同比 {myoy(cass)}（1990-01=1）</i></span>
+  </div>
+  <div class="sgr-title">铁路周度货运量（AAR，单位：车皮/联运单元）</div>
+  <div class="frt-bar">{btns}</div>
+  <div class="frt-bar frt-opt">
+    <button type="button" class="frt-m on" data-m="raw">每周</button><button type="button" class="frt-m" data-m="ma4">4 周均线</button>
+    <button type="button" class="frt-m" data-m="yoy">同比 %</button>
+    <span class="frt-sep"></span>
+    <button type="button" class="frt-r" data-r="1">1 年</button><button type="button" class="frt-r" data-r="3">3 年</button><button type="button" class="frt-r on" data-r="5">5 年</button>
+  </div>
+  <div class="frt-chart" id="frt-rail"></div>
+  <div class="sgr-title">公路货运（月度指数）</div>
+  <div class="frt-chart" id="frt-road"></div>
+  <div class="sgr-foot">
+    铁路：美国铁路协会（AAR）每周三发布的 Weekly Rail Traffic 美国部分（不含 CPKC、CN、GMXT 在美业务），本站逐份解析 PDF，
+    每份都校验「10 类之和＝车皮合计、车皮＋联运＝总运量」，不符即不入库（2024-04-06 那一周 AAR 网站上没有该期文件，周度图中前后两周直接相连，同比图中对应周留空）。点按钮切换品类（可多选对比），「同比」与去年同一周比较。
+    公路：美国没有公开的全国卡车周度运量，只有月度指数——ATA 卡车吨位指数（美国卡车运输协会，经季调，约 2 个月滞后）与 Cass 发货量指数
+    （按 Cass 处理的企业货运账单统计，未季调，含多种运输方式但以公路为主）。两者都是指数，不是吨数。随 dashboard 每日检查更新。
+  </div>
+  <script type="application/json" id="frt-data">{data}</script>
+</div>"""
+
+
 def _ust_micro_line(items, W=880, H=150, PL=58, PR=10, PT=10, PB=22, color="#6b7f8a", unit=""):
     """通用小折线, items=[{d,v}]。"""
     if len(items) < 3:
@@ -2163,7 +2223,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -2406,6 +2466,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         llm_token_html=_llm_token_html(llm_token),
         ai_capex_html=_ai_capex_html(ai_capex),
         gold_oil_html=_gold_oil_html(gold_oil),
+        us_freight_html=_us_freight_html(us_freight),
         ust_micro_html=_ust_micro_html(ust_micro),
         dxy_gold_html=_dxy_gold_html(dxy_gold),
         gold_etf_region_html=_gold_etf_region_html(gold_etf_flows),
@@ -9671,6 +9732,11 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .sgr-title{{font-size:15px;font-weight:700;color:#4a443c;margin:14px 0 6px}}
 .sgr-stat{{display:flex;gap:22px;flex-wrap:wrap;font-size:12px;color:#6b645a;margin-bottom:4px}}
 .sgr-stat b{{font-size:15px;color:#3d372f;margin:0 3px}}.sgr-stat i{{font-style:normal;color:#9a9288;font-size:11px}}
+.frt-bar{{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}}
+.frt-bar button{{font-size:11.5px;padding:3px 9px;border:1px solid #cfc7ba;background:#f6f2ec;color:#5a534a;border-radius:12px;cursor:pointer}}
+.frt-bar button.on{{background:#1f3a68;border-color:#1f3a68;color:#fff}}
+.frt-opt{{margin-top:2px}} .frt-sep{{width:14px}}
+.frt-chart{{min-height:120px}}
 .sgr-chart{{width:100%;height:auto;display:block}}
 .sgr-grid{{stroke:#eceae5;stroke-width:1}}
 .sgr-med{{stroke:#a8a29a;stroke-width:1;stroke-dasharray:4 3}}
@@ -10577,6 +10643,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ 密歇根信心 vs 全要素生产率相对趋势 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>消费者信心 vs 全要素生产率 (密歇根信心 · TFP 相对趋势 · 复刻 BofA Chart 10 · 1978 年至今)<span class="freq-badge freq-daily">每日检查</span></div>
   <div class="card">{tfp_sentiment_html}</div>
+  <!-- ━━━ 美国货运 ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>美国货运 · 铁路周度 (AAR 10 类商品 + 联运) 与公路月度 (ATA / Cass)<span class="freq-badge freq-daily">每周更新</span></div>
+  <div class="card">{us_freight_html}</div>
   <!-- ━━━ 中美 AI 资本开支 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>中美 AI 投资 · 科技巨头资本开支 (美国五家 vs 阿里/腾讯/百度 · 季度 + 美国数据中心建设月度)<span class="freq-badge freq-daily">每日检查</span></div>
   <div class="card">{ai_capex_html}</div>
@@ -11148,6 +11217,89 @@ mkRadar('rLong', RADAR.long);
       }}
     }});
   }}
+}})();
+</script>
+
+<script>
+(function(){{
+  var el=document.getElementById('frt-data'); if(!el) return;
+  var D=JSON.parse(el.textContent), R=D.rail, ZH=D.zh;
+  var COL=['#1f3a68','#b0613e','#6f8f5a','#8a6fa5','#c79a3b','#4a90a4','#a05a7a','#7a7a7a'];
+  var NS='http://www.w3.org/2000/svg';
+  var st={{keys:['Total Traffic'],mode:'raw',yrs:5}};
+  function esc(t){{return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}}
+  function fmt(v,m){{return v==null?'—':(m==='yoy'?(v>0?'+':'')+v.toFixed(1)+'%':Math.round(v).toLocaleString());}}
+  function series(k){{
+    var v=R.s[k], d=R.d, out=[];
+    for(var i=0;i<v.length;i++){{
+      var y=v[i];
+      if(st.mode==='ma4'){{ if(i<3){{y=null;}} else {{y=(v[i]+v[i-1]+v[i-2]+v[i-3])/4;}} }}
+      else if(st.mode==='yoy'){{
+        var t=new Date(d[i]).getTime()-364*864e5, j=-1;
+        for(var q=i-1;q>=0;q--){{ if(Math.abs(new Date(d[q]).getTime()-t)<=3*864e5){{j=q;break;}} if(new Date(d[q]).getTime()<t-7*864e5) break; }}
+        y=(j>=0&&v[j])?(v[i]/v[j]-1)*100:null;
+      }}
+      out.push(y);
+    }}
+    return out;
+  }}
+  function draw(box,xs,lines,opts){{
+    var W=900,H=opts.h||280,PL=56,PR=16,PT=12,PB=24,iw=W-PL-PR,ih=H-PT-PB,n=xs.length;
+    var lo=Infinity,hi=-Infinity;
+    lines.forEach(function(L){{L.v.forEach(function(y){{if(y!=null){{lo=Math.min(lo,y);hi=Math.max(hi,y);}}}});}});
+    if(!isFinite(lo)){{box.innerHTML='<p class="empty">无数据</p>';return;}}
+    if(opts.zero){{lo=Math.min(lo,0);hi=Math.max(hi,0);}}
+    var span=(hi-lo)||1, raw=span/4, mag=Math.pow(10,Math.floor(Math.log10(raw))), nr=raw/mag;
+    var step=(nr<=1?1:nr<=2?2:nr<=2.5?2.5:nr<=5?5:10)*mag;
+    lo=Math.floor(lo/step)*step; hi=Math.ceil(hi/step)*step;
+    function X(i){{return PL+iw*i/Math.max(n-1,1);}} function Y(y){{return PT+ih*(1-(y-lo)/(hi-lo));}}
+    var h='<svg viewBox="0 0 '+W+' '+H+'" class="sgr-chart" preserveAspectRatio="xMidYMid meet">';
+    for(var yv=lo;yv<=hi+step/2;yv+=step){{h+='<line x1="'+PL+'" y1="'+Y(yv).toFixed(1)+'" x2="'+(W-PR)+'" y2="'+Y(yv).toFixed(1)+'" class="sgr-grid"/><text x="'+(PL-6)+'" y="'+(Y(yv)+3.5).toFixed(1)+'" class="sgr-yt">'+esc(opts.fy(yv))+'</text>';}}
+    if(opts.zero&&lo<0&&hi>0) h+='<line x1="'+PL+'" y1="'+Y(0).toFixed(1)+'" x2="'+(W-PR)+'" y2="'+Y(0).toFixed(1)+'" stroke="#8a837a" stroke-width="1"/>';
+    var lastY='';
+    for(var i=0;i<n;i++){{var yr=xs[i].slice(0,4); if(yr!==lastY&&xs[i].slice(5,7)==='01'){{ h+='<text x="'+X(i).toFixed(1)+'" y="'+(H-6)+'" class="sgr-xt">'+yr+'</text>'; }} lastY=yr;}}
+    lines.forEach(function(L,li){{
+      var p='',pen=false;
+      L.v.forEach(function(y,i){{ if(y==null){{pen=false;return;}} p+=(pen?' L':' M')+X(i).toFixed(1)+','+Y(y).toFixed(1); pen=true; }});
+      h+='<path d="'+p+'" fill="none" stroke="'+COL[li%COL.length]+'" stroke-width="'+(li===0?1.8:1.4)+'"/>';
+    }});
+    for(var i2=0;i2<n;i2++){{
+      var l=i2>0?(X(i2-1)+X(i2))/2:PL, r=i2<n-1?(X(i2)+X(i2+1))/2:W-PR;
+      var tip=esc((opts.monthly?'':'周截至 ')+xs[i2])+'||'+lines.map(function(L){{return esc(L.name+' '+opts.ft(L.v[i2]));}}).join('<br>');
+      h+='<rect x="'+l.toFixed(1)+'" y="'+PT+'" width="'+Math.max(r-l,0.6).toFixed(2)+'" height="'+ih+'" fill="transparent" data-tip="'+tip+'"/>';
+    }}
+    h+='</svg>';
+    var leg='<div class="tfs-legend">'+lines.map(function(L,li){{return '<i style="border-color:'+COL[li%COL.length]+'"></i>'+esc(L.name);}}).join('')+'</div>';
+    box.innerHTML=leg+h;
+  }}
+  function renderRail(){{
+    var cut=new Date(R.d[R.d.length-1]); cut.setFullYear(cut.getFullYear()-st.yrs);
+    var i0=0; while(i0<R.d.length&&new Date(R.d[i0])<cut) i0++;
+    var xs=R.d.slice(i0);
+    var lines=st.keys.map(function(k){{return {{name:ZH[k],v:series(k).slice(i0)}};}});
+    draw(document.getElementById('frt-rail'),xs,lines,{{h:290,zero:st.mode==='yoy',
+      fy:function(v){{return st.mode==='yoy'?v.toFixed(0)+'%':(Math.abs(v)>=1000?Math.round(v/1000)+'k':v.toFixed(0));}},
+      ft:function(v){{return fmt(v,st.mode);}}}});
+  }}
+  function renderRoad(){{
+    var ms={{}}; (D.ata||[]).forEach(function(x){{ms[x.m]=1;}}); (D.cass||[]).forEach(function(x){{ms[x.m]=1;}});
+    var xs=Object.keys(ms).sort(); if(!xs.length) return;
+    function pick(a,base){{var m={{}};a.forEach(function(x){{m[x.m]=x.v;}}); var b=m[base]; return xs.map(function(k){{return (m[k]!=null&&b)?m[k]/b*100:null;}});}}
+    var base=xs[0];
+    var lines=[{{name:'ATA 卡车吨位（'+base+'=100）',v:pick(D.ata||[],base)}},{{name:'Cass 发货量（'+base+'=100）',v:pick(D.cass||[],base)}}];
+    var raw={{a:{{}},c:{{}}}}; (D.ata||[]).forEach(function(x){{raw.a[x.m]=x.v;}}); (D.cass||[]).forEach(function(x){{raw.c[x.m]=x.v;}});
+    draw(document.getElementById('frt-road'),xs,lines,{{h:220,monthly:true,
+      fy:function(v){{return v.toFixed(0);}}, ft:function(v){{return v==null?'—（未发布）':v.toFixed(1);}}}});
+  }}
+  function bind(sel,fn){{Array.prototype.forEach.call(document.querySelectorAll(sel),function(b){{b.addEventListener('click',function(){{fn(b);renderRail();}});}});}}
+  bind('.frt-b',function(b){{
+    var k=b.getAttribute('data-k'), i=st.keys.indexOf(k);
+    if(i>=0){{ if(st.keys.length>1){{st.keys.splice(i,1);b.classList.remove('on');}} }}
+    else {{ if(st.keys.length>=8){{return;}} st.keys.push(k); b.classList.add('on'); }}
+  }});
+  bind('.frt-m',function(b){{document.querySelectorAll('.frt-m').forEach(function(x){{x.classList.remove('on');}});b.classList.add('on');st.mode=b.getAttribute('data-m');}});
+  bind('.frt-r',function(b){{document.querySelectorAll('.frt-r').forEach(function(x){{x.classList.remove('on');}});b.classList.add('on');st.yrs=+b.getAttribute('data-r');}});
+  renderRail(); renderRoad();
 }})();
 </script>
 </body>

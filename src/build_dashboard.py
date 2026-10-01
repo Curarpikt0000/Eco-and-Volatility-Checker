@@ -750,6 +750,16 @@ def main():
     except Exception as e:
         print(f"[dashboard] 金油比 跳过: {e}")
 
+    # ── 美国货运(铁路 AAR 周度 + 公路 ATA/Cass 月度) ──
+    us_freight = {}
+    try:
+        us_freight = ed.fetch_us_freight() or {}
+        _w = (us_freight.get("rail") or {}).get("weeks") or []
+        print(f"[dashboard] 美国货运: 铁路 {len(_w)} 周 最新 {_w[-1]['d'] if _w else None} 新增 {us_freight.get('rail_new')} "
+              f"ATA {len(us_freight.get('road', {}).get('ata', []))} 月 Cass {len(us_freight.get('road', {}).get('cass', []))} 月 warn={us_freight.get('warnings')}")
+    except Exception as e:
+        print(f"[dashboard] 美国货运 跳过: {e}")
+
     # ── 中国模式断代监控(旧引擎停摆 / 新引擎接续) ──
     # ★月更: NBS 官方发布稿每月 15-16 日出; 东财宏观 API 同期更新。
     # ★口径: NBS 分项为累计同比, 东财「固定资产投资」为单月同比 —— 两者不可混比。
@@ -914,6 +924,7 @@ def main():
         llm_token=llm_token,
         ai_capex=ai_capex,
         gold_oil=gold_oil,
+        us_freight=us_freight,
         ust_micro=ust_micro,
         dxy_gold=dxy_gold,
         gold_etf_flows=gold_etf_flows,
