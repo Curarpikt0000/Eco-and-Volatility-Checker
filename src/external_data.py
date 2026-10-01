@@ -8658,6 +8658,51 @@ def fetch_us_freight():
             out["road"][key] = [{"m": d[:7], "v": v} for d, v in _fred_series_hist(sid, "2021-01-01")]
         except Exception as e:
             out["warnings"].append(f"FRED {sid} 失败: {type(e).__name__}")
+    # 成本侧: 柴油(EIA 周度, FRED GASDESW) + 整车长途运价 PPI + Cass 运费支出(月度)
+    try:
+        out["diesel"] = [{"d": d, "v": v} for d, v in _fred_series_hist("GASDESW", "2021-01-01")]
+    except Exception as e:
+        out["warnings"].append(f"柴油价格失败: {type(e).__name__}")
+    for sid, key in (("PCU484121484121", "ppi_tl"), ("FRGEXPUSM649NCIS", "cass_exp")):
+        try:
+            out["road"][key] = [{"m": d[:7], "v": v} for d, v in _fred_series_hist(sid, "2021-01-01")]
+        except Exception as e:
+            out["warnings"].append(f"FRED {sid} 失败: {type(e).__name__}")
+    # SONAR 公开快照(拒载率/现货运价): 官方不给历史, 每天抓一次公开页面的当日读数自建序列; 被拦截就沿用已存
+    out["sonar"] = _sonar_snapshot(os.path.join(root, "data", "sonar_snapshots.json"))
     if not out["rail"]["weeks"]:
         out["status"] = "error"
     return out
+
+
+def _sonar_snapshot(path):
+    import re as _re, html as _h, urllib.request
+    try:
+        store = json.load(open(path))
+    except Exception:
+        store = {"rows": {}, "note": "SONAR Market Monitor 公开页当日读数, 本站每日抓取自建; 页面不标数据日期, 以抓取日(JST)记"}
+    today = datetime.datetime.utcnow() + datetime.timedelta(hours=9)
+    day = today.strftime("%Y-%m-%d")
+    res = {"ok": False, "err": ""}
+    if day not in store["rows"] and today.weekday() < 5:
+        try:
+            req = urllib.request.Request("https://gosonar.com/freightwaves-sonar-market-monitor",
+                                         headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/124"})
+            b = urllib.request.urlopen(req, timeout=40).read().decode("utf-8", "ignore")
+            if "Attention Required" in b or "you have been blocked" in b:
+                raise RuntimeError("被 Cloudflare 拦截")
+            t = _re.sub(r"\s+", " ", _h.unescape(_re.sub(r"<[^>]+>", " ", _re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", b, flags=_re.S))))
+            def g(pat):
+                m = _re.search(pat, t)
+                return float(m.group(1).replace(",", "")) if m else None
+            row = {"stri": g(r"STRI\.USA ([\d.]+)%"), "otri": g(r"OTRI ([\d.]+)%"), "nti": g(r"NTI\.USA \$([\d.]+)/mi"),
+                   "vcrpm1": g(r"VCRPM1\.USA \$([\d.]+)/mi"), "stvi": g(r"STVI\.USA ([\d,]+\.?\d*)")}
+            if row["stri"] is None or row["nti"] is None:
+                raise RuntimeError("页面格式变了, 没解析到 STRI/NTI")
+            store["rows"][day] = row
+            json.dump(store, open(path, "w"), ensure_ascii=False, indent=0)
+            res["ok"] = True
+        except Exception as e:
+            res["err"] = f"{type(e).__name__}: {str(e)[:50]}"
+    res["rows"] = [dict(d=k, **store["rows"][k]) for k in sorted(store["rows"])]
+    return res

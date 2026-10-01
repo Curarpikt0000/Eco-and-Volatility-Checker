@@ -1401,8 +1401,28 @@ def _us_freight_html(o):
     keys = list(ZH)
     rail = {"d": [x["d"] for x in wk], "s": {k: [x[k] for x in wk] for k in keys}}
     road = (o or {}).get("road") or {}
-    data = _json.dumps({"rail": rail, "zh": ZH, "ata": road.get("ata", []), "cass": road.get("cass", [])},
+    data = _json.dumps({"rail": rail, "zh": ZH, "ata": road.get("ata", []), "cass": road.get("cass", []),
+                        "diesel": (o or {}).get("diesel", []), "ppi_tl": road.get("ppi_tl", []), "cass_exp": road.get("cass_exp", [])},
                        ensure_ascii=False, separators=(",", ":"))
+    sn = ((o or {}).get("sonar") or {}).get("rows") or []
+    dsl = (o or {}).get("diesel") or []
+    def _yoyd(s):
+        if len(s) < 53: return "—"
+        import datetime as _d2
+        t = _d2.date.fromisoformat(s[-1]["d"]) - _d2.timedelta(days=364)
+        b = next((x for x in s if abs((_d2.date.fromisoformat(x["d"]) - t).days) <= 3), None)
+        return f"{(s[-1]['v']/b['v']-1)*100:+.1f}%" if b else "—"
+    ppi = road.get("ppi_tl") or []
+    sonar_html = ""
+    if sn:
+        z = sn[-1]
+        sonar_html = f"""
+  <div class="sgr-stat">
+    <span>合同货拒载率 <b>{z['stri']:.2f}%</b><i>SONAR STRI · 抓取日 {z['d']}（OTRI {z['otri'] if z.get('otri') is not None else '—'}%）</i></span>
+    <span>卡车现货运价 <b>${z['nti']:.2f}/英里</b><i>SONAR NTI（含燃油附加费）</i></span>
+    <span>合同运价 <b>${z['vcrpm1']:.2f}/英里</b><i>SONAR VCRPM1（不含燃油）</i></span>
+    <span>本站已积累 <b>{len(sn)} 天</b><i>公开页只有当日读数，逐日积累成序列</i></span>
+  </div>"""
     btns = "".join(f'<button type="button" class="frt-b{" on" if k == "Total Traffic" else ""}" data-k="{_esc(k)}">{_esc(ZH[k])}</button>' for k in keys)
     L = wk[-1]
     import datetime as _d
@@ -1435,11 +1455,18 @@ def _us_freight_html(o):
   <div class="frt-chart" id="frt-rail"></div>
   <div class="sgr-title">公路货运（月度指数）</div>
   <div class="frt-chart" id="frt-road"></div>
+  <div class="sgr-title">公路运力与成本</div>
+  <div class="sgr-stat">
+    <span>柴油零售价 <b>${(dsl[-1]['v'] if dsl else 0):.3f}/加仑</b><i>{dsl[-1]['d'] if dsl else ''} · 同比 {_yoyd(dsl)}（EIA 周度）</i></span>
+    <span>整车长途运价 PPI <b>{ppi[-1]['v'] if ppi else '—'}</b><i>{ppi[-1]['m'] if ppi else ''} · 同比 {myoy(ppi)}（2003-12=100）</i></span>
+  </div>{sonar_html}
+  <div class="frt-chart" id="frt-diesel"></div>
+  <div class="frt-chart" id="frt-cost"></div>
   <div class="sgr-foot">
     铁路：美国铁路协会（AAR）每周三发布的 Weekly Rail Traffic 美国部分（不含 CPKC、CN、GMXT 在美业务），本站逐份解析 PDF，
     每份都校验「10 类之和＝车皮合计、车皮＋联运＝总运量」，不符即不入库（2024-04-06 那一周 AAR 网站上没有该期文件，周度图中前后两周直接相连，同比图中对应周留空）。点按钮切换品类（可多选对比），「同比」与去年同一周比较。
     公路：美国没有公开的全国卡车周度运量，只有月度指数——ATA 卡车吨位指数（美国卡车运输协会，经季调，约 2 个月滞后）与 Cass 发货量指数
-    （按 Cass 处理的企业货运账单统计，未季调，含多种运输方式但以公路为主）。两者都是指数，不是吨数。随 dashboard 每日检查更新。
+    （按 Cass 处理的企业货运账单统计，未季调，含多种运输方式但以公路为主）。两者都是指数，不是吨数。运力与成本：柴油为美国能源信息署（EIA）全美柴油零售均价（每周一）；整车长途运价 PPI 为美国劳工统计局生产者价格指数（月度）；Cass 运费支出指数＝发货量×运价。拒载率、现货/合同运价来自 FreightWaves SONAR 公开展示页的当日读数——完整历史为付费数据，本站只能从 2026-10-01 起每个工作日抓一次逐日积累，页面被拦截的日子会缺。随 dashboard 每日检查更新。
   </div>
   <script type="application/json" id="frt-data">{data}</script>
 </div>"""
@@ -11299,7 +11326,23 @@ mkRadar('rLong', RADAR.long);
   }});
   bind('.frt-m',function(b){{document.querySelectorAll('.frt-m').forEach(function(x){{x.classList.remove('on');}});b.classList.add('on');st.mode=b.getAttribute('data-m');}});
   bind('.frt-r',function(b){{document.querySelectorAll('.frt-r').forEach(function(x){{x.classList.remove('on');}});b.classList.add('on');st.yrs=+b.getAttribute('data-r');}});
-  renderRail(); renderRoad();
+  function renderCost(){{
+    var ds=D.diesel||[]; if(ds.length){{
+      var c=new Date(ds[ds.length-1].d); c.setFullYear(c.getFullYear()-5);
+      var xs=[],v=[]; ds.forEach(function(x){{ if(new Date(x.d)>=c){{xs.push(x.d);v.push(x.v);}} }});
+      draw(document.getElementById('frt-diesel'),xs,[{{name:'柴油零售价（美元/加仑）',v:v}}],{{h:200,
+        fy:function(y){{return '$'+y.toFixed(1);}}, ft:function(y){{return y==null?'—':'$'+y.toFixed(3);}}}});
+    }}
+    var ms={{}}; [D.ppi_tl,D.cass_exp,D.cass].forEach(function(a){{(a||[]).forEach(function(x){{ms[x.m]=1;}});}});
+    var xs2=Object.keys(ms).sort(); if(!xs2.length) return; var base=xs2[0];
+    function pick(a){{var m={{}};(a||[]).forEach(function(x){{m[x.m]=x.v;}}); var b=m[base]; return xs2.map(function(k){{return (m[k]!=null&&b)?m[k]/b*100:null;}});}}
+    draw(document.getElementById('frt-cost'),xs2,[
+      {{name:'整车长途运价 PPI（'+base+'=100）',v:pick(D.ppi_tl)}},
+      {{name:'Cass 运费支出（'+base+'=100）',v:pick(D.cass_exp)}},
+      {{name:'Cass 发货量（'+base+'=100）',v:pick(D.cass)}}],{{h:220,monthly:true,
+      fy:function(y){{return y.toFixed(0);}}, ft:function(y){{return y==null?'—（未发布）':y.toFixed(1);}}}});
+  }}
+  renderRail(); renderRoad(); renderCost();
 }})();
 </script>
 </body>
