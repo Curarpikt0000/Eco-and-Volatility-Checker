@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-09-30",
+  "as_of": "2026-10-01",
   "senators": [
     {
       "name": "Tommy Tuberville",
@@ -138,24 +138,24 @@
           "filed": "02/14/2025"
         },
         {
-          "ticker": "ADBE",
-          "asset": "Adobe Inc. - Common Stock",
-          "txn_date": "10/29/2024",
+          "ticker": "INTC",
+          "asset": "Intel Corp",
+          "txn_date": "05/13/2024",
           "owner": "Joint",
           "direction": "Sale (Full)",
           "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2024"
+          "amount_range": "$100,001 - $250,000",
+          "filed": "08/05/2026"
         },
         {
-          "ticker": "AAPL",
-          "asset": "Apple Inc. - Common Stock",
-          "txn_date": "10/29/2024",
+          "ticker": "INTC",
+          "asset": "Intel Corp",
+          "txn_date": "05/13/2024",
           "owner": "Joint",
-          "direction": "Sale (Full)",
-          "dir_cn": "卖出",
-          "amount_range": "$15,001 - $50,000",
-          "filed": "11/15/2024"
+          "direction": "Sale (Partial)",
+          "dir_cn": "部分卖出",
+          "amount_range": "$100,001 - $250,000",
+          "filed": "08/05/2026"
         }
       ],
       "status": "ok"

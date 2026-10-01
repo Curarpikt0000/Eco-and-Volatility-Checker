@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-09-30",
+  "as_of": "2026-10-01",
   "politicians": [
     {
       "name": "Nancy Pelosi",
@@ -5026,20 +5026,20 @@
           "amount_range": "$15,001 - $50,000"
         },
         {
-          "ticker": "ADBE",
-          "asset": "Adobe Inc. - Common Stock",
+          "ticker": "INTC",
+          "asset": "Intel Corp",
           "dir_cn": "卖出",
           "direction": "Sale (Full)",
-          "txn_date": "10/29/2024",
-          "amount_range": "$15,001 - $50,000"
+          "txn_date": "05/13/2024",
+          "amount_range": "$100,001 - $250,000"
         },
         {
-          "ticker": "AAPL",
-          "asset": "Apple Inc. - Common Stock",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "10/29/2024",
-          "amount_range": "$15,001 - $50,000"
+          "ticker": "INTC",
+          "asset": "Intel Corp",
+          "dir_cn": "部分卖出",
+          "direction": "Sale (Partial)",
+          "txn_date": "05/13/2024",
+          "amount_range": "$100,001 - $250,000"
         }
       ],
       "n_filings": 22,
