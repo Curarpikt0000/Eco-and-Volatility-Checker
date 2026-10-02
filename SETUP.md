@@ -179,7 +179,7 @@ bash ~/.hermes/scripts/publish_cf_pages.sh eco-volatility-checker docs/index.htm
 ## 11. 看板板块清单（自动更新）
 
 <!-- AUTO:SECTIONS:BEGIN -->
-_自动生成于 2026-10-01（`scripts/handover_refresh.py`，每个工作日检查一次，请勿手改此段）_
+_自动生成于 2026-10-02（`scripts/handover_refresh.py`，每个工作日检查一次，请勿手改此段）_
 
 看板当前共 **38** 个板块（顺序＝页面顺序；频率＝页面上的更新标签）：
 

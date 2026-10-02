@@ -1,6 +1,6 @@
 {
  "_note": "由 ~/.hermes/cron/jobs.json 自动导出（scripts/handover_refresh.py 每日更新）。<PROJECT_ROOT>=接手方自己的 clone 路径；<HERMES_SCRIPTS>=脚本目录(默认 ~/.hermes/scripts)；deliver=origin 表示发回创建该 job 的 Telegram 话题，接手方须改成自己的投递目标。公网版不含 eco-vol-codex-delivery-watch（同步到作者公司内部仓库用）。",
- "exported": "2026-10-01",
+ "exported": "2026-10-02",
  "jobs": [
   {
    "name": "eco-vol-01-daily-scan-report",
@@ -116,6 +116,19 @@
    "model": null,
    "skills": [],
    "prompt": "（no_agent 纯脚本）工作日 15:30 JST：把 Eco 的 KOL 观点唯一真相源 data/kol_store.sqlite 投影到本项目自己的 Notion「KOL 观点历史库 (SSOT)」，并回填 KOL List 的 Source 列。无新增写入则静默；写入、失败或 push 问题才通知。"
+  },
+  {
+   "name": "eco-vol-handover-refresh",
+   "schedule_cron": "0 12 * * 1-5",
+   "tz": "Asia/Tokyo",
+   "no_agent": true,
+   "script": "eco_vol_handover_refresh.sh",
+   "workdir": null,
+   "deliver": "origin",
+   "enabled_toolsets": null,
+   "model": null,
+   "skills": [],
+   "prompt": "交接包每日刷新(no_agent 脚本，见 scripts/handover_refresh.py)"
   }
  ]
 }

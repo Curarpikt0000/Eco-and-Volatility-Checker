@@ -244,4 +244,5 @@ Full detail: `references/data-fetch-and-chart-hardening.md` + `references/cron-r
 - See `references/chart-panels-and-data-sources.md` — add-a-chart-panel end-to-end, replicate paywalled charts w/ public proxies (MS BrokerTec), free MOVE/OFR-FSI/TIC-EU sources, left auto-index sidebar, dashboard.py str.format doubled-brace + f-string-backslash traps, incremental Notion DB creation.
 - `economic-dashboard-daily-pipeline` — the INTERNAL-facing sibling (Treasury/central-bank liquidity, internal handling). This skill READS its liquidity DBs; do not duplicate its logic.
 - `monitoring-pipeline` — the generic "script确定性 + agent补难源 + cron" method this specializes.
+- `chao-vibe` (deliberately unused). New-KOL backfill 0-output: `references/new-kol-backfill-search-cap-and-ledger.md`
 - `notion-catalog-builder` — shared Notion REST idempotent-upsert + read-back discipline.
