@@ -742,6 +742,16 @@ def main():
     except Exception as e:
         print(f"[dashboard] 中美AI资本开支 跳过: {e}")
 
+    # ── 比特币 ÷ 黄金(2010 起) + 事件 ──
+    btc_gold = {}
+    try:
+        btc_gold = ed.fetch_btc_gold_ratio() or {}
+        _ev = json.load(open(os.path.join(os.path.dirname(__file__), "..", "data", "btc_events.json"))) if os.path.exists(os.path.join(os.path.dirname(__file__), "..", "data", "btc_events.json")) else {}
+        btc_gold["not_found"] = _ev.get("not_found", [])
+        print(f"[dashboard] 比特币÷黄金: {len(btc_gold.get('rows', []))} 月 事件 {len(btc_gold.get('events', []))} 条 今日 {btc_gold.get('today')} warn={btc_gold.get('warnings')}")
+    except Exception as e:
+        print(f"[dashboard] 比特币÷黄金 跳过: {e}")
+
     # ── 金油比(1971 起) ──
     gold_oil = {}
     try:
@@ -924,6 +934,7 @@ def main():
         llm_token=llm_token,
         ai_capex=ai_capex,
         gold_oil=gold_oil,
+        btc_gold=btc_gold,
         us_freight=us_freight,
         ust_micro=ust_micro,
         dxy_gold=dxy_gold,

@@ -8706,3 +8706,101 @@ def _sonar_snapshot(path):
             res["err"] = f"{type(e).__name__}: {str(e)[:50]}"
     res["rows"] = [dict(d=k, **store["rows"][k]) for k in sorted(store["rows"])]
     return res
+
+
+# ════════════════════════════════════════════════════════
+# 比特币 ÷ 黄金（2010-08 起，月度）+ 暴涨暴跌事件标注   Chao 2026-10-02
+# ════════════════════════════════════════════════════════
+# 比特币: blockchain.com 市场均价(美元, 日度, 2010-08-18 起首次有价)，与 FRED CBBTCUSD(Coinbase, 2014-12 起)
+#         重叠 4288 天中位偏差 1.5%（2014-12~2015-01 个别日因早期交易所价差较大），仅作来源可信度参考。
+# 黄金:   与金油比同一底表 data/gold_oil_ratio_base.json(伦敦金月均价)；底表之后用 Yahoo GC=F 当月日收盘均值。
+# 比值 = 月均 BTC 美元价 ÷ 月均黄金美元价（1 盎司黄金 ≈ 几个比特币的倒数；这里直接给「1 个比特币 = 几盎司黄金」）。
+# 事件: data/btc_events.json（价格先行、联网检索、逐条验证 URL，见文件内 method）。
+def fetch_btc_gold_ratio(base_path=None, events_path=None, cache_path=None):
+    from datetime import timezone, timedelta
+    import statistics as _st
+    root = os.path.join(os.path.dirname(__file__), "..", "data")
+    base_path = base_path or os.path.join(root, "gold_oil_ratio_base.json")
+    events_path = events_path or os.path.join(root, "btc_events.json")
+    cache_path = cache_path or os.path.join(root, "btc_gold_cache.json")
+    jst = datetime.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    out = {"status": "ok", "as_of": jst, "warnings": [], "rows": [], "events": [], "daily": []}
+    try:
+        import requests as _rq
+        j = _rq.get("https://api.blockchain.info/charts/market-price?timespan=all&format=json&sampled=false",
+                    headers={"User-Agent": "Mozilla/5.0"}, timeout=60).json()
+        btc = {}
+        for x in j.get("values", []):
+            d = datetime.datetime.utcfromtimestamp(x["x"]).strftime("%Y-%m-%d")
+            if x["y"] and x["y"] > 0 and d >= "2010-08-18":
+                btc[d] = float(x["y"])
+        if len(btc) < 3000:
+            raise RuntimeError(f"blockchain.com 返回仅 {len(btc)} 天")
+        base = json.load(open(base_path))
+        gold = {r["m"]: float(r["gold"]) for r in base["rows"]}
+        last_base = max(gold)
+        try:
+            gc = _sgr_yahoo("GC%3DF", "1y")
+            for m in sorted({d[:7] for d in gc if d[:7] > last_base}):
+                gd = [v for d, v in gc.items() if d[:7] == m]
+                if gd:
+                    gold[m] = round(sum(gd) / len(gd), 2)
+            _both = sorted(d for d in gc if d in btc)
+            gold_today_d = _both[-1] if _both else None   # 取两者都有报价的最近一天, 避免日期错位
+            gold_today = gc[gold_today_d] if gold_today_d else None
+        except Exception as e:
+            out["warnings"].append(f"当月黄金实时失败({type(e).__name__})，月度只到 {last_base}")
+            gold_today = None; gold_today_d = None
+        mb = {}
+        for d, v in btc.items():
+            mb.setdefault(d[:7], []).append(v)
+        rows = []
+        for m in sorted(mb):
+            if m in gold:
+                b = sum(mb[m]) / len(mb[m])
+                rows.append({"m": m, "btc": round(b, 4 if b < 1 else 2), "gold": gold[m], "r": round(b / gold[m], 5),
+                             "days": len(mb[m])})
+        out["rows"] = rows
+        # 日度比特币(用于标注日、悬停): 只保留 2014 起每周一个点以控制体积; 标注日单独保留
+        ev = []
+        try:
+            ev = json.load(open(events_path)).get("events", [])
+            ev_age = (datetime.datetime.now() - datetime.datetime.fromtimestamp(os.path.getmtime(events_path))).days
+            if ev_age > 30:
+                out["warnings"].append(f"事件清单已 {ev_age} 天未更新")
+        except Exception as e:
+            out["warnings"].append(f"事件清单缺失: {type(e).__name__}")
+        out["events"] = ev
+        td = gold_today_d or max(btc)
+        out["today"] = {"date": td, "btc": round(btc[td], 2), "gold": round(gold_today, 2) if gold_today else None,
+                        "ratio": round(btc[td] / gold_today, 3) if gold_today else None}
+        v = [r["r"] for r in rows]
+        cur = rows[-1]["r"]
+        imax = max(range(len(v)), key=lambda i: v[i])
+        out["stats"] = {"max": v[imax], "max_m": rows[imax]["m"], "cur_m": rows[-1]["m"], "cur": cur,
+                        "pct_rank": round(sum(1 for x in v if x <= cur) / len(v) * 100, 1),
+                        "n": len(rows)}
+        # 逐次暴涨: 从周期低点到下一个高点 (zigzag, 阈值 50%/回撤 50%), 供「用了多久涨几百倍」
+        s = sorted(btc.items())
+        out["btc_daily_n"] = len(s)
+        out["btc_first"] = s[0]
+        out["btc_peak"] = max(s, key=lambda x: x[1])
+        # 标注日附近的日度价(用于图上定位)
+        dd = dict(s)
+        for e in ev:
+            e["btc_px"] = dd.get(e["date"])
+    except Exception as e:
+        try:
+            c = json.load(open(cache_path))
+            c.setdefault("warnings", []).append(f"本次抓取失败({type(e).__name__}: {str(e)[:60]})，显示 {c.get('as_of')} 缓存")
+            c["status"] = "ok(cache)"
+            return c
+        except Exception:
+            out["status"] = "error"; out["warnings"].append(f"实时数据失败且无缓存: {type(e).__name__}: {str(e)[:60]}")
+            return out
+    if out["status"] == "ok":
+        try:
+            json.dump(out, open(cache_path, "w"), ensure_ascii=False)
+        except Exception:
+            pass
+    return out

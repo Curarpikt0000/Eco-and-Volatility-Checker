@@ -1,0 +1,272 @@
+{
+ "updated": "2026-10-02 18:00",
+ "method": "价格先行：先用 blockchain.com 日均价找出周期转折点与单日/七日极端涨跌，再对这些日子联网检索新闻；由主 agent 对每条 URL 独立 web_extract 核验（页面可读、年份与关键词吻合）；仅陈述事件与价格变化，不作因果结论；未找到触发事件的异动日单列于 not_found。",
+ "events": [
+  {
+   "date": "2011-06-01",
+   "event": "Gawker 报道 Silk Road 毒品市场，比特币受关注",
+   "detail": "价格 6/1 约 $9.5，三天后约 $15，6/8 触及 $31.91（Bitcoin Magazine）。",
+   "url": "https://bitcoinmagazine.com/markets/anniversary-of-the-great-bubble-of-2011-1339139269",
+   "source": "Bitcoin Magazine",
+   "confidence": "medium",
+   "verified": "OK"
+  },
+  {
+   "date": "2011-06-19",
+   "event": "Mt.Gox 账户被盗抛售，币价瞬间崩至几美分",
+   "detail": "TechCrunch：Mt. Gox 一个被入侵的账户大量抛售，价格在几分钟内从 $17.5 跌到几美分；Ars Technica 称从 $17 跌至几美分，交易所暂停交易并回滚交易。",
+   "url": "https://techcrunch.com/2011/06/19/the-bitcoin-trials-continue-mt-gox-exchange-collapses-due-to-compromised-account/",
+   "source": "TechCrunch",
+   "confidence": "high",
+   "verified": "OK"
+  },
+  {
+   "date": "2013-04-10",
+   "event": "Mt.Gox 不堪交易量与 DDoS 攻击，比特币恐慌抛售腰斩",
+   "detail": "BBC（2013-04-11）：币价 6 小时内从高点 $260 跌到约 $130，起因是 MTGox 无法应对交易量；CNBC（2013-04-12）：Mt.Gox 在价约 $120 时暂停交易约 12 小时，价格一度跌至 $75，并称遭 DDoS 攻击。",
+   "url": "https://www.bbc.com/news/technology-22105322",
+   "source": "BBC News",
+   "confidence": "high",
+   "verified": "OK"
+  },
+  {
+   "date": "2013-12-05",
+   "event": "中国央行等五部门禁止金融机构使用比特币",
+   "detail": "NYT（2013-12-05）：中国人民银行联合另外四个部委发通知限制银行使用比特币，理由是洗钱风险与金融稳定；文中称比特币近几个月大涨，部分由中国需求推动，并提到上月美国参议院听证会。页面未给出 $1,137 价格。",
+   "url": "https://www.nytimes.com/2013/12/06/business/international/china-bars-banks-from-using-bitcoin.html",
+   "source": "The New York Times",
+   "confidence": "high",
+   "verified": "OK"
+  },
+  {
+   "date": "2014-02-28",
+   "event": "Mt.Gox 在日本申请破产保护，称可能丢失近5亿美元比特币",
+   "detail": "路透：Mt. Gox 周五在日本申请破产保护，称因系统漏洞遭黑客攻击，可能损失价值近 5 亿美元的比特币；此前数周已停止交易。注意：申请日是 2014-02-28，不是 02-24。",
+   "url": "https://www.reuters.com/article/business/mt-gox-files-for-bankruptcy-hit-with-lawsuit-idUSBREA1R0FX/",
+   "source": "Reuters",
+   "confidence": "high",
+   "verified": "OK"
+  },
+  {
+   "date": "2015-01-05",
+   "event": "Bitstamp 被盗暂停服务，币价年初下跌至 $200 以下",
+   "detail": "TechCrunch（2015-01-05）：Bitstamp 暂停服务，称运营钱包于 1 月 4 日被入侵，损失不足 19,000 枚比特币，约 500 万美元。华盛顿邮报（2015-01-14）：比特币跌破 $200，为 2013 年以来最低，年初约 $320、报道时约 $185，累计跌超 40%。",
+   "url": "https://techcrunch.com/2015/01/05/bitstamp-bitcoin-exchange-hack/",
+   "source": "TechCrunch",
+   "confidence": "high",
+   "verified": "OK"
+  },
+  {
+   "date": "2017-09-15",
+   "event": "中国要求比特币交易所关闭，币价一周内大跌",
+   "detail": "CNN（2017-09-15）：据财新报道，中国所有比特币交易所被要求在午夜前公布关闭时间；比特币周五跌 7%，一周内跌逾 20%。CNBC（2017-09-04）：中国宣布禁止 ICO 后，币价从 $4,584 跌至约 $4,350。",
+   "url": "https://money.cnn.com/2017/09/15/technology/china-bitcoin-exchanges-prices-crash/index.html",
+   "source": "CNN Money",
+   "confidence": "high",
+   "verified": "OK"
+  },
+  {
+   "date": "2017-12-17",
+   "event": "CME 比特币期货上线（当日为本轮价格顶点）",
+   "detail": "价格 12/17 日均 $19,280 为本轮最高，其后下跌；CME 期货 2018 年 1 月合约开盘价高于 $20,000（CoinDesk）。",
+   "url": "https://www.coindesk.com/markets/2017/12/18/cme-bitcoin-futures-price-above-20k-in-first-day-trading",
+   "source": "CoinDesk",
+   "confidence": "medium",
+   "verified": "OK"
+  },
+  {
+   "date": "2018-01-16",
+   "event": "韩国监管禁令担忧，比特币单日下跌",
+   "detail": "比特币当日跌超 $2,200，引发加密市场抛售，以太坊跌 23%（卫报，页面摘要可读；原文被截断）。",
+   "url": "https://www.theguardian.com/technology/2018/jan/16/bitcoin-ethereum-south-korea-fears-regulatory-crackdown-cryptocurrency-markets",
+   "source": "The Guardian",
+   "confidence": "medium",
+   "verified": "WEAK"
+  },
+  {
+   "date": "2018-02-05",
+   "event": "监管与交易所操纵担忧叠加，比特币跌破6,000美元",
+   "detail": "CNBC：比特币一度跌至5,947.40美元，为11月中旬以来最低；当日跌超11.9%。原因是监管和某大型交易所价格操纵的担忧，SEC和CFTC负责人次日将出席参议院听证。页面未提及Coincheck被盗或美股暴跌。",
+   "url": "https://www.cnbc.com/2018/02/05/bitcoin-drops-more-than-14-percent-to-below-7000.html",
+   "source": "CNBC",
+   "confidence": "medium",
+   "verified": "OK"
+  },
+  {
+   "date": "2019-06-26",
+   "event": "Facebook Libra与避险需求推动比特币创18个月新高",
+   "detail": "路透：比特币在Bitstamp触及13,666.02美元，为2018年1月以来最高；当日涨14.7%至13,475美元，年内涨超260%，已连涨8天。原因是避险需求和Libra被视为可能推动加密货币进入主流。页面未提及6月18日的白皮书。",
+   "url": "https://www.reuters.com/article/technology/bitcoin-soars-past-13000-as-facebooks-libra-fuels-demand-idUSKCN1TR10L/",
+   "source": "Reuters",
+   "confidence": "high",
+   "verified": "OK"
+  },
+  {
+   "date": "2020-03-12",
+   "event": "新冠恐慌引发全球资产抛售，比特币两天腰斩",
+   "detail": "CNBC：比特币两天跌50%，周五一度跌破4,000美元，当周开盘在9,000美元以上，收盘回升至约5,400美元。CoinDesk（3月12日）：当日一度跌26%，为7年来最大跌幅，股票和垃圾债同步被抛售。",
+   "url": "https://www.cnbc.com/2020/03/13/bitcoin-loses-half-of-its-value-in-two-day-plunge.html",
+   "source": "CNBC",
+   "confidence": "high",
+   "verified": "OK"
+  },
+  {
+   "date": "2020-03-23",
+   "event": "美联储宣布无上限购买资产的量化宽松",
+   "detail": "美联储新闻稿：FOMC将按“支持市场平稳运行所需的金额”购买美国国债和机构MBS，并设立新项目，合计提供最高3,000亿美元新融资。CNBC称这是无上限的开放式QE。这两页都没有讲比特币价格，价格与事件的关联是时间上的先后。",
+   "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200323b.htm",
+   "source": "federalreserve.gov",
+   "confidence": "medium",
+   "verified": "OK"
+  },
+  {
+   "date": "2020-10-21",
+   "event": "PayPal宣布支持持有和购买加密货币",
+   "detail": "路透：PayPal称将允许客户在其网络钱包中持有比特币等加密货币，并可在2,600万商户处使用加密货币购物。比特币升至年内新高，年内涨75%，PayPal股价涨4%。",
+   "url": "https://www.reuters.com/business/finance/paypal-open-up-network-cryptocurrencies-2020-10-21/",
+   "source": "Reuters",
+   "confidence": "high",
+   "verified": "OK"
+  },
+  {
+   "date": "2021-01-07",
+   "event": "机构、企业和散户需求推动比特币首破40,000美元",
+   "detail": "路透：比特币最高触及40,402.46美元，较2020年3月12日收盘低点涨超700%；1月2日首破30,000美元，12月16日首破20,000美元。路透称这轮上涨由机构、企业及散户需求推动，并有投资者把比特币看作对冲巨额货币刺激的工具。",
+   "url": "https://www.reuters.com/business/finance/bitcoin-hits-40000-first-time-pullback-likely-imminent-2021-01-07/",
+   "source": "Reuters",
+   "confidence": "medium",
+   "verified": "OK"
+  },
+  {
+   "date": "2021-02-08",
+   "event": "特斯拉披露买入 15 亿美元比特币并将接受其付款",
+   "detail": "价格 2/8 约 $38,900，次日 +19% 至约 $46,000（CNBC 页面摘要可读；未核实正文数字）。",
+   "url": "https://www.cnbc.com/2021/02/08/tesla-buys-1point5-billion-in-bitcoin.html",
+   "source": "CNBC",
+   "confidence": "medium",
+   "verified": "FAIL"
+  },
+  {
+   "date": "2021-04-14",
+   "event": "Coinbase 在纳斯达克直接上市,市值破千亿美元",
+   "detail": "CNBC:Coinbase 开盘 $381,较 $250 参考价高 52%,首日收盘 $328.28,完全稀释市值 $85.8 亿美元(原文如此,盘中市值超 $100 billion)。页面未直接写比特币价格,BTC 约 $63,554 是任务给出的数据。",
+   "url": "https://www.cnbc.com/2021/04/14/coinbase-to-debut-on-nasdaq-in-direct-listing.html",
+   "source": "CNBC",
+   "confidence": "medium",
+   "verified": "OK"
+  },
+  {
+   "date": "2021-05-18",
+   "event": "中国禁止金融和支付机构提供加密货币服务",
+   "detail": "CNBC(5/18):中国禁止金融机构和支付公司提供注册、交易、清算、结算等加密货币服务。Reuters(5/19):比特币盘中最多跌 30%,以太币最多跌 45%,随后收复部分跌幅;此前马斯克发推也有影响。",
+   "url": "https://www.reuters.com/business/bitcoin-slides-below-40000-ether-tumbles-2021-05-19/",
+   "source": "Reuters(另有 CNBC 2021-05-18 原始报道)",
+   "confidence": "high",
+   "verified": "OK"
+  },
+  {
+   "date": "2021-11-10",
+   "event": "美国10月CPI同比6.2%,比特币创新高至$68,000以上",
+   "detail": "CNBC 11/10:10月 CPI 同比 +6.2%,为三十年来最高,环比 +0.9%;比特币创纪录,交易价在 $68,000 以上。CNBC 11/08 另报:比特币曾涨至 $68,521,超过 10 月下旬的前高。",
+   "url": "https://www.cnbc.com/2021/11/10/gold-bitcoin-lead-gains-in-inflation-hedges-following-biggest-cpi-jump-in-3-decades.html",
+   "source": "CNBC",
+   "confidence": "high",
+   "verified": "OK"
+  },
+  {
+   "date": "2022-05-10",
+   "event": "稳定币 TerraUSD 脱锚,比特币跌破 $30,000",
+   "detail": "Reuters 5/10:TerraUSD 单日损失三分之一价值,部分导致比特币十个月来首次跌破 $30,000。",
+   "url": "https://www.reuters.com/business/finance/stablecoin-terras-broken-dollar-peg-hits-wider-crypto-markets-2022-05-10/",
+   "source": "Reuters",
+   "confidence": "high",
+   "verified": "OK"
+  },
+  {
+   "date": "2022-06-13",
+   "event": "Celsius 冻结提现,比特币六月中旬跌破 $20,000",
+   "detail": "Reuters 6/18:比特币一度跌超 13%,跌破 $20,000,为 18 个月来最低;原因包括加密借贷公司 Celsius 冻结提现和账户间转账、行业裁员及风险资产撤退。美联储 6/15 加息 75 个基点,为 1994 年以来最大幅度(CNBC 已读,含该数据)。",
+   "url": "https://www.reuters.com/markets/currencies/bitcoin-drops-65-below-20000-2022-06-18/",
+   "source": "Reuters(另有 CNBC 2022-06-15 美联储报道)",
+   "confidence": "high",
+   "verified": "OK"
+  },
+  {
+   "date": "2022-11-09",
+   "event": "币安退出收购 FTX,FTX 随后申请破产",
+   "detail": "CNBC 11/09:币安称“问题超出我们的控制或帮助能力”,退出收购;FTX 今年早些时候估值 $320 亿。Reuters 11/11:FTX 及约 130 家关联公司申请破产,72 小时内客户提走 $60 亿。比特币 11/22 最低 $15,760 为任务给出的数据,未在页面核实。",
+   "url": "https://www.cnbc.com/2022/11/09/binance-backs-out-of-ftx-rescue-leaving-the-crypto-exchange-on-the-brink-of-collapse.html",
+   "source": "CNBC(另有 Reuters 2022-11-11 破产报道)",
+   "confidence": "high",
+   "verified": "OK"
+  },
+  {
+   "date": "2023-03-10",
+   "event": "硅谷银行倒闭,美国出手保护存款人后加密市场回稳",
+   "detail": "Reuters 3/13:美国当局周日(3/12)宣布紧急措施以限制 SVB 倒闭的影响,主要加密货币企稳,USDC 发行方称其仍可 1:1 兑美元。页面未写“一周 +36%”,该数字未核实。",
+   "url": "https://www.reuters.com/technology/bitcoin-usdc-stablecoin-rally-after-us-intervenes-svb-2023-03-13/",
+   "source": "Reuters",
+   "confidence": "medium",
+   "verified": "OK"
+  },
+  {
+   "date": "2024-01-10",
+   "event": "SEC 批准首批美国现货比特币 ETF",
+   "detail": "Reuters:SEC 批准 11 项申请,包括贝莱德、Ark/21Shares、富达、Invesco、VanEck,多数产品周四(1/11)开始交易。",
+   "url": "https://www.reuters.com/technology/bitcoin-etf-hopefuls-still-expect-sec-approval-despite-social-media-hack-2024-01-10/",
+   "source": "Reuters",
+   "confidence": "high",
+   "verified": "OK"
+  },
+  {
+   "date": "2024-08-05",
+   "event": "日元套利交易平仓引发风险资产抛售",
+   "detail": "CoinDesk 8/5:日元三周内对美元升近 10%,引发套利交易平仓,风险资产抛售;比特币兑日元下跌 15%。",
+   "url": "https://www.coindesk.com/markets/2024/08/05/bitcoin-drops-15-against-japanese-yen-outpacing-declines-versus-usd-as-yen-carry-trades-unwind",
+   "source": "CoinDesk",
+   "confidence": "high",
+   "verified": "OK"
+  },
+  {
+   "date": "2024-11-06",
+   "event": "特朗普赢得美国大选,比特币创纪录",
+   "detail": "CNBC:特朗普击败哈里斯后,比特币涨约 10%,创 $76,493.86 的历史新高(Coin Metrics),理由是放松监管等预期。页面日期为 2024-11-05 URL,事件为 11/5 晚至 11/6 的开票结果。",
+   "url": "https://www.cnbc.com/2024/11/05/bitcoin-crypto-market-election-night.html",
+   "source": "CNBC",
+   "confidence": "high",
+   "verified": "OK"
+  },
+  {
+   "date": "2025-10-05",
+   "event": "比特币创历史新高,突破 $125,000",
+   "detail": "Reuters 10/5:比特币周日创纪录,GMT 05:12 报 $125,245.57,上涨近 2.7%。任务所说 10/7 前后 $124,777 日均价与此吻合。",
+   "url": "https://www.reuters.com/world/asia-pacific/bitcoin-hits-all-time-high-above-125000-2025-10-05/",
+   "source": "Reuters",
+   "confidence": "high",
+   "verified": "OK"
+  },
+  {
+   "date": "2025-10-10",
+   "event": "特朗普宣布对华加征100%关税,加密市场大规模爆仓",
+   "detail": "CoinGecko:10/10 特朗普宣布自 11/1 起对中国进口商品加征 100% 关税,对华关税总计达 130%;未平仓合约约 $2,170 亿,比特币从当日高点 $122,574 下滑。Amberdata 引述:20:50 UTC 起 40 分钟内 $69.3 亿仓位被清算。",
+   "url": "https://www.coingecko.com/learn/october-10-crypto-crash-explained",
+   "source": "CoinGecko",
+   "confidence": "medium",
+   "verified": "OK"
+  }
+ ],
+ "not_found": [
+  {
+   "date": "2012-01-07",
+   "note": "7 日内 +60%：未找到明确触发事件"
+  },
+  {
+   "date": "2018-12-15",
+   "note": "本轮熊市低点 $3,232：未找到明确触发事件"
+  },
+  {
+   "date": "2019-04-02",
+   "note": "30 分钟急升至 $4,900，单日 +18%（CoinDesk 记录价格行为，未给出触发原因）"
+  }
+ ]
+}

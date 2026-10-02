@@ -1386,6 +1386,99 @@ def _gold_oil_html(o):
 
 
 
+def _btc_gold_html(o):
+    """比特币 ÷ 黄金(2010-08 起月度, 对数轴) + 28 条暴涨暴跌事件标注(逐条带出处链接)。"""
+    import math as _m
+    ser = (o or {}).get("rows") or []
+    if len(ser) < 24:
+        err = "；".join((o or {}).get("warnings", [])[:2])
+        return f'<p class="empty">比特币 ÷ 黄金同步中{(("：" + _esc(err)) if err else "")}。</p>'
+    st = o["stats"]; td = o.get("today") or {}
+    evs = [e for e in (o.get("events") or []) if e.get("date") and e.get("event")]
+    nf = (o.get("not_found") or [])
+    W, H, PL, PR, PT, PB = 900, 340, 52, 16, 18, 26
+    iw, ih = W - PL - PR, H - PT - PB
+    n = len(ser)
+    lo, hi = _m.log10(1e-5), _m.log10(60)
+    X = lambda i: PL + iw * i / (n - 1)
+    Y = lambda v: PT + ih * (1 - (_m.log10(max(v, 1.01e-5)) - lo) / (hi - lo))
+    g = ""
+    for v, lab in ((1e-4, "0.0001"), (1e-3, "0.001"), (1e-2, "0.01"), (0.1, "0.1"), (1, "1"), (10, "10")):
+        g += (f'<line x1="{PL}" y1="{Y(v):.1f}" x2="{W-PR}" y2="{Y(v):.1f}" class="sgr-grid"/>'
+              f'<text x="{PL-6}" y="{Y(v)+3.5:.1f}" class="sgr-yt">{lab}</text>')
+    xt = "".join(f'<text x="{X(i):.1f}" y="{H-8}" class="sgr-xt">{x["m"][:4]}</text>'
+                 for i, x in enumerate(ser) if x["m"].endswith("-01") and int(x["m"][:4]) % 2 == 0)
+    pts = " ".join(f"{X(i):.1f},{Y(x['r']):.1f}" for i, x in enumerate(ser))
+    mi = {x["m"]: i for i, x in enumerate(ser)}
+    # 事件标注: 按月落点, 同月多条叠放; 编号对应下方明细表
+    marks = ""; rows_html = ""
+    used = {}; used_i = {}; placed = []
+    for k, e in enumerate(sorted(evs, key=lambda z: z["date"]), 1):
+        m = e["date"][:7]
+        if m not in mi:
+            continue
+        i = mi[m]; used[m] = used.get(m, 0) + 1
+        cx, cy = X(i), Y(ser[i]["r"])
+        # 相邻 3 个月内已有标记 → 轮换高度档位避免数字叠在一起
+        _near = sum(1 for mm, c in used_i.items() if abs(mm - i) <= 3)
+        used_i[i] = used_i.get(i, 0) + 1
+        col = {"high": "#2f6b4f", "medium": "#b07a5a"}.get(e.get("confidence"), "#8a837a")
+        def _clash(tx, ty):
+            return any(((tx - px_) ** 2 + (ty - py_) ** 2) ** .5 < 14 for px_, py_ in placed)
+        off = None
+        for step in range(0, 8):                  # 先向上逐档找空位, 再向下
+            for sign in (-1, 1):
+                cand = sign * (12 + step * 10)
+                ty = cy + cand
+                if PT + 6 <= ty <= H - PB - 4 and not _clash(cx, ty):
+                    off = cand; break
+            if off is not None:
+                break
+        if off is None:
+            off = -12
+        placed.append((cx, cy + off))
+        marks += (f'<line x1="{cx:.1f}" y1="{cy:.1f}" x2="{cx:.1f}" y2="{cy+off+5:.1f}" stroke="{col}" stroke-width=".6" opacity=".6"/>'
+                  f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="2.6" fill="{col}"/>'
+                  f'<circle cx="{cx:.1f}" cy="{cy+off-3:.1f}" r="6.2" fill="#fbfaf7" stroke="{col}" stroke-width=".7"/>'
+                  f'<text x="{cx:.1f}" y="{cy+off:.1f}" class="btcg-n" fill="{col}">{k}</text>')
+        px = e.get("btc_px")
+        rows_html += (f'<tr><td class="btcg-no" style="color:{col}">{k}</td><td>{_esc(e["date"])}</td>'
+                      f'<td><b>{_esc(e["event"])}</b><br><span class="btcg-d">{_esc(e.get("detail",""))}</span></td>'
+                      f'<td>{"$" + format(px, ",.0f") if px and px >= 100 else ("$" + format(px, ",.2f") if px else "—")}</td>'
+                      f'<td><a href="{_esc(e.get("url",""))}" target="_blank" rel="noopener">{_esc(e.get("source","出处"))}</a></td></tr>')
+    tips = [_esc(x["m"]) + "||" + _esc(f"1 比特币 ≈ {x['r']:.4g} 盎司黄金") + "<br>" +
+            _esc(f"BTC ${x['btc']:,.2f} · 黄金 ${x['gold']:,.0f}/盎司（月均）") +
+            "".join("<br>" + _esc("▸ " + e["date"] + " " + e["event"]) for e in evs if e["date"][:7] == x["m"])
+            for x in ser]
+    band = _hover_bands([X(i) for i in range(n)], tips, PT, ih, PL, W - PR)
+    warn = f'<p class="sgr-warn">⚠ {_esc("；".join(o["warnings"][:2]))}</p>' if o.get("warnings") else ""
+    nf_html = ("；".join(f'{_esc(z["date"])} {_esc(z["note"])}' for z in nf))
+    peak = o.get("btc_peak") or ("", 0)
+    cur = td.get("ratio") or ser[-1]["r"]
+    return f"""
+<div class="tfs-wrap btcg-wrap">
+  {warn}
+  <div class="sgr-stat">
+    <span>今日 <b>{cur:.1f} 盎司</b><i>{_esc(td.get('date',''))} · BTC ${td.get('btc',0):,.0f} / 黄金 ${td.get('gold') or 0:,.0f}</i></span>
+    <span>历史最高 <b>{st['max']:.1f}</b><i>{_esc(st['max_m'])} 月均（与当前相差 {cur/st['max']*100-100:+.0f}%）</i></span>
+    <span>历史分位 <b>{st['pct_rank']:.0f}%</b><i>2010-08 起 {st['n']} 个月</i></span>
+    <span>价格高点 <b>${peak[1]:,.0f}</b><i>{_esc(peak[0])}（blockchain.com 日均价）</i></span>
+  </div>
+  <svg viewBox="0 0 {W} {H}" class="sgr-chart" preserveAspectRatio="xMidYMid meet">{g}
+    <polyline points="{pts}" fill="none" stroke="#1f3a68" stroke-width="1.5"/>{xt}{marks}{band}</svg>
+  <div class="sgr-title">暴涨暴跌时点的事件（{len(evs)} 条，编号对应图上标记）</div>
+  <div class="btcg-legend"><i style="background:#2f6b4f"></i>多方来源或原文已核验 <i style="background:#b07a5a"></i>出处可读，部分数字未能逐字核对</div>
+  <table class="btcg-tab"><thead><tr><th>#</th><th>日期</th><th>事件与价格</th><th>当日 BTC</th><th>出处</th></tr></thead><tbody>{rows_html}</tbody></table>
+  <div class="sgr-foot">
+    纵轴为对数：1 个比特币 ＝ 多少盎司黄金。比特币：blockchain.com 市场均价（美元，日度，2010-08-18 起首次有价），月内取均值；
+    黄金：伦敦金月均价（与金油比、股金比同底表），当月用 COMEX 期货日收盘均值。「今日」取两者都有报价的最近一天。<br>
+    事件为「价格先行」：先从价格找出转折点与极端涨跌日，再联网检索当日新闻，每条出处都经 web_extract 独立读取核验；只陈述事件和价格变化，不下因果结论。
+    未找到明确触发事件的异动日：{nf_html or "无"}。<br>
+    早期（2010–2013）比特币成交量极小、各交易所价差大，数值仅供参考；blockchain.com 与 FRED（Coinbase）重叠期中位偏差 1.5%。随 dashboard 每日更新，事件清单每周人工复核。
+  </div>
+</div>"""
+
+
 def _us_freight_html(o):
     """美国货运: 铁路周度(AAR, 10 类商品 + 联运, 按钮筛选 + 周/4周均线切换) + 公路月度(ATA 吨位 / Cass 发货量)。"""
     import json as _json
@@ -2250,7 +2343,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -2493,6 +2586,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         llm_token_html=_llm_token_html(llm_token),
         ai_capex_html=_ai_capex_html(ai_capex),
         gold_oil_html=_gold_oil_html(gold_oil),
+        btc_gold_html=_btc_gold_html(btc_gold),
         us_freight_html=_us_freight_html(us_freight),
         ust_micro_html=_ust_micro_html(ust_micro),
         dxy_gold_html=_dxy_gold_html(dxy_gold),
@@ -9773,6 +9867,13 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .sgr-lab{{font-size:10px;fill:#4a443c}}
 .sgr-foot{{font-size:11px;color:#8a837a;margin-top:10px;line-height:1.6}}
 .sgr-warn{{font-size:12px;color:#8e3b30;margin:0 0 6px}}
+.btcg-n{{font-size:9px;font-weight:700;text-anchor:middle}}
+.btcg-legend{{font-size:11px;color:#8a837a;margin:2px 0 6px}}.btcg-legend i{{display:inline-block;width:9px;height:9px;border-radius:50%;margin:0 4px 0 10px;vertical-align:-1px}}
+.btcg-tab{{width:100%;border-collapse:collapse;font-size:12px;margin-top:4px}}
+.btcg-tab th{{text-align:left;color:#8a837a;font-weight:600;padding:4px 6px;border-bottom:1px solid #e5e1da}}
+.btcg-tab td{{padding:6px;border-bottom:1px solid #f0ede7;vertical-align:top;color:#4a443c}}
+.btcg-no{{font-weight:700;width:26px}}.btcg-tab td:nth-child(2){{white-space:nowrap;width:84px}}.btcg-tab td:nth-child(4){{white-space:nowrap}}.btcg-wrap{{padding:0 6px}}.btcg-d{{color:#8a837a;font-size:11px}}.btcg-tab a{{color:#1f3a68;text-decoration:none}}
+
 .wrs-wrap{{margin:6px 0}}
 .wrs-head{{margin-bottom:10px}}
 .wrs-title{{font-size:15px;font-weight:700;color:#4a443c;display:flex;align-items:center;gap:10px;flex-wrap:wrap}}
@@ -10664,6 +10765,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ 金油比 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>金油比 · 黄金 ÷ WTI 原油 (1971 起 · 月度 · 对数轴)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{gold_oil_html}</div>
+  <!-- ━━━ 比特币 ÷ 黄金 ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>比特币 ÷ 黄金 · 暴涨暴跌与事件 (2010 起 · 月度 · 对数轴)<span class="freq-badge freq-daily">日更</span></div>
+  <div class="card">{btc_gold_html}</div>
   <!-- ━━━ 道指/标普 ÷ 黄金 50 年比值 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>股指 ÷ 黄金 · 50 年比值 (道指÷金价 · 标普500÷金价 · 月度对数坐标 · 1976 年至今)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{stock_gold_html}</div>
