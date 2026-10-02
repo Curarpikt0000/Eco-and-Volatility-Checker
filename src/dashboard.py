@@ -1027,77 +1027,41 @@ def _wrs_html(w):
 
 
 def _stock_gold_html(o):
-    """道指÷黄金 · 标普500÷黄金 50 年月度比值(对数坐标)。每点悬停显示 月份 + 比值 + 股指/金价。"""
-    import math
+    """道指÷黄金 · 标普500÷黄金 50 年月度比值(对数坐标)。页内 JS 绘制(数据内嵌 JSON), 带时间段选取:
+    切换只替换 SVG 内容、容器高度固定 → 不改变页面布局, 左侧菜单与右侧图不跳动。统计量随所选区间重算。"""
+    import json as _json
     if not o or not o.get("rows"):
         err = "；".join((o or {}).get("warnings", [])[:2])
-        return f'<p class="empty">股指/黄金比值数据同步中{("：" + _esc(err)) if err else ""}。</p>'
-    rows = o["rows"]
-    td = o.get("today") or {}
-    W, H, PL, PR, PT, PB = 900, 230, 48, 16, 12, 24
-    iw, ih = W - PL - PR, H - PT - PB
-    n = len(rows)
-
-    def X(i): return PL + iw * i / max(n - 1, 1)
-
-    def panel(key, name, color, today_v, today_date, fmt, ticks):
-        vals = [r[key] for r in rows]
-        lo, hi = math.log10(min(vals) / 1.25), math.log10(max(vals) * 1.25)
-
-        def Y(v): return PT + ih * (1 - (math.log10(v) - lo) / (hi - lo))
-        st = o[key]
-        pts = " ".join(f"{X(i):.1f},{Y(v):.1f}" for i, v in enumerate(vals))
-        g = ""
-        for t in ticks:
-            if min(vals) / 1.25 <= t <= max(vals) * 1.25:
-                g += (f'<line x1="{PL}" y1="{Y(t):.1f}" x2="{W-PR}" y2="{Y(t):.1f}" class="sgr-grid"/>'
-                      f'<text x="{PL-6}" y="{Y(t)+3.5:.1f}" class="sgr-yt">{t:g}</text>')
-        med = st["median"]
-        g += (f'<line x1="{PL}" y1="{Y(med):.1f}" x2="{W-PR}" y2="{Y(med):.1f}" class="sgr-med"/>'
-              f'<text x="{PL+4}" y="{Y(med)-4:.1f}" class="sgr-medt">50 年中位数 {fmt(med)}</text>')
-        xt = ""
-        for i, r in enumerate(rows):
-            if r["m"].endswith("-01") and int(r["m"][:4]) % 5 == 0:
-                xt += f'<text x="{X(i):.1f}" y="{H-6}" class="sgr-xt">{r["m"][:4]}</text>'
-        marks = ""
-        for m_key, lab in (("max_m", "峰值"), ("min_m", "谷底")):
-            i = next(k for k, r in enumerate(rows) if r["m"] == st[m_key])
-            marks += (f'<circle cx="{X(i):.1f}" cy="{Y(vals[i]):.1f}" r="3" fill="{color}"/>'
-                      f'<text x="{X(i)+7:.1f}" y="{Y(vals[i])+4:.1f}" class="sgr-lab">{rows[i]["m"]} {fmt(vals[i])}</text>')
-        marks += f'<circle cx="{X(n-1):.1f}" cy="{Y(vals[-1]):.1f}" r="3.8" fill="{color}" stroke="#fff" stroke-width="1.2"/>'
-        tips = []
-        for r in rows:
-            gl = "伦敦金月均" if r["src"] == "base" else "COMEX 期金当月均"
-            idx = f'道指 {r["dow"]:,.0f}' if key == "dg" else f'标普 {r["spx"]:,.0f}'
-            tips.append(_esc(f'{r["m"]}') + "||" + _esc(f'{name} {fmt(r[key])}') + "<br>" +
-                        _esc(f'{idx} ÷ 金价 ${r["gold"]:,.0f}（{gl}）'))
-        band = _hover_bands([X(i) for i in range(n)], tips, PT, ih, PL, W - PR)
-        stat = (f'<div class="sgr-stat"><span>今日 <b>{fmt(today_v)}</b><i>{_esc(today_date)} 收盘</i></span>'
-                f'<span>50 年分位 <b>{st["pct_rank"]}%</b><i>1976 年至今 {n} 个月</i></span>'
-                f'<span>峰值 <b>{fmt(st["max"])}</b><i>{st["max_m"]}</i></span>'
-                f'<span>谷底 <b>{fmt(st["min"])}</b><i>{st["min_m"]}</i></span></div>')
-        return (f'<div class="sgr-title">{name}</div>{stat}'
-                f'<svg viewBox="0 0 {W} {H}" class="sgr-chart" preserveAspectRatio="xMidYMid meet">'
-                f'{g}<polyline points="{pts}" fill="none" stroke="{color}" stroke-width="1.5"/>{marks}{xt}{band}</svg>')
-
-    f1 = lambda v: f"{v:.1f}"
-    f2 = lambda v: f"{v:.2f}"
-    dg_today = td.get("dow_gold", o["dg"]["latest_month"])
-    sg_today = td.get("spx_gold", o["sg"]["latest_month"])
-    warn = ""
-    if o.get("warnings"):
-        warn = f'<p class="sgr-warn">⚠ {_esc("；".join(o["warnings"][:2]))}</p>'
+        return f'<p class="empty">股指/黄金比值数据同步中{(chr(0xff1a) + _esc(err)) if err else ""}。</p>'
+    rows = o["rows"]; td = o.get("today") or {}
+    data = {"r": [[r["m"], r["dow"], r["spx"], r["gold"], r["dg"], r["sg"], 0 if r["src"] == "base" else 1] for r in rows],
+            "td": {"dg": td.get("dow_gold", o["dg"]["latest_month"]), "dgd": td.get("dow_date", rows[-1]["m"]),
+                   "sg": td.get("spx_gold", o["sg"]["latest_month"]), "sgd": td.get("spx_date", rows[-1]["m"])}}
+    js = _json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    warn = f'<p class="sgr-warn">⚠ {_esc("；".join(o["warnings"][:2]))}</p>' if o.get("warnings") else ""
     return f"""
-<div class="sgr-wrap">
+<div class="sgr-wrap" id="sgz">
   {warn}
-  {panel("dg", "道琼斯工业指数 ÷ 黄金", "#4a6fa5", dg_today, td.get("dow_date", rows[-1]["m"]), f1, [1, 2, 5, 10, 20, 50])}
-  {panel("sg", "标普 500 ÷ 黄金", "#7a8f5a", sg_today, td.get("spx_date", rows[-1]["m"]), f2, [0.1, 0.2, 0.5, 1, 2, 5])}
+  <div class="sgz-ctl">
+    <span class="sgz-lab">时间段</span>
+    <button type="button" class="sgz-r" data-y="5">5 年</button><button type="button" class="sgz-r" data-y="10">10 年</button>
+    <button type="button" class="sgz-r" data-y="20">20 年</button><button type="button" class="sgz-r" data-y="30">30 年</button>
+    <button type="button" class="sgz-r on" data-y="0">全部</button>
+    <span class="sgz-sep"></span>
+    <label class="sgz-lab" lang="zh-CN">自选 <input type="month" id="sgz-from" min="1976-01" lang="zh-CN"> 至 <input type="month" id="sgz-to" lang="zh-CN"></label>
+    <button type="button" id="sgz-go">应用</button>
+    <span class="sgz-sep"></span>
+    <label class="sgz-chk"><input type="checkbox" data-s="dg" checked><i style="background:#4a6fa5"></i>道指÷黄金</label>
+    <label class="sgz-chk"><input type="checkbox" data-s="sg" checked><i style="background:#7a8f5a"></i>标普500÷黄金</label>
+  </div>
+  <div id="sgz-panels"></div>
   <div class="sgr-foot">
     比值＝指数点 ÷ 金价（美元/盎司），对数坐标；比值越低＝股票相对黄金越便宜。月度序列：股指取月末收盘，
     黄金取当月均价（1976-01 至 2026-08 为伦敦金月均价，之后为 COMEX 期金当月日收盘均值）；
-    「今日」＝最新股指收盘 ÷ 同日期金收盘。数据：道指 1976–1991 fja05680/dow-sp500-100-years，
-    1992 起 Yahoo ^DJI；标普 Yahoo ^GSPC；黄金 datasets/gold-prices（LBMA）+ Yahoo GC=F。随 dashboard 每日更新。
+    「今日」＝最新股指收盘 ÷ 同日期金收盘。<b>中位数、峰值、谷底、分位都按所选时间段重算</b>（选 5 年就是这 5 年里的中位数与分位，不是 50 年的）。
+    数据：道指 1976–1991 fja05680/dow-sp500-100-years，1992 起 Yahoo ^DJI；标普 Yahoo ^GSPC；黄金 datasets/gold-prices（LBMA）+ Yahoo GC=F。随 dashboard 每日更新。
   </div>
+  <script type="application/json" id="sgz-data">{js}</script>
 </div>"""
 
 
@@ -9838,6 +9802,17 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .sgr-yt{{font-size:10px;fill:#8a837a;text-anchor:end}}
 .sgr-xt{{font-size:10px;fill:#8a837a;text-anchor:middle}}
 .sgr-lab{{font-size:10px;fill:#4a443c}}
+.sgz-ctl{{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:4px 0 8px;min-height:30px;padding:0 6px}}.sgz-p,.sgz-st{{padding:0 6px;box-sizing:border-box}}
+.sgz-ctl button{{font-size:11.5px;padding:3px 9px;border:1px solid #cfc7ba;background:#f6f2ec;color:#5a534a;border-radius:12px;cursor:pointer}}
+.sgz-ctl button.on{{background:#1f3a68;border-color:#1f3a68;color:#fff}}
+.sgz-lab{{font-size:11.5px;color:#8a837a}}.sgz-sep{{width:12px}}
+.sgz-ctl input[type=month]{{font-size:11.5px;padding:2px 4px;border:1px solid #cfc7ba;border-radius:6px;background:#fbfaf7;color:#4a443c;width:118px}}
+.sgz-chk{{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;color:#5a534a;cursor:pointer;user-select:none}}
+.sgz-chk i{{display:inline-block;width:14px;height:3px;border-radius:2px}}
+#sgz-panels{{height:640px;contain:layout paint;overflow:hidden}}
+.sgz-p{{height:300px}}.sgz-p svg{{width:100%;height:230px;display:block}}
+.sgz-st{{display:flex;gap:22px;flex-wrap:wrap;font-size:12px;color:#6b645a;height:34px;overflow:hidden}}
+.sgz-st b{{font-size:15px;color:#3d372f;margin:0 3px}}.sgz-st i{{font-style:normal;color:#9a9288;font-size:11px}}
 .sgr-foot{{font-size:11px;color:#8a837a;margin-top:10px;line-height:1.6}}
 .sgr-warn{{font-size:12px;color:#8e3b30;margin:0 0 6px}}
 .btcg-n{{font-size:9px;font-weight:700;text-anchor:middle}}
@@ -11434,6 +11409,71 @@ mkRadar('rLong', RADAR.long);
   renderRail(); renderRoad(); renderCost();
 }})();
 
+
+/* ── 股指÷黄金: 时间段选取 (固定容器高度, 重绘只换 SVG 内容, 统计量按区间重算) ── */
+(function() {{
+  var el = document.getElementById('sgz-data'); if (!el) return;
+  var D = JSON.parse(el.textContent), R = D.r, box = document.getElementById('sgz-panels');
+  var W = 900, H = 230, PL = 48, PR = 16, PT = 12, PB = 24, iw = W - PL - PR, ih = H - PT - PB;
+  var KEYS = {{dg: {{i: 4, name: '道琼斯工业指数 ÷ 黄金', col: '#4a6fa5', ticks: [1,2,5,10,20,50], d: 1, idx: 1, idxn: '道指'}},
+               sg: {{i: 5, name: '标普 500 ÷ 黄金', col: '#7a8f5a', ticks: [0.1,0.2,0.5,1,2,5], d: 2, idx: 2, idxn: '标普'}}}};
+  var st = {{from: R[0][0], to: R[R.length-1][0], show: {{dg: 1, sg: 1}}}};
+  function mAdd(m, k) {{ var y = +m.slice(0,4), mo = +m.slice(5,7) - 1 + k; y += Math.floor(mo/12); mo = ((mo%12)+12)%12; return y + '-' + ('0'+(mo+1)).slice(-2); }}
+  function fmt(v, d) {{ return v.toFixed(d); }}
+  function f0(v) {{ return Math.round(v).toLocaleString('en-US'); }}
+  function median(a) {{ var b = a.slice().sort(function(x,y){{return x-y;}}), n = b.length; return n % 2 ? b[(n-1)/2] : (b[n/2-1] + b[n/2]) / 2; }}
+  function panel(key) {{
+    var K = KEYS[key], rows = R.filter(function(r) {{ return r[0] >= st.from && r[0] <= st.to; }});
+    if (rows.length < 2) rows = R.slice(-2);
+    var n = rows.length, vals = rows.map(function(r) {{ return r[K.i]; }});
+    var X = function(i) {{ return PL + iw * i / Math.max(n-1, 1); }};
+    var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals);
+    var lo = Math.log10(mn / 1.25), hi = Math.log10(mx * 1.25);
+    var Y = function(v) {{ return PT + ih * (1 - (Math.log10(v) - lo) / (hi - lo)); }};
+    var med = median(vals), cur = (key === 'dg' ? D.td.dg : D.td.sg);
+    var pct = Math.round(vals.filter(function(v) {{ return v <= cur; }}).length / n * 1000) / 10;
+    var imx = vals.indexOf(mx), imn = vals.indexOf(mn);
+    var g = '';
+    // 纵轴刻度: 区间内所有 1/2/5 × 10^k, 避免短区间没有刻度
+    var ts = []; for (var e = Math.floor(lo) - 1; e <= Math.ceil(hi); e++) [1,1.5,2,3,4,5,7].forEach(function(m) {{ ts.push(m * Math.pow(10, e)); }});
+    var lastY = -99; ts.sort(function(a,b){{return b-a;}});
+    ts.forEach(function(t) {{ if (!(t >= mn/1.25 && t <= mx*1.25)) return; if (Math.abs(Y(t) - lastY) < 22) return; lastY = Y(t); g += '<line x1="'+PL+'" y1="'+Y(t).toFixed(1)+'" x2="'+(W-PR)+'" y2="'+Y(t).toFixed(1)+'" class="sgr-grid"/><text x="'+(PL-6)+'" y="'+(Y(t)+3.5).toFixed(1)+'" class="sgr-yt">'+(+t.toPrecision(2))+'</text>'; }});
+    g += '<line x1="'+PL+'" y1="'+Y(med).toFixed(1)+'" x2="'+(W-PR)+'" y2="'+Y(med).toFixed(1)+'" class="sgr-med"/><text x="'+(W-PR-4)+'" y="'+(Y(med)-4).toFixed(1)+'" class="sgr-medt" style="text-anchor:end">所选区间中位数 '+fmt(med, K.d)+'</text>';
+    var span = n, step = span > 240 ? 60 : span > 120 ? 24 : span > 48 ? 12 : span > 18 ? 6 : 3, xt = '';
+    rows.forEach(function(r, i) {{ var mo = +r[0].slice(5,7) - 1, y = +r[0].slice(0,4);
+      var ok = step >= 12 ? (mo === 0 && y % (step/12) === 0) : (mo % step === 0);
+      if (ok) xt += '<text x="'+X(i).toFixed(1)+'" y="'+(H-6)+'" class="sgr-xt">'+(step >= 12 ? y : r[0])+'</text>'; }});
+    var pts = vals.map(function(v, i) {{ return X(i).toFixed(1)+','+Y(v).toFixed(1); }}).join(' ');
+    var marks = '';
+    [[imx, '峰值'], [imn, '谷底']].forEach(function(a) {{ var i = a[0], right = X(i) < W - 150;
+      marks += '<circle cx="'+X(i).toFixed(1)+'" cy="'+Y(vals[i]).toFixed(1)+'" r="3" fill="'+K.col+'"/><text x="'+(right ? X(i)+7 : X(i)-7).toFixed(1)+'" y="'+(Y(vals[i])+4).toFixed(1)+'" class="sgr-lab" style="text-anchor:'+(right?'start':'end')+'">'+rows[i][0]+' '+fmt(vals[i], K.d)+'</text>'; }});
+    marks += '<circle cx="'+X(n-1).toFixed(1)+'" cy="'+Y(cur).toFixed(1)+'" r="3.8" fill="'+K.col+'" stroke="#fff" stroke-width="1.2"/>';
+    var bands = '';
+    rows.forEach(function(r, i) {{ var l = i ? (X(i-1)+X(i))/2 : PL, rr = i < n-1 ? (X(i)+X(i+1))/2 : W-PR;
+      var gl = r[6] ? 'COMEX 期金当月均' : '伦敦金月均';
+      var tip = r[0]+'||'+K.name+' '+fmt(r[K.i], K.d)+'<br>'+K.idxn+' '+f0(r[K.idx])+' ÷ 金价 $'+f0(r[3])+'（'+gl+'）';
+      bands += '<rect x="'+l.toFixed(1)+'" y="'+PT+'" width="'+Math.max(rr-l,.6).toFixed(2)+'" height="'+ih+'" fill="transparent" data-tip="'+tip+'"/>'; }});
+    var today = key === 'dg' ? [D.td.dg, D.td.dgd] : [D.td.sg, D.td.sgd];
+    var stat = '<div class="sgz-st"><span>今日 <b>'+fmt(today[0], K.d)+'</b><i>'+today[1]+' 收盘</i></span>'
+      +'<span>区间分位 <b>'+pct+'%</b><i>'+rows[0][0]+' 至 '+rows[n-1][0]+' 共 '+n+' 个月</i></span>'
+      +'<span>区间峰值 <b>'+fmt(mx, K.d)+'</b><i>'+rows[imx][0]+'</i></span><span>区间谷底 <b>'+fmt(mn, K.d)+'</b><i>'+rows[imn][0]+'</i></span></div>';
+    return '<div class="sgz-p"><div class="sgr-title">'+K.name+'</div>'+stat+'<svg viewBox="0 0 '+W+' '+H+'" class="sgr-chart" preserveAspectRatio="xMidYMid meet">'+g+'<polyline points="'+pts+'" fill="none" stroke="'+K.col+'" stroke-width="1.5"/>'+marks+xt+bands+'</svg></div>';
+  }}
+  function render() {{ var h = ''; ['dg','sg'].forEach(function(k) {{ if (st.show[k]) h += panel(k); }}); box.innerHTML = h; }}
+  function setRange(f, t) {{ st.from = f; st.to = t; render(); }}
+  var LAST = R[R.length-1][0], FIRST = R[0][0];
+  Array.prototype.forEach.call(document.querySelectorAll('.sgz-r'), function(b) {{ b.addEventListener('click', function() {{
+    Array.prototype.forEach.call(document.querySelectorAll('.sgz-r'), function(x) {{ x.classList.remove('on'); }}); b.classList.add('on');
+    var y = +b.getAttribute('data-y'); setRange(y ? (mAdd(LAST, -12*y) < FIRST ? FIRST : mAdd(LAST, -12*y)) : FIRST, LAST);
+    document.getElementById('sgz-from').value = ''; document.getElementById('sgz-to').value = ''; }}); }});
+  document.getElementById('sgz-go').addEventListener('click', function() {{
+    var f = document.getElementById('sgz-from').value || FIRST, t = document.getElementById('sgz-to').value || LAST;
+    if (f > t) {{ var x = f; f = t; t = x; }} if (f < FIRST) f = FIRST; if (t > LAST) t = LAST;
+    Array.prototype.forEach.call(document.querySelectorAll('.sgz-r'), function(x) {{ x.classList.remove('on'); }}); setRange(f, t); }});
+  Array.prototype.forEach.call(document.querySelectorAll('.sgz-chk input'), function(c) {{ c.addEventListener('change', function() {{
+    var k = c.getAttribute('data-s'); st.show[k] = c.checked ? 1 : 0; if (!st.show.dg && !st.show.sg) {{ st.show[k] = 1; c.checked = true; }} render(); }}); }});
+  render();
+}})();
 /* ── 比特币 ÷ 黄金: 时间段 + 三条线 + 事件 (固定容器高度, 重绘只换 SVG 内容, 不触发布局位移) ── */
 (function() {{
   var el = document.getElementById('btcg-data'); if (!el) return;
