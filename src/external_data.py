@@ -8771,6 +8771,21 @@ def fetch_btc_gold_ratio(base_path=None, events_path=None, cache_path=None):
         except Exception as e:
             out["warnings"].append(f"事件清单缺失: {type(e).__name__}")
         out["events"] = ev
+        # 叠加线(用户 2026-10-02 加): ① 全球货币供应量=五大经济体 M2/M3 折美元聚合(万亿美元, 复用既有 fetcher)
+        #                            ② 美国联邦政府债务总额=FRED GFDEBTN(季度, 百万美元→万亿美元)
+        out["overlay"] = {"m2": [], "debt": [], "warnings": []}
+        try:
+            _g = fetch_global_money_supply()
+            out["overlay"]["m2"] = [{"m": x["m"], "v": x["total"], "n": x.get("n_cty")} for x in _g.get("series", []) if x.get("total") is not None]
+            if _g.get("status") != "ok":
+                out["overlay"]["warnings"].append("全球 M2 来源状态: " + str(_g.get("status")))
+        except Exception as e:
+            out["overlay"]["warnings"].append(f"全球 M2 失败: {type(e).__name__}")
+        try:
+            _d = [(d, v) for d, v in _fred_series_hist("GFDEBTN", "1996-01-01") if v is not None]
+            out["overlay"]["debt"] = [{"m": d[:7], "v": round(v / 1e6, 4)} for d, v in _d]   # 百万美元 → 万亿美元
+        except Exception as e:
+            out["overlay"]["warnings"].append(f"美国联邦债务失败: {type(e).__name__}")
         td = gold_today_d or max(btc)
         out["today"] = {"date": td, "btc": round(btc[td], 2), "gold": round(gold_today, 2) if gold_today else None,
                         "ratio": round(btc[td] / gold_today, 3) if gold_today else None}

@@ -1387,95 +1387,68 @@ def _gold_oil_html(o):
 
 
 def _btc_gold_html(o):
-    """比特币 ÷ 黄金(2010-08 起月度, 对数轴) + 28 条暴涨暴跌事件标注(逐条带出处链接)。"""
-    import math as _m
+    """比特币 ÷ 黄金(2010-08 起月度) + 全球货币供应 + 美国联邦债务 + 28 条事件标注。
+    图由页内 JS 绘制(数据内嵌 JSON): 时间段切换只替换 SVG 内容、容器高度固定 → 不改变页面布局, 不会引起侧栏/右侧跳动。"""
+    import json as _json
     ser = (o or {}).get("rows") or []
     if len(ser) < 24:
         err = "；".join((o or {}).get("warnings", [])[:2])
         return f'<p class="empty">比特币 ÷ 黄金同步中{(("：" + _esc(err)) if err else "")}。</p>'
     st = o["stats"]; td = o.get("today") or {}
-    evs = [e for e in (o.get("events") or []) if e.get("date") and e.get("event")]
+    evs = sorted([e for e in (o.get("events") or []) if e.get("date") and e.get("event")], key=lambda z: z["date"])
     nf = (o.get("not_found") or [])
-    W, H, PL, PR, PT, PB = 900, 340, 52, 16, 18, 26
-    iw, ih = W - PL - PR, H - PT - PB
-    n = len(ser)
-    lo, hi = _m.log10(1e-5), _m.log10(60)
-    X = lambda i: PL + iw * i / (n - 1)
-    Y = lambda v: PT + ih * (1 - (_m.log10(max(v, 1.01e-5)) - lo) / (hi - lo))
-    g = ""
-    for v, lab in ((1e-4, "0.0001"), (1e-3, "0.001"), (1e-2, "0.01"), (0.1, "0.1"), (1, "1"), (10, "10")):
-        g += (f'<line x1="{PL}" y1="{Y(v):.1f}" x2="{W-PR}" y2="{Y(v):.1f}" class="sgr-grid"/>'
-              f'<text x="{PL-6}" y="{Y(v)+3.5:.1f}" class="sgr-yt">{lab}</text>')
-    xt = "".join(f'<text x="{X(i):.1f}" y="{H-8}" class="sgr-xt">{x["m"][:4]}</text>'
-                 for i, x in enumerate(ser) if x["m"].endswith("-01") and int(x["m"][:4]) % 2 == 0)
-    pts = " ".join(f"{X(i):.1f},{Y(x['r']):.1f}" for i, x in enumerate(ser))
-    mi = {x["m"]: i for i, x in enumerate(ser)}
-    # 事件标注: 按月落点, 同月多条叠放; 编号对应下方明细表
-    marks = ""; rows_html = ""
-    used = {}; used_i = {}; placed = []
-    for k, e in enumerate(sorted(evs, key=lambda z: z["date"]), 1):
-        m = e["date"][:7]
-        if m not in mi:
-            continue
-        i = mi[m]; used[m] = used.get(m, 0) + 1
-        cx, cy = X(i), Y(ser[i]["r"])
-        # 相邻 3 个月内已有标记 → 轮换高度档位避免数字叠在一起
-        _near = sum(1 for mm, c in used_i.items() if abs(mm - i) <= 3)
-        used_i[i] = used_i.get(i, 0) + 1
-        col = {"high": "#2f6b4f", "medium": "#b07a5a"}.get(e.get("confidence"), "#8a837a")
-        def _clash(tx, ty):
-            return any(((tx - px_) ** 2 + (ty - py_) ** 2) ** .5 < 14 for px_, py_ in placed)
-        off = None
-        for step in range(0, 8):                  # 先向上逐档找空位, 再向下
-            for sign in (-1, 1):
-                cand = sign * (12 + step * 10)
-                ty = cy + cand
-                if PT + 6 <= ty <= H - PB - 4 and not _clash(cx, ty):
-                    off = cand; break
-            if off is not None:
-                break
-        if off is None:
-            off = -12
-        placed.append((cx, cy + off))
-        marks += (f'<line x1="{cx:.1f}" y1="{cy:.1f}" x2="{cx:.1f}" y2="{cy+off+5:.1f}" stroke="{col}" stroke-width=".6" opacity=".6"/>'
-                  f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="2.6" fill="{col}"/>'
-                  f'<circle cx="{cx:.1f}" cy="{cy+off-3:.1f}" r="6.2" fill="#fbfaf7" stroke="{col}" stroke-width=".7"/>'
-                  f'<text x="{cx:.1f}" y="{cy+off:.1f}" class="btcg-n" fill="{col}">{k}</text>')
-        px = e.get("btc_px")
-        rows_html += (f'<tr><td class="btcg-no" style="color:{col}">{k}</td><td>{_esc(e["date"])}</td>'
-                      f'<td><b>{_esc(e["event"])}</b><br><span class="btcg-d">{_esc(e.get("detail",""))}</span></td>'
-                      f'<td>{"$" + format(px, ",.0f") if px and px >= 100 else ("$" + format(px, ",.2f") if px else "—")}</td>'
-                      f'<td><a href="{_esc(e.get("url",""))}" target="_blank" rel="noopener">{_esc(e.get("source","出处"))}</a></td></tr>')
-    tips = [_esc(x["m"]) + "||" + _esc(f"1 比特币 ≈ {x['r']:.4g} 盎司黄金") + "<br>" +
-            _esc(f"BTC ${x['btc']:,.2f} · 黄金 ${x['gold']:,.0f}/盎司（月均）") +
-            "".join("<br>" + _esc("▸ " + e["date"] + " " + e["event"]) for e in evs if e["date"][:7] == x["m"])
-            for x in ser]
-    band = _hover_bands([X(i) for i in range(n)], tips, PT, ih, PL, W - PR)
-    warn = f'<p class="sgr-warn">⚠ {_esc("；".join(o["warnings"][:2]))}</p>' if o.get("warnings") else ""
-    nf_html = ("；".join(f'{_esc(z["date"])} {_esc(z["note"])}' for z in nf))
+    ov = o.get("overlay") or {}
+    data = {"r": [[x["m"], x["r"], x["btc"], x["gold"]] for x in ser],
+            "m2": [[x["m"], x["v"], x.get("n")] for x in ov.get("m2", [])],
+            "debt": [[x["m"], x["v"]] for x in ov.get("debt", [])],
+            "ev": [{"d": e["date"], "t": e["event"], "x": e.get("detail", ""), "u": e.get("url", ""), "s": e.get("source", ""),
+                    "c": e.get("confidence", ""), "p": e.get("btc_px")} for e in evs]}
+    js = _json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    warn_l = list(o.get("warnings", [])) + list(ov.get("warnings", []))
+    warn = f'<p class="sgr-warn">⚠ {_esc("；".join(warn_l[:3]))}</p>' if warn_l else ""
+    nf_html = "；".join(f'{_esc(z["date"])} {_esc(z["note"])}' for z in nf)
     peak = o.get("btc_peak") or ("", 0)
     cur = td.get("ratio") or ser[-1]["r"]
+    m2l = ov.get("m2", [{}])[-1] if ov.get("m2") else {}
+    dl = ov.get("debt", [{}])[-1] if ov.get("debt") else {}
     return f"""
-<div class="tfs-wrap btcg-wrap">
+<div class="tfs-wrap btcg-wrap" id="btcg">
   {warn}
   <div class="sgr-stat">
     <span>今日 <b>{cur:.1f} 盎司</b><i>{_esc(td.get('date',''))} · BTC ${td.get('btc',0):,.0f} / 黄金 ${td.get('gold') or 0:,.0f}</i></span>
     <span>历史最高 <b>{st['max']:.1f}</b><i>{_esc(st['max_m'])} 月均（与当前相差 {cur/st['max']*100-100:+.0f}%）</i></span>
-    <span>历史分位 <b>{st['pct_rank']:.0f}%</b><i>2010-08 起 {st['n']} 个月</i></span>
-    <span>价格高点 <b>${peak[1]:,.0f}</b><i>{_esc(peak[0])}（blockchain.com 日均价）</i></span>
+    <span>全球货币供应 <b>{m2l.get('v', 0):.1f} 万亿$</b><i>{_esc(m2l.get('m',''))} · 五大经济体 M2/M3 折美元</i></span>
+    <span>美国联邦债务 <b>{dl.get('v', 0):.1f} 万亿$</b><i>{_esc(dl.get('m',''))} · FRED GFDEBTN（季度）</i></span>
   </div>
-  <svg viewBox="0 0 {W} {H}" class="sgr-chart" preserveAspectRatio="xMidYMid meet">{g}
-    <polyline points="{pts}" fill="none" stroke="#1f3a68" stroke-width="1.5"/>{xt}{marks}{band}</svg>
-  <div class="sgr-title">暴涨暴跌时点的事件（{len(evs)} 条，编号对应图上标记）</div>
+  <div class="btcg-ctl">
+    <span class="btcg-lab">时间段</span>
+    <button type="button" class="btcg-r" data-y="1">1 年</button><button type="button" class="btcg-r" data-y="3">3 年</button>
+    <button type="button" class="btcg-r" data-y="5">5 年</button><button type="button" class="btcg-r" data-y="10">10 年</button>
+    <button type="button" class="btcg-r on" data-y="0">全部</button>
+    <span class="btcg-sep"></span>
+    <label class="btcg-lab" lang="zh-CN">自选 <input type="month" id="btcg-from" min="2010-08" lang="zh-CN"> 至 <input type="month" id="btcg-to" lang="zh-CN"></label>
+    <button type="button" id="btcg-go">应用</button>
+    <span class="btcg-sep"></span>
+    <span class="btcg-lab">曲线</span>
+    <label class="btcg-chk"><input type="checkbox" data-s="r" checked><i style="background:#1f3a68"></i>比特币÷黄金（左轴）</label>
+    <label class="btcg-chk"><input type="checkbox" data-s="m2" checked><i style="background:#2f6b4f"></i>全球货币供应（右轴）</label>
+    <label class="btcg-chk"><input type="checkbox" data-s="debt" checked><i style="background:#b0493a"></i>美国联邦债务（右轴）</label>
+    <label class="btcg-chk"><input type="checkbox" data-s="ev" checked><i style="background:#b07a5a;border-radius:50%"></i>事件标注</label>
+  </div>
+  <div class="btcg-chart" id="btcg-chart"></div>
+  <div class="btcg-pin" id="btcg-pin">悬停图上任意位置可看横纵坐标，点击可锁定。</div>
+  <div class="sgr-title">暴涨暴跌时点的事件（<span id="btcg-evn">{len(evs)}</span> 条，编号对应图上标记；随上方时间段联动）</div>
   <div class="btcg-legend"><i style="background:#2f6b4f"></i>多方来源或原文已核验 <i style="background:#b07a5a"></i>出处可读，部分数字未能逐字核对</div>
-  <table class="btcg-tab"><thead><tr><th>#</th><th>日期</th><th>事件与价格</th><th>当日 BTC</th><th>出处</th></tr></thead><tbody>{rows_html}</tbody></table>
+  <div class="btcg-tabbox"><table class="btcg-tab"><thead><tr><th>#</th><th>日期</th><th>事件与价格</th><th>当日 BTC</th><th>出处</th></tr></thead><tbody id="btcg-tb"></tbody></table></div>
   <div class="sgr-foot">
-    纵轴为对数：1 个比特币 ＝ 多少盎司黄金。比特币：blockchain.com 市场均价（美元，日度，2010-08-18 起首次有价），月内取均值；
-    黄金：伦敦金月均价（与金油比、股金比同底表），当月用 COMEX 期货日收盘均值。「今日」取两者都有报价的最近一天。<br>
+    三条线各用独立纵轴：比特币÷黄金为左轴（对数，1 个比特币＝多少盎司黄金）；全球货币供应与美国联邦债务共用右轴（万亿美元，线性）。
+    比特币：blockchain.com 市场均价（美元，日度，2010-08-18 起首次有价），月内取均值；黄金：伦敦金月均价（与金油比、股金比同底表），当月用 COMEX 期货日收盘均值。<br>
+    全球货币供应＝美国 M2、欧元区 M3、日本 M2、英国 M4、中国 M2 按当期汇率折美元的自行聚合值，不是任何机构的官方数字；早期国家不全（1996 年仅 2 国），悬停会显示覆盖国数。
+    美国联邦债务＝FRED GFDEBTN（联邦债务总额，季度，取季度首月），最新到 {_esc(dl.get('m',''))}。<br>
     事件为「价格先行」：先从价格找出转折点与极端涨跌日，再联网检索当日新闻，每条出处都经 web_extract 独立读取核验；只陈述事件和价格变化，不下因果结论。
-    未找到明确触发事件的异动日：{nf_html or "无"}。<br>
-    早期（2010–2013）比特币成交量极小、各交易所价差大，数值仅供参考；blockchain.com 与 FRED（Coinbase）重叠期中位偏差 1.5%。随 dashboard 每日更新，事件清单每周人工复核。
+    未找到明确触发事件的异动日：{nf_html or "无"}。早期（2010–2013）比特币成交量极小、各交易所价差大，数值仅供参考。随 dashboard 每日更新，事件清单每周人工复核。
   </div>
+  <script type="application/json" id="btcg-data">{js}</script>
 </div>"""
 
 
@@ -9868,6 +9841,18 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .sgr-foot{{font-size:11px;color:#8a837a;margin-top:10px;line-height:1.6}}
 .sgr-warn{{font-size:12px;color:#8e3b30;margin:0 0 6px}}
 .btcg-n{{font-size:9px;font-weight:700;text-anchor:middle}}
+.btcg-ctl{{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:4px 0 6px;min-height:30px}}
+.btcg-ctl button{{font-size:11.5px;padding:3px 9px;border:1px solid #cfc7ba;background:#f6f2ec;color:#5a534a;border-radius:12px;cursor:pointer}}
+.btcg-ctl button.on{{background:#1f3a68;border-color:#1f3a68;color:#fff}}
+.btcg-lab{{font-size:11.5px;color:#8a837a}}.btcg-sep{{width:12px}}
+.btcg-ctl input[type=month]{{font-size:11.5px;padding:2px 4px;border:1px solid #cfc7ba;border-radius:6px;background:#fbfaf7;color:#4a443c;width:118px}}
+.btcg-chk{{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;color:#5a534a;cursor:pointer;user-select:none}}
+.btcg-chk i{{display:inline-block;width:14px;height:3px;border-radius:2px}}
+.btcg-chart{{height:380px;position:relative;contain:layout paint}}
+.btcg-chart svg{{width:100%;height:100%;display:block}}
+.btcg-pin{{height:38px;line-height:19px;font-size:12px;color:#6b645a;background:#f6f2ec;border-radius:6px;padding:0 10px;margin:4px 0 6px;overflow:hidden;display:flex;align-items:center}}
+.btcg-pin b{{color:#3d372f}}
+.btcg-tabbox{{height:360px;overflow-y:auto;overscroll-behavior:contain;border-top:1px solid #eceae5}}.btcg-tab thead th{{position:sticky;top:0;background:#fbfaf7}}
 .btcg-legend{{font-size:11px;color:#8a837a;margin:2px 0 6px}}.btcg-legend i{{display:inline-block;width:9px;height:9px;border-radius:50%;margin:0 4px 0 10px;vertical-align:-1px}}
 .btcg-tab{{width:100%;border-collapse:collapse;font-size:12px;margin-top:4px}}
 .btcg-tab th{{text-align:left;color:#8a837a;font-weight:600;padding:4px 6px;border-bottom:1px solid #e5e1da}}
@@ -11447,6 +11432,98 @@ mkRadar('rLong', RADAR.long);
       fy:function(y){{return y.toFixed(0);}}, ft:function(y){{return y==null?'—（未发布）':y.toFixed(1);}}}});
   }}
   renderRail(); renderRoad(); renderCost();
+}})();
+
+/* ── 比特币 ÷ 黄金: 时间段 + 三条线 + 事件 (固定容器高度, 重绘只换 SVG 内容, 不触发布局位移) ── */
+(function() {{
+  var el = document.getElementById('btcg-data'); if (!el) return;
+  var D = JSON.parse(el.textContent);
+  var box = document.getElementById('btcg-chart'), pin = document.getElementById('btcg-pin');
+  var W = 900, H = 380, PL = 54, PR = 54, PT = 16, PB = 28, iw = W - PL - PR, ih = H - PT - PB;
+  var COL = {{r:'#1f3a68', m2:'#2f6b4f', debt:'#b0493a'}};
+  var st = {{from: D.r[0][0], to: D.r[D.r.length-1][0], show: {{r:1, m2:1, debt:1, ev:1}}}};
+  var pinned = null;
+  function mAdd(m, k) {{ var y = +m.slice(0,4), mo = +m.slice(5,7) - 1 + k; y += Math.floor(mo/12); mo = ((mo%12)+12)%12; return y + '-' + ('0'+(mo+1)).slice(-2); }}
+  function allMonths() {{ var a = [], m = D.r[0][0], e = D.r[D.r.length-1][0]; while (m <= e) {{ a.push(m); m = mAdd(m, 1); }} return a; }}
+  var MONTHS = allMonths();
+  function lerpSeries(arr, vi) {{ var m = {{}}; arr.forEach(function(x){{ m[x[0]] = x[vi]; }}); return m; }}
+  var mapR = lerpSeries(D.r, 1), mapBtc = lerpSeries(D.r, 2), mapGold = lerpSeries(D.r, 3), mapM2 = lerpSeries(D.m2, 1), mapN = lerpSeries(D.m2, 2), mapDebt = lerpSeries(D.debt, 1);
+  function fmt(v, d) {{ return v == null ? '—' : v.toLocaleString('en-US', {{maximumFractionDigits: d}}); }}
+  function render() {{
+    var ms = MONTHS.filter(function(m) {{ return m >= st.from && m <= st.to; }});
+    if (ms.length < 2) ms = MONTHS.slice(-2);
+    var n = ms.length, X = function(i) {{ return PL + iw * i / (n - 1); }};
+    // 左轴(对数): 比特币÷黄金, 范围随所选区间自适应
+    var rv = ms.map(function(m) {{ return mapR[m]; }}).filter(function(v) {{ return v > 0; }});
+    var lo = Math.log10(Math.min.apply(null, rv)) - 0.15, hi = Math.log10(Math.max.apply(null, rv)) + 0.15;
+    var YL = function(v) {{ return PT + ih * (1 - (Math.log10(v) - lo) / (hi - lo)); }};
+    // 右轴(线性): 货币供应 + 联邦债务, 取所选区间内两线最大值
+    var rr = [];
+    ms.forEach(function(m) {{ if (st.show.m2 && mapM2[m] != null) rr.push(mapM2[m]); if (st.show.debt && mapDebt[m] != null) rr.push(mapDebt[m]); }});
+    var rmax = rr.length ? Math.max.apply(null, rr) * 1.06 : 1, rmin = 0;
+    var YR = function(v) {{ return PT + ih * (1 - (v - rmin) / (rmax - rmin)); }};
+    var g = '';
+    var ticksL = []; for (var e = Math.ceil(lo); e <= Math.floor(hi); e++) ticksL.push(Math.pow(10, e));
+    ticksL.forEach(function(v) {{ var y = YL(v); g += '<line x1="'+PL+'" y1="'+y.toFixed(1)+'" x2="'+(W-PR)+'" y2="'+y.toFixed(1)+'" class="sgr-grid"/><text x="'+(PL-6)+'" y="'+(y+3.5).toFixed(1)+'" class="sgr-yt" fill="'+COL.r+'">'+(v>=1?v:v.toPrecision(1))+'</text>'; }});
+    var nt = 5; for (var k = 0; k <= nt; k++) {{ var v = rmin + (rmax - rmin) * k / nt, y = YR(v); g += '<text x="'+(W-PR+6)+'" y="'+(y+3.5).toFixed(1)+'" class="sgr-yt" style="text-anchor:start" fill="'+COL.m2+'">'+v.toFixed(v<10?1:0)+'</text>'; }}
+    g += '<text x="'+(PL-6)+'" y="10" class="sgr-yt" fill="'+COL.r+'">盎司/比特币</text><text x="'+(W-PR+6)+'" y="10" class="sgr-yt" style="text-anchor:start" fill="'+COL.m2+'">万亿美元</text>';
+    var span = ms.length, step = span > 120 ? 24 : span > 60 ? 12 : span > 24 ? 6 : 3, xt = '';
+    ms.forEach(function(m, i) {{ var mo = +m.slice(5,7) - 1; if (mo % (step >= 12 ? 12 : step) === 0 && (step < 12 || mo === 0) && (step >= 12 ? (+m.slice(0,4)) % (step/12) === 0 : true)) xt += '<text x="'+X(i).toFixed(1)+'" y="'+(H-8)+'" class="sgr-xt">'+(step >= 12 ? m.slice(0,4) : m)+'</text>'; }});
+    function line(map, Y, color, w) {{ var pts = [], seg = ''; ms.forEach(function(m, i) {{ var v = map[m]; if (v != null && v > 0) pts.push(X(i).toFixed(1)+','+Y(v).toFixed(1)); else if (pts.length) {{ seg += '<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+color+'" stroke-width="'+w+'"/>'; pts = []; }} }}); if (pts.length) seg += '<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+color+'" stroke-width="'+w+'"/>'; return seg; }}
+    var body = '';
+    if (st.show.m2) body += line(mapM2, YR, COL.m2, 1.6);
+    if (st.show.debt) {{ // 联邦债务是季度点, 用阶梯连线避免被误读成月度
+      var pts = []; ms.forEach(function(m, i) {{ var v = mapDebt[m]; if (v != null) pts.push(X(i).toFixed(1)+','+YR(v).toFixed(1)); }});
+      if (pts.length) {{ body += '<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+COL.debt+'" stroke-width="1.6" stroke-dasharray="5,3"/>';
+        ms.forEach(function(m, i) {{ if (mapDebt[m] != null) body += '<circle cx="'+X(i).toFixed(1)+'" cy="'+YR(mapDebt[m]).toFixed(1)+'" r="1.8" fill="'+COL.debt+'"/>'; }}); }}
+    }}
+    if (st.show.r) body += line(mapR, YL, COL.r, 1.9);
+    // 事件标记: 落在所选区间内, 逐个检测间距错开
+    var marks = '', placed = [], evIn = [], idx = {{}}; ms.forEach(function(m, i) {{ idx[m] = i; }});
+    D.ev.forEach(function(e, k) {{ var m = e.d.slice(0,7); if (idx[m] == null) return; e._k = k + 1; evIn.push(e);
+      if (!st.show.ev || !st.show.r) return;
+      var i = idx[m], cx = X(i), cy = YL(mapR[m]), off = null;
+      for (var step2 = 0; step2 < 9 && off == null; step2++) {{ [-1, 1].forEach(function(sg) {{ if (off != null) return; var c = sg * (12 + step2 * 10), ty = cy + c;
+          if (ty >= PT + 6 && ty <= H - PB - 4 && !placed.some(function(p) {{ return Math.hypot(cx - p[0], ty - p[1]) < 14; }})) off = c; }}); }}
+      if (off == null) off = -12; placed.push([cx, cy + off]);
+      var col = e.c === 'high' ? '#2f6b4f' : '#b07a5a';
+      marks += '<line x1="'+cx.toFixed(1)+'" y1="'+cy.toFixed(1)+'" x2="'+cx.toFixed(1)+'" y2="'+(cy+off+(off<0?5:-5)).toFixed(1)+'" stroke="'+col+'" stroke-width=".6" opacity=".6"/>'
+            +'<circle cx="'+cx.toFixed(1)+'" cy="'+cy.toFixed(1)+'" r="2.6" fill="'+col+'"/>'
+            +'<circle cx="'+cx.toFixed(1)+'" cy="'+(cy+off-3).toFixed(1)+'" r="6.2" fill="#fbfaf7" stroke="'+col+'" stroke-width=".7"/>'
+            +'<text x="'+cx.toFixed(1)+'" y="'+(cy+off).toFixed(1)+'" class="btcg-n" fill="'+col+'">'+e._k+'</text>'; }});
+    // 锁定线 + 命中带(每月一条, 悬停/点击共用)
+    var pinLine = '', bands = '';
+    if (pinned && idx[pinned] != null) pinLine = '<line x1="'+X(idx[pinned]).toFixed(1)+'" y1="'+PT+'" x2="'+X(idx[pinned]).toFixed(1)+'" y2="'+(H-PB)+'" stroke="#8a837a" stroke-width="1" stroke-dasharray="3,3"/>';
+    ms.forEach(function(m, i) {{ var l = i ? (X(i-1)+X(i))/2 : PL, r = i < n-1 ? (X(i)+X(i+1))/2 : W-PR; bands += '<rect x="'+l.toFixed(1)+'" y="'+PT+'" width="'+Math.max(r-l,.6).toFixed(2)+'" height="'+ih+'" fill="transparent" data-m="'+m+'"/>'; }});
+    box.innerHTML = '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">'+g+xt+body+marks+pinLine+bands+'</svg>';
+    // 事件表: 固定 tbody, 只替换行
+    var rows = ''; evIn.forEach(function(e) {{ var col = e.c === 'high' ? '#2f6b4f' : '#b07a5a', px = e.p ? '$' + (e.p >= 100 ? fmt(e.p, 0) : fmt(e.p, 2)) : '—';
+      rows += '<tr><td class="btcg-no" style="color:'+col+'">'+e._k+'</td><td>'+e.d+'</td><td><b>'+esc(e.t)+'</b><br><span class="btcg-d">'+esc(e.x)+'</span></td><td>'+px+'</td><td><a href="'+esc(e.u)+'" target="_blank" rel="noopener">'+esc(e.s||'出处')+'</a></td></tr>'; }});
+    document.getElementById('btcg-tb').innerHTML = rows || '<tr><td colspan="5" style="color:#8a837a;padding:14px">所选时间段内没有已核验的事件。</td></tr>';
+    document.getElementById('btcg-evn').textContent = evIn.length;
+  }}
+  function esc(t) {{ return String(t == null ? '' : t).replace(/[&<>"]/g, function(c) {{ return {{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}}[c]; }}); }}
+  function info(m) {{
+    var evs = D.ev.filter(function(e) {{ return e.d.slice(0,7) === m; }});
+    var h = '<div><b>'+m+'</b>　1 比特币 ≈ <b>'+fmt(mapR[m], mapR[m] < 1 ? 4 : 2)+'</b> 盎司黄金（BTC $'+fmt(mapBtc[m], mapBtc[m] < 100 ? 2 : 0)+' · 黄金 $'+fmt(mapGold[m], 0)+'）</div>';
+    h += '<div>全球货币供应 <b>'+fmt(mapM2[m], 1)+'</b> 万亿$'+(mapN[m] ? '（覆盖 '+mapN[m]+' 国）' : '')+'　美国联邦债务 <b>'+(mapDebt[m] != null ? fmt(mapDebt[m], 1) + '</b> 万亿$' : '—</b>（季度，非本月）')+(evs.length ? '　▸ '+esc(evs[0].d+' '+evs[0].t) : '')+'</div>';
+    pin.innerHTML = h;
+  }}
+  function monthAt(ev) {{ var t = ev.target.closest ? ev.target.closest('rect[data-m]') : null; return t ? t.getAttribute('data-m') : null; }}
+  box.addEventListener('mousemove', function(ev) {{ if (pinned) return; var m = monthAt(ev); if (m) info(m); }});
+  box.addEventListener('mouseleave', function() {{ if (!pinned) pin.textContent = '悬停图上任意位置可看横纵坐标，点击可锁定。'; }});
+  box.addEventListener('click', function(ev) {{ var m = monthAt(ev); if (!m) return; pinned = (pinned === m) ? null : m; if (pinned) info(pinned); else pin.textContent = '已取消锁定。悬停图上任意位置可看横纵坐标，点击可锁定。'; render(); }});
+  function setRange(from, to) {{ st.from = from; st.to = to; pinned = null; render(); }}
+  Array.prototype.forEach.call(document.querySelectorAll('.btcg-r'), function(b) {{ b.addEventListener('click', function() {{
+    Array.prototype.forEach.call(document.querySelectorAll('.btcg-r'), function(x) {{ x.classList.remove('on'); }}); b.classList.add('on');
+    var y = +b.getAttribute('data-y'), last = MONTHS[MONTHS.length-1]; setRange(y ? mAdd(last, -12*y) : MONTHS[0], last);
+    document.getElementById('btcg-from').value = ''; document.getElementById('btcg-to').value = ''; }}); }});
+  document.getElementById('btcg-go').addEventListener('click', function() {{
+    var f = document.getElementById('btcg-from').value || MONTHS[0], t = document.getElementById('btcg-to').value || MONTHS[MONTHS.length-1];
+    if (f > t) {{ var x = f; f = t; t = x; }} if (f < MONTHS[0]) f = MONTHS[0]; if (t > MONTHS[MONTHS.length-1]) t = MONTHS[MONTHS.length-1];
+    Array.prototype.forEach.call(document.querySelectorAll('.btcg-r'), function(x) {{ x.classList.remove('on'); }}); setRange(f, t); }});
+  Array.prototype.forEach.call(document.querySelectorAll('.btcg-chk input'), function(c) {{ c.addEventListener('change', function() {{ st.show[c.getAttribute('data-s')] = c.checked ? 1 : 0; render(); }}); }});
+  render();
 }})();
 </script>
 </body>
