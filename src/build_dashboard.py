@@ -761,6 +761,16 @@ def main():
     except Exception as e:
         print(f"[dashboard] 白银期货曲线 跳过: {e}")
 
+    # ── 机构研究报告被公开解读(线索表, 读 data/report_leads.json; 采集由 src/report_leads.py 单独跑) ──
+    report_leads = {}
+    try:
+        _rlp = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "report_leads.json")
+        if os.path.exists(_rlp):
+            report_leads = json.load(open(_rlp, encoding="utf-8"))
+        print(f"[dashboard] 报告线索: {sum(len(v.get('items', [])) for v in report_leads.get('orgs', {}).values())} 条 / {len(report_leads.get('orgs', {}))} 家 更新 {str(report_leads.get('generated', ''))[:10]}")
+    except Exception as e:
+        print(f"[dashboard] 报告线索 跳过: {e}")
+
     # ── 金油比(1971 起) ──
     gold_oil = {}
     try:
@@ -945,6 +955,7 @@ def main():
         gold_oil=gold_oil,
         btc_gold=btc_gold,
         silver_curve=silver_curve,
+        report_leads=report_leads,
         us_freight=us_freight,
         ust_micro=ust_micro,
         dxy_gold=dxy_gold,

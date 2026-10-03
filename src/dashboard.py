@@ -1350,6 +1350,59 @@ def _gold_oil_html(o):
 
 
 
+def _report_leads_html(o):
+    """机构/个人研究报告「被公开解读」线索表(Chao 2026-10-03 立)。
+    口径: 只要是报告内容的分享/解读就收(不要求原报告付费); 只收第三方解读线索, 不收原文大段;
+    摘要=平台自带简介, 正文未读。主表只放 type=report, 访谈折叠, other 不显示。按机构分组, 组内按日期倒序。"""
+    orgs = (o or {}).get("orgs") or {}
+    if not orgs:
+        return '<p class="empty">报告解读线索同步中。</p>'
+    gen = _esc((o.get("generated") or "")[:10])
+    chan = _esc(o.get("channel") or "")
+    n_rep = sum(1 for v in orgs.values() for i in v.get("items", []) if i.get("type") == "report")
+    n_itv = sum(1 for v in orgs.values() for i in v.get("items", []) if i.get("type") == "interview")
+
+    def row(i, name):
+        srcs = i.get("sources") or []
+        links = " ".join(
+            f'<a href="{_esc(x.get("url", ""))}" target="_blank" rel="noopener">{_esc(x.get("acct", "") or "来源")}</a>'
+            f'<span class="rpl-pf">{_esc(x.get("platform", ""))}</span>' for x in srcs[:3])
+        summ = _strip_md(i.get("summary") or "").strip().lstrip("，,、；;。 ")
+        _tt = (i.get("title") or "").strip()
+        if summ in ("", "-") or summ == _tt or _tt.startswith(summ) or summ.startswith(_tt):
+            summ = ""
+        else:
+            summ = f'<div class="rpl-sum">{_esc(summ)}{"…" if len(summ) >= 130 else ""}</div>'
+        return (f'<tr><td class="rpl-d">{_esc(i.get("date", ""))}</td>'
+                f'<td><div class="rpl-t">{_esc(_strip_md(i.get("title", "")))}</div>{summ}</td>'
+                f'<td class="rpl-s">{links}</td></tr>')
+
+    blocks = []
+    for name, v in sorted(orgs.items(), key=lambda kv: (-sum(1 for i in kv[1].get("items", []) if i.get("type") == "report"), kv[0])):
+        items = v.get("items") or []
+        rep = [i for i in items if i.get("type") == "report"]
+        itv = [i for i in items if i.get("type") == "interview"]
+        head = (f'<div class="rpl-h"><b>{_esc(name)}</b><span class="rpl-org">{_esc(v.get("org", ""))}</span>'
+                f'<span class="rpl-n">报告解读 {len(rep)} 条' + (f' · 访谈 {len(itv)} 条' if itv else '') + '</span></div>')
+        if rep:
+            body = ('<table class="rpl-tb"><thead><tr><th>发布日</th><th>解读标题 / 平台简介</th><th>来源</th></tr></thead><tbody>'
+                    + "".join(row(i, name) for i in rep) + '</tbody></table>')
+        else:
+            body = '<p class="rpl-none">近 6 个月未检索到报告类解读（公开信息有限，不代表该机构没有报告）。</p>'
+        if itv:
+            body += ('<details class="rpl-dt"><summary>相关访谈 / 对话 / 配音 ' + str(len(itv)) + ' 条（不是报告内容，仅供参考）</summary>'
+                     '<table class="rpl-tb"><tbody>' + "".join(row(i, name) for i in itv) + '</tbody></table></details>')
+        blocks.append(f'<div class="rpl-g">{head}{body}</div>')
+    return f"""
+<div class="rpl-wrap">
+  <p class="rpl-note"><b>口径：</b>收录「机构或个人研究报告被第三方公开解读」的线索：只要解读的是报告里的内容就收录，不要求原报告付费；
+    <b>只记标题、日期、解读者、链接和平台自带简介，不转载原文，也不写我们自己的推断</b>。正文未读，解读是否忠实原报告未核验。
+    当前渠道：{chan}；微信公众号渠道因搜索限流暂停，Reddit 接入中。更新 {gen}。共 {n_rep} 条报告解读、{n_itv} 条访谈。</p>
+  {''.join(blocks)}
+</div>
+"""
+
+
 def _silver_curve_html(o):
     """白银期货曲线价差: Yahoo COMEX 各月合约收盘价 - 最近月合约, 美元/盎司与百分比, 对比按 3M 国债利率估算的持有成本。
     非 EFP、非 CME 官方结算价, 图上显眼标注。页内 JS 绘制, 容器高度固定, 切换只换 SVG 内容。"""
@@ -2327,7 +2380,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -2572,6 +2625,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         gold_oil_html=_gold_oil_html(gold_oil),
         btc_gold_html=_btc_gold_html(btc_gold),
         silver_curve_html=_silver_curve_html(silver_curve),
+        report_leads_html=_report_leads_html(report_leads),
         us_freight_html=_us_freight_html(us_freight),
         ust_micro_html=_ust_micro_html(ust_micro),
         dxy_gold_html=_dxy_gold_html(dxy_gold),
@@ -9850,6 +9904,26 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .sgr-yt{{font-size:10px;fill:#8a837a;text-anchor:end}}
 .sgr-xt{{font-size:10px;fill:#8a837a;text-anchor:middle}}
 .sgr-lab{{font-size:10px;fill:#4a443c}}
+.rpl-wrap{{margin:6px 0}}
+.rpl-note{{font-size:12px;color:#6b5a3a;background:#faf3df;border:1px solid #ecdca8;border-radius:6px;padding:8px 11px;margin:2px 6px 10px;line-height:1.65}}
+.rpl-g{{margin:0 6px 14px;border:1px solid #e3ddd0;border-radius:8px;background:#fffdf8;padding:8px 10px}}
+.rpl-h{{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin-bottom:6px}}
+.rpl-h b{{font-size:14px;color:#2e2a24}}
+.rpl-org{{font-size:11.5px;color:#7a7266}}
+.rpl-n{{font-size:11.5px;color:#8a5a2a;margin-left:auto}}
+.rpl-tb{{width:100%;border-collapse:collapse;font-size:12px}}
+.rpl-tb th{{text-align:left;font-weight:600;color:#7a7266;padding:4px 6px;border-bottom:1px solid #e3ddd0}}
+.rpl-tb td{{padding:5px 6px;border-bottom:1px solid #f0ebe0;vertical-align:top}}
+.rpl-d{{white-space:nowrap;color:#5a534a;width:78px}}
+.rpl-t{{color:#2e2a24;line-height:1.5}}
+.rpl-sum{{color:#7a7266;font-size:11.5px;margin-top:2px;line-height:1.5}}
+.rpl-s{{width:210px;font-size:11.5px}}
+.rpl-s a{{color:#1f3a68;text-decoration:none;margin-right:2px}}
+.rpl-s a:hover{{text-decoration:underline}}
+.rpl-pf{{color:#7d7566;font-size:10.5px;margin:0 8px 0 3px}}
+.rpl-none{{font-size:12px;color:#8a8478;margin:2px 0 4px}}
+.rpl-dt{{margin-top:6px;font-size:12px;color:#5f584c}}
+.rpl-dt summary{{cursor:pointer;user-select:none}}
 .sfc-note{{font-size:12px;color:#6b5a3a;background:#faf3df;border:1px solid #ecdca8;border-radius:6px;padding:7px 10px;margin:2px 6px 8px;line-height:1.6}}
 .sfc-ctl{{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:4px 6px 6px;min-height:28px}}
 .sfc-ctl button{{font-size:11.5px;padding:3px 9px;border:1px solid #cfc7ba;background:#f6f2ec;color:#5a534a;border-radius:12px;cursor:pointer}}
@@ -10793,6 +10867,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ 白银期货曲线价差 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>白银期货 · 各月合约价差 (COMEX · 日度 · 对比持有成本)<span class="freq-badge freq-daily">日更</span></div>
   <div class="card">{silver_curve_html}</div>
+  <!-- ━━━ 机构报告被公开解读(线索表) ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>机构研究报告 · 被公开解读的线索 (按机构 · 近 6 个月 · 正文未读)<span class="freq-badge freq-daily">日更</span></div>
+  <div class="card">{report_leads_html}</div>
   <!-- ━━━ 道指/标普 ÷ 黄金 50 年比值 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>股指 ÷ 黄金 · 50 年比值 (道指÷金价 · 标普500÷金价 · 月度对数坐标 · 1976 年至今)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{stock_gold_html}</div>
