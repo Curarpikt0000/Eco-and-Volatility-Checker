@@ -752,6 +752,15 @@ def main():
     except Exception as e:
         print(f"[dashboard] 比特币÷黄金 跳过: {e}")
 
+    # ── 白银期货曲线价差(Yahoo COMEX 各月合约, 非 EFP) ──
+    silver_curve = {}
+    try:
+        silver_curve = ed.fetch_silver_curve_spread() or {}
+        _t = silver_curve.get("today") or {}
+        print(f"[dashboard] 白银期货曲线: status={silver_curve.get('status')} {len(silver_curve.get('rows', []))} 日 合约 {len(silver_curve.get('contracts', []))} 个 基准={_t.get('base')} 最新={_t.get('d')} warn={silver_curve.get('warnings')}")
+    except Exception as e:
+        print(f"[dashboard] 白银期货曲线 跳过: {e}")
+
     # ── 金油比(1971 起) ──
     gold_oil = {}
     try:
@@ -935,6 +944,7 @@ def main():
         ai_capex=ai_capex,
         gold_oil=gold_oil,
         btc_gold=btc_gold,
+        silver_curve=silver_curve,
         us_freight=us_freight,
         ust_micro=ust_micro,
         dxy_gold=dxy_gold,

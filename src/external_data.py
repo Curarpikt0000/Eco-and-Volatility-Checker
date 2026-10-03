@@ -8819,3 +8819,82 @@ def fetch_btc_gold_ratio(base_path=None, events_path=None, cache_path=None):
         except Exception:
             pass
     return out
+
+
+def fetch_silver_curve_spread(cache_path=None):
+    """白银期货曲线价差(Yahoo COMEX 各月合约收盘价, 非 CME 官方结算价, 非 EFP)。
+    各远月合约相对"最近一个仍交易的月份"的升水(美元/盎司与百分比), 并按 3 个月 SOFR/国债利率估算持有成本(理论套利上限)对比。
+    合约到期会从 Yahoo 消失(404) → 近月基准按"当日仍有报价的最近月份"滚动, 并在 rows 里记录 base 合约。"""
+    import requests as _rq
+    from datetime import timezone, timedelta
+    root = os.path.join(os.path.dirname(__file__), "..", "data")
+    cache_path = cache_path or os.path.join(root, "silver_curve_cache.json")
+    jst = datetime.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    out = {"status": "ok", "as_of": jst, "warnings": [], "rows": [], "contracts": [], "today": {}, "carry": {}}
+    MC = {"F": 1, "G": 2, "H": 3, "J": 4, "K": 5, "M": 6, "N": 7, "Q": 8, "U": 9, "V": 10, "X": 11, "Z": 12}
+    now = datetime.datetime.utcnow()
+    cands = []
+    for yr in (now.year, now.year + 1, now.year + 2):
+        for code, mo in MC.items():
+            if (yr, mo) >= (now.year, now.month):
+                cands.append((f"SI{code}{str(yr)[-2:]}.CMX", yr, mo, code))
+    cands = cands[:14]
+    try:
+        series = {}
+        for sym, yr, mo, code in cands:
+            try:
+                r = _rq.get(f"https://query1.finance.yahoo.com/v8/finance/chart/{sym}?range=1y&interval=1d",
+                            headers={"User-Agent": "Mozilla/5.0"}, timeout=25)
+                if r.status_code != 200:
+                    continue
+                d = r.json()["chart"]["result"][0]
+                ser = {datetime.datetime.utcfromtimestamp(t).strftime("%Y-%m-%d"): float(v)
+                       for t, v in zip(d["timestamp"], d["indicators"]["quote"][0]["close"]) if v and v > 0}
+                if len(ser) >= 60:
+                    series[sym] = {"ym": f"{yr}-{mo:02d}", "label": f"{yr}年{mo}月", "ser": ser, "code": code, "yr": yr, "mo": mo}
+            except Exception:
+                continue
+        if len(series) < 4:
+            raise RuntimeError(f"仅取到 {len(series)} 个合约")
+        syms = sorted(series, key=lambda k: series[k]["ym"])
+        keep = syms[:9]                              # 最近 9 个有报价的月份合约
+        days = sorted(set.intersection(*[set(series[k]["ser"]) for k in keep]))
+        if len(days) < 60:
+            raise RuntimeError(f"共同交易日仅 {len(days)}")
+        # 近月基准 = 每日"仍交易的最近月份"; 近月到期后基准自动换下一个(记录在 base)
+        rows = []
+        for d in days:
+            base = next(k for k in keep if d in series[k]["ser"])
+            b = series[base]["ser"][d]
+            rows.append({"d": d, "base": series[base]["ym"], "b": round(b, 3),
+                         "px": {series[k]["ym"]: round(series[k]["ser"][d], 3) for k in keep}})
+        # 利率(持有成本): 3M 国债收益率(FRED DGS3MO), 缺失用最近值
+        rate = {}
+        try:
+            for dd, v in _fred_series("DGS3MO", days[0]):
+                rate[dd] = v / 100.0
+        except Exception as e:
+            out["warnings"].append(f"利率(DGS3MO)获取失败({type(e).__name__}), 持有成本线不画")
+        last_r = None; rr = []
+        for dd in days:
+            if dd in rate:
+                last_r = rate[dd]
+            rr.append(last_r)
+        for i, row in enumerate(rows):
+            row["r"] = rr[i]
+        out["rows"] = rows
+        out["contracts"] = [{"ym": series[k]["ym"], "label": series[k]["label"]} for k in keep]
+        last = rows[-1]; prev30 = rows[max(0, len(rows) - 22)]
+        out["today"] = {"d": last["d"], "base": last["base"], "b": last["b"], "px": last["px"], "r": last["r"],
+                        "prev_d": prev30["d"], "prev_px": prev30["px"], "prev_base": prev30["base"], "prev_b": prev30["b"]}
+        json.dump(out, open(cache_path, "w"), ensure_ascii=False)
+    except Exception as e:
+        out["warnings"].append(f"实时获取失败({type(e).__name__}: {str(e)[:60]})")
+        try:
+            c = json.load(open(cache_path))
+            c["status"] = "ok(缓存)"; c["warnings"] = list(c.get("warnings", [])) + out["warnings"]
+            return c
+        except Exception:
+            out["status"] = "error"
+            return out
+    return out

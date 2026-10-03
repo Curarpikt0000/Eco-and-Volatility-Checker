@@ -1350,6 +1350,53 @@ def _gold_oil_html(o):
 
 
 
+def _silver_curve_html(o):
+    """白银期货曲线价差: Yahoo COMEX 各月合约收盘价 - 最近月合约, 美元/盎司与百分比, 对比按 3M 国债利率估算的持有成本。
+    非 EFP、非 CME 官方结算价, 图上显眼标注。页内 JS 绘制, 容器高度固定, 切换只换 SVG 内容。"""
+    import json as _json
+    rows = (o or {}).get("rows") or []
+    if len(rows) < 30 or not (o or {}).get("contracts"):
+        err = "；".join((o or {}).get("warnings", [])[:2])
+        return f'<p class="empty">白银期货曲线同步中{((chr(0xff1a) + _esc(err)) if err else "")}。</p>'
+    cons = [c["ym"] for c in o["contracts"]]
+    data = {"c": cons, "d": [r["d"] for r in rows], "b": [r["b"] for r in rows], "r": [r["r"] for r in rows],
+            "p": [[r["px"].get(c) for c in cons] for r in rows]}
+    js = _json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    t = o.get("today") or {}
+    warn_l = list(o.get("warnings", []))
+    warn = f'<p class="sgr-warn">⚠ {_esc("；".join(warn_l[:3]))}</p>' if warn_l else ""
+    chk = "".join(
+        f'<label class="sfc-chk"><input type="checkbox" data-c="{_esc(c)}"{" checked" if c in (cons[2], cons[5], cons[8] if len(cons) > 8 else cons[-1]) else ""}>'
+        f'<i style="background:{col}"></i>{_esc(c[:4])}年{int(c[5:])}月</label>'
+        for c, col in zip(cons[1:], ["#8a837a", "#1f3a68", "#7a8f5a", "#b0493a", "#a8761a", "#5b4a8a", "#2b7a78", "#c0643c"]))
+    return f"""
+<div class="sfc-wrap" id="sfc">
+  {warn}
+  <div class="sfc-note"><b>口径说明：</b>这是 <b>COMEX 白银期货各月合约的收盘价差</b>（各月合约 − 基准合约），基准是<b>当前最近到期的合约（{_esc(t.get('base',''))}），全程固定不滚动</b>，数据来自 Yahoo，
+    <b>不是 EFP 价差，也不是 CME 官方结算价</b>；EFP 是期货与现货之间的互换价差，免费渠道拿不到历史。两者方向相关，数值不可直接对比。</div>
+  <div class="sfc-ctl">
+    <span class="sfc-lab">时间段</span>
+    <button type="button" class="sfc-r" data-n="22">1 个月</button><button type="button" class="sfc-r" data-n="63">3 个月</button>
+    <button type="button" class="sfc-r" data-n="126">6 个月</button><button type="button" class="sfc-r on" data-n="0">全部</button>
+    <span class="sfc-sep"></span>
+    <span class="sfc-lab">单位</span>
+    <button type="button" class="sfc-u on" data-u="usd">美元/盎司</button><button type="button" class="sfc-u" data-u="pct">百分比</button>
+    <span class="sfc-sep"></span>
+    <label class="sfc-chk"><input type="checkbox" id="sfc-carry" checked><i style="background:repeating-linear-gradient(90deg,#8a837a 0 5px,transparent 5px 8px)"></i>持有成本（与合约同色的虚线）</label>
+  </div>
+  <div class="sfc-ctl">{chk}</div>
+  <div class="sfc-chart" id="sfc-chart"></div>
+  <div class="sfc-pin" id="sfc-pin">悬停图上任意位置可看各合约当日价差。</div>
+  <div class="sfc-tabbox"><table class="sfc-tab" id="sfc-tab"></table></div>
+  <div class="sfc-foot">
+    升水＝该月合约收盘价 − 基准合约收盘价（基准：{_esc(t.get('base',''))}合约；它到期后基准换成下一个月，历史按新基准整体重算）。注意：2026 年初该合约离到期还有 9 个月，那时的价差是「远月 − 10 月合约」，不是当时的「近月升水」。
+    持有成本＝基准合约价 × 3 个月美国国债收益率 × 该合约与基准合约相隔月数 ÷ 12，是无套利时远月相对基准的理论升水上限的粗估（未含仓储、保险、交割费用），
+    实际价差高出这条线才意味着市场愿意为远期实物多付钱。每日随 dashboard 更新；合约到期前几天流动性变薄，价差可能出现噪声。
+  </div>
+  <script type="application/json" id="sfc-data">{js}</script>
+</div>"""
+
+
 def _btc_gold_html(o):
     """比特币 ÷ 黄金(2010-08 起月度) + 全球货币供应 + 美国联邦债务 + 28 条事件标注。
     图由页内 JS 绘制(数据内嵌 JSON): 时间段切换只替换 SVG 内容、容器高度固定 → 不改变页面布局, 不会引起侧栏/右侧跳动。"""
@@ -2280,7 +2327,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -2524,6 +2571,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         ai_capex_html=_ai_capex_html(ai_capex),
         gold_oil_html=_gold_oil_html(gold_oil),
         btc_gold_html=_btc_gold_html(btc_gold),
+        silver_curve_html=_silver_curve_html(silver_curve),
         us_freight_html=_us_freight_html(us_freight),
         ust_micro_html=_ust_micro_html(ust_micro),
         dxy_gold_html=_dxy_gold_html(dxy_gold),
@@ -9802,6 +9850,20 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .sgr-yt{{font-size:10px;fill:#8a837a;text-anchor:end}}
 .sgr-xt{{font-size:10px;fill:#8a837a;text-anchor:middle}}
 .sgr-lab{{font-size:10px;fill:#4a443c}}
+.sfc-note{{font-size:12px;color:#6b5a3a;background:#faf3df;border:1px solid #ecdca8;border-radius:6px;padding:7px 10px;margin:2px 6px 8px;line-height:1.6}}
+.sfc-ctl{{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:4px 6px 6px;min-height:28px}}
+.sfc-ctl button{{font-size:11.5px;padding:3px 9px;border:1px solid #cfc7ba;background:#f6f2ec;color:#5a534a;border-radius:12px;cursor:pointer}}
+.sfc-ctl button.on{{background:#1f3a68;border-color:#1f3a68;color:#fff}}
+.sfc-lab{{font-size:11.5px;color:#8a837a}}.sfc-sep{{width:12px}}
+.sfc-chk{{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;color:#5a534a;cursor:pointer;user-select:none}}
+.sfc-chk i{{display:inline-block;width:14px;height:3px;border-radius:2px}}
+.sfc-chart{{height:320px;margin:0 6px}}.sfc-chart svg{{width:100%;height:320px;display:block}}
+.sfc-pin{{height:38px;margin:2px 6px 6px;padding:6px 10px;box-sizing:border-box;font-size:12px;color:#4a443c;background:#f6f2ec;border-radius:6px;overflow:hidden;line-height:1.5}}
+.sfc-tabbox{{height:300px;overflow-y:auto;margin:0 6px;border-top:1px solid #eceae5}}
+.sfc-tab{{width:100%;border-collapse:collapse;font-size:12px}}.sfc-tab th{{position:sticky;top:0;background:#fbfaf7;text-align:right;padding:5px 8px;color:#8a837a;font-weight:500;border-bottom:1px solid #eceae5}}
+.sfc-tab th:first-child,.sfc-tab td:first-child{{text-align:left}}.sfc-tab td{{text-align:right;padding:4px 8px;border-bottom:1px solid #f1eee8;color:#4a443c}}
+.sfc-foot{{font-size:11.5px;color:#8a837a;line-height:1.7;margin:8px 6px 2px}}
+.sfc-g{{stroke:#eceae5;stroke-width:1}}.sfc-yt{{font-size:10px;fill:#8a837a;text-anchor:end}}.sfc-xt{{font-size:10px;fill:#8a837a;text-anchor:middle}}
 .sgz-ctl{{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:4px 0 8px;min-height:30px;padding:0 6px}}.sgz-p,.sgz-st{{padding:0 6px;box-sizing:border-box}}
 .sgz-ctl button{{font-size:11.5px;padding:3px 9px;border:1px solid #cfc7ba;background:#f6f2ec;color:#5a534a;border-radius:12px;cursor:pointer}}
 .sgz-ctl button.on{{background:#1f3a68;border-color:#1f3a68;color:#fff}}
@@ -10728,6 +10790,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ 比特币 ÷ 黄金 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>比特币 ÷ 黄金 · 暴涨暴跌与事件 (2010 起 · 月度 · 对数轴)<span class="freq-badge freq-daily">日更</span></div>
   <div class="card">{btc_gold_html}</div>
+  <!-- ━━━ 白银期货曲线价差 ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>白银期货 · 各月合约价差 (COMEX · 日度 · 对比持有成本)<span class="freq-badge freq-daily">日更</span></div>
+  <div class="card">{silver_curve_html}</div>
   <!-- ━━━ 道指/标普 ÷ 黄金 50 年比值 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>股指 ÷ 黄金 · 50 年比值 (道指÷金价 · 标普500÷金价 · 月度对数坐标 · 1976 年至今)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{stock_gold_html}</div>
@@ -11410,6 +11475,59 @@ mkRadar('rLong', RADAR.long);
 }})();
 
 
+
+/* ── 白银期货曲线价差 (固定容器高度, 重绘只换 SVG 内容) ── */
+(function() {{
+  var el = document.getElementById('sfc-data'); if (!el) return;
+  var D = JSON.parse(el.textContent), C = D.c, N = D.d.length;
+  var COL = ['#8a837a','#1f3a68','#7a8f5a','#b0493a','#a8761a','#5b4a8a','#2b7a78','#c0643c'];
+  var st = {{n: 0, u: 'usd', carry: 1, on: {{}}}};
+  Array.prototype.forEach.call(document.querySelectorAll('.sfc-chk input[data-c]'), function(c) {{ st.on[c.getAttribute('data-c')] = c.checked; }});
+  var W = 900, H = 320, PL = 54, PR = 16, PT = 12, PB = 26, iw = W-PL-PR, ih = H-PT-PB, box = document.getElementById('sfc-chart');
+  function months(c) {{ return (+c.slice(0,4))*12 + (+c.slice(5,7)) - ((+C[0].slice(0,4))*12 + (+C[0].slice(5,7))); }}
+  function sp(i, j) {{ var v = D.p[i][j]; if (v == null) return null; return st.u === 'usd' ? v - D.b[i] : (v / D.b[i] - 1) * 100; }}
+  function cr(i, j) {{ if (D.r[i] == null) return null; var c = D.b[i] * D.r[i] * months(C[j]) / 12; return st.u === 'usd' ? c : c / D.b[i] * 100; }}
+  function fmt(v) {{ return v == null ? '—' : (st.u === 'usd' ? v.toFixed(3) : v.toFixed(2) + '%'); }}
+  function draw() {{
+    var i0 = st.n ? Math.max(0, N - st.n) : 0, n = N - i0, series = [], all = [];
+    C.forEach(function(c, j) {{ if (j === 0 || !st.on[c]) return;
+      var pts = [], cp = []; for (var i = i0; i < N; i++) {{ pts.push(sp(i, j)); cp.push(cr(i, j)); }}
+      series.push({{j: j, c: c, pts: pts, cp: cp}}); pts.forEach(function(v) {{ if (v != null) all.push(v); }});
+      if (st.carry) cp.forEach(function(v) {{ if (v != null) all.push(v); }}); }});
+    if (!series.length) {{ box.innerHTML = '<div style="padding:60px;text-align:center;color:#8a837a">请至少勾选一个合约</div>'; return; }}
+    var mn = Math.min(0, Math.min.apply(null, all)), mx = Math.max.apply(null, all), pad = (mx - mn) * 0.08 || 0.1; mn -= (mn < 0 ? pad : 0); mx += pad;
+    var X = function(k) {{ return PL + iw * k / Math.max(n-1, 1); }}, Y = function(v) {{ return PT + ih * (1 - (v - mn) / (mx - mn)); }};
+    var g = '', tk = 5; for (var t = 0; t <= tk; t++) {{ var v = mn + (mx - mn) * t / tk; g += '<line x1="'+PL+'" y1="'+Y(v).toFixed(1)+'" x2="'+(W-PR)+'" y2="'+Y(v).toFixed(1)+'" class="sfc-g"/><text x="'+(PL-6)+'" y="'+(Y(v)+3.5).toFixed(1)+'" class="sfc-yt">'+(st.u === 'usd' ? v.toFixed(2) : v.toFixed(1)+'%')+'</text>'; }}
+    g += '<text x="'+PL+'" y="'+(PT-1)+'" class="sfc-yt" style="text-anchor:start">'+(st.u === 'usd' ? '美元/盎司（相对基准合约的升水）' : '%（相对基准合约的升水）')+'</text>';
+    var step = Math.max(1, Math.round(n / 7)); for (var k = 0; k < n; k += step) g += '<text x="'+X(k).toFixed(1)+'" y="'+(H-8)+'" class="sfc-xt">'+D.d[i0+k].slice(2)+'</text>';
+    series.forEach(function(s) {{ var col = COL[(s.j-1) % COL.length], p = '', cp = '';
+      s.pts.forEach(function(v, k) {{ if (v != null) p += X(k).toFixed(1)+','+Y(v).toFixed(1)+' '; }});
+      if (st.carry) s.cp.forEach(function(v, k) {{ if (v != null) cp += X(k).toFixed(1)+','+Y(v).toFixed(1)+' '; }});
+      g += '<polyline points="'+p+'" fill="none" stroke="'+col+'" stroke-width="1.7"/>';
+      if (cp) g += '<polyline points="'+cp+'" fill="none" stroke="'+col+'" stroke-width="1.4" stroke-dasharray="6 4" opacity=".85"/>'; }});
+    g += '<rect id="sfc-hit" x="'+PL+'" y="'+PT+'" width="'+iw+'" height="'+ih+'" fill="transparent"/><line id="sfc-cur" x1="0" y1="'+PT+'" x2="0" y2="'+(PT+ih)+'" stroke="#8a837a" stroke-dasharray="3 3" style="display:none"/>';
+    box.innerHTML = '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">'+g+'</svg>';
+    var hit = document.getElementById('sfc-hit'), cur = document.getElementById('sfc-cur'), pin = document.getElementById('sfc-pin'), svg = box.firstChild;
+    function at(ev) {{ var r = svg.getBoundingClientRect(), x = (ev.clientX - r.left) / r.width * W; var k = Math.round((x - PL) / iw * (n-1)); return Math.max(0, Math.min(n-1, k)); }}
+    function show(k) {{ var i = i0 + k; cur.setAttribute('x1', X(k)); cur.setAttribute('x2', X(k)); cur.style.display = '';
+      pin.innerHTML = '<b>'+D.d[i]+'</b> 基准合约 $'+D.b[i].toFixed(2)+(D.r[i] != null ? ' · 3M利率 '+(D.r[i]*100).toFixed(2)+'%' : '')+' | '+series.map(function(s) {{ return C[s.j].slice(2,4)+'年'+(+C[s.j].slice(5))+'月 <b style="color:'+COL[(s.j-1)%COL.length]+'">'+fmt(sp(i, s.j))+'</b>'; }}).join(' · '); }}
+    hit.addEventListener('mousemove', function(ev) {{ show(at(ev)); }});
+    hit.addEventListener('mouseleave', function() {{ cur.style.display = 'none'; pin.textContent = '悬停图上任意位置可看各合约当日价差。'; }});
+  }}
+  function table() {{
+    var i = N - 1, ip = Math.max(0, N - 22), h = '<tr><th>合约（'+D.d[i]+'）</th><th>收盘价</th><th>升水($)</th><th>升水(%)</th><th>持有成本($)</th><th>超出成本($)</th><th>一个月前（'+D.d[ip].slice(5)+'）升水($)</th><th>变化($)</th></tr>';
+    C.forEach(function(c, j) {{ if (j === 0) return; var u = D.p[i][j] - D.b[i], uc = D.r[i] != null ? D.b[i]*D.r[i]*months(c)/12 : null, up = D.p[ip][j] != null ? D.p[ip][j] - D.b[ip] : null;
+      h += '<tr><td>'+c.slice(0,4)+'年'+(+c.slice(5))+'月</td><td>'+D.p[i][j].toFixed(3)+'</td><td>'+u.toFixed(3)+'</td><td>'+(u/D.b[i]*100).toFixed(2)+'%</td><td>'+(uc == null ? '—' : uc.toFixed(3))+'</td><td>'+(uc == null ? '—' : (u-uc >= 0 ? '+' : '')+(u-uc).toFixed(3))+'</td><td>'+(up == null ? '—' : up.toFixed(3))+'</td><td>'+(up == null ? '—' : (u-up >= 0 ? '+' : '')+(u-up).toFixed(3))+'</td></tr>'; }});
+    document.getElementById('sfc-tab').innerHTML = h;
+  }}
+  Array.prototype.forEach.call(document.querySelectorAll('.sfc-r'), function(b) {{ b.addEventListener('click', function() {{
+    Array.prototype.forEach.call(document.querySelectorAll('.sfc-r'), function(x) {{ x.classList.remove('on'); }}); b.classList.add('on'); st.n = +b.getAttribute('data-n'); draw(); }}); }});
+  Array.prototype.forEach.call(document.querySelectorAll('.sfc-u'), function(b) {{ b.addEventListener('click', function() {{
+    Array.prototype.forEach.call(document.querySelectorAll('.sfc-u'), function(x) {{ x.classList.remove('on'); }}); b.classList.add('on'); st.u = b.getAttribute('data-u'); draw(); }}); }});
+  Array.prototype.forEach.call(document.querySelectorAll('.sfc-chk input[data-c]'), function(c) {{ c.addEventListener('change', function() {{ st.on[c.getAttribute('data-c')] = c.checked; draw(); }}); }});
+  document.getElementById('sfc-carry').addEventListener('change', function(e) {{ st.carry = e.target.checked ? 1 : 0; draw(); }});
+  draw(); table();
+}})();
 /* ── 股指÷黄金: 时间段选取 (固定容器高度, 重绘只换 SVG 内容, 统计量按区间重算) ── */
 (function() {{
   var el = document.getElementById('sgz-data'); if (!el) return;
