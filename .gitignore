@@ -17,3 +17,13 @@ data/_daily_cache_*.json
 data/.rename_bak/
 data/kol_registry.json.bak_*
 data/notion_kol_rename_backup_*.json
+
+# X 推文原文(含第三方内容, 不得进公开仓库; 2026-10-04 起)
+data/x_backfill/*_raw.json
+data/x_backfill/x_posts_store.json
+data/x_backfill/*_BEFORE_FIX.json
+data/x_backfill/lukegromen_statements_full.json
+data/x_backfill/x_handle_candidates.json
+data/x_backfill/x_handle_review.json
+data/x_backfill/x_handle_verified.json
+data/x_backfill/x_handle_api.json

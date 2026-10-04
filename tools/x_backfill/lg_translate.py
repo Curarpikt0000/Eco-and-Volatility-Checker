@@ -10,7 +10,9 @@ import requests
 
 URL = 'http://localhost:8800/v1/chat/completions'
 MODEL = 'claude-haiku-4-5'
-OUT = '/tmp/lg_zh.json'
+OUT = os.environ.get('LG_ZH_OUT', '/tmp/lg_zh.json')
+IN = os.environ.get('LG_FINAL_IN', '/tmp/lg_final.json')
+SEED = os.environ.get('LG_ZH_SEED', '')  # 增量: 旧译文库(逐条按新原文重过门禁, 通过才复用)
 SYS = ("你是金融文本翻译。把推文逐句翻译成简体中文。硬规则:\n"
        "1) 只翻译,不总结、不评论、不加原文没有的信息、不删任何内容。\n"
        "2) 所有数字、百分比、金额($123b 这类写法保持原样,可在后面括号补换算)、年份、@用户名、#标签、股票/资产代码(UST、JGB、DXY、TGA、USDJPY 等)原样保留。\n"
@@ -35,17 +37,34 @@ GLOSS_EN = {'Bessent', 'Warsh', 'Greer', 'Druck', 'Frisby', 'Trump', 'Powell', '
 REFUSE = re.compile(r'我需要看到|我需要你提供|请提供|请复制|无法翻译|没有粘贴|您只提供|你只提供|完整的推文|我会按照|我会立即|以下是翻译|翻译如下|译文如下|Here is|I need|I cannot|断片|缺乏具体')
 
 
+def leaks_source(src, zh):
+    """★门禁: 译文夹带原文连续 25 个字符(排除 @/#/数字串)=把英文原句原样抄进译文。"""
+    a = re.sub(r'\s+', ' ', re.sub(r'https?://\S+', '', src)).strip()
+    b = re.sub(r'\s+', ' ', re.sub(r'https?://\S+', '', zh)).strip()
+    for i in range(0, max(len(a) - 25, 1), 5):
+        w = a[i:i + 25]
+        if len(w) == 25 and sum(c.isalpha() for c in w) >= 15 and '@' not in w and w in b:
+            return w
+    return ''
+
+
 def check(src, zh):
     f = facts(src)
     miss = []
     if REFUSE.search(zh):
         miss.append('拒译/带前言')
+    if leaks_source(src, zh):
+        miss.append('夹带英文原句')
     for n in f['nums']:
         if n not in zh and n.replace(',', '') not in zh.replace(',', ''):
             miss.append(n)
     miss += [a for a in f['at'] if a not in zh]
     miss += [a for a in f['tag'] if a not in zh and a.lstrip('#') not in GLOSS_EN]
     return miss
+
+
+def norm_src(t):
+    return re.sub(r'\s+', ' ', re.sub(r'https?://\S+', '', t or '')).strip()
 
 
 def call(text, extra=''):
@@ -58,10 +77,25 @@ def call(text, extra=''):
 
 
 def main():
-    items = json.load(open('/tmp/lg_final.json'))['statements']
+    items = json.load(open(IN))['statements']
     lim = int(sys.argv[1]) if len(sys.argv) > 1 else len(items)
     done = json.load(open(OUT)) if os.path.exists(OUT) else {}
     fails = 0
+    if SEED and os.path.exists(SEED):
+        seed = json.load(open(SEED)); reused = rejected = 0
+        for x in items:
+            z = seed.get(x['id'])
+            if z and z.get('ok') and x['id'] not in done:
+                # ★门禁1(新增): 译文是对「旧原文」做的; 新原文与旧原文(去空白/URL)不逐字相同 -> 不复用, 重翻
+                #   (只查数字/标签查不出「原文被截断后变长」, 实测栽过: 译文停在截断处)
+                if norm_src(x['text']) != norm_src(z.get('src', '')):
+                    rejected += 1; continue
+                miss = check(x['text'], z['zh'])  # 门禁2: 数字/标签/@ 仍须保留
+                if not miss:
+                    done[x['id']] = {'zh': z['zh'], 'ok': True, 'flag': [], 'tries': 0, 'reused': True}; reused += 1
+                else:
+                    rejected += 1
+        print(f'复用旧译文 {reused} 条(已按新原文重过门禁); 门禁不通过需重翻 {rejected} 条', flush=True)
     for i, x in enumerate(items[:lim], 1):
         if done.get(x['id'], {}).get('ok'):
             continue
@@ -71,7 +105,7 @@ def main():
                 extra = '' if tries == 0 else ("\n\n[注意: 上面就是完整的推文全文,哪怕只有一句话也请直接翻译成中文,不要要求补充内容,不要加任何说明。上次问题: " + ', '.join(miss) + "]")
                 zh = call(src, extra); tries += 1
                 miss = check(src, zh)
-            done[x['id']] = {'zh': zh, 'ok': not miss, 'flag': miss, 'tries': tries}
+            done[x['id']] = {'zh': zh, 'ok': not miss, 'flag': miss, 'tries': tries, 'src': src}
             fails = 0
         except Exception as e:  # noqa: BLE001
             done[x['id']] = {'zh': '', 'ok': False, 'flag': [f'ERR {type(e).__name__} {str(e)[:80]}'], 'tries': tries}
