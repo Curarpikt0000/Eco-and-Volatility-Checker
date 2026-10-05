@@ -1,87 +1,7 @@
 {
  "table": "HDB_YIELDS",
- "count": 259,
+ "count": 258,
  "rows": [
-  {
-   "uid": "y|2025-10-02",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2025-10-02"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "data/us_jp_yields.json .points"
-       }
-      }
-     ]
-    },
-    "US10Y": {
-     "number": 4.1
-    },
-    "US30Y": {
-     "number": 4.69
-    },
-    "JP10Y": {
-     "number": 1.675
-    },
-    "JP30Y": {
-     "number": 3.087
-    },
-    "利差": {
-     "number": 2.425
-    }
-   }
-  },
-  {
-   "uid": "y|2025-10-03",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2025-10-03"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "data/us_jp_yields.json .points"
-       }
-      }
-     ]
-    },
-    "US10Y": {
-     "number": 4.13
-    },
-    "US30Y": {
-     "number": 4.71
-    },
-    "JP10Y": {
-     "number": 1.667
-    },
-    "JP30Y": {
-     "number": 3.072
-    },
-    "利差": {
-     "number": 2.463
-    }
-   }
-  },
   {
    "uid": "y|2025-10-06",
    "props": {
@@ -10359,6 +10279,46 @@
     },
     "利差": {
      "number": 2.148
+    }
+   }
+  },
+  {
+   "uid": "y|2026-10-02",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-02"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/us_jp_yields.json .points"
+       }
+      }
+     ]
+    },
+    "US10Y": {
+     "number": null
+    },
+    "US30Y": {
+     "number": null
+    },
+    "JP10Y": {
+     "number": 3.097
+    },
+    "JP30Y": {
+     "number": 4.148
+    },
+    "利差": {
+     "number": null
     }
    }
   }

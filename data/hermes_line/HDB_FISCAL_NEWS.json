@@ -215,6 +215,59 @@
    }
   },
   {
+   "uid": "fn|2026-09-02|特朗普签署2027财年临时拨款法案，政府资金延至12月11日",
+   "props": {
+    "标题": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-09-02｜特朗普签署2027财年临时拨款法案，政府资金延至12月11日"
+       }
+      }
+     ]
+    },
+    "日期": {
+     "date": {
+      "start": "2026-09-02"
+     }
+    },
+    "摘要": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "国会通过 Continuing Appropriations and Extensions Act 2027，避免10月1日关门，下一个截止日为12月11日。"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "political.org"
+       }
+      }
+     ]
+    },
+    "国家": {
+     "select": {
+      "name": "US"
+     }
+    },
+    "类别": {
+     "select": {
+      "name": "拨款法案"
+     }
+    },
+    "来源链接": {
+     "url": "https://political.org/2026/09/02/trump-signs-continuing-appropriations-and-extensions-act-2027-averting-shutdown-through-december-11/"
+    }
+   }
+  },
+  {
    "uid": "fn|2026-09-01|众议院370-48通过CR，政府拨款延至12/11，规避10/1停摆",
    "props": {
     "标题": {
@@ -1006,59 +1059,6 @@
     },
     "来源链接": {
      "url": "https://govtschemes.org/liheap-funding-eligibility-application-guide/"
-    }
-   }
-  },
-  {
-   "uid": "fn|2026-01-28|2026 年度预算案:一般会计总额超 122 万亿日元创新高",
-   "props": {
-    "标题": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-01-28｜2026 年度预算案:一般会计总额超 122 万亿日元创新高"
-       }
-      }
-     ]
-    },
-    "日期": {
-     "date": {
-      "start": "2026-01-28"
-     }
-    },
-    "摘要": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026 年度预算案一般会计总额超 122 万亿日元创历史新高,社会保障费达 39 万亿日元;受利率上升影响,国债利払费(付息成本)急增,凸显日本财政对利率的高度敏感。"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "个人财政分析(引财务省数据)"
-       }
-      }
-     ]
-    },
-    "国家": {
-     "select": {
-      "name": "JP"
-     }
-    },
-    "类别": {
-     "select": {
-      "name": "国债/财政"
-     }
-    },
-    "来源链接": {
-     "url": "https://baruharu00.hatenablog.com/entry/20260128/1769544851"
     }
    }
   }
