@@ -179,9 +179,9 @@ bash ~/.hermes/scripts/publish_cf_pages.sh eco-volatility-checker docs/index.htm
 ## 11. 看板板块清单（自动更新）
 
 <!-- AUTO:SECTIONS:BEGIN -->
-_自动生成于 2026-10-02（`scripts/handover_refresh.py`，每个工作日检查一次，请勿手改此段）_
+_自动生成于 2026-10-05（`scripts/handover_refresh.py`，每个工作日检查一次，请勿手改此段）_
 
-看板当前共 **38** 个板块（顺序＝页面顺序；频率＝页面上的更新标签）：
+看板当前共 **41** 个板块（顺序＝页面顺序；频率＝页面上的更新标签）：
 
 1. 指标卡片 · 18 项（短 → 中 → 长） ——**每日更新**
 2. 警报统计速览 ——**每日更新**
@@ -202,27 +202,30 @@ _自动生成于 2026-10-02（`scripts/handover_refresh.py`，每个工作日检
 17. 中国模式断代监控 · 旧引擎停摆与新引擎接续 (NBS 官方分项 + 东财宏观 · 对照 Perkins 2025-12 判据) ——**每月更新**
 18. WRS · Walmart 衰退信号 (Walmart ÷ 奢侈品指数 · Jim Paulsen 口径 · 分母用 ETF 代理) ——**每日更新**
 19. 金油比 · 黄金 ÷ WTI 原油 (1971 起 · 月度 · 对数轴) ——**每日更新**
-20. 股指 ÷ 黄金 · 50 年比值 (道指÷金价 · 标普500÷金价 · 月度对数坐标 · 1976 年至今) ——**每日更新**
-21. 消费者信心 vs 全要素生产率 (密歇根信心 · TFP 相对趋势 · 复刻 BofA Chart 10 · 1978 年至今) ——**每日检查**
-22. 美国货运 · 铁路周度 (AAR 10 类商品 + 联运) 与公路月度 (ATA / Cass) ——**每周更新**
-23. 中美 AI 投资 · 科技巨头资本开支 (美国五家 vs 阿里/腾讯/百度 · 季度 + 美国数据中心建设月度) ——**每日检查**
-24. AI 算力价格 · LLM Token 支出指数 (Silicon Data SDLLMTK · 美元/百万 token · 全市场/闭源/开源) ——**每日更新**
-25. 美元指数 vs 黄金 · 年初至今大事件标注 (双轴叠加 · 事件由价格异动反查并逐条核实出处) ——**价格每日 · 事件每周**
-26. 黄金 ETF 分地区资金流 (北美/欧洲/亚洲/其他 · 世界黄金协会官方周度吨数) ——**每周更新**
-27. 贵金属 ETF 期权波动率 (GLD/SLV/IAU · ATM IV 期限结构 + 25D 偏斜) ——**每日更新**
-28. COMEX 期货期权持仓 (金/银 · Managed Money 方向，非隐含波动率) ——**持仓周更**
-29. 全球货币供应与放水加速度 (美/欧/日/英/中 · 30 年) ——**月度更新**
-30. 美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程) ——**每次拍卖**
-31. 外国官方托管美债 · 纽约联储 (去美元化风向标) ——**每周更新**
-32. 1年内到期可交易国债 · 再融资墙 (rollover 压力) ——**每月更新**
-33. 美日 10年/30年国债收益率 · 过去一年 (四线同图 · 美日利差与套息) ——**每日更新**
-34. 日本 / 中国 / 欧元区 持有美债 · 央行 vs 私人 · 近10年 + 2008长历史 (TIC 分国别口径) ——**每月更新 · 滞后约2月 · 三方同频**
-35. 四国国际投资头寸 IIP · 过去十年 (美/日/德/中 对外资产·负债·净债权地位) ——**每年更新**
-36. 美国石油库存运营红线 · 能源安全 (Brent-WTI 价差 / Cushing / SPR · tank bottom) ——**每周更新 · 价差每日**
-37. 日经225 vs 外资净买入日股 · 过去一年 (日本市场 · 外资资金流) ——**指数每日 · 外资每周**
-38. 机构持仓追踪 · 13F + Trump (对比上期变动) ——**每季度 · Trump不定期**
+20. 比特币 ÷ 黄金 · 暴涨暴跌与事件 (2010 起 · 月度 · 对数轴) ——**日更**
+21. 白银期货 · 各月合约价差 (COMEX · 日度 · 对比持有成本) ——**日更**
+22. 机构研究报告 · 被公开解读的线索 (按机构 · 近 6 个月 · 正文未读) ——**日更**
+23. 股指 ÷ 黄金 · 50 年比值 (道指÷金价 · 标普500÷金价 · 月度对数坐标 · 1976 年至今) ——**每日更新**
+24. 消费者信心 vs 全要素生产率 (密歇根信心 · TFP 相对趋势 · 复刻 BofA Chart 10 · 1978 年至今) ——**每日检查**
+25. 美国货运 · 铁路周度 (AAR 10 类商品 + 联运) 与公路月度 (ATA / Cass) ——**每周更新**
+26. 中美 AI 投资 · 科技巨头资本开支 (美国五家 vs 阿里/腾讯/百度 · 季度 + 美国数据中心建设月度) ——**每日检查**
+27. AI 算力价格 · LLM Token 支出指数 (Silicon Data SDLLMTK · 美元/百万 token · 全市场/闭源/开源) ——**每日更新**
+28. 美元指数 vs 黄金 · 年初至今大事件标注 (双轴叠加 · 事件由价格异动反查并逐条核实出处) ——**价格每日 · 事件每周**
+29. 黄金 ETF 分地区资金流 (北美/欧洲/亚洲/其他 · 世界黄金协会官方周度吨数) ——**每周更新**
+30. 贵金属 ETF 期权波动率 (GLD/SLV/IAU · ATM IV 期限结构 + 25D 偏斜) ——**每日更新**
+31. COMEX 期货期权持仓 (金/银 · Managed Money 方向，非隐含波动率) ——**持仓周更**
+32. 全球货币供应与放水加速度 (美/欧/日/英/中 · 30 年) ——**月度更新**
+33. 美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程) ——**每次拍卖**
+34. 外国官方托管美债 · 纽约联储 (去美元化风向标) ——**每周更新**
+35. 1年内到期可交易国债 · 再融资墙 (rollover 压力) ——**每月更新**
+36. 美日 10年/30年国债收益率 · 过去一年 (四线同图 · 美日利差与套息) ——**每日更新**
+37. 日本 / 中国 / 欧元区 持有美债 · 央行 vs 私人 · 近10年 + 2008长历史 (TIC 分国别口径) ——**每月更新 · 滞后约2月 · 三方同频**
+38. 四国国际投资头寸 IIP · 过去十年 (美/日/德/中 对外资产·负债·净债权地位) ——**每年更新**
+39. 美国石油库存运营红线 · 能源安全 (Brent-WTI 价差 / Cushing / SPR · tank bottom) ——**每周更新 · 价差每日**
+40. 日经225 vs 外资净买入日股 · 过去一年 (日本市场 · 外资资金流) ——**指数每日 · 外资每周**
+41. 机构持仓追踪 · 13F + Trump (对比上期变动) ——**每季度 · Trump不定期**
 
-取数函数（`src/external_data.py`，共 63 个）：`fetch_kol_recent`、`fetch_china_liquidity`、`fetch_liquidity_points`、`fetch_ecb_balance_sheet`、`fetch_euro_ncb_balance_sheets`、`fetch_cb_balance_sheets`、`fetch_cb_liquidity_swaps`、`fetch_fiscal_budget`、`fetch_maturing_treasury`、`fetch_foreign_custody_ust`、`fetch_custody_acceleration`、`fetch_tic_official_vs_private`、`fetch_country_ust_holdings`、`fetch_treasury_auctions`、`fetch_money_supply`、`fetch_m2_history`、`fetch_credit_impulse`、`fetch_treasury_stress_panels`、`fetch_ofr_fsi`、`fetch_us_jp_yields`、`fetch_nikkei225`、`fetch_foreign_flow_japan`、`fetch_iip_four_countries`、`fetch_hf_leverage`、`fetch_bis_gold_swaps`、`fetch_silver_imports_data`、`fetch_gold_premium`、`fetch_ad_line_real`、`fetch_market_breadth`、`fetch_silver_bank_positions`、`fetch_comex_silver_issues_ref`、`fetch_gold_exports`、`fetch_us_yield_century`、`fetch_comex_issue_stop_firms`、`fetch_comex_issue_stop_weekly`、`fetch_fiscal_news`、`fetch_oil_inventory`、`fetch_basis_trade_monitor`、`fetch_liquidity_crisis_panel`、`fetch_cot_managed_money`、`fetch_comex_inventory`、`fetch_debt_to_gdp`、`fetch_corporate_credit`、`fetch_ai_credit`、`fetch_ai_fcf`、`fetch_synthetic_spreads`、`fetch_treasury_curve`、`fetch_cips`、`fetch_china_regime_shift`、`fetch_wrs_recession_signal`、`fetch_ust_microstructure`、`fetch_dxy_gold_events`、`fetch_gold_etf_flows_by_region`、`fetch_pm_option_vol`、`fetch_comex_option_positions`、`fetch_global_money_supply`、`fetch_wgc_weekly_iv`、`fetch_stock_gold_ratio`、`fetch_tfp_sentiment`、`fetch_llm_token_index`、`fetch_ai_capex`、`fetch_gold_oil_ratio`、`fetch_us_freight`
+取数函数（`src/external_data.py`，共 65 个）：`fetch_kol_recent`、`fetch_china_liquidity`、`fetch_liquidity_points`、`fetch_ecb_balance_sheet`、`fetch_euro_ncb_balance_sheets`、`fetch_cb_balance_sheets`、`fetch_cb_liquidity_swaps`、`fetch_fiscal_budget`、`fetch_maturing_treasury`、`fetch_foreign_custody_ust`、`fetch_custody_acceleration`、`fetch_tic_official_vs_private`、`fetch_country_ust_holdings`、`fetch_treasury_auctions`、`fetch_money_supply`、`fetch_m2_history`、`fetch_credit_impulse`、`fetch_treasury_stress_panels`、`fetch_ofr_fsi`、`fetch_us_jp_yields`、`fetch_nikkei225`、`fetch_foreign_flow_japan`、`fetch_iip_four_countries`、`fetch_hf_leverage`、`fetch_bis_gold_swaps`、`fetch_silver_imports_data`、`fetch_gold_premium`、`fetch_ad_line_real`、`fetch_market_breadth`、`fetch_silver_bank_positions`、`fetch_comex_silver_issues_ref`、`fetch_gold_exports`、`fetch_us_yield_century`、`fetch_comex_issue_stop_firms`、`fetch_comex_issue_stop_weekly`、`fetch_fiscal_news`、`fetch_oil_inventory`、`fetch_basis_trade_monitor`、`fetch_liquidity_crisis_panel`、`fetch_cot_managed_money`、`fetch_comex_inventory`、`fetch_debt_to_gdp`、`fetch_corporate_credit`、`fetch_ai_credit`、`fetch_ai_fcf`、`fetch_synthetic_spreads`、`fetch_treasury_curve`、`fetch_cips`、`fetch_china_regime_shift`、`fetch_wrs_recession_signal`、`fetch_ust_microstructure`、`fetch_dxy_gold_events`、`fetch_gold_etf_flows_by_region`、`fetch_pm_option_vol`、`fetch_comex_option_positions`、`fetch_global_money_supply`、`fetch_wgc_weekly_iv`、`fetch_stock_gold_ratio`、`fetch_tfp_sentiment`、`fetch_llm_token_index`、`fetch_ai_capex`、`fetch_gold_oil_ratio`、`fetch_us_freight`、`fetch_btc_gold_ratio`、`fetch_silver_curve_spread`
 
 运维工具（`tools/`，共 26 个）：`aar_rail_weekly.py`、`add_forecast_kols.py`、`add_kol_short_names.py`、`add_notion_sync_to_cron.py`、`apply_1yr_backfill.py`、`apply_full_backfill.py`、`apply_snapshot_detail.py`、`backfill_kol_detail.py`、`backfill_optvol.py`、`build_comexopt_db.py`、`build_globalm2_db.py`、`build_optvol_db.py`、`clean_cron_esoteric_ref.py`、`ensure_tesseract.sh`、`fix_globalm2_gaps.py`、`freshness_audit.py`、`kol_bf_ingest.py`、`kol_consistency_audit.py`、`kol_highlights.py`、`kol_merge_deep.py`、`kol_new_backfill.sh`、`rename_kol_notion_person.py`、`snapshot_optvol.py`、`split_cycle_kols.py`、`sync_kol_from_notion.py`、`verify_backfill_urls.py`
 
@@ -231,5 +234,8 @@ _自动生成于 2026-10-02（`scripts/handover_refresh.py`，每个工作日检
 ## 12. 变更记录（自动追加，新→旧）
 
 <!-- AUTO:CHANGELOG:BEGIN -->
+- 2026-10-05 新增板块：机构研究报告 · 被公开解读的线索 (按机构 · 近 6 个月 · 正文未读)（日更）
+- 2026-10-05 新增板块：白银期货 · 各月合约价差 (COMEX · 日度 · 对比持有成本)（日更）
+- 2026-10-05 新增板块：比特币 ÷ 黄金 · 暴涨暴跌与事件 (2010 起 · 月度 · 对数轴)（日更）
 - 2026-10-01 初始化：登记 38 个看板板块基线（含金油比、美国货运、LLM Token、中美 AI 投资等）。
 <!-- AUTO:CHANGELOG:END -->

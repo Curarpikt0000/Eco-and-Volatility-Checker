@@ -30,6 +30,21 @@ if [ -f "$STATUS" ] && grep -qE '^(RUNNING|DONE)' "$STATUS"; then
   exit 0
 fi
 
+# ── 0. 先从 Notion 同步名册(2026-10-02 立) ──
+# 背景: 10/02 抓取 09:00 按 192 人切批，而日报步骤 0 在 11:00 才把名册同步到 198 人，
+#   6 位新增 KOL 当天既没抓取也没出现在看板。名册必须在切批【之前】同步。
+# 同步失败不中止抓取: 沿用现有名册继续，并打印一行告警(no_agent cron 有输出才发消息)。
+# 自测模式(KOL_PREFETCH_DRY=1)不联网同步，避免测试改动真实名册。
+SYNC_WARN=""
+if [ "${KOL_PREFETCH_DRY:-0}" != "1" ]; then
+  SYNC_OUT=$(cd "$ROOT" && timeout 300 "$ROOT/.venv/bin/python" tools/sync_kol_from_notion.py --apply 2>&1)
+  SYNC_RC=$?
+  if [ "$SYNC_RC" -ne 0 ] || ! echo "$SYNC_OUT" | grep -q "已写入"; then
+    SYNC_WARN="⚠️ eco-vol KOL 抓取: 抓取前 Notion 名册同步失败(rc=$SYNC_RC)，今日沿用上次名册，新增人要等明天。"
+    echo "$SYNC_WARN"
+  fi
+fi
+
 # ── 1. 按名册切批 ──
 if ! "$ROOT/.venv/bin/python" - "$BASE" "$NBATCH" <<'EOF'
 import json, sys
