@@ -1,7 +1,14 @@
 {
  "dataset": "corp_credit",
- "updated": "2026-10-02",
+ "updated": "2026-10-05",
  "periods": [
+  {
+   "key": "2026-10",
+   "label": "2026-10",
+   "saved_at": "2026-10-05",
+   "as_of": "2026-10-01",
+   "note": null
+  },
   {
    "key": "2026-09",
    "label": "2026-09",
