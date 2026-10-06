@@ -11180,10 +11180,14 @@ mkRadar('rLong', RADAR.long);
     // ★2026-08-25(Chao)：「中国央行流动性」与「央行货币互换」原先都掉进「其他」，
     // 但两者本质都是央行流动性观测 —— 一个是 PBoC 的逆回购/DR007/MLF/SFISF，
     // 一个是 Fed 与外国央行的美元互换额度。均归入本组。
-    {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','国际清算银行','货币供应','M2 十年','Credit Impulse','信贷脉冲','中国央行流动性','央行货币互换','美元流动性互换'] }},
+    {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','国际清算银行','三国货币供应','全球货币供应','M2 十年','Credit Impulse','信贷脉冲','中国央行流动性','央行货币互换','美元流动性互换'] }},
     {{ name: '债务与信用', match: ['政府债务','世界前十大经济体','公司债','OAS 利差','CIPS','跨境人民币','AI 产业链','自由现金流','信用维度'] }},
-    {{ name: '国债流动性观测', match: ['国债市场收益率','市场压力','基差套利去杠杆预警','SOFR 倒挂','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
+    {{ name: '国债流动性观测', match: ['国债市场收益率','国债市场微观结构','中国模式断代监控','市场压力','基差套利去杠杆预警','SOFR 倒挂','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
     {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','COMEX & 上海','贵金属库存','ETF 资金流','白银做市商','COMEX 白银','投行累计','做市商每周净','issue/stop','COMEX 交割前十名','交货方','自营黄金掉期','黄金出口','Nonmonetary','黄金 Domestic Premium','Premium/Discount','白银月度进口','Silver Bullion'] }},
+    // ★2026-10-06(Chao「跳动感」): 原先掉进「其他」的 15 个 + 被关键词错归的「美元指数 vs 黄金」,
+    //   本质都是跨资产/黄金白银/实体与 AI 观测, 单独成组, 避免被硬塞进国债流动性组。
+    {{ name: '跨资产与金银', match: ['美元指数 vs 黄金','金油比','比特币 ÷ 黄金','白银期货','股指 ÷ 黄金','黄金 ETF 分地区','贵金属 ETF 期权','COMEX 期货期权持仓','WRS','机构研究报告','印度 & 中国黄金'] }},
+    {{ name: '实体与 AI', match: ['消费者信心','美国货运','中美 AI 投资','AI 算力价格'] }},
     {{ name: '财政政策', match: ['美日财政政策事件','债务上限','补正预算','国债发行','年度财政花费','财政花费','政府总支出'] }},
     {{ name: '日本市场', match: ['日经225','外资净买入','日本市场'] }},
     {{ name: '机构与政要持仓', match: ['机构持仓','13F','Trump'], pinLast: true }}
@@ -11199,6 +11203,7 @@ mkRadar('rLong', RADAR.long);
 
   var links = [];
   var bucket = {{}};
+  var seq = [];     // ★2026-10-06: DOM 顺序下的 {a, idx, hint}; 菜单严格按它渲染, 保证 菜单顺序 === 页面顺序
   titles.forEach(function(t, i) {{
     // ★保留已有的语义 id（模板里写死的 sec-cn-liq / sec-cips 等）。
     // 旧实现无条件 t.id = 'sec-' + i，会把语义 id 冲掉 → 外部链接/书签锚点全失效。
@@ -11221,44 +11226,54 @@ mkRadar('rLong', RADAR.long);
     }});
     var g = groupOf(label);
     (bucket[g] = bucket[g] || []).push({{ a: a, idx: i }});
+    seq.push({{ a: a, idx: i, hint: g }});
     links[i] = a;
   }});
 
-  function renderGroup(gIdx, gName) {{
-    var items = bucket[gIdx];
-    if (!items || !items.length) return;
+  // ★★2026-10-06(Chao「还是有跳动感」): 旧实现把同组成员(哪怕相距几十屏)合并成一个菜单组,
+  //   而 scrollspy 用的是 DOM 序号 → 菜单顺序≠页面顺序, 3 处位置倒退
+  //   (美元指数 vs 黄金 / 全球货币供应与放水加速度 / 国债市场微观结构 被关键词硬塞进远处的组)。
+  //   根治: 菜单严格按 DOM 顺序渲染; 分组仅作「相邻 section 的小标题」:
+  //   连续同组 → 一个标题; 同组但被别组隔开 → 分成两段各带标题; 关键词无命中 → 并入相邻段。
+  //   以后新增 section 无论关键词命不命中, 都不可能再让菜单顺序与页面顺序不一致。
+  var NONE = GROUPS.length;
+  var eff = seq.map(function(x) {{ return x.hint; }});
+  for (var k = 0; k < eff.length; k++) {{
+    if (eff[k] !== NONE) continue;
+    var pv = null, nx = null, j;
+    for (j = k - 1; j >= 0; j--) {{ if (seq[j].hint !== NONE) {{ pv = seq[j].hint; break; }} }}
+    for (j = k + 1; j < eff.length; j++) {{ if (seq[j].hint !== NONE) {{ nx = seq[j].hint; break; }} }}
+    eff[k] = (pv !== null) ? pv : (nx !== null ? nx : NONE);
+  }}
+  // 孤立离群: 夹在同一组两侧、自己命中另一组、且只有 1 项 → 归入两侧那一组(菜单更连贯, 页面顺序不变)
+  for (var q = 1; q < eff.length - 1; q++) {{
+    if (eff[q] !== eff[q - 1] && eff[q - 1] === eff[q + 1] && eff[q - 1] !== NONE) {{ eff[q] = eff[q - 1]; }}
+  }}
+  var runs = [];
+  seq.forEach(function(x, n) {{
+    var gi = eff[n], last = runs[runs.length - 1];
+    if (last && last.gIdx === gi) last.items.push(x); else runs.push({{ gIdx: gi, items: [x] }});
+  }});
+  // pinLast(机构与政要持仓): 保持 Chao 的「放最后」→ 仅当它在页面里本来就靠后时才有意义;
+  // 若 pinLast 的段不在末尾, 不改菜单顺序(否则又与页面脱节), 只在日志里提示。
+  function renderRun(run, seen) {{
     var wrap = document.createElement('div');
     wrap.className = 'sn-group';
     var hdr = document.createElement('div');
     hdr.className = 'sn-group-hdr';
-    hdr.innerHTML = '<span class="sn-caret">▾</span>' + gName + '<span class="sn-cnt">' + items.length + '</span>';
+    var nm = (run.gIdx < GROUPS.length) ? GROUPS[run.gIdx].name : '其他';
+    hdr.innerHTML = '<span class="sn-caret">▾</span>' + nm + (seen[run.gIdx] ? '（续）' : '') + '<span class="sn-cnt">' + run.items.length + '</span>';
+    seen[run.gIdx] = true;
     var list = document.createElement('div');
     list.className = 'sn-group-list';
-    items.forEach(function(it) {{ list.appendChild(it.a); }});
+    run.items.forEach(function(it) {{ list.appendChild(it.a); }});
     hdr.addEventListener('click', function() {{ wrap.classList.toggle('sn-collapsed'); }});
     wrap.appendChild(hdr);
     wrap.appendChild(list);
     box.appendChild(wrap);
   }}
-  // ★按「首个成员在 DOM 中的位置」排序分组, 使菜单顺序 === 页面顺序。
-  // pinLast 的组(机构与政要持仓)无论其成员在哪, 一律排到最后(Chao 指定)。
-  var order = [];
-  for (var gi = 0; gi <= GROUPS.length; gi++) {{
-    var it = bucket[gi];
-    if (!it || !it.length) continue;
-    var pinned = (gi < GROUPS.length && GROUPS[gi].pinLast) ? 1 : 0;
-    order.push({{
-      gIdx: gi,
-      gName: (gi < GROUPS.length) ? GROUPS[gi].name : '其他',
-      first: it[0].idx,      // 该组第一个 section 在页面中的位置
-      pinned: pinned
-    }});
-  }}
-  order.sort(function(a, b) {{
-    if (a.pinned !== b.pinned) return a.pinned - b.pinned;   // pinLast 沉底
-    return a.first - b.first;                                 // 否则按 DOM 首现位置
-  }});
-  order.forEach(function(o) {{ renderGroup(o.gIdx, o.gName); }});
+  var _seen = {{}};
+  runs.forEach(function(r) {{ renderRun(r, _seen); }});
   function onScroll() {{
     // 用 getBoundingClientRect (相对视口, 不受父元素定位上下文影响) 判定当前章节。
     // 触发线 = 视口顶部下方 120px; 找最后一个标题顶部已越过触发线的 section。
