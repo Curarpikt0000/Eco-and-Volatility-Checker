@@ -143,6 +143,61 @@ def passes_gates(name, item, alias, ctx):
     return True
 
 
+def _vid_params(url):
+    """从 B 站视频链接取 aid/bvid; 解析不出返回 None。"""
+    m = re.search(r"av(\d+)|(BV[0-9A-Za-z]+)", url or "")
+    if not m:
+        return None
+    return {"aid": m.group(1)} if m.group(1) else {"bvid": m.group(2)}
+
+
+def fetch_full_desc(url, session=None):
+    """★2026-10-06 (Chao: 点击要能看到完整简介): 搜索接口的 description 被 [:140] 截断, 详情接口 /x/web-interface/view
+    能一次返回完整简介(实测 9/9 code=0, 完整长度 145~279 字)。返回 (完整简介 or None)。
+    失败/空一律返回 None, 调用方据此「保留旧值不覆盖」, 绝不写空。"""
+    p = _vid_params(url)
+    if not p:
+        return None
+    s = session or requests
+    try:
+        r = s.get("https://api.bilibili.com/x/web-interface/view", params=p,
+                  headers={"User-Agent": UA, "Referer": "https://www.bilibili.com"}, timeout=20).json()
+        if r.get("code") != 0:
+            return None
+        v = r.get("data") or {}
+        d2 = v.get("desc_v2") or []
+        full = "".join(x.get("raw_text", "") for x in d2) if d2 else (v.get("desc") or "")
+        full = re.sub(r"\s+", " ", full).strip()
+        return full or None
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def enrich_full(items, sleep=2.5, log=print, only_truncated=True):
+    """给条目补 summary_full。只补「摘要疑似被 140 字截断」的(>=130 字); 已有 summary_full 的跳过; 取不到不写。
+    返回 (补成功数, 失败数)。"""
+    sess = requests.Session()
+    ok = bad = 0
+    for it in items:
+        if it.get("summary_full"):
+            continue
+        if only_truncated and len(it.get("summary") or "") < 130:
+            continue
+        srcs = it.get("sources") or []
+        url = next((s.get("url") for s in srcs if "bilibili" in (s.get("url") or "")), None)
+        full = fetch_full_desc(url, sess) if url else None
+        if full and len(full) > len(it.get("summary") or ""):
+            it["summary_full"] = full
+            ok += 1
+        elif full:
+            ok += 0          # 完整简介不比摘要长 = 并未被截断, 不需要展开
+        else:
+            bad += 1
+            log(f"  补全失败(保留原摘要): {it.get('date')} {str(it.get('title'))[:24]}")
+        time.sleep(sleep)
+    return ok, bad
+
+
 def collect(window_days=183, targets=None, pages=(1, 2), sleep=3.0, log=print):
     today = dt.date.today()
     start = (today - dt.timedelta(days=window_days)).isoformat()
@@ -202,5 +257,10 @@ if __name__ == "__main__":
     wd = int(sys.argv[1]) if len(sys.argv) > 1 else 183
     r, st = collect(window_days=wd)
     p = save(r, wd)
-    print("完成", {k: (v if isinstance(v, str) else v) for k, v in st.items()})
+    # ★2026-10-06: 采集+合并旧数据之后, 对「摘要疑似被 140 字截断」的条目补完整简介(已补过的跳过, 取不到保留原摘要)
+    _all = [it for v in p["orgs"].values() for it in v["items"]]
+    _ok, _bad = enrich_full(_all)
+    if _ok or _bad:
+        json.dump(p, open(OUT, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    print("完成", {k: (v if isinstance(v, str) else v) for k, v in st.items()}, "| 补全简介 成功", _ok, "失败", _bad)
     print("合计", sum(len(v["items"]) for v in p["orgs"].values()), "条 →", OUT)

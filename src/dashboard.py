@@ -1414,10 +1414,19 @@ def _report_leads_html(o):
             f'<span class="rpl-pf">{_esc(x.get("platform", ""))}</span>' for x in srcs[:3])
         summ = _strip_md(i.get("summary") or "").strip().lstrip("，,、；;。 ")
         _tt = (i.get("title") or "").strip()
+        _full = _strip_md(i.get("summary_full") or "").strip().lstrip("，,、；;。 ")
         if summ in ("", "-") or summ == _tt or _tt.startswith(summ) or summ.startswith(_tt):
             summ = ""
+        elif _full and len(_full) > len(summ) + 5:
+            # ★2026-10-06 (Chao: 摘要被截断, 要点击能看到原文): 折叠态给前 ~100 字, 点开看 B 站平台自带简介全文。
+            #   口径不变: 这是平台简介, 不是视频口播原文; 正文仍未读。
+            _short = summ[:100].rstrip("，,、；;。 ")
+            summ = (f'<details class="rpl-more"><summary><span class="rpl-sum">{_esc(_short)}…</span>'
+                    f'<span class="rpl-open">展开简介全文（{len(_full)} 字）</span></summary>'
+                    f'<div class="rpl-full">{_esc(_full)}</div>'
+                    f'<div class="rpl-fullnote">以上为 B 站平台自带的视频简介，不是视频口播原文；正文未读，解读是否忠实原报告未核验。</div></details>')
         else:
-            summ = f'<div class="rpl-sum">{_esc(summ)}{"…" if len(summ) >= 130 else ""}</div>'
+            summ = f'<div class="rpl-sum">{_esc(summ)}</div>'
         return (f'<tr><td class="rpl-d">{_esc(i.get("date", ""))}</td>'
                 f'<td><div class="rpl-t">{_esc(_strip_md(i.get("title", "")))}</div>{summ}</td>'
                 f'<td class="rpl-s">{links}</td></tr>')
@@ -2161,14 +2170,15 @@ def _comex_optpos_html(cx):
     COL = {"gold": "#b08a3e", "silver": "#7d94a8"}
 
     def _bars(key, v):
-        """期权净多周度柱状图(正上负下, 零轴居中)。"""
+        """期权净多周度柱状图(正上负下, 零轴居中) + ★2026-10-06 叠加 COMEX 连续合约日线价格(右轴)。"""
         ser = v.get("series") or []
         ser = ser[-104:]
         vals = [x["net_opt"] for x in ser]
         if len(vals) < 4:
             return ""
-        W, H = 940, 200
-        PL, PR, PT, PB = 62, 16, 16, 30
+        px_all = v.get("price") or []
+        W, H = 940, 220
+        PL, PR, PT, PB = 62, (64 if px_all else 16), 16, 30
         iw, ih = W - PL - PR, H - PT - PB
         lo, hi = min(vals + [0]), max(vals + [0])
         pad = (hi - lo) * 0.10 or 1
@@ -2176,6 +2186,30 @@ def _comex_optpos_html(cx):
         def Y(y): return PT + ih * (1 - (y - lo) / (hi - lo))
         bw = max(iw / len(ser) * 0.78, 1.2)
         y0 = Y(0)
+        # ── 价格线: 只取柱图时间窗内的日线, 横坐标按「日期在 [首周, 末周] 里的位置」映射到与柱同一条时间轴 ──
+        import datetime as _d
+        def _dd(s): return _d.date.fromisoformat(s[:10])
+        d0, d1 = _dd(ser[0]["d"]), _dd(ser[-1]["d"])
+        span = max((d1 - d0).days, 1)
+        def XD(s): return PL + iw * (0.5 / len(ser)) + (iw * (1 - 1.0 / len(ser))) * ((_dd(s) - d0).days / span)
+        px = [(p[0], p[1]) for p in px_all if d0 <= _dd(p[0]) <= d1 + _d.timedelta(days=4)]
+        PCOL = "#2f5d8a" if key == "silver" else "#7a4b12"
+        price_svg = legend_px = ""
+        if len(px) >= 10:
+            pvals = [p[1] for p in px]
+            plo, phi = min(pvals), max(pvals)
+            pp = (phi - plo) * 0.08 or 1
+            plo, phi = plo - pp, phi + pp
+            def YP(v): return PT + ih * (1 - (v - plo) / (phi - plo))
+            price_svg = ('<polyline fill="none" stroke="' + PCOL + '" stroke-width="1.5" opacity=".95" points="'
+                         + " ".join(f"{XD(a):.1f},{YP(b):.1f}" for a, b in px) + '"/>')
+            ax = ""
+            for k in range(4):
+                pv = plo + (phi - plo) * k / 3
+                ax += f'<text x="{W-PR+6}" y="{YP(pv)+3.5:.1f}" class="cxo-yl" style="text-anchor:start;fill:{PCOL}">${pv:,.0f}</text>'
+            price_svg += ax
+            legend_px = (f'<span class="cxo-lg"><i style="background:{PCOL}"></i>COMEX {"白银 SI=F" if key=="silver" else "黄金 GC=F"} 收盘价（右轴 · 日线）</span>'
+                         f'<span class="cxo-lg"><i style="background:{COL[key]}"></i>期权净多（左轴 · 周度柱，正=净多 / 负=净空）</span>')
         bars = ""
         for i, x in enumerate(ser):
             cx_ = PL + iw * (i + 0.5) / len(ser)
@@ -2184,9 +2218,19 @@ def _comex_optpos_html(cx):
             fill = COL[key] if x["net_opt"] >= 0 else "#a3705f"
             bars += (f'<rect x="{cx_-bw/2:.1f}" y="{top:.1f}" width="{bw:.1f}" '
                      f'height="{max(h,0.6):.1f}" fill="{fill}" opacity=".82"/>')
-        bars += _hover_bands([PL + iw * (i + 0.5) / len(ser) for i in range(len(ser))],
-                             [f'{_esc(x["d"])}||期权净多 {x["net_opt"]:,} 张' for x in ser],
-                             PT, ih, PL, W - PR)
+        # 悬停: 每周一条命中带, 同时给出该周期权净多 + 当周价格(取不晚于该周周日的最近一个交易日收盘)
+        tips = []
+        pj = 0
+        for x in ser:
+            tp = f'{_esc(x["d"])}||期权净多 {x["net_opt"]:,} 张'
+            if px:
+                lim = _dd(x["d"])
+                while pj + 1 < len(px) and _dd(px[pj + 1][0]) <= lim:
+                    pj += 1
+                if _dd(px[pj][0]) <= lim:
+                    tp += f'<br>COMEX {"白银" if key=="silver" else "黄金"} ${px[pj][1]:,.2f}/oz（{_esc(px[pj][0])}）'
+            tips.append(tp)
+        hover = _hover_bands([PL + iw * (i + 0.5) / len(ser) for i in range(len(ser))], tips, PT, ih, PL, W - PR)
         grid = ""
         for k in range(4):
             gv = lo + (hi - lo) * k / 3
@@ -2197,12 +2241,20 @@ def _comex_optpos_html(cx):
         for i in (0, len(ser)//2, len(ser)-1):
             xt += (f'<text x="{PL + iw*(i+0.5)/len(ser):.1f}" y="{H-10}" '
                    f'class="cxo-xt">{ser[i]["d"]}</text>')
+        pst = v.get("price_status")
+        pnote = ""
+        if px_all and pst == "缓存":
+            pnote = '<div class="cxo-warn">⚠ 价格本次抓取失败，显示的是上次缓存（最新点见悬停）。</div>'
+        elif not px_all:
+            pnote = '<div class="cxo-warn">⚠ 价格未获取，本图暂不叠加价格线（持仓柱图不受影响）。</div>'
         return f"""
   <div class="cxo-block">
-    <div class="cxo-t">{v.get("cn")} · Managed Money 期权净多（张，正=净多 / 负=净空）</div>
+    <div class="cxo-t">{v.get("cn")} · Managed Money 期权净多（张，正=净多 / 负=净空）{('· 叠加 COMEX 价格' if price_svg else '')}</div>
+    <div class="cxo-lgs">{legend_px}</div>
     <svg viewBox="0 0 {W} {H}" class="cxo-chart" preserveAspectRatio="xMidYMid meet">
-      {grid}{zero}{bars}{xt}
+      {grid}{zero}{bars}{price_svg}{xt}{hover}
     </svg>
+    {pnote}
   </div>"""
 
     cards, charts = "", ""
@@ -5236,10 +5288,22 @@ def _comex_issue_stop_html(cs):
     if not cs or cs.get("status") != "ok" or not (cs.get("gold") or cs.get("silver")):
         return '<p class="empty">COMEX 做市商周净 issue/stop 数据未就绪。</p>'
 
+    def _week_done(week_monday):
+        """该 ISO 周(周一日期)是否已过完: 周五已是过去(以今日东京日期)。"""
+        import datetime as _d
+        try:
+            fri = _d.date.fromisoformat(week_monday) + _d.timedelta(days=4)
+            _today = _d.datetime.now(_d.timezone(_d.timedelta(hours=9))).date()
+            return _today > fri
+        except Exception:
+            return True
+
     def _bars_svg(rows, field, w=920, h=230):
         if not rows:
             return '<div class="cust-chart-na">无数据</div>'
-        vals = [r[field] for r in rows]
+        vals = [r[field] for r in rows if r.get(field) is not None]
+        if not vals:
+            return '<div class="cust-chart-na">该时间窗内没有可区分 House 的数据</div>'
         vmax = max(abs(min(vals)), abs(max(vals)), 1)
         ml, mr, mt, mb = 52, 20, 14, 38
         pw, ph = w - ml - mr, h - mt - mb
@@ -5255,10 +5319,25 @@ def _comex_issue_stop_html(cs):
             parts.append(f'<text x="{ml-5}" y="{gy+3:.1f}" font-size="9" fill="#8a8578" text-anchor="end">{gv:+.0f}</text>')
         parts.append(f'<line x1="{ml}" y1="{zero_y:.1f}" x2="{w-mr}" y2="{zero_y:.1f}" stroke="#8a8578" stroke-width="1"/>')
         for i, r in enumerate(rows):
-            v = r[field]; x = X(i); y = BY(v)
+            v = r[field]; x = X(i)
+            if v is None:
+                # ★Chao 2026-10-06 选 A: 该周全是「无 C/H 标记」数据 → 留白, 画一条浅灰细线占位, 悬停说明原因
+                parts.append(f'<rect x="{x-bw/2:.1f}" y="{zero_y-3:.1f}" width="{bw:.1f}" height="6" fill="#d9d3c6" opacity="0.9" '
+                             f'data-tip="{_esc(r["week"])}||无 House/Customer 区分，不进图（该周 {r.get("days", "?")} 个交割日的席位记录没有 C/H 标记）"/>')
+                continue
+            y = BY(v)
             col = "#d64545" if v > 0 else ("#2e9e5b" if v < 0 else "#8a8578")
             top = min(y, zero_y); ht = abs(y - zero_y)
-            parts.append(f'<rect x="{x-bw/2:.1f}" y="{top:.1f}" width="{bw:.1f}" height="{ht:.1f}" fill="{col}" opacity="0.82" data-tip="{_esc(r["week"])}||{v:+.0f}"/>')
+            # ★2026-10-06 (Chao: 少了几天内容): 每周实际采到的交割日数写进悬停; 不足 5 天(且该周已过完)标「不完整」, 柱子加虚线描边。
+            _nd = r.get("h_days") if r.get("h_days") is not None else r.get("days")
+            _wk_done = _week_done(r["week"])
+            _short = _nd is not None and _nd < 5 and _wk_done
+            _cur = _nd is not None and not _wk_done
+            _note = (f'（本周仅 {_nd}/5 个交割日有 House 记录，数值不完整）' if _short else
+                     (f'（本周进行中，已有 {_nd} 个交割日）' if _cur else
+                      (f'（{_nd} 个交割日）' if _nd is not None else '')))
+            _st = ' stroke="#8a8578" stroke-width="1" stroke-dasharray="3,2"' if (_short or _cur) else ''
+            parts.append(f'<rect x="{x-bw/2:.1f}" y="{top:.1f}" width="{bw:.1f}" height="{ht:.1f}" fill="{col}" opacity="{0.45 if (_short or _cur) else 0.82}"{_st} data-tip="{_esc(r["week"])}||{v:+.0f}{_esc(_note)}"/>')
         step = max(1, round(n/8)); prev=None
         for i in range(0, n, step):
             lbl = rows[i]["week"][:7]
@@ -5273,7 +5352,10 @@ def _comex_issue_stop_html(cs):
         数据一次性全量内嵌, 切换纯前端重绘, 不重新请求。窗口不足的诚实显示实际周数。"""
         if not rows:
             return f'<div class="cust-chart-na">{metal_name} 无数据</div>'
-        latest = rows[-1]
+        _valued = [r for r in rows if r.get("core_net") is not None]
+        if not _valued:
+            return f'<div class="cust-chart-na">{metal_name} 暂无可区分 House 的数据</div>'
+        latest = _valued[-1]
         cn = latest["core_net"]
         cdir = "净发货(交货/压价)" if cn > 0 else ("净接货(囤货/看涨)" if cn < 0 else "持平")
 
@@ -5317,17 +5399,25 @@ def _comex_issue_stop_html(cs):
         )
 
     banks_core = "、".join(cs.get("banks_core", []))
+    # 覆盖天数 = 各周实际采到的交割日数之和(取金银较大者); 原写法用 archive_pdfs_parsed(历史 PDF 数)会把增量日漏算
+    _cov_days = max(sum((r.get("days") or 0) for r in (cs.get("silver") or [])),
+                    sum((r.get("days") or 0) for r in (cs.get("gold") or [])))
+    _short_wks = [r["week"] for r in (cs.get("silver") or []) if r.get("core_net") is not None and (r.get("h_days") if r.get("h_days") is not None else (r.get("days") or 5)) < 5 and _week_done(r["week"])]
+    _blank_wks = [r["week"] for r in (cs.get("silver") or []) if r.get("blank")]
     return (
         f'<div class="cust-wrap">'
         f'<div class="cust-chart-col cust-chart-full">'
-        f'<div class="cust-chart-title">COMEX 做市商每周净 issue/stop · 金 + 银（{_esc(cs.get("archive_range",""))}，{cs.get("archive_pdfs_parsed","?")} 个交易日）'
+        f'<div class="cust-chart-title">COMEX 做市商每周净 issue/stop · 金 + 银（{_esc(cs.get("data_range") or cs.get("archive_range",""))}，已覆盖 {_cov_days} 个交割日）'
         f'<span class="chart-freq freq-d">🟢 每日更新 · CME 交割报告</span></div>'
         f'{_metal_block("白银 Silver", cs.get("silver", []), "ag")}'
         f'{_metal_block("黄金 Gold", cs.get("gold", []), "au")}'
         f'<div class="oil-src">数据源：CME 每日 Issues &amp; Stops 交割报告（ScraperAPI/Jina/Wayback 三层兜底采集，x坐标精确解析）· '
-        f'核心做市商(10家)：{_esc(banks_core)}</div>'
+        f'核心做市商(10家)：{_esc(banks_core)}'
+        + (f'<br><b style="color:#8e3b30">⚠ 有 {len(_short_wks)} 周 House 记录不足 5 个交割日（虚线浅色柱）：</b>该日 House 当日可能确实为 0 笔，也可能上游采集只有库存没有交割明细；悬停可见实际天数。' if _short_wks else '')
+        + (f'<br><b style="color:#8e3b30">留白 {len(_blank_wks)} 周（{_esc(_blank_wks[0])} → {_esc(_blank_wks[-1])}，浅灰细线）：</b>上游该段记录没有 C/H 标记，无法区分 House 与 Customer，按口径不进图，也不假装是 0。' if _blank_wks else '')
+        + f'</div>'
         f'</div>'
-        f'<div class="cust-how"><b>如何看：</b>每根柱=<b>该周大行(bullion banks)净 issue/stop</b>＝Σ发货−Σ接货：'
+        f'<div class="cust-how"><b>口径：</b>只统计 <b>House（自营）</b>席位；Customer（代客）不进图。<br><b>如何看：</b>每根柱=<b>该周大行(bullion banks)House 净 issue/stop</b>＝Σ发货−Σ接货：'
         f'<b style="color:#d64545">红柱(正)=净发货</b>（做市商向市场交货，对应 Issued，压价/看跌）；'
         f'<b style="color:#2e9e5b">绿柱(负)=净接货</b>（做市商从市场接货囤积，对应 Stopped，逼空/看涨）。<br>'
         f'<b>两口径</b>：上图=<b>核心做市商(10家传统 LBMA 金银做市大行)</b>；下图=<b>全投行(17家)</b>对照。'
@@ -9963,6 +10053,14 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .rpl-d{{white-space:nowrap;color:#5a534a;width:78px}}
 .rpl-t{{color:#2e2a24;line-height:1.5}}
 .rpl-sum{{color:#7a7266;font-size:11.5px;margin-top:2px;line-height:1.5}}
+.rpl-more{{margin-top:2px}}
+.rpl-more>summary{{cursor:pointer;list-style:none;display:block}}
+.rpl-more>summary::-webkit-details-marker{{display:none}}
+.rpl-more .rpl-sum{{display:inline;margin-top:0}}
+.rpl-open{{display:inline-block;margin-left:6px;font-size:11px;color:#8a5a2a;border-bottom:1px dashed #b98c5a;white-space:nowrap}}
+.rpl-more[open] .rpl-open{{display:none}}
+.rpl-full{{color:#4a443b;font-size:12px;line-height:1.65;margin-top:4px;padding:6px 8px;background:#f6f1e6;border-radius:4px;white-space:pre-wrap;word-break:break-word;max-height:280px;overflow-y:auto}}
+.rpl-fullnote{{font-size:10.5px;color:#9a9185;margin-top:3px}}
 .rpl-s{{width:210px;font-size:11.5px}}
 .rpl-s a{{color:#1f3a68;text-decoration:none;margin-right:2px}}
 .rpl-s a:hover{{text-decoration:underline}}
@@ -10237,6 +10335,8 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .cxo-warn{{font-size:10.5px;color:#8e3b30;margin-top:3px}}
 .cxo-block{{margin:10px 0}}
 .cxo-t{{font-size:12px;color:#6b645c;margin-bottom:2px}}
+.cxo-lgs{{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:11px;color:#6b645c;margin:2px 0 4px}}
+.cxo-lg i{{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:5px;vertical-align:middle}}
 .cxo-chart{{width:100%;height:auto;display:block}}
 .cxo-g{{stroke:#e2dcd1;stroke-width:.7}}
 .cxo-z{{stroke:#b3aba0;stroke-width:1.1}}
@@ -10997,7 +11097,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title" id="sec-comex-silver-issues"><span class="part-num">＋</span>COMEX 白银 投行累计 issues/stops · 静态参考 (Michael Lynch @DtDS_WSS·CME封禁无法自动更新)<span class="freq-badge" style="background:#e8e2d5;color:#8a6d3b">静态参考</span></div>
   <div class="card">{comex_silver_issues_ref}</div>
   <!-- ═══ 附三·十二F：COMEX 做市商每周净 issue/stop 柱状图(金+银, 一手) ═══ -->
-  <div class="part-title" id="sec-comex-issue-stop"><span class="part-num">＋</span>COMEX 做市商每周净 issue/stop · 金+银 (一手·大行发货vs接货·每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="part-title" id="sec-comex-issue-stop"><span class="part-num">＋</span>COMEX 做市商每周净 issue/stop · 金+银 (一手·仅 House 自营·大行发货vs接货·每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{comex_issue_stop}</div>
   <!-- ═══ 附三·十二G：COMEX 交割前十名 金/银/铂 per-firm (需求B, Chao 2026-08-22) ═══ -->
   <div class="part-title" id="sec-comex-firms-top10"><span class="part-num">＋</span>COMEX 交割前十名 · 金/银/铂 (top10 交货方 vs 接货方·日/周/月切换·每日更新)<span class="freq-badge freq-daily">每日更新</span></div>

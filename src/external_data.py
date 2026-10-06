@@ -5490,7 +5490,40 @@ def fetch_comex_inventory(cache_path=None):
     src_used = None
     tried = []
     import subprocess
-    for u in urls:
+    import sys as _sys
+    # ★2026-10-06 Eco 接管(Chao「接入」): 先在本地自产(Notion 只读 + SPDR 官方 + SGE 官网周报), 不再依赖外站。
+    #   外站 comex-inventory-charts 自 09-16 起停更(生产者在 Mac, 脚本写死 Mac 路径), 日报 cron 仍标 ok = 静默旧数据。
+    #   自产失败才回落到外站, 外站也失败才回落缓存; 回落时 src_used/tried 会写进 note, 不再静默。
+    try:
+        _proj = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+        _tool = os.path.join(_proj, "tools", "comex_inv")
+        _base = os.path.join(_proj, "data", "_comex_inv_work")      # 已加 .gitignore, 不进 git
+        os.makedirs(os.path.join(_base, "data"), exist_ok=True)
+        _seed = os.path.join(_proj, "data", "comex_inv", "sge_history.json")
+        if os.path.exists(_seed):
+            import shutil as _sh
+            _sh.copy(_seed, os.path.join(_base, "data", "sge_history.json"))
+        _out_html = os.path.join(_base, "inventory_charts.html")
+        if os.path.exists(_out_html):
+            os.remove(_out_html)
+        _env = dict(os.environ, INV_BASE=_base)
+        _ok = True
+        for _s in ("build_inventory_data.py", "build_etf_data.py", "render_inventory_html.py"):
+            _r = subprocess.run([_sys.executable, os.path.join(_tool, _s)], env=_env,
+                                capture_output=True, text=True, timeout=240)
+            if _r.returncode != 0:
+                tried.append(f"自产:{_s} rc={_r.returncode} {(_r.stderr or '')[-100:].strip()}")
+                _ok = False
+                break
+        if _ok and os.path.exists(_out_html):
+            _b = open(_out_html, encoding="utf-8").read()
+            if "const CHARTS" in _b:
+                html, src_used = _b, "local:tools/comex_inv(Notion只读+SPDR+SGE官网)"
+            else:
+                tried.append("自产:产物无CHARTS")
+    except Exception as e:  # noqa: BLE001
+        tried.append(f"自产:{type(e).__name__} {str(e)[:80]}")
+    for u in ([] if html else urls):
         try:
             r = subprocess.run(["curl", "-s", "-L", "--max-time", "30",
                                 "-H", "User-Agent: Mozilla/5.0", u],
@@ -7589,6 +7622,58 @@ def fetch_comex_option_positions(weeks=104):
         out["status"] = "error"
     elif out["errors"]:
         out["status"] = "ok(部分失败)"
+
+    # ★2026-10-06 (Chao「在这两个图上覆盖一下金银的 COMEX」): 每个品种叠加 COMEX 连续合约日线收盘价(Yahoo GC=F / SI=F)。
+    #   抓不到读上次缓存并标「缓存」; 缓存也没有则不叠加并标「未获取」, 绝不编数。价格失败不影响持仓数据。
+    import os as _os
+    _cache = _os.path.join(_os.path.dirname(__file__), "..", "data", "comex_optpos_price_cache.json")
+
+    def _load_px_cache():
+        try:
+            with open(_cache, encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:  # noqa: BLE001
+            return {}
+
+    def _yahoo_px(sym):
+        import urllib.request as _ur
+        u = f"https://query1.finance.yahoo.com/v8/finance/chart/{sym}?range=3y&interval=1d"
+        try:
+            r = _ur.urlopen(_ur.Request(u, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                                                   "AppleWebKit/537.36 Chrome/120 Safari/537.36"}), timeout=45)
+            res = json.loads(r.read().decode("utf-8", "ignore"))["chart"]["result"][0]
+            cl = res["indicators"]["quote"][0]["close"]
+            return [[_dt.datetime.utcfromtimestamp(t).strftime("%Y-%m-%d"), round(float(c), 2)]
+                    for t, c in zip(res.get("timestamp") or [], cl) if c is not None]
+        except Exception:  # noqa: BLE001
+            return []
+
+    _pc = _load_px_cache()
+    _fresh = {}
+    for key, sym in (("gold", "GC=F"), ("silver", "SI=F")):
+        if key not in out["metals"]:
+            continue
+        px = _yahoo_px(sym)
+        if len(px) >= 20:
+            _fresh[key] = px
+            out["metals"][key]["price"] = px
+            out["metals"][key]["price_status"] = "ok"
+        elif (_pc.get(key) or []):
+            out["metals"][key]["price"] = _pc[key]
+            out["metals"][key]["price_status"] = "缓存"
+            out["errors"].append(f"{key} 价格抓取失败, 用缓存(最新 {_pc[key][-1][0]})")
+        else:
+            out["metals"][key]["price"] = []
+            out["metals"][key]["price_status"] = "未获取"
+            out["errors"].append(f"{key} 价格未获取, 图上不叠加")
+        out["metals"][key]["price_source"] = f"Yahoo Finance · {sym} COMEX 连续合约 日收盘(美元/盎司)"
+    if _fresh:
+        try:
+            _merged = dict(_pc); _merged.update(_fresh)
+            with open(_cache, "w", encoding="utf-8") as f:
+                json.dump(_merged, f, ensure_ascii=False)
+        except Exception:  # noqa: BLE001
+            pass
     return out
 
 
