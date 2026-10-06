@@ -12,10 +12,10 @@
     "note": "口径=CBOE官方EQUITY put/call=0.53 (jina直取官方daily页, 最近交易日, 2026-10-01取得)。equity 0.53偏低=股票期权看涨占优(风险偏好偏高); TOTAL 0.88 / INDEX 1.03 / ETP 1.04。较上次0.58小幅回落(看涨情绪略增)"
   },
   "insider": {
-    "value": 0.32,
-    "as_of": "2026-09-30",
+    "value": 0.38,
+    "as_of": "2026-10-06",
     "status": "ok",
-    "note": "GuruFocus insider buy/sell 0.32 (Sep 2026, 官网标题最新值; 低于长期均值0.39约18%, 区间0.12-2.01, 中位数0.34; 内部人处偏谨慎但较Aug小幅回升)"
+    "note": "GuruFocus insider buy/sell 0.38 (Oct 2026, 官网标题最新值; 较Sep 0.32回升)"
   },
   "lei": {
     "value": -0.1,
