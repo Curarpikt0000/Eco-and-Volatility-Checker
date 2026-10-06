@@ -1,6 +1,6 @@
 {
  "table": "HDB_INDICATORS",
- "count": 130,
+ "count": 131,
  "rows": [
   {
    "uid": "ind|2025-08-08",
@@ -6301,6 +6301,58 @@
        "type": "text",
        "text": {
         "content": "vix=16.39; fear_greed=31.2; aaii_bull_bear=-11.8; put_call=0.58; bofa_fms_cash=3.9; sofr_iorb=-1.0; margin_cost=7.0; bank_funding_stress=16.0; margin_debt=1453.832; margin_gdp=4.46; ipo_count=251.0; insider=10.839; bofa_bull_bear=9.5; hy_oas=3.24; ad_line=False; buffett=255.0; cape=41.38; yield_curve=0.45; lei=0.57; aaii_alloc=71.79"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-10-06",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-06"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": 1.0
+    },
+    "VIX": {
+     "number": 15.31
+    },
+    "HY利差": {
+     "number": 3.1
+    },
+    "恐慌贪婪": {
+     "number": 43.1
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-10-06.json + data/daily/"
+       }
+      }
+     ]
+    },
+    "综合信号": {
+     "select": {
+      "name": "🟡 警戒"
+     }
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.31; fear_greed=43.1; aaii_bull_bear=-11.8; put_call=0.59; bofa_fms_cash=3.9; sofr_iorb=0.0; margin_cost=7.0; bank_funding_stress=15.0; margin_debt=1453.832; margin_gdp=4.46; ipo_count=251.0; insider=0.419; bofa_bull_bear=9.5; hy_oas=3.1; ad_line=False; buffett=255.0; cape=41.67; yield_curve=0.47; lei=0.57; aaii_alloc=71.79"
        }
       }
      ]

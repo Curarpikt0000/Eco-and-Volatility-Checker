@@ -1,6 +1,6 @@
 {
  "table": "HDB_NIKKEI",
- "count": 241,
+ "count": 242,
  "rows": [
   {
    "uid": "nk|2025-10-06",
@@ -7460,6 +7460,37 @@
     },
     "涨跌幅": {
      "number": -0.939
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "FRED NIKKEI225 (日经225指数,日频)"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "nk|2026-10-05",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-05"
+       }
+      }
+     ]
+    },
+    "收盘": {
+     "number": 69946.86
+    },
+    "涨跌幅": {
+     "number": 2.397
     },
     "数据源": {
      "rich_text": [
