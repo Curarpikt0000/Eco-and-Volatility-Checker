@@ -191,7 +191,20 @@ def fetch_aaii_allocation():
                         raw = str(df.iloc[i, df.shape[1] - 2] if df.shape[1] > 2 else df.iloc[i, 1])
                         v = _num(raw)
                         if v and 20 < v < 100:
-                            return {"value": round(v, 2), "as_of": None, "status": "ok"}
+                            # ★2026-10-06: 同页表头写明 "Asset Allocation Results for September 2026", 取月份作 as_of
+                            #   (月度调查, 记为 YYYY-MM; 取不到保持 None 并标 unknown, 不拿抓取日冒充)。
+                            _mo = None
+                            for _df in tables:
+                                _hit = re.search(r"Asset\s+Allocation\s+Results\s+for\s+([A-Za-z]+)\s+(20\d\d)", " ".join(str(c) for c in _df.columns) + " " + _df.astype(str).to_string())
+                                if _hit:
+                                    try:
+                                        import datetime as _dt
+                                        _mo = _dt.datetime.strptime(f"{_hit.group(1)[:3]} {_hit.group(2)}", "%b %Y").strftime("%Y-%m")
+                                    except Exception:
+                                        _mo = None
+                                    break
+                            return {"value": round(v, 2), "as_of": _mo, "status": "ok",
+                                    "freshness": "dated" if _mo else "unknown"}
     except Exception:
         pass
     # 回退 Jina 正则
@@ -257,7 +270,11 @@ def fetch_put_call():
         if m:
             val = float(m.group(1))
             if 0.1 <= val <= 5.0:          # 合理区间守卫, 防抓到别的数
-                return {"value": val, "as_of": None, "status": "ok",
+                # ★2026-10-06: 页面载荷里有真实交易日 selectedDate(此前 as_of 硬写 None, 看板无法判断新鲜度)。
+                #   取不到就保持 None 并标 freshness=unknown, 绝不拿抓取日冒充。
+                dm = re.search(r'selectedDate(?:\\)?"\s*:\s*(?:\\)?"(20\d\d-\d\d-\d\d)', h)
+                return {"value": val, "as_of": dm.group(1) if dm else None, "status": "ok",
+                        "freshness": "dated" if dm else "unknown",
                         "source": "CBOE official (via ScraperAPI)"}
 
     # 通道2: Jina 直连(历史路径, 多半被 Cloudflare 挡)
@@ -366,8 +383,17 @@ def fetch_ipo():
         if tables:
             n = len(tables[0])
             if n > 0:
-                return {"value": float(n), "as_of": f"{year}-YTD", "status": "ok",
-                        "extra": {"source": "stockanalysis", "year": year}}
+                # ★2026-10-06: as_of 原为 "2026-YTD"(非日期, 无法判断新鲜度)。表首列 IPO Date 已按时间倒序,
+                #   取其最新一行作 as_of(= 最近一次 IPO 上市日), 并保留 YTD 语义在 extra。解析失败则 None+unknown。
+                _asof = None
+                try:
+                    import datetime as _dt
+                    _asof = max(_dt.datetime.strptime(str(x).strip(), "%b %d, %Y") for x in tables[0].iloc[:, 0]).strftime("%Y-%m-%d")
+                except Exception:
+                    _asof = None
+                return {"value": float(n), "as_of": _asof, "status": "ok",
+                        "freshness": "dated" if _asof else "unknown",
+                        "extra": {"source": "stockanalysis", "year": year, "basis": "YTD累计宗数, as_of=最近一次IPO上市日"}}
     except Exception:
         pass
     # 回退旧 Renaissance
@@ -408,7 +434,19 @@ def fetch_insider():
         if buys and sells and sells > 0:
             ratio = buys / sells
             if 0 < ratio < 50:
-                return {"value": round(ratio, 3), "as_of": None, "status": "ok",
+                # ★2026-10-06: 榜单是「最近100笔」滚动口径, 页内每行有 Filing Date(含时分秒)。
+                #   as_of 取买入榜、卖出榜两张表里最新申报日中较旧的那个(派生值取最旧输入)。
+                def _latest_filing(url):
+                    try:
+                        hh = http_get(url, timeout=25)[1] or ""
+                        ds = re.findall(r"(20\d\d-\d\d-\d\d) \d\d:\d\d:\d\d", hh)
+                        return max(ds) if ds else None
+                    except Exception:
+                        return None
+                lb, ls = _latest_filing("http://openinsider.com/insider-purchases"), _latest_filing("http://openinsider.com/insider-sales")
+                ds = [d for d in (lb, ls) if d]
+                return {"value": round(ratio, 3), "as_of": min(ds) if len(ds) == 2 else None, "status": "ok",
+                        "freshness": "dated" if len(ds) == 2 else "unknown",
                         "extra": {"source": "openinsider", "note": "近期榜前100笔口径,趋势用"}}
     except Exception:
         pass

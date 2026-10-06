@@ -61,6 +61,9 @@ def _esc_md(s):
 #   徽章只描述"数据有多旧", 绝不修改/伪造数据本身。
 _FRESH_TOL = {
     "daily": 5,        # 日频(含周末+假日缓冲)
+    # ★2026-10-06: FRED 日度序列(VIX/HY/DPRIME/SOFR/EFFR)官方 T+1~T+2 发布, 实测 10-06 上午 FRED 最新就是 10-02,
+    #   故这几项容忍 7 天(含周末), 不当「滞后」误报; 其余 daily=5 不变。
+    "daily_fred": 7,
     "weekly": 12,      # 周频
     "biweekly": 25,    # 双周(如 CFTC COT)
     "monthly": 50,     # 月频
@@ -114,6 +117,48 @@ def _stale_badge(as_of, freq="daily", label=None, known_reason=False):
     if label:
         txt = f"{label} {txt}"
     return f'<span class="stale-badge sb-{sev}" title="最新数据日期 {_esc(s)}，距今 {days} 天；该源自然更新频率={freq}">{txt}</span>'
+
+
+# ★2026-10-06 指标卡新鲜度(Chao 报「今天数据健康度差」后的修复; Opus 5.5 评审 + 本地实测)。
+#   每个指标的自然更新频率。依据: FRED 日度序列 T+1~T+2(实测 10-06 上午最新=10-02);
+#   AAII 资产配置=月度调查; FINRA/LEI=月度; BofA FMS=月度; BofA Bull&Bear=周度; Z.1 巴菲特=季度;
+#   IPO/insider/put_call/CNN/CAPE/腾落线=日度。
+_IND_FREQ = {
+    "vix": "daily_fred", "hy_oas": "daily_fred", "margin_cost": "daily_fred",
+    "sofr_iorb": "daily_fred", "bank_funding_stress": "daily_fred", "yield_curve": "daily_fred",
+    "fear_greed": "daily", "put_call": "daily", "cape": "daily", "ad_line": "daily", "insider": "daily",
+    "ipo_count": "daily",
+    "aaii_bull_bear": "weekly", "bofa_bull_bear": "weekly",
+    "margin_debt": "monthly", "lei": "monthly", "bofa_fms_cash": "monthly", "aaii_alloc": "monthly",
+    "margin_gdp": "quarterly", "buffett": "quarterly",
+}
+
+
+def _ind_fresh_badge(key, r):
+    """指标卡的新鲜度徽章。只描述「数据有多旧」, 不修改任何数值/信号灯。
+    - as_of 缺失(源站不给日期且代码取不到)→ 灰色「日期未知」, 不得显示为正常;
+    - 滞后超过该指标自然频率的容忍天数 → 复用 _stale_badge 的 🟡/🔴;
+    - 新鲜 → 空串(不干扰版面)。"""
+    if r.get("value") is None:
+        return ""
+    a = r.get("as_of")
+    if not a:
+        return '<span class="stale-badge sb-gray" title="该指标的数据源页面没有可解析的日期, 无法判断是不是最新">⚪ 日期未知</span>'
+    freq = _IND_FREQ.get(key, "daily")
+    # FRED 的月度/季度序列用「期初日」(如 2026-08-01 = 8 月整月; 2026-04-01 = Q1)标日期, 实际数据覆盖整个周期。
+    # 滞后要从「周期末」起算, 否则必然误报(2026-10-06 实测 LEI 8/01 被报 66 天, 实际 8 月才刚结束 36 天)。
+    a = str(a)[:10]
+    if freq in ("monthly", "quarterly") and len(a) == 10 and a.endswith("-01"):
+        try:
+            y, m = int(a[:4]), int(a[5:7])
+            span = 1 if freq == "monthly" else 3
+            em = m + span
+            ey = y + (em - 1) // 12
+            em = (em - 1) % 12 + 1
+            a = (datetime.date(ey, em, 1) - datetime.timedelta(days=1)).isoformat()
+        except Exception:
+            pass
+    return _stale_badge(a, freq)
 
 
 # ── 数据源代码 → 官方链接映射 ──────────────────────────────────
@@ -2469,7 +2514,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
                 <div class="mc-name">{ind['name_zh']}<span class="mc-en">{ind['name_en']}</span></div>
                 <span class="mc-dot dot-{cls}"></span>
               </div>
-              <div class="mc-val">{fmt_val(ind, r)} {chg}{st_badge}{slabel_html}</div>
+              <div class="mc-val">{fmt_val(ind, r)} {chg}{st_badge}{slabel_html}{_ind_fresh_badge(key, r)}</div>
               <div class="mc-thr">{threshold_text(ind)}</div>
               <div class="mc-spark">{spark}<span class="mc-spark-lbl">近4周</span></div>
               {note_html}
@@ -9729,6 +9774,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
                   margin-left: 6px; white-space: nowrap; letter-spacing: .2px; vertical-align: middle; }}
   .sb-amber {{ color: #8a6d1f; background: rgba(224,169,46,.16); border: 1px solid rgba(224,169,46,.38); }}
   .sb-red   {{ color: #8a3f47; background: rgba(192,117,125,.16); border: 1px solid rgba(192,117,125,.42); }}
+  .sb-gray  {{ color: #6b6f78; background: rgba(120,125,135,.12); border: 1px solid rgba(120,125,135,.30); }}
   .mc-slabel {{ font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px; margin-left: 4px; }}
   .mc-slabel-g {{ color: #3f5a3f; background: rgba(154,171,151,.30); }}
   .mc-slabel-y {{ color: #8a6a2a; background: rgba(212,178,110,.32); }}

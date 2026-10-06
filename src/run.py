@@ -116,11 +116,18 @@ def fetch_all():
     # margin_gdp = margin_debt / 名义GDP * 100
     md = results.get("margin_debt", {}).get("value")
     if md is not None:
-        gdp_v, _ = fred.fetch_fred_latest("GDP")  # 十亿$ 年化
+        gdp_v, gdp_d = fred.fetch_fred_latest("GDP")  # 十亿$ 年化
         if gdp_v:
+            # ★2026-10-06: as_of 原写运行日(jst_today), 实际分子是月度 margin_debt、分母是季度 GDP,
+            #   数据比标注旧一个多月(伪新鲜)。改为「两个输入里较旧的那个」; 值本身不变。
+            _ds = [str(d)[:10] for d in (results.get("margin_debt", {}).get("as_of"), gdp_d) if d]
             results["margin_gdp"] = {"key": "margin_gdp",
                                      "value": round(md / gdp_v * 100, 2),
-                                     "as_of": jst_today(), "status": "ok"}
+                                     "as_of": min(_ds) if len(_ds) == 2 else None, "status": "ok",
+                                     "freshness": "dated" if len(_ds) == 2 else "unknown",
+                                     "extra": {"basis": "取输入(margin_debt月度/GDP季度)中较旧的as_of",
+                                               "margin_debt_as_of": results.get("margin_debt", {}).get("as_of"),
+                                               "gdp_as_of": gdp_d}}
 
     # ad_line 顶背离 = 优先用真 A/D 腾落线(Economic-Dashboard SP500 全成分股 cron),
     # 东财 RSP/SPY 广度比作 fallback。抓不到则保留旧值不覆盖成空。
