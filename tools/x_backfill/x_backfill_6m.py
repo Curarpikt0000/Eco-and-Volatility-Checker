@@ -15,10 +15,13 @@ PROG = os.path.join(S.DATA, 'x_backfill_6m_progress.json')
 
 
 def tunnel_ok():
-    try:
-        urllib.request.urlopen(f"http://{os.environ.get('CDP_HOST', 'localhost')}:{os.environ.get('CDP_PORT', '9333')}/json/version", timeout=6).read(); return True
-    except Exception:
-        return False
+    # 瞬时忙/抖动不应判死: 重试 3 次(间隔 5 秒), 全失败才算不通
+    for i in range(3):
+        try:
+            urllib.request.urlopen(f"http://{os.environ.get('CDP_HOST', 'localhost')}:{os.environ.get('CDP_PORT', '9333')}/json/version", timeout=10).read(); return True
+        except Exception:
+            time.sleep(5)
+    return False
 
 
 def main():

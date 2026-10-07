@@ -11203,7 +11203,7 @@ mkRadar('rLong', RADAR.long);
 
   var links = [];
   var bucket = {{}};
-  var seq = [];     // ★2026-10-06: DOM 顺序下的 {a, idx, hint}; 菜单严格按它渲染, 保证 菜单顺序 === 页面顺序
+  var seq = [];     // ★2026-10-06: DOM 顺序下的 {{a, idx, hint}}; 菜单严格按它渲染, 保证 菜单顺序 === 页面顺序
   titles.forEach(function(t, i) {{
     // ★保留已有的语义 id（模板里写死的 sec-cn-liq / sec-cips 等）。
     // 旧实现无条件 t.id = 'sec-' + i，会把语义 id 冲掉 → 外部链接/书签锚点全失效。
