@@ -484,3 +484,8 @@ report the verdict — do not start rendering and discover the data isn't there.
 
 Source-family verdicts already established (don't re-probe from zero):
 `references/free-macro-credit-data-sources.md` §③ SEC XBRL fundamentals + §④ what is NOT free.
+
+## 延伸阅读(2026-10-06 新增, 两份实战文件)
+- `references/data-freshness-silent-staleness-and-house-basis.md` — 「cron 标 ok ≠ 图是活的」三类静默停更(上游生产者停了/源头改发布格式解析器抓不到不报错/源头本来低频)、隔离跑 `tools/freshness_audit.py`、JPX 外资周流 xlsx 新格式、COMEX 只算 House(H) 口径。
+- `references/sidebar-menu-order-equals-dom-order.md` — 侧栏菜单「跳动感」根因=关键词分组把远距板块合并；按 DOM 顺序分 run 根治，无头 Chromium 探针量化 y 倒退。
+- SKILL.md 已贴近 100K 字符上限，再加内容一律走 references/，不要往 SKILL.md 正文塞。
