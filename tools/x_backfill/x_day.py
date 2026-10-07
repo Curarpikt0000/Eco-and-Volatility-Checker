@@ -5,7 +5,8 @@
 - 滚动直到连续 3 次无新增; 若总数 >= 40 标记 capped(可能被截断, 需要人工复核)
 """
 import json, sys, time, urllib.request, urllib.parse
-sys.path.insert(0, '/tmp')
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))   # cdp_probe 已入库, 不再依赖会被清的 /tmp
 from cdp_probe import new_tab, run
 
 handle, day, out = sys.argv[1], sys.argv[2], sys.argv[3]
@@ -34,7 +35,7 @@ for i in range(30):
         break
     run(ws, 'window.scrollBy(0, 2200)')
     time.sleep(3)
-urllib.request.urlopen(f"http://localhost:9333/json/close/{t['id']}", timeout=8)
+import cdp_probe as _cp; urllib.request.urlopen(f"http://{_cp.HOST}:{_cp.PORT}/json/close/{t['id']}", timeout=8)
 mine = [x for x in seen.values() if ('@' + handle.lower()) in x['who'].lower()]
 rows = sorted(mine, key=lambda z: z['when'])
 json.dump({'day': day, 'raw': len(seen), 'mine': len(mine), 'capped': len(seen) >= 40, 'rows': rows}, open(out, 'w'), ensure_ascii=False, indent=1)
