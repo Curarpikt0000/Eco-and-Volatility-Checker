@@ -2027,3 +2027,98 @@ AGENTS.md 的 Cron 段仍描述旧版日报口径，需 Chao 授权后补写。
 - [ ] 核对 6 位新增 KOL 回填入库条数/覆盖月数并提交推送。
 - [ ] 10-04 09:00 首次真实运行抓取前名册同步，确认无告警。
 - [ ] 其余约 94 人排队，每天上限 6 人，预计一两周补完。
+
+## 2026-10-04
+### 决策
+- Luke Gromen 217 条推文先落独立 JSON（乙），不接看板/Notion；Chao 说「先 commit 然后全量」，再选「2+3」（先做 X 账号核对表，再按人逐步铺开）；账号核对选「乙」（猜账号+访问资料页）。
+- Chao 用另一账号（@Vergiljin，Pay Per Use，$20）开了 X API，令牌写入 `.env` 的 `X_BEARER_TOKEN_2`（旧 `X_BEARER_TOKEN` 余额为零，402，保留）；批准约 $6 预算（账号核对+3 人回填）。
+- Chao 要求每日 cron 抓取层也改走 API，余额耗尽要告警；改 cron 待回填跑通后再落地，需批准。
+- 回填原则：先 3 人验收再扩，不一口气铺开。
+
+### 事实与配置
+- 名册 198 人 `x_handle` 全空；X 账号映射拟存 `data/x_backfill/x_handles.json`，不碰名册（SSOT 在 Notion）。
+- 网页「人物搜索」对 74/198 人失灵（返回热门推荐，Dalio、Gromen 都搜不到）；猜账号对常规命名有效（lukegromen、raydalio），同名路人真实存在（Niall Ferguson→多伦多医学教授、Hartnett→爱尔兰诗人节号、Rajan→@ArunSFan 模仿号）。
+- 账号门禁规则：姓/名本身不算机构词；通用词（china/group/capital）不算；认证号+粉丝≥1万+姓名双命中可免机构词；无认证账号一律进人审，不自动采用。该门禁对 48 个样本调参，有过拟合风险。
+- X API：读帖 $0.005/条，查账号 $0.01；`search/all` 对该账号开放；长推文 `text` 会截断，必须优先取 `note_tweet.text`；402=余额耗尽。账本 `data/x_backfill/x_api_spend.json`，硬上限 $8，封装含 BudgetExceeded。
+- API 核对 299 账号花 $2.99：50 verified / 31 name_only / 42 reject / 75 人无候选（搜索失灵者阶段一未覆盖）；与网页核验对照 40 一致、8 不一致，网页错放的 3 个 API 均未放行。
+- API 回填 Gromen 3 个月 262 条花 $1.31；网页方式约 55 分钟，API 不到 1 分钟。
+- Gromen 翻译 217 条：数字/@/# 门禁通过；已知译偏习语手改；UST 保留英文、RS/LS→右轴/左轴；人名术语表（贝森特等）。引用转推缺被引用内容。
+- 成本估算（仅 Gromen 单样本，误差可能 2 倍以上）：48 人×3 月≈$60、198 人×6 月≈$500、日增 48 人≈$20/月。
+- 风险：公开 GitHub 仓库已含 217 条推文原文，与「private」话术冲突；给 Chao 的 X 申请话术提出 A（仓库只留 ID/链接/译文）/B（话术改公开研究看板），待选。
+
+### 进展
+- Gromen 217 条落 `data/x_backfill/lukegromen_statements.json`，提交推送 `1342ccc`（7 个文件，密钥扫描 0 命中）。
+- 网页账号核对跑完 198 人：high 48 / med 28 / low 122；猜账号只跑到第 10 人（0 自动通过）后停掉（pkill -f 误杀自身终端，教训：先 pgrep 再按 PID 杀）。
+
+### 待办
+- [ ] 补 75 个无候选者（先估价，Chao 点头再花）。
+- [ ] 先 3 人 API 回填并抽样验收，再扩。
+- [ ] 每日 cron 抓取层改 API（since_id）+ 余额告警（402 与 $16 预警），需批准。
+- [ ] 公开仓库推文原文处理（A/B 待选）；建议在 X 后台重新生成已在聊天出现过的 Bearer Token。
+- [ ] FFTT 自述 9 条抄进报告板块；Gromen 接看板待验收。
+
+## 2026-10-05
+
+### 决策
+- Chao 定：每个 KOL×平台 X 回填最多 1 个月（2026-09-05~10-04）；API 用尽转网页。
+- Chao 选「丙」：8 个高产号用 API 同窗口拉一遍，实测网页漏抓率（花 $3.91）。
+- Chao 选「乙」并同意名单：每日 X 扫描缩到保留 20 个、移出 22 个（写 `x_scan_exclude.json`，可逆，不删数据）。
+- Chao 批准：网站监测只接 King World News + Kitco，建 no_agent cron（每天 10:00 JST，有名册 KOL 命中才发一行）；不做网站 backfill。
+- 剩余网页回填队列仅 felixprehn / Rory_Johnston / saylor，Chao 回「跑」。
+
+### 事实与配置
+- 网页按天搜索对高产号漏抓约 24%（771 条样本），稀疏号约 0%；与当日条数、发帖时间、帖型均无关，「同日折叠」「UTC 日界」假设被证伪；网页补的数据须标 source=web，不当完整。
+- 网页日文件相邻日会含同一帖，汇总须按帖子 id 去重（日志“补抓 N 条”约重复计数 1.85 倍）。
+- X API：`since_id` 超 7 天返回 400，稀疏账号被静默吞（6 个账号没扫成）；已改为帖龄≥6 天用 `start_time`，并强制输出“X 个账号没扫成”。
+- 账本累计 $16.585/$20（账本口径），保留 20 个后月成本估 $3~6，账本到 $18 时提醒充值。
+- andrewmaguire1 半年无原创帖（主页对照确认，最新 2025-12-06）。
+- 站点实测：KWN 有 RSS+WP 接口，文字可取，音频在 SoundCloud 私有嵌入（未验证可下载，不转写）；Kitco 无 RSS，走分类 sitemap（news/opinions/video）；Kitco 视频近 8 周 46 条，命中名册仅 4 人 6 条。Zero Hedge、Peak Prosperity 近 7 天 0 命中不接；Real Vision/Hidden Forces RSS 空壳；SilverDoctors 停更近一年；HTTP 200≠有内容。
+- Lyn Alden 不在名册（Notion 未收），非匹配漏洞；名册不自行增删，需 Chao 在 Notion 加。
+- 网站监测 cron id `825bd3fda948`；`cdp_probe.py` 已移入 `tools/x_backfill/`（原在 /tmp 重启即丢）。
+
+### 进展
+- KWN 访谈判据收紧（标题含 Interview/Broadcast/WEEKLY WRAP with 等），Dalio 引语评论改标 mention。
+- 今日 09:30 X 扫描 cron 首次自动运行，发现并修复静默吞错 bug（编译通过，待明天真跑验证）。
+
+### 待办
+- [ ] 明天 09:30 扫描确认无“没扫成”。
+- [ ] 核对 felixprehn/Rory_Johnston/saylor 网页回填结果（按 id 去重）。
+- [ ] ChaoWiki 归档（insight.md/data-links.md/log.md）待 Chao 确认后 push。
+
+## 2026-10-06
+
+### 决策
+- Chao 让我把库存/ETF 图和 COMEX 做市商周净 issue/stop 两条产线接过来当 Eco 自己的项目。
+- 周净图只算 House 自营 (H)，代客 (C) 不进图（Chao 纠正：我把 C 也算进去了）。口径：核心 10 家 + 只算 H；无标记的 06-06~08-20 留白；缺失交割明细不补。
+- Notion 对这几个库只读，避免与 Mac 上另一个 agent 撞车。
+- 本轮改动不手动发布，等 11:00 日更 cron；发布后须自己读回线上核对。
+
+### 事实与配置
+- GLD/SLV 图停在 09-16 的根因：上游站 comex-inventory-charts.pages.dev 自己停更；原生产 cron 在本机不存在（脚本写死 Mac 路径）；日报读旧站仍标 ok。
+- 自产脚本在 `tools/comex_inv/`（路径用环境变量 INV_BASE）；`fetch_comex_inventory` 回落顺序：本地自产 → 外站 → 缓存，note 写明。单函数约 51 秒。
+- SGE 历史底表 `data/comex_inv/sge_history.json` 用 Eco 缓存播种，保住 51 点。
+- 周净图混算 C：自 08-21 起 Notion 席位名带 (C)/(H)，旧解析丢弃标记，C 与 H 相加。House 版：黄金 09-28 周 −1970 → +805（符号反转），白银 +866 → +390；留白 11 周；PDF 与 Notion 段无重叠日期，无法证明两段 H 同口径。
+- 周净数据没停：生产文件 11:04 生成早于 Notion 10-05 行写入（12:30）。上游自 06-08 起缺 19 天交割明细（10 天是周四，原因未知）。
+- SLV 10-05 日净流量 0.0：与 10-02 持仓盎司相同，疑上游复制，未验证。
+
+### 进展
+- Eco `e6cca3f`（库存/ETF 自产 + 期权叠价 + 研报简介展开 + 周图悬停天数），Comex-Daily-Report `f3a619b`（House 版）；两仓本地=远端。
+- 补报：清 http.server 时误用 pkill -f。
+
+### 待办
+- [ ] 10-07 cron 后读回线上：库存图到 10-05、周图黄金 +805/白银 +390、整站构建通过。
+- [ ] 菜单与页面顺序 3 处错配未改；全量核对各图是否真在更新；悬停坐标未统计。
+
+## 2026-10-07
+
+### 决策
+- Chao 要求对确定有高质量 X 发文的 KOL 和 report 回填 6 个月，用他的 Chrome 后台慢慢跑。我先不动手，提 3 个待定口径：名单是否仅日更 20 个账号、接受网页兜底「可能漏」、手动先试 1 个还是建夜间 cron。
+
+### 事实与配置
+- 窗口 2026-04-07 → 10-07；20 账号中 6 个已满，13 个有缺口，合计约 1,799 个账号·日；网页实际约 12~20 小时。API 账本 $16.93/$20，不够。
+- `x_day.py` 写死从 /tmp 导入 cdp_probe，/tmp 被清会 ImportError；仓库内 `tools/x_backfill/cdp_probe.py` 有副本。
+- 报告板块 window_days 本已是 183 天，无需回填。
+- 微信搜索实测可用（3 个查询均 200）。
+
+### 待办
+- [ ] 等 Chao 回 1/2/3 后再起回填。
