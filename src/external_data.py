@@ -3667,6 +3667,52 @@ def _jpx_foreign_flow_weekly():
         if bal is not None:
             # Excel 单位=千円(1,000 yen): 千円→万亿日元(¥T) = /1e9
             out.append((wk_end.isoformat(), round(bal / 1e9, 3)))  # 千円→万亿日元(¥T)
+    # ★★2026-10-06(Chao「这个图没更新」): JPX 自 2026 年 9 月第 3 周起换了发布格式 ——
+    #   旧: 存档页 stock_val_1_YYMMWW.xls(海外投資家 差引 在 col6, 周范围在 row3 文字里)
+    #   新: index 页 stock_1_w_YYYYMMDD_YYYYMMDD.xlsx(横向 14 个投资者块, 海外投資家 差引 在 col21,
+    #       周范围在「文件名」里, 文件内只有 YYYYMMW 周标识)。新文件不出现在存档页 → 旧解析器抓不到,
+    #       fetcher 不报错、缓存每天被重写但内容不变、日报仍标 ok(静默停更, 停在 09-11)。
+    #   新格式单位已核: PDF 页眉「千円 1,000 yen」= 旧表同单位, 同样 /1e9 → 万亿日元。
+    #   自洽校验: 买 − 卖 必须 == 差引(±2), 不符则丢弃该周(宁缺勿错)。
+    have = {d for d, _ in out}
+    try:
+        _ih = requests.get(base + "/english/markets/statistics-equities/investor-type/index.html",
+                           headers={"User-Agent": "Mozilla/5.0"}, timeout=30).text
+        _new = sorted(set(re.findall(r'href="([^"]*stock_1_w_(\d{8})_(\d{8})\.xlsx)"', _ih)), key=lambda t: t[2])
+    except Exception:
+        _new = []
+    for _href, _d0, _d1 in _new:
+        try:
+            wk_end = _dt.date(int(_d1[:4]), int(_d1[4:6]), int(_d1[6:8]))
+        except ValueError:
+            continue
+        if wk_end < cutoff or wk_end.isoformat() in have:
+            continue
+        try:
+            raw = requests.get(base + _href, headers={"User-Agent": "Mozilla/5.0"}, timeout=40).content
+            df = pd.read_excel(io.BytesIO(raw), header=None, sheet_name=0)
+        except Exception:
+            continue
+        # 定位「海外投資家」块: 第 3 行(idx3)起始列; 差引 Balance = 起始列+2 (売/買/差引/合計)
+        jf = None
+        for j in range(df.shape[1]):
+            if "海外" in str(df.iloc[3, j]) if df.shape[0] > 3 else False:
+                jf = j
+                break
+        if jf is None or df.shape[1] <= jf + 2:
+            continue
+        # 找「東証プライム」的「金額 Value」行(行内第 2 列含 Prime, 下一行是 Value)
+        vrow = None
+        for i in range(7, df.shape[0]):
+            if "プライム" in str(df.iloc[i, 1]) or "Prime" in str(df.iloc[i, 1]):
+                vrow = i + 1
+                break
+        if vrow is None or vrow >= df.shape[0] or "Value" not in str(df.iloc[vrow, 2]):
+            continue
+        sell, buy, bal = (_to_float(df.iloc[vrow, jf + k]) for k in (0, 1, 2))
+        if None in (sell, buy, bal) or abs((buy - sell) - bal) > 2:
+            continue   # 自洽失败: 列位置/口径不对, 丢弃, 不写错数
+        out.append((wk_end.isoformat(), round(bal / 1e9, 3)))
     out.sort(key=lambda t: t[0])
     return out
 
