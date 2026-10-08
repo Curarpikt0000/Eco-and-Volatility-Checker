@@ -3739,12 +3739,12 @@ def fetch_foreign_flow_japan(cache_path=None):
     return out
 
 
-def _imf_iip_series(country, entry):
+def _imf_iip_series(country, entry, freq="A", start="2014"):
     """IMF SDMX 2.1 拉一国 IIP 资产/负债年度序列(USD)。
     country: USA/JPN/DEU/CHN; entry: A_P(资产)/L_P(负债)。返回 {year:USD} 。失败{}。绝不编造。"""
     import requests
     import xml.etree.ElementTree as ET
-    url = f"https://api.imf.org/external/sdmx/2.1/data/IIP/{country}.{entry}.IIP.USD.A?startPeriod=2014"
+    url = f"https://api.imf.org/external/sdmx/2.1/data/IIP/{country}.{entry}.IIP.USD.{freq}?startPeriod={start}"
     try:
         r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=60)
         if r.status_code != 200:
@@ -3791,7 +3791,18 @@ def fetch_iip_four_countries(cache_path=None):
         assets = [(y, round(a[y] / 1e12, 2)) for y in yrs]
         liab = [(y, round(l[y] / 1e12, 2)) for y in yrs]
         net = [(y, round((a[y] - l[y]) / 1e12, 2)) for y in yrs]
+        # ★2026-10-07 接季频(IMF IIP Q 口径与年频同一数据集, 实测美国 2025-Q4 季频值 == 2025 年频值)。
+        #   只追加【晚于最新年末】的季度点(net_q), 年频序列与 latest_* 一律不动; 季度取不到就没有 net_q, 页面自动退回年频。
+        qa = _imf_iip_series(iso, "A_P", freq="Q", start=str(int(yrs[-1])))
+        ql = _imf_iip_series(iso, "L_P", freq="Q", start=str(int(yrs[-1])))
+        qks = sorted(p for p in (set(qa) & set(ql)) if p > f"{yrs[-1]}-Q4")
+        net_q = [(p, round((qa[p] - ql[p]) / 1e12, 2)) for p in qks]
         countries[key] = {
+            "q_assets": round(qa[qks[-1]] / 1e12, 2) if qks else None,
+            "q_liab": round(ql[qks[-1]] / 1e12, 2) if qks else None,
+            "q_net": net_q[-1][1] if qks else None,
+            "q_period": qks[-1] if qks else None,
+            "net_q": net_q,
             "status": "ok", "name": name, "flag": flag, "color": color,
             "assets": assets, "liab": liab, "net": net,
             "latest_year": yrs[-1], "latest_assets": assets[-1][1],
@@ -3801,7 +3812,8 @@ def fetch_iip_four_countries(cache_path=None):
     ok = any(c.get("status") == "ok" for c in countries.values())
     out = {"status": "ok" if ok else "未获取",
            "as_of": max(all_years) if all_years else "",
-           "source": "IMF International Investment Position (SDMX 2.1, api.imf.org), 年频, USD",
+           "q_as_of": max((c.get("q_period") or "" for c in countries.values()), default=""),
+           "source": "IMF International Investment Position (SDMX 2.1, api.imf.org), 年频 + 最新季频, USD",
            "countries": countries}
     try:
         with open(cache_path, "w") as f:
@@ -3954,10 +3966,14 @@ def fetch_bis_gold_swaps(cache_path=None):
         return {"status": "未获取", "as_of": data.get("as_of", ""),
                 "source": data.get("source", "BIS 自营黄金掉期"), "unit": "tonnes", "points": []}
     peak = max(pts, key=lambda p: p["tonnes"])
-    latest = pts[-1]
+    # ★2026-10-07: 「最新年报」必须取最后一个 kind=annual 点, 不能取最后一个点——补入月度点(2026-08 141t)后
+    #   最后一点是 monthly, 页面会把 GATA 的月度推算误标成「年报确认」。无 annual 点才回退最后一点。
+    _ann = [p for p in pts if p.get("kind") == "annual"]
+    latest = _ann[-1] if _ann else pts[-1]
     return {
         "status": "ok",
-        "as_of": data.get("as_of", latest["date"]),
+        "as_of": data.get("as_of", pts[-1]["date"]),
+        "gaps_note": data.get("gaps_note", ""),
         "source": data.get("source", "BIS 自营黄金掉期 (BIS own-account gold swaps)"),
         "unit": data.get("unit", "tonnes"),
         "note": data.get("note", ""),

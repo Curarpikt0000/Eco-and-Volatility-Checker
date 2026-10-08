@@ -1,23 +1,135 @@
 {
-  "as_of": "2026-03-31",
-  "source": "BIS 自营黄金掉期 (BIS own-account gold swaps)",
-  "unit": "tonnes",
-  "note": "BIS 机构自营账户的黄金掉期规模(吨)。BIS 从不主动披露此数字; 年度值(3/31)由 BIS 年报确认(annual), 月度值由 GATA 顾问 Robert Lambourne 从 BIS 官方月度 Statement of Account(bis.org/banking/balsheet/statofacc{YYMMDD}.pdf 的 Gold and gold loans 与 Gold deposits 两行 + 当期金价)推算。BIS 年报每年验证其推算准确。绝不编造: 每点标 kind(annual=年报确认 / monthly=月度推算)。",
-  "points": [
-    {"date": "2010-03-31", "tonnes": 346, "kind": "annual", "src": "BIS 2009-10 Annual Report"},
-    {"date": "2011-03-31", "tonnes": 409, "kind": "annual", "src": "BIS 2010-11 Annual Report"},
-    {"date": "2012-03-31", "tonnes": 355, "kind": "annual", "src": "BIS 2011-12 Annual Report"},
-    {"date": "2013-03-31", "tonnes": 404, "kind": "annual", "src": "BIS 2012-13 Annual Report"},
-    {"date": "2014-03-31", "tonnes": 236, "kind": "annual", "src": "BIS 2013-14 Annual Report"},
-    {"date": "2015-03-31", "tonnes": 47, "kind": "annual", "src": "BIS 2014-15 Annual Report"},
-    {"date": "2016-03-31", "tonnes": 0, "kind": "annual", "src": "BIS 2015-16 Annual Report"},
-    {"date": "2017-03-31", "tonnes": 438, "kind": "annual", "src": "BIS 2016-17 Annual Report"},
-    {"date": "2018-03-31", "tonnes": 361, "kind": "annual", "src": "BIS 2017-18 Annual Report"},
-    {"date": "2019-03-31", "tonnes": 175, "kind": "annual", "src": "BIS 2018-19 Annual Report"},
-    {"date": "2020-03-31", "tonnes": 326, "kind": "annual", "src": "BIS 2019-20 Annual Report"},
-    {"date": "2021-03-31", "tonnes": 490, "kind": "annual", "src": "BIS 2020-21 Annual Report (record high)"},
-    {"date": "2025-10-31", "tonnes": 54, "kind": "monthly", "src": "GATA/Lambourne from BIS statofacc251031.pdf"},
-    {"date": "2025-11-30", "tonnes": 39, "kind": "monthly", "src": "GATA/Lambourne from BIS statofacc251130.pdf"},
-    {"date": "2026-03-31", "tonnes": 184, "kind": "annual", "src": "BIS 2025-26 Annual Report"}
-  ]
+ "as_of": "2026-08-31",
+ "source": "BIS 自营黄金掉期 (BIS own-account gold swaps)",
+ "unit": "tonnes",
+ "note": "BIS 机构自营账户的黄金掉期规模(吨)。BIS 从不主动披露此数字; 年度值(3/31)由 BIS 年报确认(annual), 月度值由 GATA 顾问 Robert Lambourne 从 BIS 官方月度 Statement of Account(bis.org/banking/balsheet/statofacc{YYMMDD}.pdf 的 Gold and gold loans 与 Gold deposits 两行 + 当期金价)推算。BIS 年报每年验证其推算准确。绝不编造: 每点标 kind(annual=年报确认 / monthly=月度推算)。",
+ "points": [
+  {
+   "date": "2010-03-31",
+   "tonnes": 346,
+   "kind": "annual",
+   "src": "BIS 2009-10 Annual Report"
+  },
+  {
+   "date": "2011-03-31",
+   "tonnes": 409,
+   "kind": "annual",
+   "src": "BIS 2010-11 Annual Report"
+  },
+  {
+   "date": "2012-03-31",
+   "tonnes": 355,
+   "kind": "annual",
+   "src": "BIS 2011-12 Annual Report"
+  },
+  {
+   "date": "2013-03-31",
+   "tonnes": 404,
+   "kind": "annual",
+   "src": "BIS 2012-13 Annual Report"
+  },
+  {
+   "date": "2014-03-31",
+   "tonnes": 236,
+   "kind": "annual",
+   "src": "BIS 2013-14 Annual Report"
+  },
+  {
+   "date": "2015-03-31",
+   "tonnes": 47,
+   "kind": "annual",
+   "src": "BIS 2014-15 Annual Report"
+  },
+  {
+   "date": "2016-03-31",
+   "tonnes": 0,
+   "kind": "annual",
+   "src": "BIS 2015-16 Annual Report"
+  },
+  {
+   "date": "2017-03-31",
+   "tonnes": 438,
+   "kind": "annual",
+   "src": "BIS 2016-17 Annual Report"
+  },
+  {
+   "date": "2018-03-31",
+   "tonnes": 361,
+   "kind": "annual",
+   "src": "BIS 2017-18 Annual Report"
+  },
+  {
+   "date": "2019-03-31",
+   "tonnes": 175,
+   "kind": "annual",
+   "src": "BIS 2018-19 Annual Report"
+  },
+  {
+   "date": "2020-03-31",
+   "tonnes": 326,
+   "kind": "annual",
+   "src": "BIS 2019-20 Annual Report"
+  },
+  {
+   "date": "2021-03-31",
+   "tonnes": 490,
+   "kind": "annual",
+   "src": "BIS 2020-21 Annual Report (record high)"
+  },
+  {
+   "date": "2025-10-31",
+   "tonnes": 54,
+   "kind": "monthly",
+   "src": "GATA/Lambourne from BIS statofacc251031.pdf"
+  },
+  {
+   "date": "2025-11-30",
+   "tonnes": 39,
+   "kind": "monthly",
+   "src": "GATA/Lambourne from BIS statofacc251130.pdf"
+  },
+  {
+   "date": "2025-12-31",
+   "tonnes": 56,
+   "kind": "monthly",
+   "src": "GATA/Lambourne 月表 (gata.org/node/24731, 2026-06-04)"
+  },
+  {
+   "date": "2026-01-31",
+   "tonnes": 106,
+   "kind": "monthly",
+   "src": "GATA/Lambourne 月表 (gata.org/node/24731, 2026-06-04)"
+  },
+  {
+   "date": "2026-02-28",
+   "tonnes": 104,
+   "kind": "monthly",
+   "src": "GATA/Lambourne 月表 (gata.org/node/24550, 2026-03-07) from BIS statofacc260228.pdf"
+  },
+  {
+   "date": "2026-03-31",
+   "tonnes": 184,
+   "kind": "annual",
+   "src": "BIS 2025-26 Annual Report"
+  },
+  {
+   "date": "2026-04-30",
+   "tonnes": 134,
+   "kind": "monthly",
+   "src": "GATA/Lambourne 月表 (gata.org/node/24731, 2026-06-04) from BIS statofacc260430.pdf"
+  },
+  {
+   "date": "2026-06-30",
+   "tonnes": 144,
+   "kind": "monthly",
+   "src": "GoldSeek/GATA 2026-07-10: swaps fell from 146 to 144 tonnes, from BIS statofacc260630.pdf"
+  },
+  {
+   "date": "2026-08-31",
+   "tonnes": 141,
+   "kind": "monthly",
+   "src": "GATA gata.org/node/24975 (2026-09-10): increased by 10 tonnes, now 141, from BIS statement-account-31-august-2026.pdf"
+  }
+ ],
+ "gaps_note": "2026-05 / 2026-07 两个月 GATA 有发布但本项目未读到正文数字(仅见搜索摘要/反推), 按「绝不编造」不补; 2026-03 以 BIS 年报确认的 184 吨为准(GATA 月度推算为 181, 差 3 吨, GATA 自己在年报后已说明)。"
 }

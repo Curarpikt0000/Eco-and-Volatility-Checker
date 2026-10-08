@@ -119,6 +119,16 @@ def _stale_badge(as_of, freq="daily", label=None, known_reason=False):
     return f'<span class="stale-badge sb-{sev}" title="最新数据日期 {_esc(s)}，距今 {days} 天；该源自然更新频率={freq}">{txt}</span>'
 
 
+def _srcslow_badge(as_of, cadence, verified_on, src_note, extra=""):
+    """★2026-10-07 (Chao「怎么还是上周的数据」): 低频源「官方最新就是这一期」时, 不能用 🟡「数据滞后」吓人。
+    只用于【已回官方接口核实过「官方没有更新的一期」】的板块, 调用方必须填 verified_on(核实日) 与 src_note(怎么核的)。
+    灰色 ⏳ 只陈述事实: 最新是哪天、该源多久一更。没核实过的板块一律继续用 _stale_badge, 不得套用本函数。"""
+    if not as_of:
+        return ""
+    return (f'<span class="stale-badge sb-slow" title="{_esc(src_note)}（核实于 {_esc(verified_on)}）">'
+            f'⏳ 源头{_esc(cadence)}更新 · 最新 {_esc(str(as_of)[:10])} 已是官方最新{(" · " + _esc(extra)) if extra else ""}</span>')
+
+
 # ★2026-10-06 指标卡新鲜度(Chao 报「今天数据健康度差」后的修复; Opus 5.5 评审 + 本地实测)。
 #   每个指标的自然更新频率。依据: FRED 日度序列 T+1~T+2(实测 10-06 上午最新=10-02);
 #   AAII 资产配置=月度调查; FINRA/LEI=月度; BofA FMS=月度; BofA Bull&Bear=周度; Z.1 巴菲特=季度;
@@ -2645,6 +2655,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
                 <div><span class="cl">未平仓 (OI)</span><span class="cv">{r['open_interest']:,}</span></div>
                 <div><span class="cl">大户投机净</span><span class="cv">{r.get('noncomm_net',0):,}</span></div>
               </div>
+              <div class="cot-cad">{_cot_cadence_note(r.get('as_of'))}</div>
             </div>"""
         return html
 
@@ -4158,7 +4169,10 @@ def _iip_net_svg(countries, w=920, h=280):
     if not active:
         return '<div class="cust-chart-na">四国 IIP 数据不足</div>'
     all_years = sorted({y for c in active.values() for y, _ in c["net"]})
-    all_vals = [v for c in active.values() for _, v in c["net"]]
+    # ★2026-10-07 接季频: 年频之后追加「最新季度」标签(如 2026-Q1/Q2), 与年频同一 x 轴顺序延伸
+    q_labels = sorted({q for c in active.values() for q, _ in (c.get("net_q") or [])})
+    all_years = all_years + [q for q in q_labels if q not in all_years]
+    all_vals = [v for c in active.values() for _, v in c["net"]] + [v for c in active.values() for _, v in (c.get("net_q") or [])]
     lo, hi = min(all_vals + [0.0]), max(all_vals + [0.0])
     pad = (hi - lo) * 0.08 or 1
     lo -= pad; hi += pad
@@ -4179,8 +4193,9 @@ def _iip_net_svg(countries, w=920, h=280):
     parts.append(f'<line x1="{ml}" y1="{zy:.1f}" x2="{w-mr}" y2="{zy:.1f}" stroke="#8a8578" stroke-width="1.3" opacity="0.6"/>')
     # x 年份
     for i, y in enumerate(all_years):
-        if i % 2 == 0 or i == n - 1:
-            anchor = "start" if i == 0 else ("end" if i >= n - 2 else "middle")
+        # 季度标签一律显示(只有 1~2 个); 年份仍每隔 1 个标一个
+        if i % 2 == 0 or i == n - 1 or "Q" in str(y):
+            anchor = "start" if i == 0 else ("end" if i >= n - 1 else "middle")
             parts.append(f'<text x="{X(i):.1f}" y="{h-9}" font-size="9" fill="#8a8578" text-anchor="{anchor}">{y}</text>')
     legend_y = mt + 6
     for k in ("US", "JP", "DE", "CN"):
@@ -4194,9 +4209,18 @@ def _iip_net_svg(countries, w=920, h=280):
                 if y in yidx:
                     parts.append(f'<circle class="tip-hit" cx="{X(yidx[y]):.1f}" cy="{Y(v):.1f}" r="6" data-tip="{_esc(c["name"])} · {_esc(str(y))}||{v:+.1f}"/>')
             ly, lv = c["net"][-1]
+            nq = [(q, v) for q, v in (c.get("net_q") or []) if q in yidx]
+            if nq:
+                # 虚线: 年频末点 → 各季度点(区别于实线年频; 季度点空心圆)
+                seg = [f"{X(yidx[ly]):.1f},{Y(lv):.1f}"] + [f"{X(yidx[q]):.1f},{Y(v):.1f}" for q, v in nq]
+                parts.append(f'<polyline points="{" ".join(seg)}" fill="none" stroke="{color}" stroke-width="2.2" stroke-dasharray="5,4" stroke-linejoin="round"/>')
+                for q, v in nq:
+                    parts.append(f'<circle class="tip-hit" cx="{X(yidx[q]):.1f}" cy="{Y(v):.1f}" r="6" data-tip="{_esc(c["name"])} · {_esc(str(q))}（季频）||{v:+.1f}"/>')
+                    parts.append(f'<circle cx="{X(yidx[q]):.1f}" cy="{Y(v):.1f}" r="3.2" fill="#fff" stroke="{color}" stroke-width="1.6"/>')
+                ly, lv = nq[-1]
             parts.append(f'<circle cx="{X(yidx[ly]):.1f}" cy="{Y(lv):.1f}" r="3.4" fill="{color}"/>')
         parts.append(f'<line x1="{w-mr+8}" y1="{legend_y}" x2="{w-mr+24}" y2="{legend_y}" stroke="{color}" stroke-width="2.6"/>')
-        parts.append(f'<text x="{w-mr+28}" y="{legend_y+4}" font-size="10" fill="{color}" font-weight="600">{c["flag"]}{_esc(c["name"])} {c["latest_net"]:+.1f}</text>')
+        parts.append(f'<text x="{w-mr+28}" y="{legend_y+4}" font-size="10" fill="{color}" font-weight="600">{c["flag"]}{_esc(c["name"])} {(c.get("q_net") if c.get("q_net") is not None else c["latest_net"]):+.1f}</text>')
         legend_y += 18
     parts.append('</svg>')
     return "".join(parts)
@@ -4209,7 +4233,11 @@ def _iip_assets_liab_svg(countries, w=920, h=230):
     if not order:
         return '<div class="cust-chart-na">数据不足</div>'
     cd = dict(active)
-    allv = [cd[k]["latest_assets"] for k in order] + [cd[k]["latest_liab"] for k in order]
+    # ★2026-10-07 接季频: 用最新季度资产/负债(四国都有才用, 否则整图退回年频, 不混用不同期别)
+    use_q = all(cd[k].get("q_assets") is not None and cd[k].get("q_liab") is not None for k in order)
+    A = (lambda k: cd[k]["q_assets"]) if use_q else (lambda k: cd[k]["latest_assets"])
+    L = (lambda k: cd[k]["q_liab"]) if use_q else (lambda k: cd[k]["latest_liab"])
+    allv = [A(k) for k in order] + [L(k) for k in order]
     vmax = max(allv) * 1.12
     ml, mr, mt, mb = 46, 14, 20, 40
     pw, ph = w - ml - mr, h - mt - mb
@@ -4224,8 +4252,8 @@ def _iip_assets_liab_svg(countries, w=920, h=230):
     for gi, k in enumerate(order):
         c = cd[k]
         cx = ml + gap * gi + gap / 2
-        for off, val, col, lab in ((-bw*0.6, c["latest_assets"], "#7fa085", "资产"),
-                                   (bw*0.6, c["latest_liab"], "#c0757d", "负债")):
+        for off, val, col, lab in ((-bw*0.6, A(k), "#7fa085", "资产"),
+                                   (bw*0.6, L(k), "#c0757d", "负债")):
             bh = val / vmax * ph
             by = mt + ph - bh
             parts.append(f'<rect x="{cx+off-bw/2:.1f}" y="{by:.1f}" width="{bw:.1f}" height="{bh:.1f}" rx="1.5" fill="{col}" opacity="0.85" data-tip="{_esc(c["name"])} · {lab}||{val:.1f}"/>')
@@ -4254,11 +4282,14 @@ def _iip_html(iip):
         c = cs.get(k, {})
         if c.get("status") != "ok":
             continue
-        net = c["latest_net"]
+        _q_ok = c.get("q_net") is not None and all(cs.get(x, {}).get("q_assets") is not None for x in ("US", "JP", "DE", "CN") if cs.get(x, {}).get("status") == "ok")
+        net = c["q_net"] if _q_ok else c["latest_net"]
+        _as = c["q_assets"] if _q_ok else c["latest_assets"]
+        _li = c["q_liab"] if _q_ok else c["latest_liab"]
         col = "#2e9e5b" if net >= 0 else "#d64545"
         role = "净债权国" if net >= 0 else "净债务国"
         rows.append(f'<span style="color:{c["color"]};font-weight:600">{c["flag"]}{_esc(c["name"])}</span> '
-                    f'资产${c["latest_assets"]:.1f}T/负债${c["latest_liab"]:.1f}T→'
+                    f'资产${_as:.1f}T/负债${_li:.1f}T→'
                     f'净<b style="color:{col}">{net:+.1f}T</b>（{role}）')
     meta = " · ".join(rows)
     asof = iip.get("as_of", "")
@@ -4266,11 +4297,11 @@ def _iip_html(iip):
         f'<div class="cust-wrap">'
         f'<div class="cust-chart-col cust-chart-full">'
         f'<div class="cust-chart-title">四国对外净头寸 NIIP · 过去约十年（对外总资产 − 总负债 · $万亿）'
-        f'<span class="chart-freq freq-w">🔵 年频 · IMF 年度更新</span></div>'
+        f'<span class="chart-freq freq-w">🔵 年频为主 + 最新季频（虚线）· IMF</span></div>'
         f'{net_svg}'
         f'</div>'
         f'<div class="cust-chart-col cust-chart-full" style="margin-top:14px;">'
-        f'<div class="cust-chart-title">最新年（{_esc(asof)}）· 四国对外总资产 vs 总负债（$万亿）</div>'
+        f'<div class="cust-chart-title">最新{("季（" + _esc(iip.get("q_as_of", "")) + "，季频") if iip.get("q_as_of") and all(cs.get(x, {}).get("q_assets") is not None for x in ("US", "JP", "DE", "CN") if cs.get(x, {}).get("status") == "ok") else ("年（" + _esc(asof))}）· 四国对外总资产 vs 总负债（$万亿）</div>'
         f'{al_svg}'
         f'<div class="oil-meta">{meta}</div>'
         f'<div class="oil-src">数据源：{_esc(iip.get("source",""))}</div>'
@@ -4280,7 +4311,7 @@ def _iip_html(iip):
         f'<b>🇺🇸 美国</b>是全球最大<b>净债务国</b>(净头寸深度为负且持续恶化)——靠美元储备货币地位持续吸收外部资本；'
         f'<b>🇯🇵 日本 / 🇩🇪 德国 / 🇨🇳 中国</b>是主要<b>净债权国</b>(常年经常账户顺差累积对外资产)。'
         f'净债务国若外部融资条件收紧(利率↑/避险)会承压；净债权国则在全球动荡时资本回流本国、支撑本币。'
-        f'是判断<b>全球资本流向与外部脆弱性</b>的结构性指标。<br>年频，IMF 官方公开数据。</div>'
+        f'是判断<b>全球资本流向与外部脆弱性</b>的结构性指标。<br>实线为年频(年末值)，虚线为晚于最新年末的季频点；同口径(IMF IIP 同一数据集，美国 2025-Q4 季频值与 2025 年频值一致)，IMF 官方公开数据。</div>'
         f'</div>'
     )
 
@@ -4723,7 +4754,9 @@ def _bis_gold_swaps_html(bg):
     mo_txt = ""
     if len(monthly) >= 1:
         m = monthly[-1]
-        mo_txt = (f' · 最新月度推算 <b>{m["tonnes"]}t</b>（{_esc(m["date"])}，GATA/Lambourne 从 BIS 月报推算）')
+        recent = " → ".join(f'{q["date"][:7]} {q["tonnes"]}t' for q in monthly[-4:])
+        mo_txt = (f' · 最新月度推算 <b>{m["tonnes"]}t</b>（{_esc(m["date"])}，GATA/Lambourne 从 BIS 月报推算；'
+                  f'近几期：{_esc(recent)}）')
     return (
         f'<div class="cust-wrap">'
         f'<div class="cust-chart-col cust-chart-full">'
@@ -4744,7 +4777,8 @@ def _bis_gold_swaps_html(bg):
         f'是<b>央行黄金政策/市场压力的另类信号</b>。<br>'
         f'<b>数据诚实说明</b>：BIS 不单列 swaps 科目，年度值取自 BIS 年报明确确认，月度值为 GATA 从 BIS 官方月报推算'
         f'（BIS 年报每年验证其推算准确）；BIS 未公开精确勾稽算法，故本页不做无法验证的自行换算，'
-        f'仅呈现已核实公开真值，月度点由 cron 读 GATA 新披露只增补充，<b>绝不编造</b>。</div>'
+        f'仅呈现已核实公开真值，月度点由 cron 读 GATA 新披露只增补充，<b>绝不编造</b>。'
+        f'{("<br><b>缺口：</b>" + _esc(bg.get("gaps_note"))) if bg.get("gaps_note") else ""}</div>'
         f'</div>'
     )
 
@@ -4925,6 +4959,22 @@ def _comex_silver_issues_ref_html(cs):
     )
 
 
+def _cot_cadence_note(as_of):
+    """COT 周频: 持仓日=周二, CFTC 通常周五发布(遇联邦假日顺延)。下一期日期由最近数据日推算, 不写死。
+    ★2026-10-07 实测 CFTC Socrata 全表最新=09-29, 与本卡一致; 页面此前只写日期不写节奏, 读者会误以为没更新。"""
+    try:
+        d0 = datetime.date.fromisoformat(str(as_of)[:10])
+    except Exception:
+        return ""
+    nxt_data = d0 + datetime.timedelta(days=7)
+    nxt_pub = nxt_data + datetime.timedelta(days=3)
+    late = ""
+    if datetime.date.today() > nxt_pub + datetime.timedelta(days=2):
+        late = ' <span class="stale-badge sb-amber">🟡 已超过预计发布日，请核对 CFTC 是否延迟</span>'
+    return (f'周频 · 持仓日为周二、通常周五发布 · 本期持仓日 {d0.isoformat()} · '
+            f'下一期持仓日 {nxt_data.isoformat()}，预计 {nxt_pub.isoformat()} 发布{late}')
+
+
 def _gold_exports_html(ge):
     """美国黄金出口(Nonmonetary gold) section: FRED IEAXGG 季度折线(1999→今) + 暴涨标注。
     ge: fetch_gold_exports()。FRED 官方一手真数据, 诚实标题(Nonmonetary), 绝不编造。"""
@@ -4939,7 +4989,13 @@ def _gold_exports_html(ge):
     latest = ge.get("latest"); latest_d = ge.get("latest_date", "")
     peak = ge.get("peak"); peak_d = ge.get("peak_date", "")
     base = ge.get("base_2024_avg"); surge = ge.get("surge_x")
-    latest_b = round(latest / 1000, 1) if latest else None  # 换算成十亿美元
+    # ★2026-10-07 更正(Chao 复核全图时发现): 原写 latest/1000 却标「亿美元」, 实为「十亿美元」, 单位错 10 倍;
+    #   且「约 460 吨」是【峰值季】(47.2B)的换算, 误挂在「最新季」后。现改: 最新季按 亿美元=百万美元/100 显示,
+    #   吨数按「同一假设(金价约 $3200/oz, 与原批注一致)」分别给最新季与峰值季, 不再串用。
+    latest_b = round(latest / 100, 1) if latest else None   # 百万美元 → 亿美元
+    _oz_t = 32151.0
+    _t_latest = round(latest * 1e6 / 3200.0 / _oz_t) if latest else None
+    _t_peak = round(peak * 1e6 / 3200.0 / _oz_t) if peak else None
     # 460吨换算说明(用户图批注): 47B USD ÷ ~$3200/oz ÷ 32151 oz/t ≈ 460t 量级
     status_badge = ('🟡 缓存' if ge.get("status") == "缓存" else '🟢 每季 · FRED/BEA 官方')
     return (
@@ -4948,8 +5004,8 @@ def _gold_exports_html(ge):
         f'<div class="cust-chart-title">美国黄金出口 · Nonmonetary Gold Exports（百万美元 · 季度 · 1999→今）'
         f'<span class="chart-freq freq-w">{status_badge}</span></div>'
         f'{svg}'
-        f'<div class="oil-meta">最新（{_esc(latest_d)}）：<b style="color:#c9a94e">{latest:,.0f} 百万美元</b>{_stale_badge(latest_d, "quarterly")}'
-        f'（≈ <b>{latest_b} 亿美元</b>，约 <b>460 吨</b>量级） · '
+        f'<div class="oil-meta">最新（{_esc(latest_d)}）：<b style="color:#c9a94e">{latest:,.0f} 百万美元</b>{_srcslow_badge(latest_d, "季度", "2026-10-07", "FRED IEAXGG 官方 API 实测: 全序列最新观测=2026-04-01, FRED 最近一次更新 2026-09-24; 抓取链路完好")}'
+        f'（≈ <b>{latest_b:,.0f} 亿美元</b>，按金价约 $3,200/盎司折算约 <b>{_t_latest} 吨</b>量级；峰值季约 {_t_peak} 吨） · '
         f'历史峰值 <b>{peak:,.0f}</b>（{_esc(peak_d)}） · '
         f'较 2024 均值（{base:,.0f}）<b style="color:#d64545">暴涨 {surge}×</b></div>'
         f'<div class="oil-src">数据源：{_esc(ge.get("source",""))} · '
@@ -6706,7 +6762,7 @@ def _credit_impulse_html(ci):
         f'<span style="color:#2e9e5b">正值=信贷在加速扩张</span>（利好增长/风险资产），'
         f'<span style="color:#d64545">负值=新增信贷放缓/收缩</span>（即使总债务仍在涨）。'
         f'领先实体经济约 <b>6-9 个月</b>——<b>中国信贷脉冲</b>是全球商品、周期股、风险资产最强的领先指标之一。'
-        f'口径为 BIS credit-to-GDP ratio 的二阶差分（美/中/欧/日统一口径、国际可比），<b>季度序列、BIS 汇编发布滞后约 3 季</b>（as of {_esc(asof)[:7]}）{_stale_badge(asof, "bis_quarterly")}。'
+        f'口径为 BIS credit-to-GDP ratio 的二阶差分（美/中/欧/日统一口径、国际可比），<b>季度序列、BIS 汇编发布滞后约 3 季</b>（as of {_esc(asof)[:7]}）{_srcslow_badge(asof, "季度", "2026-10-07", "FRED QUSPAM770A/QCNPAM770A 等四国序列官方 API 实测: 最新观测均=2025-10-01, FRED 06-15 才更新; 抓取链路完好", extra="BIS 汇编发布滞后约 3 季")}。'
         f'数据源：{_linkify_sources(src)}。</div>'
         f'{long_block}'
         f'</div>'
@@ -9865,6 +9921,8 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .sb-amber {{ color: #8a6d1f; background: rgba(224,169,46,.16); border: 1px solid rgba(224,169,46,.38); }}
   .sb-red   {{ color: #8a3f47; background: rgba(192,117,125,.16); border: 1px solid rgba(192,117,125,.42); }}
   .sb-gray  {{ color: #6b6f78; background: rgba(120,125,135,.12); border: 1px solid rgba(120,125,135,.30); }}
+  .sb-slow  {{ color: #4a5b78; background: rgba(74,91,120,.10); border: 1px solid rgba(74,91,120,.28); }}
+  .cot-cad  {{ margin-top: 8px; font-size: 11px; color: var(--muted); line-height: 1.5; }}
   .mc-slabel {{ font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px; margin-left: 4px; }}
   .mc-slabel-g {{ color: #3f5a3f; background: rgba(154,171,151,.30); }}
   .mc-slabel-y {{ color: #8a6a2a; background: rgba(212,178,110,.32); }}
