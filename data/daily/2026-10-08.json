@@ -1,0 +1,937 @@
+{
+  "date": "2026-10-08",
+  "brief": {
+    "date": "2026-10-08",
+    "overall": "🟡 警戒",
+    "hit": 1,
+    "sell_threshold_reached": false,
+    "group_stats": {
+      "short": {
+        "safe": 6,
+        "total": 8
+      },
+      "mid": {
+        "safe": 2,
+        "total": 7
+      },
+      "long": {
+        "safe": 2,
+        "total": 5
+      }
+    },
+    "anchors": [
+      {
+        "name": "VIX 波动率指数",
+        "value": 15.01,
+        "arrow": "↓",
+        "light": "🟢"
+      },
+      {
+        "name": "CNN 恐惧与贪婪指数",
+        "value": 44.6,
+        "arrow": "↓",
+        "light": "🟢"
+      },
+      {
+        "name": "高收益债利差",
+        "value": 3.03,
+        "arrow": "↓",
+        "light": "🟢"
+      },
+      {
+        "name": "巴菲特指标",
+        "value": 255.0,
+        "arrow": "→",
+        "light": "🔴"
+      },
+      {
+        "name": "席勒 CAPE (PE10)",
+        "value": 41.8,
+        "arrow": "↓",
+        "light": "🔴"
+      },
+      {
+        "name": "10Y-2Y 收益率曲线",
+        "value": 0.51,
+        "arrow": "↑",
+        "light": "🟢"
+      },
+      {
+        "name": "美银牛熊指标",
+        "value": 9.5,
+        "arrow": "→",
+        "light": "🔴"
+      }
+    ],
+    "triggered": [
+      [
+        "BofA Bull&Bear > 8.0",
+        "9.5"
+      ]
+    ],
+    "near": [],
+    "cot_alerts": [],
+    "calm": false
+  },
+  "cb_balance": {
+    "US": {
+      "name": "美联储 Fed",
+      "flag": "🇺🇸",
+      "unit": "$B",
+      "period": "WoW",
+      "date": "2026-09-30",
+      "assets": [
+        {
+          "name": "美国国债 Treasuries",
+          "value": 4564.161,
+          "delta": 5.829,
+          "pct": 0.13,
+          "sub": false
+        },
+        {
+          "name": "短期国债 Bills（RMP 储备管理购买）",
+          "value": 560.211,
+          "delta": 5.838,
+          "pct": 1.05,
+          "sub": true
+        },
+        {
+          "name": "MBS 抵押债",
+          "value": 1898.089,
+          "delta": -12.32,
+          "pct": -0.64,
+          "sub": false
+        },
+        {
+          "name": "FIMA 回购便利（Fed 借美元给外国央行）",
+          "value": 0,
+          "delta": 0,
+          "pct": null,
+          "sub": false
+        },
+        {
+          "name": "SRF 常备回购",
+          "value": 1.2,
+          "delta": 1.199,
+          "pct": 119900.0,
+          "sub": false
+        },
+        {
+          "name": "其他 Other（差额）",
+          "value": 279.6,
+          "delta": null,
+          "pct": null,
+          "sub": false
+        }
+      ],
+      "liabilities": [
+        {
+          "name": "准备金 Reserves",
+          "value": 2948.09,
+          "delta": 17.897,
+          "pct": 0.61,
+          "sub": false
+        },
+        {
+          "name": "隔夜逆回购 ON RRP",
+          "value": 11.539,
+          "delta": 11.078,
+          "pct": 2403.04,
+          "sub": false
+        },
+        {
+          "name": "外国官方及国际账户逆回购（外国央行存放）",
+          "value": 350.344,
+          "delta": 30.08,
+          "pct": 9.39,
+          "sub": false
+        },
+        {
+          "name": "财政部账户 TGA",
+          "value": 948.674,
+          "delta": -28.41,
+          "pct": -2.91,
+          "sub": false
+        },
+        {
+          "name": "流通货币 Currency",
+          "value": 2482.015,
+          "delta": -0.185,
+          "pct": -0.01,
+          "sub": false
+        }
+      ],
+      "total_assets": {
+        "name": "总资产",
+        "value": 6743.031,
+        "delta": -4.673,
+        "pct": -0.07,
+        "sub": false
+      },
+      "total_liab": null
+    },
+    "JP": {
+      "name": "日本央行 BoJ",
+      "flag": "🇯🇵",
+      "unit": "$B",
+      "period": "较上期",
+      "date": "2026-09-20",
+      "assets": [
+        {
+          "name": "日本国债 JGB",
+          "value": 3297.0,
+          "delta": 4.3,
+          "pct": 0.13,
+          "sub": false
+        },
+        {
+          "name": "公司债",
+          "value": 7.1,
+          "delta": -0.9,
+          "pct": -11.44,
+          "sub": false
+        },
+        {
+          "name": "ETF",
+          "value": 234.2,
+          "delta": -0.1,
+          "pct": -0.03,
+          "sub": false
+        },
+        {
+          "name": "J-REIT",
+          "value": 4.1,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": false
+        },
+        {
+          "name": "其他 Other（差额）",
+          "value": 521.2,
+          "delta": null,
+          "pct": null,
+          "sub": false
+        }
+      ],
+      "liabilities": [
+        {
+          "name": "银行券 Banknotes",
+          "value": 727.3,
+          "delta": 1.9,
+          "pct": 0.26,
+          "sub": false
+        },
+        {
+          "name": "经常项目存款",
+          "value": 2599.7,
+          "delta": -15.2,
+          "pct": -0.58,
+          "sub": false
+        },
+        {
+          "name": "政府存款",
+          "value": 104.8,
+          "delta": -14.4,
+          "pct": -12.08,
+          "sub": false
+        }
+      ],
+      "total_assets": {
+        "name": "总资产",
+        "value": 4063.6,
+        "delta": -19.0,
+        "pct": -0.46,
+        "sub": false
+      },
+      "total_liab": null,
+      "orig_unit": "兆¥"
+    },
+    "CN": {
+      "name": "中国央行 PBoC",
+      "flag": "🇨🇳",
+      "unit": "$B",
+      "period": "MoM",
+      "date": "2026-08",
+      "assets": [
+        {
+          "name": "外汇占款",
+          "value": 3226.6,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": false
+        },
+        {
+          "name": "对政府债权",
+          "value": 333.3,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": false
+        },
+        {
+          "name": "对其他存款性公司债权",
+          "value": 3032.1,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": false
+        },
+        {
+          "name": "其他 Other（差额）",
+          "value": 624.9,
+          "delta": null,
+          "pct": null,
+          "sub": false
+        }
+      ],
+      "liabilities": [
+        {
+          "name": "储备货币",
+          "value": 5835.9,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": false
+        },
+        {
+          "name": "货币发行",
+          "value": 2259.2,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": true
+        },
+        {
+          "name": "政府存款",
+          "value": 897.3,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": false
+        },
+        {
+          "name": "其他 Other（差额）",
+          "value": 483.7,
+          "delta": null,
+          "pct": null,
+          "sub": false
+        }
+      ],
+      "total_assets": {
+        "name": "总资产",
+        "value": 7216.9,
+        "delta": 0.0,
+        "pct": 0.0,
+        "sub": false
+      },
+      "total_liab": {
+        "name": "总负债",
+        "value": 7216.9,
+        "delta": 0.0,
+        "pct": 0.0,
+        "sub": false
+      },
+      "orig_unit": "亿¥"
+    },
+    "_fx": {
+      "USDJPY": 157.81,
+      "USDCNY": 6.7038,
+      "USDEUR": 1.1259
+    },
+    "ECB": {
+      "name": "欧元体系 Eurosystem",
+      "flag": "🇪🇺",
+      "unit": "$B",
+      "orig_unit": "十亿€",
+      "period": "周度",
+      "date": "2026-W40",
+      "assets": [
+        {
+          "name": "黄金及黄金债权 Gold",
+          "value": 1448.2,
+          "delta": 60.1,
+          "pct": 4.33,
+          "sub": false
+        },
+        {
+          "name": "外币资产 FX Assets",
+          "value": 591.9,
+          "delta": 1.0,
+          "pct": 0.17,
+          "sub": false
+        },
+        {
+          "name": "货币政策证券 Securities(APP+PEPP)",
+          "value": 3750.4,
+          "delta": -14.1,
+          "pct": -0.37,
+          "sub": false
+        },
+        {
+          "name": "对信贷机构贷款 Lending to CIs",
+          "value": 42.9,
+          "delta": 10.2,
+          "pct": 31.19,
+          "sub": false
+        },
+        {
+          "name": "其他资产 Other Assets",
+          "value": 323.5,
+          "delta": 0.7,
+          "pct": 0.23,
+          "sub": false
+        },
+        {
+          "name": "其他 Other（差额）",
+          "value": 539.8,
+          "delta": null,
+          "pct": null,
+          "sub": false
+        }
+      ],
+      "liabilities": [
+        {
+          "name": "流通银行券 Banknotes",
+          "value": 1838.1,
+          "delta": 1.5,
+          "pct": 0.08,
+          "sub": false
+        },
+        {
+          "name": "对信贷机构负债 Liab. to CIs",
+          "value": 2578.2,
+          "delta": -5.1,
+          "pct": -0.2,
+          "sub": false
+        },
+        {
+          "name": "存款便利 Deposit Facility",
+          "value": 2206.5,
+          "delta": 3.6,
+          "pct": 0.16,
+          "sub": true
+        },
+        {
+          "name": "对其他居民负债 Liab. to Others",
+          "value": 218.6,
+          "delta": 12.9,
+          "pct": 6.28,
+          "sub": false
+        },
+        {
+          "name": "重估账户 Revaluation",
+          "value": 1420.5,
+          "delta": 60.2,
+          "pct": 4.43,
+          "sub": false
+        },
+        {
+          "name": "资本与储备 Capital&Reserves",
+          "value": 31.8,
+          "delta": 0.0,
+          "pct": 0.07,
+          "sub": false
+        },
+        {
+          "name": "其他负债 Other Liab.",
+          "value": 190.1,
+          "delta": -2.1,
+          "pct": -1.11,
+          "sub": false
+        }
+      ],
+      "total_assets": {
+        "name": "总资产",
+        "value": 6696.7,
+        "delta": 57.0,
+        "pct": 0.86,
+        "sub": false
+      },
+      "total_liab": null,
+      "rates": {
+        "mro": 2.65,
+        "dfr": 2.5,
+        "mlf": 2.9
+      },
+      "usd_per_eur": 1.1259,
+      "source": "ECB Data Portal ILM (Eurosystem 周度财务报表)"
+    }
+  },
+  "liquidity": {
+    "reserves_T": {
+      "value": 2.948,
+      "prev": 2.93,
+      "delta": 0.02
+    },
+    "on_rrp_B": {
+      "value": 0.35,
+      "prev": 11.539,
+      "delta": -11.19
+    },
+    "tga_B": {
+      "value": 948.7,
+      "prev": 977.1,
+      "delta": -28.4
+    },
+    "risk_notes": {
+      "AI短评": "🔴危险：10/1 美债牛陡反转——10Y 5.24%(−5bp，连续第 7 个交易日 >5%)、30Y 5.61%(−3bp)、2Y 4.78%(−10bp) → 2s10s 由 41bp 走陡至 46bp，前端在今晚 21:30 JST 非农前抢跑；长端压不动因 Brent 单日 +4.37% 至 $102.49 且 ISM 价格支付 77.9(伊朗战争以来最高)。日债 10Y 3.057%、30Y 4.098%、10Y−TONAR 183bp、YCC 风险高。Fed 9/30 周准备金 +$17.9B 至 $2.948T(首次回升、仍 <$3T)，bills 连 3 周增持，真 FIMA $0 无美元荒。完整度 92%。",
+      "操作建议": "161226: 持有 — 10Y 5.24% 距止损锚 5.30% 仅 6bp（小于近 6 个交易日单日波动 −10~+7bp）；三档减仓已于 9/29 执行完毕，按「破位不回补」持底仓。今晚非农为方向决定点：若 10Y 再上破 5.30% 即确认久期再定价，不回补。\n1542.T: 加仓 — JGB 10Y 3.057%（3% 上方固化）＋30Y 4.098%＋政策利率 1.25%，净息差扩张路径最确定；日债长端高位引发的银行股回调即分批加仓点，不追高。\n8306.T: 加仓 — 同 1542.T 逻辑：JGB 长端与政策利率双升支撑净息差，MUFG 对长端敏感度更高；回调分批建仓不追高，若日元快速升值至 155 下方则暂停。\n1164.HK: 持有 — 无新增信号：美债 30Y 5.61%、日债 30Y 4.098% 双高压制港元与风险偏好，DR007 1.3632% 低位平稳、中国侧",
+      "关键变动": "• 美债 10/1 收盘（美财政部官方平价收益率曲线口径；FRED DGS10 仍停 9/30，A1 今日 09:01 cron 已写入 9/30 行）：10Y 5.24%（−5bp，连续第 7 个交易日收于 5% 上方，9/23–10/1 逐日重算；距 9/30 的 24 年高点 5.29% 仅 5bp、距 2007/6/12 的 5.26% 仅 2bp）、30Y 5.61%（−3bp，回吐后仍处 2001/12/17 的 5.61% 并列区间）、20Y 5.64%（−4bp）继续高于 30Y → 20s30s 倒挂 −3bp（自 −4bp 略收窄，中间久期仍缺配置盘）、7Y 5.12%（−7bp）、5Y 5.01%（−8bp）、3Y 4.91%（−9bp）、2Y 4.78%（−10bp）、1Y 4.44%（−10bp）、3Mo 4.17%（−3bp）；2s10s 41→46bp、5s3"
+    },
+    "risk_lights": {
+      "风控总分": "🔴危险",
+      "运行状态": "✅成功",
+      "日债风险": "🔴",
+      "美债风险": "🔴",
+      "基差套利风险": "🟢",
+      "Fed流动性风险": "🟡"
+    },
+    "yields": {
+      "10Y": {
+        "value": 5.29,
+        "delta": 0.03
+      },
+      "2Y": {
+        "value": 4.88,
+        "delta": -0.01
+      },
+      "30Y": {
+        "value": 5.64,
+        "delta": 0.05
+      }
+    }
+  },
+  "custody": {
+    "value": 2.582,
+    "as_of": "2026-09-30",
+    "wow_delta_bn": -15.2,
+    "wow_pct": -0.59,
+    "total_custody_tn": 2.867,
+    "status": "ok",
+    "source": "FRED WMTSECL1 (Fed H.4.1 custody, weekly Wed)"
+  },
+  "auctions": {
+    "terms": {
+      "2-Year": {
+        "history": [
+          {
+            "auction_date": "2026-09-22",
+            "security_type": "Note",
+            "security_term": "2-Year",
+            "offering_bn": 69.0,
+            "accepted_bn": 79.4,
+            "bid_to_cover": 2.63,
+            "high_yield": 4.787,
+            "indirect_pct": 49.3,
+            "issue_date": "2026-09-30",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-08-25",
+            "security_type": "Note",
+            "security_term": "2-Year",
+            "offering_bn": 69.0,
+            "accepted_bn": 77.9,
+            "bid_to_cover": 2.6,
+            "high_yield": 4.204,
+            "indirect_pct": 57.7,
+            "issue_date": "2026-08-31",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-07-27",
+            "security_type": "Note",
+            "security_term": "2-Year",
+            "offering_bn": 69.0,
+            "accepted_bn": 76.6,
+            "bid_to_cover": 2.66,
+            "high_yield": 4.315,
+            "indirect_pct": 50.1,
+            "issue_date": "2026-07-31",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-06-23",
+            "security_type": "Note",
+            "security_term": "2-Year",
+            "offering_bn": 69.0,
+            "accepted_bn": 79.3,
+            "bid_to_cover": 2.64,
+            "high_yield": 4.189,
+            "indirect_pct": 47.6,
+            "issue_date": "2026-06-30",
+            "reopening": "No"
+          }
+        ],
+        "next": null
+      },
+      "3-Year": {
+        "history": [
+          {
+            "auction_date": "2026-10-06",
+            "security_type": "Note",
+            "security_term": "3-Year",
+            "offering_bn": 58.0,
+            "accepted_bn": 59.4,
+            "bid_to_cover": 2.62,
+            "high_yield": 4.932,
+            "indirect_pct": 55.3,
+            "issue_date": "2026-10-15",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-09-08",
+            "security_type": "Note",
+            "security_term": "3-Year",
+            "offering_bn": 58.0,
+            "accepted_bn": 58.0,
+            "bid_to_cover": 2.72,
+            "high_yield": 4.474,
+            "indirect_pct": 61.7,
+            "issue_date": "2026-09-15",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-08-11",
+            "security_type": "Note",
+            "security_term": "3-Year",
+            "offering_bn": 58.0,
+            "accepted_bn": 72.7,
+            "bid_to_cover": 2.71,
+            "high_yield": 4.291,
+            "indirect_pct": 50.7,
+            "issue_date": "2026-08-17",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-07-07",
+            "security_type": "Note",
+            "security_term": "3-Year",
+            "offering_bn": 58.0,
+            "accepted_bn": 64.0,
+            "bid_to_cover": 2.6,
+            "high_yield": 4.179,
+            "indirect_pct": 60.9,
+            "issue_date": "2026-07-15",
+            "reopening": "No"
+          }
+        ],
+        "next": null
+      },
+      "5-Year": {
+        "history": [
+          {
+            "auction_date": "2026-09-23",
+            "security_type": "Note",
+            "security_term": "5-Year",
+            "offering_bn": 70.0,
+            "accepted_bn": 80.5,
+            "bid_to_cover": 2.21,
+            "high_yield": 5.033,
+            "indirect_pct": 47.0,
+            "issue_date": "2026-09-30",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-08-26",
+            "security_type": "Note",
+            "security_term": "5-Year",
+            "offering_bn": 70.0,
+            "accepted_bn": 79.0,
+            "bid_to_cover": 2.37,
+            "high_yield": 4.393,
+            "indirect_pct": 54.3,
+            "issue_date": "2026-08-31",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-07-27",
+            "security_type": "Note",
+            "security_term": "5-Year",
+            "offering_bn": 70.0,
+            "accepted_bn": 77.7,
+            "bid_to_cover": 2.28,
+            "high_yield": 4.408,
+            "indirect_pct": 53.2,
+            "issue_date": "2026-07-31",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-06-24",
+            "security_type": "Note",
+            "security_term": "5-Year",
+            "offering_bn": 70.0,
+            "accepted_bn": 80.5,
+            "bid_to_cover": 2.35,
+            "high_yield": 4.2,
+            "indirect_pct": 53.5,
+            "issue_date": "2026-06-30",
+            "reopening": "No"
+          }
+        ],
+        "next": null
+      },
+      "7-Year": {
+        "history": [
+          {
+            "auction_date": "2026-09-24",
+            "security_type": "Note",
+            "security_term": "7-Year",
+            "offering_bn": 44.0,
+            "accepted_bn": 50.6,
+            "bid_to_cover": 2.42,
+            "high_yield": 5.085,
+            "indirect_pct": 49.1,
+            "issue_date": "2026-09-30",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-08-27",
+            "security_type": "Note",
+            "security_term": "7-Year",
+            "offering_bn": 44.0,
+            "accepted_bn": 49.7,
+            "bid_to_cover": 2.5,
+            "high_yield": 4.512,
+            "indirect_pct": 53.7,
+            "issue_date": "2026-08-31",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-07-28",
+            "security_type": "Note",
+            "security_term": "7-Year",
+            "offering_bn": 44.0,
+            "accepted_bn": 48.9,
+            "bid_to_cover": 2.49,
+            "high_yield": 4.473,
+            "indirect_pct": 63.0,
+            "issue_date": "2026-07-31",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-06-25",
+            "security_type": "Note",
+            "security_term": "7-Year",
+            "offering_bn": 44.0,
+            "accepted_bn": 50.6,
+            "bid_to_cover": 2.5,
+            "high_yield": 4.26,
+            "indirect_pct": 50.0,
+            "issue_date": "2026-06-30",
+            "reopening": "No"
+          }
+        ],
+        "next": null
+      },
+      "10-Year": {
+        "history": [
+          {
+            "auction_date": "2026-08-12",
+            "security_type": "Note",
+            "security_term": "10-Year",
+            "offering_bn": 42.0,
+            "accepted_bn": 52.6,
+            "bid_to_cover": 2.53,
+            "high_yield": 4.683,
+            "indirect_pct": 61.0,
+            "issue_date": "2026-08-17",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-05-12",
+            "security_type": "Note",
+            "security_term": "10-Year",
+            "offering_bn": 42.0,
+            "accepted_bn": 52.0,
+            "bid_to_cover": 2.4,
+            "high_yield": 4.468,
+            "indirect_pct": 51.5,
+            "issue_date": "2026-05-15",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-02-11",
+            "security_type": "Note",
+            "security_term": "10-Year",
+            "offering_bn": 42.0,
+            "accepted_bn": 53.9,
+            "bid_to_cover": 2.39,
+            "high_yield": 4.177,
+            "indirect_pct": 50.1,
+            "issue_date": "2026-02-17",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2025-11-12",
+            "security_type": "Note",
+            "security_term": "10-Year",
+            "offering_bn": 42.0,
+            "accepted_bn": 48.5,
+            "bid_to_cover": 2.43,
+            "high_yield": 4.074,
+            "indirect_pct": 57.8,
+            "issue_date": "2025-11-17",
+            "reopening": "No"
+          }
+        ],
+        "next": null
+      },
+      "20-Year": {
+        "history": [
+          {
+            "auction_date": "2026-08-19",
+            "security_type": "Bond",
+            "security_term": "20-Year",
+            "offering_bn": 16.0,
+            "accepted_bn": 18.1,
+            "bid_to_cover": 2.53,
+            "high_yield": 5.204,
+            "indirect_pct": 55.1,
+            "issue_date": "2026-08-31",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-05-20",
+            "security_type": "Bond",
+            "security_term": "20-Year",
+            "offering_bn": 16.0,
+            "accepted_bn": 18.4,
+            "bid_to_cover": 2.55,
+            "high_yield": 5.122,
+            "indirect_pct": 58.3,
+            "issue_date": "2026-06-01",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-02-18",
+            "security_type": "Bond",
+            "security_term": "20-Year",
+            "offering_bn": 16.0,
+            "accepted_bn": 17.9,
+            "bid_to_cover": 2.36,
+            "high_yield": 4.664,
+            "indirect_pct": 49.1,
+            "issue_date": "2026-03-02",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2025-11-19",
+            "security_type": "Bond",
+            "security_term": "20-Year",
+            "offering_bn": 16.0,
+            "accepted_bn": 17.8,
+            "bid_to_cover": 2.41,
+            "high_yield": 4.706,
+            "indirect_pct": 53.0,
+            "issue_date": "2025-12-01",
+            "reopening": "No"
+          }
+        ],
+        "next": null
+      },
+      "30-Year": {
+        "history": [
+          {
+            "auction_date": "2026-08-13",
+            "security_type": "Bond",
+            "security_term": "30-Year",
+            "offering_bn": 25.0,
+            "accepted_bn": 31.3,
+            "bid_to_cover": 2.39,
+            "high_yield": 5.216,
+            "indirect_pct": 53.1,
+            "issue_date": "2026-08-17",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-05-13",
+            "security_type": "Bond",
+            "security_term": "30-Year",
+            "offering_bn": 25.0,
+            "accepted_bn": 30.9,
+            "bid_to_cover": 2.3,
+            "high_yield": 5.046,
+            "indirect_pct": 53.7,
+            "issue_date": "2026-05-15",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-02-12",
+            "security_type": "Bond",
+            "security_term": "30-Year",
+            "offering_bn": 25.0,
+            "accepted_bn": 32.1,
+            "bid_to_cover": 2.66,
+            "high_yield": 4.75,
+            "indirect_pct": 54.4,
+            "issue_date": "2026-02-17",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2025-11-13",
+            "security_type": "Bond",
+            "security_term": "30-Year",
+            "offering_bn": 25.0,
+            "accepted_bn": 28.9,
+            "bid_to_cover": 2.29,
+            "high_yield": 4.694,
+            "indirect_pct": 61.3,
+            "issue_date": "2025-11-17",
+            "reopening": "No"
+          }
+        ],
+        "next": null
+      }
+    },
+    "upcoming": [],
+    "as_of": "2026-10-06",
+    "status": "ok",
+    "source": "US Treasury fiscaldata.treasury.gov auctions_query"
+  },
+  "kol_changes_n": 31,
+  "ai": {
+    "reads": {
+      "vix": "VIX 15.01（10/6），低波动区（绿灯），较前值 15.52 回落。",
+      "fear_greed": "CNN 恐惧贪婪 44.6（10/7，fear 档），较 47.4 回落，绿灯。",
+      "aaii_bull_bear": "AAII 多空差 -11.8（9/30 当周），连续第 11 周低于历史均值，本周无新数据。",
+      "put_call": "CBOE 股票 put/call 0.63（10/7，官方口径），较 0.59 回升，看涨优势收窄。",
+      "bofa_fms_cash": "BofA FMS 现金 3.9%（🔴，9 月数据），低于 4.0% 阈值，机构满仓。",
+      "margin_gdp": "融资余额/GDP 4.46%（🔴），接近历史极值。",
+      "bofa_bull_bear": "BofA Bull&Bear 9.5（🔴，9/16），远超 8.0 卖出阈值，是目前唯一触发的卖出条件。",
+      "hy_oas": "HY OAS 3.03%（10/6），较 3.12% 收窄 9bp，信用补偿继续偏薄。",
+      "buffett": "巴菲特指标 255%（🔴），历史极端。",
+      "cape": "席勒 CAPE 41.8（🔴），略低于前值 41.9。",
+      "yield_curve": "10Y-2Y 利差 +0.51（前值 +0.48），小幅陡峭。",
+      "aaii_alloc": "AAII 股票配置 71.79%（🔴），持续高于均值。",
+      "margin_debt": "FINRA 融资余额 $1,453.8B（8 月），距 6 月高点 -3.2%，无新数据。",
+      "ad_line": "NYSE A/D（10/1 口径）判定无顶背离，累计 915、上涨占比 59%；与 9 月多源报告的顶背离结论并存，待验证。",
+      "insider": "openinsider 近期榜前100笔口径买卖比 1.309（前 0.229），明显回升，远离 0.17 触发线（绿灯）；该口径波动大，仅看趋势。",
+      "lei": "LEI 指标 0.57（绿灯）；Conference Board 9/18 公布的六个月增长率 -0.1%，两处口径不同，未做对账。"
+    },
+    "notes": {
+      "vix": "VIX 15.01，低波动",
+      "fear_greed": "恐惧贪婪 44.6，偏恐惧",
+      "aaii_bull_bear": "-11.8，无新数据",
+      "put_call": "0.63，看涨优势收窄",
+      "bofa_fms_cash": "机构现金 3.9% 低于阈值",
+      "sofr_iorb": "SOFR-EFFR +2.0bp，无摩擦",
+      "margin_cost": "券商融资利率 7.0%",
+      "bank_funding_stress": "银行融资压力 3.0bp，平稳",
+      "margin_debt": "融资余额 1,453.8B，距高点 3%",
+      "margin_gdp": "杠杆/GDP 4.46% 近极值",
+      "ipo_count": "2026 年 IPO 累计 251 宗",
+      "insider": "买卖比 1.309，大幅回升",
+      "bofa_bull_bear": "9.5 持续卖出信号",
+      "hy_oas": "HY OAS 3.03%，收窄",
+      "ad_line": "无顶背离（10/1 口径）",
+      "buffett": "市值/GDP 255%",
+      "cape": "CAPE 41.8",
+      "yield_curve": "+0.51，小幅陡峭",
+      "lei": "LEI 0.57，绿灯",
+      "aaii_alloc": "股票配置 71.8%，高于均值"
+    },
+    "conclusions": {
+      "short": "短期（🟡 警戒，卖出触发 1/7）：核心矛盾仍是美债长端高位（FRED 口径 10Y 5.29%/30Y 5.64%；Treasury 官方 10/1 收盘 10Y 5.24%）对比 VIX 15、HY OAS 3.03% 的低波动。动作：不加仓、维持防御；10Y 破 5.30% 按「破位不回补」执行；日本银行股（1542.T/8306.T）回调分批加仓，不追高。",
+      "mid": "中期（偏谨慎）：估值全红（CAPE 41.8/Buffett 255/AAII 配置 71.8%）叠加仓位拥挤（FMS 现金 3.9%/BofA B&B 9.5）。动作：逐步再平衡降低美股 beta，提高现金与贵金属比重；留意 NYSE A/D 背离是否被确认。",
+      "long": "长期（结构性风险高）：估值极端压缩长期回报，美债长端 24 年高位反映期限溢价重估。动作：维持黄金/白银战略配置作主权信用对冲，降低长久期美债与高估值成长股敞口。"
+    },
+    "focus": "今日最需关注：美债长端高位（FRED 10Y 5.29%/+3bp、30Y 5.64%，距 5.30% 止损锚仅 1bp）与低波动（VIX 15.0、HY OAS 3.03%）的背离。卖出触发 1/7（仅 BofA Bull&Bear 9.5）。边际变化：Insider 买卖比 0.229→1.309；put/call 0.59→0.63；Eurosystem 黄金债权 +$60B（+4.3%，估值变动为主）。",
+    "sector_analysis": "【波动率与情绪】VIX 15.01（前 15.52）低波动，CNN 恐惧贪婪 44.6（前 47.4，转入 fear 档），put/call 0.63（前 0.59）。AAII 多空差 -11.8 无新数据（连续 11 周低于均值）；BofA Bull&Bear 9.5 与 FMS 现金 3.9% 仍显示机构端拥挤。散户偏悲观、机构满仓的组合延续。\n\n【杠杆与信用】融资余额 8 月 $1,453.8B（距 6 月高点 -3.2%），融资余额/GDP 4.46% 🔴；HY OAS 3.03%（前 3.12%）收窄 9bp，银行融资压力 3bp 🟢。信用定价缺乏安全边际。\n\n【估值与周期】CAPE 41.8、巴菲特指标 255%、AAII 股票配置 71.8% 全红；10Y-2Y +0.51。NYSE A/D 本期（10/1 口径）无顶背离，与 9 月多源顶背离结论不一致，待验证。Insider 买卖比（openinsider 前100笔口径）0.229→1.309，回升明显。\n\n【贵金属 COT】9/29 周：黄金 commercial 净空 -250,967 手（周环比 +11,936，空头回补），白银 -40,010 手（+4,744），均无突增标记。\n\n【KOL 情绪】名册 205 人，今日抓到 121、沿用旧条目 84（质量 ok 84/thin 18/none 19），大类转向 31 条（对比 10/7）。转向例：Citrini 中性→看空（油价拖累增长）、Michael Howell 中性→看空、Jason Calacanis 看多→看空、David Friedberg 看空→看多、Ken Griffin 看多→中性。\n\n【央行流动性与资产负债表】Fed 总资产 $6,743.0B（WoW -4.7B）；准备金 $2.948T（+17.9B）、ON RRP $11.5B、TGA $948.7B（-28.4B）；SRF $1.2B。BoJ $4,063.6B（-19.0B）；PBoC $7,216.9B（8 月 MoM 持平）；Eurosystem（W40）黄金债权 +$60.1B（+4.3%）、APP+PEPP -$14.1B。外国官方托管美债 $2.582T（WoW -15.2B）。风控总分 🔴（美债/日债 🔴，基差套利 🟢，Fed 流动性 🟡）。\n\n【机构持仓】13F 机构 19 行刷新（无新报告则数据不变）；政要披露四源已刷新。"
+  }
+}
