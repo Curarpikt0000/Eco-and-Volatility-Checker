@@ -1,6 +1,6 @@
 {
  "table": "HDB_INDICATORS",
- "count": 132,
+ "count": 133,
  "rows": [
   {
    "uid": "ind|2025-08-08",
@@ -6405,6 +6405,53 @@
        "type": "text",
        "text": {
         "content": "vix=15.52; fear_greed=47.4; aaii_bull_bear=-11.8; put_call=0.59; bofa_fms_cash=3.9; sofr_iorb=1.0; margin_cost=7.0; bank_funding_stress=3.0; margin_debt=1453.832; margin_gdp=4.46; ipo_count=251.0; insider=0.229; bofa_bull_bear=9.5; hy_oas=3.12; ad_line=False; buffett=255.0; cape=41.9; yield_curve=0.48; lei=0.57; aaii_alloc=71.79"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "ind|2026-10-08",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-08"
+       }
+      }
+     ]
+    },
+    "触发数": {
+     "number": null
+    },
+    "VIX": {
+     "number": 15.01
+    },
+    "HY利差": {
+     "number": 3.03
+    },
+    "恐慌贪婪": {
+     "number": 44.6
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/snapshots/2026-10-08.json + data/daily/"
+       }
+      }
+     ]
+    },
+    "备注": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "vix=15.01; fear_greed=44.6; aaii_bull_bear=-11.8; put_call=0.63; bofa_fms_cash=3.9; sofr_iorb=2.0; margin_cost=7.0; bank_funding_stress=3.0; margin_debt=1453.832; margin_gdp=4.46; ipo_count=251.0; insider=1.309; bofa_bull_bear=9.5; hy_oas=3.03; ad_line=False; buffett=255.0; cape=41.8; yield_curve=0.51; lei=0.57; aaii_alloc=71.79"
        }
       }
      ]

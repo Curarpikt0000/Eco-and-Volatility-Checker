@@ -1,6 +1,6 @@
 {
  "table": "HDB_BIS_GOLD_SWAPS",
- "count": 15,
+ "count": 21,
  "rows": [
   {
    "uid": "bis|2010-03-31",
@@ -507,6 +507,114 @@
    }
   },
   {
+   "uid": "bis|2025-12-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-12-31｜monthly"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2025-12-31"
+     }
+    },
+    "掉期_吨": {
+     "number": 56.0
+    },
+    "环比": {
+     "number": 17.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "GATA/Lambourne 月表 (gata.org/node/24731, 2026-06-04)"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "bis|2026-01-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-01-31｜monthly"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2026-01-31"
+     }
+    },
+    "掉期_吨": {
+     "number": 106.0
+    },
+    "环比": {
+     "number": 50.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "GATA/Lambourne 月表 (gata.org/node/24731, 2026-06-04)"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "bis|2026-02-28",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-02-28｜monthly"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2026-02-28"
+     }
+    },
+    "掉期_吨": {
+     "number": 104.0
+    },
+    "环比": {
+     "number": -2.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "GATA/Lambourne 月表 (gata.org/node/24550, 2026-03-07) from BIS statofacc260228.pdf"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
    "uid": "bis|2026-03-31",
    "props": {
     "记录": {
@@ -528,7 +636,7 @@
      "number": 184.0
     },
     "环比": {
-     "number": 145.0
+     "number": 80.0
     },
     "数据源": {
      "rich_text": [
@@ -536,6 +644,114 @@
        "type": "text",
        "text": {
         "content": "BIS 2025-26 Annual Report"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "bis|2026-04-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-04-30｜monthly"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2026-04-30"
+     }
+    },
+    "掉期_吨": {
+     "number": 134.0
+    },
+    "环比": {
+     "number": -50.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "GATA/Lambourne 月表 (gata.org/node/24731, 2026-06-04) from BIS statofacc260430.pdf"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "bis|2026-06-30",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-30｜monthly"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2026-06-30"
+     }
+    },
+    "掉期_吨": {
+     "number": 144.0
+    },
+    "环比": {
+     "number": 10.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "GoldSeek/GATA 2026-07-10: swaps fell from 146 to 144 tonnes, from BIS statofacc260630.pdf"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "bis|2026-08-31",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-08-31｜monthly"
+       }
+      }
+     ]
+    },
+    "月份": {
+     "date": {
+      "start": "2026-08-31"
+     }
+    },
+    "掉期_吨": {
+     "number": 141.0
+    },
+    "环比": {
+     "number": -3.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "GATA gata.org/node/24975 (2026-09-10): increased by 10 tonnes, now 141, from BIS statement-account-31-august-2026.pdf"
        }
       }
      ]
