@@ -1467,6 +1467,182 @@ def _report_leads_html(o):
 """
 
 
+def _gold_vol_html(o):
+    """黄金波动率(周线): 价格 + 5 条简单均线 + GVZ / 布林带宽度(40,80) / ATR(14) 四个副图。纯内联 SVG + 少量 JS(悬停读数)。"""
+    import json as _json
+    w = (o or {}).get("w") or {}
+    if not w or len(w.get("d", [])) < 300 or o.get("status") == "error":
+        err = "；".join((o or {}).get("warnings", [])[:2])
+        return f'<p class="empty">黄金波动率同步中{((chr(0xff1a) + _esc(err)) if err else "")}。</p>'
+    d0 = next((i for i, x in enumerate(w["d"]) if x >= "2011-01-01"), 0)
+    sl = lambda L: L[d0:]
+    D_ = sl(w["d"]); n = len(D_)
+    c = sl(w["c"]); hi_ = sl(w["h"]); lo_ = sl(w["l"])
+    ma = {k: sl(v) for k, v in w["ma"].items()}
+    panels = [("GVZ", sl(w["gvz"]), "GVZ（黄金波动率指数）", 0), ("BBW40", sl(w["bbw40"]), "布林带宽度(40,2)", 1),
+              ("BBW80", sl(w["bbw80"]), "布林带宽度(80,2)", 1), ("ATR", sl(w["atr"]), "ATR(14)", 0)]
+    W, ML, MR = 1140, 52, 14
+    COLS = {"82": "#1f2d4d", "105": "#8a2d3b", "127": "#2f7d4f", "148": "#a23b8a", "170": "#8d7bc4"}
+    X = lambda i: ML + (W - ML - MR) * i / (n - 1)
+    def lines(vals, Y, col, sw=1.2):
+        seg, cur = [], []
+        for i, v in enumerate(vals):
+            if v is None:
+                if cur: seg.append(cur); cur = []
+            else: cur.append(f"{X(i):.1f},{Y(v):.1f}")
+        if cur: seg.append(cur)
+        return "".join(f'<polyline points="{" ".join(p)}" fill="none" stroke="{col}" stroke-width="{sw}" stroke-linejoin="round"/>' for p in seg if len(p) > 1)
+    def yticks(lo, hi, Y, fmt, k=5):
+        import math as _m
+        raw = (hi - lo) / k; mag = 10 ** _m.floor(_m.log10(raw)); st = min((x * mag for x in (1, 2, 2.5, 5, 10)), key=lambda x: abs(x - raw))
+        v = _m.floor(lo / st + 1) * st; g = ""
+        while v < hi:
+            g += f'<line x1="{ML}" x2="{W-MR}" y1="{Y(v):.1f}" y2="{Y(v):.1f}" stroke="#ece7dc"/><text x="{ML-4}" y="{Y(v)+3:.1f}" text-anchor="end" font-size="9" fill="#8a837a">{fmt(v)}</text>'
+            v += st
+        return g
+    def xticks(top, bot):
+        g = ""
+        for yr in range(2011, 2027):
+            i = next((j for j, x in enumerate(D_) if x >= f"{yr}-01-01"), None)
+            if i is not None: g += f'<line x1="{X(i):.1f}" x2="{X(i):.1f}" y1="{top}" y2="{bot}" stroke="#f1ede3"/>' + (f'<text x="{X(i):.1f}" y="{bot+12}" text-anchor="middle" font-size="9" fill="#8a837a">{yr}</text>' if yr % 2 == 1 or yr == 2026 else "")
+        return g
+    # 价格主图
+    PH, PT, PB = 300, 12, 22
+    allp = [v for v in hi_ if v] + [v for v in lo_ if v] + [v for L in ma.values() for v in L if v]
+    plo, phi = min(allp) * 0.97, max(allp) * 1.03
+    YP = lambda v: PT + (PH - PT - PB) * (1 - (v - plo) / (phi - plo))
+    price_svg = yticks(plo, phi, YP, lambda v: f"{v:,.0f}") + xticks(PT, PH - PB)
+    price_svg += lines(c, YP, "#1c1c1c", 1.5)
+    for k in ("82", "105", "127", "148", "170"): price_svg += lines(ma[k], YP, COLS[k], 1.1)
+    leg = '<span class="gv-lg"><i style="background:#1c1c1c"></i>收盘价</span>' + "".join(f'<span class="gv-lg"><i style="background:{COLS[k]}"></i>{k} 周均线</span>' for k in ("82", "105", "127", "148", "170"))
+    out = [f'<div class="gv-box"><div class="gv-ttl">黄金（COMEX 期货，周线）与 5 条简单均线</div><svg viewBox="0 0 {W} {PH}" class="gv-svg" id="gv-p0">{price_svg}<line class="gv-hl" x1="0" x2="0" y1="{PT}" y2="{PH-PB}" stroke="#b0493a" stroke-dasharray="3 3" visibility="hidden"/></svg><div class="gv-leg">{leg}</div></div>']
+    SH, ST, SB = 120, 8, 18
+    for idx, (key, vals, title, dec) in enumerate(panels):
+        vv = [v for v in vals if v is not None]
+        lo, hi = 0 if key in ("GVZ", "ATR") else min(vv) * 0.9, max(vv) * 1.08
+        Y = (lambda lo, hi: (lambda v: ST + (SH - ST - SB) * (1 - (v - lo) / (hi - lo))))(lo, hi)
+        g = yticks(lo, hi, Y, (lambda v: f"{v:,.0f}") if dec == 0 else (lambda v: f"{v:.0f}"), 4) + xticks(ST, SH - SB) + lines(vals, Y, "#1c1c1c", 1.3)
+        last = next((v for v in reversed(vals) if v is not None), None)
+        mx = max(vv); imx = vals.index(mx)
+        out.append(f'<div class="gv-box"><div class="gv-ttl">{title}　<span class="gv-now">最新 {last:,.2f}</span>　<span class="gv-sub">区间峰值 {mx:,.1f}（{D_[imx]}）</span></div>'
+                   f'<svg viewBox="0 0 {W} {SH}" class="gv-svg" id="gv-p{idx+1}">{g}<line class="gv-hl" x1="0" x2="0" y1="{ST}" y2="{SH-SB}" stroke="#b0493a" stroke-dasharray="3 3" visibility="hidden"/></svg></div>')
+    data = {"d": D_, "c": c, "ma": ma, "gvz": panels[0][1], "b40": panels[1][1], "b80": panels[2][1], "atr": panels[3][1]}
+    js = _json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    script = """<script>(function(){var D=__DATA__,W=__W__,ML=__ML__,MR=__MR__,n=D.d.length;
+var pin=document.getElementById('gv-pin');function f(v,k){return v==null?'—':v.toFixed(k)}
+function show(e){var s=e.currentTarget.getBoundingClientRect();var x=(e.clientX-s.left)/s.width*W;var i=Math.round((x-ML)/(W-ML-MR)*(n-1));if(i<0||i>=n)return;
+var px=ML+(W-ML-MR)*i/(n-1);for(var k=0;k<5;k++){var l=document.querySelector('#gv-p'+k+' .gv-hl');if(l){l.setAttribute('x1',px);l.setAttribute('x2',px);l.setAttribute('visibility','visible')}}
+pin.textContent=D.d[i]+'（周）　收盘 '+f(D.c[i],1)+'　MA82 '+f(D.ma['82'][i],0)+'　MA105 '+f(D.ma['105'][i],0)+'　MA127 '+f(D.ma['127'][i],0)+'　MA148 '+f(D.ma['148'][i],0)+'　MA170 '+f(D.ma['170'][i],0)+'　｜　GVZ '+f(D.gvz[i],2)+'　BB宽度(40) '+f(D.b40[i],1)+'　BB宽度(80) '+f(D.b80[i],1)+'　ATR(14) '+f(D.atr[i],1)}
+for(var k=0;k<5;k++){var sv=document.getElementById('gv-p'+k);if(sv)sv.addEventListener('mousemove',show)}})();</script>""".replace("__DATA__", js).replace("__W__", str(W)).replace("__ML__", str(ML)).replace("__MR__", str(MR))
+    last_bar = w.get("last_bar", D_[-1])
+    warn_l = list(o.get("warnings", []))
+    warn = f'<p class="sgr-warn">⚠ {_esc("；".join(warn_l[:3]))}</p>' if warn_l else ""
+    return f"""
+<style>.gv-box{{background:#fff;border:1px solid #e6e1d6;border-radius:8px;padding:10px 12px;margin-bottom:10px}}.gv-ttl{{font-size:13px;font-weight:600;color:#2b2b2b;margin-bottom:4px}}
+.gv-now{{font-weight:600;color:#b0493a}}.gv-sub{{font-size:11px;font-weight:400;color:#8a837a}}.gv-svg{{width:100%;height:auto;display:block;cursor:crosshair}}
+.gv-leg{{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:#5b564e;margin-top:4px}}.gv-lg i{{display:inline-block;width:14px;height:3px;margin-right:5px;vertical-align:middle}}
+.gv-pin{{font-size:12px;color:#2b2b2b;background:#faf7f0;border:1px solid #e6e1d6;border-radius:6px;padding:6px 10px;margin-bottom:10px;min-height:18px}}</style>
+{warn}
+<div class="sfc-note"><b>口径说明：</b>价格取 Yahoo 的 <b>COMEX 黄金期货（GC=F）周线</b>，不是现货；均线为<b>简单均线</b>（周期 82/105/127/148/170 周）；布林带宽度＝(上轨−下轨)÷中轨×100，ATR 用 Wilder 平滑；
+  <b>GVZ</b> 为 CBOE 黄金波动率指数（FRED 官方，日度取每周最后值）。我拿同一周的参考读数对过：GVZ 完全一致，均线整体比现货口径高约 0.5%，布林带宽度差 1~3%，ATR 同量级（期货与现货有基差）。本周最新一根为 {last_bar}（未收完的周线按当日价计）。</div>
+<div class="gv-pin" id="gv-pin">鼠标移到任一图上，可同时看到该周的价格、5 条均线和 4 个指标读数。</div>
+{"".join(out)}{script}
+<div class="sfc-foot">数据：Yahoo Finance（GC=F 周线）、FRED GVZCLS。均线周期是原作者所选，本看板照用，不作评价；不含主观画线与走势设想。</div>
+"""
+
+
+def _analog_corr_html(o):
+    """金银「类比路径」+ GDX÷SPY。历史年份价格路径按【从当年 1/28 起的日历天数偏移】叠到 2026 年起点上,
+    并按比例缩放到 2026-01-28 起点价(原图 y 轴量级证实做了缩放, 图上未写; 本看板口径写明)。纯 SVG 内联, 无外链。"""
+    import json as _json
+    if not o or o.get("status") == "error" or not (o.get("gold") or {}).get("2026") or not (o.get("silver") or {}).get("2026"):
+        err = "；".join((o or {}).get("warnings", [])[:2])
+        return f'<p class="empty">类比路径同步中{((chr(0xff1a) + _esc(err)) if err else "")}。</p>'
+    W, Hh, ML, MR, MT, MB = 560, 300, 46, 12, 14, 34
+    COL = {"2026": "#1c1c1c", "2006": "#b0493a", "2008": "#1f3a68", "2011": "#c0643c", "1973": "#7a8f5a", "1974": "#6aa8c8"}
+    def chart(metal, title, order, unit):
+        ser = o[metal]
+        def _pk(pts):
+            w = [p for p in pts if p[0] <= 120]
+            return max(w, key=lambda p: p[1])
+        pk26 = _pk(ser["2026"]["pts"])
+        lines = {}
+        for lab in order:
+            if lab not in ser: continue
+            if lab == "2026":
+                lines[lab] = [(d, v) for d, v in ser[lab]["pts"]]
+            else:
+                pk = _pk(ser[lab]["pts"]); k = pk26[1] / pk[1]
+                lines[lab] = [(d - pk[0] + pk26[0], v * k) for d, v in ser[lab]["pts"] if d >= pk[0]]
+        allv = [v for L in lines.values() for _, v in L]
+        lo, hi = min(allv), max(allv); pad = (hi - lo) * 0.06; lo -= pad; hi += pad
+        xmax = max(d for L in lines.values() for d, _ in L)
+        X = lambda d: ML + (W - ML - MR) * d / xmax
+        Y = lambda v: MT + (Hh - MT - MB) * (1 - (v - lo) / (hi - lo))
+        g = []
+        import math as _m
+        _raw = (hi - lo) / 6.0
+        _mag = 10 ** _m.floor(_m.log10(_raw))
+        step = min((c * _mag for c in (1, 2, 2.5, 5, 10)), key=lambda x: abs(x - _raw))   # 约 6 档的"好看"步长
+        v0 = _m.floor(lo / step + 1) * step
+        while v0 < hi:
+            g.append(f'<line x1="{ML}" x2="{W-MR}" y1="{Y(v0):.1f}" y2="{Y(v0):.1f}" stroke="#e6e1d6"/><text x="{ML-4}" y="{Y(v0)+3:.1f}" text-anchor="end" font-size="9" fill="#8a837a">{unit}{v0:,.0f}</text>')
+            v0 += step
+        for m in range(0, int(xmax) + 1, 60):
+            g.append(f'<line x1="{X(m):.1f}" x2="{X(m):.1f}" y1="{MT}" y2="{Hh-MB}" stroke="#f0ece2"/><text x="{X(m):.1f}" y="{Hh-MB+13}" text-anchor="middle" font-size="9" fill="#8a837a">+{m}天</text>')
+        paths = []
+        for lab, L in lines.items():
+            pts = " ".join(f"{X(d):.1f},{Y(v):.1f}" for d, v in L)
+            paths.append(f'<polyline points="{pts}" fill="none" stroke="{COL[lab]}" stroke-width="{2.4 if lab == "2026" else 1.3}" stroke-linejoin="round"><title>{lab}</title></polyline>')
+        leg = "".join(f'<span class="ac-lg"><i style="background:{COL[l]}"></i>{l}{"（实际）" if l == "2026" else "（类比·已缩放）"}</span>' for l in order if l in lines)
+        last26 = ser["2026"]["last_date"]
+        return (f'<div class="ac-box"><div class="ac-ttl">{title}</div>'
+                f'<svg viewBox="0 0 {W} {Hh}" class="ac-svg" role="img" aria-label="{title}">{"".join(g)}{"".join(paths)}</svg>'
+                f'<div class="ac-leg">{leg}</div><div class="ac-sub">2026 线截至 {last26}；各线以「当年 1 月底起 120 天内的最高收盘」对齐 2026 年高点，横轴＝距 2026-01-28 的天数。</div></div>')
+    gold = chart("gold", "金：重大突破后的回调（2026 与 2006、2008 类比）", ["2006", "2008", "2026"], "$")
+    silver = chart("silver", "银：回调（2026 与 2008、2011 类比）", ["2008", "2011", "2026"], "$")
+    # GDX÷SPY
+    gs = o.get("gdx_spy") or {}
+    gsvg = ""
+    if len(gs.get("d", [])) > 500:
+        d, v = gs["d"], gs["v"]
+        W2, H2 = 1140, 260
+        lo, hi = 0, max(v) * 1.05
+        t0 = __import__("datetime").date.fromisoformat(d[0]).toordinal(); t1 = __import__("datetime").date.fromisoformat(d[-1]).toordinal()
+        X2 = lambda ds: ML + (W2 - ML - MR) * (__import__("datetime").date.fromisoformat(ds).toordinal() - t0) / (t1 - t0)
+        Y2 = lambda x: MT + (H2 - MT - MB) * (1 - (x - lo) / (hi - lo))
+        step = max(1, len(d) // 600)
+        pts = " ".join(f"{X2(d[i]):.1f},{Y2(v[i]):.1f}" for i in range(0, len(d), step))
+        gg = "".join(f'<line x1="{ML}" x2="{W2-MR}" y1="{Y2(y):.1f}" y2="{Y2(y):.1f}" stroke="#e6e1d6"/><text x="{ML-4}" y="{Y2(y)+3:.1f}" text-anchor="end" font-size="9" fill="#8a837a">{y:.2f}</text>' for y in (0.1, 0.2, 0.3, 0.4, 0.5, 0.6) if y < hi)
+        for yr in range(2006, 2027, 2):
+            ds = f"{yr}-01-02"
+            if ds >= d[0]:
+                gg += f'<text x="{X2(ds):.1f}" y="{H2-MB+13}" text-anchor="middle" font-size="9" fill="#8a837a">{yr}</text>'
+        gsvg = (f'<div class="ac-box ac-wide"><div class="ac-ttl">金矿股相对大盘：GDX ÷ SPY（日度，2006 年 5 月起）</div>'
+                f'<svg viewBox="0 0 {W2} {H2}" class="ac-svg" role="img" aria-label="GDX÷SPY">{gg}<polyline points="{pts}" fill="none" stroke="#1c1c1c" stroke-width="1.4"><title>GDX/SPY</title></polyline></svg>'
+                f'<div class="ac-sub">最新 {d[-1]}：{v[-1]:.3f}（2011-09 附近高点约 0.52）。</div></div>')
+    m73 = o.get("gold_1973_monthly") or []
+    note73 = ""
+    if m73:
+        note73 = (f'<p class="ac-note">1973 年的金价只有<b>月度</b>数据（datahub 公开数据集，1973-01 {m73[0][1]:g} 美元 → 1973-12 {m73[-1][1]:g} 美元），'
+                  f'画成日度路径会失真，所以<b>金图未画 1973</b>；1974 年金银均无公开日度数据，银图未画 1974。</p>')
+    warn_l = list(o.get("warnings", []))
+    warn = f'<p class="sgr-warn">⚠ {_esc("；".join(warn_l[:3]))}</p>' if warn_l else ""
+    _w = lambda m: max([p for p in o[m]["2026"]["pts"] if p[0] <= 120], key=lambda p: p[1])[1]
+    _gp, _sp = _w("gold"), _w("silver")
+    return f"""
+<style>.ac-grid{{display:grid;grid-template-columns:1fr 1fr;gap:14px}}.ac-box{{background:#fff;border:1px solid #e6e1d6;border-radius:8px;padding:10px 12px}}.ac-wide{{margin-top:14px}}
+.ac-ttl{{font-size:13px;font-weight:600;color:#2b2b2b;margin-bottom:4px}}.ac-svg{{width:100%;height:auto;display:block}}.ac-leg{{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:#5b564e;margin-top:4px}}
+.ac-lg i{{display:inline-block;width:14px;height:3px;margin-right:5px;vertical-align:middle}}.ac-sub{{font-size:11px;color:#8a837a;margin-top:4px}}.ac-note{{font-size:12px;color:#5b564e;margin:10px 0 0;line-height:1.7}}
+@media(max-width:760px){{.ac-grid{{grid-template-columns:1fr}}}}</style>
+{warn}
+<div class="sfc-note"><b>口径说明：</b>价格取 Yahoo 的 COMEX 黄金（GC=F）、白银（SI=F）连续合约日收盘价，不是 LBMA 定盘价。历史年份路径的对齐方式：取该年 1 月底起 120 天内的<b>最高收盘价</b>作为高点，把高点<b>对齐到 2026 年高点日</b>，并<b>按比例缩放到 2026 年高点价</b>（金 {_gp:,.0f} 美元、银 {_sp:,.1f} 美元），所以历史线读的是<b>走势形状和回调幅度的类比，不是当年的真实价格</b>。
+  这个对齐方式是我按原图里圈出的低点位置<b>反推</b>出来的，只用金 2008、银 2008 两条线粗略对过（低点出现的天数接近，价格有几个百分点差距），其余线未逐条核对；原图作者没有公开算法，图上低点位置也是估读。</div>
+<div class="ac-grid">{gold}{silver}</div>{note73}{gsvg}
+<div class="sfc-foot">数据：Yahoo Finance（GC=F、SI=F、GDX、SPY）；1973 月度金价 datahub gold-prices。类比不代表预测。</div>
+"""
+
+
 def _silver_curve_html(o):
     """白银期货曲线价差: Yahoo COMEX 各月合约收盘价 - 最近月合约, 美元/盎司与百分比, 对比按 3M 国债利率估算的持有成本。
     非 EFP、非 CME 官方结算价, 图上显眼标注。页内 JS 绘制, 容器高度固定, 切换只换 SVG 内容。"""
@@ -2487,7 +2663,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, analog_corr=None, gold_vol=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -2733,6 +2909,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         gold_oil_html=_gold_oil_html(gold_oil),
         btc_gold_html=_btc_gold_html(btc_gold),
         silver_curve_html=_silver_curve_html(silver_curve),
+        analog_corr_html=_analog_corr_html(analog_corr),
+        gold_vol_html=_gold_vol_html(gold_vol),
         report_leads_html=_report_leads_html(report_leads),
         us_freight_html=_us_freight_html(us_freight),
         ust_micro_html=_ust_micro_html(ust_micro),
@@ -11071,6 +11249,12 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ 白银期货曲线价差 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>白银期货 · 各月合约价差 (COMEX · 日度 · 对比持有成本)<span class="freq-badge freq-daily">日更</span></div>
   <div class="card">{silver_curve_html}</div>
+  <!-- ━━━ 金银类比路径 ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>金银回调 · 历史类比路径 (金 2006/2008 · 银 2008/2011 · GDX÷SPY · 日度)<span class="freq-badge freq-daily">日更</span></div>
+  <div class="card">{analog_corr_html}</div>
+  <!-- ━━━ 黄金波动率 ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>黄金波动率 · GVZ / 布林带宽度 / ATR (COMEX 周线 · 2011 起)<span class="freq-badge freq-daily">日更</span></div>
+  <div class="card">{gold_vol_html}</div>
   <!-- ━━━ 机构报告被公开解读(线索表) ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>机构研究报告 · 被公开解读的线索 (按机构 · 近 6 个月 · 正文未读)<span class="freq-badge freq-daily">日更</span></div>
   <div class="card">{report_leads_html}</div>

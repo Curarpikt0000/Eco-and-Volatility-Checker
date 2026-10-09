@@ -8968,6 +8968,130 @@ def fetch_btc_gold_ratio(base_path=None, events_path=None, cache_path=None):
     return out
 
 
+def fetch_gold_volatility(cache_path=None):
+    """黄金波动率(周线): Yahoo COMEX 黄金期货 GC=F 周线 OHLC + FRED GVZCLS(CBOE 黄金波动率指数, 日度→取每周最后值)。
+    指标全部自算: 5 条简单均线(82/105/127/148/170 周)、布林带宽度(40,2)/(80,2)=(上轨-下轨)/中轨×100(总体σ)、ATR(14) Wilder。
+    2026-10-09 实测对账(同一周): GVZ 与图上读数完全一致; 均线偏差一致 +0.5%(期货 vs 现货基差); BB 宽度差 1~3%; ATR 同量级。
+    价格是期货不是现货, 页面写明。失败回退缓存, 绝不用空覆盖旧真值。"""
+    import requests as _rq, json as _json, math as _m
+    from datetime import timezone, timedelta
+    root = os.path.join(os.path.dirname(__file__), "..", "data")
+    cache_path = cache_path or os.path.join(root, "gold_vol_cache.json")
+    jst = datetime.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    out = {"status": "ok", "as_of": jst, "warnings": [], "w": {}}
+    try:
+        t0 = int(datetime.datetime(2005, 1, 1, tzinfo=timezone.utc).timestamp()); t1 = int(datetime.datetime.utcnow().timestamp()) + 86400
+        r = _rq.get("https://query1.finance.yahoo.com/v8/finance/chart/GC=F", params={"period1": t0, "period2": t1, "interval": "1wk"},
+                    headers={"User-Agent": "Mozilla/5.0"}, timeout=40)
+        r.raise_for_status()
+        j = r.json()["chart"]["result"][0]; q = j["indicators"]["quote"][0]
+        rows = [(datetime.datetime.utcfromtimestamp(t).strftime("%Y-%m-%d"), q["open"][i], q["high"][i], q["low"][i], q["close"][i])
+                for i, t in enumerate(j["timestamp"]) if q["close"][i] and q["high"][i] and q["low"][i] and q["open"][i]]
+        if len(rows) < 600:
+            raise RuntimeError(f"GC=F 周线仅 {len(rows)} 根")
+        d = [x[0] for x in rows]; o = [x[1] for x in rows]; h = [x[2] for x in rows]; l = [x[3] for x in rows]; c = [x[4] for x in rows]
+        n = len(c)
+        def sma(k):
+            return [None if i < k - 1 else sum(c[i - k + 1:i + 1]) / k for i in range(n)]
+        def bbw(k, mult=2.0):
+            res = []
+            for i in range(n):
+                if i < k - 1: res.append(None); continue
+                seg = c[i - k + 1:i + 1]; m = sum(seg) / k; sd = _m.sqrt(sum((x - m) ** 2 for x in seg) / k)
+                res.append(2 * mult * sd / m * 100)
+            return res
+        tr = [h[0] - l[0]] + [max(h[i] - l[i], abs(h[i] - c[i - 1]), abs(l[i] - c[i - 1])) for i in range(1, n)]
+        atr = [None] * n; a = sum(tr[:14]) / 14; atr[13] = a
+        for i in range(14, n):
+            a = (a * 13 + tr[i]) / 14; atr[i] = a
+        gv = {}
+        for dd, v in _fred_series("GVZCLS", "2005-01-01"):
+            gv[dd] = v
+        gk = sorted(gv); gvz = []; p = 0; last = None
+        for dd in d:                                   # 每根周线取"该周标记日之前(含)最近一个 GVZ 值", 不向前借用未来值
+            while p < len(gk) and gk[p] <= dd:
+                last = gv[gk[p]]; p += 1
+            gvz.append(last)
+        out["w"] = {"d": d, "o": o, "h": h, "l": l, "c": c, "ma": {str(k): sma(k) for k in (82, 105, 127, 148, 170)},
+                    "bbw40": bbw(40), "bbw80": bbw(80), "atr": atr, "gvz": gvz, "last_bar": d[-1]}
+        rd = lambda L: [None if v is None else round(v, 3) for v in L]
+        out["w"]["ma"] = {k: rd(v) for k, v in out["w"]["ma"].items()}
+        for k in ("bbw40", "bbw80", "atr"): out["w"][k] = rd(out["w"][k])
+        out["w"]["gvz"] = rd(out["w"]["gvz"])
+        out["w"]["o"], out["w"]["h"], out["w"]["l"], out["w"]["c"] = rd(o), rd(h), rd(l), rd(c)
+        _json.dump(out, open(cache_path, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+    except Exception as e:
+        try:
+            cc = _json.load(open(cache_path, encoding="utf-8"))
+            cc["status"] = "cached"; cc["warnings"] = (cc.get("warnings") or []) + [f"在线抓取失败({type(e).__name__}: {str(e)[:60]}), 使用缓存"]
+            return cc
+        except Exception:
+            out["status"] = "error"; out["warnings"].append(f"抓取失败且无缓存: {type(e).__name__}: {str(e)[:80]}")
+    return out
+
+
+def fetch_analog_corrections(cache_path=None):
+    """金银「类比路径」: 把历史年份的日价格路径, 按【从该年 1 月 28 日起的相同日历天数偏移】叠到 2026 年 1/28 起点上。
+    数据: Yahoo COMEX 主力连续合约(GC=F/SI=F)日收盘, 另用 datahub 月度金价补 1973(日度缺, 如实标月度)。
+    不做归一化, 全部是原始美元价; 图上同一对齐规则写明(无法确认原图的对齐日, 是本看板的口径)。
+    另: GDX÷SPY(Yahoo 日线相除)。失败回退缓存, 绝不用空覆盖旧真值。"""
+    import requests as _rq, json as _json, csv as _csv, io as _io
+    from datetime import timezone, timedelta
+    root = os.path.join(os.path.dirname(__file__), "..", "data")
+    cache_path = cache_path or os.path.join(root, "analog_corrections_cache.json")
+    jst = datetime.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    out = {"status": "ok", "as_of": jst, "warnings": [], "gold": {}, "silver": {}, "gdx_spy": {}, "gold_1973_monthly": []}
+    H = {"User-Agent": "Mozilla/5.0"}
+    def _ts(d):
+        return int(datetime.datetime.strptime(d, "%Y-%m-%d").replace(tzinfo=timezone.utc).timestamp())
+    def _yh(sym, a, b):
+        r = _rq.get(f"https://query1.finance.yahoo.com/v8/finance/chart/{sym}",
+                    params={"period1": _ts(a), "period2": _ts(b), "interval": "1d"}, headers=H, timeout=40)
+        r.raise_for_status()
+        j = r.json()["chart"]["result"][0]
+        return [(datetime.datetime.utcfromtimestamp(t).strftime("%Y-%m-%d"), float(v))
+                for t, v in zip(j.get("timestamp") or [], j["indicators"]["quote"][0]["close"]) if v and v > 0]
+    START = (1, 28)
+    try:
+        today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
+        spec = {"gold": [("GC=F", 2026, "2026"), ("GC=F", 2006, "2006"), ("GC=F", 2008, "2008")],
+                "silver": [("SI=F", 2026, "2026"), ("SI=F", 2008, "2008"), ("SI=F", 2011, "2011")]}
+        for metal, items in spec.items():
+            for sym, yr, label in items:
+                rows = _yh(sym, f"{yr}-01-01", (today if yr == 2026 else f"{yr + 1}-02-15"))
+                base = datetime.date(yr, *START)
+                ser = []
+                for d, v in rows:
+                    off = (datetime.date.fromisoformat(d) - base).days
+                    if off >= 0:
+                        ser.append([off, round(v, 3)])
+                if len(ser) < 50:
+                    raise RuntimeError(f"{sym} {yr} 仅 {len(ser)} 点")
+                out[metal][label] = {"sym": sym, "start": str(base), "pts": ser, "last_date": rows[-1][0]}
+        # GDX ÷ SPY(2006-06 起, 日线)
+        g = dict(_yh("GDX", "2006-05-01", today)); sp = dict(_yh("SPY", "2006-05-01", today))
+        days = sorted(set(g) & set(sp))
+        out["gdx_spy"] = {"d": days, "v": [round(g[d] / sp[d], 5) for d in days]}
+        if len(days) < 1000:
+            raise RuntimeError(f"GDX/SPY 共同日仅 {len(days)}")
+        # 1973 月度金价(datahub 公开 CSV, 月度)
+        t = _rq.get("https://raw.githubusercontent.com/datasets/gold-prices/master/data/monthly.csv", headers=H, timeout=40).text
+        mm = [[r["Date"], float(r["Price"])] for r in _csv.DictReader(_io.StringIO(t)) if r["Date"].startswith("1973")]
+        if len(mm) == 12:
+            out["gold_1973_monthly"] = mm
+        else:
+            out["warnings"].append(f"1973 月度金价仅 {len(mm)} 个月, 不画")
+        _json.dump(out, open(cache_path, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+    except Exception as e:
+        try:
+            c = _json.load(open(cache_path, encoding="utf-8"))
+            c["status"] = "cached"; c["warnings"] = (c.get("warnings") or []) + [f"在线抓取失败({type(e).__name__}: {str(e)[:60]}), 使用缓存"]
+            return c
+        except Exception:
+            out["status"] = "error"; out["warnings"].append(f"抓取失败且无缓存: {type(e).__name__}: {str(e)[:80]}")
+    return out
+
+
 def fetch_silver_curve_spread(cache_path=None):
     """白银期货曲线价差(Yahoo COMEX 各月合约收盘价, 非 CME 官方结算价, 非 EFP)。
     各远月合约相对"最近一个仍交易的月份"的升水(美元/盎司与百分比), 并按 3 个月 SOFR/国债利率估算持有成本(理论套利上限)对比。

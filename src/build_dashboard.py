@@ -761,6 +761,22 @@ def main():
     except Exception as e:
         print(f"[dashboard] 白银期货曲线 跳过: {e}")
 
+    # ── 金银回调历史类比路径 + GDX÷SPY(Yahoo 日线; 1973 月度 datahub) ──
+    analog_corr = {}
+    try:
+        analog_corr = ed.fetch_analog_corrections() or {}
+        print(f"[dashboard] 金银类比路径: status={analog_corr.get('status')} 金线 {list((analog_corr.get('gold') or {}))} 银线 {list((analog_corr.get('silver') or {}))} GDX/SPY {len((analog_corr.get('gdx_spy') or {}).get('d', []))} 点 warn={analog_corr.get('warnings')}")
+    except Exception as e:
+        print(f"[dashboard] 金银类比路径 跳过: {e}")
+
+    # ── 黄金波动率(周线 + GVZ + BB 宽度 + ATR) ──
+    gold_vol = {}
+    try:
+        gold_vol = ed.fetch_gold_volatility() or {}
+        print(f"[dashboard] 黄金波动率: status={gold_vol.get('status')} {len((gold_vol.get('w') or {}).get('d', []))} 周 最新={(gold_vol.get('w') or {}).get('last_bar')} warn={gold_vol.get('warnings')}")
+    except Exception as e:
+        print(f"[dashboard] 黄金波动率 跳过: {e}")
+
     # ── 机构研究报告被公开解读(线索表, 读 data/report_leads.json; 采集由 src/report_leads.py 单独跑) ──
     report_leads = {}
     try:
@@ -955,6 +971,8 @@ def main():
         gold_oil=gold_oil,
         btc_gold=btc_gold,
         silver_curve=silver_curve,
+        analog_corr=analog_corr,
+        gold_vol=gold_vol,
         report_leads=report_leads,
         us_freight=us_freight,
         ust_micro=ust_micro,
