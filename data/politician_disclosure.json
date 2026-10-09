@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-10-08",
+  "as_of": "2026-10-09",
   "politicians": [
     {
       "name": "Nancy Pelosi",
@@ -284,67 +284,67 @@
           "amount_range": "$15,001 - $50,000"
         },
         {
-          "ticker": "TSCO",
-          "asset": "Tractor Supply Company",
+          "ticker": "ADBE",
+          "asset": "Adobe Inc. - Common Stock",
           "dir_cn": "卖出",
           "direction": "Sale (Full)",
-          "txn_date": "01/10/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "CARR",
-          "asset": "Carrier Global Corp",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "01/10/2025",
-          "amount_range": "$1,001 - $15,000"
-        },
-        {
-          "ticker": "TXN",
-          "asset": "Texas Instruments Incorporated - Common Stock",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "01/10/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "DEO",
-          "asset": "Diageo Plc ADR",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "01/10/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "MSFT",
-          "asset": "Microsoft Corp",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "01/10/2025",
-          "amount_range": "$15,001 - $50,000"
-        },
-        {
-          "ticker": "AAPL",
-          "asset": "Apple Inc",
-          "dir_cn": "卖出",
-          "direction": "Sale (Full)",
-          "txn_date": "01/10/2025",
+          "txn_date": "10/29/2024",
           "amount_range": "$15,001 - $50,000"
         },
         {
           "ticker": "AAPL",
           "asset": "Apple Inc. - Common Stock",
-          "dir_cn": "部分卖出",
-          "direction": "Sale (Partial)",
-          "txn_date": "08/26/2024",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "10/29/2024",
           "amount_range": "$15,001 - $50,000"
         },
         {
-          "ticker": "MDT",
-          "asset": "Medtronic plc. Ordinary Shares",
+          "ticker": "CTVA",
+          "asset": "Corteva, Inc. Common Stock",
           "dir_cn": "卖出",
           "direction": "Sale (Full)",
-          "txn_date": "08/26/2024",
+          "txn_date": "10/29/2024",
+          "amount_range": "$1,001 - $15,000"
+        },
+        {
+          "ticker": "HON",
+          "asset": "Honeywell International Inc. - Common Stock",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "10/29/2024",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "JNJ",
+          "asset": "Johnson & Johnson Common Stock",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "10/29/2024",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "KMB",
+          "asset": "Kimberly-Clark Corporation Common Stock",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "10/29/2024",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "MCD",
+          "asset": "McDonald's Corporation Common Stock",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "10/29/2024",
+          "amount_range": "$15,001 - $50,000"
+        },
+        {
+          "ticker": "MSFT",
+          "asset": "Microsoft Corporation - Common Stock",
+          "dir_cn": "卖出",
+          "direction": "Sale (Full)",
+          "txn_date": "10/29/2024",
           "amount_range": "$15,001 - $50,000"
         }
       ],
