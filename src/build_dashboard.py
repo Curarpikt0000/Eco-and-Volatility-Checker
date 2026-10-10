@@ -777,6 +777,14 @@ def main():
     except Exception as e:
         print(f"[dashboard] 黄金波动率 跳过: {e}")
 
+    # ── 金银短线图(12 标的日线 + MA + RSI) ──
+    gs_tech = {}
+    try:
+        gs_tech = ed.fetch_gold_silver_tech() or {}
+        print(f"[dashboard] 金银短线图: status={gs_tech.get('status')} 标的={len(gs_tech.get('items', []))} 警告={gs_tech.get('warnings')}")
+    except Exception as e:
+        print(f"[dashboard] 金银短线图 跳过: {e}")
+
     # ── 联邦基金利率 × 金价 × 油价(月度 1970 起) ──
     fed_gold_oil = {}
     try:
@@ -982,6 +990,7 @@ def main():
         analog_corr=analog_corr,
         gold_vol=gold_vol,
         fed_gold_oil=fed_gold_oil,
+        gs_tech=gs_tech,
         report_leads=report_leads,
         us_freight=us_freight,
         ust_micro=ust_micro,

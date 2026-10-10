@@ -1494,7 +1494,7 @@ def _gs_tech_html(o):
             sid = it["sym"].replace("=", "_").replace(".", "_")
             tag = '<span class="gst-tag">缓存</span>' if it.get("src") == "cache" else ""
             cards += (f'<div class="gst-card"><div class="gst-hd"><b>{_esc(it["name"])}</b><span class="gst-sym">{_esc(it["sym"])}</span>{tag}</div>'
-                      f'<div class="gst-pin" id="gst-pin-{sid}">&nbsp;</div>'
+                      f'<div class="gst-pin" id="gst-pin-{sid}">鼠标移到图上查看当日读数</div>'
                       f'<svg class="gst-svg" id="gst-svg-{sid}" viewBox="0 0 560 300" preserveAspectRatio="none"></svg>'
                       f'<div class="gst-st">{_esc(status_line(it))}</div><div class="gst-nt">{_esc(it["note"])}</div></div>')
         cards += '</div>'
@@ -1509,7 +1509,7 @@ var X=function(i){return ML+(W-ML-MR)*i/Math.max(k-1,1)},Y=function(v){return PT
 function pl(arr,Yf,col,sw,dash){var p='';for(var i=0;i<arr.length;i++){if(arr[i]==null)continue;p+=(p?' ':'')+X(i).toFixed(1)+','+Yf(arr[i]).toFixed(1)}return p?'<polyline points="'+p+'" fill="none" stroke="'+col+'" stroke-width="'+sw+'"'+(dash?' stroke-dasharray="'+dash+'"':'')+' stroke-linejoin="round"/>':''}
 var g='';for(var t=0;t<=4;t++){var v=lo+(hi-lo)*t/4,y=Y(v);g+='<line x1="'+ML+'" x2="'+(W-MR)+'" y1="'+y.toFixed(1)+'" y2="'+y.toFixed(1)+'" stroke="#ece7dc"/><text x="'+(W-MR+4)+'" y="'+(y+3).toFixed(1)+'" font-size="10" fill="#6b5a2a">'+fmt(v)+'</text>'}
 [30,50,70].forEach(function(v){g+='<line x1="'+ML+'" x2="'+(W-MR)+'" y1="'+YR(v).toFixed(1)+'" y2="'+YR(v).toFixed(1)+'" stroke="'+(v==50?'#e6e1d6':'#d9a0a0')+'" stroke-dasharray="'+(v==50?'':'3 3')+'"/><text x="'+(W-MR+4)+'" y="'+(YR(v)+3).toFixed(1)+'" font-size="9" fill="#a8a095">'+v+'</text>'});
-var step=Math.max(1,Math.round(k/6));for(var i=0;i<k;i+=step){g+='<text x="'+X(i).toFixed(1)+'" y="'+(H-3)+'" font-size="9" fill="#8a837a" text-anchor="middle">'+dt[i].slice(5)+'</text>'}
+var step=Math.max(1,Math.round(k/6));for(var i=0;i<k;i+=step){g+='<text x="'+X(i).toFixed(1)+'" y="'+(H-3)+'" font-size="9" fill="#8a837a" text-anchor="'+(i==0?'start':'middle')+'">'+(i==0?dt[i].slice(2):dt[i].slice(5))+'</text>'}
 g+='<text x="'+ML+'" y="'+(RT-3)+'" font-size="9" fill="#8a837a">RSI(14)</text>';
 var ln=pl(m200,Y,'#7a5c8a',1.3)+pl(m50,Y,'#3f7d5a',1.3)+pl(m20,Y,'#d08a2c',1.3)+pl(c,Y,'#1f2a44',1.9)+pl(rs,YR,'#b0493a',1.4);
 svg.innerHTML=g+ln+'<line class="gst-hl" x1="0" x2="0" y1="'+PT+'" y2="'+(RT+RH)+'" stroke="#555" stroke-dasharray="3 3" visibility="hidden"/>';
@@ -11369,6 +11369,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ WRS · Walmart 衰退信号(分母 ETF 代理, 已标注) ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>WRS · Walmart 衰退信号 (Walmart ÷ 奢侈品指数 · Jim Paulsen 口径 · 分母用 ETF 代理)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{wrs_html}</div>
+  <!-- ━━━ 金银短线图(12 标的 · 价格+MA20/50/200+RSI14) ━━━ -->
+  <div class="part-title" id="sec-gs-tech"><span class="part-num">＋</span>金银短线图 · 12 标的 (收盘 + 20/50/200 日线 + RSI14 · 日线)<span class="freq-badge freq-daily">日更</span></div>
+  <div class="card">{gs_tech_html}</div>
   <!-- ━━━ 金银类比路径 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>金银回调 · 历史类比路径 (金 2006/2008 · 银 2008/2011 · GDX÷SPY · 日度)<span class="freq-badge freq-daily">日更</span></div>
   <div class="card">{analog_corr_html}</div>
