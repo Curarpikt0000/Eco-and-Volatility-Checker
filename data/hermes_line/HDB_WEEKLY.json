@@ -1,6 +1,6 @@
 {
  "table": "HDB_WEEKLY",
- "count": 8,
+ "count": 9,
  "rows": [
   {
    "uid": "wk|2026-W33",
@@ -196,6 +196,31 @@
        "type": "text",
        "text": {
         "content": "# Eco & Volatility 周报 2026-W40 (2026-09-28 ~ 2026-10-02)\n\n- 综合信号: 🟡 警戒(全周一致,卖出触发 1/7)\n- 周内红灯: bofa_fms_cash(3.9%)、margin_gdp(4.46%)、bofa_bull_bear(9.5)、buffett(255%)、cape(41)、aaii_alloc(71.8%)；put_call 9/30 单日🔴(其余日🟡/🟢)\n\n## 本周状态变化\n1) 综合信号全周🟡警戒、卖出触发恒为1/7,无升降级。2) 指标灯:仅 put_call 摆动(9/28🟡→9/29🟢→9/30🔴→10/1🟡→10/2🟢,0.52→0.57);其余灯一周无变化。3) 数值:VIX 14.21→16.34,CNN F&G 37→28.1(恐惧加深),AAII 多空差-24.5→-15.4,HY OAS 2.80→3.12(走阔32bp),10Y-2Y 0.36→0.46,BofA B&B 9.7→9.5,Buffett 255.7→255.0,CAPE 41.48→41.07。4) 流动性:Fed准备金9/30周 +17.9B至2.948T(首次回升,仍<3T),ON RRP 11.5B,TGA -28.4B至948.7B;美债10Y 5.29%/30Y 5.64%/2Y 4.88%(10/2),10Y连续多日>5%,央行风控灯🔴危险(日债🔴/美债🔴/Fed流动性🟡)。5) 央行BS:Fed总资产-4.7B(-0.07%),BoJ(9/20)-19.0B(-0.46%,QT),PBoC(8月)科目环比0.0(疑未更新/待核)。6) 机构:本周无新13F。7) KOL:27人方向实质转向(见下)。\n\n## KOL 转向\n9/25快照 vs 10/2快照(剔除未找到),27人转向。转多:Art Berman/Peter Thiel/Raghuram Rajan/Jeff Snider/Martin Armstrong/Druckenmiller(看空→看多)、Amos Hochstein/Jim Curry/Dan Loeb/Alex Kuptsikevich(中性→看多)。转空:Ricardo Evangelista/Carl Icahn/Kyle Bass(看多→看空)、Prechter/EWI(中性→看空)。转中性:Sentient Trader/WaveTrack/Doomberg/Vermeulen/Castelli/Sargent(看多→中性)、White/Stein/Dynan/Griffin/Chandler/Abhigya Anand(看空→中性)。当前分布(192人当日快照):看多85/中性37/看空24/未找到12(其余为带限定语的复合表述)。\n\n## KOL 本周言论(名册active 198人)\n\nKOL 新言论（出处日期 2026-09-28 ~ 2026-10-03）：32 人 / 43 条\n\n【宏观货币与金融体系】\n- Judy Shelton（10-01，看多）主张金本位/黄金支持国债,称4500美元金价预示货币体系重置,已入职财政部 [出处](https://www.gata.org/node/25029)\n  　原话要点：▸ 核心论点：前特朗普经济顾问、金本位倡导者Judy Shelton认为黄金走高是全球货币体系正在发生重大转变的信号，主张发行\"黄金可转换国债\"(gold-convertible Treasury bonds)以恢复\"诚实货币\"体系；2026年9月16日已正式加入美国财政部，担任财长Bessent的顾问(counselor)。 ▸ 关键依据：2026年1月访谈中提出金价4500美元可能标志着全球货币体系重大转变的信号；其2012年Cato Journal论文提出\"财政部信托债券\"(Treasury Trust Bonds)构想——零息债券，持有人可选择以美元或约定数量黄金偿付，以保护债权人免受美元对黄金贬值的损失；任职背景是在通胀与赤字担忧推高美债收益率、财政部斥巨资回购国债(Bessent称若无回购收益率会更高)的背景下。 ▸ 时间与位置：未给出具体黄金交易目标价或时间窗口，仅提及已观察到的45"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "wk|2026-W41",
+   "props": {
+    "周": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-W41"
+       }
+      }
+     ]
+    },
+    "综合研判": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "# Eco & Volatility 周报 2026-W41 (2026-10-05 ~ 2026-10-09)\n\n- 综合信号: 🟡 警戒(全周一致,卖出触发 1/7)\n- 周内红灯: bofa_fms_cash(3.9%)、margin_gdp(4.46%)、bofa_bull_bear(9.5)、buffett(255%)、cape(41.4~41.6)、aaii_alloc(71.8%)\n\n## 本周状态变化\n1) 综合信号全周🟡警戒、卖出触发恒为1/7(仅BofA Bull&Bear 9.5>8.0),无升降级。\n2) 指标灯:仅 insider(内部人买卖比)10/7 单日🟡,其余日🟢;其余灯一周无变化。红灯6项固定:BofA FMS现金3.9%、Margin/GDP 4.46%、BofA B&B 9.5、巴菲特指标255%、CAPE 41.4~41.6、AAII股票配置71.8%。put_call全周🟢(0.58→0.62)。\n3) 数值首末(10/5→10/9):VIX 16.39→15.08(回落),CNN F&G 31.2→38.1(恐惧缓解),HY OAS 3.24→3.09(收窄15bp),10Y-2Y 0.45→0.47,CAPE 41.38→41.62,银行融资压力(CP-TBill)16→2bp,SOFR-EFFR -1→0bp。AAII/BofA/Buffett/Margin/IPO/LEI 为低频指标,本周无更新。\n4) 流动性:Fed准备金(9/30周)+17.9B至2.948T(首次回升、仍<3T),ON RRP 11.5B,TGA -28.4B至948.7B;央行风控灯🔴危险(美债🔴/日债🔴)。10Y 本周10/7盘中触5.365%后回落至5.286%(KOL Soloway口径),日债10Y~3.06%。\n5) 央行BS:Fed总资产-4.7B(-0.07%,9/30周),BoJ(9/20旬)-19.0B(-0.46%,QT),PBoC(8月)科目环比0.0(月度,未新增);ECB(W40)黄金+60B/APP+PEPP -14B。本周无扩缩表方向转折。\n6) 机构:本周无新13F(最新为2026-06-30季度,8/14前后披露)。\n7) KOL:10/2快照 vs 10/9快照,方向变动 58 人(转多21/转空18/转中性19);多空两端同步大量互换,含措辞/抓取口径噪声,不宜当单向转折解读。\n\n## KOL 转向\n10/2快照 vs 10/9快照(剔除未找到),方向变动58人;分布 看多104→115/中性43→45/看空32→38。多空两端同步互换,含措辞/抓取口径噪声,不宜当单向转折解读。\n中性→看多(12):Trisha Curtis、Matt Smith、Tim Scott、David Sacks、Francis Hunt、Peter Alexander、Glenn Neely、Ken Griffin、Massimiliano Castelli、David Meger、Doomberg / Kuppy、Daniel Ghali\n中性→看空(9):Bill Gurley、Michael Howell、Paul Kedrosky、Yanis Varoufakis、Howard Marks、William White、Mervyn King、Marc Chandler、Chris Vermeulen\n看多→中性(11):Michael Dunne、Henry Sanderson、Michael Fritzell、Jason Calacanis、Peter Thiel、Raghuram Rajan、Dan Loeb、Torsten Sløk、Gareth Soloway、Craig Hemke、Jay Martin\n看多→看空(9):Bert Dohmen、Richard A. Werner、Art Berman、Larry C. Johnson、Felix Zulauf、Charles Nenner、Amos Hochstein、Martin Armstrong、Jeff Snider\n看空→中性(8):Jamie Dimon、Francis Fukuyama、Ricardo Eva"
        }
       }
      ]
