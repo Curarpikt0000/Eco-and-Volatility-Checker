@@ -1467,6 +1467,133 @@ def _report_leads_html(o):
 """
 
 
+def _gs_tech_html(o):
+    """金银短线图: 每个标的一张图 = 价格(收盘线+SMA20/50/200) + 上方 RSI(14); 默认近 90 个交易日, 可切 60/130/250;
+    悬停读数(收/MA/RSI/距各均线%), 每图下一行事实状态。内联 SVG, 数据一次性嵌入 JS。"""
+    import json as _json
+    if not o or o.get("status") == "error" or not o.get("items"):
+        err = "；".join((o or {}).get("warnings", [])[:2])
+        return f'<p class="empty">金银短线图同步中{(chr(0xff1a) + _esc(err)) if err else ""}。</p>'
+    items = o["items"]
+    groups = []
+    for it in items:
+        if it["grp"] not in groups:
+            groups.append(it["grp"])
+    def status_line(it):
+        c, m20, m50, m200, r = it["c"][-1], it["ma20"][-1], it["ma50"][-1], it["ma200"][-1], it["rsi"][-1]
+        def rel(m, n):
+            if m is None: return f"{n}日线缺"
+            return f"{'站上' if c >= m else '跌破'}{n}日线({(c / m - 1) * 100:+.1f}%)"
+        rz = "超买区" if r is not None and r >= 70 else ("超卖区" if r is not None and r <= 30 else "中性区")
+        prev = it["c"][-2]
+        return f"{it['d'][-1]} 收 {c:g}（日 {(c / prev - 1) * 100:+.2f}%）｜{rel(m20, 20)}、{rel(m50, 50)}、{rel(m200, 200)}｜RSI {r:.1f}（{rz}）"
+    cards = ""
+    for gi, g in enumerate(groups):
+        cards += f'<div class="gst-grp">{_esc(g)}</div><div class="gst-grid">'
+        for it in [x for x in items if x["grp"] == g]:
+            sid = it["sym"].replace("=", "_").replace(".", "_")
+            tag = '<span class="gst-tag">缓存</span>' if it.get("src") == "cache" else ""
+            cards += (f'<div class="gst-card"><div class="gst-hd"><b>{_esc(it["name"])}</b><span class="gst-sym">{_esc(it["sym"])}</span>{tag}</div>'
+                      f'<div class="gst-pin" id="gst-pin-{sid}">&nbsp;</div>'
+                      f'<svg class="gst-svg" id="gst-svg-{sid}" viewBox="0 0 560 300" preserveAspectRatio="none"></svg>'
+                      f'<div class="gst-st">{_esc(status_line(it))}</div><div class="gst-nt">{_esc(it["note"])}</div></div>')
+        cards += '</div>'
+    data = _json.dumps({it["sym"]: {k: it[k] for k in ("d", "c", "ma20", "ma50", "ma200", "rsi")} for it in items}, separators=(",", ":"))
+    ids = _json.dumps({it["sym"]: it["sym"].replace("=", "_").replace(".", "_") for it in items})
+    js = """<script>(function(){var D=__DATA__,ID=__IDS__,W=560,H=300,ML=4,MR=46,PT=6,PH=190,GAP=14,RT=PT+PH+GAP,RH=H-RT-16;var win=90;
+function fmt(v){if(v==null)return '—';var a=Math.abs(v);return v.toFixed(a>=1000?0:(a>=100?1:(a>=10?2:3)))}
+function build(sym){var d=D[sym],id=ID[sym],svg=document.getElementById('gst-svg-'+id);var n=d.d.length,a=Math.max(0,n-win);
+var c=d.c.slice(a),m20=d.ma20.slice(a),m50=d.ma50.slice(a),m200=d.ma200.slice(a),rs=d.rsi.slice(a),dt=d.d.slice(a),k=c.length;
+var vals=c.concat(m20,m50,m200).filter(function(x){return x!=null});var lo=Math.min.apply(null,vals),hi=Math.max.apply(null,vals);var pad=(hi-lo)*0.06||1;lo-=pad;hi+=pad;
+var X=function(i){return ML+(W-ML-MR)*i/Math.max(k-1,1)},Y=function(v){return PT+PH*(1-(v-lo)/(hi-lo))},YR=function(v){return RT+RH*(1-v/100)};
+function pl(arr,Yf,col,sw,dash){var p='';for(var i=0;i<arr.length;i++){if(arr[i]==null)continue;p+=(p?' ':'')+X(i).toFixed(1)+','+Yf(arr[i]).toFixed(1)}return p?'<polyline points="'+p+'" fill="none" stroke="'+col+'" stroke-width="'+sw+'"'+(dash?' stroke-dasharray="'+dash+'"':'')+' stroke-linejoin="round"/>':''}
+var g='';for(var t=0;t<=4;t++){var v=lo+(hi-lo)*t/4,y=Y(v);g+='<line x1="'+ML+'" x2="'+(W-MR)+'" y1="'+y.toFixed(1)+'" y2="'+y.toFixed(1)+'" stroke="#ece7dc"/><text x="'+(W-MR+4)+'" y="'+(y+3).toFixed(1)+'" font-size="10" fill="#6b5a2a">'+fmt(v)+'</text>'}
+[30,50,70].forEach(function(v){g+='<line x1="'+ML+'" x2="'+(W-MR)+'" y1="'+YR(v).toFixed(1)+'" y2="'+YR(v).toFixed(1)+'" stroke="'+(v==50?'#e6e1d6':'#d9a0a0')+'" stroke-dasharray="'+(v==50?'':'3 3')+'"/><text x="'+(W-MR+4)+'" y="'+(YR(v)+3).toFixed(1)+'" font-size="9" fill="#a8a095">'+v+'</text>'});
+var step=Math.max(1,Math.round(k/6));for(var i=0;i<k;i+=step){g+='<text x="'+X(i).toFixed(1)+'" y="'+(H-3)+'" font-size="9" fill="#8a837a" text-anchor="middle">'+dt[i].slice(5)+'</text>'}
+g+='<text x="'+ML+'" y="'+(RT-3)+'" font-size="9" fill="#8a837a">RSI(14)</text>';
+var ln=pl(m200,Y,'#7a5c8a',1.3)+pl(m50,Y,'#3f7d5a',1.3)+pl(m20,Y,'#d08a2c',1.3)+pl(c,Y,'#1f2a44',1.9)+pl(rs,YR,'#b0493a',1.4);
+svg.innerHTML=g+ln+'<line class="gst-hl" x1="0" x2="0" y1="'+PT+'" y2="'+(RT+RH)+'" stroke="#555" stroke-dasharray="3 3" visibility="hidden"/>';
+svg.onmousemove=function(e){var b=svg.getBoundingClientRect();var x=(e.clientX-b.left)/b.width*W;var i=Math.round((x-ML)/(W-ML-MR)*(k-1));if(i<0||i>=k)return;var px=ML+(W-ML-MR)*i/Math.max(k-1,1);var hl=svg.querySelector('.gst-hl');hl.setAttribute('x1',px);hl.setAttribute('x2',px);hl.setAttribute('visibility','visible');
+function dv(m){return m==null?'—':((c[i]/m-1)*100).toFixed(1)+'%'}
+document.getElementById('gst-pin-'+id).textContent=dt[i]+'　收 '+fmt(c[i])+'｜MA20 '+fmt(m20[i])+'('+dv(m20[i])+') MA50 '+fmt(m50[i])+'('+dv(m50[i])+') MA200 '+fmt(m200[i])+'('+dv(m200[i])+')｜RSI '+(rs[i]==null?'—':rs[i].toFixed(1))};
+svg.onmouseleave=function(){var hl=svg.querySelector('.gst-hl');hl.setAttribute('visibility','hidden')};}
+function all(){Object.keys(D).forEach(build)}
+document.querySelectorAll('.gst-win button').forEach(function(b){b.addEventListener('click',function(){win=+b.dataset.w;document.querySelectorAll('.gst-win button').forEach(function(x){x.classList.toggle('on',x===b)});all()})});
+all()})();</script>""".replace("__DATA__", data).replace("__IDS__", ids)
+    warn_l = list(o.get("warnings", []))
+    warn = f'<p class="sgr-warn">⚠ {_esc("；".join(warn_l[:4]))}</p>' if warn_l else ""
+    return f"""
+<style>.gst-grp{{font-size:12px;color:#6b5a2a;margin:10px 0 6px;letter-spacing:.5px}}.gst-grid{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}@media(max-width:900px){{.gst-grid{{grid-template-columns:1fr}}}}
+.gst-card{{background:#fff;border:1px solid #e6e1d6;border-radius:8px;padding:8px 10px}}.gst-hd{{display:flex;gap:8px;align-items:baseline;font-size:13px}}.gst-sym{{font-size:11px;color:#8a837a}}.gst-tag{{font-size:10px;background:#f3e3c6;color:#8a5a14;border-radius:3px;padding:0 4px}}
+.gst-pin{{font-size:11px;color:#2b2b2b;background:#faf7f0;border:1px solid #efe9db;border-radius:5px;padding:3px 6px;margin:4px 0;min-height:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}.gst-svg{{width:100%;height:230px;display:block;cursor:crosshair}}
+.gst-st{{font-size:11px;color:#3a362f;margin-top:2px}}.gst-nt{{font-size:10px;color:#9a948a;margin-top:1px}}.gst-win{{display:flex;gap:6px;align-items:center;font-size:12px;margin:0 0 6px}}.gst-win button{{border:1px solid #d8d1c2;background:#fff;border-radius:4px;padding:2px 9px;cursor:pointer;font-size:12px}}.gst-win button.on{{background:#1f2a44;color:#fff;border-color:#1f2a44}}
+.gst-lg{{font-size:11px;color:#5a554c;margin:2px 0 4px}}.gst-lg i{{display:inline-block;width:14px;height:3px;margin:0 4px 0 10px;vertical-align:middle}}</style>
+{warn}
+<div class="sfc-note"><b>读图：</b>每张图上半部是<b>收盘价</b>与 <b>20/50/200 日均线</b>（简单平均），下半部是 <b>RSI(14)</b>（Wilder 口径，70/30 为超买/超卖参考线，不是买卖信号）。默认看近 90 个交易日，右上角可切换窗口；均线与 RSI 在全部历史上计算，窗口只是截取，所以左端不会缺线。
+ <b>口径：</b>金银期货为 COMEX <b>连续合约</b>（换月时有价格跳点），不是现货价；GLD/SLV/GDX 等为美元 ETF；中国侧为 A 股与深交所 ETF（人民币）。<b>时间：</b>美股收盘在北京时间次日清晨，中国收盘在当日 15:00；11:00 日更任务读到的是<b>最近一个已收盘交易日</b>。<b>2026-10-09 GDXJ 的 RSI 与 StockCharts 截图核对一致（45.74）。</b></div>
+<div class="gst-win">窗口：<button data-w="45">45 日</button><button data-w="90" class="on">90 日</button><button data-w="130">130 日</button><button data-w="250">250 日</button>
+<span class="gst-lg"><i style="background:#1f2a44"></i>收盘<i style="background:#d08a2c"></i>MA20<i style="background:#3f7d5a"></i>MA50<i style="background:#7a5c8a"></i>MA200<i style="background:#b0493a"></i>RSI</span></div>
+{cards}{js}
+<div class="sfc-foot">数据：Yahoo Finance 日线；指标由本看板自行计算。仅陈述价格与指标相对位置，不构成买卖建议。</div>
+"""
+
+
+def _fed_gold_oil_html(o):
+    """联邦基金利率(左轴 线性 %) + 金价(美元/盎司) + WTI 油价(美元/桶)(右轴 共用对数美元轴), 月度 1970 起。内联 SVG + 悬停读数 + 开关。"""
+    import json as _json, math as _m
+    if not o or o.get("status") == "error" or len(o.get("m", [])) < 600:
+        err = "；".join((o or {}).get("warnings", [])[:2])
+        return f'<p class="empty">利率、金价、油价同步中{((chr(0xff1a) + _esc(err)) if err else "")}。</p>'
+    M, FF, G, O = o["m"], o["ff"], o["gold"], o["oil"]; n = len(M)
+    W, Hh, ML, MR, MT, MB = 1140, 430, 48, 56, 14, 26
+    X = lambda i: ML + (W - ML - MR) * i / (n - 1)
+    YL = lambda v: MT + (Hh - MT - MB) * (1 - v / 20.0)                 # 左轴 0~20%
+    lo, hi = 2.0, 8000.0
+    YR = lambda v: MT + (Hh - MT - MB) * (1 - (_m.log10(v) - _m.log10(lo)) / (_m.log10(hi) - _m.log10(lo)))
+    g = ""
+    for v in (0, 5, 10, 15, 20):
+        g += f'<line x1="{ML}" x2="{W-MR}" y1="{YL(v):.1f}" y2="{YL(v):.1f}" stroke="#ece7dc"/><text x="{ML-5}" y="{YL(v)+3:.1f}" text-anchor="end" font-size="10" fill="#b0493a">{v}%</text>'
+    for v in (2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000):
+        major = v in (10, 100, 1000)
+        g += f'<text x="{W-MR+5}" y="{YR(v)+3:.1f}" font-size="{10 if major else 9}" fill="#6b5a2a">${v:,}</text>' + (f'<line x1="{W-MR}" x2="{W-MR+3}" y1="{YR(v):.1f}" y2="{YR(v):.1f}" stroke="#a8761a"/>')
+    for yr in range(1970, 2030, 5):
+        i = next((j for j, x in enumerate(M) if x >= f"{yr}-01"), None)
+        if i is not None:
+            g += f'<line x1="{X(i):.1f}" x2="{X(i):.1f}" y1="{MT}" y2="{Hh-MB}" stroke="#f1ede3"/><text x="{X(i):.1f}" y="{Hh-MB+14}" text-anchor="middle" font-size="10" fill="#8a837a">{yr}</text>'
+    pl = lambda vals, Y, col, sw, idn: f'<polyline id="{idn}" points="{" ".join(f"{X(i):.1f},{Y(v):.1f}" for i, v in enumerate(vals))}" fill="none" stroke="{col}" stroke-width="{sw}" stroke-linejoin="round"/>'
+    lines = pl(O, YR, "#1f3a68", 1.3, "fgo-l-oil") + pl(G, YR, "#c99a2e", 1.8, "fgo-l-gold") + pl(FF, YL, "#b0493a", 1.8, "fgo-l-ff")
+    # 数据派生的极值标注(不写原因, 只标日期与数值)
+    ipk = max(range(n), key=lambda i: FF[i]); igk = max(range(n), key=lambda i: G[i]); iok = max(range(n), key=lambda i: O[i])
+    def mark(i, Y, v, col, txt, dy, dx=0, anchor="middle"):
+        return (f'<circle cx="{X(i):.1f}" cy="{Y(v):.1f}" r="3.2" fill="{col}"/>'
+                f'<text x="{X(i)+dx:.1f}" y="{Y(v)+dy:.1f}" text-anchor="{anchor}" font-size="11" fill="{col}" stroke="#fff" stroke-width="3" paint-order="stroke">{txt}</text>')
+    marks = (mark(ipk, YL, FF[ipk], "#b0493a", f"利率峰值 {FF[ipk]:.1f}%（{M[ipk]}）", -8, dx=70)
+             + mark(igk, YR, G[igk], "#8a6a14", f"金价高点 ${G[igk]:,.0f}（{M[igk]}）", -8, dx=-6, anchor="end")
+             + mark(iok, YR, O[iok], "#1f3a68", f"油价高点 ${O[iok]:,.0f}（{M[iok]}）", -9))
+    data = _json.dumps({"m": M, "ff": FF, "g": G, "o": O}, separators=(",", ":"))
+    script = """<script>(function(){var D=__DATA__,W=__W__,ML=__ML__,MR=__MR__,n=D.m.length;var pin=document.getElementById('fgo-pin');var sv=document.getElementById('fgo-svg');var hl=document.getElementById('fgo-hl');
+function f(v,k){return v==null?'—':v.toFixed(k)}
+sv.addEventListener('mousemove',function(e){var s=sv.getBoundingClientRect();var x=(e.clientX-s.left)/s.width*W;var i=Math.round((x-ML)/(W-ML-MR)*(n-1));if(i<0||i>=n)return;var px=ML+(W-ML-MR)*i/(n-1);hl.setAttribute('x1',px);hl.setAttribute('x2',px);hl.setAttribute('visibility','visible');
+pin.textContent=D.m[i]+'　联邦基金利率 '+f(D.ff[i],2)+'%　｜　金价 $'+f(D.g[i],0)+'/盎司　｜　WTI 油价 $'+f(D.o[i],2)+'/桶　｜　金油比 '+f(D.g[i]/D.o[i],1)});
+['ff','gold','oil'].forEach(function(k){var c=document.getElementById('fgo-c-'+k);var l=document.getElementById('fgo-l-'+k);c.addEventListener('change',function(){l.setAttribute('visibility',c.checked?'visible':'hidden')})})})();</script>""".replace("__DATA__", data).replace("__W__", str(W)).replace("__ML__", str(ML)).replace("__MR__", str(MR))
+    warn_l = list(o.get("warnings", []))
+    warn = f'<p class="sgr-warn">⚠ {_esc("；".join(warn_l[:3]))}</p>' if warn_l else ""
+    srcs = "；".join(sorted(set(o.get("src", {}).values())))
+    return f"""
+<style>.fgo-box{{background:#fff;border:1px solid #e6e1d6;border-radius:8px;padding:10px 12px}}.fgo-svg{{width:100%;height:auto;display:block;cursor:crosshair}}
+.fgo-ctl{{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:#3a362f;margin:0 0 8px}}.fgo-ctl label{{cursor:pointer}}.fgo-ctl i{{display:inline-block;width:16px;height:3px;margin-right:5px;vertical-align:middle}}
+.fgo-pin{{font-size:12px;color:#2b2b2b;background:#faf7f0;border:1px solid #e6e1d6;border-radius:6px;padding:6px 10px;margin-bottom:8px;min-height:18px}}</style>
+{warn}
+<div class="sfc-note"><b>口径说明：</b>左轴是<b>联邦基金有效利率</b>（月均，线性，%）；右轴是<b>对数轴</b>，<b>金价（美元/盎司）和 WTI 原油（美元/桶）共用这一根轴</b>，两者单位不同，只是都以美元计价、放在同一把尺子上比较涨跌幅度。
+  金价为世界银行月均价（与本看板「金油比」「股指÷黄金」同一底表）；油价为 FRED 的 WTI 现货月均价，<b>1973 年前为官方管制标价，不是市场价</b>。{(' 最新未发布月份用日度数据补：' + _esc(srcs) + '。') if srcs else ''}</div>
+<div class="fgo-box"><div class="fgo-ctl"><label><input type="checkbox" id="fgo-c-ff" checked><i style="background:#b0493a"></i>联邦基金利率（左轴）</label><label><input type="checkbox" id="fgo-c-gold" checked><i style="background:#c99a2e"></i>金价（右轴·对数）</label><label><input type="checkbox" id="fgo-c-oil" checked><i style="background:#1f3a68"></i>WTI 油价（右轴·对数）</label></div>
+<div class="fgo-pin" id="fgo-pin">鼠标移到图上，可看到该月的利率、金价、油价和金油比。</div>
+<svg viewBox="0 0 {W} {Hh}" class="fgo-svg" id="fgo-svg" role="img" aria-label="联邦基金利率与金价油价">{g}{lines}{marks}<line id="fgo-hl" x1="0" x2="0" y1="{MT}" y2="{Hh-MB}" stroke="#555" stroke-dasharray="3 3" visibility="hidden"/></svg></div>
+{script}
+<div class="sfc-foot">数据：FRED（FEDFUNDS、DFF、WTISPLC、DCOILWTICO）、datahub gold-prices（世界银行 Pink Sheet）、Yahoo Finance（GC=F，仅补最新月）。图上只标注数据本身的极值，不附原因解读。</div>
+"""
+
+
 def _gold_vol_html(o):
     """黄金波动率(周线): 价格 + 5 条简单均线 + GVZ / 布林带宽度(40,80) / ATR(14) 四个副图。纯内联 SVG + 少量 JS(悬停读数)。"""
     import json as _json
@@ -2663,7 +2790,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, analog_corr=None, gold_vol=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, gs_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -2911,6 +3038,8 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         silver_curve_html=_silver_curve_html(silver_curve),
         analog_corr_html=_analog_corr_html(analog_corr),
         gold_vol_html=_gold_vol_html(gold_vol),
+        fed_gold_oil_html=_fed_gold_oil_html(fed_gold_oil),
+        gs_tech_html=_gs_tech_html(gs_tech),
         report_leads_html=_report_leads_html(report_leads),
         us_freight_html=_us_freight_html(us_freight),
         ust_micro_html=_ust_micro_html(ust_micro),
@@ -11240,27 +11369,69 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ WRS · Walmart 衰退信号(分母 ETF 代理, 已标注) ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>WRS · Walmart 衰退信号 (Walmart ÷ 奢侈品指数 · Jim Paulsen 口径 · 分母用 ETF 代理)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{wrs_html}</div>
-  <!-- ━━━ 金油比 ━━━ -->
-  <div class="part-title"><span class="part-num">＋</span>金油比 · 黄金 ÷ WTI 原油 (1971 起 · 月度 · 对数轴)<span class="freq-badge freq-daily">每日更新</span></div>
-  <div class="card">{gold_oil_html}</div>
-  <!-- ━━━ 比特币 ÷ 黄金 ━━━ -->
-  <div class="part-title"><span class="part-num">＋</span>比特币 ÷ 黄金 · 暴涨暴跌与事件 (2010 起 · 月度 · 对数轴)<span class="freq-badge freq-daily">日更</span></div>
-  <div class="card">{btc_gold_html}</div>
-  <!-- ━━━ 白银期货曲线价差 ━━━ -->
-  <div class="part-title"><span class="part-num">＋</span>白银期货 · 各月合约价差 (COMEX · 日度 · 对比持有成本)<span class="freq-badge freq-daily">日更</span></div>
-  <div class="card">{silver_curve_html}</div>
   <!-- ━━━ 金银类比路径 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>金银回调 · 历史类比路径 (金 2006/2008 · 银 2008/2011 · GDX÷SPY · 日度)<span class="freq-badge freq-daily">日更</span></div>
   <div class="card">{analog_corr_html}</div>
   <!-- ━━━ 黄金波动率 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>黄金波动率 · GVZ / 布林带宽度 / ATR (COMEX 周线 · 2011 起)<span class="freq-badge freq-daily">日更</span></div>
   <div class="card">{gold_vol_html}</div>
-  <!-- ━━━ 机构报告被公开解读(线索表) ━━━ -->
-  <div class="part-title"><span class="part-num">＋</span>机构研究报告 · 被公开解读的线索 (按机构 · 近 6 个月 · 正文未读)<span class="freq-badge freq-daily">日更</span></div>
-  <div class="card">{report_leads_html}</div>
+  <!-- ━━━ 联邦基金利率 × 金价 × 油价 ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>联邦基金利率 × 金价 × 油价 (1970 起 · 月度 · 右轴对数)<span class="freq-badge freq-daily">日更</span></div>
+  <div class="card">{fed_gold_oil_html}</div>
+  <!-- ━━━ 金油比 ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>金油比 · 黄金 ÷ WTI 原油 (1971 起 · 月度 · 对数轴)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{gold_oil_html}</div>
+  <!-- ━━━ 比特币 ÷ 黄金 ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>比特币 ÷ 黄金 · 暴涨暴跌与事件 (2010 起 · 月度 · 对数轴)<span class="freq-badge freq-daily">日更</span></div>
+  <div class="card">{btc_gold_html}</div>
   <!-- ━━━ 道指/标普 ÷ 黄金 50 年比值 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>股指 ÷ 黄金 · 50 年比值 (道指÷金价 · 标普500÷金价 · 月度对数坐标 · 1976 年至今)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{stock_gold_html}</div>
+  <!-- ━━━ 美元指数 vs 黄金 + 年初至今大事件标注 ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>美元指数 vs 黄金 · 年初至今大事件标注 (双轴叠加 · 事件由价格异动反查并逐条核实出处)<span class="freq-badge freq-daily">价格每日 · 事件每周</span></div>
+  <div class="card">{dxy_gold_html}</div>
+  <!-- ━━━ 白银期货曲线价差 ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>白银期货 · 各月合约价差 (COMEX · 日度 · 对比持有成本)<span class="freq-badge freq-daily">日更</span></div>
+  <div class="card">{silver_curve_html}</div>
+  <!-- ━━━ COMEX 期货期权持仓(非 IV) ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>COMEX 期货期权持仓 (金/银 · Managed Money 方向，非隐含波动率)<span class="freq-badge freq-weekly">持仓周更</span></div>
+  <div class="card">{comex_optpos_html}</div>
+  <!-- ═══ 附三·十二D：白银做市商头寸(CFTC COT, 一手) ═══ -->
+  <div class="part-title" id="sec-silver-bank-positions"><span class="part-num">＋</span>白银做市商头寸 · CFTC COT commercial 净持仓 (做市商接货 vs 压价·一手真数据)<span class="freq-badge freq-weekly">每周更新</span></div>
+  <div class="card">{silver_bank_positions}</div>
+  <!-- ═══ 附三·十二E：COMEX 白银 issues/stops 静态参考(Michael Lynch) ═══ -->
+  <div class="part-title" id="sec-comex-silver-issues"><span class="part-num">＋</span>COMEX 白银 投行累计 issues/stops · 静态参考 (Michael Lynch @DtDS_WSS·CME封禁无法自动更新)<span class="freq-badge" style="background:#e8e2d5;color:#8a6d3b">静态参考</span></div>
+  <div class="card">{comex_silver_issues_ref}</div>
+  <!-- ═══ 附三·十二F：COMEX 做市商每周净 issue/stop 柱状图(金+银, 一手) ═══ -->
+  <div class="part-title" id="sec-comex-issue-stop"><span class="part-num">＋</span>COMEX 做市商每周净 issue/stop · 金+银 (一手·仅 House 自营·大行发货vs接货·每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{comex_issue_stop}</div>
+  <!-- ═══ 附三·十二G：COMEX 交割前十名 金/银/铂 per-firm (需求B, Chao 2026-08-22) ═══ -->
+  <div class="part-title" id="sec-comex-firms-top10"><span class="part-num">＋</span>COMEX 交割前十名 · 金/银/铂 (top10 交货方 vs 接货方·日/周/月切换·每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{comex_firms_top10}</div>
+  <!-- ━━━ 贵金属 ETF 期权波动率: ATM IV 期限结构 + 25D 偏斜 ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>贵金属 ETF 期权波动率 (GLD/SLV/IAU · ATM IV 期限结构 + 25D 偏斜)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{pm_optvol_html}</div>
+  <!-- ━━━ 黄金 ETF 分地区资金流 (WGC 官方) ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>黄金 ETF 分地区资金流 (北美/欧洲/亚洲/其他 · 世界黄金协会官方周度吨数)<span class="freq-badge freq-weekly">每周更新</span></div>
+  <div class="card">{gold_etf_region_html}</div>
+  <!-- ═══ 附三·十二A：COMEX & 上海贵金属库存 + GLD/SLV ETF 资金流 ═══ -->
+  <div class="part-title" id="sec-comex-inventory"><span class="part-num">＋</span>COMEX &amp; 上海贵金属库存 + GLD/SLV ETF 资金流 (金/银/铂 东西方库存对照 · 实物流向/逼仓信号)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{comex_inventory}</div>
+  <!-- ═══ 附三·十二B：BIS 自营黄金掉期 ═══ -->
+  <div class="part-title" id="sec-bis-gold-swaps"><span class="part-num">＋</span>BIS 自营黄金掉期 · 央行黄金市场隐秘干预信号 (吨 · 2010→今)<span class="freq-badge freq-quarterly">年度确认+月度推算</span></div>
+  <div class="card">{bis_gold_swaps}</div>
+  <!-- ═══ 附三·十二B2：美国黄金出口(FRED IEAXGG, 去美元化/回流实物金) ═══ -->
+  <div class="part-title" id="sec-gold-exports"><span class="part-num">＋</span>美国黄金出口 · Nonmonetary Gold Exports (各国黄金运回家·去美元化实物信号·2026Q1暴涨4.9×)<span class="freq-badge freq-quarterly">每季更新</span></div>
+  <div class="card">{gold_exports}</div>
+  <!-- ═══ 附三·十二B1：印度/中国黄金 domestic premium (WGC goldhub) ═══ -->
+  <div class="part-title" id="sec-gold-premium"><span class="part-num">＋</span>印度 &amp; 中国黄金 Domestic Premium/Discount (亚洲实物黄金需求风向标·WGC 真数据)<span class="freq-badge freq-weekly">周更/月更</span></div>
+  <div class="card">{gold_premium}</div>
+  <!-- ═══ 附三·十二B1b：印度白银月度进口 (UN Comtrade) ═══ -->
+  <div class="part-title" id="sec-silver-imports"><span class="part-num">＋</span>印度白银月度进口 · Silver Bullion Imports (全球最大白银进口国·实物需求风向标·UN Comtrade 免费月度)<span class="freq-badge freq-monthly">每月更新</span></div>
+  <div class="card">{silver_imports}</div>
+  <!-- ━━━ 机构报告被公开解读(线索表) ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>机构研究报告 · 被公开解读的线索 (按机构 · 近 6 个月 · 正文未读)<span class="freq-badge freq-daily">日更</span></div>
+  <div class="card">{report_leads_html}</div>
   <!-- ━━━ 密歇根信心 vs 全要素生产率相对趋势 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>消费者信心 vs 全要素生产率 (密歇根信心 · TFP 相对趋势 · 复刻 BofA Chart 10 · 1978 年至今)<span class="freq-badge freq-daily">每日检查</span></div>
   <div class="card">{tfp_sentiment_html}</div>
@@ -11273,18 +11444,6 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ LLM Token 支出指数 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>AI 算力价格 · LLM Token 支出指数 (Silicon Data SDLLMTK · 美元/百万 token · 全市场/闭源/开源)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{llm_token_html}</div>
-  <!-- ━━━ 美元指数 vs 黄金 + 年初至今大事件标注 ━━━ -->
-  <div class="part-title"><span class="part-num">＋</span>美元指数 vs 黄金 · 年初至今大事件标注 (双轴叠加 · 事件由价格异动反查并逐条核实出处)<span class="freq-badge freq-daily">价格每日 · 事件每周</span></div>
-  <div class="card">{dxy_gold_html}</div>
-  <!-- ━━━ 黄金 ETF 分地区资金流 (WGC 官方) ━━━ -->
-  <div class="part-title"><span class="part-num">＋</span>黄金 ETF 分地区资金流 (北美/欧洲/亚洲/其他 · 世界黄金协会官方周度吨数)<span class="freq-badge freq-weekly">每周更新</span></div>
-  <div class="card">{gold_etf_region_html}</div>
-  <!-- ━━━ 贵金属 ETF 期权波动率: ATM IV 期限结构 + 25D 偏斜 ━━━ -->
-  <div class="part-title"><span class="part-num">＋</span>贵金属 ETF 期权波动率 (GLD/SLV/IAU · ATM IV 期限结构 + 25D 偏斜)<span class="freq-badge freq-daily">每日更新</span></div>
-  <div class="card">{pm_optvol_html}</div>
-  <!-- ━━━ COMEX 期货期权持仓(非 IV) ━━━ -->
-  <div class="part-title"><span class="part-num">＋</span>COMEX 期货期权持仓 (金/银 · Managed Money 方向，非隐含波动率)<span class="freq-badge freq-weekly">持仓周更</span></div>
-  <div class="card">{comex_optpos_html}</div>
   <!-- ━━━ 全球货币供应(五大经济体聚合) + 加速度 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>全球货币供应与放水加速度 (美/欧/日/英/中 · 30 年)<span class="freq-badge freq-monthly">月度更新</span></div>
   <div class="card">{global_money_html}</div>
@@ -11317,33 +11476,6 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·七：美国石油库存运营红线 (Brent-WTI价差 / Cushing / SPR) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美国石油库存运营红线 · 能源安全 (Brent-WTI 价差 / Cushing / SPR · tank bottom)<span class="freq-badge freq-weekly">每周更新 · 价差每日</span></div>
   <div class="card">{oil_inventory}</div>
-  <!-- ═══ 附三·十二A：COMEX & 上海贵金属库存 + GLD/SLV ETF 资金流 ═══ -->
-  <div class="part-title" id="sec-comex-inventory"><span class="part-num">＋</span>COMEX &amp; 上海贵金属库存 + GLD/SLV ETF 资金流 (金/银/铂 东西方库存对照 · 实物流向/逼仓信号)<span class="freq-badge freq-daily">每日更新</span></div>
-  <div class="card">{comex_inventory}</div>
-  <!-- ═══ 附三·十二B：BIS 自营黄金掉期 ═══ -->
-  <div class="part-title" id="sec-bis-gold-swaps"><span class="part-num">＋</span>BIS 自营黄金掉期 · 央行黄金市场隐秘干预信号 (吨 · 2010→今)<span class="freq-badge freq-quarterly">年度确认+月度推算</span></div>
-  <div class="card">{bis_gold_swaps}</div>
-  <!-- ═══ 附三·十二B2：美国黄金出口(FRED IEAXGG, 去美元化/回流实物金) ═══ -->
-  <div class="part-title" id="sec-gold-exports"><span class="part-num">＋</span>美国黄金出口 · Nonmonetary Gold Exports (各国黄金运回家·去美元化实物信号·2026Q1暴涨4.9×)<span class="freq-badge freq-quarterly">每季更新</span></div>
-  <div class="card">{gold_exports}</div>
-  <!-- ═══ 附三·十二B1：印度/中国黄金 domestic premium (WGC goldhub) ═══ -->
-  <div class="part-title" id="sec-gold-premium"><span class="part-num">＋</span>印度 &amp; 中国黄金 Domestic Premium/Discount (亚洲实物黄金需求风向标·WGC 真数据)<span class="freq-badge freq-weekly">周更/月更</span></div>
-  <div class="card">{gold_premium}</div>
-  <!-- ═══ 附三·十二B1b：印度白银月度进口 (UN Comtrade) ═══ -->
-  <div class="part-title" id="sec-silver-imports"><span class="part-num">＋</span>印度白银月度进口 · Silver Bullion Imports (全球最大白银进口国·实物需求风向标·UN Comtrade 免费月度)<span class="freq-badge freq-monthly">每月更新</span></div>
-  <div class="card">{silver_imports}</div>
-  <!-- ═══ 附三·十二D：白银做市商头寸(CFTC COT, 一手) ═══ -->
-  <div class="part-title" id="sec-silver-bank-positions"><span class="part-num">＋</span>白银做市商头寸 · CFTC COT commercial 净持仓 (做市商接货 vs 压价·一手真数据)<span class="freq-badge freq-weekly">每周更新</span></div>
-  <div class="card">{silver_bank_positions}</div>
-  <!-- ═══ 附三·十二E：COMEX 白银 issues/stops 静态参考(Michael Lynch) ═══ -->
-  <div class="part-title" id="sec-comex-silver-issues"><span class="part-num">＋</span>COMEX 白银 投行累计 issues/stops · 静态参考 (Michael Lynch @DtDS_WSS·CME封禁无法自动更新)<span class="freq-badge" style="background:#e8e2d5;color:#8a6d3b">静态参考</span></div>
-  <div class="card">{comex_silver_issues_ref}</div>
-  <!-- ═══ 附三·十二F：COMEX 做市商每周净 issue/stop 柱状图(金+银, 一手) ═══ -->
-  <div class="part-title" id="sec-comex-issue-stop"><span class="part-num">＋</span>COMEX 做市商每周净 issue/stop · 金+银 (一手·仅 House 自营·大行发货vs接货·每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
-  <div class="card">{comex_issue_stop}</div>
-  <!-- ═══ 附三·十二G：COMEX 交割前十名 金/银/铂 per-firm (需求B, Chao 2026-08-22) ═══ -->
-  <div class="part-title" id="sec-comex-firms-top10"><span class="part-num">＋</span>COMEX 交割前十名 · 金/银/铂 (top10 交货方 vs 接货方·日/周/月切换·每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
-  <div class="card">{comex_firms_top10}</div>
   <!-- ═══ 附三·十一：美日财政政策事件时间线 ═══ -->
   <div class="part-title" id="sec-fiscal-news"><span class="part-num">＋</span>美日财政政策事件 · 债务上限/CR/补正预算/国债发行 (每日检索)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{fiscal_news}</div>
@@ -11415,6 +11547,8 @@ mkRadar('rLong', RADAR.long);
   // 组内成员也按 DOM 顺序 → 菜单自上而下 === 页面自上而下。
   // 「机构与政要持仓」由 Chao 指定固定放最后(在「其他」之下), 用 pinLast 标记。
   var GROUPS = [
+    // ★2026-10-10(Chao「按这个顺序」): 黄金白银 21 板块连成一段, 置于首位以优先命中
+    {{ name: '黄金白银', match: ['金银短线','金银回调','黄金波动率','联邦基金利率','金油比','比特币 ÷ 黄金','股指 ÷ 黄金','美元指数 vs 黄金','白银期货','COMEX 期货期权持仓','白银做市商','COMEX 白银','做市商每周净','COMEX 交割前十名','贵金属 ETF 期权','黄金 ETF 分地区','COMEX & 上海贵金属库存','自营黄金掉期','美国黄金出口','印度 & 中国黄金','印度白银月度进口'] }},
     {{ name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注','A/D 腾落线','市场广度'] }},
     // ★2026-08-25(Chao)：KOL 全量名录原先未命中任何关键词 → 掉进「其他」，
     // 但它本质就是 KOL 板块的一部分，归入本组。
@@ -11424,12 +11558,9 @@ mkRadar('rLong', RADAR.long);
     // 一个是 Fed 与外国央行的美元互换额度。均归入本组。
     {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','国际清算银行','三国货币供应','全球货币供应','M2 十年','Credit Impulse','信贷脉冲','中国央行流动性','央行货币互换','美元流动性互换'] }},
     {{ name: '债务与信用', match: ['政府债务','世界前十大经济体','公司债','OAS 利差','CIPS','跨境人民币','AI 产业链','自由现金流','信用维度'] }},
-    {{ name: '国债流动性观测', match: ['国债市场收益率','国债市场微观结构','中国模式断代监控','市场压力','基差套利去杠杆预警','SOFR 倒挂','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
+    {{ name: '国债流动性观测', match: ['WRS','国债市场收益率','国债市场微观结构','中国模式断代监控','市场压力','基差套利去杠杆预警','SOFR 倒挂','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
     {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','COMEX & 上海','贵金属库存','ETF 资金流','白银做市商','COMEX 白银','投行累计','做市商每周净','issue/stop','COMEX 交割前十名','交货方','自营黄金掉期','黄金出口','Nonmonetary','黄金 Domestic Premium','Premium/Discount','白银月度进口','Silver Bullion'] }},
-    // ★2026-10-06(Chao「跳动感」): 原先掉进「其他」的 15 个 + 被关键词错归的「美元指数 vs 黄金」,
-    //   本质都是跨资产/黄金白银/实体与 AI 观测, 单独成组, 避免被硬塞进国债流动性组。
-    {{ name: '跨资产与金银', match: ['美元指数 vs 黄金','金油比','比特币 ÷ 黄金','白银期货','股指 ÷ 黄金','黄金 ETF 分地区','贵金属 ETF 期权','COMEX 期货期权持仓','WRS','机构研究报告','印度 & 中国黄金'] }},
-    {{ name: '实体与 AI', match: ['消费者信心','美国货运','中美 AI 投资','AI 算力价格'] }},
+    {{ name: '实体、AI 与研报', match: ['机构研究报告','消费者信心','美国货运','中美 AI 投资','AI 算力价格'] }},
     {{ name: '财政政策', match: ['美日财政政策事件','债务上限','补正预算','国债发行','年度财政花费','财政花费','政府总支出'] }},
     {{ name: '日本市场', match: ['日经225','外资净买入','日本市场'] }},
     {{ name: '机构与政要持仓', match: ['机构持仓','13F','Trump'], pinLast: true }}

@@ -8968,6 +8968,179 @@ def fetch_btc_gold_ratio(base_path=None, events_path=None, cache_path=None):
     return out
 
 
+GS_TECH_SYMBOLS = [
+    # (代码, 名称, 分组, 说明)
+    ("GC=F", "COMEX 黄金期货", "金属本身", "COMEX 连续合约(Yahoo), 非现货/LBMA 定盘价; 换月会有跳点"),
+    ("SI=F", "COMEX 白银期货", "金属本身", "COMEX 连续合约(Yahoo), 非现货/LBMA 定盘价; 换月会有跳点"),
+    ("GLD", "GLD 黄金 ETF", "金属本身", "SPDR Gold Shares, 美元"),
+    ("SLV", "SLV 白银 ETF", "金属本身", "iShares Silver Trust, 美元"),
+    ("GDX", "GDX 美国金矿 ETF", "美国矿企指数", "VanEck Gold Miners ETF, 美元"),
+    ("GDXJ", "GDXJ 美国小型金矿 ETF", "美国矿企指数", "VanEck Junior Gold Miners ETF, 美元"),
+    ("SIL", "SIL 美国银矿 ETF", "美国矿企指数", "Global X Silver Miners ETF, 美元"),
+    ("SILJ", "SILJ 美国小型银矿 ETF", "美国矿企指数", "Amplify Junior Silver Miners ETF, 美元"),
+    ("159562.SZ", "中国黄金股 ETF 159562", "中国矿企", "深交所 ETF(代表中国黄金矿企指数), 人民币"),
+    ("600547.SS", "山东黄金", "中国矿企", "上交所 A 股, 人民币"),
+    ("600489.SS", "中金黄金", "中国矿企", "上交所 A 股, 人民币"),
+    ("601899.SS", "紫金矿业", "中国矿企", "上交所 A 股, 人民币"),
+]
+
+
+def _gs_sma(vals, n):
+    out = [None] * len(vals)
+    if len(vals) < n:
+        return out
+    s = sum(vals[:n]); out[n - 1] = s / n
+    for i in range(n, len(vals)):
+        s += vals[i] - vals[i - n]; out[i] = s / n
+    return out
+
+
+def _gs_rsi(vals, n=14):
+    """Wilder RSI(StockCharts 口径): 前 n 根简单平均起步, 之后 Wilder 平滑。"""
+    out = [None] * len(vals)
+    if len(vals) <= n:
+        return out
+    gains = [max(vals[i] - vals[i - 1], 0.0) for i in range(1, len(vals))]
+    losses = [max(vals[i - 1] - vals[i], 0.0) for i in range(1, len(vals))]
+    ag = sum(gains[:n]) / n; al = sum(losses[:n]) / n
+    out[n] = 100.0 if al == 0 else 100.0 - 100.0 / (1.0 + ag / al)
+    for i in range(n, len(gains)):
+        ag = (ag * (n - 1) + gains[i]) / n; al = (al * (n - 1) + losses[i]) / n
+        out[i + 1] = 100.0 if al == 0 else 100.0 - 100.0 / (1.0 + ag / al)
+    return out
+
+
+def fetch_gold_silver_tech(cache_path=None, keep=260):
+    """金银短线图: 12 个标的日线 OHLC + SMA20/50/200 + RSI14(Wilder)。
+    数据: Yahoo Finance 日线(约 3 年历史, 保证 1 年窗口内 200 日线完整); 指标在全历史上算, 只缓存最近 keep 根。
+    单个标的失败 → 用该标的旧缓存并标「缓存」, 绝不用空覆盖旧真值。"""
+    import requests as _rq, json as _json, time
+    from datetime import timezone, timedelta
+    root = os.path.join(os.path.dirname(__file__), "..", "data")
+    cache_path = cache_path or os.path.join(root, "gold_silver_tech_cache.json")
+    jst = datetime.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    try:
+        old = {x["sym"]: x for x in _json.load(open(cache_path, encoding="utf-8")).get("items", [])}
+    except Exception:
+        old = {}
+    out = {"status": "ok", "as_of": jst, "warnings": [], "items": []}
+    H = {"User-Agent": "Mozilla/5.0"}
+    t1 = int(datetime.datetime.utcnow().timestamp()) + 86400; t0 = t1 - 1250 * 86400
+    ok_n = 0
+    for sym, name, grp, note in GS_TECH_SYMBOLS:
+        item = None
+        try:
+            r = None
+            for _ in range(2):
+                r = _rq.get(f"https://query1.finance.yahoo.com/v8/finance/chart/{sym}", params={"period1": t0, "period2": t1, "interval": "1d"}, headers=H, timeout=40)
+                if r.status_code == 200:
+                    break
+                time.sleep(1.5)
+            if r.status_code != 200:
+                raise RuntimeError(f"HTTP {r.status_code}")
+            j = r.json()["chart"]["result"][0]; q = j["indicators"]["quote"][0]
+            rows = []
+            for k, ts in enumerate(j["timestamp"]):
+                o_, h_, l_, c_ = q["open"][k], q["high"][k], q["low"][k], q["close"][k]
+                if None in (o_, h_, l_, c_):
+                    continue
+                rows.append((datetime.datetime.utcfromtimestamp(ts).strftime("%Y-%m-%d"), float(o_), float(h_), float(l_), float(c_), float(q["volume"][k] or 0)))
+            dd = {}
+            for x in rows:
+                dd[x[0]] = x
+            rows = [dd[k] for k in sorted(dd)]
+            if len(rows) < 260:
+                raise RuntimeError(f"仅 {len(rows)} 根日线")
+            cl = [x[4] for x in rows]
+            m20, m50, m200, rs = _gs_sma(cl, 20), _gs_sma(cl, 50), _gs_sma(cl, 200), _gs_rsi(cl, 14)
+            sl = slice(len(rows) - keep, len(rows))
+            rd = lambda v, k=4: None if v is None else round(v, k)
+            item = {"sym": sym, "name": name, "grp": grp, "note": note, "src": "live",
+                    "d": [x[0] for x in rows[sl]], "o": [rd(x[1]) for x in rows[sl]], "h": [rd(x[2]) for x in rows[sl]],
+                    "l": [rd(x[3]) for x in rows[sl]], "c": [rd(x[4]) for x in rows[sl]], "v": [int(x[5]) for x in rows[sl]],
+                    "ma20": [rd(v) for v in m20[sl]], "ma50": [rd(v) for v in m50[sl]], "ma200": [rd(v) for v in m200[sl]], "rsi": [rd(v, 2) for v in rs[sl]],
+                    "n_hist": len(rows), "contract": (j.get("meta", {}).get("longName") or j.get("meta", {}).get("shortName") or "")}
+            ok_n += 1
+        except Exception as e:
+            out["warnings"].append(f"{sym} 抓取失败({type(e).__name__}: {str(e)[:50]}), " + ("使用该标的旧缓存" if sym in old else "且无缓存, 本图缺失"))
+            if sym in old:
+                item = dict(old[sym]); item["src"] = "cache"
+        if item:
+            out["items"].append(item)
+        time.sleep(0.4)
+    if ok_n == 0:
+        out["status"] = "error" if not out["items"] else "cached"
+        return out
+    if out["warnings"]:
+        out["status"] = "partial"
+    _json.dump(out, open(cache_path, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+    return out
+
+
+def fetch_fed_gold_oil(cache_path=None):
+    """联邦基金利率 × 金价 × 油价(月度, 1970 起)。
+    利率: FRED FEDFUNDS(有效利率月均), 最新未发布月用 DFF 日度当月均值补。
+    金价: datahub gold-prices(世界银行 Pink Sheet 月均, 与项目「金油比/股金比」底表同源, 逐月对过 668 个月 0 差异), 其后月份用 Yahoo GC=F 当月日均补。
+    油价: FRED WTISPLC(WTI 现货月均; 1973 年前为管制标价, 页面注明), 最新未发布月用 DCOILWTICO 日度当月均值补。
+    失败回退缓存, 绝不用空覆盖旧真值。"""
+    import requests as _rq, json as _json, csv as _csv, io as _io
+    from datetime import timezone, timedelta
+    root = os.path.join(os.path.dirname(__file__), "..", "data")
+    cache_path = cache_path or os.path.join(root, "fed_gold_oil_cache.json")
+    jst = datetime.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    out = {"status": "ok", "as_of": jst, "warnings": [], "m": [], "ff": [], "gold": [], "oil": [], "src": {}}
+    H = {"User-Agent": "Mozilla/5.0"}
+    def _monthly_mean(daily):
+        acc = {}
+        for d, v in daily:
+            acc.setdefault(d[:7], []).append(v)
+        return {m: sum(x) / len(x) for m, x in acc.items()}
+    try:
+        ff = {d[:7]: v for d, v in _fred_series("FEDFUNDS", "1970-01-01")}
+        if len(ff) < 600:
+            raise RuntimeError(f"FEDFUNDS 仅 {len(ff)} 月")
+        dff = _monthly_mean(_fred_series("DFF", "2026-01-01"))
+        for m, v in dff.items():
+            if m not in ff:
+                ff[m] = v; out["src"]["ff_" + m] = "DFF 日度当月均值(FEDFUNDS 月值未发布)"
+        oil = {d[:7]: v for d, v in _fred_series("WTISPLC", "1970-01-01")}
+        if len(oil) < 600:
+            raise RuntimeError(f"WTISPLC 仅 {len(oil)} 月")
+        wti = _monthly_mean(_fred_series("DCOILWTICO", "2026-01-01"))
+        for m, v in wti.items():
+            if m not in oil:
+                oil[m] = v; out["src"]["oil_" + m] = "DCOILWTICO 日度当月均值(WTISPLC 月值未发布)"
+        t = _rq.get("https://raw.githubusercontent.com/datasets/gold-prices/master/data/monthly.csv", headers=H, timeout=40).text
+        gold = {r["Date"]: float(r["Price"]) for r in _csv.DictReader(_io.StringIO(t)) if r["Date"] >= "1970-01"}
+        if len(gold) < 600:
+            raise RuntimeError(f"金价仅 {len(gold)} 月")
+        last_g = max(gold)
+        t0 = int(datetime.datetime(2026, 1, 1, tzinfo=timezone.utc).timestamp()); t1 = int(datetime.datetime.utcnow().timestamp()) + 86400
+        r = _rq.get("https://query1.finance.yahoo.com/v8/finance/chart/GC=F", params={"period1": t0, "period2": t1, "interval": "1d"}, headers=H, timeout=40)
+        j = r.json()["chart"]["result"][0]
+        gd = [(datetime.datetime.utcfromtimestamp(x).strftime("%Y-%m-%d"), float(c)) for x, c in zip(j["timestamp"], j["indicators"]["quote"][0]["close"]) if c]
+        for m, v in _monthly_mean(gd).items():
+            if m > last_g:
+                gold[m] = v; out["src"]["gold_" + m] = "Yahoo GC=F 当月日均(底表未发布)"
+        months = sorted(set(ff) & set(gold) & set(oil))
+        months = [m for m in months if m >= "1970-01"]
+        if len(months) < 600:
+            raise RuntimeError(f"三序列共同月仅 {len(months)}")
+        out["m"] = months
+        out["ff"] = [round(ff[m], 3) for m in months]
+        out["gold"] = [round(gold[m], 2) for m in months]
+        out["oil"] = [round(oil[m], 2) for m in months]
+        _json.dump(out, open(cache_path, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+    except Exception as e:
+        try:
+            c = _json.load(open(cache_path, encoding="utf-8"))
+            c["status"] = "cached"; c["warnings"] = (c.get("warnings") or []) + [f"在线抓取失败({type(e).__name__}: {str(e)[:60]}), 使用缓存"]
+            return c
+        except Exception:
+            out["status"] = "error"; out["warnings"].append(f"抓取失败且无缓存: {type(e).__name__}: {str(e)[:80]}")
+    return out
+
+
 def fetch_gold_volatility(cache_path=None):
     """黄金波动率(周线): Yahoo COMEX 黄金期货 GC=F 周线 OHLC + FRED GVZCLS(CBOE 黄金波动率指数, 日度→取每周最后值)。
     指标全部自算: 5 条简单均线(82/105/127/148/170 周)、布林带宽度(40,2)/(80,2)=(上轨-下轨)/中轨×100(总体σ)、ATR(14) Wilder。

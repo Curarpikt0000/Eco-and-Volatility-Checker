@@ -777,6 +777,14 @@ def main():
     except Exception as e:
         print(f"[dashboard] 黄金波动率 跳过: {e}")
 
+    # ── 联邦基金利率 × 金价 × 油价(月度 1970 起) ──
+    fed_gold_oil = {}
+    try:
+        fed_gold_oil = ed.fetch_fed_gold_oil() or {}
+        print(f"[dashboard] 利率×金×油: status={fed_gold_oil.get('status')} {len(fed_gold_oil.get('m', []))} 月 末={(fed_gold_oil.get('m') or ['-'])[-1]} warn={fed_gold_oil.get('warnings')}")
+    except Exception as e:
+        print(f"[dashboard] 利率×金×油 跳过: {e}")
+
     # ── 机构研究报告被公开解读(线索表, 读 data/report_leads.json; 采集由 src/report_leads.py 单独跑) ──
     report_leads = {}
     try:
@@ -973,6 +981,7 @@ def main():
         silver_curve=silver_curve,
         analog_corr=analog_corr,
         gold_vol=gold_vol,
+        fed_gold_oil=fed_gold_oil,
         report_leads=report_leads,
         us_freight=us_freight,
         ust_micro=ust_micro,
