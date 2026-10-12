@@ -1,10 +1,14 @@
 # Adding a new "data source → dashboard section" (repeatable checklist)
 
+> 补充(2026-10-10)：长史叠加图(利率×金×油对数轴)、隔离整站构建硬检查脚本骨架、COT 发布时差判据、OI/库存折吨、30Y−2Y/银行融资压力读法见 `references/long-history-overlay-chart-and-cot-oi-reading.md`。
+
 This is the canonical procedure for the recurring request "帮我把这张图/这个指标也建进 dashboard".
 Done 3× in one session (silver COT positioning, COMEX silver issues static ref, US gold exports)
 with identical wiring. Follow in order; each step has a known anchor file.
 
-## Batch of charts at once ("这5个图，你能拿到数据就做哪个")
+> 补充(2026-10-09)：用户发截图问「这张图你能做吗」时的**逐线源审计、付费源诚实版、对齐口径反推对账、用图上读数对账判 SMA/EMA、隔离整站构建（硬检查清单）+ 无头 Chromium 验收、generate() 最小形参坑**见 `references/replicate-chart-from-screenshot-and-isolated-build.md`。
+
+## Batch of charts at once ("这 5 个图，你能拿到数据就做哪个")
 Chao often sends SEVERAL reference-image charts in one turn and says build the ones you can get
 data for. Do NOT block the whole batch waiting on the hardest source. Triage FIRST, then execute:
 - For each chart: run step-0 source vetting → classify ✅buildable-now / ⚠️needs-user-input / ❌blocked.
