@@ -1,38 +1,7 @@
 {
  "table": "HDB_NIKKEI",
- "count": 242,
+ "count": 241,
  "rows": [
-  {
-   "uid": "nk|2025-10-10",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2025-10-10"
-       }
-      }
-     ]
-    },
-    "收盘": {
-     "number": 48088.8
-    },
-    "涨跌幅": {
-     "number": null
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "FRED NIKKEI225 (日经225指数,日频)"
-       }
-      }
-     ]
-    }
-   }
-  },
   {
    "uid": "nk|2025-10-14",
    "props": {
@@ -50,7 +19,7 @@
      "number": 46847.32
     },
     "涨跌幅": {
-     "number": -2.582
+     "number": null
     },
     "数据源": {
      "rich_text": [
