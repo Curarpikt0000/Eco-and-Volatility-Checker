@@ -1,6 +1,6 @@
 {
  "table": "HDB_YIELDS",
- "count": 257,
+ "count": 258,
  "rows": [
   {
    "uid": "y|2025-10-14",
@@ -10279,6 +10279,46 @@
     },
     "利差": {
      "number": 2.131
+    }
+   }
+  },
+  {
+   "uid": "y|2026-10-09",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-09"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/us_jp_yields.json .points"
+       }
+      }
+     ]
+    },
+    "US10Y": {
+     "number": null
+    },
+    "US30Y": {
+     "number": null
+    },
+    "JP10Y": {
+     "number": 3.027
+    },
+    "JP30Y": {
+     "number": 4.085
+    },
+    "利差": {
+     "number": null
     }
    }
   }
