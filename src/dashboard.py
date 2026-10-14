@@ -1615,7 +1615,7 @@ def _cn_cap_svg(series, w=940, h=250, unit="", colors=None, stacked=False, dec=0
     return "".join(p)
 
 
-def _cn_capital_html(o, cl):
+def _cn_capital_html(o, cl, hk_hold=None):
     """A 股资金面: ①国家队直接持股(季频) ②北向持股市值(季频快照) ③南向净买入累计(日频)
     ④⑤ 复用宽基 ETF 份额 / 两融余额(来自 cn_liq)。口径坑全部写在页面上, 不替「超级平准/超级外资」背书。"""
     if not o or o.get("status") == "error":
@@ -1696,6 +1696,25 @@ def _cn_capital_html(o, cl):
                  '下图为近 3 年累计（起点归零，单位万亿港元）及同期恒生指数；数据 2014-11-17 起日频完整。</p>')
         h.append(_cn_cap_svg([("南向近3年累计净买入", c3)], unit=" 万亿港元", dec=2, ylab="万亿港元", colors=["#6b8fb5"], h=220))
         h.append(_cn_cap_svg([("恒生指数收盘", hsi)], unit="", dec=0, ylab="恒指", colors=["#b58a6a"], h=190))
+        hh = (hk_hold or {}).get("d") or {}
+        if len(hh) >= 20:
+            hk = sorted(hh)
+            lastd = hk[-1]
+            cap_now = hh[lastd][0] / 1e4
+            top10 = hh[lastd][2]
+            # 与恒指对齐比较起点: 持股存量与恒指同期涨幅 → 估算「价格效应」占多少(只描述, 不下结论)
+            d0 = hk[0]
+            hsi_map = {d: sd[d][1] for d in sd if sd[d][1]}
+            note = ""
+            if d0 in hsi_map and lastd in hsi_map:
+                note = (f'同期恒指 {hsi_map[d0]:,.0f} → {hsi_map[lastd]:,.0f}（{(hsi_map[lastd] / hsi_map[d0] - 1) * 100:+.0f}%），'
+                        f'港股通持股市值 {hh[d0][0] / 1e4:.2f} → {cap_now:.2f} 万亿港元（{(hh[lastd][0] / hh[d0][0] - 1) * 100:+.0f}%）。')
+            h.append(f'<p class="oil-meta"><b>南向持股存量（港股通在港股持有的总市值）</b>：{lastd} 为 <b>{cap_now:.2f} 万亿港元</b>，'
+                     f'共 {hh[lastd][1]} 只，前十大合计占 {top10}%。{note}'
+                     f'<b>注意：这是存量，包含港股价格涨跌，不等于净买入</b>（净买入见上方累计线）。'
+                     f'数据 {hk[0]} 起日频（接口只存约两年）；港股通两个通道返回同一份持股，已只取一个通道，没有重复计算。</p>')
+            h.append(_cn_cap_svg([("南向持股市值", [(d, hh[d][0] / 1e4) for d in hk])], unit=" 万亿港元", dec=2,
+                                 ylab="万亿港元", colors=["#7fa085"], h=210))
     # ④⑤ 复用
     cl = cl or {}
     etf = (cl.get("etf") or {}).get("series") or {}
@@ -2968,7 +2987,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, gs_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, cn_hk_hold=None, gs_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -3218,7 +3237,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         gold_vol_html=_gold_vol_html(gold_vol),
         fed_gold_oil_html=_fed_gold_oil_html(fed_gold_oil),
         gs_tech_html=_gs_tech_html(gs_tech),
-        cn_capital_html=_cn_capital_html(cn_capital, cn_liq),
+        cn_capital_html=_cn_capital_html(cn_capital, cn_liq, cn_hk_hold),
         report_leads_html=_report_leads_html(report_leads),
         us_freight_html=_us_freight_html(us_freight),
         ust_micro_html=_ust_micro_html(ust_micro),

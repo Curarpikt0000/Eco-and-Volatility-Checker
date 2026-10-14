@@ -787,6 +787,16 @@ def main():
     except Exception as e:
         print(f"[dashboard] A股资金面 跳过: {type(e).__name__}: {e}")
 
+    # ── 港股通(南向)持股存量日频: 每次运行补缺, 限时 120 秒 ──
+    cn_hk_hold = {}
+    try:
+        from fetchers.cn_capital_hk_hold import run as _hk_run
+        cn_hk_hold, _n = _hk_run(120)
+        print(f"[dashboard] 南向持股存量: status={cn_hk_hold.get('status')} 本次新增={_n} 累计={len(cn_hk_hold.get('d', {}))} "
+              f"剩余={cn_hk_hold.get('remaining')} 警告={cn_hk_hold.get('warnings')}")
+    except Exception as e:
+        print(f"[dashboard] 南向持股存量 跳过: {type(e).__name__}: {e}")
+
     # ── 金银短线图(12 标的日线 + MA + RSI) ──
     gs_tech = {}
     try:
@@ -1002,6 +1012,7 @@ def main():
         fed_gold_oil=fed_gold_oil,
         gs_tech=gs_tech,
         cn_capital=cn_capital,
+        cn_hk_hold=cn_hk_hold,
         report_leads=report_leads,
         us_freight=us_freight,
         ust_micro=ust_micro,
