@@ -1538,6 +1538,184 @@ all()})();</script>""".replace("__DATA__", data).replace("__IDS__", ids)
 """
 
 
+def _cn_cap_svg(series, w=940, h=250, unit="", colors=None, stacked=False, dec=0, ylab=""):
+    """通用 A 股资金面折线/堆叠柱。series: [(名称, [(日期, 值), ...])]; 每点/每柱 悬停 data-tip。
+    stacked=True: 按日期对齐画堆叠柱(季频存量); 否则折线(日频)。"""
+    colors = colors or ["#6b8fb5", "#7fa085", "#b58a6a", "#9a7ca8"]
+    series = [(n, [(d, v) for d, v in pts if v is not None]) for n, pts in series]
+    series = [(n, pts) for n, pts in series if pts]
+    if not series:
+        return ""
+    ml, mr, mt, mb = 62, 14, 24, 44
+    pw, ph = w - ml - mr, h - mt - mb
+    p = [f'<svg viewBox="0 0 {w} {h}" preserveAspectRatio="xMidYMid meet">']
+    if stacked:
+        dates = sorted({d for _, pts in series for d, _ in pts})
+        m = {n: dict(pts) for n, pts in series}
+        tot = [sum(m[n].get(d, 0) for n, _ in series) for d in dates]
+        top = max(tot) * 1.1 or 1
+        Y = lambda v: mt + ph - ph * v / top
+        step = pw / len(dates)
+        bw = step * 0.62
+        for k in range(5):
+            tv = top * k / 4
+            yy = Y(tv)
+            p.append(f'<line x1="{ml}" y1="{yy:.1f}" x2="{ml+pw}" y2="{yy:.1f}" stroke="#2a2f3a" stroke-dasharray="3 3"/>')
+            p.append(f'<text x="{ml-7}" y="{yy+3.5:.1f}" text-anchor="end" font-size="10" fill="#8b93a7">{tv:,.{dec}f}</text>')
+        for i, d in enumerate(dates):
+            cx = ml + step * i + step / 2
+            acc = 0
+            for j, (n, _) in enumerate(series):
+                v = m[n].get(d)
+                if v is None:
+                    continue
+                y1, y0 = Y(acc + v), Y(acc)
+                acc += v
+                tip = f'{d}｜{n} {v:,.{dec}f}{unit}（合计 {tot[i]:,.{dec}f}{unit}）'
+                p.append(f'<rect class="tip-hit" x="{cx-bw/2:.1f}" y="{y1:.1f}" width="{bw:.1f}" '
+                         f'height="{max(y0-y1, 0.5):.1f}" fill="{colors[j % len(colors)]}" opacity="0.85" data-tip="{_esc(tip)}"/>')
+            if i % max(1, len(dates) // 10) == 0 or i == len(dates) - 1:
+                p.append(f'<text x="{cx:.1f}" y="{mt+ph+14:.1f}" text-anchor="middle" font-size="9" fill="#7c8496">{_esc(d[2:7])}</text>')
+    else:
+        allv = [v for _, pts in series for _, v in pts]
+        lo, hi = min(allv), max(allv)
+        pad = (hi - lo) * 0.12 or 1
+        lo -= pad
+        hi += pad
+        dates = sorted({d for _, pts in series for d, _ in pts})
+        idx = {d: i for i, d in enumerate(dates)}
+        X = lambda d: ml + pw * idx[d] / max(len(dates) - 1, 1)
+        Y = lambda v: mt + ph - ph * (v - lo) / (hi - lo)
+        for k in range(5):
+            tv = lo + (hi - lo) * k / 4
+            yy = Y(tv)
+            p.append(f'<line x1="{ml}" y1="{yy:.1f}" x2="{ml+pw}" y2="{yy:.1f}" stroke="#2a2f3a" stroke-dasharray="3 3"/>')
+            p.append(f'<text x="{ml-7}" y="{yy+3.5:.1f}" text-anchor="end" font-size="10" fill="#8b93a7">{tv:,.{dec}f}</text>')
+        if lo < 0 < hi:
+            p.append(f'<line x1="{ml}" y1="{Y(0):.1f}" x2="{ml+pw}" y2="{Y(0):.1f}" stroke="#8b93a7" opacity=".7"/>')
+        for j, (n, pts) in enumerate(series):
+            c = colors[j % len(colors)]
+            pl = " ".join(f"{X(d):.1f},{Y(v):.1f}" for d, v in pts)
+            p.append(f'<polyline points="{pl}" fill="none" stroke="{c}" stroke-width="1.6"/>')
+            stp = max(1, len(pts) // 260)
+            hit = pts[::stp]
+            if hit[-1] != pts[-1]:
+                hit.append(pts[-1])
+            for d, v in hit:
+                tip = f"{d}｜{n} {v:,.{dec}f}{unit}"
+                p.append(f'<circle class="tip-hit" cx="{X(d):.1f}" cy="{Y(v):.1f}" r="5" fill="transparent" data-tip="{_esc(tip)}"/>')
+        for i in range(0, len(dates), max(1, len(dates) // 9)):
+            p.append(f'<text x="{X(dates[i]):.1f}" y="{mt+ph+14:.1f}" text-anchor="middle" font-size="9" fill="#7c8496">{_esc(dates[i][2:7])}</text>')
+    lx = ml
+    for j, (n, _) in enumerate(series):
+        p.append(f'<rect x="{lx}" y="{h-18}" width="10" height="10" fill="{colors[j % len(colors)]}"/>'
+                 f'<text x="{lx+14}" y="{h-9}" font-size="9.5" fill="#8b93a7">{_esc(n)}</text>')
+        lx += 26 + len(n) * 11
+    p.append(f'<text x="{ml}" y="{mt-5}" font-size="10" fill="#8b93a7">{_esc(ylab)}</text></svg>')
+    return "".join(p)
+
+
+def _cn_capital_html(o, cl):
+    """A 股资金面: ①国家队直接持股(季频) ②北向持股市值(季频快照) ③南向净买入累计(日频)
+    ④⑤ 复用宽基 ETF 份额 / 两融余额(来自 cn_liq)。口径坑全部写在页面上, 不替「超级平准/超级外资」背书。"""
+    if not o or o.get("status") == "error":
+        err = "；".join((o or {}).get("warnings", [])[:2])
+        return f'<p class="empty">A 股资金面数据同步中{(chr(0xff1a) + _esc(err)) if err else ""}。</p>'
+    h = []
+    warn = o.get("warnings") or []
+    if warn:
+        h.append(f'<p class="sgr-warn">⚠ {_esc("；".join(warn[:3]))}</p>')
+    h.append('<div class="sfc-note"><b>先读口径：</b>本板块全部来自交易所/东方财富披露库的<b>真实披露数据</b>，没有任何推算。'
+             '行情软件里的「超级平准持仓占比」「超级外资累计净买入」是软件自定义口径，<b>公开资料查不到定义，'
+             '本板块不复刻、也不等同于它们</b>。</div>')
+    # ① 国家队
+    hq = o.get("holders_q") or {}
+    qs = sorted(hq)[-24:]
+    names = ["汇金投资", "汇金资管", "证金"]
+    if qs:
+        h.append('<div class="part-title" style="font-size:14px;margin-top:10px">① 国家队直接持股市值 · 季末'
+                 '<span class="freq-badge freq-quarterly">季度更新</span></div>')
+        last = qs[-1]
+        lv = hq[last]
+        tot = sum(v["cap_yi"] for v in lv.values())
+        h.append(f'<p class="oil-meta">三家合计 <b>{tot/1e4:.2f} 万亿元</b>（{last} 十大流通股东披露口径）。'
+                 f'汇金投资只直接持有 {lv.get("汇金投资", {}).get("n", 0)} 只，以四大行为主，是这条线的绝对主体，'
+                 '季度间变化主要来自股价而非买卖。</p>')
+        ser = [(nm, [(q, hq[q][nm]["cap_yi"] / 1e4 if nm in hq[q] else None) for q in qs]) for nm in names]
+        h.append(_cn_cap_svg(ser, stacked=True, unit=" 万亿元", dec=2, ylab="万亿元"))
+        hs = o.get("holders_stocks") or {}
+        if len(qs) >= 3 and all(q in hs for q in qs[-3:]):
+            base = qs[-2]
+            basket = {c for c, v in hs[base].items() if "证金" in v or "汇金资管" in v}
+            row = []
+            for q in qs[-4:]:
+                if q not in hs:
+                    continue
+                sh = {c: hs[q].get(c, {}).get("证金", 0) + hs[q].get(c, {}).get("汇金资管", 0) for c in basket}
+                row.append((q, sum(sh.values()) / 1e8, sum(1 for v in sh.values() if v > 0)))
+            if len(row) >= 2:
+                cells = "；".join(f"{q} {t:,.0f} 亿股（{n}/{len(basket)} 只有记录）" for q, t, n in row)
+                h.append('<p class="oil-meta" style="border-left:3px solid #c9a961;padding-left:9px">'
+                         '<b>读图提示：证金/汇金资管的「只数」逐季骤降，不能读成撤退。</b>'
+                         f'这是十大流通股东披露——掉出前十名就不再出现。以 {base} 时证金+汇金资管在列的 {len(basket)} 只股票为固定篮子，'
+                         f'合并两家股数（持股会在两家之间转移）：{cells}。'
+                         '最新一期「有记录只数」下降，可能是掉出前十、也可能是真减持，<b>这份数据区分不了，所以不据此下撤退结论</b>。'
+                         '另：汇金通过 ETF 的持仓不在本数据内（ETF 持有人仅半年报/年报披露前十大）。</p>')
+    # ② 北向
+    nq = o.get("north_q") or {}
+    if nq:
+        h.append('<div class="part-title" style="font-size:14px;margin-top:14px">② 北向（外资）持股市值 · 季末快照'
+                 '<span class="freq-badge freq-quarterly">季度更新</span></div>')
+        ks = sorted(nq)
+        lk = ks[-1]
+        h.append(f'<p class="oil-meta"><b>北向日度净买入已于 2024-08-16 起停止披露</b>（交易所只剩日成交额，净买入字段为空），'
+                 f'所以外资只能看季度存量：{lk} 持股 <b>{nq[lk]["cap_yi"]/1e4:.2f} 万亿元</b>，占 A 股流通市值 <b>{nq[lk]["ratio_pct"]:.2f}%</b>。'
+                 f'接口只给最近几期，本看板每次运行把拿到的期次存进本地档案，<b>历史从现在开始逐季积累，目前只有 {len(ks)} 个点</b>。'
+                 '持股市值含价格涨跌，不等于净买入。</p>')
+        h.append(_cn_cap_svg([("北向持股市值", [(k, nq[k]["cap_yi"] / 1e4) for k in ks])],
+                             stacked=True, unit=" 万亿元", dec=2, ylab="万亿元", h=210))
+    # ③ 南向
+    sd = o.get("south_d") or {}
+    if sd:
+        h.append('<div class="part-title" style="font-size:14px;margin-top:14px">③ 南向资金净买入累计 · 港股通'
+                 '<span class="freq-badge freq-daily">每日更新</span></div>')
+        ds = sorted(sd)
+        cutoff = (datetime.date.fromisoformat(ds[-1]) - datetime.timedelta(days=365 * 3)).isoformat()
+        acc = 0.0
+        c3 = []
+        for d in ds:
+            if d >= cutoff:
+                acc += sd[d][0]
+                c3.append((d, acc / 1e6))
+        hsi = [(d, sd[d][1]) for d in ds if d >= cutoff and sd[d][1]]
+        last5 = sum(sd[d][0] for d in ds[-5:]) / 100
+        last20 = sum(sd[d][0] for d in ds[-20:]) / 100
+        yt = sum(sd[d][0] for d in ds if d[:4] == ds[-1][:4]) / 100
+        h.append(f'<p class="oil-meta"><b>方向要看清：南向是内地资金买港股，不是外资</b>（H 股一侧最完整的跨境资金数据）。'
+                 f'截至 {ds[-1]}：近 5 日净买入 <b>{last5:,.0f} 亿港元</b>，近 20 日 <b>{last20:,.0f} 亿港元</b>，今年以来 <b>{yt:,.0f} 亿港元</b>。'
+                 '下图为近 3 年累计（起点归零，单位万亿港元）及同期恒生指数；数据 2014-11-17 起日频完整。</p>')
+        h.append(_cn_cap_svg([("南向近3年累计净买入", c3)], unit=" 万亿港元", dec=2, ylab="万亿港元", colors=["#6b8fb5"], h=220))
+        h.append(_cn_cap_svg([("恒生指数收盘", hsi)], unit="", dec=0, ylab="恒指", colors=["#b58a6a"], h=190))
+    # ④⑤ 复用
+    cl = cl or {}
+    etf = (cl.get("etf") or {}).get("series") or {}
+    mgr = cl.get("margin") or []
+    if etf or mgr:
+        h.append('<div class="part-title" style="font-size:14px;margin-top:14px">④ 宽基 ETF 份额 · ⑤ 两融余额'
+                 '<span class="freq-badge freq-daily">每日更新</span></div>')
+        h.append('<p class="oil-meta">这两张是日频代理指标，频率与上方季频数据不同。<b>注意：代理指标，不等同于国家队持仓。</b>'
+                 '④ 宽基 ETF 份额：三只份额各自以首日为 100 的指数化走势，2026 年的大幅下降是已用公开报道逐点核对过的真实赎回'
+                 '（沪深300ETF 2025-12-31 888.30 亿份 → 2026-08-10 248.61 亿份），不是数据故障。'
+                 '⑤ 两融余额：沪深两融合计余额，单位万亿元；纵轴出现负数刻度只是画图留白，余额本身不会为负。</p>')
+        if etf:
+            h.append(_etf_share_svg(etf, (cl.get("etf") or {}).get("names") or {}))
+        if mgr:
+            h.append(f'<p class="oil-meta">⑤ 两融余额（万亿元）· {mgr[0]["date"]} ~ {mgr[-1]["date"]} · 日频</p>')
+            h.append(_cn_line_svg(mgr, "v", unit="", color="#c9a961", dec=3))
+    h.append('<div class="sfc-foot">数据：东方财富披露库（十大流通股东、沪深港通）、上交所 ETF 规模表。仅陈述披露数据，不构成投资建议。</div>')
+    return "".join(h)
+
+
 def _fed_gold_oil_html(o):
     """联邦基金利率(左轴 线性 %) + 金价(美元/盎司) + WTI 油价(美元/桶)(右轴 共用对数美元轴), 月度 1970 起。内联 SVG + 悬停读数 + 开关。"""
     import json as _json, math as _m
@@ -2790,7 +2968,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, gs_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, gs_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -3040,6 +3218,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         gold_vol_html=_gold_vol_html(gold_vol),
         fed_gold_oil_html=_fed_gold_oil_html(fed_gold_oil),
         gs_tech_html=_gs_tech_html(gs_tech),
+        cn_capital_html=_cn_capital_html(cn_capital, cn_liq),
         report_leads_html=_report_leads_html(report_leads),
         us_freight_html=_us_freight_html(us_freight),
         ust_micro_html=_ust_micro_html(ust_micro),
@@ -11332,6 +11511,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="card">{cn_liq}</div>
 
   <!-- ═══ 央行美元流动性互换(Chao 2026-08-24 点名遗失指标) ═══ -->
+  <!-- ━━━ A 股资金面(国家队持股/北向/南向/ETF份额/两融) ━━━ -->
+  <div class="part-title" id="sec-cn-capital"><span class="part-num">＋</span>A 股资金面 · 国家队持股 / 北向 / 南向 / ETF 份额 / 两融 (真实披露数据 · 不含软件自定义口径)<span class="freq-badge freq-daily">日更 + 季更</span></div>
+  <div class="card">{cn_capital_html}</div>
   <!-- ★2026-08-31：原在页面最底部(DOM #47)，同属「流动性与央行」组 → 一并前移。 -->
   <div class="part-title" id="sec-cb-swaps"><span class="part-num">＋</span>央行货币互换 · 美元流动性互换 (Fed↔外国央行 · 离岸美元荒温度计)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{cb_swaps}</div>
@@ -11559,7 +11741,7 @@ mkRadar('rLong', RADAR.long);
     // ★2026-08-25(Chao)：「中国央行流动性」与「央行货币互换」原先都掉进「其他」，
     // 但两者本质都是央行流动性观测 —— 一个是 PBoC 的逆回购/DR007/MLF/SFISF，
     // 一个是 Fed 与外国央行的美元互换额度。均归入本组。
-    {{ name: '流动性与央行', match: ['流动性要点','央行资产负债表','国际清算银行','三国货币供应','全球货币供应','M2 十年','Credit Impulse','信贷脉冲','中国央行流动性','央行货币互换','美元流动性互换'] }},
+    {{ name: '流动性与央行', match: ['A 股资金面','流动性要点','央行资产负债表','国际清算银行','三国货币供应','全球货币供应','M2 十年','Credit Impulse','信贷脉冲','中国央行流动性','央行货币互换','美元流动性互换'] }},
     {{ name: '债务与信用', match: ['政府债务','世界前十大经济体','公司债','OAS 利差','CIPS','跨境人民币','AI 产业链','自由现金流','信用维度'] }},
     {{ name: '国债流动性观测', match: ['WRS','国债市场收益率','国债市场微观结构','中国模式断代监控','市场压力','基差套利去杠杆预警','SOFR 倒挂','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
     {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','COMEX & 上海','贵金属库存','ETF 资金流','白银做市商','COMEX 白银','投行累计','做市商每周净','issue/stop','COMEX 交割前十名','交货方','自营黄金掉期','黄金出口','Nonmonetary','黄金 Domestic Premium','Premium/Discount','白银月度进口','Silver Bullion'] }},

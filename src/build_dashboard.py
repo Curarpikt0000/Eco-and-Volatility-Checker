@@ -777,6 +777,16 @@ def main():
     except Exception as e:
         print(f"[dashboard] 黄金波动率 跳过: {e}")
 
+    # ── A 股资金面(国家队持股季频 / 北向季度快照 / 南向日度) ──
+    cn_capital = {}
+    try:
+        from fetchers.cn_capital import fetch_cn_capital
+        cn_capital = fetch_cn_capital() or {}
+        print(f"[dashboard] A股资金面: status={cn_capital.get('status')} 国家队季度={len(cn_capital.get('holders_q', {}))} "
+              f"北向季度={len(cn_capital.get('north_q', {}))} 南向日={len(cn_capital.get('south_d', {}))} 警告={cn_capital.get('warnings')}")
+    except Exception as e:
+        print(f"[dashboard] A股资金面 跳过: {type(e).__name__}: {e}")
+
     # ── 金银短线图(12 标的日线 + MA + RSI) ──
     gs_tech = {}
     try:
@@ -991,6 +1001,7 @@ def main():
         gold_vol=gold_vol,
         fed_gold_oil=fed_gold_oil,
         gs_tech=gs_tech,
+        cn_capital=cn_capital,
         report_leads=report_leads,
         us_freight=us_freight,
         ust_micro=ust_micro,
