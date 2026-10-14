@@ -797,6 +797,13 @@ def main():
     except Exception as e:
         print(f"[dashboard] 南向持股存量 跳过: {type(e).__name__}: {e}")
 
+    # ── 铀短线图(14 标的日线 + MA + RSI) ──
+    ur_tech = {}
+    try:
+        ur_tech = ed.fetch_uranium_tech() or {}
+        print(f"[dashboard] 铀短线图: status={ur_tech.get('status')} 标的={len(ur_tech.get('items', []))} 警告={ur_tech.get('warnings')}")
+    except Exception as e:
+        print(f"[dashboard] 铀短线图 跳过: {e}")
     # ── 金银短线图(12 标的日线 + MA + RSI) ──
     gs_tech = {}
     try:
@@ -1011,6 +1018,7 @@ def main():
         gold_vol=gold_vol,
         fed_gold_oil=fed_gold_oil,
         gs_tech=gs_tech,
+        ur_tech=ur_tech,
         cn_capital=cn_capital,
         cn_hk_hold=cn_hk_hold,
         report_leads=report_leads,

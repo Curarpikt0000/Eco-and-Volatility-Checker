@@ -9077,6 +9077,92 @@ def fetch_gold_silver_tech(cache_path=None, keep=260):
     return out
 
 
+URANIUM_TECH_SYMBOLS = [
+    # (代码, 名称, 分组, 说明)
+    ("SRUUF", "SPUT 实物铀信托(美元)", "铀本身", "Sprott Physical Uranium Trust 美股 OTC 价; 是信托份额二级市场价, 与 U3O8 现货有溢价/折价, 非现货价"),
+    ("YCA.L", "Yellow Cake 实物铀(伦敦)", "铀本身", "Yellow Cake plc 伦敦主板, 便士计价; 持有实物铀, 二级市场价, 非 U3O8 现货价"),
+    ("URA", "URA 铀与核能 ETF", "铀 ETF", "Global X Uranium ETF, 美元"),
+    ("URNM", "URNM 铀矿 ETF", "铀 ETF", "Sprott Uranium Miners ETF, 美元"),
+    ("NLR", "NLR 铀与核电 ETF", "铀 ETF", "VanEck Uranium and Nuclear ETF, 美元"),
+    ("CCJ", "Cameco", "矿企", "加拿大最大铀生产商, 纽交所美元价"),
+    ("NXE", "NexGen", "矿企", "Athabasca 盆地开发商(Rook I), 纽交所美元价"),
+    ("KAP.IL", "Kazatomprom", "矿企", "哈萨克斯坦国家原子能公司, 伦敦 GDR 美元价"),
+    ("PDN.AX", "Paladin", "矿企", "澳交所澳元价"),
+    ("DNN", "Denison", "矿企", "美股美元价"),
+    ("UUUU", "Energy Fuels", "矿企", "美股美元价"),
+    ("UEC", "Uranium Energy", "矿企", "美股美元价"),
+    ("BOE.AX", "Boss Energy", "矿企", "澳交所澳元价"),
+    ("1164.HK", "中广核矿业", "矿企", "港股港元价"),
+]
+
+
+def fetch_uranium_tech(cache_path=None, keep=260):
+    """铀短线图: 14 个标的日线 + SMA20/50/200 + RSI14(Wilder), 与金银短线图同口径。
+    铀现货(U3O8)无免费可靠日线(Yahoo UX=F 仅 1 根), 用两只实物铀信托作代理并在页面注明。
+    单个标的失败 → 用旧缓存并标「缓存」, 绝不用空覆盖旧真值。"""
+    import requests as _rq, json as _json, time
+    from datetime import timezone, timedelta
+    root = os.path.join(os.path.dirname(__file__), "..", "data")
+    cache_path = cache_path or os.path.join(root, "uranium_tech_cache.json")
+    jst = datetime.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    try:
+        old = {x["sym"]: x for x in _json.load(open(cache_path, encoding="utf-8")).get("items", [])}
+    except Exception:
+        old = {}
+    out = {"status": "ok", "as_of": jst, "warnings": [], "items": []}
+    H = {"User-Agent": "Mozilla/5.0"}
+    t1 = int(datetime.datetime.utcnow().timestamp()) + 86400; t0 = t1 - 1250 * 86400
+    ok_n = 0
+    for sym, name, grp, note in URANIUM_TECH_SYMBOLS:
+        item = None
+        try:
+            r = None
+            for _ in range(2):
+                r = _rq.get(f"https://query1.finance.yahoo.com/v8/finance/chart/{sym}", params={"period1": t0, "period2": t1, "interval": "1d"}, headers=H, timeout=30)
+                if r.status_code == 200:
+                    break
+                time.sleep(1.5)
+            if r.status_code != 200:
+                raise RuntimeError(f"HTTP {r.status_code}")
+            j = r.json()["chart"]["result"][0]; q = j["indicators"]["quote"][0]
+            rows = []
+            for k, ts in enumerate(j["timestamp"]):
+                o_, h_, l_, c_ = q["open"][k], q["high"][k], q["low"][k], q["close"][k]
+                if None in (o_, h_, l_, c_):
+                    continue
+                rows.append((datetime.datetime.utcfromtimestamp(ts).strftime("%Y-%m-%d"), float(o_), float(h_), float(l_), float(c_), float(q["volume"][k] or 0)))
+            dd = {}
+            for x in rows:
+                dd[x[0]] = x
+            rows = [dd[k] for k in sorted(dd)]
+            if len(rows) < 260:
+                raise RuntimeError(f"仅 {len(rows)} 根日线")
+            cl = [x[4] for x in rows]
+            m20, m50, m200, rs = _gs_sma(cl, 20), _gs_sma(cl, 50), _gs_sma(cl, 200), _gs_rsi(cl, 14)
+            sl = slice(len(rows) - keep, len(rows))
+            rd = lambda v, k=4: None if v is None else round(v, k)
+            item = {"sym": sym, "name": name, "grp": grp, "note": note, "src": "live",
+                    "d": [x[0] for x in rows[sl]], "o": [rd(x[1]) for x in rows[sl]], "h": [rd(x[2]) for x in rows[sl]],
+                    "l": [rd(x[3]) for x in rows[sl]], "c": [rd(x[4]) for x in rows[sl]], "v": [int(x[5]) for x in rows[sl]],
+                    "ma20": [rd(v) for v in m20[sl]], "ma50": [rd(v) for v in m50[sl]], "ma200": [rd(v) for v in m200[sl]], "rsi": [rd(v, 2) for v in rs[sl]],
+                    "n_hist": len(rows), "contract": (j.get("meta", {}).get("longName") or j.get("meta", {}).get("shortName") or "")}
+            ok_n += 1
+        except Exception as e:
+            out["warnings"].append(f"{sym} 抓取失败({type(e).__name__}: {str(e)[:50]}), " + ("使用该标的旧缓存" if sym in old else "且无旧缓存, 该标的本次缺失"))
+            if sym in old:
+                item = dict(old[sym]); item["src"] = "cache"
+        if item:
+            out["items"].append(item)
+        time.sleep(0.4)
+    if ok_n == 0:
+        out["status"] = "error" if not out["items"] else "cached"
+        return out
+    if out["warnings"]:
+        out["status"] = "partial"
+    _json.dump(out, open(cache_path, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+    return out
+
+
 def fetch_fed_gold_oil(cache_path=None):
     """联邦基金利率 × 金价 × 油价(月度, 1970 起)。
     利率: FRED FEDFUNDS(有效利率月均), 最新未发布月用 DFF 日度当月均值补。

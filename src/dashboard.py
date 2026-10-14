@@ -1538,6 +1538,77 @@ all()})();</script>""".replace("__DATA__", data).replace("__IDS__", ids)
 """
 
 
+
+def _ur_tech_html(o):
+    """铀短线图(克隆自金银, 前缀 urt-): 每个标的一张图 = 价格(收盘线+SMA20/50/200) + 上方 RSI(14); 默认近 90 个交易日, 可切 60/130/250;
+    悬停读数(收/MA/RSI/距各均线%), 每图下一行事实状态。内联 SVG, 数据一次性嵌入 JS。"""
+    import json as _json
+    if not o or o.get("status") == "error" or not o.get("items"):
+        err = "；".join((o or {}).get("warnings", [])[:2])
+        return f'<p class="empty">铀短线图同步中{(chr(0xff1a) + _esc(err)) if err else ""}。</p>'
+    items = o["items"]
+    groups = []
+    for it in items:
+        if it["grp"] not in groups:
+            groups.append(it["grp"])
+    def status_line(it):
+        c, m20, m50, m200, r = it["c"][-1], it["ma20"][-1], it["ma50"][-1], it["ma200"][-1], it["rsi"][-1]
+        def rel(m, n):
+            if m is None: return f"{n}日线缺"
+            return f"{'站上' if c >= m else '跌破'}{n}日线({(c / m - 1) * 100:+.1f}%)"
+        rz = "超买区" if r is not None and r >= 70 else ("超卖区" if r is not None and r <= 30 else "中性区")
+        prev = it["c"][-2]
+        return f"{it['d'][-1]} 收 {c:g}（日 {(c / prev - 1) * 100:+.2f}%）｜{rel(m20, 20)}、{rel(m50, 50)}、{rel(m200, 200)}｜RSI {r:.1f}（{rz}）"
+    cards = ""
+    for gi, g in enumerate(groups):
+        cards += f'<div class="urt-grp">{_esc(g)}</div><div class="urt-grid">'
+        for it in [x for x in items if x["grp"] == g]:
+            sid = it["sym"].replace("=", "_").replace(".", "_")
+            tag = '<span class="urt-tag">缓存</span>' if it.get("src") == "cache" else ""
+            cards += (f'<div class="urt-card"><div class="urt-hd"><b>{_esc(it["name"])}</b><span class="urt-sym">{_esc(it["sym"])}</span>{tag}</div>'
+                      f'<div class="urt-pin" id="urt-pin-{sid}">鼠标移到图上查看当日读数</div>'
+                      f'<svg class="urt-svg" id="urt-svg-{sid}" viewBox="0 0 560 300" preserveAspectRatio="none"></svg>'
+                      f'<div class="urt-st">{_esc(status_line(it))}</div><div class="urt-nt">{_esc(it["note"])}</div></div>')
+        cards += '</div>'
+    data = _json.dumps({it["sym"]: {k: it[k] for k in ("d", "c", "ma20", "ma50", "ma200", "rsi")} for it in items}, separators=(",", ":"))
+    ids = _json.dumps({it["sym"]: it["sym"].replace("=", "_").replace(".", "_") for it in items})
+    js = """<script>(function(){var D=__DATA__,ID=__IDS__,W=560,H=300,ML=4,MR=46,PT=6,PH=190,GAP=14,RT=PT+PH+GAP,RH=H-RT-16;var win=90;
+function fmt(v){if(v==null)return '—';var a=Math.abs(v);return v.toFixed(a>=1000?0:(a>=100?1:(a>=10?2:3)))}
+function build(sym){var d=D[sym],id=ID[sym],svg=document.getElementById('urt-svg-'+id);var n=d.d.length,a=Math.max(0,n-win);
+var c=d.c.slice(a),m20=d.ma20.slice(a),m50=d.ma50.slice(a),m200=d.ma200.slice(a),rs=d.rsi.slice(a),dt=d.d.slice(a),k=c.length;
+var vals=c.concat(m20,m50,m200).filter(function(x){return x!=null});var lo=Math.min.apply(null,vals),hi=Math.max.apply(null,vals);var pad=(hi-lo)*0.06||1;lo-=pad;hi+=pad;
+var X=function(i){return ML+(W-ML-MR)*i/Math.max(k-1,1)},Y=function(v){return PT+PH*(1-(v-lo)/(hi-lo))},YR=function(v){return RT+RH*(1-v/100)};
+function pl(arr,Yf,col,sw,dash){var p='';for(var i=0;i<arr.length;i++){if(arr[i]==null)continue;p+=(p?' ':'')+X(i).toFixed(1)+','+Yf(arr[i]).toFixed(1)}return p?'<polyline points="'+p+'" fill="none" stroke="'+col+'" stroke-width="'+sw+'"'+(dash?' stroke-dasharray="'+dash+'"':'')+' stroke-linejoin="round"/>':''}
+var g='';for(var t=0;t<=4;t++){var v=lo+(hi-lo)*t/4,y=Y(v);g+='<line x1="'+ML+'" x2="'+(W-MR)+'" y1="'+y.toFixed(1)+'" y2="'+y.toFixed(1)+'" stroke="#ece7dc"/><text x="'+(W-MR+4)+'" y="'+(y+3).toFixed(1)+'" font-size="10" fill="#6b5a2a">'+fmt(v)+'</text>'}
+[30,50,70].forEach(function(v){g+='<line x1="'+ML+'" x2="'+(W-MR)+'" y1="'+YR(v).toFixed(1)+'" y2="'+YR(v).toFixed(1)+'" stroke="'+(v==50?'#e6e1d6':'#d9a0a0')+'" stroke-dasharray="'+(v==50?'':'3 3')+'"/><text x="'+(W-MR+4)+'" y="'+(YR(v)+3).toFixed(1)+'" font-size="9" fill="#a8a095">'+v+'</text>'});
+var step=Math.max(1,Math.round(k/6));for(var i=0;i<k;i+=step){g+='<text x="'+X(i).toFixed(1)+'" y="'+(H-3)+'" font-size="9" fill="#8a837a" text-anchor="'+(i==0?'start':'middle')+'">'+(i==0?dt[i].slice(2):dt[i].slice(5))+'</text>'}
+g+='<text x="'+ML+'" y="'+(RT-3)+'" font-size="9" fill="#8a837a">RSI(14)</text>';
+var ln=pl(m200,Y,'#7a5c8a',1.3)+pl(m50,Y,'#3f7d5a',1.3)+pl(m20,Y,'#d08a2c',1.3)+pl(c,Y,'#1f2a44',1.9)+pl(rs,YR,'#b0493a',1.4);
+svg.innerHTML=g+ln+'<line class="urt-hl" x1="0" x2="0" y1="'+PT+'" y2="'+(RT+RH)+'" stroke="#555" stroke-dasharray="3 3" visibility="hidden"/>';
+svg.onmousemove=function(e){var b=svg.getBoundingClientRect();var x=(e.clientX-b.left)/b.width*W;var i=Math.round((x-ML)/(W-ML-MR)*(k-1));if(i<0||i>=k)return;var px=ML+(W-ML-MR)*i/Math.max(k-1,1);var hl=svg.querySelector('.urt-hl');hl.setAttribute('x1',px);hl.setAttribute('x2',px);hl.setAttribute('visibility','visible');
+function dv(m){return m==null?'—':((c[i]/m-1)*100).toFixed(1)+'%'}
+document.getElementById('urt-pin-'+id).textContent=dt[i]+'　收 '+fmt(c[i])+'｜MA20 '+fmt(m20[i])+'('+dv(m20[i])+') MA50 '+fmt(m50[i])+'('+dv(m50[i])+') MA200 '+fmt(m200[i])+'('+dv(m200[i])+')｜RSI '+(rs[i]==null?'—':rs[i].toFixed(1))};
+svg.onmouseleave=function(){var hl=svg.querySelector('.urt-hl');hl.setAttribute('visibility','hidden')};}
+function all(){Object.keys(D).forEach(build)}
+document.querySelectorAll('.urt-win button').forEach(function(b){b.addEventListener('click',function(){win=+b.dataset.w;document.querySelectorAll('.urt-win button').forEach(function(x){x.classList.toggle('on',x===b)});all()})});
+all()})();</script>""".replace("__DATA__", data).replace("__IDS__", ids)
+    warn_l = list(o.get("warnings", []))
+    warn = f'<p class="sgr-warn">⚠ {_esc("；".join(warn_l[:4]))}</p>' if warn_l else ""
+    return f"""
+<style>.urt-grp{{font-size:12px;color:#6b5a2a;margin:10px 0 6px;letter-spacing:.5px}}.urt-grid{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}@media(max-width:900px){{.urt-grid{{grid-template-columns:1fr}}}}
+.urt-card{{background:#fff;border:1px solid #e6e1d6;border-radius:8px;padding:8px 10px}}.urt-hd{{display:flex;gap:8px;align-items:baseline;font-size:13px}}.urt-sym{{font-size:11px;color:#8a837a}}.urt-tag{{font-size:10px;background:#f3e3c6;color:#8a5a14;border-radius:3px;padding:0 4px}}
+.urt-pin{{font-size:11px;color:#2b2b2b;background:#faf7f0;border:1px solid #efe9db;border-radius:5px;padding:3px 6px;margin:4px 0;min-height:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}.urt-svg{{width:100%;height:230px;display:block;cursor:crosshair}}
+.urt-st{{font-size:11px;color:#3a362f;margin-top:2px}}.urt-nt{{font-size:10px;color:#9a948a;margin-top:1px}}.urt-win{{display:flex;gap:6px;align-items:center;font-size:12px;margin:0 0 6px}}.urt-win button{{border:1px solid #d8d1c2;background:#fff;border-radius:4px;padding:2px 9px;cursor:pointer;font-size:12px}}.urt-win button.on{{background:#1f2a44;color:#fff;border-color:#1f2a44}}
+.urt-lg{{font-size:11px;color:#5a554c;margin:2px 0 4px}}.urt-lg i{{display:inline-block;width:14px;height:3px;margin:0 4px 0 10px;vertical-align:middle}}</style>
+{warn}
+<div class="sfc-note"><b>读图：</b>每张图上半部是<b>收盘价</b>与 <b>20/50/200 日均线</b>（简单平均），下半部是 <b>RSI(14)</b>（Wilder 口径，70/30 为超买/超卖参考线，不是买卖信号）。默认看近 90 个交易日，右上角可切换窗口；均线与 RSI 在全部历史上计算，窗口只是截取，所以左端不会缺线。
+ <b>口径：</b>铀<b>现货(U3O8)没有免费可靠的日线</b>，这里用两只<b>实物铀信托</b>（SPUT 美股 OTC 价、Yellow Cake 伦敦价）作代理，它们是二级市场价，与现货之间有溢价或折价，<b>不等于铀价</b>。URA/URNM/NLR 为美元 ETF；矿企按各自上市地计价（美元、澳元、港元，Kazatomprom 为伦敦 GDR 美元价）。<b>时间：</b>各市场收盘时刻不同，同一天的收盘不在同一时点。</div>
+<div class="urt-win">窗口：<button data-w="45">45 日</button><button data-w="90" class="on">90 日</button><button data-w="130">130 日</button><button data-w="250">250 日</button>
+<span class="urt-lg"><i style="background:#1f2a44"></i>收盘<i style="background:#d08a2c"></i>MA20<i style="background:#3f7d5a"></i>MA50<i style="background:#7a5c8a"></i>MA200<i style="background:#b0493a"></i>RSI</span></div>
+{cards}{js}
+<div class="sfc-foot">数据：Yahoo Finance 日线；指标由本看板自行计算。仅陈述价格与指标相对位置，不构成买卖建议。</div>
+"""
+
 def _cn_cap_svg(series, w=940, h=250, unit="", colors=None, stacked=False, dec=0, ylab=""):
     """通用 A 股资金面折线/堆叠柱。series: [(名称, [(日期, 值), ...])]; 每点/每柱 悬停 data-tip。
     stacked=True: 按日期对齐画堆叠柱(季频存量); 否则折线(日频)。"""
@@ -2987,7 +3058,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, cn_hk_hold=None, gs_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, cn_hk_hold=None, gs_tech=None, ur_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -3237,6 +3308,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         gold_vol_html=_gold_vol_html(gold_vol),
         fed_gold_oil_html=_fed_gold_oil_html(fed_gold_oil),
         gs_tech_html=_gs_tech_html(gs_tech),
+        ur_tech_html=_ur_tech_html(ur_tech),
         cn_capital_html=_cn_capital_html(cn_capital, cn_liq, cn_hk_hold),
         report_leads_html=_report_leads_html(report_leads),
         us_freight_html=_us_freight_html(us_freight),
@@ -11633,6 +11705,10 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·十二B1b：印度白银月度进口 (UN Comtrade) ═══ -->
   <div class="part-title" id="sec-silver-imports"><span class="part-num">＋</span>印度白银月度进口 · Silver Bullion Imports (全球最大白银进口国·实物需求风向标·UN Comtrade 免费月度)<span class="freq-badge freq-monthly">每月更新</span></div>
   <div class="card">{silver_imports}</div>
+  <!-- ━━━ 铀短线图(14 标的 · 价格+MA20/50/200+RSI14) ━━━ -->
+  <div class="part-title" id="sec-ur-tech"><span class="part-num">＋</span>铀与铀矿企 · 14 标的 (收盘 + 20/50/200 日线 + RSI14 · 日线)<span class="freq-badge freq-daily">日更</span></div>
+  <div class="card">{ur_tech_html}</div>
+
   <!-- ━━━ 机构报告被公开解读(线索表) ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>机构研究报告 · 被公开解读的线索 (按机构 · 近 6 个月 · 正文未读)<span class="freq-badge freq-daily">日更</span></div>
   <div class="card">{report_leads_html}</div>
@@ -11753,6 +11829,7 @@ mkRadar('rLong', RADAR.long);
   var GROUPS = [
     // ★2026-10-10(Chao「按这个顺序」): 黄金白银 21 板块连成一段, 置于首位以优先命中
     {{ name: '黄金白银', match: ['金银短线','金银回调','黄金波动率','联邦基金利率','金油比','比特币 ÷ 黄金','股指 ÷ 黄金','美元指数 vs 黄金','白银期货','COMEX 期货期权持仓','白银做市商','COMEX 白银','做市商每周净','COMEX 交割前十名','贵金属 ETF 期权','黄金 ETF 分地区','COMEX & 上海贵金属库存','自营黄金掉期','美国黄金出口','印度 & 中国黄金','印度白银月度进口'] }},
+    {{ name: '铀', match: ['铀与铀矿企'] }},
     {{ name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注','A/D 腾落线','市场广度'] }},
     // ★2026-08-25(Chao)：KOL 全量名录原先未命中任何关键词 → 掉进「其他」，
     // 但它本质就是 KOL 板块的一部分，归入本组。
