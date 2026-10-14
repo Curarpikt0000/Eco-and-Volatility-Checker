@@ -1,0 +1,1770 @@
+{
+  "date": "2026-10-14",
+  "overall": "🟡 警戒",
+  "hit": 1,
+  "results": {
+    "vix": {
+      "key": "vix",
+      "value": 15.21,
+      "as_of": "2026-10-12",
+      "status": "ok"
+    },
+    "fear_greed": {
+      "value": 44.7,
+      "as_of": "2026-10-13",
+      "status": "ok",
+      "extra": {
+        "rating": "fear"
+      },
+      "key": "fear_greed"
+    },
+    "aaii_bull_bear": {
+      "value": 1.3,
+      "as_of": "2026-10-08",
+      "status": "ok",
+      "note": "AAII bull-bear spread +1.3 (多40.3%/空39.0%, 空头-7.5pt, 来源rallies.ai转述AAII 10/10周报; 仍低于均值6.5连续第12周)",
+      "key": "aaii_bull_bear"
+    },
+    "put_call": {
+      "value": 0.54,
+      "as_of": "2026-10-13",
+      "status": "ok",
+      "freshness": "dated",
+      "source": "CBOE official (via ScraperAPI)",
+      "key": "put_call"
+    },
+    "bofa_fms_cash": {
+      "value": 3.9,
+      "as_of": "2026-09",
+      "status": "ok",
+      "note": "BofA FMS现金水平3.9% (Sep 2026, 9/15官方发布, 自8月3.5%上升; 极端夏季看多降温; BofA模型称升至4-5%中性带才可再加风险; 现仍<4.0仍偏低); 净超配股票49%/净低配债券-48%(2022年5月来最低)",
+      "key": "bofa_fms_cash"
+    },
+    "sofr_iorb": {
+      "key": "sofr_iorb",
+      "value": -1.0,
+      "as_of": "2026-10-09",
+      "status": "ok",
+      "extra": {
+        "sofr": 3.87,
+        "effr": 3.88,
+        "sofr_as_of": "2026-10-09",
+        "effr_as_of": "2026-10-09",
+        "basis": "SOFR-EFFR"
+      }
+    },
+    "margin_cost": {
+      "key": "margin_cost",
+      "value": 7.0,
+      "as_of": "2026-10-02",
+      "status": "ok"
+    },
+    "bank_funding_stress": {
+      "key": "bank_funding_stress",
+      "value": 1.0,
+      "as_of": "2026-10-09",
+      "status": "ok",
+      "extra": {
+        "cp3m": 4.07,
+        "tbill3m": 4.06,
+        "sofr": 3.87,
+        "spread_bps": 1.0
+      }
+    },
+    "margin_debt": {
+      "value": 1453.832,
+      "as_of": "2026-08-31",
+      "status": "ok",
+      "key": "margin_debt"
+    },
+    "margin_gdp": {
+      "key": "margin_gdp",
+      "value": 4.46,
+      "as_of": "2026-04-01",
+      "status": "ok",
+      "freshness": "dated",
+      "extra": {
+        "basis": "取输入(margin_debt月度/GDP季度)中较旧的as_of",
+        "margin_debt_as_of": "2026-08-31",
+        "gdp_as_of": "2026-04-01"
+      }
+    },
+    "ipo_count": {
+      "value": 254.0,
+      "as_of": "2026-10-09",
+      "status": "ok",
+      "freshness": "dated",
+      "extra": {
+        "source": "stockanalysis",
+        "year": 2026,
+        "basis": "YTD累计宗数, as_of=最近一次IPO上市日"
+      },
+      "key": "ipo_count"
+    },
+    "insider": {
+      "value": 0.214,
+      "as_of": "2026-10-13",
+      "status": "ok",
+      "freshness": "dated",
+      "extra": {
+        "source": "openinsider",
+        "note": "近期榜前100笔口径,趋势用"
+      },
+      "key": "insider"
+    },
+    "bofa_bull_bear": {
+      "value": 8.1,
+      "as_of": "2026-10-08",
+      "status": "ok",
+      "note": "BofA Bull&Bear 8.1 (Flow Show 2026-10-08, 自8.8回落, 仍>8.0卖出线; 驱动=全球股指广度走弱+HY/银行次级债利差走阔; 周度现金流入$166.4bn为2020-04来最大) | 2026-10-13复核仍为10/8值8.1(Flow Show下期周四)",
+      "key": "bofa_bull_bear"
+    },
+    "hy_oas": {
+      "key": "hy_oas",
+      "value": 3.11,
+      "as_of": "2026-10-12",
+      "status": "ok"
+    },
+    "ad_line": {
+      "key": "ad_line",
+      "value": false,
+      "as_of": "2026-10-01",
+      "status": "ok",
+      "extra": {
+        "source": "NYSE A/D 腾落线(SP500 全成分股, Economic-Dashboard cron 真数据)",
+        "cumulative": 915,
+        "advance_pct": 59.05,
+        "ad_net": 93,
+        "cum_recent_high": 2031,
+        "cum_lookback_high": 2031,
+        "cum_made_new_high": true,
+        "recent_advance_pct_avg": 45.6,
+        "breadth_confirmed": true,
+        "tickers": 503
+      }
+    },
+    "buffett": {
+      "value": 255.0,
+      "as_of": "2026-04-01",
+      "status": "ok",
+      "extra": {
+        "source": "FRED Z.1"
+      },
+      "key": "buffett"
+    },
+    "cape": {
+      "value": 41.84,
+      "as_of": "2026-10-13",
+      "status": "ok",
+      "key": "cape"
+    },
+    "yield_curve": {
+      "key": "yield_curve",
+      "value": 0.42,
+      "as_of": "2026-10-13",
+      "status": "ok"
+    },
+    "lei": {
+      "value": 0.57,
+      "as_of": "2026-08-01",
+      "status": "ok",
+      "extra": {
+        "cli_index": 100.96,
+        "source": "FRED OECD CLI",
+        "note": "OECD综合领先指标6月变化(替Conference Board付费LEI)"
+      },
+      "key": "lei"
+    },
+    "aaii_alloc": {
+      "value": 71.79,
+      "as_of": "2026-09",
+      "status": "ok",
+      "freshness": "dated",
+      "key": "aaii_alloc"
+    }
+  },
+  "cot": {
+    "gold": {
+      "as_of": "2026-10-06",
+      "open_interest": 396109,
+      "comm_long": 55802,
+      "comm_short": 300329,
+      "comm_net": -244527,
+      "noncomm_long": 245403,
+      "noncomm_short": 35068,
+      "noncomm_net": 210335,
+      "metal": "gold",
+      "comm_net_wow": 6440,
+      "comm_long_wow": -3029,
+      "comm_short_wow": -9469,
+      "comm_surge": false
+    },
+    "silver": {
+      "as_of": "2026-10-06",
+      "open_interest": 105130,
+      "comm_long": 31745,
+      "comm_short": 73337,
+      "comm_net": -41592,
+      "noncomm_long": 33648,
+      "noncomm_short": 10495,
+      "noncomm_net": 23153,
+      "metal": "silver",
+      "comm_net_wow": -1582,
+      "comm_long_wow": -2350,
+      "comm_short_wow": -768,
+      "comm_surge": false
+    }
+  },
+  "cb_balance": {
+    "US": {
+      "name": "美联储 Fed",
+      "flag": "🇺🇸",
+      "unit": "$B",
+      "period": "WoW",
+      "date": "2026-09-30",
+      "assets": [
+        {
+          "name": "美国国债 Treasuries",
+          "value": 4564.161,
+          "delta": 5.829,
+          "pct": 0.13,
+          "sub": false
+        },
+        {
+          "name": "短期国债 Bills（RMP 储备管理购买）",
+          "value": 560.211,
+          "delta": 5.838,
+          "pct": 1.05,
+          "sub": true
+        },
+        {
+          "name": "MBS 抵押债",
+          "value": 1898.089,
+          "delta": -12.32,
+          "pct": -0.64,
+          "sub": false
+        },
+        {
+          "name": "FIMA 回购便利（Fed 借美元给外国央行）",
+          "value": 0,
+          "delta": 0,
+          "pct": null,
+          "sub": false
+        },
+        {
+          "name": "SRF 常备回购",
+          "value": 1.2,
+          "delta": 1.199,
+          "pct": 119900.0,
+          "sub": false
+        },
+        {
+          "name": "其他 Other（差额）",
+          "value": 279.6,
+          "delta": null,
+          "pct": null,
+          "sub": false
+        }
+      ],
+      "liabilities": [
+        {
+          "name": "准备金 Reserves",
+          "value": 2948.09,
+          "delta": 17.897,
+          "pct": 0.61,
+          "sub": false
+        },
+        {
+          "name": "隔夜逆回购 ON RRP",
+          "value": 11.539,
+          "delta": 11.078,
+          "pct": 2403.04,
+          "sub": false
+        },
+        {
+          "name": "外国官方及国际账户逆回购（外国央行存放）",
+          "value": 350.344,
+          "delta": 30.08,
+          "pct": 9.39,
+          "sub": false
+        },
+        {
+          "name": "财政部账户 TGA",
+          "value": 948.674,
+          "delta": -28.41,
+          "pct": -2.91,
+          "sub": false
+        },
+        {
+          "name": "流通货币 Currency",
+          "value": 2482.015,
+          "delta": -0.185,
+          "pct": -0.01,
+          "sub": false
+        }
+      ],
+      "total_assets": {
+        "name": "总资产",
+        "value": 6743.031,
+        "delta": -4.673,
+        "pct": -0.07,
+        "sub": false
+      },
+      "total_liab": null
+    },
+    "JP": {
+      "name": "日本央行 BoJ",
+      "flag": "🇯🇵",
+      "unit": "$B",
+      "period": "较上期",
+      "date": "2026-09-20",
+      "assets": [
+        {
+          "name": "日本国债 JGB",
+          "value": 3286.0,
+          "delta": 4.3,
+          "pct": 0.13,
+          "sub": false
+        },
+        {
+          "name": "公司债",
+          "value": 7.1,
+          "delta": -0.9,
+          "pct": -11.44,
+          "sub": false
+        },
+        {
+          "name": "ETF",
+          "value": 233.4,
+          "delta": -0.1,
+          "pct": -0.03,
+          "sub": false
+        },
+        {
+          "name": "J-REIT",
+          "value": 4.1,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": false
+        },
+        {
+          "name": "其他 Other（差额）",
+          "value": 519.4,
+          "delta": null,
+          "pct": null,
+          "sub": false
+        }
+      ],
+      "liabilities": [
+        {
+          "name": "银行券 Banknotes",
+          "value": 724.9,
+          "delta": 1.9,
+          "pct": 0.26,
+          "sub": false
+        },
+        {
+          "name": "经常项目存款",
+          "value": 2591.0,
+          "delta": -15.2,
+          "pct": -0.58,
+          "sub": false
+        },
+        {
+          "name": "政府存款",
+          "value": 104.5,
+          "delta": -14.3,
+          "pct": -12.08,
+          "sub": false
+        }
+      ],
+      "total_assets": {
+        "name": "总资产",
+        "value": 4050.0,
+        "delta": -18.9,
+        "pct": -0.46,
+        "sub": false
+      },
+      "total_liab": null,
+      "orig_unit": "兆¥"
+    },
+    "CN": {
+      "name": "中国央行 PBoC",
+      "flag": "🇨🇳",
+      "unit": "$B",
+      "period": "MoM",
+      "date": "2026-08",
+      "assets": [
+        {
+          "name": "外汇占款",
+          "value": 3232.3,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": false
+        },
+        {
+          "name": "对政府债权",
+          "value": 333.9,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": false
+        },
+        {
+          "name": "对其他存款性公司债权",
+          "value": 3037.4,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": false
+        },
+        {
+          "name": "其他 Other（差额）",
+          "value": 626.0,
+          "delta": null,
+          "pct": null,
+          "sub": false
+        }
+      ],
+      "liabilities": [
+        {
+          "name": "储备货币",
+          "value": 5846.1,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": false
+        },
+        {
+          "name": "货币发行",
+          "value": 2263.2,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": true
+        },
+        {
+          "name": "政府存款",
+          "value": 898.9,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": false
+        },
+        {
+          "name": "其他 Other（差额）",
+          "value": 484.6,
+          "delta": null,
+          "pct": null,
+          "sub": false
+        }
+      ],
+      "total_assets": {
+        "name": "总资产",
+        "value": 7229.6,
+        "delta": 0.0,
+        "pct": 0.0,
+        "sub": false
+      },
+      "total_liab": {
+        "name": "总负债",
+        "value": 7229.6,
+        "delta": 0.0,
+        "pct": 0.0,
+        "sub": false
+      },
+      "orig_unit": "亿¥"
+    },
+    "_fx": {
+      "USDJPY": 158.34,
+      "USDCNY": 6.692,
+      "USDEUR": 1.1193
+    },
+    "ECB": {
+      "name": "欧元体系 Eurosystem",
+      "flag": "🇪🇺",
+      "unit": "$B",
+      "orig_unit": "十亿€",
+      "period": "周度",
+      "date": "2026-W41",
+      "assets": [
+        {
+          "name": "黄金及黄金债权 Gold",
+          "value": 1439.7,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": false
+        },
+        {
+          "name": "外币资产 FX Assets",
+          "value": 587.0,
+          "delta": -1.5,
+          "pct": -0.25,
+          "sub": false
+        },
+        {
+          "name": "货币政策证券 Securities(APP+PEPP)",
+          "value": 3711.9,
+          "delta": -16.5,
+          "pct": -0.44,
+          "sub": false
+        },
+        {
+          "name": "对信贷机构贷款 Lending to CIs",
+          "value": 38.4,
+          "delta": -4.2,
+          "pct": -9.95,
+          "sub": false
+        },
+        {
+          "name": "其他资产 Other Assets",
+          "value": 323.1,
+          "delta": 1.5,
+          "pct": 0.45,
+          "sub": false
+        },
+        {
+          "name": "其他 Other（差额）",
+          "value": 552.9,
+          "delta": null,
+          "pct": null,
+          "sub": false
+        }
+      ],
+      "liabilities": [
+        {
+          "name": "流通银行券 Banknotes",
+          "value": 1828.3,
+          "delta": 1.0,
+          "pct": 0.06,
+          "sub": false
+        },
+        {
+          "name": "对信贷机构负债 Liab. to CIs",
+          "value": 2559.0,
+          "delta": -4.1,
+          "pct": -0.16,
+          "sub": false
+        },
+        {
+          "name": "存款便利 Deposit Facility",
+          "value": 2187.8,
+          "delta": -5.7,
+          "pct": -0.26,
+          "sub": true
+        },
+        {
+          "name": "对其他居民负债 Liab. to Others",
+          "value": 213.5,
+          "delta": -3.9,
+          "pct": -1.78,
+          "sub": false
+        },
+        {
+          "name": "重估账户 Revaluation",
+          "value": 1412.1,
+          "delta": -0.0,
+          "pct": -0.0,
+          "sub": false
+        },
+        {
+          "name": "资本与储备 Capital&Reserves",
+          "value": 31.6,
+          "delta": 0.0,
+          "pct": 0.04,
+          "sub": false
+        },
+        {
+          "name": "其他负债 Other Liab.",
+          "value": 200.1,
+          "delta": 11.1,
+          "pct": 5.87,
+          "sub": false
+        }
+      ],
+      "total_assets": {
+        "name": "总资产",
+        "value": 6653.0,
+        "delta": -4.4,
+        "pct": -0.07,
+        "sub": false
+      },
+      "total_liab": null,
+      "rates": {
+        "mro": 2.65,
+        "dfr": 2.5,
+        "mlf": 2.9
+      },
+      "usd_per_eur": 1.1193,
+      "source": "ECB Data Portal ILM (Eurosystem 周度财务报表)"
+    }
+  },
+  "liquidity": {
+    "reserves_T": {
+      "value": 2.948,
+      "prev": 2.93,
+      "delta": 0.02
+    },
+    "on_rrp_B": {
+      "value": 0.35,
+      "prev": 11.539,
+      "delta": -11.19
+    },
+    "tga_B": {
+      "value": 948.7,
+      "prev": 977.1,
+      "delta": -28.4
+    },
+    "risk_notes": {
+      "AI短评": "🔴危险：10/1 美债牛陡反转——10Y 5.24%(−5bp，连续第 7 个交易日 >5%)、30Y 5.61%(−3bp)、2Y 4.78%(−10bp) → 2s10s 由 41bp 走陡至 46bp，前端在今晚 21:30 JST 非农前抢跑；长端压不动因 Brent 单日 +4.37% 至 $102.49 且 ISM 价格支付 77.9(伊朗战争以来最高)。日债 10Y 3.057%、30Y 4.098%、10Y−TONAR 183bp、YCC 风险高。Fed 9/30 周准备金 +$17.9B 至 $2.948T(首次回升、仍 <$3T)，bills 连 3 周增持，真 FIMA $0 无美元荒。完整度 92%。",
+      "操作建议": "161226: 持有 — 10Y 5.24% 距止损锚 5.30% 仅 6bp（小于近 6 个交易日单日波动 −10~+7bp）；三档减仓已于 9/29 执行完毕，按「破位不回补」持底仓。今晚非农为方向决定点：若 10Y 再上破 5.30% 即确认久期再定价，不回补。\n1542.T: 加仓 — JGB 10Y 3.057%（3% 上方固化）＋30Y 4.098%＋政策利率 1.25%，净息差扩张路径最确定；日债长端高位引发的银行股回调即分批加仓点，不追高。\n8306.T: 加仓 — 同 1542.T 逻辑：JGB 长端与政策利率双升支撑净息差，MUFG 对长端敏感度更高；回调分批建仓不追高，若日元快速升值至 155 下方则暂停。\n1164.HK: 持有 — 无新增信号：美债 30Y 5.61%、日债 30Y 4.098% 双高压制港元与风险偏好，DR007 1.3632% 低位平稳、中国侧",
+      "关键变动": "• 美债 10/1 收盘（美财政部官方平价收益率曲线口径；FRED DGS10 仍停 9/30，A1 今日 09:01 cron 已写入 9/30 行）：10Y 5.24%（−5bp，连续第 7 个交易日收于 5% 上方，9/23–10/1 逐日重算；距 9/30 的 24 年高点 5.29% 仅 5bp、距 2007/6/12 的 5.26% 仅 2bp）、30Y 5.61%（−3bp，回吐后仍处 2001/12/17 的 5.61% 并列区间）、20Y 5.64%（−4bp）继续高于 30Y → 20s30s 倒挂 −3bp（自 −4bp 略收窄，中间久期仍缺配置盘）、7Y 5.12%（−7bp）、5Y 5.01%（−8bp）、3Y 4.91%（−9bp）、2Y 4.78%（−10bp）、1Y 4.44%（−10bp）、3Mo 4.17%（−3bp）；2s10s 41→46bp、5s3"
+    },
+    "risk_lights": {
+      "风控总分": "🔴危险",
+      "运行状态": "✅成功",
+      "日债风险": "🔴",
+      "美债风险": "🔴",
+      "基差套利风险": "🟢",
+      "Fed流动性风险": "🟡"
+    },
+    "yields": {
+      "10Y": {
+        "value": 5.29,
+        "delta": 0.03
+      },
+      "2Y": {
+        "value": 4.88,
+        "delta": -0.01
+      },
+      "30Y": {
+        "value": 5.64,
+        "delta": 0.05
+      }
+    }
+  },
+  "custody": {
+    "value": 2.566,
+    "as_of": "2026-10-07",
+    "wow_delta_bn": -16.8,
+    "wow_pct": -0.65,
+    "total_custody_tn": 2.851,
+    "history": [
+      [
+        "2025-10-01",
+        2.7816
+      ],
+      [
+        "2025-10-08",
+        2.7771
+      ],
+      [
+        "2025-10-15",
+        2.7461
+      ],
+      [
+        "2025-10-22",
+        2.7508
+      ],
+      [
+        "2025-10-29",
+        2.7872
+      ],
+      [
+        "2025-11-05",
+        2.7692
+      ],
+      [
+        "2025-11-12",
+        2.7454
+      ],
+      [
+        "2025-11-19",
+        2.7375
+      ],
+      [
+        "2025-11-26",
+        2.7589
+      ],
+      [
+        "2025-12-03",
+        2.7628
+      ],
+      [
+        "2025-12-10",
+        2.7682
+      ],
+      [
+        "2025-12-17",
+        2.758
+      ],
+      [
+        "2025-12-24",
+        2.7426
+      ],
+      [
+        "2025-12-31",
+        2.7246
+      ],
+      [
+        "2026-01-07",
+        2.7568
+      ],
+      [
+        "2026-01-14",
+        2.7607
+      ],
+      [
+        "2026-01-21",
+        2.7706
+      ],
+      [
+        "2026-01-28",
+        2.7905
+      ],
+      [
+        "2026-02-04",
+        2.7865
+      ],
+      [
+        "2026-02-11",
+        2.8006
+      ],
+      [
+        "2026-02-18",
+        2.7906
+      ],
+      [
+        "2026-02-25",
+        2.7756
+      ],
+      [
+        "2026-03-04",
+        2.7662
+      ],
+      [
+        "2026-03-11",
+        2.7265
+      ],
+      [
+        "2026-03-18",
+        2.7172
+      ],
+      [
+        "2026-03-25",
+        2.694
+      ],
+      [
+        "2026-04-01",
+        2.7318
+      ],
+      [
+        "2026-04-08",
+        2.693
+      ],
+      [
+        "2026-04-15",
+        2.7053
+      ],
+      [
+        "2026-04-22",
+        2.7284
+      ],
+      [
+        "2026-04-29",
+        2.735
+      ],
+      [
+        "2026-05-06",
+        2.7263
+      ],
+      [
+        "2026-05-13",
+        2.6871
+      ],
+      [
+        "2026-05-20",
+        2.6668
+      ],
+      [
+        "2026-05-27",
+        2.6797
+      ],
+      [
+        "2026-06-03",
+        2.647
+      ],
+      [
+        "2026-06-10",
+        2.6334
+      ],
+      [
+        "2026-06-17",
+        2.6313
+      ],
+      [
+        "2026-06-24",
+        2.6369
+      ],
+      [
+        "2026-07-01",
+        2.6259
+      ],
+      [
+        "2026-07-08",
+        2.5973
+      ],
+      [
+        "2026-07-15",
+        2.5979
+      ],
+      [
+        "2026-07-22",
+        2.6227
+      ],
+      [
+        "2026-07-29",
+        2.6566
+      ],
+      [
+        "2026-08-05",
+        2.6311
+      ],
+      [
+        "2026-08-12",
+        2.5968
+      ],
+      [
+        "2026-08-19",
+        2.5862
+      ],
+      [
+        "2026-08-26",
+        2.6152
+      ],
+      [
+        "2026-09-02",
+        2.6012
+      ],
+      [
+        "2026-09-09",
+        2.5901
+      ],
+      [
+        "2026-09-16",
+        2.6088
+      ],
+      [
+        "2026-09-23",
+        2.5975
+      ],
+      [
+        "2026-09-30",
+        2.5823
+      ],
+      [
+        "2026-10-07",
+        2.5655
+      ]
+    ],
+    "status": "ok",
+    "source": "FRED WMTSECL1 (Fed H.4.1 custody, weekly Wed)"
+  },
+  "auctions": {
+    "terms": {
+      "2-Year": {
+        "history": [
+          {
+            "auction_date": "2026-09-22",
+            "security_type": "Note",
+            "security_term": "2-Year",
+            "offering_bn": 69.0,
+            "accepted_bn": 79.4,
+            "bid_to_cover": 2.63,
+            "high_yield": 4.787,
+            "indirect_pct": 49.3,
+            "issue_date": "2026-09-30",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-08-25",
+            "security_type": "Note",
+            "security_term": "2-Year",
+            "offering_bn": 69.0,
+            "accepted_bn": 77.9,
+            "bid_to_cover": 2.6,
+            "high_yield": 4.204,
+            "indirect_pct": 57.7,
+            "issue_date": "2026-08-31",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-07-27",
+            "security_type": "Note",
+            "security_term": "2-Year",
+            "offering_bn": 69.0,
+            "accepted_bn": 76.6,
+            "bid_to_cover": 2.66,
+            "high_yield": 4.315,
+            "indirect_pct": 50.1,
+            "issue_date": "2026-07-31",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-06-23",
+            "security_type": "Note",
+            "security_term": "2-Year",
+            "offering_bn": 69.0,
+            "accepted_bn": 79.3,
+            "bid_to_cover": 2.64,
+            "high_yield": 4.189,
+            "indirect_pct": 47.6,
+            "issue_date": "2026-06-30",
+            "reopening": "No"
+          }
+        ],
+        "next": null
+      },
+      "3-Year": {
+        "history": [
+          {
+            "auction_date": "2026-10-06",
+            "security_type": "Note",
+            "security_term": "3-Year",
+            "offering_bn": 58.0,
+            "accepted_bn": 59.4,
+            "bid_to_cover": 2.62,
+            "high_yield": 4.932,
+            "indirect_pct": 55.3,
+            "issue_date": "2026-10-15",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-09-08",
+            "security_type": "Note",
+            "security_term": "3-Year",
+            "offering_bn": 58.0,
+            "accepted_bn": 58.0,
+            "bid_to_cover": 2.72,
+            "high_yield": 4.474,
+            "indirect_pct": 61.7,
+            "issue_date": "2026-09-15",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-08-11",
+            "security_type": "Note",
+            "security_term": "3-Year",
+            "offering_bn": 58.0,
+            "accepted_bn": 72.7,
+            "bid_to_cover": 2.71,
+            "high_yield": 4.291,
+            "indirect_pct": 50.7,
+            "issue_date": "2026-08-17",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-07-07",
+            "security_type": "Note",
+            "security_term": "3-Year",
+            "offering_bn": 58.0,
+            "accepted_bn": 64.0,
+            "bid_to_cover": 2.6,
+            "high_yield": 4.179,
+            "indirect_pct": 60.9,
+            "issue_date": "2026-07-15",
+            "reopening": "No"
+          }
+        ],
+        "next": null
+      },
+      "5-Year": {
+        "history": [
+          {
+            "auction_date": "2026-09-23",
+            "security_type": "Note",
+            "security_term": "5-Year",
+            "offering_bn": 70.0,
+            "accepted_bn": 80.5,
+            "bid_to_cover": 2.21,
+            "high_yield": 5.033,
+            "indirect_pct": 47.0,
+            "issue_date": "2026-09-30",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-08-26",
+            "security_type": "Note",
+            "security_term": "5-Year",
+            "offering_bn": 70.0,
+            "accepted_bn": 79.0,
+            "bid_to_cover": 2.37,
+            "high_yield": 4.393,
+            "indirect_pct": 54.3,
+            "issue_date": "2026-08-31",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-07-27",
+            "security_type": "Note",
+            "security_term": "5-Year",
+            "offering_bn": 70.0,
+            "accepted_bn": 77.7,
+            "bid_to_cover": 2.28,
+            "high_yield": 4.408,
+            "indirect_pct": 53.2,
+            "issue_date": "2026-07-31",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-06-24",
+            "security_type": "Note",
+            "security_term": "5-Year",
+            "offering_bn": 70.0,
+            "accepted_bn": 80.5,
+            "bid_to_cover": 2.35,
+            "high_yield": 4.2,
+            "indirect_pct": 53.5,
+            "issue_date": "2026-06-30",
+            "reopening": "No"
+          }
+        ],
+        "next": null
+      },
+      "7-Year": {
+        "history": [
+          {
+            "auction_date": "2026-09-24",
+            "security_type": "Note",
+            "security_term": "7-Year",
+            "offering_bn": 44.0,
+            "accepted_bn": 50.6,
+            "bid_to_cover": 2.42,
+            "high_yield": 5.085,
+            "indirect_pct": 49.1,
+            "issue_date": "2026-09-30",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-08-27",
+            "security_type": "Note",
+            "security_term": "7-Year",
+            "offering_bn": 44.0,
+            "accepted_bn": 49.7,
+            "bid_to_cover": 2.5,
+            "high_yield": 4.512,
+            "indirect_pct": 53.7,
+            "issue_date": "2026-08-31",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-07-28",
+            "security_type": "Note",
+            "security_term": "7-Year",
+            "offering_bn": 44.0,
+            "accepted_bn": 48.9,
+            "bid_to_cover": 2.49,
+            "high_yield": 4.473,
+            "indirect_pct": 63.0,
+            "issue_date": "2026-07-31",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-06-25",
+            "security_type": "Note",
+            "security_term": "7-Year",
+            "offering_bn": 44.0,
+            "accepted_bn": 50.6,
+            "bid_to_cover": 2.5,
+            "high_yield": 4.26,
+            "indirect_pct": 50.0,
+            "issue_date": "2026-06-30",
+            "reopening": "No"
+          }
+        ],
+        "next": null
+      },
+      "10-Year": {
+        "history": [
+          {
+            "auction_date": "2026-08-12",
+            "security_type": "Note",
+            "security_term": "10-Year",
+            "offering_bn": 42.0,
+            "accepted_bn": 52.6,
+            "bid_to_cover": 2.53,
+            "high_yield": 4.683,
+            "indirect_pct": 61.0,
+            "issue_date": "2026-08-17",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-05-12",
+            "security_type": "Note",
+            "security_term": "10-Year",
+            "offering_bn": 42.0,
+            "accepted_bn": 52.0,
+            "bid_to_cover": 2.4,
+            "high_yield": 4.468,
+            "indirect_pct": 51.5,
+            "issue_date": "2026-05-15",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-02-11",
+            "security_type": "Note",
+            "security_term": "10-Year",
+            "offering_bn": 42.0,
+            "accepted_bn": 53.9,
+            "bid_to_cover": 2.39,
+            "high_yield": 4.177,
+            "indirect_pct": 50.1,
+            "issue_date": "2026-02-17",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2025-11-12",
+            "security_type": "Note",
+            "security_term": "10-Year",
+            "offering_bn": 42.0,
+            "accepted_bn": 48.5,
+            "bid_to_cover": 2.43,
+            "high_yield": 4.074,
+            "indirect_pct": 57.8,
+            "issue_date": "2025-11-17",
+            "reopening": "No"
+          }
+        ],
+        "next": null
+      },
+      "20-Year": {
+        "history": [
+          {
+            "auction_date": "2026-08-19",
+            "security_type": "Bond",
+            "security_term": "20-Year",
+            "offering_bn": 16.0,
+            "accepted_bn": 18.1,
+            "bid_to_cover": 2.53,
+            "high_yield": 5.204,
+            "indirect_pct": 55.1,
+            "issue_date": "2026-08-31",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-05-20",
+            "security_type": "Bond",
+            "security_term": "20-Year",
+            "offering_bn": 16.0,
+            "accepted_bn": 18.4,
+            "bid_to_cover": 2.55,
+            "high_yield": 5.122,
+            "indirect_pct": 58.3,
+            "issue_date": "2026-06-01",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-02-18",
+            "security_type": "Bond",
+            "security_term": "20-Year",
+            "offering_bn": 16.0,
+            "accepted_bn": 17.9,
+            "bid_to_cover": 2.36,
+            "high_yield": 4.664,
+            "indirect_pct": 49.1,
+            "issue_date": "2026-03-02",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2025-11-19",
+            "security_type": "Bond",
+            "security_term": "20-Year",
+            "offering_bn": 16.0,
+            "accepted_bn": 17.8,
+            "bid_to_cover": 2.41,
+            "high_yield": 4.706,
+            "indirect_pct": 53.0,
+            "issue_date": "2025-12-01",
+            "reopening": "No"
+          }
+        ],
+        "next": null
+      },
+      "30-Year": {
+        "history": [
+          {
+            "auction_date": "2026-08-13",
+            "security_type": "Bond",
+            "security_term": "30-Year",
+            "offering_bn": 25.0,
+            "accepted_bn": 31.3,
+            "bid_to_cover": 2.39,
+            "high_yield": 5.216,
+            "indirect_pct": 53.1,
+            "issue_date": "2026-08-17",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-05-13",
+            "security_type": "Bond",
+            "security_term": "30-Year",
+            "offering_bn": 25.0,
+            "accepted_bn": 30.9,
+            "bid_to_cover": 2.3,
+            "high_yield": 5.046,
+            "indirect_pct": 53.7,
+            "issue_date": "2026-05-15",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2026-02-12",
+            "security_type": "Bond",
+            "security_term": "30-Year",
+            "offering_bn": 25.0,
+            "accepted_bn": 32.1,
+            "bid_to_cover": 2.66,
+            "high_yield": 4.75,
+            "indirect_pct": 54.4,
+            "issue_date": "2026-02-17",
+            "reopening": "No"
+          },
+          {
+            "auction_date": "2025-11-13",
+            "security_type": "Bond",
+            "security_term": "30-Year",
+            "offering_bn": 25.0,
+            "accepted_bn": 28.9,
+            "bid_to_cover": 2.29,
+            "high_yield": 4.694,
+            "indirect_pct": 61.3,
+            "issue_date": "2025-11-17",
+            "reopening": "No"
+          }
+        ],
+        "next": null
+      }
+    },
+    "upcoming": [],
+    "as_of": "2026-10-06",
+    "status": "ok",
+    "source": "US Treasury fiscaldata.treasury.gov auctions_query"
+  },
+  "holdings": {
+    "as_of": "2026-10-14",
+    "politicians": [
+      {
+        "name": "Nancy Pelosi",
+        "title": "众议院议员 (加州 · 前议长)",
+        "n_filings": 7,
+        "n_recent_parsed": 3,
+        "trades": [
+          {
+            "ticker": null,
+            "direction": "P",
+            "dir_cn": "买入",
+            "txn_date": "09/08/2026",
+            "amount_range": "$500,001 - $1,000,000",
+            "filing_date": "10/2/2026",
+            "doc_id": "20035553"
+          },
+          {
+            "ticker": "BE",
+            "direction": "P",
+            "dir_cn": "买入",
+            "txn_date": "07/28/2026",
+            "amount_range": "$500,001 - $1,000,000",
+            "filing_date": "8/21/2026",
+            "doc_id": "20035143"
+          },
+          {
+            "ticker": "BE",
+            "direction": "P",
+            "dir_cn": "买入",
+            "txn_date": "07/28/2026",
+            "amount_range": "$500,001 - $1,000,000",
+            "filing_date": "8/21/2026",
+            "doc_id": "20035143"
+          },
+          {
+            "ticker": null,
+            "direction": "P",
+            "dir_cn": "买入",
+            "txn_date": "07/27/2026",
+            "amount_range": "$500,001 - $1,000,000",
+            "filing_date": "8/21/2026",
+            "doc_id": "20035143"
+          },
+          {
+            "ticker": "BE",
+            "direction": "P",
+            "dir_cn": "买入",
+            "txn_date": "07/24/2026",
+            "amount_range": "$1,000,001 - $5,000,000",
+            "filing_date": "8/21/2026",
+            "doc_id": "20035143"
+          },
+          {
+            "ticker": "BE",
+            "direction": "P",
+            "dir_cn": "买入",
+            "txn_date": "07/24/2026",
+            "amount_range": "$1,000,001 - $5,000,000",
+            "filing_date": "8/21/2026",
+            "doc_id": "20035143"
+          },
+          {
+            "ticker": "INTC",
+            "direction": "P",
+            "dir_cn": "买入",
+            "txn_date": "07/24/2026",
+            "amount_range": "$250,001 - $500,000",
+            "filing_date": "8/21/2026",
+            "doc_id": "20035143"
+          },
+          {
+            "ticker": "INTC",
+            "direction": "P",
+            "dir_cn": "买入",
+            "txn_date": "07/24/2026",
+            "amount_range": "$500,001 - $1,000,000",
+            "filing_date": "8/21/2026",
+            "doc_id": "20035143"
+          },
+          {
+            "ticker": "INTC",
+            "direction": "P",
+            "dir_cn": "买入",
+            "txn_date": "05/29/2026",
+            "amount_range": "$1,000,001 - $5,000,000",
+            "filing_date": "6/23/2026",
+            "doc_id": "20034836"
+          },
+          {
+            "ticker": "UBER",
+            "direction": "P",
+            "dir_cn": "买入",
+            "txn_date": "05/29/2026",
+            "amount_range": "$500,001 - $1,000,000",
+            "filing_date": "6/23/2026",
+            "doc_id": "20034836"
+          }
+        ],
+        "status": "ok"
+      },
+      {
+        "name": "Dan Crenshaw",
+        "title": "众议院议员 (德州)",
+        "n_filings": 1,
+        "n_recent_parsed": 1,
+        "trades": [
+          {
+            "ticker": "GOOG",
+            "direction": "S",
+            "dir_cn": "卖出",
+            "txn_date": "06/01/2026",
+            "amount_range": "$1,001 - $15,000",
+            "filing_date": "7/16/2026",
+            "doc_id": "20035024"
+          },
+          {
+            "ticker": "AMZN",
+            "direction": "S",
+            "dir_cn": "卖出",
+            "txn_date": "06/01/2026",
+            "amount_range": "$1,001 - $15,000",
+            "filing_date": "7/16/2026",
+            "doc_id": "20035024"
+          },
+          {
+            "ticker": "AAPL",
+            "direction": "S",
+            "dir_cn": "卖出",
+            "txn_date": "06/01/2026",
+            "amount_range": "$1,001 - $15,000",
+            "filing_date": "7/16/2026",
+            "doc_id": "20035024"
+          },
+          {
+            "ticker": null,
+            "direction": "S",
+            "dir_cn": "卖出",
+            "txn_date": "06/01/2026",
+            "amount_range": "$1,001 - $15,000",
+            "filing_date": "7/16/2026",
+            "doc_id": "20035024"
+          },
+          {
+            "ticker": "META",
+            "direction": "S",
+            "dir_cn": "卖出",
+            "txn_date": "06/01/2026",
+            "amount_range": "$1,001 - $15,000",
+            "filing_date": "7/16/2026",
+            "doc_id": "20035024"
+          },
+          {
+            "ticker": "USOU",
+            "direction": "P",
+            "dir_cn": "买入",
+            "txn_date": "06/01/2026",
+            "amount_range": "$1,001 - $15,000",
+            "filing_date": "7/16/2026",
+            "doc_id": "20035024"
+          },
+          {
+            "ticker": "META",
+            "direction": "S",
+            "dir_cn": "卖出",
+            "txn_date": "05/05/2026",
+            "amount_range": "$1,001 - $15,000",
+            "filing_date": "7/16/2026",
+            "doc_id": "20035024"
+          },
+          {
+            "ticker": "META",
+            "direction": "P",
+            "dir_cn": "买入",
+            "txn_date": "04/28/2026",
+            "amount_range": "$1,001 - $15,000",
+            "filing_date": "7/16/2026",
+            "doc_id": "20035024"
+          }
+        ],
+        "status": "ok"
+      },
+      {
+        "name": "Donald J Trump",
+        "title": "总统 · OGE 278-T",
+        "trades": [],
+        "n_filings": 0,
+        "status": "fetch_error",
+        "note": "",
+        "source": "OGE Form 278-T (逐笔交易报告)"
+      },
+      {
+        "name": "Donald J Trump",
+        "title": "总统 · DJT 内部人(SEC Form 4)",
+        "trades": [
+          {
+            "ticker": "DJT",
+            "asset": "Common Stock, par value $0.0001 per share",
+            "dir_cn": "赠与",
+            "direction": "G",
+            "txn_date": "2024-12-17",
+            "amount_range": "114,750,000 股"
+          },
+          {
+            "ticker": "DJT",
+            "asset": "Common Stock, par value $0.0001 per share",
+            "dir_cn": "其他",
+            "direction": "J",
+            "txn_date": "2024-04-26",
+            "amount_range": "36,000,000 股"
+          },
+          {
+            "ticker": "DJT",
+            "asset": "Right to receive Earnout Shares",
+            "dir_cn": "其他",
+            "direction": "J",
+            "txn_date": "2024-04-26",
+            "amount_range": "36,000,000 股"
+          }
+        ],
+        "n_filings": 8,
+        "status": "ok",
+        "source": "SEC EDGAR Form 4 (Trump Media, DJT)"
+      },
+      {
+        "name": "Tommy Tuberville",
+        "title": "参议员 (阿拉巴马) · 参议院 PTR",
+        "trades": [
+          {
+            "ticker": "PEP",
+            "asset": "Pepsico Inc",
+            "dir_cn": "卖出",
+            "direction": "Sale (Full)",
+            "txn_date": "10/07/2025",
+            "amount_range": "$15,001 - $50,000"
+          },
+          {
+            "ticker": "OC",
+            "asset": "Owens Corning Inc",
+            "dir_cn": "卖出",
+            "direction": "Sale (Full)",
+            "txn_date": "10/07/2025",
+            "amount_range": "$15,001 - $50,000"
+          },
+          {
+            "ticker": "MSFT",
+            "asset": "Microsoft Corp",
+            "dir_cn": "卖出",
+            "direction": "Sale (Full)",
+            "txn_date": "10/07/2025",
+            "amount_range": "$15,001 - $50,000"
+          },
+          {
+            "ticker": "AAPL",
+            "asset": "Apple Inc",
+            "dir_cn": "卖出",
+            "direction": "Sale (Full)",
+            "txn_date": "10/07/2025",
+            "amount_range": "$15,001 - $50,000"
+          },
+          {
+            "ticker": "GOOGL",
+            "asset": "Alphabet Inc. - Class A Common Stock",
+            "dir_cn": "卖出",
+            "direction": "Sale (Full)",
+            "txn_date": "10/07/2025",
+            "amount_range": "$15,001 - $50,000"
+          },
+          {
+            "ticker": "ORCL",
+            "asset": "Oracle Corporation Common Stock",
+            "dir_cn": "卖出",
+            "direction": "Sale (Full)",
+            "txn_date": "10/07/2025",
+            "amount_range": "$15,001 - $50,000"
+          },
+          {
+            "ticker": null,
+            "asset": "BIRMINGHAM ALA GO WTS SER. 2018 B\n                                        \n                                        \n                                        \n                                            Rate/Coupon: 5.0% Matures: 12/01/2043",
+            "dir_cn": "卖出",
+            "direction": "Sale (Full)",
+            "txn_date": "10/07/2025",
+            "amount_range": "$15,001 - $50,000"
+          },
+          {
+            "ticker": "TSCO",
+            "asset": "Tractor Supply Company",
+            "dir_cn": "卖出",
+            "direction": "Sale (Full)",
+            "txn_date": "01/10/2025",
+            "amount_range": "$15,001 - $50,000"
+          },
+          {
+            "ticker": "CARR",
+            "asset": "Carrier Global Corp",
+            "dir_cn": "卖出",
+            "direction": "Sale (Full)",
+            "txn_date": "01/10/2025",
+            "amount_range": "$1,001 - $15,000"
+          },
+          {
+            "ticker": "TXN",
+            "asset": "Texas Instruments Incorporated - Common Stock",
+            "dir_cn": "卖出",
+            "direction": "Sale (Full)",
+            "txn_date": "01/10/2025",
+            "amount_range": "$15,001 - $50,000"
+          },
+          {
+            "ticker": "DEO",
+            "asset": "Diageo Plc ADR",
+            "dir_cn": "卖出",
+            "direction": "Sale (Full)",
+            "txn_date": "01/10/2025",
+            "amount_range": "$15,001 - $50,000"
+          },
+          {
+            "ticker": "MSFT",
+            "asset": "Microsoft Corp",
+            "dir_cn": "卖出",
+            "direction": "Sale (Full)",
+            "txn_date": "01/10/2025",
+            "amount_range": "$15,001 - $50,000"
+          },
+          {
+            "ticker": "AAPL",
+            "asset": "Apple Inc",
+            "dir_cn": "卖出",
+            "direction": "Sale (Full)",
+            "txn_date": "01/10/2025",
+            "amount_range": "$15,001 - $50,000"
+          },
+          {
+            "ticker": "ADBE",
+            "asset": "Adobe Inc. - Common Stock",
+            "dir_cn": "卖出",
+            "direction": "Sale (Full)",
+            "txn_date": "10/29/2024",
+            "amount_range": "$15,001 - $50,000"
+          },
+          {
+            "ticker": "AAPL",
+            "asset": "Apple Inc. - Common Stock",
+            "dir_cn": "卖出",
+            "direction": "Sale (Full)",
+            "txn_date": "10/29/2024",
+            "amount_range": "$15,001 - $50,000"
+          }
+        ],
+        "n_filings": 22,
+        "status": "ok",
+        "source": "Senate efdsearch PTR"
+      }
+    ]
+  },
+  "kol_changes": [
+    {
+      "kol": "Mike McGlone 麥克·麥格隆（Bloomberg Intelligence 高級大宗商品策略師 / 通縮派 / 「BI COMD」主導者）",
+      "sector": "贵金属与商品周期",
+      "prev_dir": "看空",
+      "new_dir": "中性",
+      "prev_date": "2026-10-13",
+      "date": "2026-10-14",
+      "comments": "称'比特币交易已结束',押注2026年大反转——股市补跌而非商品补涨",
+      "targets": "看空比特币/原油/天然气/铜(风险情景);看多黄金(长期)与美债;10年期美债收益率看向3%或以下",
+      "detail": "▸ 核心论点：Mike McGlone（彭博高级大宗商品策略师）提出\"比特币交易已结束\",押注2026年\"大反转\"——美股与商品/加密货币走势背离,他认为将是风险资产补跌而非商品补涨。\n▸ 关键依据：原油已从高位跌至约56美元;比特币兑黄金比率从约40盎司跌至约20盎司,视为比特币走弱领先指标;美股屡创新高同时金价超4300美元/盎司,传统上是经济压力信号。\n▸ 时间与位置：10年期美债收益率或向3%以下回落;原油或探至约40美元;比特币存在跌向5万甚至1万美元风险;若美股跌20%铜或跌30-40%,聚焦2026全年。\n▸ 标的与操作：看空比特币/原油/天然气;看多黄金(长期)与美国长期国债;看多做多美债作为2026年首选交易,铜视美股走势谨慎。"
+    },
+    {
+      "kol": "Citrini Research（Citrini 研究機構 / 創始人 James van Geelen /《2028 全球智能危機》出版方與共同作者）",
+      "sector": "科技与未来趋势",
+      "prev_dir": "中性",
+      "new_dir": "看空",
+      "prev_date": "2026-10-13",
+      "date": "2026-10-14",
+      "comments": "油价驱动的经济放缓将拖累股市,Fed降息也难成托底",
+      "targets": "",
+      "detail": "▸ 核心论点：若中东战争不结束，油价高企将成为对经济增长的'税'，压低消费者购买力并收紧金融条件，导致股市下行；即便战争迅速结束，消费者也会'略微走弱'。\n▸ 关键依据：引用创始人James van Geelen 2026年3月Substack文章，论点基于'利率已接近中性'——若油价维持高位，仅维持利率不变就已构成实质紧缩；此前2月该机构曾发布关于AI泡沫可能导致失业率升至10%的广泛传播报告。\n▸ 时间与位置：文章发布于2026年3月25日，未给出具体点位，强调的是中东战事持续性作为核心变量，未设定明确时间窗口。\n▸ 标的与操作：观点面向整体股票市场（看空/谨慎），未提具体标的买卖建议；隐含逻辑是即使美联储降息也不足以对冲油价冲击。"
+    },
+    {
+      "kol": "Niall Ferguson 尼爾·弗格森（史丹佛大學胡佛研究所 Milbank Family 資深研究員／金融史學家／《貨幣崛起》《Doom》作者／The Free Press 專欄作家）",
+      "sector": "宏观货币与金融体系",
+      "prev_dir": "看空",
+      "new_dir": "看多",
+      "prev_date": "2026-10-13",
+      "date": "2026-10-14",
+      "comments": "美债利息超国防支出触'弗格森定律',看多黄金比特币对冲美元走弱滞胀风险",
+      "targets": "美国联邦债务/GDP近100%,利息支出已超国防支出;美元自特朗普上任以来已贬值约8-9%",
+      "detail": "▸ 核心论点：美国已触发其提出的'弗格森定律'(任何利息支出超过国防支出的大国都将不再强盛)，财政不可持续局面只有增长(AI生产力奇迹)、违约或通胀稀释三条出路，且他认为前者概率低；建议配置黄金与比特币对冲美元走弱/滞胀风险。\n▸ 关键依据：美国2024年利息支出首次超过国防支出，联邦债务占GDP约100-120%(高于二战结束时水平)，预计每年财政赤字达GDP的6%以上；按其测算到2040年美国利息支出将达国防支出的两倍；美元自特朗普上任以来已贬值约8-9%；金价创历史新高被其解读为市场预期美元持续走弱的信号。\n▸ 时间与位置：2026年1月及多次访谈中重申该论点(含TRIGGERnometry 1月5日访谈)，未给出具体金价/比特币点位，但明确以'小比例配置'作为滞胀对冲建议；2026年作为美国建国250周年，他将中期选举结果(共和党是否失去众议院)列为年度最大政治变量，AI泡沫是否降温为次要变量。\n▸ 标的与操作：建议持有黄金和比特币作为小比例对冲仓位，应对1970年代式滞胀/美元持续贬值情景；对美股整体并非看空，认为只要AI资本开支持续、超大型科技公司自由现金流强劲，美股2026年政治新闻面差但市场面'尚可'；对台海风险给出三年内逾50%的灰色地带(非直接入侵)概率判断。"
+    },
+    {
+      "kol": "Mark Spitznagel 馬克·斯皮茨納格爾（Universa Investments 創始人兼首席投資官 /「尾部風險對沖」之父 /《The Dao of Capital》《Safe Haven》）",
+      "sector": "股权市场",
+      "prev_dir": "中性",
+      "new_dir": "看多",
+      "prev_date": "2026-10-13",
+      "date": "2026-10-14",
+      "comments": "未来仍看涨一波'狂热大涨',之后预警史上最大崩盘将至。",
+      "targets": "",
+      "detail": "▸ 核心论点：斯皮茨纳格尔认为AI驱动的牛市尚有一波\"狂热暴涨\"可期，自己借尾部对冲策略得以在过去四年保持\"极度看多\"，但狂热落幕后将迎来\"一生一次的崩盘\"。\n▸ 关键依据：他此前(2025年11月)接受采访时曾预测标普500指数还有约20%涨幅空间后再迎\"80%崩盘\"；本轮(2026年9月)采访重申同样逻辑，并指出此前多轮加息的滞后冲击尚未完全在经济中显现，经济正\"翻转\"(rolling over)。\n▸ 时间与位置：未给出具体点位或精确时间窗口，仅表述为\"可能更早而非更晚\"，自称届时会是\"未来几个月里最悲观的空头\"但目前尚未转空。\n▸ 标的与操作：聚焦美股整体(含AI相关股)，当前策略是通过Universa的尾部风险对冲(期权等)继续持有多头敞口搏最后一波上涨，同时为崩盘后果进行保护性对冲，而非直接做空。"
+    },
+    {
+      "kol": "Trisha Curtis 特里莎·柯蒂斯（PetroNerds 創始人兼 CEO / American Energy Institute 首席經濟學家 / 美國頁巖油專家 / 前 EPRINC 上游與中游研究總監）",
+      "sector": "资源与能源安全",
+      "prev_dir": "中性",
+      "new_dir": "看多",
+      "prev_date": "2026-10-13",
+      "date": "2026-10-14",
+      "comments": "看多原油与能源安全,警惕柴油紧张与通胀叠加AI资本争夺",
+      "targets": "WTI $89.57/桶、Brent $101.93/桶(10月7日快照);柴油>$6/加仑",
+      "detail": "▸ 核心论点：PetroNerds创始人兼CEO在10月7日市场快照及播客中指出,全球炼油产能偏紧、中国限制成品油出口、中东原油流向变化,叠加全球债券收益率上升,构成能源与宏观双重压力,但她不预测衰退。\n▸ 关键依据：10月7日WTI报89.57美元/桶,Brent报101.93美元/桶,价差显著;美欧天然气价差拉大;柴油价格已突破6美元/加仑级别;中国10月限制成品油出口被解读为地缘杠杆。\n▸ 时间与位置：数据时点为2026年10月7日市场快照;9月16日ROSA能源会议主题演讲;未给出具体多空目标点位或交易时间窗口。\n▸ 标的与操作：聚焦原油(WTI/Brent)、柴油/成品油及天然气(Henry Hub vs 欧洲LNG)供需分析,未给出具体买卖操作建议,呼吁维持产能投资与能源政策诚实。"
+    },
+    {
+      "kol": "Robert Pape 羅伯特·佩普（芝加哥大學政治學教授 / CPOST 安全與威脅項目主任 /《The Escalation Trap》作者）",
+      "sector": "资源与能源安全",
+      "prev_dir": "看空",
+      "new_dir": "看多",
+      "prev_date": "2026-10-13",
+      "date": "2026-10-14",
+      "comments": "警告美国陷'升级陷阱',伊朗或中期选举前动手,油市风险上行",
+      "targets": "",
+      "detail": "▸ 核心论点：芝加哥大学教授、CPOST主任Pape在Substack长期跟踪伊朗战争升级路径,认为美国陷'升级陷阱'——伊朗掌握升级优势,美方每升级反而改善伊朗相对地位。\n▸ 关键依据：美国战略石油储备降至1982年以来最低,约2.85亿桶,不足授权库容40%;9月单周释放量创3月紧急动用以来新低;沙特东西输油管道遭袭被迫改道。\n▸ 时间与位置：未给出具体点位或目标价,但判断伊朗在中期选举前首次主动出手概率'高于多数人预期'(2026年10月文章)。\n▸ 标的与操作：聚焦原油/中东地缘溢价与霍尔木兹海峡航运,未直接给买卖建议,偏风险警示与情景推演。"
+    },
+    {
+      "kol": "Michael Dunne（Dunne Insights 創辦人兼 CEO /《Driving with Dunne》播客主持 / 全球汽車產業資深分析師，數十年中國實地觀察）",
+      "sector": "股权市场",
+      "prev_dir": "看空",
+      "new_dir": "中性",
+      "prev_date": "2026-10-13",
+      "date": "2026-10-14",
+      "comments": "中国车企产能过剩全球外溢,美需关税买时间,短期难破局",
+      "targets": "",
+      "detail": "▸ 核心论点：Dunne Insights创始人Dunne在Hoover研究院等多场访谈中称中国已是汽车产业'终局玩家',美国在电动车领域落后中国'十年、十倍'。\n▸ 关键依据：中国今年产能约5500万辆、内需仅2500万辆,过剩1500-2000万辆外溢全球;比亚迪2024年销量已超特斯拉;中国掌控约70%电池供应链。\n▸ 时间与位置：未给出具体点位或目标价;对美中关系实质突破持悲观(1-10分量表打'负2分')。\n▸ 标的与操作：支持对华关税'买时间',建议美车企转向南美、东南亚抢占先机,未给具体股票买卖建议。"
+    },
+    {
+      "kol": "Tim Scott 提姆·史考特（Biocom California 總裁兼 CEO / 25+ 年生物科技創業者經驗；⚠️ 非美國參議員 Tim Scott）",
+      "sector": "科技与未来趋势",
+      "prev_dir": "中性偏乐观",
+      "new_dir": "看多",
+      "prev_date": "2026-10-12",
+      "date": "2026-10-14",
+      "comments": "生物科技寒冬第三年,长期基本面仍强,M&A与授权交易回暖",
+      "targets": "",
+      "detail": "▸ 核心论点：Biocom California总裁兼CEO Tim Scott(确认为生物科技高管,非同名参议员)称行业正处'生物科技寒冬'第三年,但长期基本面依然强劲、终将反弹。\n▸ 关键依据：2025年加州生命科学业创造近3940亿美元产出,吸引631亿美元私人资本(约三分之二涉并购);2030年前约70个重磅药专利悬崖,涉逾3000亿美元销售额。\n▸ 时间与位置：未给出具体点位或目标价;判断IPO窗口基本关闭,早期融资受限,但并购与授权交易相对活跃。\n▸ 标的与操作：看好后期阶段及强临床数据公司的并购/授权机会,关注AI在药物研发中的应用;未给出具体股票操作建议。"
+    },
+    {
+      "kol": "Jamie Dimon 傑米·戴蒙（JPMorgan Chase 董事長兼 CEO / 年度股東信作者 / 公共政策評論者）",
+      "sector": "宏观货币与金融体系",
+      "prev_dir": "中性偏谨慎",
+      "new_dir": "看空",
+      "prev_date": "2026-10-12",
+      "date": "2026-10-14",
+      "comments": "称当前估值不买股票和长债,警告市场'亢奋',通胀或冲4%",
+      "targets": "",
+      "detail": "▸ 核心论点：JPMorgan Chase CEO Jamie Dimon多场公开发言警示市场低估地缘政治与财政风险,称当前价位'个人不会买'股票或长期美债。\n▸ 关键依据：5月29日称市场'亢奋'且有炒作,点名美光48个交易日市值从5000亿翻倍至1万亿美元;信用利差处历史低位;预计今年通胀或'轻松冲到4%'。\n▸ 时间与位置：未给出具体点位,但提出10年期美债收益率'应处于4%-4.5%',暗示当前偏低、国债价格上行空间有限。\n▸ 标的与操作：对美股与长久期美债整体持谨慎/观望,仅'优质个股'才考虑介入;同时JPMorgan预计投行费用增10%,交易并购业务不悲观。"
+    },
+    {
+      "kol": "Einar Tangen 艾納爾·唐恩（CIGI 高級研究員 / 太和智庫高級研究員 / Asia Narratives 主席 / 常駐北京的中國全球治理評論員）",
+      "sector": "宏观货币与金融体系",
+      "prev_dir": "看多(中国经济韧性)",
+      "new_dir": "中性",
+      "prev_date": "2026-10-12",
+      "date": "2026-10-14",
+      "comments": "伊朗战争加速'石油需求见顶',中短期供应缓冲将耗尽、须再平衡",
+      "targets": "",
+      "detail": "▸ 核心论点：CIGI高级研究员、常驻北京的Einar Tangen撰文称伊朗战争加速而非引发石油需求见顶,中长期能源市场将被迫再平衡。\n▸ 关键依据：霍尔木兹海峡中断影响约占全球贸易原油运输五分之一(约2000万桶/日);中国石油消费从战前16.8-17.0降至15.8-16.0百万桶/日;IEA释放约4亿桶储备仅能支撑约5个月。\n▸ 时间与位置：未给出具体点位或目标价;判断未来两年美/巴西/圭亚那等合计可新增约180-250万桶/日产能,仍无法完全替代中东份额。\n▸ 标的与操作：聚焦原油供需与地缘溢价分析,未给做多/做空建议,呈现'中期供应趋紧、长期需求见顶'双向判断。"
+    },
+    {
+      "kol": "Abigail Coplin 阿比蓋爾·科普林（Vassar College 社會學與科技研究助理教授 / 中國生物技術與農業生物技術產業權威）",
+      "sector": "科技与未来趋势",
+      "prev_dir": "看多(中国生物科技崛起)",
+      "new_dir": "中性",
+      "prev_date": "2026-10-12",
+      "date": "2026-10-14",
+      "comments": "中国生物科技快速崛起,美国基础研究与人才优势正被削弱",
+      "targets": "",
+      "detail": "▸ 核心论点：Vassar College助理教授Abigail Coplin指出中国生物科技崛起速度被低估,美国限制资金与人才正自我削弱竞争力。\n▸ 关键依据：中国拟科技预算增至4260亿元(同比+10%);2012-2023年中国基础研究投入增两倍以上,美国仅增约一半;预计2028年前后中国成全球最大公共科研资金方。\n▸ 时间与位置：未给出具体点位或目标价;2026年5月1日起中国新规(IIT数据提交20天内获'转化批准')已生效,加速本土商业化。\n▸ 标的与操作：属学术政策分析而非投资建议,主张美中应继续科研接触,认为生物科技无芯片式先发垄断壁垒,未涉具体资产操作。"
+    },
+    {
+      "kol": "Henry Sanderson 亨利·桑德森（前《金融時報》記者 /《Volt Rush 伏特熱》作者 / Volt Insight 專欄主筆 / 中國電池金屬與關鍵礦物供應鏈專家）",
+      "sector": "资源与能源安全",
+      "prev_dir": "中性偏看空(西方供应链独立性)",
+      "new_dir": "看多",
+      "prev_date": "2026-10-12",
+      "date": "2026-10-14",
+      "comments": "锂价逆势飙升突破20万元/吨,其后停更Volt Insight转任Fastmarkets",
+      "targets": "",
+      "detail": "▸ 核心论点：前FT记者、《Volt Rush》作者Henry Sanderson在Volt Insight专栏指出,中国电动车市场增速放缓但锂价逆势飙升,显示电池需求结构性支撑。\n▸ 关键依据：中国锂期货5月一度突破每吨20万元人民币;同期宁德时代加大矿产布局、押注数据中心与能源管理软件,电池厂商受天然气成本与锂价挤压利润率。\n▸ 时间与位置：未给出具体点位或目标价,文章发布于2026年5月;9月4日宣布停更转任Fastmarkets稀土领域编辑。\n▸ 标的与操作：看好锂价及电池金属需求韧性,对中国电池企业盈利能力偏谨慎;未给具体买卖指令,独立观点来源已中断。"
+    },
+    {
+      "kol": "John Lee（Silver Elephant Mining 执行主席兼 CEO / CleanTech Vanadium CEO / 白银与矿业 25 年从业者）",
+      "sector": "贵金属与商品周期",
+      "prev_dir": "看多",
+      "new_dir": "中性",
+      "prev_date": "2026-10-13",
+      "date": "2026-10-14",
+      "comments": "白银盘整50-85区间，看好锗(germanium)作AI机器人隐藏标的",
+      "targets": "白银区间50-90美元（年内/明年），金银比高位",
+      "detail": "▸ 核心论点：2026-06-23访谈中，John Lee认为金银在2026年初见顶(金约5400、银1月高点超120)后进入修正阶段；白银短期难以持续突破90美元，但长期仍看好贵金属叙事；更强调被市场忽视的\"锗(germanium)\"作为AI/机器人产业隐藏标的。\n▸ 关键依据：复盘称银从2025年7月(36美元)到120美元为\"cartel(操纵集团)\"通过期货/ETF推高再砸盘(80→115→70附近)制造FOMO与多杀多；金从1800美元2年多涨到5400美元，他认为部分买家(央行等)有\"提前知情\"优势；锗价格6年内从20美元/盎司涨到240美元/盎司(涨10倍)，Silver Elephant与CleanTech Vanadium在美国Four Mile矿区有锗项目，美国政府拟投70亿美元在附近建锗精炼厂(由Exim Bank/商务部/国防部支持)。\n▸ 时间与位置：白银录制时交易价约62美元/盎司，金约4137美元/盎司；他给出白银2026年(或延至明年)盘整区间50-90美元，突破90美元\"较难\"；未给出黄金新高目标价。\n▸ 标的与操作：建议资金50%配置CleanTech(锗生产，\"喂养机器人的能源/材料\")、50%配置Silver Elephant(锗项目，\"给机器人视觉\")；对金银总体维持长期多头但短期区间震荡观望，不追高。"
+    },
+    {
+      "kol": "Clive Thompson（前瑞士私人银行家 / 退役财富管理董事总经理 / 近 50 年瑞士银行与财富管理经验 / 贵金属与资产配置评论者）",
+      "sector": "宏观货币与金融体系",
+      "prev_dir": "看多",
+      "new_dir": "中性",
+      "prev_date": "2026-10-13",
+      "date": "2026-10-14",
+      "comments": "公开信息有限，仅检索到其讨论贵金属波动性，未见具体观点",
+      "targets": "无明确多空方向",
+      "detail": "▸ 核心论点：公开信息有限，仅检索到：Clive Thompson(近50年瑞士私人银行从业者)在一期题为\"Silver Price Prediction 2026\"的播客节目中，受邀讨论贵金属市场\"前所未有的波动性\"。\n▸ 关键依据：播客简介未透露具体多空结论、点位或数字依据，仅标题提及\"silver price prediction\"与\"unprecedented volatility\"。\n▸ 时间与位置：未给出具体点位或目标价，节目发布时间未明确标注(其个人博客近期帖子日期约2026-09)。\n▸ 标的与操作：无法判断具体操作建议，仅知话题方向为白银/贵金属波动性评论。"
+    },
+    {
+      "kol": "David Sacks（Craft Ventures 联合创始人 / Yammer 创始人·前 PayPal COO / 前白宫 AI 与加密货币政策负责人（AI & Crypto Czar）/ All-In Podcast 联合主持）",
+      "sector": "股权市场",
+      "prev_dir": "看多",
+      "new_dir": "看空",
+      "prev_date": "2026-10-13",
+      "date": "2026-10-14",
+      "comments": "警示AI估值与基本面脱钩,但对OpenAI/Anthropic\"双寡头\"地位本身认可",
+      "targets": "AI初创2023-24估值10-20倍营收 vs 成熟SaaS历史5-8倍/高增长SaaS 10-15倍",
+      "detail": "▸ 核心论点：David Sacks在All-In播客辩论中认为AI估值已与基本面脱钩，多数AI公司尚未证明可重复、可规模化的单位经济模型；但他本人同时认为Nvidia的业绩/预测\"粉碎了AI是泡沫\"的叙事，态度并非单纯看空而是强调甄别。\n▸ 关键依据：2026-04-17播客辩论中指出，2023-2024年AI公司普遍以营收10-20倍(甚至30倍以上)估值融资，而成熟SaaS历史估值为营收5-8倍，高增长SaaS(40%+同比)通常10-15倍；他认为多数AI初创的营收仍是\"理论性\"的，获客成本/留存率因产品上市时间太短而未知；早期算力/数据/人才护城河正随云厂商普及算力与开源模型进步而快速消失；估值终将向基本面收敛(类比2000年互联网泡沫)。另一面，2026-09-13他在X发文回应Anthropic CEO Dario Amodei与OpenAI CEO Sam Altman提出的\"放慢前沿模型开发\"倡议，称双方事实上已形成\"前沿双寡头\"(按市场份额/营收增速/模型能力衡量)，可自行放慢但不应借此换取反垄断豁免或监管审批特权。\n▸ 时间与位置：未给出具体点位或目标价；辩论发生于2026年4月，监管立场发文为2026年9月13日(白宫总统科技顾问委员会联席主席身份)。\n▸ 标的与操作：对营收/估值脱节的AI初创股权/私募估值持谨慎看空态度，建议以单位经济(CAC/LTV)而非叙事定价；对Nvidia等有真实业绩支撑的AI基建龙头相对认可；未给出具体做多/做空的上市公司标的。"
+    }
+  ]
+}
