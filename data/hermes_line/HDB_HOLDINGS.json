@@ -770,6 +770,65 @@
    }
   },
   {
+   "uid": "h13f|2026-06-30|Berkshire Hathaway|BAC|❌清仓|0",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-30｜Berkshire Hathaway｜BAC"
+       }
+      }
+     ]
+    },
+    "机构": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Berkshire Hathaway"
+       }
+      }
+     ]
+    },
+    "标的": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "BAC · Bank America Corp [❌清仓]"
+       }
+      }
+     ]
+    },
+    "持股数": {
+     "number": 0.0
+    },
+    "市值_百万": {
+     "number": null
+    },
+    "环比变化": {
+     "number": -100.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SEC 13F via data/holdings_13f.json [exits]"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2026-06-30"
+     }
+    }
+   }
+  },
+  {
    "uid": "h13f|2026-06-30|Berkshire Hathaway|Constellation Brands Inc|❌清仓|0",
    "props": {
     "记录": {
@@ -857,65 +916,6 @@
        "type": "text",
        "text": {
         "content": "CB · Chubb Ltd Switz [❌清仓]"
-       }
-      }
-     ]
-    },
-    "持股数": {
-     "number": 0.0
-    },
-    "市值_百万": {
-     "number": null
-    },
-    "环比变化": {
-     "number": -100.0
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "SEC 13F via data/holdings_13f.json [exits]"
-       }
-      }
-     ]
-    },
-    "季度": {
-     "date": {
-      "start": "2026-06-30"
-     }
-    }
-   }
-  },
-  {
-   "uid": "h13f|2026-06-30|Berkshire Hathaway|BAC|❌清仓|0",
-   "props": {
-    "记录": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-06-30｜Berkshire Hathaway｜BAC"
-       }
-      }
-     ]
-    },
-    "机构": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "Berkshire Hathaway"
-       }
-      }
-     ]
-    },
-    "标的": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "BAC · Bank America Corp [❌清仓]"
        }
       }
      ]
@@ -2009,14 +2009,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Bridgewater Associates|Enpro Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Bridgewater Associates|Cognizant Technology Solutio|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Bridgewater Associates｜Enpro Inc"
+        "content": "2026-06-30｜Bridgewater Associates｜Cognizant Technology Solutio"
        }
       }
      ]
@@ -2036,7 +2036,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Enpro Inc · Enpro Inc [❌清仓]"
+        "content": "Cognizant Technology Solutio · Cognizant Technology Solutio [❌清仓]"
        }
       }
      ]
@@ -2068,14 +2068,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Bridgewater Associates|Dicks Sporting Goods Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Bridgewater Associates|Extra Space Storage Inc|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Bridgewater Associates｜Dicks Sporting Goods Inc"
+        "content": "2026-06-30｜Bridgewater Associates｜Extra Space Storage Inc"
        }
       }
      ]
@@ -2095,7 +2095,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Dicks Sporting Goods Inc · Dicks Sporting Goods Inc [❌清仓]"
+        "content": "Extra Space Storage Inc · Extra Space Storage Inc [❌清仓]"
        }
       }
      ]
@@ -2127,14 +2127,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Bridgewater Associates|Commercial Metals Co|❌清仓|0",
+   "uid": "h13f|2026-06-30|Bridgewater Associates|Fermi Inc|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Bridgewater Associates｜Commercial Metals Co"
+        "content": "2026-06-30｜Bridgewater Associates｜Fermi Inc"
        }
       }
      ]
@@ -2154,7 +2154,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Commercial Metals Co · Commercial Metals Co [❌清仓]"
+        "content": "Fermi Inc · Fermi Inc [❌清仓]"
        }
       }
      ]
@@ -2186,14 +2186,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Bridgewater Associates|Affiliated Managers Group|❌清仓|0",
+   "uid": "h13f|2026-06-30|Bridgewater Associates|Apellis Pharmaceuticals Inc|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Bridgewater Associates｜Affiliated Managers Group"
+        "content": "2026-06-30｜Bridgewater Associates｜Apellis Pharmaceuticals Inc"
        }
       }
      ]
@@ -2213,7 +2213,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Affiliated Managers Group · Affiliated Managers Group [❌清仓]"
+        "content": "Apellis Pharmaceuticals Inc · Apellis Pharmaceuticals Inc [❌清仓]"
        }
       }
      ]
@@ -2245,14 +2245,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Bridgewater Associates|Hologic Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Bridgewater Associates|UBER|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Bridgewater Associates｜Hologic Inc"
+        "content": "2026-06-30｜Bridgewater Associates｜UBER"
        }
       }
      ]
@@ -2272,7 +2272,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Hologic Inc · Hologic Inc [❌清仓]"
+        "content": "UBER · Uber Technologies Inc [❌清仓]"
        }
       }
      ]
@@ -2304,14 +2304,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Bridgewater Associates|Osi Systems Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Bridgewater Associates|Peloton Interactive Inc|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Bridgewater Associates｜Osi Systems Inc"
+        "content": "2026-06-30｜Bridgewater Associates｜Peloton Interactive Inc"
        }
       }
      ]
@@ -2331,7 +2331,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Osi Systems Inc · Osi Systems Inc [❌清仓]"
+        "content": "Peloton Interactive Inc · Peloton Interactive Inc [❌清仓]"
        }
       }
      ]
@@ -2835,14 +2835,14 @@
    }
   },
   {
-   "uid": "h13f|2025-09-30|Scion Asset Mgmt|META|❌清仓|0",
+   "uid": "h13f|2025-09-30|Scion Asset Mgmt|VFC|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2025-09-30｜Scion Asset Mgmt｜META"
+        "content": "2025-09-30｜Scion Asset Mgmt｜VFC"
        }
       }
      ]
@@ -2862,66 +2862,7 @@
       {
        "type": "text",
        "text": {
-        "content": "META · Meta Platforms Inc [❌清仓]"
-       }
-      }
-     ]
-    },
-    "持股数": {
-     "number": 0.0
-    },
-    "市值_百万": {
-     "number": null
-    },
-    "环比变化": {
-     "number": -100.0
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "SEC 13F via data/holdings_13f.json [exits/top_holdings]"
-       }
-      }
-     ]
-    },
-    "季度": {
-     "date": {
-      "start": "2025-09-30"
-     }
-    }
-   }
-  },
-  {
-   "uid": "h13f|2025-09-30|Scion Asset Mgmt|EL|❌清仓|0",
-   "props": {
-    "记录": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2025-09-30｜Scion Asset Mgmt｜EL"
-       }
-      }
-     ]
-    },
-    "机构": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "Scion Asset Mgmt"
-       }
-      }
-     ]
-    },
-    "标的": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "EL · Lauder Estee Cos Inc [❌清仓]"
+        "content": "VFC · V F Corp [❌清仓]"
        }
       }
      ]
@@ -3012,14 +2953,14 @@
    }
   },
   {
-   "uid": "h13f|2025-09-30|Scion Asset Mgmt|UNH|❌清仓|0",
+   "uid": "h13f|2025-09-30|Scion Asset Mgmt|JD|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2025-09-30｜Scion Asset Mgmt｜UNH"
+        "content": "2025-09-30｜Scion Asset Mgmt｜JD"
        }
       }
      ]
@@ -3039,7 +2980,7 @@
       {
        "type": "text",
        "text": {
-        "content": "UNH · Unitedhealth Group Inc [❌清仓]"
+        "content": "JD · Jd.Com Inc [❌清仓]"
        }
       }
      ]
@@ -3117,7 +3058,7 @@
       {
        "type": "text",
        "text": {
-        "content": "SEC 13F via data/holdings_13f.json [exits]"
+        "content": "SEC 13F via data/holdings_13f.json [exits/top_holdings]"
        }
       }
      ]
@@ -3130,14 +3071,14 @@
    }
   },
   {
-   "uid": "h13f|2025-09-30|Scion Asset Mgmt|REGN|❌清仓|0",
+   "uid": "h13f|2025-09-30|Scion Asset Mgmt|BABA|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2025-09-30｜Scion Asset Mgmt｜REGN"
+        "content": "2025-09-30｜Scion Asset Mgmt｜BABA"
        }
       }
      ]
@@ -3157,7 +3098,7 @@
       {
        "type": "text",
        "text": {
-        "content": "REGN · Regeneron Pharmaceuticals [❌清仓]"
+        "content": "BABA · Alibaba Group Hldg Ltd [❌清仓]"
        }
       }
      ]
@@ -3177,6 +3118,65 @@
        "type": "text",
        "text": {
         "content": "SEC 13F via data/holdings_13f.json [exits]"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2025-09-30"
+     }
+    }
+   }
+  },
+  {
+   "uid": "h13f|2025-09-30|Scion Asset Mgmt|META|❌清仓|0",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2025-09-30｜Scion Asset Mgmt｜META"
+       }
+      }
+     ]
+    },
+    "机构": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Scion Asset Mgmt"
+       }
+      }
+     ]
+    },
+    "标的": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "META · Meta Platforms Inc [❌清仓]"
+       }
+      }
+     ]
+    },
+    "持股数": {
+     "number": 0.0
+    },
+    "市值_百万": {
+     "number": null
+    },
+    "环比变化": {
+     "number": -100.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SEC 13F via data/holdings_13f.json [exits/top_holdings]"
        }
       }
      ]
@@ -4251,14 +4251,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Soros Fund Mgmt|Stubhub Hldgs Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Soros Fund Mgmt|Fluor Corp|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Soros Fund Mgmt｜Stubhub Hldgs Inc"
+        "content": "2026-06-30｜Soros Fund Mgmt｜Fluor Corp"
        }
       }
      ]
@@ -4278,7 +4278,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Stubhub Hldgs Inc · Stubhub Hldgs Inc [❌清仓]"
+        "content": "Fluor Corp · Fluor Corp [❌清仓]"
        }
       }
      ]
@@ -4310,14 +4310,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Soros Fund Mgmt|Jazz Investments I Ltd|❌清仓|0",
+   "uid": "h13f|2026-06-30|Soros Fund Mgmt|Cadiz Inc|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Soros Fund Mgmt｜Jazz Investments I Ltd"
+        "content": "2026-06-30｜Soros Fund Mgmt｜Cadiz Inc"
        }
       }
      ]
@@ -4337,7 +4337,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Jazz Investments I Ltd · Jazz Investments I Ltd [❌清仓]"
+        "content": "Cadiz Inc · Cadiz Inc [❌清仓]"
        }
       }
      ]
@@ -4369,14 +4369,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Soros Fund Mgmt|Mda Space Ltd|❌清仓|0",
+   "uid": "h13f|2026-06-30|Soros Fund Mgmt|Liberty Media Corp Del|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Soros Fund Mgmt｜Mda Space Ltd"
+        "content": "2026-06-30｜Soros Fund Mgmt｜Liberty Media Corp Del"
        }
       }
      ]
@@ -4396,7 +4396,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Mda Space Ltd · Mda Space Ltd [❌清仓]"
+        "content": "Liberty Media Corp Del · Liberty Media Corp Del [❌清仓]"
        }
       }
      ]
@@ -4428,14 +4428,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Soros Fund Mgmt|Shoals Technologies Group In|❌清仓|0",
+   "uid": "h13f|2026-06-30|Soros Fund Mgmt|Lincoln Natl Corp Ind|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Soros Fund Mgmt｜Shoals Technologies Group In"
+        "content": "2026-06-30｜Soros Fund Mgmt｜Lincoln Natl Corp Ind"
        }
       }
      ]
@@ -4455,7 +4455,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Shoals Technologies Group In · Shoals Technologies Group In [❌清仓]"
+        "content": "Lincoln Natl Corp Ind · Lincoln Natl Corp Ind [❌清仓]"
        }
       }
      ]
@@ -4487,14 +4487,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Soros Fund Mgmt|Arcellx Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Soros Fund Mgmt|Nuscale Pwr Corp|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Soros Fund Mgmt｜Arcellx Inc"
+        "content": "2026-06-30｜Soros Fund Mgmt｜Nuscale Pwr Corp"
        }
       }
      ]
@@ -4514,7 +4514,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Arcellx Inc · Arcellx Inc [❌清仓]"
+        "content": "Nuscale Pwr Corp · Nuscale Pwr Corp [❌清仓]"
        }
       }
      ]
@@ -4546,14 +4546,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Soros Fund Mgmt|Array Technologies Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Soros Fund Mgmt|DTE|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Soros Fund Mgmt｜Array Technologies Inc"
+        "content": "2026-06-30｜Soros Fund Mgmt｜DTE"
        }
       }
      ]
@@ -4573,7 +4573,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Array Technologies Inc · Array Technologies Inc [❌清仓]"
+        "content": "DTE · Dte Energy Co [❌清仓]"
        }
       }
      ]
@@ -5667,65 +5667,6 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|ARK Investment Mgmt|Brera Holdings Plc|❌清仓|0",
-   "props": {
-    "记录": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-06-30｜ARK Investment Mgmt｜Brera Holdings Plc"
-       }
-      }
-     ]
-    },
-    "机构": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "ARK Investment Mgmt"
-       }
-      }
-     ]
-    },
-    "标的": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "Brera Holdings Plc · Brera Holdings Plc [❌清仓]"
-       }
-      }
-     ]
-    },
-    "持股数": {
-     "number": 0.0
-    },
-    "市值_百万": {
-     "number": null
-    },
-    "环比变化": {
-     "number": -100.0
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "SEC 13F via data/holdings_13f.json [exits]"
-       }
-      }
-     ]
-    },
-    "季度": {
-     "date": {
-      "start": "2026-06-30"
-     }
-    }
-   }
-  },
-  {
    "uid": "h13f|2026-06-30|ARK Investment Mgmt|Salesforce Inc|❌清仓|0",
    "props": {
     "记录": {
@@ -5785,14 +5726,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|ARK Investment Mgmt|Intercontinental Exchange Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|ARK Investment Mgmt|Palo Alto Networks Inc|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜ARK Investment Mgmt｜Intercontinental Exchange Inc"
+        "content": "2026-06-30｜ARK Investment Mgmt｜Palo Alto Networks Inc"
        }
       }
      ]
@@ -5812,7 +5753,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Intercontinental Exchange Inc · Intercontinental Exchange Inc [❌清仓]"
+        "content": "Palo Alto Networks Inc · Palo Alto Networks Inc [❌清仓]"
        }
       }
      ]
@@ -5903,14 +5844,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|ARK Investment Mgmt|Palo Alto Networks Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|ARK Investment Mgmt|Brera Holdings Plc|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜ARK Investment Mgmt｜Palo Alto Networks Inc"
+        "content": "2026-06-30｜ARK Investment Mgmt｜Brera Holdings Plc"
        }
       }
      ]
@@ -5930,7 +5871,66 @@
       {
        "type": "text",
        "text": {
-        "content": "Palo Alto Networks Inc · Palo Alto Networks Inc [❌清仓]"
+        "content": "Brera Holdings Plc · Brera Holdings Plc [❌清仓]"
+       }
+      }
+     ]
+    },
+    "持股数": {
+     "number": 0.0
+    },
+    "市值_百万": {
+     "number": null
+    },
+    "环比变化": {
+     "number": -100.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SEC 13F via data/holdings_13f.json [exits]"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2026-06-30"
+     }
+    }
+   }
+  },
+  {
+   "uid": "h13f|2026-06-30|ARK Investment Mgmt|Intercontinental Exchange Inc|❌清仓|0",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-30｜ARK Investment Mgmt｜Intercontinental Exchange Inc"
+       }
+      }
+     ]
+    },
+    "机构": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "ARK Investment Mgmt"
+       }
+      }
+     ]
+    },
+    "标的": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Intercontinental Exchange Inc · Intercontinental Exchange Inc [❌清仓]"
        }
       }
      ]
@@ -7614,6 +7614,65 @@
    }
   },
   {
+   "uid": "h13f|2026-06-30|Appaloosa|Rtx Corporation|❌清仓|0",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-30｜Appaloosa｜Rtx Corporation"
+       }
+      }
+     ]
+    },
+    "机构": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Appaloosa"
+       }
+      }
+     ]
+    },
+    "标的": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Rtx Corporation · Rtx Corporation [❌清仓]"
+       }
+      }
+     ]
+    },
+    "持股数": {
+     "number": 0.0
+    },
+    "市值_百万": {
+     "number": null
+    },
+    "环比变化": {
+     "number": -100.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SEC 13F via data/holdings_13f.json [exits]"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2026-06-30"
+     }
+    }
+   }
+  },
+  {
    "uid": "h13f|2026-06-30|Appaloosa|MSFT|❌清仓|0",
    "props": {
     "记录": {
@@ -7642,124 +7701,6 @@
        "type": "text",
        "text": {
         "content": "MSFT · Microsoft Corp [❌清仓]"
-       }
-      }
-     ]
-    },
-    "持股数": {
-     "number": 0.0
-    },
-    "市值_百万": {
-     "number": null
-    },
-    "环比变化": {
-     "number": -100.0
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "SEC 13F via data/holdings_13f.json [exits]"
-       }
-      }
-     ]
-    },
-    "季度": {
-     "date": {
-      "start": "2026-06-30"
-     }
-    }
-   }
-  },
-  {
-   "uid": "h13f|2026-06-30|Appaloosa|GLW|❌清仓|0",
-   "props": {
-    "记录": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-06-30｜Appaloosa｜GLW"
-       }
-      }
-     ]
-    },
-    "机构": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "Appaloosa"
-       }
-      }
-     ]
-    },
-    "标的": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "GLW · Corning Inc [❌清仓]"
-       }
-      }
-     ]
-    },
-    "持股数": {
-     "number": 0.0
-    },
-    "市值_百万": {
-     "number": null
-    },
-    "环比变化": {
-     "number": -100.0
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "SEC 13F via data/holdings_13f.json [exits]"
-       }
-      }
-     ]
-    },
-    "季度": {
-     "date": {
-      "start": "2026-06-30"
-     }
-    }
-   }
-  },
-  {
-   "uid": "h13f|2026-06-30|Appaloosa|UNH|❌清仓|0",
-   "props": {
-    "记录": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-06-30｜Appaloosa｜UNH"
-       }
-      }
-     ]
-    },
-    "机构": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "Appaloosa"
-       }
-      }
-     ]
-    },
-    "标的": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "UNH · Unitedhealth Group Inc [❌清仓]"
        }
       }
      ]
@@ -7850,14 +7791,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Appaloosa|Pdd Holdings Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Appaloosa|SNDK|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Appaloosa｜Pdd Holdings Inc"
+        "content": "2026-06-30｜Appaloosa｜SNDK"
        }
       }
      ]
@@ -7877,7 +7818,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Pdd Holdings Inc · Pdd Holdings Inc [❌清仓]"
+        "content": "SNDK · Sandisk Corp [❌清仓]"
        }
       }
      ]
@@ -7909,14 +7850,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Appaloosa|Deutsche Bk Ag|❌清仓|0",
+   "uid": "h13f|2026-06-30|Appaloosa|GLW|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Appaloosa｜Deutsche Bk Ag"
+        "content": "2026-06-30｜Appaloosa｜GLW"
        }
       }
      ]
@@ -7936,7 +7877,66 @@
       {
        "type": "text",
        "text": {
-        "content": "Deutsche Bk Ag · Deutsche Bk Ag [❌清仓]"
+        "content": "GLW · Corning Inc [❌清仓]"
+       }
+      }
+     ]
+    },
+    "持股数": {
+     "number": 0.0
+    },
+    "市值_百万": {
+     "number": null
+    },
+    "环比变化": {
+     "number": -100.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SEC 13F via data/holdings_13f.json [exits]"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2026-06-30"
+     }
+    }
+   }
+  },
+  {
+   "uid": "h13f|2026-06-30|Appaloosa|Ball Corp|❌清仓|0",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-30｜Appaloosa｜Ball Corp"
+       }
+      }
+     ]
+    },
+    "机构": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Appaloosa"
+       }
+      }
+     ]
+    },
+    "标的": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Ball Corp · Ball Corp [❌清仓]"
        }
       }
      ]
@@ -8853,183 +8853,6 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Duquesne Family Office|Stubhub Hldgs Inc|❌清仓|0",
-   "props": {
-    "记录": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-06-30｜Duquesne Family Office｜Stubhub Hldgs Inc"
-       }
-      }
-     ]
-    },
-    "机构": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "Duquesne Family Office"
-       }
-      }
-     ]
-    },
-    "标的": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "Stubhub Hldgs Inc · Stubhub Hldgs Inc [❌清仓]"
-       }
-      }
-     ]
-    },
-    "持股数": {
-     "number": 0.0
-    },
-    "市值_百万": {
-     "number": null
-    },
-    "环比变化": {
-     "number": -100.0
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "SEC 13F via data/holdings_13f.json [exits]"
-       }
-      }
-     ]
-    },
-    "季度": {
-     "date": {
-      "start": "2026-06-30"
-     }
-    }
-   }
-  },
-  {
-   "uid": "h13f|2026-06-30|Duquesne Family Office|Lattice Semiconductor Corp|❌清仓|0",
-   "props": {
-    "记录": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-06-30｜Duquesne Family Office｜Lattice Semiconductor Corp"
-       }
-      }
-     ]
-    },
-    "机构": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "Duquesne Family Office"
-       }
-      }
-     ]
-    },
-    "标的": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "Lattice Semiconductor Corp · Lattice Semiconductor Corp [❌清仓]"
-       }
-      }
-     ]
-    },
-    "持股数": {
-     "number": 0.0
-    },
-    "市值_百万": {
-     "number": null
-    },
-    "环比变化": {
-     "number": -100.0
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "SEC 13F via data/holdings_13f.json [exits]"
-       }
-      }
-     ]
-    },
-    "季度": {
-     "date": {
-      "start": "2026-06-30"
-     }
-    }
-   }
-  },
-  {
-   "uid": "h13f|2026-06-30|Duquesne Family Office|AVGO|❌清仓|0",
-   "props": {
-    "记录": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-06-30｜Duquesne Family Office｜AVGO"
-       }
-      }
-     ]
-    },
-    "机构": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "Duquesne Family Office"
-       }
-      }
-     ]
-    },
-    "标的": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "AVGO · Broadcom Inc [❌清仓]"
-       }
-      }
-     ]
-    },
-    "持股数": {
-     "number": 0.0
-    },
-    "市值_百万": {
-     "number": null
-    },
-    "环比变化": {
-     "number": -100.0
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "SEC 13F via data/holdings_13f.json [exits]"
-       }
-      }
-     ]
-    },
-    "季度": {
-     "date": {
-      "start": "2026-06-30"
-     }
-    }
-   }
-  },
-  {
    "uid": "h13f|2026-06-30|Duquesne Family Office|Jabil Inc|❌清仓|0",
    "props": {
     "记录": {
@@ -9089,14 +8912,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Duquesne Family Office|Almonty Inds Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Duquesne Family Office|Lyondellbasell Industries Nv|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Duquesne Family Office｜Almonty Inds Inc"
+        "content": "2026-06-30｜Duquesne Family Office｜Lyondellbasell Industries Nv"
        }
       }
      ]
@@ -9116,7 +8939,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Almonty Inds Inc · Almonty Inds Inc [❌清仓]"
+        "content": "Lyondellbasell Industries Nv · Lyondellbasell Industries Nv [❌清仓]"
        }
       }
      ]
@@ -9148,14 +8971,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Duquesne Family Office|TWST|❌清仓|0",
+   "uid": "h13f|2026-06-30|Duquesne Family Office|BE|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Duquesne Family Office｜TWST"
+        "content": "2026-06-30｜Duquesne Family Office｜BE"
        }
       }
      ]
@@ -9175,7 +8998,184 @@
       {
        "type": "text",
        "text": {
-        "content": "TWST · Twist Bioscience Corp [❌清仓]"
+        "content": "BE · Bloom Energy Corp [❌清仓]"
+       }
+      }
+     ]
+    },
+    "持股数": {
+     "number": 0.0
+    },
+    "市值_百万": {
+     "number": null
+    },
+    "环比变化": {
+     "number": -100.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SEC 13F via data/holdings_13f.json [exits]"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2026-06-30"
+     }
+    }
+   }
+  },
+  {
+   "uid": "h13f|2026-06-30|Duquesne Family Office|MLB1|❌清仓|0",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-30｜Duquesne Family Office｜MLB1"
+       }
+      }
+     ]
+    },
+    "机构": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Duquesne Family Office"
+       }
+      }
+     ]
+    },
+    "标的": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "MLB1 · Mercadolibre Inc [❌清仓]"
+       }
+      }
+     ]
+    },
+    "持股数": {
+     "number": 0.0
+    },
+    "市值_百万": {
+     "number": null
+    },
+    "环比变化": {
+     "number": -100.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SEC 13F via data/holdings_13f.json [exits]"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2026-06-30"
+     }
+    }
+   }
+  },
+  {
+   "uid": "h13f|2026-06-30|Duquesne Family Office|Option Care Health Inc|❌清仓|0",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-30｜Duquesne Family Office｜Option Care Health Inc"
+       }
+      }
+     ]
+    },
+    "机构": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Duquesne Family Office"
+       }
+      }
+     ]
+    },
+    "标的": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Option Care Health Inc · Option Care Health Inc [❌清仓]"
+       }
+      }
+     ]
+    },
+    "持股数": {
+     "number": 0.0
+    },
+    "市值_百万": {
+     "number": null
+    },
+    "环比变化": {
+     "number": -100.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SEC 13F via data/holdings_13f.json [exits]"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2026-06-30"
+     }
+    }
+   }
+  },
+  {
+   "uid": "h13f|2026-06-30|Duquesne Family Office|QSR|❌清仓|0",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-30｜Duquesne Family Office｜QSR"
+       }
+      }
+     ]
+    },
+    "机构": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Duquesne Family Office"
+       }
+      }
+     ]
+    },
+    "标的": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "QSR · Restaurant Brands Intl Inc [❌清仓]"
        }
       }
      ]
@@ -10269,14 +10269,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Oxbow Advisors|Honeywell Intl Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Oxbow Advisors|Otis Worldwide Corp|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Oxbow Advisors｜Honeywell Intl Inc"
+        "content": "2026-06-30｜Oxbow Advisors｜Otis Worldwide Corp"
        }
       }
      ]
@@ -10296,7 +10296,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Honeywell Intl Inc · Honeywell Intl Inc [❌清仓]"
+        "content": "Otis Worldwide Corp · Otis Worldwide Corp [❌清仓]"
        }
       }
      ]
@@ -10328,14 +10328,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Oxbow Advisors|National Fuel Gas Co|❌清仓|0",
+   "uid": "h13f|2026-06-30|Oxbow Advisors|Bp Plc|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Oxbow Advisors｜National Fuel Gas Co"
+        "content": "2026-06-30｜Oxbow Advisors｜Bp Plc"
        }
       }
      ]
@@ -10355,7 +10355,7 @@
       {
        "type": "text",
        "text": {
-        "content": "National Fuel Gas Co · National Fuel Gas Co [❌清仓]"
+        "content": "Bp Plc · Bp Plc [❌清仓]"
        }
       }
      ]
@@ -10446,14 +10446,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Oxbow Advisors|Dht Holdings Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Oxbow Advisors|Vanguard Whitehall Fds|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Oxbow Advisors｜Dht Holdings Inc"
+        "content": "2026-06-30｜Oxbow Advisors｜Vanguard Whitehall Fds"
        }
       }
      ]
@@ -10473,7 +10473,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Dht Holdings Inc · Dht Holdings Inc [❌清仓]"
+        "content": "Vanguard Whitehall Fds · Vanguard Whitehall Fds [❌清仓]"
        }
       }
      ]
@@ -10505,14 +10505,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Oxbow Advisors|Otis Worldwide Corp|❌清仓|0",
+   "uid": "h13f|2026-06-30|Oxbow Advisors|NEM|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Oxbow Advisors｜Otis Worldwide Corp"
+        "content": "2026-06-30｜Oxbow Advisors｜NEM"
        }
       }
      ]
@@ -10532,7 +10532,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Otis Worldwide Corp · Otis Worldwide Corp [❌清仓]"
+        "content": "NEM · Newmont Corp [❌清仓]"
        }
       }
      ]
@@ -10564,14 +10564,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Oxbow Advisors|Bp Plc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Oxbow Advisors|BAC|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Oxbow Advisors｜Bp Plc"
+        "content": "2026-06-30｜Oxbow Advisors｜BAC"
        }
       }
      ]
@@ -10591,7 +10591,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Bp Plc · Bp Plc [❌清仓]"
+        "content": "BAC · Bank America Corp [❌清仓]"
        }
       }
      ]
@@ -11626,14 +11626,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Tiger Global|Procore Technologies Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Tiger Global|Applovin Corp|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Tiger Global｜Procore Technologies Inc"
+        "content": "2026-06-30｜Tiger Global｜Applovin Corp"
        }
       }
      ]
@@ -11653,7 +11653,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Procore Technologies Inc · Procore Technologies Inc [❌清仓]"
+        "content": "Applovin Corp · Applovin Corp [❌清仓]"
        }
       }
      ]
@@ -11744,14 +11744,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Tiger Global|Figma Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Tiger Global|Bullish|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Tiger Global｜Figma Inc"
+        "content": "2026-06-30｜Tiger Global｜Bullish"
        }
       }
      ]
@@ -11771,7 +11771,66 @@
       {
        "type": "text",
        "text": {
-        "content": "Figma Inc · Figma Inc [❌清仓]"
+        "content": "Bullish · Bullish [❌清仓]"
+       }
+      }
+     ]
+    },
+    "持股数": {
+     "number": 0.0
+    },
+    "市值_百万": {
+     "number": null
+    },
+    "环比变化": {
+     "number": -100.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SEC 13F via data/holdings_13f.json [exits]"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2026-06-30"
+     }
+    }
+   }
+  },
+  {
+   "uid": "h13f|2026-06-30|Tiger Global|LITE|❌清仓|0",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-30｜Tiger Global｜LITE"
+       }
+      }
+     ]
+    },
+    "机构": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Tiger Global"
+       }
+      }
+     ]
+    },
+    "标的": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "LITE · Lumentum Hldgs Inc [❌清仓]"
        }
       }
      ]
@@ -11862,14 +11921,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Tiger Global|Zillow Group Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Tiger Global|Etoro Group Ltd|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Tiger Global｜Zillow Group Inc"
+        "content": "2026-06-30｜Tiger Global｜Etoro Group Ltd"
        }
       }
      ]
@@ -11889,66 +11948,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Zillow Group Inc · Zillow Group Inc [❌清仓]"
-       }
-      }
-     ]
-    },
-    "持股数": {
-     "number": 0.0
-    },
-    "市值_百万": {
-     "number": null
-    },
-    "环比变化": {
-     "number": -100.0
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "SEC 13F via data/holdings_13f.json [exits]"
-       }
-      }
-     ]
-    },
-    "季度": {
-     "date": {
-      "start": "2026-06-30"
-     }
-    }
-   }
-  },
-  {
-   "uid": "h13f|2026-06-30|Tiger Global|Costar Group Inc|❌清仓|0",
-   "props": {
-    "记录": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-06-30｜Tiger Global｜Costar Group Inc"
-       }
-      }
-     ]
-    },
-    "机构": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "Tiger Global"
-       }
-      }
-     ]
-    },
-    "标的": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "Costar Group Inc · Costar Group Inc [❌清仓]"
+        "content": "Etoro Group Ltd · Etoro Group Ltd [❌清仓]"
        }
       }
      ]
@@ -12865,14 +12865,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Coatue Management|Chime Finl Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Coatue Management|Solstice Advanced Matls Inc|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Coatue Management｜Chime Finl Inc"
+        "content": "2026-06-30｜Coatue Management｜Solstice Advanced Matls Inc"
        }
       }
      ]
@@ -12892,7 +12892,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Chime Finl Inc · Chime Finl Inc [❌清仓]"
+        "content": "Solstice Advanced Matls Inc · Solstice Advanced Matls Inc [❌清仓]"
        }
       }
      ]
@@ -12924,14 +12924,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Coatue Management|Ishares Bitcoin Trust Etf|❌清仓|0",
+   "uid": "h13f|2026-06-30|Coatue Management|Chime Finl Inc|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Coatue Management｜Ishares Bitcoin Trust Etf"
+        "content": "2026-06-30｜Coatue Management｜Chime Finl Inc"
        }
       }
      ]
@@ -12951,7 +12951,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Ishares Bitcoin Trust Etf · Ishares Bitcoin Trust Etf [❌清仓]"
+        "content": "Chime Finl Inc · Chime Finl Inc [❌清仓]"
        }
       }
      ]
@@ -13042,14 +13042,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Coatue Management|V|❌清仓|0",
+   "uid": "h13f|2026-06-30|Coatue Management|Ishares Bitcoin Trust Etf|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Coatue Management｜V"
+        "content": "2026-06-30｜Coatue Management｜Ishares Bitcoin Trust Etf"
        }
       }
      ]
@@ -13069,7 +13069,7 @@
       {
        "type": "text",
        "text": {
-        "content": "V · Visa Inc [❌清仓]"
+        "content": "Ishares Bitcoin Trust Etf · Ishares Bitcoin Trust Etf [❌清仓]"
        }
       }
      ]
@@ -13101,14 +13101,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Coatue Management|Solstice Advanced Matls Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Coatue Management|V|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Coatue Management｜Solstice Advanced Matls Inc"
+        "content": "2026-06-30｜Coatue Management｜V"
        }
       }
      ]
@@ -13128,7 +13128,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Solstice Advanced Matls Inc · Solstice Advanced Matls Inc [❌清仓]"
+        "content": "V · Visa Inc [❌清仓]"
        }
       }
      ]
@@ -14163,6 +14163,65 @@
    }
   },
   {
+   "uid": "h13f|2026-06-30|Whale Rock Capital|Ciena Corp|❌清仓|0",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-30｜Whale Rock Capital｜Ciena Corp"
+       }
+      }
+     ]
+    },
+    "机构": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Whale Rock Capital"
+       }
+      }
+     ]
+    },
+    "标的": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Ciena Corp · Ciena Corp [❌清仓]"
+       }
+      }
+     ]
+    },
+    "持股数": {
+     "number": 0.0
+    },
+    "市值_百万": {
+     "number": null
+    },
+    "环比变化": {
+     "number": -100.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SEC 13F via data/holdings_13f.json [exits]"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2026-06-30"
+     }
+    }
+   }
+  },
+  {
    "uid": "h13f|2026-06-30|Whale Rock Capital|MSFT|❌清仓|0",
    "props": {
     "记录": {
@@ -14191,183 +14250,6 @@
        "type": "text",
        "text": {
         "content": "MSFT · Microsoft Corp [❌清仓]"
-       }
-      }
-     ]
-    },
-    "持股数": {
-     "number": 0.0
-    },
-    "市值_百万": {
-     "number": null
-    },
-    "环比变化": {
-     "number": -100.0
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "SEC 13F via data/holdings_13f.json [exits]"
-       }
-      }
-     ]
-    },
-    "季度": {
-     "date": {
-      "start": "2026-06-30"
-     }
-    }
-   }
-  },
-  {
-   "uid": "h13f|2026-06-30|Whale Rock Capital|Tower Semiconductor Ltd|❌清仓|0",
-   "props": {
-    "记录": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-06-30｜Whale Rock Capital｜Tower Semiconductor Ltd"
-       }
-      }
-     ]
-    },
-    "机构": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "Whale Rock Capital"
-       }
-      }
-     ]
-    },
-    "标的": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "Tower Semiconductor Ltd · Tower Semiconductor Ltd [❌清仓]"
-       }
-      }
-     ]
-    },
-    "持股数": {
-     "number": 0.0
-    },
-    "市值_百万": {
-     "number": null
-    },
-    "环比变化": {
-     "number": -100.0
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "SEC 13F via data/holdings_13f.json [exits]"
-       }
-      }
-     ]
-    },
-    "季度": {
-     "date": {
-      "start": "2026-06-30"
-     }
-    }
-   }
-  },
-  {
-   "uid": "h13f|2026-06-30|Whale Rock Capital|NFLX|❌清仓|0",
-   "props": {
-    "记录": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-06-30｜Whale Rock Capital｜NFLX"
-       }
-      }
-     ]
-    },
-    "机构": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "Whale Rock Capital"
-       }
-      }
-     ]
-    },
-    "标的": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "NFLX · Netflix Inc. [❌清仓]"
-       }
-      }
-     ]
-    },
-    "持股数": {
-     "number": 0.0
-    },
-    "市值_百万": {
-     "number": null
-    },
-    "环比变化": {
-     "number": -100.0
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "SEC 13F via data/holdings_13f.json [exits]"
-       }
-      }
-     ]
-    },
-    "季度": {
-     "date": {
-      "start": "2026-06-30"
-     }
-    }
-   }
-  },
-  {
-   "uid": "h13f|2026-06-30|Whale Rock Capital|RBLX|❌清仓|0",
-   "props": {
-    "记录": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-06-30｜Whale Rock Capital｜RBLX"
-       }
-      }
-     ]
-    },
-    "机构": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "Whale Rock Capital"
-       }
-      }
-     ]
-    },
-    "标的": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "RBLX · Roblox Corp [❌清仓]"
        }
       }
      ]
@@ -14486,6 +14368,124 @@
        "type": "text",
        "text": {
         "content": "AEIS · Advanced Energy Inds [❌清仓]"
+       }
+      }
+     ]
+    },
+    "持股数": {
+     "number": 0.0
+    },
+    "市值_百万": {
+     "number": null
+    },
+    "环比变化": {
+     "number": -100.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SEC 13F via data/holdings_13f.json [exits]"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2026-06-30"
+     }
+    }
+   }
+  },
+  {
+   "uid": "h13f|2026-06-30|Whale Rock Capital|NFLX|❌清仓|0",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-30｜Whale Rock Capital｜NFLX"
+       }
+      }
+     ]
+    },
+    "机构": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Whale Rock Capital"
+       }
+      }
+     ]
+    },
+    "标的": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "NFLX · Netflix Inc. [❌清仓]"
+       }
+      }
+     ]
+    },
+    "持股数": {
+     "number": 0.0
+    },
+    "市值_百万": {
+     "number": null
+    },
+    "环比变化": {
+     "number": -100.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "SEC 13F via data/holdings_13f.json [exits]"
+       }
+      }
+     ]
+    },
+    "季度": {
+     "date": {
+      "start": "2026-06-30"
+     }
+    }
+   }
+  },
+  {
+   "uid": "h13f|2026-06-30|Whale Rock Capital|RBLX|❌清仓|0",
+   "props": {
+    "记录": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-06-30｜Whale Rock Capital｜RBLX"
+       }
+      }
+     ]
+    },
+    "机构": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "Whale Rock Capital"
+       }
+      }
+     ]
+    },
+    "标的": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "RBLX · Roblox Corp [❌清仓]"
        }
       }
      ]
@@ -16405,14 +16405,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Third Point|Vaneck Etf Trust|❌清仓|0",
+   "uid": "h13f|2026-06-30|Third Point|META|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Third Point｜Vaneck Etf Trust"
+        "content": "2026-06-30｜Third Point｜META"
        }
       }
      ]
@@ -16432,7 +16432,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Vaneck Etf Trust · Vaneck Etf Trust [❌清仓]"
+        "content": "META · Meta Platforms Inc [❌清仓]"
        }
       }
      ]
@@ -16464,14 +16464,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Third Point|Sharkninja Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Third Point|Kla Corp|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Third Point｜Sharkninja Inc"
+        "content": "2026-06-30｜Third Point｜Kla Corp"
        }
       }
      ]
@@ -16491,7 +16491,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Sharkninja Inc · Sharkninja Inc [❌清仓]"
+        "content": "Kla Corp · Kla Corp [❌清仓]"
        }
       }
      ]
@@ -16582,14 +16582,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Third Point|AVGO|❌清仓|0",
+   "uid": "h13f|2026-06-30|Third Point|LRCX|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Third Point｜AVGO"
+        "content": "2026-06-30｜Third Point｜LRCX"
        }
       }
      ]
@@ -16609,7 +16609,7 @@
       {
        "type": "text",
        "text": {
-        "content": "AVGO · Broadcom Inc [❌清仓]"
+        "content": "LRCX · Lam Research Corp [❌清仓]"
        }
       }
      ]
@@ -16641,14 +16641,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Third Point|Kla Corp|❌清仓|0",
+   "uid": "h13f|2026-06-30|Third Point|NVDA|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Third Point｜Kla Corp"
+        "content": "2026-06-30｜Third Point｜NVDA"
        }
       }
      ]
@@ -16668,7 +16668,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Kla Corp · Kla Corp [❌清仓]"
+        "content": "NVDA · Nvidia Corporation [❌清仓]"
        }
       }
      ]
@@ -18352,14 +18352,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Renaissance Technologies|Arcellx Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Renaissance Technologies|Apollo Coml Real Estate Fin|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Renaissance Technologies｜Arcellx Inc"
+        "content": "2026-06-30｜Renaissance Technologies｜Apollo Coml Real Estate Fin"
        }
       }
      ]
@@ -18379,7 +18379,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Arcellx Inc · Arcellx Inc [❌清仓]"
+        "content": "Apollo Coml Real Estate Fin · Apollo Coml Real Estate Fin [❌清仓]"
        }
       }
      ]
@@ -18411,14 +18411,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Renaissance Technologies|Revolution Medicines Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Renaissance Technologies|Onity Group Inc|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Renaissance Technologies｜Revolution Medicines Inc"
+        "content": "2026-06-30｜Renaissance Technologies｜Onity Group Inc"
        }
       }
      ]
@@ -18438,7 +18438,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Revolution Medicines Inc · Revolution Medicines Inc [❌清仓]"
+        "content": "Onity Group Inc · Onity Group Inc [❌清仓]"
        }
       }
      ]
@@ -18470,14 +18470,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Renaissance Technologies|Adc Therapeutics Sa|❌清仓|0",
+   "uid": "h13f|2026-06-30|Renaissance Technologies|Mid Penn Bancorp Inc|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Renaissance Technologies｜Adc Therapeutics Sa"
+        "content": "2026-06-30｜Renaissance Technologies｜Mid Penn Bancorp Inc"
        }
       }
      ]
@@ -18497,7 +18497,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Adc Therapeutics Sa · Adc Therapeutics Sa [❌清仓]"
+        "content": "Mid Penn Bancorp Inc · Mid Penn Bancorp Inc [❌清仓]"
        }
       }
      ]
@@ -18529,14 +18529,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Renaissance Technologies|U-Bx Technology Ltd|❌清仓|0",
+   "uid": "h13f|2026-06-30|Renaissance Technologies|Genedx Holdings Corp|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Renaissance Technologies｜U-Bx Technology Ltd"
+        "content": "2026-06-30｜Renaissance Technologies｜Genedx Holdings Corp"
        }
       }
      ]
@@ -18556,7 +18556,7 @@
       {
        "type": "text",
        "text": {
-        "content": "U-Bx Technology Ltd · U-Bx Technology Ltd [❌清仓]"
+        "content": "Genedx Holdings Corp · Genedx Holdings Corp [❌清仓]"
        }
       }
      ]
@@ -18588,14 +18588,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Renaissance Technologies|Kb Home|❌清仓|0",
+   "uid": "h13f|2026-06-30|Renaissance Technologies|Vicor Corp|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Renaissance Technologies｜Kb Home"
+        "content": "2026-06-30｜Renaissance Technologies｜Vicor Corp"
        }
       }
      ]
@@ -18615,7 +18615,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Kb Home · Kb Home [❌清仓]"
+        "content": "Vicor Corp · Vicor Corp [❌清仓]"
        }
       }
      ]
@@ -18647,14 +18647,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Renaissance Technologies|Futu Hldgs Ltd|❌清仓|0",
+   "uid": "h13f|2026-06-30|Renaissance Technologies|Amicus Therapeutic|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Renaissance Technologies｜Futu Hldgs Ltd"
+        "content": "2026-06-30｜Renaissance Technologies｜Amicus Therapeutic"
        }
       }
      ]
@@ -18674,7 +18674,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Futu Hldgs Ltd · Futu Hldgs Ltd [❌清仓]"
+        "content": "Amicus Therapeutic · Amicus Therapeutic [❌清仓]"
        }
       }
      ]
@@ -19768,14 +19768,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Citadel Advisors|Renatus Tactical Acquis|❌清仓|0",
+   "uid": "h13f|2026-06-30|Citadel Advisors|Grayscale Xrp Trust Etf|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Citadel Advisors｜Renatus Tactical Acquis"
+        "content": "2026-06-30｜Citadel Advisors｜Grayscale Xrp Trust Etf"
        }
       }
      ]
@@ -19795,7 +19795,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Renatus Tactical Acquis · Renatus Tactical Acquis [❌清仓]"
+        "content": "Grayscale Xrp Trust Etf · Grayscale Xrp Trust Etf [❌清仓]"
        }
       }
      ]
@@ -19827,14 +19827,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Citadel Advisors|Prudential Plc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Citadel Advisors|Montrose Environmental Group|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Citadel Advisors｜Prudential Plc"
+        "content": "2026-06-30｜Citadel Advisors｜Montrose Environmental Group"
        }
       }
      ]
@@ -19854,7 +19854,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Prudential Plc · Prudential Plc [❌清仓]"
+        "content": "Montrose Environmental Group · Montrose Environmental Group [❌清仓]"
        }
       }
      ]
@@ -19886,14 +19886,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Citadel Advisors|Arcellx Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Citadel Advisors|Btc Digital Ltd|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Citadel Advisors｜Arcellx Inc"
+        "content": "2026-06-30｜Citadel Advisors｜Btc Digital Ltd"
        }
       }
      ]
@@ -19913,7 +19913,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Arcellx Inc · Arcellx Inc [❌清仓]"
+        "content": "Btc Digital Ltd · Btc Digital Ltd [❌清仓]"
        }
       }
      ]
@@ -19945,14 +19945,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Citadel Advisors|Public Pol Hldg Co Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Citadel Advisors|Mmtec Inc|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Citadel Advisors｜Public Pol Hldg Co Inc"
+        "content": "2026-06-30｜Citadel Advisors｜Mmtec Inc"
        }
       }
      ]
@@ -19972,7 +19972,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Public Pol Hldg Co Inc · Public Pol Hldg Co Inc [❌清仓]"
+        "content": "Mmtec Inc · Mmtec Inc [❌清仓]"
        }
       }
      ]
@@ -20004,14 +20004,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Citadel Advisors|Franklin Covey Co|❌清仓|0",
+   "uid": "h13f|2026-06-30|Citadel Advisors|Clean Energy Technologies In|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Citadel Advisors｜Franklin Covey Co"
+        "content": "2026-06-30｜Citadel Advisors｜Clean Energy Technologies In"
        }
       }
      ]
@@ -20031,7 +20031,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Franklin Covey Co · Franklin Covey Co [❌清仓]"
+        "content": "Clean Energy Technologies In · Clean Energy Technologies In [❌清仓]"
        }
       }
      ]
@@ -20063,14 +20063,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Citadel Advisors|Drugs Made In Amer Acqutn Co|❌清仓|0",
+   "uid": "h13f|2026-06-30|Citadel Advisors|Amicus Therapeutic|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Citadel Advisors｜Drugs Made In Amer Acqutn Co"
+        "content": "2026-06-30｜Citadel Advisors｜Amicus Therapeutic"
        }
       }
      ]
@@ -20090,7 +20090,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Drugs Made In Amer Acqutn Co · Drugs Made In Amer Acqutn Co [❌清仓]"
+        "content": "Amicus Therapeutic · Amicus Therapeutic [❌清仓]"
        }
       }
      ]
@@ -21184,14 +21184,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Millennium Management|Imax Corp|❌清仓|0",
+   "uid": "h13f|2026-06-30|Millennium Management|Spirit Aerosystems Inc|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Millennium Management｜Imax Corp"
+        "content": "2026-06-30｜Millennium Management｜Spirit Aerosystems Inc"
        }
       }
      ]
@@ -21211,7 +21211,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Imax Corp · Imax Corp [❌清仓]"
+        "content": "Spirit Aerosystems Inc · Spirit Aerosystems Inc [❌清仓]"
        }
       }
      ]
@@ -21243,14 +21243,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Millennium Management|Arcellx Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Millennium Management|Montrose Environmental Group|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Millennium Management｜Arcellx Inc"
+        "content": "2026-06-30｜Millennium Management｜Montrose Environmental Group"
        }
       }
      ]
@@ -21270,7 +21270,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Arcellx Inc · Arcellx Inc [❌清仓]"
+        "content": "Montrose Environmental Group · Montrose Environmental Group [❌清仓]"
        }
       }
      ]
@@ -21302,14 +21302,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Millennium Management|Canton Strategic Holdings In|❌清仓|0",
+   "uid": "h13f|2026-06-30|Millennium Management|Onity Group Inc|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Millennium Management｜Canton Strategic Holdings In"
+        "content": "2026-06-30｜Millennium Management｜Onity Group Inc"
        }
       }
      ]
@@ -21329,7 +21329,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Canton Strategic Holdings In · Canton Strategic Holdings In [❌清仓]"
+        "content": "Onity Group Inc · Onity Group Inc [❌清仓]"
        }
       }
      ]
@@ -21361,14 +21361,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Millennium Management|Bank7 Corp|❌清仓|0",
+   "uid": "h13f|2026-06-30|Millennium Management|Middlesex Wtr Co|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Millennium Management｜Bank7 Corp"
+        "content": "2026-06-30｜Millennium Management｜Middlesex Wtr Co"
        }
       }
      ]
@@ -21388,7 +21388,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Bank7 Corp · Bank7 Corp [❌清仓]"
+        "content": "Middlesex Wtr Co · Middlesex Wtr Co [❌清仓]"
        }
       }
      ]
@@ -21420,14 +21420,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Millennium Management|Myr Group Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Millennium Management|Krystal Biotech Inc|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Millennium Management｜Myr Group Inc"
+        "content": "2026-06-30｜Millennium Management｜Krystal Biotech Inc"
        }
       }
      ]
@@ -21447,7 +21447,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Myr Group Inc · Myr Group Inc [❌清仓]"
+        "content": "Krystal Biotech Inc · Krystal Biotech Inc [❌清仓]"
        }
       }
      ]
@@ -21479,14 +21479,14 @@
    }
   },
   {
-   "uid": "h13f|2026-06-30|Millennium Management|Nu Skin Enterprises Inc|❌清仓|0",
+   "uid": "h13f|2026-06-30|Millennium Management|Amicus Therapeutic|❌清仓|0",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-06-30｜Millennium Management｜Nu Skin Enterprises Inc"
+        "content": "2026-06-30｜Millennium Management｜Amicus Therapeutic"
        }
       }
      ]
@@ -21506,7 +21506,7 @@
       {
        "type": "text",
        "text": {
-        "content": "Nu Skin Enterprises Inc · Nu Skin Enterprises Inc [❌清仓]"
+        "content": "Amicus Therapeutic · Amicus Therapeutic [❌清仓]"
        }
       }
      ]

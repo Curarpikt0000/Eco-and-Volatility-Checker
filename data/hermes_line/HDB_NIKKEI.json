@@ -1,6 +1,6 @@
 {
  "table": "HDB_NIKKEI",
- "count": 241,
+ "count": 243,
  "rows": [
   {
    "uid": "nk|2025-10-14",
@@ -7460,6 +7460,68 @@
     },
     "涨跌幅": {
      "number": -0.016
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "FRED NIKKEI225 (日经225指数,日频)"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "nk|2026-10-13",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-13"
+       }
+      }
+     ]
+    },
+    "收盘": {
+     "number": 67777.52
+    },
+    "涨跌幅": {
+     "number": -1.816
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "FRED NIKKEI225 (日经225指数,日频)"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "nk|2026-10-14",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-14"
+       }
+      }
+     ]
+    },
+    "收盘": {
+     "number": 67744.29
+    },
+    "涨跌幅": {
+     "number": -0.049
     },
     "数据源": {
      "rich_text": [
