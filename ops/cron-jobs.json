@@ -1,6 +1,6 @@
 {
  "_note": "由 ~/.hermes/cron/jobs.json 自动导出（scripts/handover_refresh.py 每日更新）。<PROJECT_ROOT>=接手方自己的 clone 路径；<HERMES_SCRIPTS>=脚本目录(默认 ~/.hermes/scripts)；deliver=origin 表示发回创建该 job 的 Telegram 话题，接手方须改成自己的投递目标。公网版不含 eco-vol-codex-delivery-watch（同步到作者公司内部仓库用）。",
- "exported": "2026-10-14",
+ "exported": "2026-10-15",
  "jobs": [
   {
    "name": "eco-vol-01-daily-scan-report",
@@ -168,6 +168,32 @@
    "model": "claude-sonnet-5-5",
    "skills": [],
    "prompt": "你是「技术派金银日报」撰写员。工作目录 <PROJECT_ROOT>。今天 `date +%F`(JST)。目标：给 Chao 一份**极短**的当日短期（约 1 个月内）金银观点汇总，分两个通道，**必须分开写、不得混成一句**：\n  A 技术派（channel=tech）：技术分析（支撑/阻力/均线/趋势），来自 Kitco 技术文、GoldSeek、Gold-Eagle 摘要、三位技术派 YouTube 视频(只有标题)。\n  B 机构派（channel=inst，2026-10-05 Chao 加）：银行/机构策略师给出的**短期（至多约 12 个月内）金银价位预测**，来自 Kitco 与 KWN 的采访/报道。注意 B 不是技术分析，但有明确价位和时间窗。\n\n## 铁律（违反任何一条就是失败）\n1. **价位只能抄原文**：每个价位后面必须能在采集到的 body 里找到原句。找不到就不写。绝不推算、不补整、不凭记忆。\n2. **视频只报标题+链接，一律标「正文未读」**（VM 的 IP 被 YouTube 判为机器人，字幕抓不到，2026-10-05 实测）。禁止从视频标题推断观点或价位。\n3. 不要把两个人的观点并成一句；每个人单独一行，带来源与日期。\n4. 采集是 0 条 ≠ 没人说。必须先看 health：任一来源 err 非空或 fetched=0，要在报告里单独点名「某某来源本次没取到」。\n5. 价格基准：先 `web_search` 取当日金银现货价（至少 2 个独立来源互证，差异>1% 要标出来）。取不到就写「现价未取到」，不要沿用旧数。\n6. 没有新内容就一行说明，不要为了凑篇幅重复昨天的内容。同一篇文章在多个来源出现(GoldSeek 与 Gold-Eagle 常转载同一篇)只算一篇。\n\n## B 通道（机构派）读法\n- `new` 里 channel=inst 的条目带 `fcst_sentences`（脚本按规则抽的候选句）和 `body`。**候选句只是线索，不是结论**：脚本规则偏宽，会把「某分析师说金价跌回 4,300 下方」这类**行情描述**也抽进来。你必须读 body 原文判断：这句话是不是**某个具名机构/人对未来价位的预测**。是行情描述的就丢掉。\n- 每条 B 只写：`机构/人（来源 日期）：看金/银 方向 + 价位 + 时间窗`，价位和时间窗必须在 body 里能找到原句。**没有时间窗就写「无时间窗」，不要补**。\n- 与 A 的区别要写明：B 是机构预测，不是技术分析。不得把 A 的人和 B 的人放进同一行。\n- 同一事件多源报道只算一条。KWN 文末的 Nomi Prins 采访广告（含 $6,000 gold）是促销，**不是当天分析，不要收**。\n\n## 步骤\n1. 运行：`/usr/bin/python3 tools/tech_watch.py > /tmp/tech_today.json`，读 JSON：`health`、`new`（新条目）。第一次运行用 `TECH_LOOKBACK=3`，之后默认 2 天。脚本本身已按 url 去重，只会给「新」条目。\n2. 对每条 kind=article 且 body_read=true：读 body，提取该作者对**金、银各自**的：当前判断（偏多/偏空/中性，只用原文措辞）、关键价位（支撑/阻力/目标/止损，附原句）、时间窗（原文有才写）、触发条件。body_read=false（Gold-Eagle 常只给摘要）的，只写标题和「仅摘要，正文未读」，**不写价位**。\n3. 对 kind=video（Chris Vermeulen、Gareth Soloway、Jordan Roy-Byrne）：只列标题、发布日、链接，标「正文未读」。\n4. 若某篇文章值得深读（技术派、含具体价位但 body 被截断），可用 `web_extract` 读原链接补全；读不到就标未读，不换成别的来源顶替。\n5. 取现价（见铁律 5）。\n\n## 输出格式（Telegram，中文，极短，禁用 emoji 标题，不超过 24 行）\n第 1 行：`金银短期观点 · {日期} · 金 {价}/银 {价}（{来源数}源）`\n「技术派」小节：按作者分行，每行：`作者｜金：判断；关键位（原句价位）｜银：判断；关键位`，没有银的观点就写「银未提」。\n「机构预测」小节（有才写）：每行：`机构/人｜金：方向 价位 时间窗｜银：…`，全部来自 channel=inst，且经你读原文确认是预测。\n再一行：`视频（正文未读）：作者 标题 链接`\n再一行：`没取到：{来源名}`（无则省略）\n最后一行：分歧点（只在 ≥2 人对同一变量说法相反时写，一句话；技术派与机构派的分歧可以点出，但要写明各属哪派；否则省略）。\n\n## 收尾\n- 写入 data/tech_watch/ 的 state 已由脚本维护，不要手改。\n- 不 git push，不写 Notion，不改任何其他文件。\n- 如果 `new` 为空且 health 无异常：只回复一行「今日无新增技术派金银分析」。\n- 如果脚本报错：原样回报错误的最后 5 行，不要自己编一份日报。\n"
+  },
+  {
+   "name": "eco-vol-optvol-snapshot",
+   "schedule_cron": "30 6 * * 2-6",
+   "tz": "Asia/Tokyo",
+   "no_agent": true,
+   "script": "eco_vol_optvol_snapshot.sh",
+   "workdir": null,
+   "deliver": "origin",
+   "enabled_toolsets": null,
+   "model": null,
+   "skills": [],
+   "prompt": "每日把 CBOE 的 GLD/SLV 期权快照(25D 偏斜 + ATM IV 期限结构)写入 Notion DB_OPTVOL。脚本静默即成功,失败才输出一行。"
+  },
+  {
+   "name": "eco-vol-cot-sentinel",
+   "schedule_cron": "0 6 * * 6",
+   "tz": "Asia/Tokyo",
+   "no_agent": true,
+   "script": "eco_vol_cot_sentinel.py",
+   "workdir": null,
+   "deliver": "origin",
+   "enabled_toolsets": null,
+   "model": null,
+   "skills": [],
+   "prompt": "每周六读 CFTC 最新 COT,做市商/对冲基金/商业净持仓周变动超过近3年周变动标准差2倍才发消息,否则静默。"
   }
  ]
 }

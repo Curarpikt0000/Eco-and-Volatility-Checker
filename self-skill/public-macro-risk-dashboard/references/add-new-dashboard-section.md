@@ -1,5 +1,9 @@
 # Adding a new "data source → dashboard section" (repeatable checklist)
 
+> 补充(2026-10-14 晚)：给新资产类(铀)克隆金银短线图板块 + 菜单分组被吞进别组的坑 → `references/clone-chart-section-for-new-asset-and-menu-grouping.md`。
+
+> 补充(2026-10-14)：**发布别发隔离构建产物**(缺 Notion 会让线上板块退化)→ 项目目录构建+Notion 只读守卫、港股通 002/004 重复计数坑、南向持股存量回填、KOL 库主题扫描见 `references/readonly-guarded-publish-hk-connect-holdings-and-kol-topic-scan.md`。
+
 > 补充(2026-10-13)：板块物理挪位成连续菜单组、新板块接线 5 处清单、隔离构建/发布读回流程、东财 A 股资金面(国家队/北向停披露/南向)口径坑见 `references/section-reorder-isolated-build-and-cn-capital-data.md`。
 
 > 补充(2026-10-10)：长史叠加图(利率×金×油对数轴)、隔离整站构建硬检查脚本骨架、COT 发布时差判据、OI/库存折吨、30Y−2Y/银行融资压力读法见 `references/long-history-overlay-chart-and-cot-oi-reading.md`。
