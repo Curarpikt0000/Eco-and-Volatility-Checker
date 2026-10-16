@@ -1,0 +1,213 @@
+{
+  "date": "2026-10-16",
+  "results": {
+    "vix": {
+      "key": "vix",
+      "value": 16.87,
+      "as_of": "2026-10-14",
+      "status": "ok"
+    },
+    "fear_greed": {
+      "value": 31.5,
+      "as_of": "2026-10-15",
+      "status": "ok",
+      "extra": {
+        "rating": "fear"
+      },
+      "key": "fear_greed"
+    },
+    "aaii_bull_bear": {
+      "value": 1.3,
+      "as_of": "2026-10-08",
+      "status": "ok",
+      "note": "AAII bull-bear spread +1.3 (多40.3%/空39.0%, 空头-7.5pt, 来源rallies.ai转述AAII 10/10周报; 仍低于均值6.5连续第12周)",
+      "key": "aaii_bull_bear"
+    },
+    "put_call": {
+      "value": 0.62,
+      "as_of": "2026-10-15",
+      "status": "ok",
+      "freshness": "dated",
+      "source": "CBOE official (via ScraperAPI)",
+      "key": "put_call"
+    },
+    "bofa_fms_cash": {
+      "value": 3.9,
+      "as_of": "2026-09",
+      "status": "ok",
+      "note": "BofA FMS现金水平3.9% (Sep 2026, 9/15官方发布, 自8月3.5%上升; 极端夏季看多降温; BofA模型称升至4-5%中性带才可再加风险; 现仍<4.0仍偏低); 净超配股票49%/净低配债券-48%(2022年5月来最低)",
+      "key": "bofa_fms_cash"
+    },
+    "sofr_iorb": {
+      "key": "sofr_iorb",
+      "value": 0.0,
+      "as_of": "2026-10-14",
+      "status": "ok",
+      "extra": {
+        "sofr": 3.88,
+        "effr": 3.88,
+        "sofr_as_of": "2026-10-14",
+        "effr_as_of": "2026-10-14",
+        "basis": "SOFR-EFFR"
+      }
+    },
+    "margin_cost": {
+      "key": "margin_cost",
+      "value": 7.0,
+      "as_of": "2026-10-13",
+      "status": "ok"
+    },
+    "bank_funding_stress": {
+      "key": "bank_funding_stress",
+      "value": -2.0,
+      "as_of": "2026-10-14",
+      "status": "ok",
+      "extra": {
+        "cp3m": 4.08,
+        "tbill3m": 4.1,
+        "sofr": 3.88,
+        "spread_bps": -2.0
+      }
+    },
+    "margin_debt": {
+      "value": 1453.832,
+      "as_of": "2026-08-31",
+      "status": "ok",
+      "key": "margin_debt"
+    },
+    "margin_gdp": {
+      "key": "margin_gdp",
+      "value": 4.46,
+      "as_of": "2026-04-01",
+      "status": "ok",
+      "freshness": "dated",
+      "extra": {
+        "basis": "取输入(margin_debt月度/GDP季度)中较旧的as_of",
+        "margin_debt_as_of": "2026-08-31",
+        "gdp_as_of": "2026-04-01"
+      }
+    },
+    "ipo_count": {
+      "value": 257.0,
+      "as_of": "2026-10-15",
+      "status": "ok",
+      "freshness": "dated",
+      "extra": {
+        "source": "stockanalysis",
+        "year": 2026,
+        "basis": "YTD累计宗数, as_of=最近一次IPO上市日"
+      },
+      "key": "ipo_count"
+    },
+    "insider": {
+      "value": 0.38,
+      "as_of": "2026-10-06",
+      "status": "ok",
+      "note": "GuruFocus insider buy/sell 0.38 (Oct 2026, 官网标题最新值; 较Sep 0.32回升) | 2026-10-13 GuruFocus 403 Cloudflare, 沿用旧值",
+      "key": "insider"
+    },
+    "bofa_bull_bear": {
+      "value": 8.1,
+      "as_of": "2026-10-08",
+      "status": "ok",
+      "note": "BofA Bull&Bear 8.1 (Flow Show 2026-10-08, 自8.8回落, 仍>8.0卖出线; 驱动=全球股指广度走弱+HY/银行次级债利差走阔; 周度现金流入$166.4bn为2020-04来最大) | 2026-10-13复核仍为10/8值8.1(Flow Show下期周四)",
+      "key": "bofa_bull_bear"
+    },
+    "hy_oas": {
+      "key": "hy_oas",
+      "value": 3.25,
+      "as_of": "2026-10-14",
+      "status": "ok"
+    },
+    "ad_line": {
+      "key": "ad_line",
+      "value": false,
+      "as_of": "2026-10-01",
+      "status": "ok",
+      "extra": {
+        "source": "NYSE A/D 腾落线(SP500 全成分股, Economic-Dashboard cron 真数据)",
+        "cumulative": 915,
+        "advance_pct": 59.05,
+        "ad_net": 93,
+        "cum_recent_high": 2031,
+        "cum_lookback_high": 2031,
+        "cum_made_new_high": true,
+        "recent_advance_pct_avg": 45.6,
+        "breadth_confirmed": true,
+        "tickers": 503
+      }
+    },
+    "buffett": {
+      "value": 255.0,
+      "as_of": "2026-04-01",
+      "status": "ok",
+      "extra": {
+        "source": "FRED Z.1"
+      },
+      "key": "buffett"
+    },
+    "cape": {
+      "value": 41.01,
+      "as_of": "2026-10-15",
+      "status": "ok",
+      "key": "cape"
+    },
+    "yield_curve": {
+      "key": "yield_curve",
+      "value": 0.33,
+      "as_of": "2026-10-15",
+      "status": "ok"
+    },
+    "lei": {
+      "value": 0.57,
+      "as_of": "2026-09-01",
+      "status": "ok",
+      "extra": {
+        "cli_index": 101.0,
+        "source": "FRED OECD CLI",
+        "note": "OECD综合领先指标6月变化(替Conference Board付费LEI)"
+      },
+      "key": "lei"
+    },
+    "aaii_alloc": {
+      "value": 71.79,
+      "as_of": "2026-09",
+      "status": "ok",
+      "freshness": "dated",
+      "key": "aaii_alloc"
+    }
+  },
+  "cot": {
+    "gold": {
+      "as_of": "2026-10-06",
+      "open_interest": 396109,
+      "comm_long": 55802,
+      "comm_short": 300329,
+      "comm_net": -244527,
+      "noncomm_long": 245403,
+      "noncomm_short": 35068,
+      "noncomm_net": 210335,
+      "metal": "gold",
+      "comm_net_wow": 6440,
+      "comm_long_wow": -3029,
+      "comm_short_wow": -9469,
+      "comm_surge": false
+    },
+    "silver": {
+      "as_of": "2026-10-06",
+      "open_interest": 105130,
+      "comm_long": 31745,
+      "comm_short": 73337,
+      "comm_net": -41592,
+      "noncomm_long": 33648,
+      "noncomm_short": 10495,
+      "noncomm_net": 23153,
+      "metal": "silver",
+      "comm_net_wow": -1582,
+      "comm_long_wow": -2350,
+      "comm_short_wow": -768,
+      "comm_surge": false
+    }
+  },
+  "generated_at": "2026-10-16T02:03:04.042080"
+}
