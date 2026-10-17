@@ -691,6 +691,18 @@ def main():
     except Exception as e:
         print(f"[dashboard] WRS衰退信号 跳过: {e}")
 
+    # ── 标普÷黄金 1929 起长历史 + 均线 + 回撤(Chao 2026-10-16) ──
+    spx_gold_long = {}
+    try:
+        spx_gold_long = ed.fetch_spx_gold_long() or {}
+        if spx_gold_long.get("rows"):
+            print(f"[dashboard] 标普÷黄金长历史: {len(spx_gold_long['rows'])} 个月 {spx_gold_long['rows'][0]['m']}~{spx_gold_long.get('last_m')} "
+                  f"最新 {spx_gold_long.get('latest')} 跌破事件 {spx_gold_long.get('events')} status={spx_gold_long.get('status')}")
+        else:
+            print(f"[dashboard] 标普÷黄金长历史 失败: {spx_gold_long.get('warnings')}")
+    except Exception as e:
+        print(f"[dashboard] 标普÷黄金长历史 跳过: {e}")
+
     # ── 股指 ÷ 黄金 50 年比值(Chao 2026-09-30: 每日更新) ──
     stock_gold = {}
     try:
@@ -1008,6 +1020,7 @@ def main():
         china_regime=china_regime,
         wrs=wrs,
         stock_gold=stock_gold,
+        spx_gold_long=spx_gold_long,
         tfp_sentiment=tfp_sentiment,
         llm_token=llm_token,
         ai_capex=ai_capex,

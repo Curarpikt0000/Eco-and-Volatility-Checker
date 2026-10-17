@@ -9428,3 +9428,67 @@ def fetch_silver_curve_spread(cache_path=None):
             out["status"] = "error"
             return out
     return out
+
+
+# ══════════════════════════════════════════════════════════════════
+# 标普500 ÷ 黄金 · 1929 起长历史 + 均线 + 回撤(Chao 2026-10-16 看到 StockCharts 原图, 要求做)
+#   ★独立于 fetch_stock_gold_ratio(1976+ 已验收面板), 不改它。
+#   标普: datasets/s-and-p-500 (Shiller 月度, 本口径为【月均值】, 与 1976+ 面板的【月末收盘】不同 → 页面写明);
+#   黄金: datasets/gold-prices 月度; 1934-01 前 20.67 美元、1934-1971 官价 35 美元 → 此段比值≈指数本身, 图上标灰。
+#   最新月: 用 1976+ 面板的 Yahoo 月末收盘/当月金均值续接(标注), 不混用口径做均线之外的统计。
+#   均线: 月度 40/78 期(≈原图周线 170/340 的月度近似, 不等同); 「跌破两均线」自动判定:
+#     之前 12 个月内曾同时站上两线 → 此后连续 ≥12 个月同时低于两线 → 取起点, 间隔 ≥24 个月。
+#   回撤: 标普月度序列的「峰→谷」跌幅(月均值口径, 比日内口径浅), 三段固定窗口。
+def fetch_spx_gold_long(cache_path=None):
+    import csv as _csv, io as _io, json as _j, urllib.request as _ur, os as _os
+    from datetime import timezone, timedelta
+    root = _os.path.join(_os.path.dirname(__file__), "..", "data")
+    cache_path = cache_path or _os.path.join(root, "spx_gold_long_cache.json")
+    jst = datetime.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    out = {"status": "ok", "as_of": jst, "warnings": [], "rows": []}
+    def _get(u):
+        req = _ur.Request(u, headers={"User-Agent": "Mozilla/5.0"})
+        with _ur.urlopen(req, timeout=40) as r:
+            return list(_csv.reader(_io.StringIO(r.read().decode("utf-8"))))[1:]
+    try:
+        sp = {r[0][:7]: float(r[1]) for r in _get("https://raw.githubusercontent.com/datasets/s-and-p-500/main/data/data.csv")}
+        gd = {r[0][:7]: float(r[1]) for r in _get("https://raw.githubusercontent.com/datasets/gold-prices/main/data/monthly.csv")}
+    except Exception as e:
+        try:
+            c = _j.load(open(cache_path)); c.setdefault("warnings", []).append("本次抓取失败(%s), 显示 %s 缓存" % (type(e).__name__, c.get("as_of")))
+            c["status"] = "ok(cache)"; return c
+        except Exception:
+            out["status"] = "error"; out["warnings"].append("长历史抓取失败且无缓存: %s" % type(e).__name__); return out
+    ms = sorted(m for m in sp if m in gd and m >= "1929-01")
+    if len(ms) < 200:
+        out["status"] = "error"; out["warnings"].append("重叠月份过少(%d)" % len(ms)); return out
+    ser = [sp[m] / gd[m] for m in ms]
+    def _sma(n): return [None] * (n - 1) + [round(sum(ser[i - n + 1:i + 1]) / n, 4) for i in range(n - 1, len(ser))]
+    m40, m78 = _sma(40), _sma(78)
+    ev = []; i = 78
+    while i < len(ms) - 12:
+        prior = any(ser[j] > m40[j] and ser[j] > m78[j] for j in range(max(78, i - 12), i))
+        now = all(ser[j] < m40[j] and ser[j] < m78[j] for j in range(i, i + 12))
+        edge = ser[i] < m40[i] and ser[i] < m78[i] and not (ser[i - 1] < m40[i - 1] and ser[i - 1] < m78[i - 1])
+        if prior and now and edge:
+            ev.append(ms[i]); i += 24
+        else:
+            i += 1
+    streak = 0
+    for j in range(len(ms) - 1, 77, -1):
+        if ser[j] < m40[j] and ser[j] < m78[j]: streak += 1
+        else: break
+    def _dd(a, b):
+        sub = [(m, sp[m]) for m in sorted(sp) if a <= m <= b]
+        pk = max(sub, key=lambda x: x[1]); aft = [x for x in sub if x[0] >= pk[0]]; tr = min(aft, key=lambda x: x[1])
+        return {"peak_m": pk[0], "trough_m": tr[0], "pct": round((tr[1] / pk[1] - 1) * 100, 1)}
+    dds = [dict(_dd(a, b), label=l) for a, b, l in (("1929-01", "1933-12", "1929–32"), ("1972-06", "1975-06", "1973–74"), ("2000-01", "2003-06", "2000–02"))]
+    out["rows"] = [{"m": m, "sg": round(ser[k], 5), "spx": sp[m], "gold": gd[m], "ma40": m40[k], "ma78": m78[k]} for k, m in enumerate(ms)]
+    out["events"] = ev; out["streak"] = streak; out["drawdowns"] = dds
+    out["last_m"] = ms[-1]; out["latest"] = round(ser[-1], 3)
+    out["ma_latest"] = {"ma40": m40[-1], "ma78": m78[-1]}
+    try:
+        _j.dump(out, open(cache_path, "w"), ensure_ascii=False)
+    except Exception:
+        pass
+    return out

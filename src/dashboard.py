@@ -1121,6 +1121,46 @@ def _stock_gold_html(o):
 
 
 
+def _sgl_html(o):
+    """标普500÷黄金 1929 起长历史(对数) + MA40/MA78 月 + 自动「跌破两均线」标记 + 三段回撤。页内 JS 绘制, 悬停每月一点。"""
+    import json as _json
+    if not o or not o.get("rows"):
+        err = "；".join((o or {}).get("warnings", [])[:2])
+        return f'<p class="empty">标普÷黄金长历史数据同步中{(chr(0xff1a) + _esc(err)) if err else ""}。</p>'
+    rows = o["rows"]
+    data = {"r": [[r["m"], r["sg"], r["spx"], r["gold"], r["ma40"], r["ma78"]] for r in rows],
+            "ev": o.get("events", []), "dd": o.get("drawdowns", []), "streak": o.get("streak", 0),
+            "ma": o.get("ma_latest", {})}
+    js = _json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    warn = f'<p class="sgr-warn">⚠ {_esc("；".join(o["warnings"][:2]))}</p>' if o.get("warnings") else ""
+    ev = "、".join(o.get("events", [])) or "无"
+    return f"""
+<div class="sgr-wrap" id="sgl">
+  {warn}
+  <div class="sgz-ctl">
+    <span class="sgz-lab">时间段</span>
+    <button type="button" class="sgl-r" data-y="20">20 年</button><button type="button" class="sgl-r" data-y="50">50 年</button>
+    <button type="button" class="sgl-r on" data-y="0">全部（1929 起）</button>
+    <span class="sgz-sep"></span>
+    <label class="sgz-chk"><input type="checkbox" id="sgl-ma" checked><i style="background:#c0793a"></i>40 / 78 月均线</label>
+    <label class="sgz-chk"><input type="checkbox" id="sgl-ev" checked><i style="background:#b0493a"></i>跌破两线标记</label>
+  </div>
+  <div id="sgl-box"></div>
+  <div class="sgr-foot">
+    <b>这是对 StockCharts 公开图「S&amp;P 500 vs. Gold」的自制复现，不是原图数据。</b>比值＝标普500 ÷ 金价（美元/盎司），对数坐标。
+    均线为<b>月度 40 期与 78 期</b>（约等于原图周线 170 / 340 期，但窗口不同，数值不会与原图一致）。
+    <b>「跌破两线」由规则自动判定</b>：此前 12 个月内曾同时站上两条均线，此后连续 12 个月以上同时低于两线，取起点，间隔至少 24 个月；
+    本次判定出 <b>{_esc(ev)}</b>，当前已连续 <b>{o.get("streak", 0)}</b> 个月同时低于两线。这是对历史形态的描述，不构成对未来的判断。
+    <b>回撤</b>为标普月度序列的峰→谷跌幅（月均值口径，比日内最高最低口径浅）：
+    {"；".join(_esc(d["label"]) + " " + str(d["pct"]) + "%（" + _esc(d["peak_m"]) + "→" + _esc(d["trough_m"]) + "）" for d in o.get("drawdowns", []))}。
+    <b>口径说明：</b>① 标普 1929–2026 用 Shiller 月度数据（月均值），与上方 1976 起面板的「月末收盘」口径不同，所以同一个月数值有约 ±4% 的差异；
+    ② 灰带为黄金<b>固定官价期</b>（1934-02 至 1971-08，每盎司 35 美元；1934-01 前为 20.67 美元），这段比值基本等于标普指数本身除以常数，不反映黄金市场定价，请勿与 1971 年之后直接比较；
+    ③ 本图最后一个月为当月数据，未走完。数据：标普 datasets/s-and-p-500（Shiller），黄金 datasets/gold-prices。随 dashboard 每日更新。
+  </div>
+  <script type="application/json" id="sgl-data">{js}</script>
+</div>"""
+
+
 def _tfp_sentiment_html(o):
     """密歇根信心(左轴,月) vs TFP 相对趋势(右轴,季, 普通+剔除开工率两口径)。每月一个悬停点。"""
     if not o or not o.get("tfp") or not o.get("umcsent"):
@@ -3058,7 +3098,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, cn_hk_hold=None, gs_tech=None, ur_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, cn_hk_hold=None, gs_tech=None, ur_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, spx_gold_long=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -3298,6 +3338,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         china_regime_html=_china_regime_html(china_regime),
         wrs_html=_wrs_html(wrs),
         stock_gold_html=_stock_gold_html(stock_gold),
+        spx_gold_long_html=_sgl_html(spx_gold_long),
         tfp_sentiment_html=_tfp_sentiment_html(tfp_sentiment),
         llm_token_html=_llm_token_html(llm_token),
         ai_capex_html=_ai_capex_html(ai_capex),
@@ -11663,6 +11704,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ 道指/标普 ÷ 黄金 50 年比值 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>股指 ÷ 黄金 · 50 年比值 (道指÷金价 · 标普500÷金价 · 月度对数坐标 · 1976 年至今)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{stock_gold_html}</div>
+  <div class="card"><div class="sgr-title" style="margin:0 0 4px">延长到 1929 年 · 标普÷黄金 · 均线与回撤（自制复现 StockCharts 公开图）</div>{spx_gold_long_html}</div>
   <!-- ━━━ 美元指数 vs 黄金 + 年初至今大事件标注 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>美元指数 vs 黄金 · 年初至今大事件标注 (双轴叠加 · 事件由价格异动反查并逐条核实出处)<span class="freq-badge freq-daily">价格每日 · 事件每周</span></div>
   <div class="card">{dxy_gold_html}</div>
@@ -12482,6 +12524,61 @@ mkRadar('rLong', RADAR.long);
     Array.prototype.forEach.call(document.querySelectorAll('.sgz-r'), function(x) {{ x.classList.remove('on'); }}); setRange(f, t); }});
   Array.prototype.forEach.call(document.querySelectorAll('.sgz-chk input'), function(c) {{ c.addEventListener('change', function() {{
     var k = c.getAttribute('data-s'); st.show[k] = c.checked ? 1 : 0; if (!st.show.dg && !st.show.sg) {{ st.show[k] = 1; c.checked = true; }} render(); }}); }});
+  render();
+}})();
+/* ── 标普÷黄金 1929 起长历史: 均线 + 跌破标记 + 回撤 (独立 IIFE, 前缀 sgl-) ── */
+(function() {{
+  var el = document.getElementById('sgl-data'); if (!el) return;
+  var D = JSON.parse(el.textContent), R = D.r, box = document.getElementById('sgl-box');
+  var W = 900, H = 330, PL = 48, PR = 16, PT = 14, PB = 26, iw = W - PL - PR, ih = H - PT - PB;
+  var st = {{from: R[0][0], ma: 1, ev: 1}};
+  function mAdd(m, k) {{ var y = +m.slice(0,4), mo = +m.slice(5,7) - 1 + k; y += Math.floor(mo/12); mo = ((mo%12)+12)%12; return y + '-' + ('0'+(mo+1)).slice(-2); }}
+  function f0(v) {{ return Math.round(v).toLocaleString('en-US'); }}
+  function render() {{
+    var rows = R.filter(function(r) {{ return r[0] >= st.from; }}), n = rows.length;
+    if (n < 2) rows = R.slice(-2), n = 2;
+    var vals = []; rows.forEach(function(r) {{ vals.push(r[1]); if (st.ma) {{ if (r[4] != null) vals.push(r[4]); if (r[5] != null) vals.push(r[5]); }} }});
+    var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals);
+    var lo = Math.log10(mn / 1.2), hi = Math.log10(mx * 1.2);
+    var X = function(i) {{ return PL + iw * i / (n - 1); }};
+    var Y = function(v) {{ return PT + ih * (1 - (Math.log10(v) - lo) / (hi - lo)); }};
+    var g = '';
+    // 固定官价期灰带 1934-02 ~ 1971-08
+    var a = -1, b = -1; rows.forEach(function(r, i) {{ if (r[0] >= '1934-02' && a < 0) a = i; if (r[0] <= '1971-08') b = i; }});
+    if (a >= 0 && b >= a) g += '<rect x="'+X(a).toFixed(1)+'" y="'+PT+'" width="'+Math.max(X(b)-X(a),1).toFixed(1)+'" height="'+ih+'" fill="#d9d3c8" opacity=".45"/><text x="'+((X(a)+X(b))/2).toFixed(1)+'" y="'+(PT+11)+'" class="sgr-xt" style="text-anchor:middle">黄金固定官价期</text>';
+    var lastY = -99, ts = []; for (var e = Math.floor(lo) - 1; e <= Math.ceil(hi); e++) [1,1.5,2,3,5,7].forEach(function(m) {{ ts.push(m * Math.pow(10, e)); }});
+    ts.sort(function(x,y) {{ return y-x; }});
+    ts.forEach(function(t) {{ if (!(t >= mn/1.2 && t <= mx*1.2)) return; if (Math.abs(Y(t) - lastY) < 20) return; lastY = Y(t);
+      g += '<line x1="'+PL+'" y1="'+Y(t).toFixed(1)+'" x2="'+(W-PR)+'" y2="'+Y(t).toFixed(1)+'" class="sgr-grid"/><text x="'+(PL-6)+'" y="'+(Y(t)+3.5).toFixed(1)+'" class="sgr-yt">'+(t >= 1 ? +t.toFixed(1) : +t.toFixed(2))+'</text>'; }});
+    var step = n > 600 ? 120 : n > 240 ? 60 : 24, xt = '';
+    rows.forEach(function(r, i) {{ var mo = +r[0].slice(5,7) - 1, y = +r[0].slice(0,4); if (mo === 0 && y % (step/12) === 0) xt += '<text x="'+X(i).toFixed(1)+'" y="'+(H-8)+'" class="sgr-xt">'+y+'</text>'; }});
+    function line(idx, col, w, dash) {{ var p = []; rows.forEach(function(r, i) {{ if (r[idx] != null) p.push(X(i).toFixed(1)+','+Y(r[idx]).toFixed(1)); }});
+      return p.length > 1 ? '<polyline points="'+p.join(' ')+'" fill="none" stroke="'+col+'" stroke-width="'+w+'"'+(dash ? ' stroke-dasharray="'+dash+'"' : '')+' stroke-linejoin="round"/>' : ''; }}
+    if (st.ma) {{ g += line(5, '#8a4b2f', 1.3, '5 3') + line(4, '#c0793a', 1.3, ''); }}
+    g += line(1, '#1f3a68', 1.8, '');
+    var marks = '';
+    if (st.ev) D.ev.forEach(function(m) {{ var i = -1; rows.forEach(function(r, k) {{ if (r[0] === m) i = k; }}); if (i < 0) return;
+      marks += '<line x1="'+X(i).toFixed(1)+'" y1="'+PT+'" x2="'+X(i).toFixed(1)+'" y2="'+(PT+ih)+'" stroke="#b0493a" stroke-width="1" stroke-dasharray="3 3"/><circle cx="'+X(i).toFixed(1)+'" cy="'+Y(rows[i][1]).toFixed(1)+'" r="4" fill="#b0493a" stroke="#fff" stroke-width="1.2"/><text x="'+(X(i) > W - 150 ? X(i)-6 : X(i)+6).toFixed(1)+'" y="'+(PT+24)+'" class="sgr-lab" style="fill:#b0493a;text-anchor:'+(X(i) > W - 150 ? 'end' : 'start')+'">'+m+' 跌破两线</text>'; }});
+    var cur = rows[n-1];
+    marks += '<circle cx="'+X(n-1).toFixed(1)+'" cy="'+Y(cur[1]).toFixed(1)+'" r="3.8" fill="#1f3a68" stroke="#fff" stroke-width="1.2"/>';
+    var bands = '';
+    rows.forEach(function(r, i) {{ var l = i ? (X(i-1)+X(i))/2 : PL, rr = i < n-1 ? (X(i)+X(i+1))/2 : W-PR;
+      var official = r[0] >= '1934-02' && r[0] <= '1971-08' ? '<br>（该月黄金为固定官价，比值≈指数本身）' : '';
+      var tip = r[0]+'||标普÷黄金 '+r[1].toFixed(r[1] >= 1 ? 2 : 3)+(r[4] != null ? '<br>MA40月 '+r[4].toFixed(2) : '')+(r[5] != null ? ' · MA78月 '+r[5].toFixed(2) : '')+'<br>标普 '+f0(r[2])+' ÷ 金价 $'+f0(r[3])+official;
+      bands += '<rect x="'+l.toFixed(1)+'" y="'+PT+'" width="'+Math.max(rr-l,.6).toFixed(2)+'" height="'+ih+'" fill="transparent" data-tip="'+tip+'"/>'; }});
+    var below = cur[4] != null && cur[5] != null && cur[1] < cur[4] && cur[1] < cur[5];
+    var stat = '<div class="sgz-st"><span>最新 <b>'+cur[1].toFixed(3)+'</b><i>'+cur[0]+'（当月未走完）</i></span>'
+      +'<span>MA40月 <b>'+(cur[4] != null ? cur[4].toFixed(3) : '—')+'</b><i>MA78月 '+(cur[5] != null ? cur[5].toFixed(3) : '—')+'</i></span>'
+      +'<span>位置 <b>'+(below ? '同时低于两线' : '未同时低于两线')+'</b><i>已连续 '+D.streak+' 个月</i></span></div>';
+    var dd = '<div class="sgz-st">'+D.dd.map(function(d) {{ return '<span>'+d.label+' 标普回撤 <b>'+d.pct+'%</b><i>'+d.peak_m+' → '+d.trough_m+'（月均值口径）</i></span>'; }}).join('')+'</div>';
+    box.innerHTML = '<div class="sgz-p" style="height:auto"><div class="sgr-title">标普 500 ÷ 黄金（1929 起，对数）</div>'+stat+'<svg viewBox="0 0 '+W+' '+H+'" class="sgr-chart" style="height:290px" preserveAspectRatio="xMidYMid meet">'+g+xt+marks+bands+'</svg>'+dd+'</div>';
+  }}
+  var LAST = R[R.length-1][0], FIRST = R[0][0];
+  Array.prototype.forEach.call(document.querySelectorAll('.sgl-r'), function(b) {{ b.addEventListener('click', function() {{
+    Array.prototype.forEach.call(document.querySelectorAll('.sgl-r'), function(x) {{ x.classList.remove('on'); }}); b.classList.add('on');
+    var y = +b.getAttribute('data-y'); var f = y ? mAdd(LAST, -12*y) : FIRST; st.from = f < FIRST ? FIRST : f; render(); }}); }});
+  document.getElementById('sgl-ma').addEventListener('change', function(e) {{ st.ma = e.target.checked ? 1 : 0; render(); }});
+  document.getElementById('sgl-ev').addEventListener('change', function(e) {{ st.ev = e.target.checked ? 1 : 0; render(); }});
   render();
 }})();
 /* ── 比特币 ÷ 黄金: 时间段 + 三条线 + 事件 (固定容器高度, 重绘只换 SVG 内容, 不触发布局位移) ── */
