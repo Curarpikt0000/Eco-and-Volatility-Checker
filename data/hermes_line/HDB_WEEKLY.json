@@ -1,6 +1,6 @@
 {
  "table": "HDB_WEEKLY",
- "count": 9,
+ "count": 10,
  "rows": [
   {
    "uid": "wk|2026-W33",
@@ -221,6 +221,31 @@
        "type": "text",
        "text": {
         "content": "# Eco & Volatility 周报 2026-W41 (2026-10-05 ~ 2026-10-09)\n\n- 综合信号: 🟡 警戒(全周一致,卖出触发 1/7)\n- 周内红灯: bofa_fms_cash(3.9%)、margin_gdp(4.46%)、bofa_bull_bear(9.5)、buffett(255%)、cape(41.4~41.6)、aaii_alloc(71.8%)\n\n## 本周状态变化\n1) 综合信号全周🟡警戒、卖出触发恒为1/7(仅BofA Bull&Bear 9.5>8.0),无升降级。\n2) 指标灯:仅 insider(内部人买卖比)10/7 单日🟡,其余日🟢;其余灯一周无变化。红灯6项固定:BofA FMS现金3.9%、Margin/GDP 4.46%、BofA B&B 9.5、巴菲特指标255%、CAPE 41.4~41.6、AAII股票配置71.8%。put_call全周🟢(0.58→0.62)。\n3) 数值首末(10/5→10/9):VIX 16.39→15.08(回落),CNN F&G 31.2→38.1(恐惧缓解),HY OAS 3.24→3.09(收窄15bp),10Y-2Y 0.45→0.47,CAPE 41.38→41.62,银行融资压力(CP-TBill)16→2bp,SOFR-EFFR -1→0bp。AAII/BofA/Buffett/Margin/IPO/LEI 为低频指标,本周无更新。\n4) 流动性:Fed准备金(9/30周)+17.9B至2.948T(首次回升、仍<3T),ON RRP 11.5B,TGA -28.4B至948.7B;央行风控灯🔴危险(美债🔴/日债🔴)。10Y 本周10/7盘中触5.365%后回落至5.286%(KOL Soloway口径),日债10Y~3.06%。\n5) 央行BS:Fed总资产-4.7B(-0.07%,9/30周),BoJ(9/20旬)-19.0B(-0.46%,QT),PBoC(8月)科目环比0.0(月度,未新增);ECB(W40)黄金+60B/APP+PEPP -14B。本周无扩缩表方向转折。\n6) 机构:本周无新13F(最新为2026-06-30季度,8/14前后披露)。\n7) KOL:10/2快照 vs 10/9快照,方向变动 58 人(转多21/转空18/转中性19);多空两端同步大量互换,含措辞/抓取口径噪声,不宜当单向转折解读。\n\n## KOL 转向\n10/2快照 vs 10/9快照(剔除未找到),方向变动58人;分布 看多104→115/中性43→45/看空32→38。多空两端同步互换,含措辞/抓取口径噪声,不宜当单向转折解读。\n中性→看多(12):Trisha Curtis、Matt Smith、Tim Scott、David Sacks、Francis Hunt、Peter Alexander、Glenn Neely、Ken Griffin、Massimiliano Castelli、David Meger、Doomberg / Kuppy、Daniel Ghali\n中性→看空(9):Bill Gurley、Michael Howell、Paul Kedrosky、Yanis Varoufakis、Howard Marks、William White、Mervyn King、Marc Chandler、Chris Vermeulen\n看多→中性(11):Michael Dunne、Henry Sanderson、Michael Fritzell、Jason Calacanis、Peter Thiel、Raghuram Rajan、Dan Loeb、Torsten Sløk、Gareth Soloway、Craig Hemke、Jay Martin\n看多→看空(9):Bert Dohmen、Richard A. Werner、Art Berman、Larry C. Johnson、Felix Zulauf、Charles Nenner、Amos Hochstein、Martin Armstrong、Jeff Snider\n看空→中性(8):Jamie Dimon、Francis Fukuyama、Ricardo Eva"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "wk|2026-W42",
+   "props": {
+    "周": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-W42"
+       }
+      }
+     ]
+    },
+    "综合研判": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "# Eco & Volatility 周报 2026-W42 (2026-10-12 ~ 2026-10-16)\n\n- 综合信号: 🟡 警戒(可得日全周一致,卖出触发 1/7)\n- 周内红灯: bofa_fms_cash(3.9%)、margin_gdp(4.46%)、bofa_bull_bear(8.1)、buffett(255%)、cape(41.0~41.9)、aaii_alloc(71.8%)、insider(10/12 红0.065→10/16 绿0.38)\n\n## 本周状态变化\n1) 综合信号 🟡警戒(10/14、10/16 可得;10/12、10/13 日报文件缺综合字段,10/15 仅存触发数1),卖出触发恒为 1/7(BofA Bull&Bear 8.1>8.0),无升降级。\n2) 指标灯:insider 内部人买卖比 10/12🔴(0.065)→10/16🟢(0.38) 唯一转绿;其余灯一周内无变化(put_call 10/12→10/16 0.56→0.62 灯色按快照重算有切换)。红灯固定 6 项:BofA FMS现金3.9%、Margin/GDP 4.46%、BofA B&B 8.1、巴菲特指标255%、CAPE 41.0~41.9、AAII股票配置71.8%。\n3) 数值首末(10/12→10/16快照):VIX 15.41→16.87,CNN F&G 45→31.5(转恐惧),AAII牛熊差 -11.8→+1.3,HY OAS 3.15→3.25,10Y-2Y 0.44→0.33,CAPE 41.87→41.01,银行融资压力 2→-2bp,SOFR-EFFR -1→0bp。\n4) 流动性:Fed准备金 2.948T(9/30周,+17.9B,仍<3T),TGA 948.7B(-28.4B);10Y 5.29%/2Y 4.88%/30Y 5.64%;央行风控灯🔴危险(美债🔴/日债🔴/Fed流动性🟡)。\n5) 央行BS:Fed总资产(9/30周)-4.7B(-0.07%),BoJ(9/20旬)-18.9B(-0.46%,QT),PBoC(8月)月度无新数据;本周无扩缩表方向转折。外国官方托管美债 2.551T(10/14周),WoW -14.6B(-0.57%)。\n6) 机构:本周无新13F披露(最新 8/14 申报,6/30季度)。\n7) KOL:10/9快照 vs 10/16快照,看多114→94/中性45→39/看空35→35/未找到7→15;多空两端互换含措辞/抓取口径噪声,'未找到'增加 8 人,不宜当单向转折解读。\n\n## KOL 转向\n10/9→10/16 方向变动(仅列纯三分类间转换,剔除未找到):\n看空→中性(7):Magerman、Kedrosky、Larry C. Johnson、Howard Marks、Prechter/EWI、Mervyn King、Jeff Snider\n中性→看空(8):Niall Ferguson、Avi Gilburt、Karen Dynan、Raghuram Rajan、Hamilton-Parker、Icahn、Acemoglu、Kyle Bass\n看多→中性(9):Michael Bloch、Trisha Curtis、Bruce Flatt、Glenn Neely、Tom McClellan、Jim Rogers、Ken Griffin、Bob Haberkorn 等\n看多→看空(6):David Sacks、Michael Power、Francis Hunt、Neil Howe、Jeffrey Gundlach 等\n中性→看多(5):David Friedberg、Ricardo Evangelista、Craig Hemke、Jay Martin 等\n看空→看多(3):Art Berman、Rupal Bhansali、Charles Nenner\n另约 25 人由单一方向变为带限定语的复合表述(如 Hartnett 看多→看空(风险资产)转逢高买债、Stockman 看多→看空(财政/债务危机)、Ted Oakley 看多→看空(股市/退休储蓄))。\n\n## KOL 本周言论\n本周有新发言 37 人 / 46 条(名册 212 人快照);出"
        }
       }
      ]
