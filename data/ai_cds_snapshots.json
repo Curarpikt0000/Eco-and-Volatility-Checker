@@ -1,0 +1,55 @@
+{
+ "note": "5年期单名CDS(bp), 新闻转引(S&P Global Market Intelligence/LSEG 口径), 非日更付费序列; 无报道的日子为空, 不插值",
+ "rows": [
+  {
+   "name": "CoreWeave",
+   "asof": "2026-10-14",
+   "bp": 1000,
+   "src_name": "Reuters(Economic Times 转载)",
+   "src_url": "https://economictimes.indiatimes.com/tech/artificial-intelligence/ai-credit-default-swap-spreads-widen-sharply/articleshow/134958105.cms",
+   "basis": "LSEG, 5年期",
+   "note": "原文: blown out past 1000 bps, 即 >=1000",
+   "added": "2026-10-18 19:52 JST"
+  },
+  {
+   "name": "CoreWeave",
+   "asof": "2026-10-15",
+   "bp": 1100,
+   "src_name": "Reuters(Insurance Journal 转载)",
+   "src_url": "https://www.insurancejournal.com/news/international/2026/10/16/889185.htm",
+   "basis": "S&P Global Market Intelligence, 5年期",
+   "note": "原文: blew past 1,100 bps, 即 >=1100; 1000bp 对应五年违约概率约64%(Reuters 换算)",
+   "added": "2026-10-18 19:52 JST"
+  },
+  {
+   "name": "Oracle",
+   "asof": "2026-10-14",
+   "bp": 288,
+   "src_name": "Reuters(Economic Times 转载)",
+   "src_url": "https://economictimes.indiatimes.com/tech/artificial-intelligence/ai-credit-default-swap-spreads-widen-sharply/articleshow/134958105.cms",
+   "basis": "S&P Global Market Intelligence, 5年期",
+   "note": "创纪录; 原文: 一夜上升26bp至288bp",
+   "added": "2026-10-18 19:52 JST"
+  },
+  {
+   "name": "Oracle",
+   "asof": "2026-10-15",
+   "bp": 300,
+   "src_name": "Reuters(Insurance Journal 转载)",
+   "src_url": "https://www.insurancejournal.com/news/international/2026/10/16/889185.htm",
+   "basis": "S&P Global Market Intelligence",
+   "note": "原文: near 300 bps, 本周约 +31bp; 为盘中近似值, 非收盘价",
+   "added": "2026-10-18 19:52 JST"
+  },
+  {
+   "name": "SoftBank",
+   "asof": "2026-10-14",
+   "bp": 424,
+   "src_name": "Reuters(Economic Times 转载)",
+   "src_url": "https://economictimes.indiatimes.com/tech/artificial-intelligence/ai-credit-default-swap-spreads-widen-sharply/articleshow/134958105.cms",
+   "basis": "S&P Global Market Intelligence, 5年期",
+   "note": "原文: 一夜上升24bp至424bp",
+   "added": "2026-10-18 19:52 JST"
+  }
+ ]
+}

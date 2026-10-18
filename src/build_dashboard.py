@@ -691,6 +691,17 @@ def main():
     except Exception as e:
         print(f"[dashboard] WRS衰退信号 跳过: {e}")
 
+    # ── AI 债务 CDS 快照: 读 data/ai_cds_snapshots.json(新闻转引, 入库走 tools/ai_cds_ingest.py 硬门禁) ──
+    ai_cds = {}
+    try:
+        import json as _jj
+        _f = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "ai_cds_snapshots.json")
+        ai_cds = _jj.load(open(_f, encoding="utf-8")) if os.path.exists(_f) else {}
+        _rows = ai_cds.get("rows") or []
+        print(f"[dashboard] AI债务CDS快照: {len(_rows)} 行 标的={sorted({r['name'] for r in _rows})} 最新={max((r['asof'] for r in _rows), default=None)}")
+    except Exception as e:
+        print(f"[dashboard] AI债务CDS快照 跳过: {e}")
+
     # ── 日元套息: CFTC 日元净头寸 · 美日利差 vs USDJPY · 周K+已实现波动率 + 规则型每日事实(Chao 2026-10-18) ──
     jpy_carry = {}
     try:
@@ -1048,6 +1059,7 @@ def main():
         spx_gold_long=spx_gold_long,
         ust_trio=ust_trio,
         jpy_carry=jpy_carry,
+        ai_cds=ai_cds,
         tfp_sentiment=tfp_sentiment,
         llm_token=llm_token,
         ai_capex=ai_capex,

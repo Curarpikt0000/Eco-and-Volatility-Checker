@@ -1237,6 +1237,83 @@ def _jpy_carry_html(o, which):
 </div>"""
 
 
+def _ai_cds_html(o):
+    """AI 债务 CDS 快照: 读 data/ai_cds_snapshots.json 的 rows。新闻转引, 非连续序列, 离散点不连线。"""
+    import json as _json, html as _h
+    rows = (o or {}).get("rows") or []
+    if not rows:
+        return '<p class="empty">AI 债务 CDS 暂无读数（新闻转引，有报道才记）。</p>'
+    colors = {"Oracle": "#c0553a", "CoreWeave": "#6a4c93", "SoftBank": "#2f6f9f", "Nvidia": "#2f8a6a", "Amazon": "#e0a030", "Alphabet": "#8a6d3b", "Meta": "#1f7a7a", "Microsoft": "#555", "Broadcom": "#a05a8a", "SpaceX": "#444", "STMicroelectronics": "#999"}
+    zh = {"Oracle": "甲骨文 Oracle", "CoreWeave": "CoreWeave", "SoftBank": "软银 SoftBank"}
+    by = {}
+    for r in rows: by.setdefault(r["name"], []).append(r)
+    for k in by: by[k].sort(key=lambda r: r["asof"])
+    def _mark(r):
+        n = r.get("note") or ""
+        return "≥" if ("past" in n or "blew" in n or "超过" in n) else ("近 " if "near" in n else "")
+    order = sorted(by, key=lambda n: -by[n][-1]["bp"])
+    # 顶部: 每家最近读数
+    cards = ""
+    for k in order:
+        L = by[k][-1]; prev = by[k][-2] if len(by[k]) > 1 else None
+        ge = _mark(L)
+        chg = ""
+        if prev:
+            d = L["bp"] - prev["bp"]
+            if _mark(L) or _mark(prev):
+                chg = f'<i>较 {prev["asof"][5:]} {_mark(prev)}{prev["bp"]:g} bp：两端含下限或近似值，不算确切变动</i>'
+            else:
+                chg = f'<i>较 {prev["asof"][5:]} {prev["bp"]:g} bp：{d:+g} bp</i>'
+        cards += (f'<div class="aic-card" style="border-top:3px solid {colors.get(k, "#888")}"><div class="aic-n">{_h.escape(zh.get(k, k))}</div>'
+                  f'<div class="aic-v">{ge}{L["bp"]:g}<small> bp</small></div><div class="aic-d">{L["asof"]}　{chg}</div></div>')
+    # 明细表
+    trs = ""
+    for r in sorted(rows, key=lambda r: (r["asof"], r["name"]), reverse=True):
+        cf = ' <b style="color:#c0553a">⚠来源数值冲突</b>' if r.get("conflict") else ""
+        trs += (f'<tr><td style="white-space:nowrap">{r["asof"]}</td><td style="white-space:nowrap">{_h.escape(zh.get(r["name"], r["name"]))}</td><td style="text-align:right;white-space:nowrap"><b>{_mark(r)}{r["bp"]:g}</b></td>'
+                f'<td><a href="{_h.escape(r["src_url"])}" target="_blank" rel="noopener" style="color:#2f6f9f">{_h.escape(r["src_name"])}</a></td>'
+                f'<td>{_h.escape(r["basis"])}</td><td>{_h.escape(r.get("note", ""))}{cf}</td></tr>')
+    # 离散点图
+    dates = sorted({r["asof"] for r in rows}); W, H, PL, PR, PT, PB = 900, 260, 54, 16, 14, 26
+    lo, hi = 0, max(r["bp"] for r in rows) * 1.12
+    def X(d):
+        import datetime as _dt
+        d0 = _dt.date.fromisoformat(dates[0]); d1 = _dt.date.fromisoformat(dates[-1]); span = max((d1 - d0).days, 1)
+        return PL + (W - PL - PR) * (((_dt.date.fromisoformat(d) - d0).days + 0.5) / (span + 1))
+    Y = lambda v: PT + (H - PT - PB) * (1 - (v - lo) / (hi - lo))
+    g = ""
+    step = 200 if hi > 800 else (100 if hi > 400 else 50)
+    v = 0
+    while v <= hi:
+        g += f'<line x1="{PL}" y1="{Y(v):.1f}" x2="{W-PR}" y2="{Y(v):.1f}" class="sgr-grid"/><text x="{PL-6}" y="{Y(v)+3.5:.1f}" class="sgr-yt">{v}</text>'
+        v += step
+    g += f'<text x="{PL-6}" y="10" class="sgr-yt">bp</text>'
+    for d in dates: g += f'<text x="{X(d):.1f}" y="{H-8}" class="sgr-xt">{d[5:]}</text>'
+    hit = ""
+    for r in rows:
+        c = colors.get(r["name"], "#888")
+        mk = _mark(r)
+        if mk: g += f'<circle cx="{X(r["asof"]):.1f}" cy="{Y(r["bp"]):.1f}" r="7" fill="#fff" stroke="{c}" stroke-width="2.4"/>'
+        else:  g += f'<circle cx="{X(r["asof"]):.1f}" cy="{Y(r["bp"]):.1f}" r="7" fill="{c}" stroke="#fff" stroke-width="1.2"/>'
+        g += f'<text x="{X(r["asof"])+11:.1f}" y="{Y(r["bp"])+4:.1f}" style="font-size:11px;fill:#3d372f">{mk}{r["bp"]:g}</text>'
+        tip = f'{r["asof"]}||{zh.get(r["name"], r["name"])} {r["bp"]:g} bp<br>{_h.escape(r["src_name"])}'
+        hit += f'<circle cx="{X(r["asof"]):.1f}" cy="{Y(r["bp"]):.1f}" r="13" fill="transparent" data-tip="{tip}" class="tip-hit"/>'
+    leg = "".join(f'<span><i style="display:inline-block;width:10px;height:10px;border-radius:50%;background:{colors.get(k, "#888")};margin-right:5px"></i>{_h.escape(zh.get(k, k))}</span>' for k in order)
+    return f"""
+<div class="sgr-wrap">
+  <div class="aic-row">{cards}</div>
+  <div class="sgz-st" style="margin-top:8px">{leg}</div>
+  <svg viewBox="0 0 {W} {H}" class="sgr-chart aic-svg" style="height:230px" preserveAspectRatio="xMidYMid meet">{g}{hit}</svg>
+  <div style="font-size:12px;color:#3d372f;margin:2px 0 4px">每个圆点＝一个报道里的读数，点与点之间<b>不连线、不插值</b>；空白＝当天没有报道；<b>空心圆＝原文只给了「超过」或「接近」</b>（下限或近似值），实心圆＝原文给了确切数字。</div>
+  <div class="sgr-title" style="margin-top:10px">全部读数</div>
+  <div style="overflow-x:auto"><table class="aic-tab"><thead><tr><th>日期</th><th>标的</th><th style="text-align:right">bp</th><th>来源</th><th>口径</th><th>备注</th></tr></thead><tbody>{trs}</tbody></table></div>
+  <div class="sgr-foot"><b>5 年期单名 CDS 利差（bp）</b>：每年为对冲 100 万美元债务付的保费 ≈ 利差 × 100 美元（288 bp ≈ 2.88 万美元）。
+  <b>数据来自 Reuters 等新闻转引（S&amp;P Global Market Intelligence / LSEG 口径），不是可日更的付费序列</b>：每个读数一个圆点、<b>不连线</b>，点与点之间的空白＝当天没有报道，不是没变化；
+  「≥」「近」沿用原文措辞（盘中近似或下限），不当收盘精确值。与上方的 BBB OAS 是<b>两个口径</b>（BBB OAS 是全行业评级档利差，这里是单名 CDS）。
+  更新方式：每个工作日由日报任务检索当日新闻，有来源链接且通过入库校验才写入，查不到就写「当日无新读数」。</div>
+</div>"""
+
+
 def _tfp_sentiment_html(o):
     """密歇根信心(左轴,月) vs TFP 相对趋势(右轴,季, 普通+剔除开工率两口径)。每月一个悬停点。"""
     if not o or not o.get("tfp") or not o.get("umcsent"):
@@ -3174,7 +3251,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, cn_hk_hold=None, gs_tech=None, ur_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, spx_gold_long=None, ust_trio=None, jpy_carry=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, cn_hk_hold=None, gs_tech=None, ur_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, spx_gold_long=None, ust_trio=None, jpy_carry=None, ai_cds=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -3418,6 +3495,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         ust_yld_html=_ust_trio_html(ust_trio, 'yld'),
         ust_tpm_html=_ust_trio_html(ust_trio, 'tpm'),
         ust_agg_html=_ust_trio_html(ust_trio, 'agg'),
+        ai_cds_html=_ai_cds_html(ai_cds),
         jpy_facts_html=_jpy_carry_html(jpy_carry, 'facts'),
         jpy_cftc_html=_jpy_carry_html(jpy_carry, 'cftc'),
         jpy_spread_html=_jpy_carry_html(jpy_carry, 'spread'),
@@ -10852,6 +10930,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .sgz-p{{height:300px}}.sgz-p svg{{width:100%;height:230px;display:block}}
 .sgz-st{{display:flex;gap:22px;flex-wrap:wrap;font-size:12px;color:#6b645a;height:34px;overflow:hidden}}
 .sgz-st b{{font-size:15px;color:#3d372f;margin:0 3px}}.sgz-st i{{font-style:normal;color:#9a9288;font-size:11px}}
+.aic-row{{display:flex;gap:12px;flex-wrap:wrap}}.aic-card{{flex:1;min-width:150px;background:#faf7f0;padding:10px 12px;border-radius:4px}}.aic-n{{font-size:12px;color:#6b645a}}.aic-v{{font-size:26px;font-weight:600;color:#3d372f;line-height:1.3}}.aic-v small{{font-size:12px;font-weight:400;color:#8a837a}}.aic-d{{font-size:11px;color:#8a837a}}.aic-d i{{font-style:normal;margin-left:6px}}.aic-svg .sgr-yt,.aic-svg .sgr-xt{{font-size:11.5px;fill:#5a534a}}.aic-tab{{width:100%;border-collapse:collapse;font-size:12px}}.aic-tab th{{text-align:left;color:#6b645a;border-bottom:1px solid #d9d3c8;padding:4px 6px}}.aic-tab td{{border-bottom:1px dashed #e6e0d4;padding:4px 6px;color:#3d372f;vertical-align:top}}
 .jpy-facts{{list-style:none;margin:6px 0 8px;padding:0}}.jpy-facts li{{padding:6px 2px;border-bottom:1px dashed #e0d9cc;font-size:13.5px;line-height:1.7;color:#3d372f}}.jpy-facts li b{{display:inline-block;min-width:44px;color:#6b645a;font-weight:600}}
 .sgr-foot{{font-size:11px;color:#8a837a;margin-top:10px;line-height:1.6}}
 .sgr-warn{{font-size:12px;color:#8e3b30;margin:0 0 6px}}
@@ -11767,6 +11846,9 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title"><span class="part-num">＋</span>基差套利去杠杆预警 · 美债/日债 (SOFR 倒挂 + 持券 Carry + 波动触发 · 强平潮尾部风险 · 每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
   <!-- ━━━ 每日流动性危机监测(SOFR−EFFR + BBB/HY OAS + 闪崩标注) ━━━ -->
   {liquidity_crisis_html}
+  <!-- ━━━ AI 债务 CDS 快照 (Chao 2026-10-18): Oracle/CoreWeave/SoftBank 单名 CDS, 新闻转引, 离散点不连线 ━━━ -->
+  <div class="part-title" id="sec-ai-cds"><span class="part-num">＋</span>AI 债务 CDS 快照 · 甲骨文 / CoreWeave / 软银 (5 年期单名 · 新闻转引)<span class="freq-badge freq-daily">有报道才记</span></div>
+  <div class="card">{ai_cds_html}</div>
   {cot_mm_html}
   <!-- ━━━ 中国模式断代监控(旧引擎停摆 / 新引擎接续) ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>中国模式断代监控 · 旧引擎停摆与新引擎接续 (NBS 官方分项 + 东财宏观 · 对照 Perkins 2025-12 判据)<span class="freq-badge freq-monthly">每月更新</span></div>
@@ -11980,7 +12062,7 @@ mkRadar('rLong', RADAR.long);
     // 但两者本质都是央行流动性观测 —— 一个是 PBoC 的逆回购/DR007/MLF/SFISF，
     // 一个是 Fed 与外国央行的美元互换额度。均归入本组。
     {{ name: '流动性与央行', match: ['A 股资金面','流动性要点','央行资产负债表','国际清算银行','三国货币供应','全球货币供应','M2 十年','Credit Impulse','信贷脉冲','中国央行流动性','央行货币互换','美元流动性互换'] }},
-    {{ name: '债务与信用', match: ['政府债务','世界前十大经济体','公司债','OAS 利差','CIPS','跨境人民币','AI 产业链','自由现金流','信用维度'] }},
+    {{ name: '债务与信用', match: ['政府债务','世界前十大经济体','公司债','OAS 利差','AI 债务 CDS','CIPS','跨境人民币','AI 产业链','自由现金流','信用维度'] }},
     {{ name: '国债流动性观测', match: ['WRS','国债市场收益率','日元套息','日元期货 CFTC','美日 10年利差','美元/日元周K线','美债 2年/10年/30年','美债期限溢价','美国综合债券指数','国债市场微观结构','中国模式断代监控','市场压力','基差套利去杠杆预警','SOFR 倒挂','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
     {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','COMEX & 上海','贵金属库存','ETF 资金流','白银做市商','COMEX 白银','投行累计','做市商每周净','issue/stop','COMEX 交割前十名','交货方','自营黄金掉期','黄金出口','Nonmonetary','黄金 Domestic Premium','Premium/Discount','白银月度进口','Silver Bullion'] }},
     {{ name: '实体、AI 与研报', match: ['机构研究报告','消费者信心','美国货运','中美 AI 投资','AI 算力价格'] }},
