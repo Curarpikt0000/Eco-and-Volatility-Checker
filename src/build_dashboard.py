@@ -691,6 +691,18 @@ def main():
     except Exception as e:
         print(f"[dashboard] WRS衰退信号 跳过: {e}")
 
+    # ── 日元套息: CFTC 日元净头寸 · 美日利差 vs USDJPY · 周K+已实现波动率 + 规则型每日事实(Chao 2026-10-18) ──
+    jpy_carry = {}
+    try:
+        jpy_carry = ed.fetch_jpy_carry() or {}
+        if jpy_carry.get("cftc"):
+            print(f"[dashboard] 日元套息: CFTC末 {(jpy_carry['cftc'].get('last') or {}).get('noncomm')} "
+                  f"USDJPY末 {((jpy_carry.get('spread') or {}).get('last') or {}).get('usdjpy')} facts={len(jpy_carry.get('facts', []))} status={jpy_carry.get('status')} warn={jpy_carry.get('warnings')}")
+        else:
+            print(f"[dashboard] 日元套息 失败: {jpy_carry.get('warnings')}")
+    except Exception as e:
+        print(f"[dashboard] 日元套息 跳过: {e}")
+
     # ── 美债三图: 2Y/10Y/30Y · 期限溢价+MOVE+10Y · AGG/BND 代理(Chao 2026-10-16) ──
     ust_trio = {}
     try:
@@ -1035,6 +1047,7 @@ def main():
         stock_gold=stock_gold,
         spx_gold_long=spx_gold_long,
         ust_trio=ust_trio,
+        jpy_carry=jpy_carry,
         tfp_sentiment=tfp_sentiment,
         llm_token=llm_token,
         ai_capex=ai_capex,

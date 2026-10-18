@@ -1200,6 +1200,43 @@ def _ust_trio_html(o, which):
 </div>"""
 
 
+def _jpy_carry_html(o, which):
+    """日元套息: facts | cftc | spread | kline。数据内嵌 JSON, 页内 JS 绘制(id 前缀 jpy-)。"""
+    import json as _json
+    if not o or o.get("status") == "error" or not o.get("cftc"):
+        err = "；".join((o or {}).get("warnings", [])[:2])
+        return f'<p class="empty">日元套息数据同步中{(chr(0xff1a) + _esc(err)) if err else ""}。</p>'
+    warn = f'<p class="sgr-warn">⚠ {_esc("；".join(o["warnings"][:2]))}</p>' if o.get("warnings") else ""
+    if which == "facts":
+        rows = "".join(f'<li><b>{_esc(f["tag"])}</b>　{_esc(f["txt"])}</li>' for f in o.get("facts", []))
+        return (f'<div class="sgr-wrap">{warn}<ul class="jpy-facts">{rows}</ul>'
+                '<div class="sgr-foot">以上每条都是按固定阈值从官方/公开数据直接算出的<b>事实</b>（CFTC 周度净头寸、日本财务省日债、FRED 美债、Yahoo 汇率），'
+                '不含预测、不含买卖建议。「3%」「5%」「160」是你周报里点名的关口，仅用于陈述当前在其上方还是下方。'
+                '本页不含主权 CDS（付费数据）与谈判/油价等事件判断。随 dashboard 每日更新（CFTC 每周五美东 15:30 发布，其余日频）。</div></div>')
+    if which == "cftc":
+        data = {"k": "cftc", "noncomm": o["cftc"]["noncomm"], "lev": o["cftc"]["lev"], "last": o["cftc"]["last"]}
+        foot = ("CME 日元期货持仓（CFTC 官方，每周二数据、周五发布）：<b>非商业净头寸</b>＝非商业多头 − 空头（传统报告口径）；"
+                "<b>杠杆基金</b>＝TFF 报告里的 Leveraged Funds 净头寸（对冲基金口径，与非商业<b>不是同一个口径</b>，二者并列只为对照）。"
+                "正值＝净做多日元期货（押日元升值），负值＝净做空。近 3 年。")
+    elif which == "spread":
+        data = {"k": "spread", "spread": o["spread"]["spread"], "usdjpy": o["spread"]["usdjpy"], "last": o["spread"]["last"]}
+        foot = ("美日 10 年国债利差（美债 10Y 取 FRED，日债 10Y 取日本财务省官方日度数据，百分点，左轴）与美元/日元（Yahoo，周度，<b>右轴已反转：线向上＝日元走强</b>），近 2 年。"
+                "利差大＝套息有肉；日元走强是套息平仓的结果之一，但二者相关≠因果。")
+    else:
+        data = {"k": "kline", "kl": o["kline"]["k"], "rv": o["kline"]["rv"], "last_rv": o["kline"]["last_rv"], "last": o["spread"]["last"]}
+        foot = ("美元/日元周 K 线（Yahoo，红涨绿跌的习惯在此用<b>涨＝日元贬值</b>色，下方有说明）与 MA5/10/20/30 周均线；副图为 <b>20 日已实现波动率</b>（日线对数收益率标准差×√252，年化 %）。"
+                "<b>这是已实现波动率，不是隐含波动率</b>：CBOE 日元波动率指数 JYVIX 已于 2022-11 停更，免费渠道没有日元隐含波动率，所以用已实现值代理。"
+                "MacroMicro 原图的「隐含波动率差值」是其专有构造，本页不复现。")
+    js = _json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    return f"""
+<div class="sgr-wrap" id="jpy-{which}">
+  {warn}
+  <div id="jpy-{which}-box"></div>
+  <div class="sgr-foot">{foot}</div>
+  <script type="application/json" id="jpy-{which}-data">{js}</script>
+</div>"""
+
+
 def _tfp_sentiment_html(o):
     """密歇根信心(左轴,月) vs TFP 相对趋势(右轴,季, 普通+剔除开工率两口径)。每月一个悬停点。"""
     if not o or not o.get("tfp") or not o.get("umcsent"):
@@ -3137,7 +3174,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, cn_hk_hold=None, gs_tech=None, ur_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, spx_gold_long=None, ust_trio=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, cn_hk_hold=None, gs_tech=None, ur_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, spx_gold_long=None, ust_trio=None, jpy_carry=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -3381,6 +3418,10 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         ust_yld_html=_ust_trio_html(ust_trio, 'yld'),
         ust_tpm_html=_ust_trio_html(ust_trio, 'tpm'),
         ust_agg_html=_ust_trio_html(ust_trio, 'agg'),
+        jpy_facts_html=_jpy_carry_html(jpy_carry, 'facts'),
+        jpy_cftc_html=_jpy_carry_html(jpy_carry, 'cftc'),
+        jpy_spread_html=_jpy_carry_html(jpy_carry, 'spread'),
+        jpy_kline_html=_jpy_carry_html(jpy_carry, 'kline'),
         tfp_sentiment_html=_tfp_sentiment_html(tfp_sentiment),
         llm_token_html=_llm_token_html(llm_token),
         ai_capex_html=_ai_capex_html(ai_capex),
@@ -10811,6 +10852,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .sgz-p{{height:300px}}.sgz-p svg{{width:100%;height:230px;display:block}}
 .sgz-st{{display:flex;gap:22px;flex-wrap:wrap;font-size:12px;color:#6b645a;height:34px;overflow:hidden}}
 .sgz-st b{{font-size:15px;color:#3d372f;margin:0 3px}}.sgz-st i{{font-style:normal;color:#9a9288;font-size:11px}}
+.jpy-facts{{list-style:none;margin:6px 0 8px;padding:0}}.jpy-facts li{{padding:6px 2px;border-bottom:1px dashed #e0d9cc;font-size:13.5px;line-height:1.7;color:#3d372f}}.jpy-facts li b{{display:inline-block;min-width:44px;color:#6b645a;font-weight:600}}
 .sgr-foot{{font-size:11px;color:#8a837a;margin-top:10px;line-height:1.6}}
 .sgr-warn{{font-size:12px;color:#8e3b30;margin:0 0 6px}}
 .btcg-n{{font-size:9px;font-weight:700;text-anchor:middle}}
@@ -11832,6 +11874,15 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·八：美日 10Y/30Y 国债收益率四线图 ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美日 10年/30年国债收益率 · 过去一年 (四线同图 · 美日利差与套息)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{yield_curves}</div>
+  <!-- ━━━ 日元套息 (Chao 2026-10-18): 每日事实 + CFTC 日元净头寸 + 美日利差 vs USDJPY + USDJPY 周K/均线/已实现波动率 ━━━ -->
+  <div class="part-title" id="sec-jpy-carry"><span class="part-num">＋</span>日元套息 · 每日事实<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{jpy_facts_html}</div>
+  <div class="part-title"><span class="part-num">＋</span>日元期货 CFTC 净头寸 · 非商业与杠杆基金 · 近 3 年<span class="freq-badge freq-weekly">每周更新</span></div>
+  <div class="card">{jpy_cftc_html}</div>
+  <div class="part-title"><span class="part-num">＋</span>美日 10年利差 vs 美元/日元 · 近 2 年<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{jpy_spread_html}</div>
+  <div class="part-title"><span class="part-num">＋</span>美元/日元周K线 · 均线与已实现波动率<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{jpy_kline_html}</div>
   <!-- ═══ 附三·八B：美国国债收益率百年周期(4线, 1934→今) ═══ -->
   <div class="part-title" id="sec-us-yield-century"><span class="part-num">＋</span>美国国债收益率百年周期 · Fed Funds/3M/10Y/30Y (40年长周期·1940大底/1980大顶/2020大底)<span class="freq-badge freq-quarterly">每季更新</span></div>
   <div class="card">{us_yield_century}</div>
@@ -11930,7 +11981,7 @@ mkRadar('rLong', RADAR.long);
     // 一个是 Fed 与外国央行的美元互换额度。均归入本组。
     {{ name: '流动性与央行', match: ['A 股资金面','流动性要点','央行资产负债表','国际清算银行','三国货币供应','全球货币供应','M2 十年','Credit Impulse','信贷脉冲','中国央行流动性','央行货币互换','美元流动性互换'] }},
     {{ name: '债务与信用', match: ['政府债务','世界前十大经济体','公司债','OAS 利差','CIPS','跨境人民币','AI 产业链','自由现金流','信用维度'] }},
-    {{ name: '国债流动性观测', match: ['WRS','国债市场收益率','美债 2年/10年/30年','美债期限溢价','美国综合债券指数','国债市场微观结构','中国模式断代监控','市场压力','基差套利去杠杆预警','SOFR 倒挂','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
+    {{ name: '国债流动性观测', match: ['WRS','国债市场收益率','日元套息','日元期货 CFTC','美日 10年利差','美元/日元周K线','美债 2年/10年/30年','美债期限溢价','美国综合债券指数','国债市场微观结构','中国模式断代监控','市场压力','基差套利去杠杆预警','SOFR 倒挂','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
     {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','COMEX & 上海','贵金属库存','ETF 资金流','白银做市商','COMEX 白银','投行累计','做市商每周净','issue/stop','COMEX 交割前十名','交货方','自营黄金掉期','黄金出口','Nonmonetary','黄金 Domestic Premium','Premium/Discount','白银月度进口','Silver Bullion'] }},
     {{ name: '实体、AI 与研报', match: ['机构研究报告','消费者信心','美国货运','中美 AI 投资','AI 算力价格'] }},
     {{ name: '财政政策', match: ['美日财政政策事件','债务上限','补正预算','国债发行','年度财政花费','财政花费','政府总支出'] }},
@@ -12672,6 +12723,69 @@ mkRadar('rLong', RADAR.long);
     series: [{{key: 'tp', lk: 'tp', name: '10Y 期限溢价(ACM)', col: '#2f8a8a', axis: 'L', d: 2, unit: '%'}}, {{key: 'y10', lk: 'y10', name: '10Y 收益率', col: '#c0a030', axis: 'L', d: 2, unit: '%'}}, {{key: 'move', lk: 'move', name: 'MOVE', col: '#b0493a', axis: 'R', d: 1, dash: true}}]}});
   build('agg', {{title: '彭博美综指的 ETF 代理 · AGG 与 BND（起点=100 的相对值 · 近 2 年 · 日度）', ul: '相对值(起点=100)', dl: 0,
     series: [{{key: 'agg', lk: 'agg', name: 'AGG', col: '#6a4c93', axis: 'L', d: 2, w: 2}}, {{key: 'bnd', lk: 'bnd', name: 'BND', col: '#e0a030', axis: 'L', d: 2, w: 1.2, dash: true}}]}});
+}})();
+/* ── 日元套息: CFTC 净头寸 · 美日利差 vs USDJPY · USDJPY 周K+均线+已实现波动率 (独立 IIFE, 前缀 jpy-; 悬停显示日期+各线数值) ── */
+(function() {{
+  function get(w) {{ var e = document.getElementById('jpy-' + w + '-data'); return e ? [JSON.parse(e.textContent), document.getElementById('jpy-' + w + '-box')] : null; }}
+  function nice(lo, hi, k) {{ var step = (hi - lo) / k, p = Math.pow(10, Math.floor(Math.log10(step))), f = step / p, st = (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * p, a = []; for (var v = Math.ceil(lo / st) * st; v <= hi + 1e-9; v += st) a.push(v); return a; }}
+  function xticks(dates, X, H) {{ var t = '', last = ''; dates.forEach(function(d, i) {{ var m = d.slice(5,7), q = d.slice(0,4) + m; if ((m === '01' || m === '04' || m === '07' || m === '10') && q !== last) {{ last = q; t += '<text x="'+X(i).toFixed(1)+'" y="'+(H-8)+'" class="sgr-xt">'+d.slice(2,7)+'</text>'; }} }}); return t; }}
+  function legend(items) {{ return '<div class="sgz-st">' + items.map(function(s) {{ return '<span><i style="display:inline-block;width:14px;height:3px;background:'+s.col+';margin-right:5px;vertical-align:middle"></i>'+s.name+' <b>'+s.val+'</b><i>'+s.d+'</i></span>'; }}).join('') + '</div>'; }}
+  /* 通用折线/柱 */
+  function line(box, title, spec) {{
+    var D = spec.D, W = 900, H = spec.h || 300, PL = 54, PR = spec.right ? 54 : 16, PT = 14, PB = 26, iw = W - PL - PR, ih = H - PT - PB;
+    var dates = [], maps = spec.series.map(function(s) {{ var m = {{}}; (D[s.key] || []).forEach(function(p) {{ m[p[0]] = p[1]; if (dates.indexOf(p[0]) < 0) dates.push(p[0]); }}); return m; }});
+    dates.sort(); var n = dates.length; if (n < 2) {{ box.innerHTML = '<p class="empty">数据点不足</p>'; return; }}
+    var X = function(i) {{ return PL + iw * i / (n - 1); }};
+    function rng(side) {{ var a = []; spec.series.forEach(function(s, k) {{ if (s.axis !== side) return; dates.forEach(function(d) {{ var v = maps[k][d]; if (v != null) a.push(v); }}); }}); if (!a.length) return null; var lo = Math.min.apply(null, a), hi = Math.max.apply(null, a), pad = (hi - lo) * 0.08 || 1; if (spec.bar && side === 'L') {{ lo = Math.min(lo, 0); hi = Math.max(hi, 0); }} return [lo - (spec.bar && side === 'L' ? 0 : pad), hi + (spec.bar && side === 'L' ? pad : pad)]; }}
+    var RL = rng('L'), RR = rng('R');
+    var YL = function(v) {{ return PT + ih * (1 - (v - RL[0]) / (RL[1] - RL[0])); }};
+    var YR = RR ? function(v) {{ var f = (v - RR[0]) / (RR[1] - RR[0]); return PT + ih * (spec.flipR ? f : 1 - f); }} : null;
+    var g = '';
+    var gl = nice(RL[0], RL[1], 5);
+    gl.forEach(function(v) {{ g += '<line x1="'+PL+'" y1="'+YL(v).toFixed(1)+'" x2="'+(W-PR)+'" y2="'+YL(v).toFixed(1)+'" class="sgr-grid"'+(spec.bar && Math.abs(v) < (RL[1]-RL[0])*1e-6 ? ' style="stroke:#3d372f;stroke-width:1.4"' : '')+'/><text x="'+(PL-6)+'" y="'+(YL(v)+3.5).toFixed(1)+'" class="sgr-yt">'+(+v.toFixed(spec.dl))+'</text>'; }});
+    if (RR) gl.forEach(function(v) {{ var f = (v - RL[0]) / (RL[1] - RL[0]), rv = spec.flipR ? RR[1] - f * (RR[1] - RR[0]) : RR[0] + f * (RR[1] - RR[0]); g += '<text x="'+(W-PR+6)+'" y="'+(YL(v)+3.5).toFixed(1)+'" class="sgr-yt" style="text-anchor:start;fill:'+spec.rc+'">'+(+rv.toFixed(spec.dr || 0))+'</text>'; }});
+    g += '<text x="'+(PL-6)+'" y="10" class="sgr-yt">'+spec.ul+'</text>' + (RR ? '<text x="'+(W-PR+6)+'" y="10" class="sgr-yt" style="text-anchor:start;fill:'+spec.rc+'">'+spec.ur+'</text>' : '');
+    spec.series.forEach(function(s, k) {{
+      var Y = s.axis === 'R' ? YR : YL;
+      if (spec.bar && s.bar) {{ var bw = Math.max(iw / n * (s.bw || 0.8), 1.2), y0 = YL(0); dates.forEach(function(d, i) {{ var v = maps[k][d]; if (v == null) return; var y = YL(v); g += '<rect x="'+(X(i)-bw/2+(s.off||0)).toFixed(1)+'" y="'+Math.min(y,y0).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+Math.max(Math.abs(y-y0),.6).toFixed(1)+'" fill="'+(s.colNeg && v < 0 ? s.colNeg : s.col)+'" opacity="'+(s.op||1)+'"/>'; }}); return; }}
+      var p = []; dates.forEach(function(d, i) {{ var v = maps[k][d]; if (v != null) p.push(X(i).toFixed(1)+','+Y(v).toFixed(1)); }});
+      if (p.length > 1) g += '<polyline points="'+p.join(' ')+'" fill="none" stroke="'+s.col+'" stroke-width="'+(s.w || 1.6)+'"'+(s.dash ? ' stroke-dasharray="5 3"' : '')+' stroke-linejoin="round"/>'; }});
+    var bands = '';
+    dates.forEach(function(d, i) {{ var l = i ? (X(i-1)+X(i))/2 : PL, r = i < n-1 ? (X(i)+X(i+1))/2 : W-PR;
+      var tip = d + '||' + spec.series.map(function(s, k) {{ var v = maps[k][d]; if (v == null) return s.name + ' —'; return s.name + ' ' + (spec.fmt ? spec.fmt(v) : (+v.toFixed(s.d))) + (s.unit || ''); }}).join('<br>');
+      bands += '<rect x="'+l.toFixed(1)+'" y="'+PT+'" width="'+Math.max(r-l,.6).toFixed(2)+'" height="'+ih+'" fill="transparent" data-tip="'+tip+'"/>'; }});
+    var lg = legend(spec.series.map(function(s) {{ var L = spec.last[s.lk]; return {{col: s.col, name: s.name, val: L ? (spec.lfmt ? spec.lfmt(L.v) : (+L.v.toFixed(s.d))) + (s.unit || '') : '—', d: L ? L.d : ''}}; }}));
+    box.innerHTML = '<div class="sgz-p" style="height:auto"><div class="sgr-title">'+title+'</div>'+lg+'<svg viewBox="0 0 '+W+' '+H+'" class="sgr-chart" style="height:'+(H-30)+'px" preserveAspectRatio="xMidYMid meet">'+g+xticks(dates, X, H)+bands+'</svg></div>';
+  }}
+  var a = get('cftc'); if (a) line(a[1], '日元期货 CFTC 净头寸（近 3 年 · 周度 · 手）', {{D: a[0], bar: true, dl: 0, ul: '手', last: a[0].last, lfmt: function(v) {{ return (v > 0 ? '+' : '') + Math.round(v); }}, fmt: function(v) {{ return (v > 0 ? '+' : '') + Math.round(v); }},
+    series: [{{key: 'noncomm', lk: 'noncomm', name: '非商业净头寸', col: '#2f6f9f', colNeg: '#c0553a', axis: 'L', bar: true, bw: 0.8, unit: ' 手'}}, {{key: 'lev', lk: 'lev', name: '杠杆基金净头寸', col: '#e0a030', axis: 'L', w: 1.8, d: 0, unit: ' 手'}}]}});
+  var b = get('spread'); if (b) line(b[1], '美日 10 年利差 vs 美元/日元（近 2 年 · 周度；右轴反转：向上＝日元走强）', {{D: b[0], right: true, flipR: true, dl: 1, dr: 0, ul: '利差（百分点）', ur: '美元/日元（反转）', rc: '#b0493a', last: b[0].last,
+    series: [{{key: 'spread', lk: 'spread', name: '美日10Y利差', col: '#2f6f9f', axis: 'L', d: 2, unit: ' 个百分点', w: 2}}, {{key: 'usdjpy', lk: 'usdjpy', name: '美元/日元', col: '#b0493a', axis: 'R', d: 2, w: 1.6}}]}});
+  var c = get('kline'); if (c) {{
+    var K = c[0].kl, box = c[1], W = 900, H1 = 280, H2 = 110, PL = 54, PR = 16, PT = 14, PB = 4, iw = W - PL - PR, n = K.length;
+    var X = function(i) {{ return PL + iw * (i + 0.5) / n; }}, lo = 1e9, hi = -1e9;
+    K.forEach(function(k) {{ lo = Math.min(lo, k.l); hi = Math.max(hi, k.h); [k.ma5, k.ma10, k.ma20, k.ma30].forEach(function(m) {{ if (m != null) {{ lo = Math.min(lo, m); hi = Math.max(hi, m); }} }}); }});
+    var pad = (hi - lo) * 0.05; lo -= pad; hi += pad; var ih1 = H1 - PT - PB, Y = function(v) {{ return PT + ih1 * (1 - (v - lo) / (hi - lo)); }}, g = '', bw = Math.max(iw / n * 0.62, 1.4);
+    nice(lo, hi, 6).forEach(function(v) {{ g += '<line x1="'+PL+'" y1="'+Y(v).toFixed(1)+'" x2="'+(W-PR)+'" y2="'+Y(v).toFixed(1)+'" class="sgr-grid"/><text x="'+(PL-6)+'" y="'+(Y(v)+3.5).toFixed(1)+'" class="sgr-yt">'+Math.round(v)+'</text>'; }});
+    g += '<line x1="'+PL+'" y1="'+Y(160).toFixed(1)+'" x2="'+(W-PR)+'" y2="'+Y(160).toFixed(1)+'" stroke="#b0493a" stroke-width="1" stroke-dasharray="3 4" opacity=".7"/><text x="'+(W-PR-2)+'" y="'+(Y(160)-3).toFixed(1)+'" class="sgr-xt" style="text-anchor:end;fill:#b0493a">160</text>';
+    K.forEach(function(k, i) {{ var up = k.c >= k.o, col = up ? '#c0553a' : '#2f8a6a'; g += '<line x1="'+X(i).toFixed(1)+'" y1="'+Y(k.h).toFixed(1)+'" x2="'+X(i).toFixed(1)+'" y2="'+Y(k.l).toFixed(1)+'" stroke="'+col+'" stroke-width="1"/><rect x="'+(X(i)-bw/2).toFixed(1)+'" y="'+Math.min(Y(k.o),Y(k.c)).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+Math.max(Math.abs(Y(k.o)-Y(k.c)),.8).toFixed(1)+'" fill="'+col+'"/>'; }});
+    var MA = [['ma5','#6a4c93','MA5'],['ma10','#2f6f9f','MA10'],['ma20','#e0a030','MA20'],['ma30','#555','MA30']];
+    MA.forEach(function(m) {{ var p = []; K.forEach(function(k, i) {{ if (k[m[0]] != null) p.push(X(i).toFixed(1)+','+Y(k[m[0]]).toFixed(1)); }}); if (p.length > 1) g += '<polyline points="'+p.join(' ')+'" fill="none" stroke="'+m[1]+'" stroke-width="1.3"/>'; }});
+    var bands = ''; K.forEach(function(k, i) {{ var l = PL + iw * i / n, tip = k.d + '（周）||开 '+k.o+' 高 '+k.h+' 低 '+k.l+' 收 '+k.c+'<br>' + MA.map(function(m) {{ return m[2] + ' ' + (k[m[0]] == null ? '—' : k[m[0]]); }}).join(' · ');
+      bands += '<rect x="'+l.toFixed(1)+'" y="'+PT+'" width="'+(iw/n).toFixed(2)+'" height="'+ih1+'" fill="transparent" data-tip="'+tip+'"/>'; }});
+    var xt = '', lastq = ''; K.forEach(function(k, i) {{ var m = k.d.slice(5,7), q = k.d.slice(0,4)+m; if ((m === '01' || m === '04' || m === '07' || m === '10') && q !== lastq) {{ lastq = q; xt += '<text x="'+X(i).toFixed(1)+'" y="'+(H1+2)+'" class="sgr-xt" style="dominant-baseline:hanging">'+k.d.slice(2,7)+'</text>'; }} }});
+    var RV = c[0].rv, rvmap = {{}}; RV.forEach(function(p) {{ rvmap[p[0]] = p[1]; }});
+    var rv = RV.map(function(p) {{ return p[1]; }}), rlo = 0, rhi = Math.max.apply(null, rv) * 1.1, ih2 = H2 - 18, YV = function(v) {{ return 6 + ih2 * (1 - (v - rlo) / (rhi - rlo)); }}, g2 = '';
+    nice(rlo, rhi, 3).forEach(function(v) {{ g2 += '<line x1="'+PL+'" y1="'+YV(v).toFixed(1)+'" x2="'+(W-PR)+'" y2="'+YV(v).toFixed(1)+'" class="sgr-grid"/><text x="'+(PL-6)+'" y="'+(YV(v)+3.5).toFixed(1)+'" class="sgr-yt">'+(+v.toFixed(0))+'</text>'; }});
+    var rn = RV.length, XR = function(i) {{ return PL + iw * i / (rn - 1); }}, pp = RV.map(function(p, i) {{ return XR(i).toFixed(1)+','+YV(p[1]).toFixed(1); }});
+    var lq2 = ''; RV.forEach(function(p, i) {{ var m = p[0].slice(5,7), q = p[0].slice(0,4)+m; if ((m === '01' || m === '04' || m === '07' || m === '10') && q !== lq2) {{ lq2 = q; g2 += '<text x="'+XR(i).toFixed(1)+'" y="'+(H2+8)+'" class="sgr-xt">'+p[0].slice(2,7)+'</text>'; }} }});
+    g2 += '<polyline points="'+pp.join(' ')+'" fill="none" stroke="#1f7a7a" stroke-width="1.8"/>';
+    var b2 = ''; RV.forEach(function(p, i) {{ var l = i ? (XR(i-1)+XR(i))/2 : PL, r = i < rn-1 ? (XR(i)+XR(i+1))/2 : W-PR; b2 += '<rect x="'+l.toFixed(1)+'" y="6" width="'+Math.max(r-l,.6).toFixed(2)+'" height="'+ih2+'" fill="transparent" data-tip="'+p[0]+'||20日已实现波动率 '+p[1]+'%（年化）"/>'; }});
+    var L = c[0].last, lk = K[K.length-1];
+    var lg = legend([{{col:'#c0553a',name:'美元/日元 收',val:lk.c,d:lk.d}},{{col:'#6a4c93',name:'MA5',val:lk.ma5,d:''}},{{col:'#2f6f9f',name:'MA10',val:lk.ma10,d:''}},{{col:'#e0a030',name:'MA20',val:lk.ma20,d:''}},{{col:'#555',name:'MA30',val:lk.ma30,d:''}},{{col:'#1f7a7a',name:'20日已实现波动率(年化)',val:(c[0].last_rv||{{}}).v+'%',d:(c[0].last_rv||{{}}).d}}]);
+    box.innerHTML = '<div class="sgz-p" style="height:auto"><div class="sgr-title">美元/日元周 K 线 + MA5/10/20/30 周 + 20 日已实现波动率（近 2.5 年）</div>'+lg+'<svg viewBox="0 0 '+W+' '+(H1+16)+'" class="sgr-chart" style="height:'+(H1-10)+'px" preserveAspectRatio="xMidYMid meet">'+g+xt+bands+'</svg>'
+      +'<div class="sgr-title" style="margin-top:2px;font-size:12px;color:#6b645a">20 日已实现波动率（年化 %，代理；不是隐含波动率）</div><svg viewBox="0 0 '+W+' '+(H2+14)+'" class="sgr-chart" style="height:'+(H2+4)+'px" preserveAspectRatio="xMidYMid meet">'+g2+b2+'</svg></div>';
+  }}
 }})();
 /* ── 比特币 ÷ 黄金: 时间段 + 三条线 + 事件 (固定容器高度, 重绘只换 SVG 内容, 不触发布局位移) ── */
 (function() {{

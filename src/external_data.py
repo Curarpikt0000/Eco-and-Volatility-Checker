@@ -9557,3 +9557,139 @@ def fetch_ust_trio(cache_path=None):
     except Exception:
         pass
     return out
+
+
+# ══════════════════════════════════════════════════════════════════
+# 日元套息(Chao 2026-10-18 贴 MacroMicro 四宫格 + 周报文字摘要, 要求「做 + 每天类似的推导结论」, 接受用已实现波动率代替隐含波动率)
+def fetch_jpy_carry(cache_path=None):
+    import json as _j, os as _os, datetime as _dt, math as _m, requests as _rq
+    from datetime import timezone, timedelta
+    root = _os.path.join(_os.path.dirname(__file__), "..", "data")
+    cache_path = cache_path or _os.path.join(root, "jpy_carry_cache.json")
+    jst = _dt.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    out = {"status": "ok", "as_of": jst, "warnings": [], "cftc": {}, "spread": {}, "kline": {}, "facts": []}
+    today = _dt.date.today(); H = {"User-Agent": "Mozilla/5.0"}
+    # ── A. CFTC 日元(只取 CME JAPANESE YEN 主合约) ──
+    def _cftc(ds, fields):
+        rows, off = [], 0
+        while off < 4000:
+            r = _rq.get("https://publicreporting.cftc.gov/resource/%s.json" % ds, params={
+                "$where": "market_and_exchange_names='JAPANESE YEN - CHICAGO MERCANTILE EXCHANGE' AND report_date_as_yyyy_mm_dd>='%s'" % ((today - _dt.timedelta(days=1100)).isoformat()),
+                "$order": "report_date_as_yyyy_mm_dd ASC", "$limit": 1000, "$offset": off}, headers=H, timeout=45)
+            if r.status_code != 200: break
+            b = r.json()
+            if not b: break
+            rows += b; off += len(b)
+            if len(b) < 1000: break
+        out_rows = []
+        for x in rows:
+            try:
+                d = x["report_date_as_yyyy_mm_dd"][:10]
+                out_rows.append([d] + [float(x[f]) for f in fields])
+            except Exception:
+                continue
+        return out_rows
+    try:
+        leg = _cftc("6dca-aqww", ["noncomm_positions_long_all", "noncomm_positions_short_all"])
+        tff = _cftc("gpe5-46if", ["lev_money_positions_long", "lev_money_positions_short", "asset_mgr_positions_long", "asset_mgr_positions_short"])
+    except Exception as e:
+        leg, tff = [], []; out["warnings"].append("CFTC 日元取数失败: %s" % type(e).__name__)
+    nc = [[r[0], r[1] - r[2]] for r in leg]
+    lv = [[r[0], r[1] - r[2]] for r in tff]
+    am = [[r[0], r[3] - r[4]] for r in tff]
+    out["cftc"] = {"noncomm": nc, "lev": lv, "assetmgr": am,
+                   "last": {"noncomm": ({"d": nc[-1][0], "v": nc[-1][1], "long": leg[-1][1], "short": leg[-1][2]} if nc else None),
+                            "lev": ({"d": lv[-1][0], "v": lv[-1][1]} if lv else None)}}
+    if len(nc) < 100: out["warnings"].append("CFTC 非商业点数过少(%d)" % len(nc))
+    # ── B. 美日 10Y 利差 + USDJPY ──
+    start = (today - _dt.timedelta(days=760)).isoformat()
+    us10 = dict(_fred_series_hist("DGS10", start))
+    try: jp10 = {k: v for k, v in _mof_jgb_yields(10).items() if k >= start}
+    except Exception as e: jp10 = {}; out["warnings"].append("日债10Y(MOF)取数失败: %s" % type(e).__name__)
+    def _yh(sym, rng="5y"):
+        try:
+            r = _rq.get("https://query1.finance.yahoo.com/v8/finance/chart/" + sym, params={"interval": "1d", "range": rng}, headers=H, timeout=40)
+            if r.status_code != 200: return []
+            j = r.json()["chart"]["result"][0]; q = j["indicators"]["quote"][0]
+            res = []
+            for i, t in enumerate(j["timestamp"]):
+                o, h, l, c = q["open"][i], q["high"][i], q["low"][i], q["close"][i]
+                if c is None or o is None: continue
+                res.append((_dt.datetime.fromtimestamp(t, timezone.utc).strftime("%Y-%m-%d"), o, h, l, c))
+            return res
+        except Exception:
+            return []
+    fx = _yh("USDJPY=X")
+    if len(fx) < 500: out["warnings"].append("USDJPY 日线点数过少(%d)" % len(fx))
+    fxc = {d: c for d, o, h, l, c in fx}
+    dts = sorted(set(us10) & set(jp10))
+    spread = [(d, round(us10[d] - jp10[d], 3)) for d in dts]
+    sp_w = _weekly_resample(spread) if spread else []
+    fx_w = _weekly_resample([(d, fxc[d]) for d in sorted(fxc) if d >= start]) if fxc else []
+    out["spread"] = {"spread": [[d, round(v, 3)] for d, v in sp_w], "usdjpy": [[d, round(v, 3)] for d, v in fx_w],
+                     "us10": [[d, v] for d, v in _weekly_resample(sorted((d, v) for d, v in us10.items()))],
+                     "jp10": [[d, v] for d, v in _weekly_resample(sorted(jp10.items()))],
+                     "last": {"spread": ({"d": spread[-1][0], "v": spread[-1][1]} if spread else None),
+                              "usdjpy": ({"d": fx[-1][0], "v": round(fx[-1][4], 3)} if fx else None),
+                              "jp10": ({"d": max(jp10), "v": jp10[max(jp10)]} if jp10 else None),
+                              "us10": ({"d": max(us10), "v": us10[max(us10)]} if us10 else None)}}
+    if not spread: out["warnings"].append("美日利差无共同交易日")
+    # ── C. USDJPY 周K + 均线 + 已实现波动率(20 日年化, 代理) ──
+    wk = {}
+    for d, o, h, l, c in fx:
+        dt = _dt.date.fromisoformat(d); k = (dt - _dt.timedelta(days=dt.weekday())).isoformat()   # 周一为周标
+        w = wk.setdefault(k, {"o": o, "h": h, "l": l, "c": c, "d": d})
+        w["h"] = max(w["h"], h); w["l"] = min(w["l"], l); w["c"] = c; w["d"] = d
+    wks = sorted(wk)[-130:]
+    allw = sorted(wk)
+    closes = [wk[k]["c"] for k in allw]
+    def _ma(n, i): return round(sum(closes[i - n + 1:i + 1]) / n, 3) if i >= n - 1 else None
+    kl = []
+    for k in wks:
+        i = allw.index(k)
+        kl.append({"d": wk[k]["d"], "o": round(wk[k]["o"], 3), "h": round(wk[k]["h"], 3), "l": round(wk[k]["l"], 3), "c": round(wk[k]["c"], 3),
+                   "ma5": _ma(5, i), "ma10": _ma(10, i), "ma20": _ma(20, i), "ma30": _ma(30, i)})
+    rv = []
+    cl = [(d, c) for d, o, h, l, c in fx]
+    for i in range(20, len(cl)):
+        rets = [_m.log(cl[j][1] / cl[j - 1][1]) for j in range(i - 19, i + 1)]
+        mu = sum(rets) / 20; var = sum((x - mu) ** 2 for x in rets) / 19
+        rv.append([cl[i][0], round(_m.sqrt(var) * _m.sqrt(252) * 100, 2)])
+    rv_w = _weekly_resample(rv) if rv else []
+    out["kline"] = {"k": kl, "rv": [[d, round(v, 2)] for d, v in rv_w if d >= (today - _dt.timedelta(days=760)).isoformat()],
+                    "last_rv": ({"d": rv[-1][0], "v": rv[-1][1]} if rv else None)}
+    # ── facts: 规则型事实, 每条带口径与日期; 不预测不建议 ──
+    F = []
+    def add(tag, txt): F.append({"tag": tag, "txt": txt})
+    if len(nc) >= 2:
+        a, b = nc[-1], nc[-2]
+        chg = (a[1] - b[1]) / abs(b[1]) * 100 if b[1] else None
+        add("CFTC", "日元非商业净头寸 %s：%+d 手（上周 %+d，周变动 %+d 手%s）" % (a[0], a[1], b[1], a[1] - b[1], ("，%+.0f%%" % chg) if chg is not None and abs(b[1]) >= 5000 else "，上周基数过小不算百分比"))
+    if len(lv) >= 2:
+        add("CFTC", "杠杆基金（TFF）日元净头寸 %s：%+d 手（周变动 %+d）" % (lv[-1][0], lv[-1][1], lv[-1][1] - lv[-2][1]))
+    if jp10:
+        dk = sorted(jp10); v, p = jp10[dk[-1]], jp10[dk[-2]]
+        hi = max(jp10[k] for k in dk[-30:])
+        add("日债", "日本 10 年国债收益率 %s：%.3f%%（前一交易日 %.3f%%；近 30 个交易日最高 %.3f%%）%s" % (dk[-1], v, p, hi, ("，当前" + ("高于" if v > 3 else "低于") + " 3%")))
+    if us10:
+        dk = sorted(us10); v = us10[dk[-1]]
+        add("美债", "美国 10 年国债收益率 %s：%.2f%%，%s 5%%" % (dk[-1], v, "高于" if v > 5 else "低于"))
+    if spread:
+        a = spread[-1]; b = spread[-6] if len(spread) > 6 else spread[0]
+        add("利差", "美日 10 年利差 %s：%.2f 个百分点（5 个交易日前 %.2f，%s）" % (a[0], a[1], b[1], "走阔" if a[1] > b[1] else "收窄"))
+    if fx:
+        last = fx[-1][4]
+        add("汇率", "美元/日元 %s：%.2f（距 160 关口 %.2f 日元；近 1 年高点 %.2f）" % (fx[-1][0], last, 160 - last, max(x[2] for x in fx[-250:])))
+    if rv:
+        add("波动", "美元/日元 20 日已实现波动率 %s：%.1f%%（年化；近 1 年中位 %.1f%%）——是已实现波动率，不是隐含波动率" % (rv[-1][0], rv[-1][1], sorted(x[1] for x in rv[-250:])[len(rv[-250:]) // 2]))
+    out["facts"] = F
+    ok = len(nc) >= 100 and len(fx) >= 500 and bool(spread)
+    if not ok:
+        try:
+            c = _j.load(open(cache_path)); c.setdefault("warnings", []).append("本次抓取不完整(%s), 显示 %s 缓存" % ("; ".join(out["warnings"][:2]), c.get("as_of")))
+            c["status"] = "ok(cache)"; return c
+        except Exception:
+            out["status"] = "error"; return out
+    try: _j.dump(out, open(cache_path, "w"), ensure_ascii=False)
+    except Exception: pass
+    return out
