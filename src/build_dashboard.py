@@ -691,6 +691,12 @@ def main():
     except Exception as e:
         print(f"[dashboard] WRS衰退信号 跳过: {e}")
 
+    h8_deposits = {}
+    try:
+        h8_deposits = ed.fetch_h8_deposits() or {}
+        print(f"[dashboard] H.8 银行存款: status={h8_deposits.get('status')} as_of={h8_deposits.get('as_of')} 周数={len(h8_deposits.get('rows') or [])} M2末={(h8_deposits.get('m2') or [[None, None]])[-1]} warn={h8_deposits.get('warnings')}")
+    except Exception as ex:
+        print(f"[dashboard] H.8 银行存款 跳过: {ex}")
     mm_ratio = {}
     try:
         mm_ratio = ed.fetch_mm_ratio() or {}
@@ -1075,6 +1081,7 @@ def main():
         ai_cds=ai_cds,
         bbb_3y=bbb_3y,
         mm_ratio=mm_ratio,
+        h8_deposits=h8_deposits,
         tfp_sentiment=tfp_sentiment,
         llm_token=llm_token,
         ai_capex=ai_capex,

@@ -929,6 +929,87 @@ document.querySelectorAll('.mmr-r').forEach(function(b){b.addEventListener('clic
             + cards + foot + '<script>' + js + '</script></section>')
 
 
+def _h8_deposits_html(o):
+    """美国商业银行存款(美联储 H.8, FRED 周度, 十亿美元)。2026-10-18 Chao 贴 H.8 周表「这个图能做么」→「做」。"""
+    import json as _json, html as _h
+    rows = (o or {}).get("rows") or []
+    if not o or len(rows) < 12:
+        return '<p class="empty">美国银行存款（H.8）同步中（源：FRED / 美联储，周三发布）。</p>'
+    L, P = rows[-1], rows[-2]
+    def dv(k, tag): return L["%s_%s" % (k, tag)] - P["%s_%s" % (k, tag)]
+    def sg(x): return ("+" if x >= 0 else "−") + f"{abs(x):,.1f}"
+    tot_sa, tot_nsa = dv("tot", "sa"), dv("tot", "nsa")
+    verb = lambda x: ("增加" if x >= 0 else "减少")
+    banner = (f'<div class="h8-ban"><b>{L["d"]} 当周</b>　季调（SA）总存款{verb(tot_sa)} <b>{abs(tot_sa) * 1:,.1f}</b> 十亿美元（约 {abs(tot_sa) * 10:,.0f} 亿美元）'
+              f'（大型银行 {sg(dv("lg", "sa"))}，小型银行 {sg(dv("sm", "sa"))}，外国相关机构 {sg(dv("fr", "sa"))}）；'
+              f'未季调（NSA）{verb(tot_nsa)} <b>{abs(tot_nsa):,.1f}</b>（大型 {sg(dv("lg", "nsa"))}，小型 {sg(dv("sm", "nsa"))}，外国 {sg(dv("fr", "nsa"))}）。'
+              f'<span class="h8-u">单位：十亿美元；H.8 周三发布，数据为周三余额。</span></div>')
+    stat = (f'<div class="h8-stat"><span><i>总存款（SA）</i><b>{L["tot_sa"]:,.1f}</b><em>{L["d"]} · 周变动 {sg(tot_sa)}</em></span>'
+            f'<span><i>总存款（NSA）</i><b>{L["tot_nsa"]:,.1f}</b><em>周变动 {sg(tot_nsa)}</em></span>'
+            f'<span><i>大型 / 小型国内银行（SA）</i><b>{L["lg_sa"]:,.0f} / {L["sm_sa"]:,.0f}</b><em>周变动 {sg(dv("lg", "sa"))} / {sg(dv("sm", "sa"))}</em></span>'
+            f'<span><i>外国相关机构（SA）</i><b>{L["fr_sa"]:,.0f}</b><em>周变动 {sg(dv("fr", "sa"))}</em></span></div>')
+    # 表: 最近 8 周
+    trs = ""
+    for i in range(len(rows) - 1, max(len(rows) - 9, 0), -1):
+        a, p = rows[i], rows[i - 1]
+        f = lambda k, t: a["%s_%s" % (k, t)] - p["%s_%s" % (k, t)]
+        cls = lambda x: ' style="color:#a8442f"' if x < 0 else ' style="color:#2f6f4f"'
+        trs += (f'<tr><td style="white-space:nowrap">{a["d"]}</td><td class="r">{a["tot_sa"]:,.1f}</td><td class="r"{cls(f("tot","sa"))}>{sg(f("tot","sa"))}</td>'
+                f'<td class="r"{cls(f("lg","sa"))}>{sg(f("lg","sa"))}</td><td class="r"{cls(f("sm","sa"))}>{sg(f("sm","sa"))}</td><td class="r"{cls(f("fr","sa"))}>{sg(f("fr","sa"))}</td>'
+                f'<td class="r">{a["tot_nsa"]:,.1f}</td><td class="r"{cls(f("tot","nsa"))}>{sg(f("tot","nsa"))}</td>'
+                f'<td class="r"{cls(f("lg","nsa"))}>{sg(f("lg","nsa"))}</td><td class="r"{cls(f("sm","nsa"))}>{sg(f("sm","nsa"))}</td><td class="r"{cls(f("fr","nsa"))}>{sg(f("fr","nsa"))}</td></tr>')
+    m2 = o.get("m2") or []
+    m2txt = ""
+    if len(m2) >= 2:
+        m2txt = ("　".join(f'{x[0][:7]} {x[1]:,.1f}' for x in m2[-3:]) + f'　（最新较上月 {sg(m2[-1][1] - m2[-2][1])}）')
+    table = ('<table class="h8-tab"><thead><tr><th rowspan="2">周（周三）</th><th colspan="5">季调 SA</th><th colspan="5">未季调 NSA</th></tr>'
+             '<tr><th>总存款</th><th>周变动</th><th>大型</th><th>小型</th><th>外国</th><th>总存款</th><th>周变动</th><th>大型</th><th>小型</th><th>外国</th></tr></thead>'
+             f'<tbody>{trs}</tbody></table>'
+             + (f'<div class="h8-m2">月度 M2（SA，十亿美元，FRED M2SL）：{m2txt}</div>' if m2txt else ''))
+    pay = {"rows": rows}
+    ctl = ('<div class="h8-ctl"><span class="h8-lab">口径</span><button class="h8-b h8-on" data-g="sa">季调 SA</button><button class="h8-b" data-g="nsa">未季调 NSA</button>'
+           '<span class="h8-lab" style="margin-left:14px">区间</span><button class="h8-r h8-on" data-w="52">1 年</button><button class="h8-r" data-w="110">2 年</button></div>')
+    js = "(function(){var D=" + _json.dumps(pay, ensure_ascii=False, separators=(",", ":")) + r"""
+;var ST={g:'sa',w:52};
+function fm(n){return n.toLocaleString('en-US',{minimumFractionDigits:1,maximumFractionDigits:1})}
+function sg(n){return (n>=0?'+':'−')+fm(Math.abs(n))}
+function draw(){var rows=D.rows.slice(-(ST.w+1)),g=ST.g,n=rows.length;if(n<3)return;
+ var W=1100,H=380,PL=64,PR=64,PT=22,PB=34,iw=W-PL-PR,ih=H-PT-PB;
+ var split=PT+ih*0.62;       // 上 62% 总存款折线, 下 38% 周变动柱
+ var tv=rows.map(function(r){return r['tot_'+g]}),tmin=Math.min.apply(null,tv),tmax=Math.max.apply(null,tv),tp=(tmax-tmin)*0.12||1;tmin-=tp;tmax+=tp;
+ var ch=[];for(var i=1;i<n;i++)ch.push(rows[i]['tot_'+g]-rows[i-1]['tot_'+g]);
+ var cm=Math.max.apply(null,ch.map(Math.abs))*1.15||1;
+ var t0=Date.parse(rows[1].d),t1=Date.parse(rows[n-1].d),sp=Math.max(1,t1-t0);
+ function X(s){return PL+iw*(Date.parse(s)-t0)/sp}
+ function YT(v){return PT+(split-PT-14)*(1-(v-tmin)/(tmax-tmin))}
+ var by0=split+14,bh=H-PB-by0,mid=by0+bh/2;function YC(v){return mid-(bh/2)*(v/cm)}
+ var s='<svg viewBox="0 0 '+W+' '+H+'" class="h8-chart" preserveAspectRatio="xMidYMid meet" font-family="-apple-system,PingFang SC,Helvetica,sans-serif">';
+ var i2;for(i2=0;i2<=4;i2++){var y=PT+(split-PT-14)*i2/4;s+='<line x1="'+PL+'" y1="'+y+'" x2="'+(PL+iw)+'" y2="'+y+'" stroke="#e6e0d4" stroke-width="0.7"/><text x="'+(PL-8)+'" y="'+(y+4)+'" font-size="11" fill="#4a443c" text-anchor="end">'+Math.round(tmax-(tmax-tmin)*i2/4).toLocaleString('en-US')+'</text>'}
+ s+='<text x="'+PL+'" y="'+(PT-8)+'" font-size="11" fill="#4a443c">折线：总存款（'+(g=='sa'?'季调':'未季调')+'，十亿美元）</text>';
+ s+='<line x1="'+PL+'" y1="'+mid+'" x2="'+(PL+iw)+'" y2="'+mid+'" stroke="#9a9184" stroke-width="0.9"/><text x="'+PL+'" y="'+(by0-3)+'" font-size="11" fill="#4a443c">柱：周变动（十亿美元，零轴为分界）</text>';
+ s+='<text x="'+(PL-8)+'" y="'+(mid+4)+'" font-size="11" fill="#4a443c" text-anchor="end">0</text><text x="'+(PL-8)+'" y="'+(YC(cm*0.85)+4)+'" font-size="10.5" fill="#6b645a" text-anchor="end">+'+Math.round(cm*0.85)+'</text><text x="'+(PL-8)+'" y="'+(YC(-cm*0.85)+4)+'" font-size="10.5" fill="#6b645a" text-anchor="end">−'+Math.round(cm*0.85)+'</text>';
+ var bw=Math.max(2,iw/(n-1)*0.62);
+ for(var i3=1;i3<n;i3++){var c=ch[i3-1],x=X(rows[i3].d),y2=YC(c),top=Math.min(y2,mid),h2=Math.abs(y2-mid);s+='<rect x="'+(x-bw/2).toFixed(1)+'" y="'+top.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+Math.max(0.6,h2).toFixed(1)+'" fill="'+(c>=0?'#7aa88a':'#c0553a')+'" opacity="0.85"/>'}
+ s+='<polyline points="'+rows.slice(1).map(function(r){return X(r.d).toFixed(1)+','+YT(r['tot_'+g]).toFixed(1)}).join(' ')+'" fill="none" stroke="#3d372f" stroke-width="1.8"/>';
+ var last='';rows.slice(1).forEach(function(r){var ym=r.d.slice(0,7),mo=parseInt(ym.slice(5));if(ym!==last&&(mo%3==1)){last=ym;s+='<text x="'+X(r.d).toFixed(1)+'" y="'+(H-12)+'" font-size="11" fill="#4a443c" text-anchor="middle">'+ym+'</text>'}});
+ for(var i4=1;i4<n;i4++){var r=rows[i4],p=rows[i4-1],x3=X(r.d),dd=function(k){return r[k+'_'+g]-p[k+'_'+g]};
+  var t='总存款 <b>'+fm(r['tot_'+g])+'</b>（周变动 '+sg(dd('tot'))+'）<br>大型 '+sg(dd('lg'))+' · 小型 '+sg(dd('sm'))+' · 外国 '+sg(dd('fr'))+'<br>（'+(g=='sa'?'季调':'未季调')+'，十亿美元；H.8 周三余额）';
+  s+='<circle class="tip-hit" cx="'+x3.toFixed(1)+'" cy="'+YT(r['tot_'+g]).toFixed(1)+'" r="10" fill="transparent" data-tip="'+r.d+'||'+t.replace(/"/g,'&quot;')+'"/>'}
+ s+='</svg>';document.getElementById('h8-box').innerHTML=s}
+draw();
+document.querySelectorAll('.h8-b').forEach(function(b){b.addEventListener('click',function(){ST.g=b.dataset.g;document.querySelectorAll('.h8-b').forEach(function(x){x.classList.toggle('h8-on',x===b)});draw()})});
+document.querySelectorAll('.h8-r').forEach(function(b){b.addEventListener('click',function(){ST.w=parseInt(b.dataset.w);document.querySelectorAll('.h8-r').forEach(function(x){x.classList.toggle('h8-on',x===b)});draw()})});
+})();"""
+    foot = ('<div class="sgr-foot"><b>口径：</b>美联储 H.8 报告的<b>商业银行存款</b>（FRED 序列 <code>DPSACBW027</code> 总存款、<code>DPSLCBW027</code> 大型国内银行、<code>DPSSCBW027</code> 小型国内银行、<code>DPSFRIW027</code> 外国相关机构，各有 SA 季调与 NSA 未季调两套），'
+            '每周三发布，数值为周三余额。<b>总存款 = 大型 + 小型 + 外国相关机构</b>（页面构建时逐周校验，容差 0.5）。'
+            '<br><b>不含</b>货币市场基金、国债等，所以不等于「市场上的钱」。H.8 数据会被事后小幅修订，与第三方截图的数值可能相差零点几十亿美元。'
+            '<br>页面只陈述数据，不对「存款外流」或原因做判断。</div>')
+    return ('<section class="sec" id="h8-deposits"><h2>美国银行存款 · H.8 周度'
+            '<span class="freq-badge freq-weekly">每周三更新</span></h2>'
+            '<div class="sec-note">美联储 H.8 报告中商业银行存款的每周变化，按大型国内银行、小型国内银行、外国相关机构拆分，季调与未季调并列。</div>'
+            + banner + stat + ctl + '<div class="h8-box" id="h8-box"></div>' + table + foot + '<script>' + js + '</script></section>')
+
+
 def _china_regime_html(cn):
     """中国模式断代监控 —— 旧引擎停摆 / 新引擎接续。"""
     if not cn or not str(cn.get("status", "")).startswith("ok"):
@@ -3418,7 +3499,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, cn_hk_hold=None, gs_tech=None, ur_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, spx_gold_long=None, ust_trio=None, jpy_carry=None, ai_cds=None, bbb_3y=None, mm_ratio=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, cn_hk_hold=None, gs_tech=None, ur_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, spx_gold_long=None, ust_trio=None, jpy_carry=None, ai_cds=None, bbb_3y=None, mm_ratio=None, h8_deposits=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -3656,6 +3737,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         liquidity_crisis_html=_liquidity_crisis_html(liquidity_crisis),
         cot_mm_html=_cot_mm_html(cot_mm),
         mm_ratio_html=_mm_ratio_html(mm_ratio),
+        h8_deposits_html=_h8_deposits_html(h8_deposits),
         china_regime_html=_china_regime_html(china_regime),
         wrs_html=_wrs_html(wrs),
         stock_gold_html=_stock_gold_html(stock_gold),
@@ -11324,6 +11406,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
 .pv-hist b{{color:#6b5340}}
 
 .mmr-one{{margin:14px 0 22px}}.mmr-t{{font-weight:600;font-size:14px;color:#3d372f;margin:4px 0 8px}}.mmr-ex{{font-size:11px;color:#8a837a;font-weight:400;margin-left:8px}}.mmr-stat{{display:flex;gap:14px;flex-wrap:wrap;margin:6px 0 8px}}.mmr-stat span{{flex:1;min-width:170px;background:#faf7f0;padding:8px 11px 12px;border-radius:4px}}.mmr-stat i{{display:block;font-style:normal;font-size:11.5px;color:#6b645a}}.mmr-stat b{{font-size:20px;color:#3d372f;font-weight:600}}.mmr-stat em{{display:block;font-style:normal;font-size:11px;color:#8a837a;margin-top:2px}}.mmr-ctl{{margin:4px 0 6px;font-size:12px}}.mmr-lab{{color:#6b645a;margin-right:6px}}.mmr-b,.mmr-r{{border:1px solid #d9d3c8;background:#fff;color:#3d372f;font-size:12px;padding:2px 10px;border-radius:3px;cursor:pointer;margin-right:4px}}.mmr-on{{background:#3d372f;color:#fff;border-color:#3d372f}}.mmr-chart{{width:100%;display:block}}
+.h8-ban{{background:#f6e8b8;border-radius:4px;padding:9px 13px;margin:8px 0;font-size:13px;line-height:1.7;color:#3d372f}}.h8-u{{display:block;font-size:11px;color:#6b645a;margin-top:2px}}.h8-stat{{display:flex;gap:14px;flex-wrap:wrap;margin:6px 0 8px}}.h8-stat span{{flex:1;min-width:190px;background:#faf7f0;padding:8px 11px 11px;border-radius:4px}}.h8-stat i{{display:block;font-style:normal;font-size:11.5px;color:#6b645a}}.h8-stat b{{font-size:20px;color:#3d372f;font-weight:600}}.h8-stat em{{display:block;font-style:normal;font-size:11px;color:#8a837a;margin-top:2px}}.h8-ctl{{margin:4px 0 6px;font-size:12px}}.h8-lab{{color:#6b645a;margin-right:6px}}.h8-b,.h8-r{{border:1px solid #d9d3c8;background:#fff;color:#3d372f;font-size:12px;padding:2px 10px;border-radius:3px;cursor:pointer;margin-right:4px}}.h8-on{{background:#3d372f;color:#fff;border-color:#3d372f}}.h8-chart{{width:100%;display:block}}.h8-tab{{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}}.h8-tab th{{background:#efe9dd;color:#4a443c;padding:4px 6px;border:1px solid #e0d9cb;text-align:center}}.h8-tab td{{padding:4px 7px;border:1px solid #ece6d9;color:#3d372f}}.h8-tab td.r{{text-align:right;font-variant-numeric:tabular-nums}}.h8-m2{{font-size:12px;color:#4a443c;margin-top:6px}}
 /* ── COMEX 期货期权持仓 ── */
 .cxo-wrap{{margin:6px 0}}
 .cxo-notiv{{font-size:11.5px;color:#7a5f52;line-height:1.85;margin-bottom:10px;
@@ -12112,6 +12195,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ 全球货币供应(五大经济体聚合) + 加速度 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>全球货币供应与放水加速度 (美/欧/日/英/中 · 30 年)<span class="freq-badge freq-monthly">月度更新</span></div>
   <div class="card">{global_money_html}</div>
+  <div class="card">{h8_deposits_html}</div>
   <div class="card">{basis_trade}</div>
   <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)<span class="freq-badge freq-event">每次拍卖</span></div>
@@ -12231,7 +12315,7 @@ mkRadar('rLong', RADAR.long);
     // ★2026-08-25(Chao)：「中国央行流动性」与「央行货币互换」原先都掉进「其他」，
     // 但两者本质都是央行流动性观测 —— 一个是 PBoC 的逆回购/DR007/MLF/SFISF，
     // 一个是 Fed 与外国央行的美元互换额度。均归入本组。
-    {{ name: '流动性与央行', match: ['A 股资金面','流动性要点','央行资产负债表','国际清算银行','三国货币供应','全球货币供应','M2 十年','Credit Impulse','信贷脉冲','中国央行流动性','央行货币互换','美元流动性互换'] }},
+    {{ name: '流动性与央行', match: ['美国银行存款','A 股资金面','流动性要点','央行资产负债表','国际清算银行','三国货币供应','全球货币供应','M2 十年','Credit Impulse','信贷脉冲','中国央行流动性','央行货币互换','美元流动性互换'] }},
     {{ name: '债务与信用', match: ['政府债务','世界前十大经济体','公司债','OAS 利差','AI 债务 CDS','CIPS','跨境人民币','AI 产业链','自由现金流','信用维度'] }},
     {{ name: '国债流动性观测', match: ['WRS','国债市场收益率','日元套息','日元期货 CFTC','美日 10年利差','美元/日元周K线','美债 2年/10年/30年','美债期限溢价','美国综合债券指数','国债市场微观结构','中国模式断代监控','市场压力','基差套利去杠杆预警','SOFR 倒挂','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
     {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','COMEX & 上海','贵金属库存','ETF 资金流','白银做市商','COMEX 白银','投行累计','做市商每周净','issue/stop','COMEX 交割前十名','交货方','自营黄金掉期','黄金出口','Nonmonetary','黄金 Domestic Premium','Premium/Discount','白银月度进口','Silver Bullion'] }},

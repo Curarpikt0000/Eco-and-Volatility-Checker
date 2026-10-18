@@ -9767,3 +9767,51 @@ def fetch_mm_ratio(cache_path=None, weeks_back=110):
     try: _j.dump(res, open(cache_path, "w"), ensure_ascii=False)
     except Exception: pass
     return res
+
+
+def fetch_h8_deposits(cache_path=None, weeks_back=110):
+    """美联储 H.8 周度存款(FRED): 总/大型国内银行/小型国内银行/外国相关机构 × SA/NSA, 十亿美元; 另 M2SL 月度。
+    ID: DPSACBW027(总) DPSLCBW027(大) DPSSCBW027(小) DPSFRIW027(外国相关机构) + SBOG(SA)/NBOG(NSA)。H.8 周三发布(周三收盘余额, 以周三为周序列日期)。
+    ★H.8 只含商业银行存款, 不含货币市场基金/国债等, 不等于「市场上的钱」。失败回退缓存, 绝不编。"""
+    import json as _j, os as _os, datetime as _dt
+    root = _os.path.join(_os.path.dirname(__file__), "..")
+    cache_path = cache_path or _os.path.join(root, "data", "h8_deposits_cache.json")
+    start = (_dt.date.today() - _dt.timedelta(days=weeks_back * 7 + 14)).isoformat()
+    ids = {"tot": "DPSACBW027", "lg": "DPSLCBW027", "sm": "DPSSCBW027", "fr": "DPSFRIW027"}
+    S = {}
+    warns = []
+    for k, base in ids.items():
+        for sfx, tag in (("SBOG", "sa"), ("NBOG", "nsa")):
+            try:
+                S[(k, tag)] = dict(_fred_series_hist(base + sfx, start))
+            except Exception as ex:
+                warns.append("%s%s 取数失败: %s" % (base, sfx, type(ex).__name__)); S[(k, tag)] = {}
+    dates = sorted(set(S[("tot", "sa")]) & set(S[("tot", "nsa")]))
+    if len(dates) < 20 or any(len(v) < 20 for v in S.values()):
+        try:
+            c = _j.load(open(cache_path)); c["status"] = "ok(cache)"; c.setdefault("warnings", []).extend(warns + ["本次抓取不完整, 显示缓存"]); return c
+        except Exception:
+            return {"status": "error", "warnings": warns + ["H.8 取数失败且无缓存"], "rows": []}
+    rows = []
+    for d in dates:
+        r = {"d": d}
+        ok = True
+        for k in ids:
+            for tag in ("sa", "nsa"):
+                v = S[(k, tag)].get(d)
+                if v is None: ok = False; break
+                r["%s_%s" % (k, tag)] = round(v, 1)
+            if not ok: break
+        if ok: rows.append(r)
+    # 自洽检查: 大+小+外 == 总 (SA), 容差 0.5; 超差记警告而不改数
+    bad = [r["d"] for r in rows if abs(r["lg_sa"] + r["sm_sa"] + r["fr_sa"] - r["tot_sa"]) > 0.5]
+    if bad: warns.append("大+小+外≠总 的周(容差0.5): %s" % bad[:5])
+    m2 = []
+    try:
+        m2 = [[d, round(v, 1)] for d, v in _fred_series_hist("M2SL", (_dt.date.today() - _dt.timedelta(days=240)).isoformat())][-6:]
+    except Exception as ex:
+        warns.append("M2SL 取数失败: %s" % type(ex).__name__)
+    out = {"status": "ok", "as_of": rows[-1]["d"], "warnings": warns, "rows": rows, "m2": m2, "unit": "十亿美元"}
+    try: _j.dump(out, open(cache_path, "w"), ensure_ascii=False)
+    except Exception: pass
+    return out
