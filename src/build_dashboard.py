@@ -691,6 +691,13 @@ def main():
     except Exception as e:
         print(f"[dashboard] WRS衰退信号 跳过: {e}")
 
+    mm_ratio = {}
+    try:
+        mm_ratio = ed.fetch_mm_ratio() or {}
+        _mr = mm_ratio.get("metals") or {}
+        print(f"[dashboard] 多空比: status={mm_ratio.get('status')} as_of={mm_ratio.get('as_of')} 金属={list(_mr)} 周数={ {k: len(v.get('rows') or []) for k, v in _mr.items()} } warn={mm_ratio.get('warnings')}")
+    except Exception as ex:
+        print(f"[dashboard] 多空比 跳过: {ex}")
     bbb_3y = {}
     try:
         bbb_3y = ed.fetch_bbb_oas_3y() or {}
@@ -1067,6 +1074,7 @@ def main():
         jpy_carry=jpy_carry,
         ai_cds=ai_cds,
         bbb_3y=bbb_3y,
+        mm_ratio=mm_ratio,
         tfp_sentiment=tfp_sentiment,
         llm_token=llm_token,
         ai_capex=ai_capex,

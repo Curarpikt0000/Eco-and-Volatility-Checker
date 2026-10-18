@@ -854,6 +854,81 @@ def _cot_mm_html(cm):
 
 
 
+def _mm_ratio_html(o):
+    """白银/黄金 对冲基金(Managed Money) 多空比 vs 价格。多空比=多头手数/空头手数(CFTC Disaggregated 周度)。
+    两口径: Combined(期货+期权, 与 MacroMicro「期货/选择权」同口径) 与 Futures-only(与看板上方「对冲基金持仓」同口径)。2026-10-18 Chao 贴 MacroMicro 白银图「这个我们有做么」→「做」。"""
+    import json as _json, html as _h
+    if not o or not isinstance(o, dict) or not (o.get("metals") or {}):
+        return '<p class="empty">对冲基金多空比同步中（源：CFTC Disaggregated，免 key）。</p>'
+    cards = ""
+    pay = {}
+    for key in ("silver", "gold"):
+        m = (o.get("metals") or {}).get(key)
+        if not m or len(m.get("rows") or []) < 10: continue
+        rows = m["rows"]; L = rows[-1]; P = rows[-2]
+        cb = [r["cb_ratio"] for r in rows]; lo = min(cb); hi = max(cb)
+        rk = sum(1 for v in cb if v <= L["cb_ratio"]) / len(cb) * 100
+        pay[key] = {"rows": rows, "price": m.get("price") or [], "name": m["name"], "gaps": m.get("gaps") or []}
+        diff = L["cb_ratio"] - L["fo_ratio"]
+        _med = sorted(cb)[len(cb) // 2]; _mx = max(rows, key=lambda r: r["cb_ratio"])
+        _ext = (f'<br>最高值 {_mx["cb_ratio"]:.2f} 出现在 {_mx["d"]}（当周空头仅 {_mx["cb_short"]:,} 手，真实数据），约为中位数 {_med:.2f} 的 {_mx["cb_ratio"]/_med:.0f} 倍；切到「2 年」时纵轴会被拉高'
+                if _mx["cb_ratio"] > _med * 3 else "")
+        stat = (f'<div class="mmr-stat">'
+                f'<span><i>多空比（期货+期权）</i><b>{L["cb_ratio"]:.2f}</b><em>{L["d"]} · 周变动 {L["cb_ratio"]-P["cb_ratio"]:+.2f}<br>近 2 年分位 P{rk:.0f}（越低＝越偏空）</em></span>'
+                f'<span><i>多 / 空（手）</i><b>{L["cb_long"]:,} / {L["cb_short"]:,}</b><em>上周 {P["cb_long"]:,} / {P["cb_short"]:,}</em></span>'
+                f'<span><i>近 2 年区间</i><b>{lo:.2f} – {hi:.2f}</b><em>最新{"为区间最低" if L["cb_ratio"] <= lo + 1e-9 else ("为区间最高" if L["cb_ratio"] >= hi - 1e-9 else "在区间内")}{_ext}</em></span>'
+                f'<span><i>仅期货口径</i><b>{L["fo_ratio"]:.2f}</b><em>与期货+期权相差 {diff:+.2f}</em></span>'
+                f'</div>')
+        cards += (f'<div class="mmr-one" id="mmr-{key}"><div class="mmr-t">{_h.escape(m["name"])} Managed Money 多空比 vs {_h.escape(m["name"])}期货价格<span class="mmr-ex">COMEX</span></div>'
+                  f'{stat}<div class="mmr-ctl"><span class="mmr-lab">口径</span>'
+                  f'<button class="mmr-b mmr-on" data-k="{key}" data-g="cb">期货+期权</button><button class="mmr-b" data-k="{key}" data-g="fo">仅期货</button>'
+                  f'<span class="mmr-lab" style="margin-left:14px">区间</span>'
+                  f'<button class="mmr-r mmr-on" data-k="{key}" data-w="52">1 年</button><button class="mmr-r" data-k="{key}" data-w="110">2 年</button></div>'
+                  f'<div class="mmr-box" id="mmr-box-{key}"></div></div>')
+    if not cards:
+        return '<p class="empty">对冲基金多空比：本期无数据。</p>'
+    js = "(function(){var D=" + _json.dumps(pay, ensure_ascii=False, separators=(",", ":")) + r"""
+;var ST={};
+function fmt(n){return n.toLocaleString('en-US')}
+function draw(k){var d=D[k],st=ST[k],rows=d.rows.slice(-st.w),g=st.g;if(!rows.length)return;
+ var W=1100,H=340,PL=54,PR=92,PT=26,PB=34,iw=W-PL-PR,ih=H-PT-PB;
+ var d0=rows[0].d,d1=rows[rows.length-1].d,t0=Date.parse(d0),t1=Date.parse(d1),sp=Math.max(1,t1-t0);
+ function X(s){return PL+iw*(Date.parse(s)-t0)/sp}
+ var pr=d.price.filter(function(p){return p[0]>=d0});
+ var rv=rows.map(function(r){return g=='cb'?r.cb_ratio:r.fo_ratio}),rmax=Math.max.apply(null,rv)*1.12;
+ var pv=pr.map(function(p){return p[1]}),pmin=Math.min.apply(null,pv),pmax=Math.max.apply(null,pv),pp=(pmax-pmin)*0.08||1;pmin=Math.max(0,pmin-pp);pmax+=pp;
+ function YR(v){return PT+ih*(1-v/rmax)}function YP(v){return PT+ih*(1-(v-pmin)/(pmax-pmin))}
+ var s='<svg viewBox="0 0 '+W+' '+H+'" class="mmr-chart" preserveAspectRatio="xMidYMid meet" font-family="-apple-system,PingFang SC,Helvetica,sans-serif">';
+ var ns=5,i;for(i=0;i<=ns;i++){var y=PT+ih*i/ns;s+='<line x1="'+PL+'" y1="'+y+'" x2="'+(PL+iw)+'" y2="'+y+'" stroke="#e6e0d4" stroke-width="0.7"/>';
+  s+='<text x="'+(PL-8)+'" y="'+(y+4)+'" font-size="12" fill="#4a443c" text-anchor="end">'+(rmax*(1-i/ns)).toFixed(1)+'</text>';
+  s+='<text x="'+(PL+iw+18)+'" y="'+(y+4)+'" font-size="12" fill="#8c4a3a" text-anchor="start">'+(pmax-(pmax-pmin)*i/ns).toFixed(k=='gold'?0:0)+'</text>'}
+ s+='<text x="'+PL+'" y="'+(PT-12)+'" font-size="11" fill="#5a534a" text-anchor="start">绿柱：多空比（左轴）</text><text x="'+(W-4)+'" y="'+(PT-12)+'" font-size="11" fill="#8c4a3a" text-anchor="end">红线：价格 $（右轴）</text>';
+ var bw=Math.max(1.5,iw/rows.length*0.62);
+ rows.forEach(function(r){var v=g=='cb'?r.cb_ratio:r.fo_ratio,x=X(r.d),y=YR(v);s+='<rect x="'+(x-bw/2).toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+(PT+ih-y).toFixed(1)+'" fill="#7aa88a" opacity="0.78"/>'});
+ s+='<path d="M'+pr.map(function(p){return X(p[0]).toFixed(1)+','+YP(p[1]).toFixed(1)}).join(' L')+'" fill="none" stroke="#c0553a" stroke-width="1.6"/>';
+ var last=null;rows.forEach(function(r){var ym=r.d.slice(0,7),mo=parseInt(ym.slice(5));if(ym!==last&&(mo%3==1)){last=ym;s+='<text x="'+X(r.d).toFixed(1)+'" y="'+(PT+ih+16)+'" font-size="11" fill="#5a534a" text-anchor="middle">'+ym+'</text>'}});
+ var xs=[],tips=[],ci=-1;
+ rows.forEach(function(r,idx){var x=X(r.d),L=g=='cb'?r.cb_long:r.fo_long,S=g=='cb'?r.cb_short:r.fo_short,v=g=='cb'?r.cb_ratio:r.fo_ratio;
+  var pj=-1;for(var j=0;j<pr.length;j++){if(pr[j][0]<=r.d)pj=j;else break}
+  var t='多空比 <b>'+v.toFixed(2)+'</b>（'+(g=='cb'?'期货+期权':'仅期货')+'）<br>多头 '+fmt(L)+' 手 / 空头 '+fmt(S)+' 手'+(pj>=0?'<br>价格 $'+pr[pj][1].toFixed(2)+'（'+pr[pj][0]+' 收盘）':'')+'<br>（持仓周度 · CFTC 周二持仓）';
+  s+='<circle class="tip-hit" cx="'+x.toFixed(1)+'" cy="'+YR(v).toFixed(1)+'" r="9" fill="transparent" data-tip="'+r.d+'||'+t.replace(/"/g,'&quot;')+'"/>'});
+ s+='</svg>';document.getElementById('mmr-box-'+k).innerHTML=s}
+['silver','gold'].forEach(function(k){if(!D[k])return;ST[k]={g:'cb',w:52};draw(k)});
+document.querySelectorAll('.mmr-b').forEach(function(b){b.addEventListener('click',function(){var k=b.dataset.k;ST[k].g=b.dataset.g;document.querySelectorAll('.mmr-b[data-k="'+k+'"]').forEach(function(x){x.classList.toggle('mmr-on',x===b)});draw(k)})});
+document.querySelectorAll('.mmr-r').forEach(function(b){b.addEventListener('click',function(){var k=b.dataset.k;ST[k].w=parseInt(b.dataset.w);document.querySelectorAll('.mmr-r[data-k="'+k+'"]').forEach(function(x){x.classList.toggle('mmr-on',x===b)});draw(k)})});
+})();"""
+    foot = ('<div class="sgr-foot"><b>怎么读：</b>多空比＝对冲基金（Managed Money）多头手数 ÷ 空头手数。比值越高越偏多，接近 1 表示多空接近均衡。'
+            '绿柱是多空比（周更，周二持仓、周五发布，所以永远滞后几天），红线是价格（日更，Yahoo 连续合约）。'
+            '<br><b>口径：</b>默认「期货+期权」（CFTC Disaggregated Combined，数据集 <code>kh3c-gbw2</code>），与 MacroMicro 标题「期货/选择权」同类；'
+            '切到「仅期货」（<code>72hh-3qpy</code>）则与上方「对冲基金持仓 vs 价格」同口径。<b>两者最多相差约 0.6，与 MacroMicro 原图的数值也不一定逐点相同</b>（我们取 COMEX 主合约、排除 MICRO，未必与对方的合约范围一致）。'
+            '<br><b>2025-11 那一段：</b>MacroMicro 原图在 2025-11 中旬有一段缺失。CFTC 的数据里这一段<b>没有缺周</b>，但 2025-11-10 这期的报告日是周一（通常是周二），其后到 11-18 间隔 8 天——这是美国联邦政府停摆后 CFTC 补发时调整了日期，所以这几根柱子的间距比其他周略不均匀，不是我插值或补出来的。'
+            '<br>页面只陈述数据，不对价格方向做判断。</div>')
+    return ('<section class="sec" id="mm-ratio"><h2>对冲基金多空比 vs 价格'
+            '<span class="freq-badge freq-weekly">持仓周更 · 价格日更</span></h2>'
+            '<div class="sec-note">对冲基金在 COMEX 金银上的多头手数相对空头手数的比值，叠加期货价格。口径是 CFTC 官方周度数据，免费、可回溯。</div>'
+            + cards + foot + '<script>' + js + '</script></section>')
+
+
 def _china_regime_html(cn):
     """中国模式断代监控 —— 旧引擎停摆 / 新引擎接续。"""
     if not cn or not str(cn.get("status", "")).startswith("ok"):
@@ -3343,7 +3418,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, cn_hk_hold=None, gs_tech=None, ur_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, spx_gold_long=None, ust_trio=None, jpy_carry=None, ai_cds=None, bbb_3y=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, cn_hk_hold=None, gs_tech=None, ur_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, spx_gold_long=None, ust_trio=None, jpy_carry=None, ai_cds=None, bbb_3y=None, mm_ratio=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -3580,6 +3655,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         stress_panels=_stress_panels_html(stress_panels, ofr_fsi),
         liquidity_crisis_html=_liquidity_crisis_html(liquidity_crisis),
         cot_mm_html=_cot_mm_html(cot_mm),
+        mm_ratio_html=_mm_ratio_html(mm_ratio),
         china_regime_html=_china_regime_html(china_regime),
         wrs_html=_wrs_html(wrs),
         stock_gold_html=_stock_gold_html(stock_gold),
@@ -11247,6 +11323,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   background:#f4efe6;border-left:3px solid #a3855f;padding:9px 12px;border-radius:5px}}
 .pv-hist b{{color:#6b5340}}
 
+.mmr-one{{margin:14px 0 22px}}.mmr-t{{font-weight:600;font-size:14px;color:#3d372f;margin:4px 0 8px}}.mmr-ex{{font-size:11px;color:#8a837a;font-weight:400;margin-left:8px}}.mmr-stat{{display:flex;gap:14px;flex-wrap:wrap;margin:6px 0 8px}}.mmr-stat span{{flex:1;min-width:170px;background:#faf7f0;padding:8px 11px 12px;border-radius:4px}}.mmr-stat i{{display:block;font-style:normal;font-size:11.5px;color:#6b645a}}.mmr-stat b{{font-size:20px;color:#3d372f;font-weight:600}}.mmr-stat em{{display:block;font-style:normal;font-size:11px;color:#8a837a;margin-top:2px}}.mmr-ctl{{margin:4px 0 6px;font-size:12px}}.mmr-lab{{color:#6b645a;margin-right:6px}}.mmr-b,.mmr-r{{border:1px solid #d9d3c8;background:#fff;color:#3d372f;font-size:12px;padding:2px 10px;border-radius:3px;cursor:pointer;margin-right:4px}}.mmr-on{{background:#3d372f;color:#fff;border-color:#3d372f}}.mmr-chart{{width:100%;display:block}}
 /* ── COMEX 期货期权持仓 ── */
 .cxo-wrap{{margin:6px 0}}
 .cxo-notiv{{font-size:11.5px;color:#7a5f52;line-height:1.85;margin-bottom:10px;
@@ -11942,6 +12019,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title" id="sec-ai-cds"><span class="part-num">＋</span>AI 债务 CDS 快照 · 甲骨文 / CoreWeave / 软银 (5 年期单名 · 新闻转引)<span class="freq-badge freq-daily">有报道才记</span></div>
   <div class="card">{ai_cds_html}</div>
   {cot_mm_html}
+  {mm_ratio_html}
   <!-- ━━━ 中国模式断代监控(旧引擎停摆 / 新引擎接续) ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>中国模式断代监控 · 旧引擎停摆与新引擎接续 (NBS 官方分项 + 东财宏观 · 对照 Perkins 2025-12 判据)<span class="freq-badge freq-monthly">每月更新</span></div>
   <div class="card">{china_regime_html}</div>
@@ -12144,7 +12222,7 @@ mkRadar('rLong', RADAR.long);
   // 「机构与政要持仓」由 Chao 指定固定放最后(在「其他」之下), 用 pinLast 标记。
   var GROUPS = [
     // ★2026-10-10(Chao「按这个顺序」): 黄金白银 21 板块连成一段, 置于首位以优先命中
-    {{ name: '黄金白银', match: ['金银短线','金银回调','黄金波动率','联邦基金利率','金油比','比特币 ÷ 黄金','股指 ÷ 黄金','美元指数 vs 黄金','白银期货','COMEX 期货期权持仓','白银做市商','COMEX 白银','做市商每周净','COMEX 交割前十名','贵金属 ETF 期权','黄金 ETF 分地区','COMEX & 上海贵金属库存','自营黄金掉期','美国黄金出口','印度 & 中国黄金','印度白银月度进口'] }},
+    {{ name: '黄金白银', match: ['对冲基金多空比','金银短线','金银回调','黄金波动率','联邦基金利率','金油比','比特币 ÷ 黄金','股指 ÷ 黄金','美元指数 vs 黄金','白银期货','COMEX 期货期权持仓','白银做市商','COMEX 白银','做市商每周净','COMEX 交割前十名','贵金属 ETF 期权','黄金 ETF 分地区','COMEX & 上海贵金属库存','自营黄金掉期','美国黄金出口','印度 & 中国黄金','印度白银月度进口'] }},
     {{ name: '铀', match: ['铀与铀矿企'] }},
     {{ name: '核心风险扫描', match: ['指标卡片','警报统计','逐条','综合结论','卖出触发','今日最需关注','A/D 腾落线','市场广度'] }},
     // ★2026-08-25(Chao)：KOL 全量名录原先未命中任何关键词 → 掉进「其他」，

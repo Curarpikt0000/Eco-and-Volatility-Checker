@@ -9712,3 +9712,58 @@ def fetch_bbb_oas_3y(cache_path=None):
     try: _j.dump(out, open(cache_path, "w"), ensure_ascii=False)
     except Exception: pass
     return out
+
+
+def fetch_mm_ratio(cache_path=None, weeks_back=110):
+    """白银/黄金 Managed Money 多空比 = 多头手数 / 空头手数(CFTC Disaggregated, 周度, COMEX, 排除 MICRO)。
+    两个口径并存: Combined(期货+期权, 数据集 kh3c-gbw2) 与 FuturesOnly(72hh-3qpy)。价格取 data/cot_managed_money.json 里已有的日频连续合约(不重复抓)。
+    Chao 2026-10-18「做」(对标 MacroMicro 白银多空比 vs 价格)。失败回退缓存, 绝不编。"""
+    import json as _j, os as _os, datetime as _dt, requests as _rq
+    root = _os.path.join(_os.path.dirname(__file__), "..")
+    cache_path = cache_path or _os.path.join(root, "data", "mm_ratio_cache.json")
+    base = "https://publicreporting.cftc.gov/resource/%s.json"
+    start = (_dt.date.today() - _dt.timedelta(days=weeks_back * 7)).isoformat()
+    names = {"silver": ("SILVER - COMMODITY EXCHANGE", "白银"), "gold": ("GOLD - COMMODITY EXCHANGE", "黄金")}
+    def pull(ds, like):
+        q = {"$where": "market_and_exchange_names like '%s%%' AND report_date_as_yyyy_mm_dd >= '%sT00:00:00.000'" % (like, start),
+             "$order": "report_date_as_yyyy_mm_dd ASC", "$limit": 400}
+        r = _rq.get(base % ds, params=q, headers={"User-Agent": "Mozilla/5.0"}, timeout=60); r.raise_for_status()
+        out = {}
+        for x in r.json():
+            nm = x.get("market_and_exchange_names") or ""
+            if "MICRO" in nm.upper(): continue
+            d = x["report_date_as_yyyy_mm_dd"][:10]
+            L = int(float(x.get("m_money_positions_long_all") or 0)); S = int(float(x.get("m_money_positions_short_all") or 0))
+            out[d] = (L, S)
+        return out
+    res = {"status": "ok", "warnings": [], "metals": {}}
+    try:
+        px = _j.load(open(_os.path.join(root, "data", "cot_managed_money.json")))
+    except Exception:
+        px = {}
+    for key, (like, zh) in names.items():
+        try:
+            cb = pull("kh3c-gbw2", like); fo = pull("72hh-3qpy", like)
+        except Exception as ex:
+            res["warnings"].append("%s CFTC 取数失败: %s" % (zh, type(ex).__name__)); continue
+        ds = sorted(set(cb) & set(fo))
+        if len(ds) < 20:
+            res["warnings"].append("%s 周数过少(%d)" % (zh, len(ds))); continue
+        rows = []
+        for d in ds:
+            Lc, Sc = cb[d]; Lf, Sf = fo[d]
+            if Sc <= 0 or Sf <= 0: continue
+            rows.append({"d": d, "cb_long": Lc, "cb_short": Sc, "cb_ratio": round(Lc / Sc, 3), "fo_long": Lf, "fo_short": Sf, "fo_ratio": round(Lf / Sf, 3)})
+        gaps = [(rows[i]["d"], rows[i + 1]["d"]) for i in range(len(rows) - 1) if (_dt.date.fromisoformat(rows[i + 1]["d"]) - _dt.date.fromisoformat(rows[i]["d"])).days != 7]
+        price = [p for p in ((px.get(key) or {}).get("price") or []) if p[0] >= rows[0]["d"]]
+        res["metals"][key] = {"name": zh, "rows": rows, "price": price, "gaps": gaps,
+                              "exchange": "COMEX", "price_sym": (px.get(key) or {}).get("symbol")}
+    if not res["metals"]:
+        try:
+            c = _j.load(open(cache_path)); c["status"] = "ok(cache)"; c.setdefault("warnings", []).extend(res["warnings"]); return c
+        except Exception:
+            res["status"] = "error"; return res
+    res["as_of"] = max(m["rows"][-1]["d"] for m in res["metals"].values())
+    try: _j.dump(res, open(cache_path, "w"), ensure_ascii=False)
+    except Exception: pass
+    return res
