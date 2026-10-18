@@ -691,6 +691,19 @@ def main():
     except Exception as e:
         print(f"[dashboard] WRS衰退信号 跳过: {e}")
 
+    # ── 美债三图: 2Y/10Y/30Y · 期限溢价+MOVE+10Y · AGG/BND 代理(Chao 2026-10-16) ──
+    ust_trio = {}
+    try:
+        ust_trio = ed.fetch_ust_trio() or {}
+        if ust_trio.get("yields"):
+            _l = ust_trio["yields"].get("last", {})
+            print(f"[dashboard] 美债三图: 收益率末日 {(_l.get('y10') or {}).get('d')} 10Y={(_l.get('y10') or {}).get('v')} "
+                  f"AGG末 {((ust_trio.get('agg') or {}).get('last') or {}).get('agg')} status={ust_trio.get('status')} warn={ust_trio.get('warnings')}")
+        else:
+            print(f"[dashboard] 美债三图 失败: {ust_trio.get('warnings')}")
+    except Exception as e:
+        print(f"[dashboard] 美债三图 跳过: {e}")
+
     # ── 标普÷黄金 1929 起长历史 + 均线 + 回撤(Chao 2026-10-16) ──
     spx_gold_long = {}
     try:
@@ -1021,6 +1034,7 @@ def main():
         wrs=wrs,
         stock_gold=stock_gold,
         spx_gold_long=spx_gold_long,
+        ust_trio=ust_trio,
         tfp_sentiment=tfp_sentiment,
         llm_token=llm_token,
         ai_capex=ai_capex,

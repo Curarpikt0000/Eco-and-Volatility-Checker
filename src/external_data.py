@@ -9492,3 +9492,68 @@ def fetch_spx_gold_long(cache_path=None):
     except Exception:
         pass
     return out
+
+
+# ══════════════════════════════════════════════════════════════════
+# 美债三图(Chao 2026-10-16 看到 MacroMicro/Investing 拼图, 要求做 1/2/3; 第 4 张「美国主权 CDS」为付费数据未做)
+#   ① 2Y/10Y/30Y 收益率 2019 起(FRED DGS2/DGS10/DGS30 日频→周度末值);
+#   ② 10Y 期限溢价(NY Fed ACM, THREEFYTP10) + MOVE(Yahoo ^MOVE) + 10Y 收益率, 近 2 年: MOVE 用 agg="peak" 保尖峰;
+#   ③ 彭博美国综合债券指数的【ETF 代理】: Yahoo AGG(主)与 BND(对照)日线 → 价格, 不是指数点位, 页面写明。
+#   ACM 期限溢价每日发布但滞后数日(末值日期可能早于其他序列), 页面写各序列各自的末日。
+def fetch_ust_trio(cache_path=None):
+    import json as _j, os as _os, datetime as _dt, requests as _rq
+    from datetime import timezone, timedelta
+    root = _os.path.join(_os.path.dirname(__file__), "..", "data")
+    cache_path = cache_path or _os.path.join(root, "ust_trio_cache.json")
+    jst = _dt.datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
+    out = {"status": "ok", "as_of": jst, "warnings": [], "yields": {}, "tpm": {}, "agg": {}}
+    today = _dt.date.today()
+    def _pk(pts, weekly=True, agg="last"):
+        if not pts: return []
+        wp = _weekly_resample(pts, agg=agg) if weekly else pts
+        return [[d, round(v, 4)] for d, v in wp]
+    # ① 收益率
+    y_start = "2019-01-01"
+    ys = {k: _fred_series_hist(sid, y_start) for k, sid in (("y2", "DGS2"), ("y10", "DGS10"), ("y30", "DGS30"))}
+    for k, v in ys.items():
+        if len(v) < 200: out["warnings"].append("收益率 %s 点数过少(%d)" % (k, len(v)))
+    out["yields"] = {"y2": _pk(ys["y2"]), "y10": _pk(ys["y10"]), "y30": _pk(ys["y30"]),
+                     "last": {k: ({"d": v[-1][0], "v": v[-1][1]} if v else None) for k, v in ys.items()}}
+    # ② 期限溢价 + MOVE + 10Y (近 2 年)
+    t_start = (today - _dt.timedelta(days=740)).isoformat()
+    tp = _fred_series_hist("THREEFYTP10", t_start)
+    mv = _fetch_move_history(t_start)
+    y10 = [(d, v) for d, v in ys["y10"] if d >= t_start]
+    out["tpm"] = {"tp": _pk(tp), "move": _pk(mv, agg="peak"), "y10": _pk(y10),
+                  "last": {"tp": ({"d": tp[-1][0], "v": tp[-1][1]} if tp else None),
+                           "move": ({"d": mv[-1][0], "v": mv[-1][1]} if mv else None),
+                           "y10": ({"d": y10[-1][0], "v": y10[-1][1]} if y10 else None)}}
+    if not tp: out["warnings"].append("期限溢价 THREEFYTP10 无数据")
+    if not mv: out["warnings"].append("MOVE 无数据")
+    # ③ AGG / BND 日线(Yahoo chart v8)
+    def _yh(sym):
+        try:
+            r = _rq.get("https://query1.finance.yahoo.com/v8/finance/chart/" + sym, params={"interval": "1d", "range": "2y"},
+                        headers={"User-Agent": "Mozilla/5.0"}, timeout=30)
+            if r.status_code != 200: return []
+            j = r.json()["chart"]["result"][0]; c = j["indicators"]["quote"][0]["close"]
+            return [(_dt.datetime.fromtimestamp(t, timezone(timedelta(hours=9))).strftime("%Y-%m-%d"), v) for t, v in zip(j["timestamp"], c) if v is not None]
+        except Exception:
+            return []
+    agg, bnd = _yh("AGG"), _yh("BND")
+    if len(agg) < 200: out["warnings"].append("AGG 日线点数过少(%d)" % len(agg))
+    out["agg"] = {"agg": [[d, round(v, 3)] for d, v in agg], "bnd": [[d, round(v, 3)] for d, v in bnd],
+                  "last": {"agg": ({"d": agg[-1][0], "v": round(agg[-1][1], 3)} if agg else None),
+                           "bnd": ({"d": bnd[-1][0], "v": round(bnd[-1][1], 3)} if bnd else None)}}
+    ok = len(ys["y10"]) > 200 and len(agg) > 200
+    if not ok:
+        try:
+            c = _j.load(open(cache_path)); c.setdefault("warnings", []).append("本次抓取不完整(%s), 显示 %s 缓存" % ("; ".join(out["warnings"][:2]), c.get("as_of")))
+            c["status"] = "ok(cache)"; return c
+        except Exception:
+            out["status"] = "error"; return out
+    try:
+        _j.dump(out, open(cache_path, "w"), ensure_ascii=False)
+    except Exception:
+        pass
+    return out

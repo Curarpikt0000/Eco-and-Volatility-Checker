@@ -1161,6 +1161,45 @@ def _sgl_html(o):
 </div>"""
 
 
+def _ust_trio_html(o, which):
+    """美债三图之一: which = 'yld' | 'tpm' | 'agg'。数据内嵌 JSON, 页内 JS 绘制(id 前缀 ust-)。"""
+    import json as _json
+    if not o or not o.get("yields") or o.get("status") == "error":
+        err = "；".join((o or {}).get("warnings", [])[:2])
+        return f'<p class="empty">美债图数据同步中{(chr(0xff1a) + _esc(err)) if err else ""}。</p>'
+    warn = f'<p class="sgr-warn">⚠ {_esc("；".join(o["warnings"][:2]))}</p>' if o.get("warnings") else ""
+    if which == "yld":
+        data = {"k": "yld", "y2": o["yields"]["y2"], "y10": o["yields"]["y10"], "y30": o["yields"]["y30"], "last": o["yields"]["last"]}
+        foot = ("2 年 / 10 年 / 30 年美国国债收益率(%)，FRED 日频→周度末值，2019 年至今；灰带为 2020 年新冠衰退（NBER）。"
+                "「曲线倒挂」＝2 年高于 10 年。数据：FRED DGS2 / DGS10 / DGS30。随 dashboard 每日更新。")
+    elif which == "tpm":
+        data = {"k": "tpm", "tp": o["tpm"]["tp"], "move": o["tpm"]["move"], "y10": o["tpm"]["y10"], "last": o["tpm"]["last"]}
+        foot = ("10 年期限溢价（纽约联储 ACM 模型，左轴 %）、10 年收益率（左轴 %）与 MOVE 债市波动率（右轴，指数点）。"
+                "MOVE 周度保留周内尖峰；<b>ACM 期限溢价发布滞后数日，末值日期早于其他两条线</b>，悬停处各线标各自日期。"
+                "数据：FRED THREEFYTP10 / DGS10，Yahoo ^MOVE（ICE BofA，专有指数的免费历史）。随 dashboard 每日更新。")
+    else:
+        _a, _b = o["agg"]["agg"], o["agg"]["bnd"]
+        _d0 = max(_a[0][0], _b[0][0]) if _a and _b else None
+        def _norm(ser):
+            base = next((v for d, v in ser if d >= _d0), None) if _d0 else None
+            return [[d, round(v / base * 100, 3)] for d, v in ser if base and d >= _d0]
+        _la, _lb = o["agg"]["last"].get("agg"), o["agg"]["last"].get("bnd")
+        _na, _nb = _norm(_a), _norm(_b)
+        data = {"k": "agg", "agg": _na, "bnd": _nb, "last": {"agg": ({"d": _na[-1][0], "v": _na[-1][1]} if _na else None), "bnd": ({"d": _nb[-1][0], "v": _nb[-1][1]} if _nb else None)},
+                "px": {"agg": _la, "bnd": _lb}, "d0": _d0}
+        foot = ("<b>这不是彭博美国综合债券指数本身（专有、需订阅），而是跟踪该指数的 ETF 价格代理：</b>iShares 核心美国综合债券 ETF（AGG）与先锋整体债券市场 ETF（BND）。"
+                "两只 ETF 价格量级不同（AGG 约 95 美元、BND 约 71 美元），所以图中<b>都折算成起点（取两者共同起始日）=100 的相对值</b>画在同一纵轴上，看它们的走势是否一致；最新实际价格见图例括号。纵轴不是指数点位，与彭博终端上的 1 万点量级数值不可对比；"
+                "ETF 含管理费与跟踪误差，且分红时价格会下跌一次。数据：Yahoo Finance 日线，近 2 年。随 dashboard 每日更新。")
+    js = _json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    return f"""
+<div class="sgr-wrap" id="ust-{which}">
+  {warn}
+  <div id="ust-{which}-box"></div>
+  <div class="sgr-foot">{foot}</div>
+  <script type="application/json" id="ust-{which}-data">{js}</script>
+</div>"""
+
+
 def _tfp_sentiment_html(o):
     """密歇根信心(左轴,月) vs TFP 相对趋势(右轴,季, 普通+剔除开工率两口径)。每月一个悬停点。"""
     if not o or not o.get("tfp") or not o.get("umcsent"):
@@ -3098,7 +3137,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, cn_hk_hold=None, gs_tech=None, ur_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, spx_gold_long=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, cn_hk_hold=None, gs_tech=None, ur_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, spx_gold_long=None, ust_trio=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -3339,6 +3378,9 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         wrs_html=_wrs_html(wrs),
         stock_gold_html=_stock_gold_html(stock_gold),
         spx_gold_long_html=_sgl_html(spx_gold_long),
+        ust_yld_html=_ust_trio_html(ust_trio, 'yld'),
+        ust_tpm_html=_ust_trio_html(ust_trio, 'tpm'),
+        ust_agg_html=_ust_trio_html(ust_trio, 'agg'),
         tfp_sentiment_html=_tfp_sentiment_html(tfp_sentiment),
         llm_token_html=_llm_token_html(llm_token),
         ai_capex_html=_ai_capex_html(ai_capex),
@@ -11669,6 +11711,13 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ═══ 附三·二·四：国债市场压力四联图 (对齐 Morgan Stanley 三图 + OFR官方压力指数, 竖向) ═══ -->
   <div class="part-title"><span class="part-num">＋</span>国债市场收益率·波动性·压力 · 竖向四联图 (对齐 Morgan Stanley · 过去3年真实公开数据 · 每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{stress_panels}</div>
+  <!-- ━━━ 美债三图: 2Y/10Y/30Y · 期限溢价+MOVE+10Y · 彭博美综指 ETF 代理 (Chao 2026-10-16) ━━━ -->
+  <div class="part-title"><span class="part-num">＋</span>美债 2年/10年/30年收益率 · 2019 年至今 (周度)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{ust_yld_html}</div>
+  <div class="part-title"><span class="part-num">＋</span>美债期限溢价 + MOVE + 10年收益率 · 近 2 年<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{ust_tpm_html}</div>
+  <div class="part-title"><span class="part-num">＋</span>美国综合债券指数 · ETF 代理 (AGG / BND · 近 2 年 · 日度)<span class="freq-badge freq-daily">每日更新</span></div>
+  <div class="card">{ust_agg_html}</div>
   <!-- ━━━ 国债微观结构: MS Exhibit 3/4 对口 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>国债市场微观结构 · 成交量与交易成本 (对齐 Morgan Stanley Exhibit 3/4 · 成交量为 NY Fed 官方真数据 · 价差为代理)<span class="freq-badge freq-weekly">每周更新</span></div>
   <div class="card">{ust_micro_html}</div>
@@ -11881,7 +11930,7 @@ mkRadar('rLong', RADAR.long);
     // 一个是 Fed 与外国央行的美元互换额度。均归入本组。
     {{ name: '流动性与央行', match: ['A 股资金面','流动性要点','央行资产负债表','国际清算银行','三国货币供应','全球货币供应','M2 十年','Credit Impulse','信贷脉冲','中国央行流动性','央行货币互换','美元流动性互换'] }},
     {{ name: '债务与信用', match: ['政府债务','世界前十大经济体','公司债','OAS 利差','CIPS','跨境人民币','AI 产业链','自由现金流','信用维度'] }},
-    {{ name: '国债流动性观测', match: ['WRS','国债市场收益率','国债市场微观结构','中国模式断代监控','市场压力','基差套利去杠杆预警','SOFR 倒挂','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
+    {{ name: '国债流动性观测', match: ['WRS','国债市场收益率','美债 2年/10年/30年','美债期限溢价','美国综合债券指数','国债市场微观结构','中国模式断代监控','市场压力','基差套利去杠杆预警','SOFR 倒挂','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
     {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','COMEX & 上海','贵金属库存','ETF 资金流','白银做市商','COMEX 白银','投行累计','做市商每周净','issue/stop','COMEX 交割前十名','交货方','自营黄金掉期','黄金出口','Nonmonetary','黄金 Domestic Premium','Premium/Discount','白银月度进口','Silver Bullion'] }},
     {{ name: '实体、AI 与研报', match: ['机构研究报告','消费者信心','美国货运','中美 AI 投资','AI 算力价格'] }},
     {{ name: '财政政策', match: ['美日财政政策事件','债务上限','补正预算','国债发行','年度财政花费','财政花费','政府总支出'] }},
@@ -12580,6 +12629,49 @@ mkRadar('rLong', RADAR.long);
   document.getElementById('sgl-ma').addEventListener('change', function(e) {{ st.ma = e.target.checked ? 1 : 0; render(); }});
   document.getElementById('sgl-ev').addEventListener('change', function(e) {{ st.ev = e.target.checked ? 1 : 0; render(); }});
   render();
+}})();
+/* ── 美债三图: 2Y/10Y/30Y · 期限溢价+MOVE+10Y · AGG/BND 代理 (独立 IIFE, 前缀 ust-; 悬停显示日期+各线数值) ── */
+(function() {{
+  function build(which, spec) {{
+    var el = document.getElementById('ust-' + which + '-data'); if (!el) return;
+    var D = JSON.parse(el.textContent), box = document.getElementById('ust-' + which + '-box');
+    var W = 900, H = 300, PL = 46, PR = spec.right ? 46 : 16, PT = 14, PB = 26, iw = W - PL - PR, ih = H - PT - PB;
+    var dates = []; var mapS = spec.series.map(function(s) {{ var m = {{}}; (D[s.key] || []).forEach(function(p) {{ m[p[0]] = p[1]; if (dates.indexOf(p[0]) < 0) dates.push(p[0]); }}); return m; }});
+    dates.sort(); var n = dates.length; if (n < 2) {{ box.innerHTML = '<p class="empty">数据点不足</p>'; return; }}
+    var X = function(i) {{ return PL + iw * i / (n - 1); }};
+    function range(side) {{ var a = [];
+      spec.series.forEach(function(s, k) {{ if (s.axis !== side) return; dates.forEach(function(d) {{ var v = mapS[k][d]; if (v != null) a.push(v); }}); }});
+      if (!a.length) return null; var lo = Math.min.apply(null, a), hi = Math.max.apply(null, a), pad = (hi - lo) * 0.08 || 1;
+      if (spec.zero && side === 'L') lo = Math.min(0, lo); else lo -= pad; hi += pad; return [lo, hi]; }}
+    var RL = range('L'), RR = range('R');
+    var YL = function(v) {{ return PT + ih * (1 - (v - RL[0]) / (RL[1] - RL[0])); }};
+    var YR = RR ? function(v) {{ return PT + ih * (1 - (v - RR[0]) / (RR[1] - RR[0])); }} : null;
+    function nice(lo, hi, k) {{ var step = (hi - lo) / k, p = Math.pow(10, Math.floor(Math.log10(step))), f = step / p; var st = (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * p, a = []; for (var v = Math.ceil(lo / st) * st; v <= hi; v += st) a.push(v); return a; }}
+    var g = '';
+    (spec.bands || []).forEach(function(b) {{ var a = -1, z = -1; dates.forEach(function(d, i) {{ if (d >= b[0] && a < 0) a = i; if (d <= b[1]) z = i; }});
+      if (a >= 0 && z > a) g += '<rect x="'+X(a).toFixed(1)+'" y="'+PT+'" width="'+(X(z)-X(a)).toFixed(1)+'" height="'+ih+'" fill="#d9d3c8" opacity=".5"/><text x="'+((X(a)+X(z))/2).toFixed(1)+'" y="'+(PT+11)+'" class="sgr-xt" style="text-anchor:middle">'+b[2]+'</text>'; }});
+    nice(RL[0], RL[1], 5).forEach(function(v) {{ g += '<line x1="'+PL+'" y1="'+YL(v).toFixed(1)+'" x2="'+(W-PR)+'" y2="'+YL(v).toFixed(1)+'" class="sgr-grid"/><text x="'+(PL-6)+'" y="'+(YL(v)+3.5).toFixed(1)+'" class="sgr-yt">'+(+v.toFixed(spec.dl))+'</text>'; }});
+    if (RR) {{ var gl = nice(RL[0], RL[1], 5); gl.forEach(function(v) {{ var f = (v - RL[0]) / (RL[1] - RL[0]), rv = RR[0] + f * (RR[1] - RR[0]); g += '<text x="'+(W-PR+6)+'" y="'+(YL(v)+3.5).toFixed(1)+'" class="sgr-yt" style="text-anchor:start;fill:'+spec.rc+'">'+Math.round(rv)+'</text>'; }}); }}
+    g += '<text x="'+(PL-6)+'" y="10" class="sgr-yt">'+spec.ul+'</text>' + (RR ? '<text x="'+(W-PR+6)+'" y="10" class="sgr-yt" style="text-anchor:start;fill:'+spec.rc+'">'+spec.ur+'</text>' : '');
+    var step = n > 300 ? 52 : n > 120 ? 26 : n > 60 ? 13 : 5, xt = '', lastYr = '';
+    dates.forEach(function(d, i) {{ var y = d.slice(0,4), m = d.slice(5,7); var tick = n > 300 ? (m === '01' && y !== lastYr) : (m === '01' || m === '04' || m === '07' || m === '10') && (d.slice(0,7) !== lastYr);
+      if (tick) {{ lastYr = n > 300 ? y : d.slice(0,7); xt += '<text x="'+X(i).toFixed(1)+'" y="'+(H-8)+'" class="sgr-xt">'+(n > 300 ? y : d.slice(2,7))+'</text>'; }} }});
+    spec.series.forEach(function(s, k) {{ var Y = s.axis === 'R' ? YR : YL, p = [];
+      dates.forEach(function(d, i) {{ var v = mapS[k][d]; if (v != null) p.push(X(i).toFixed(1)+','+Y(v).toFixed(1)); }});
+      if (p.length > 1) g += '<polyline points="'+p.join(' ')+'" fill="none" stroke="'+s.col+'" stroke-width="'+(s.w || 1.6)+'"'+(s.dash ? ' stroke-dasharray="5 3"' : '')+' stroke-linejoin="round"/>'; }});
+    var bands = '';
+    dates.forEach(function(d, i) {{ var l = i ? (X(i-1)+X(i))/2 : PL, r = i < n-1 ? (X(i)+X(i+1))/2 : W-PR;
+      var tip = d + '||' + spec.series.map(function(s, k) {{ var v = mapS[k][d]; if (v == null) {{ var best = null; Object.keys(mapS[k]).forEach(function(dd) {{ if (dd <= d && (best == null || dd > best)) best = dd; }}); return s.name + ' ' + (best ? (+mapS[k][best].toFixed(s.d)) + '（' + best + '）' : '—'); }} return s.name + ' ' + (+v.toFixed(s.d)) + (s.unit || ''); }}).join('<br>');
+      bands += '<rect x="'+l.toFixed(1)+'" y="'+PT+'" width="'+Math.max(r-l,.6).toFixed(2)+'" height="'+ih+'" fill="transparent" data-tip="'+tip+'"/>'; }});
+    var leg = '<div class="sgz-st">' + spec.series.map(function(s) {{ var L = D.last && D.last[s.lk], PX = D.px && D.px[s.lk]; return '<span><i style="display:inline-block;width:14px;height:3px;background:'+s.col+';margin-right:5px;vertical-align:middle"></i>'+s.name+' <b>'+(L ? (+L.v.toFixed(s.d)) + (s.unit || '') : '—')+'</b><i>'+(L ? L.d : '')+(PX ? '（实际价格 $'+PX.v+'）' : '')+'</i></span>'; }}).join('') + (D.d0 ? '<span><i style="font-style:normal">起点日 '+D.d0+'</i></span>' : '') + '</div>';
+    box.innerHTML = '<div class="sgz-p" style="height:auto"><div class="sgr-title">'+spec.title+'</div>'+leg+'<svg viewBox="0 0 '+W+' '+H+'" class="sgr-chart" style="height:270px" preserveAspectRatio="xMidYMid meet">'+g+xt+bands+'</svg></div>';
+  }}
+  build('yld', {{title: '美国 2 年 / 10 年 / 30 年国债收益率（2019 年至今 · 周度）', ul: '收益率 %', dl: 1, zero: true, bands: [['2020-02-14', '2020-04-30', '2020 衰退']],
+    series: [{{key: 'y2', lk: 'y2', name: '2 年', col: '#2f8a6a', axis: 'L', d: 2, unit: '%'}}, {{key: 'y10', lk: 'y10', name: '10 年', col: '#1f3a68', axis: 'L', d: 2, unit: '%'}}, {{key: 'y30', lk: 'y30', name: '30 年', col: '#b0493a', axis: 'L', d: 2, unit: '%'}}]}});
+  build('tpm', {{title: '10 年期限溢价 · MOVE 波动率 · 10 年收益率（近 2 年 · 周度）', ul: '% (期限溢价/10Y)', ur: 'MOVE 指数', rc: '#b0493a', right: true, dl: 1,
+    series: [{{key: 'tp', lk: 'tp', name: '10Y 期限溢价(ACM)', col: '#2f8a8a', axis: 'L', d: 2, unit: '%'}}, {{key: 'y10', lk: 'y10', name: '10Y 收益率', col: '#c0a030', axis: 'L', d: 2, unit: '%'}}, {{key: 'move', lk: 'move', name: 'MOVE', col: '#b0493a', axis: 'R', d: 1, dash: true}}]}});
+  build('agg', {{title: '彭博美综指的 ETF 代理 · AGG 与 BND（起点=100 的相对值 · 近 2 年 · 日度）', ul: '相对值(起点=100)', dl: 0,
+    series: [{{key: 'agg', lk: 'agg', name: 'AGG', col: '#6a4c93', axis: 'L', d: 2, w: 2}}, {{key: 'bnd', lk: 'bnd', name: 'BND', col: '#e0a030', axis: 'L', d: 2, w: 1.2, dash: true}}]}});
 }})();
 /* ── 比特币 ÷ 黄金: 时间段 + 三条线 + 事件 (固定容器高度, 重绘只换 SVG 内容, 不触发布局位移) ── */
 (function() {{
