@@ -9693,3 +9693,22 @@ def fetch_jpy_carry(cache_path=None):
     try: _j.dump(out, open(cache_path, "w"), ensure_ascii=False)
     except Exception: pass
     return out
+
+
+def fetch_bbb_oas_3y(cache_path=None):
+    """BBB 档公司债 OAS 近 3 年(FRED BAMLC0A4CBBB, 日频→周度末值, 百分点×100=bp)。Oracle CDS 图的行业背景线; 不是 Oracle 自己的利差。失败回退缓存, 绝不编。"""
+    import json as _j, os as _os, datetime as _dt
+    cache_path = cache_path or _os.path.join(_os.path.dirname(__file__), "..", "data", "bbb_oas_3y_cache.json")
+    start = (_dt.date.today() - _dt.timedelta(days=3 * 365 + 20)).isoformat()
+    pts = _fred_series_hist("BAMLC0A4CBBB", start)
+    if len(pts) < 300:
+        try:
+            c = _j.load(open(cache_path)); c["status"] = "ok(cache)"; c.setdefault("warnings", []).append("本次抓取点数过少(%d), 显示缓存" % len(pts)); return c
+        except Exception:
+            return {"status": "error", "warnings": ["BBB OAS 取数失败且无缓存"], "series": []}
+    wk = _weekly_resample(pts)
+    out = {"status": "ok", "as_of": pts[-1][0], "warnings": [], "series": [[d, round(v * 100, 1)] for d, v in wk],
+           "last": {"d": pts[-1][0], "bp": round(pts[-1][1] * 100, 1)}, "start": start}
+    try: _j.dump(out, open(cache_path, "w"), ensure_ascii=False)
+    except Exception: pass
+    return out

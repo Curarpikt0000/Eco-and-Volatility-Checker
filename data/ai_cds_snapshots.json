@@ -23,6 +23,106 @@
   },
   {
    "name": "Oracle",
+   "asof": "2025-11-14",
+   "bp": 106,
+   "src_name": "Bloomberg",
+   "src_url": "https://www.bloomberg.com/news/articles/2025-11-14/oracle-credit-derivatives-jump-as-traders-rush-to-hedge-ai-bets",
+   "basis": "Bloomberg(CMA 报价), 5年期",
+   "note": "原文: jump as much as 4.36bp on Friday to about 106bp; 盘中约值; 文中: 自 2022-11 以来最高",
+   "added": "2026-10-18 21:20 JST"
+  },
+  {
+   "name": "Oracle",
+   "asof": "2025-11-28",
+   "bp": 125,
+   "src_name": "Benzinga(引 Morgan Stanley/Bloomberg)",
+   "src_url": "https://www.benzinga.com/markets/tech/25/11/49121400/morgan-stanley-warns-oracle-debt-risk-2008-crisis-levels",
+   "basis": "5年期, 报道称 jumped this week to 125 basis points, highest in three years",
+   "note": "读数日取文章发表日 2025-11-28, 原文写「本周」, 非精确交易日",
+   "added": "2026-10-18 21:20 JST"
+  },
+  {
+   "name": "Oracle",
+   "asof": "2025-12-11",
+   "bp": 139,
+   "src_name": "MarketScreener(S&P Global Market Intelligence)",
+   "src_url": "https://www.marketscreener.com/news/oracle-5-year-cds-surge-to-139-bps-up-nearly-12-bps-from-last-close-s-p-global-market-intelligence-data-shows-ce7e5ed2d38ef020",
+   "basis": "S&P Global Market Intelligence, 5年期",
+   "note": "原文: surge to 139 bps, up nearly 12 bps from last close; 发布 12/11/2025 09:02 EST 盘中",
+   "added": "2026-10-18 21:20 JST"
+  },
+  {
+   "name": "Oracle",
+   "asof": "2025-12-11",
+   "bp": 126,
+   "src_name": "Reuters",
+   "src_url": "https://www.reuters.com/business/finance/global-markets-cds-explainer-2025-12-11/",
+   "basis": "S&P Global Market Intelligence, 5年期",
+   "note": "原文: Oracle CDS trade around 126 bps; 与同日 MarketScreener 139 差 13bp, 两稿时间点不同(Reuters 解释稿为更早取值)",
+   "added": "2026-10-18 21:20 JST"
+  },
+  {
+   "name": "Oracle",
+   "asof": "2026-07-17",
+   "bp": 198.23,
+   "src_name": "Briefs.co(二手)",
+   "src_url": "https://www.briefs.co/news/oracle-debt-protection-costs-hit-record-peak-as-ai-spending/",
+   "basis": "页内未标明数据商",
+   "note": "原文: reached 198.23 basis points on July 17, 2026, edging past the previous record of 198.18 set in late March; 二手, 数据商未标明",
+   "added": "2026-10-18 21:21 JST"
+  },
+  {
+   "name": "Oracle",
+   "asof": "2026-07-29",
+   "bp": 200,
+   "src_name": "Reuters",
+   "src_url": "https://www.reuters.com/business/finance/global-markets-cds-explainer-2026-07-29/",
+   "basis": "S&P Global Market Intelligence, 5年期",
+   "note": "原文: Oracle CDS trade around 200 bps; near 200",
+   "added": "2026-10-18 21:20 JST"
+  },
+  {
+   "name": "Oracle",
+   "asof": "2026-09-11",
+   "bp": 186,
+   "src_name": "CrossVol(二手)",
+   "src_url": "https://crossvol.com/en/blog/oracle-cds-yen-softbank-arm-quarter-end/",
+   "basis": "文中称 five year CDS went from 186bp on September 11 to 237 on September 25",
+   "note": "原文: 186 bp on September 11; 数据商未标明",
+   "added": "2026-10-18 21:21 JST"
+  },
+  {
+   "name": "Oracle",
+   "asof": "2026-09-25",
+   "bp": 237,
+   "src_name": "CrossVol(二手)",
+   "src_url": "https://crossvol.com/en/blog/oracle-cds-yen-softbank-arm-quarter-end/",
+   "basis": "文中称 to 237 on September 25, a widening of 51 bp in 10 trading days",
+   "note": "原文: 237 on September 25; 另有两家聚合站同日报 232.41(日内/不同口径), 数值冲突, 保留本条并在 note 说明",
+   "added": "2026-10-18 21:21 JST"
+  },
+  {
+   "name": "Oracle",
+   "asof": "2026-10-08",
+   "bp": 257,
+   "src_name": "IFR(Euromoney)",
+   "src_url": "https://www.ifre.com/people-and-markets/2496665/hyperscaler-and-chipmaker-cds-widen-to-record-levels",
+   "basis": "IFR 报道, 数据商页内未标明; 5年期",
+   "note": "原文: widened to 257bp on Thursday, the highest level since at least 2009 and up from 182bp in mid-September; 发表 2026-10-09, 周四=2026-10-08",
+   "added": "2026-10-18 21:22 JST"
+  },
+  {
+   "name": "Oracle",
+   "asof": "2026-10-08",
+   "bp": 261,
+   "src_name": "Reuters(El7.ai 转载)",
+   "src_url": "https://el7.ai/en/news/2026-10-10-morgan-stanley-warns-on-oracle-debt-risks-as-credit-default-swaps-hit-record",
+   "basis": "Reuters 报道, 引 Morgan Stanley 研究; 5年期",
+   "note": "原文: closed at a record 261bps; 与 IFR 同日 257bp 相差 4bp, 疑为盘中与收盘之别, 两条都保留",
+   "added": "2026-10-18 21:22 JST"
+  },
+  {
+   "name": "Oracle",
    "asof": "2026-10-14",
    "bp": 288,
    "src_name": "Reuters(Economic Times 转载)",

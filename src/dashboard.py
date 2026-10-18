@@ -1237,7 +1237,7 @@ def _jpy_carry_html(o, which):
 </div>"""
 
 
-def _ai_cds_html(o):
+def _ai_cds_html(o, bbb=None):
     """AI 债务 CDS 快照: 读 data/ai_cds_snapshots.json 的 rows。新闻转引, 非连续序列, 离散点不连线。"""
     import json as _json, html as _h
     rows = (o or {}).get("rows") or []
@@ -1273,38 +1273,130 @@ def _ai_cds_html(o):
         trs += (f'<tr><td style="white-space:nowrap">{r["asof"]}</td><td style="white-space:nowrap">{_h.escape(zh.get(r["name"], r["name"]))}</td><td style="text-align:right;white-space:nowrap"><b>{_mark(r)}{r["bp"]:g}</b></td>'
                 f'<td><a href="{_h.escape(r["src_url"])}" target="_blank" rel="noopener" style="color:#2f6f9f">{_h.escape(r["src_name"])}</a></td>'
                 f'<td>{_h.escape(r["basis"])}</td><td>{_h.escape(r.get("note", ""))}{cf}</td></tr>')
-    # 离散点图
-    dates = sorted({r["asof"] for r in rows}); W, H, PL, PR, PT, PB = 900, 260, 54, 16, 14, 26
-    lo, hi = 0, max(r["bp"] for r in rows) * 1.12
-    def X(d):
-        import datetime as _dt
-        d0 = _dt.date.fromisoformat(dates[0]); d1 = _dt.date.fromisoformat(dates[-1]); span = max((d1 - d0).days, 1)
-        return PL + (W - PL - PR) * (((_dt.date.fromisoformat(d) - d0).days + 0.5) / (span + 1))
-    Y = lambda v: PT + (H - PT - PB) * (1 - (v - lo) / (hi - lo))
-    g = ""
-    step = 200 if hi > 800 else (100 if hi > 400 else 50)
-    v = 0
-    while v <= hi:
-        g += f'<line x1="{PL}" y1="{Y(v):.1f}" x2="{W-PR}" y2="{Y(v):.1f}" class="sgr-grid"/><text x="{PL-6}" y="{Y(v)+3.5:.1f}" class="sgr-yt">{v}</text>'
-        v += step
-    g += f'<text x="{PL-6}" y="10" class="sgr-yt">bp</text>'
-    for d in dates: g += f'<text x="{X(d):.1f}" y="{H-8}" class="sgr-xt">{d[5:]}</text>'
-    hit = ""
-    for r in rows:
-        c = colors.get(r["name"], "#888")
-        mk = _mark(r)
-        if mk: g += f'<circle cx="{X(r["asof"]):.1f}" cy="{Y(r["bp"]):.1f}" r="7" fill="#fff" stroke="{c}" stroke-width="2.4"/>'
-        else:  g += f'<circle cx="{X(r["asof"]):.1f}" cy="{Y(r["bp"]):.1f}" r="7" fill="{c}" stroke="#fff" stroke-width="1.2"/>'
-        g += f'<text x="{X(r["asof"])+11:.1f}" y="{Y(r["bp"])+4:.1f}" style="font-size:11px;fill:#3d372f">{mk}{r["bp"]:g}</text>'
-        tip = f'{r["asof"]}||{zh.get(r["name"], r["name"])} {r["bp"]:g} bp<br>{_h.escape(r["src_name"])}'
-        hit += f'<circle cx="{X(r["asof"]):.1f}" cy="{Y(r["bp"]):.1f}" r="13" fill="transparent" data-tip="{tip}" class="tip-hit"/>'
+    # ── 图 A: 甲骨文近 3 年(纵轴按 Oracle+BBB 缩放) ──
+    import datetime as _dt
+    bser = (bbb or {}).get("series") or []
+    def _chart(sel, title, hi_cap=None, with_bbb=False, lab_last=None, h=300):
+        rs = [r for r in rows if sel(r)]
+        if not rs: return ""
+        W, H, PL, PR, PT, PB = 900, h, 54, (96 if with_bbb else 22), 14, 26
+        d0 = min([r["asof"] for r in rs] + ([bser[0][0]] if (with_bbb and bser) else []))
+        d1 = max([r["asof"] for r in rs] + ([bser[-1][0]] if (with_bbb and bser) else []))
+        span = max((_dt.date.fromisoformat(d1) - _dt.date.fromisoformat(d0)).days, 1)
+        _pad = 0.08 if span <= 200 else 0.0
+        X = lambda dd: PL + (W - PL - PR) * (_pad + (1 - 2 * _pad) * ((_dt.date.fromisoformat(dd) - _dt.date.fromisoformat(d0)).days / span))
+        vals = [r["bp"] for r in rs] + ([p[1] for p in bser] if (with_bbb and bser) else [])
+        hi = (hi_cap or max(vals)) * 1.12; lo = 0
+        Y = lambda v: PT + (H - PT - PB) * (1 - (v - lo) / (hi - lo))
+        g = ""; step = 50 if hi <= 400 else (100 if hi <= 800 else 200); v = 0
+        while v <= hi:
+            g += f'<line x1="{PL}" y1="{Y(v):.1f}" x2="{W-PR}" y2="{Y(v):.1f}" class="sgr-grid"/><text x="{PL-6}" y="{Y(v)+3.5:.1f}" class="sgr-yt">{v}</text>'; v += step
+        g += f'<text x="{PL-6}" y="10" class="sgr-yt">bp</text>'
+        if span > 200:
+            seen = set(); y0 = int(d0[:4])
+            for yy in range(y0, int(d1[:4]) + 1):
+                for mm in ("01", "07"):
+                    dd = f"{yy}-{mm}-01"
+                    if d0 <= dd <= d1: g += f'<line x1="{X(dd):.1f}" y1="{PT}" x2="{X(dd):.1f}" y2="{H-PB}" stroke="#eee8dc" stroke-width="1"/><text x="{X(dd):.1f}" y="{H-8}" class="sgr-xt">{dd[2:7]}</text>'
+        else:
+            for dd in sorted({r["asof"] for r in rs}): g += f'<text x="{X(dd):.1f}" y="{H-8}" class="sgr-xt">{dd[5:]}</text>'
+        if with_bbb and bser:
+            g += '<polyline points="' + " ".join(f"{X(p[0]):.1f},{Y(p[1]):.1f}" for p in bser) + '" fill="none" stroke="#b9b2a6" stroke-width="1.8"/>'
+            g += f'<text x="{PL+6}" y="{Y(bser[0][1])-8:.1f}" style="font-size:11px;fill:#6b645a">灰线：BBB 档全行业利差（行业背景，不是甲骨文）</text>'
+        # Oracle 相邻读数虚线(>120天断开)
+        byname = {}
+        for r in rs: byname.setdefault(r["name"], []).append(r)
+        for nm, lst in byname.items():
+            if nm != "Oracle": continue
+            dm = {}
+            for r in lst: dm.setdefault(r["asof"], []).append(r["bp"])
+            seg = []; segs = []
+            for dd in sorted(dm):
+                if seg and (_dt.date.fromisoformat(dd) - _dt.date.fromisoformat(seg[-1][0])).days > 120: segs.append(seg); seg = []
+                seg.append((dd, sum(dm[dd]) / len(dm[dd])))
+            segs.append(seg)
+            for sg in segs:
+                if len(sg) > 1: g += '<polyline points="' + " ".join(f"{X(a):.1f},{Y(b):.1f}" for a, b in sg) + f'" fill="none" stroke="{colors[nm]}" stroke-width="1.5" stroke-dasharray="4 3" opacity=".7"/>'
+        # 点: 同日多读数横向错开
+        hit = ""; same = {}
+        for r in rs: same.setdefault((r["name"], r["asof"]), []).append(r)
+        for (nm, dd), lst in same.items():
+            lst.sort(key=lambda r: r["bp"])
+            for k, r in enumerate(lst):
+                off = (k - (len(lst) - 1) / 2) * 9; cx = X(dd) + off; cy = Y(r["bp"]); c = colors.get(nm, "#888"); mk = _mark(r)
+                if mk: g += f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="6" fill="#fff" stroke="{c}" stroke-width="2.2"/>'
+                else:  g += f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="6" fill="{c}" stroke="#fff" stroke-width="1.2"/>'
+                tip = f'{r["asof"]}||{zh.get(nm, nm)} {mk}{r["bp"]:g} bp<br>{_h.escape(r["src_name"])}'
+                hit += f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="11" fill="transparent" data-tip="{tip}" class="tip-hit"/>'
+        # 标签放置器: 同日多读数合并为一个标签; 逐个尝试候选位置, 与已放矩形/点相交则换位, 避免重叠
+        placed = []
+        def _rect(x, y, w, hh): return (x, y - hh, x + w, y + 3)
+        def _hit(r1, r2): return not (r1[2] < r2[0] or r2[2] < r1[0] or r1[3] < r2[1] or r2[3] < r1[1])
+        pts_rects = []
+        for (nm, dd), lst in same.items():
+            for k, r in enumerate(sorted(lst, key=lambda r: r["bp"])):
+                cx = X(dd) + (k - (len(lst) - 1) / 2) * 9; cy = Y(r["bp"]); pts_rects.append((cx - 8, cy - 8, cx + 8, cy + 8))
+        if lab_last:
+            want = lab_last(rs)
+            groups = {}
+            for r in want: groups.setdefault((r["name"], r["asof"]), []).append(r)
+            # 右缘簇: 最近 5 个读数日(含 2026-09-11 以后)的标签统一放到右侧标签栏, 按 y 排序等距, 细引线连点
+            _all = sorted(groups.items(), key=lambda kv: (kv[0][1], kv[0][0]))
+            _right = [kv for kv in _all if kv[0][1] >= "2026-09-11"]
+            _left = [kv for kv in _all if kv[0][1] < "2026-09-11"]
+            if with_bbb and _right:
+                items = []
+                for (nm, dd), lst in _right:
+                    for r in sorted(lst, key=lambda r: r["bp"]):
+                        k = sorted(same[(nm, dd)], key=lambda q: q["bp"]).index(r); n_ = len(same[(nm, dd)])
+                        items.append((r, X(dd) + (k - (n_ - 1) / 2) * 9, Y(r["bp"])))
+                items.sort(key=lambda t: t[2])                      # 自上而下
+                ys = [t[2] for t in items]; gap = 15.0
+                for i in range(1, len(ys)):                         # 保证相邻标签 >= gap
+                    if ys[i] - ys[i - 1] < gap: ys[i] = ys[i - 1] + gap
+                over = ys[-1] - (H - PB - 4)
+                if over > 0: ys = [y - over for y in ys]
+                lx = W - PR + 14
+                for (r, px, py), ly in zip(items, ys):
+                    g += f'<line x1="{px + 6:.1f}" y1="{py:.1f}" x2="{lx - 3:.1f}" y2="{ly - 4:.1f}" stroke="#c9c2b6" stroke-width=".8"/>'
+                    g += f'<text x="{lx:.1f}" y="{ly:.1f}" style="font-size:11px;fill:#3d372f;text-anchor:start">{r["asof"][5:]}　{_mark(r)}{r["bp"]:g}</text>'
+                    placed.append(_rect(lx, ly, 70, 12))
+            for (nm, dd), lst in (_left if (with_bbb and _right) else _all):
+                lst = sorted(lst, key=lambda r: r["bp"])
+                txt = "/".join(f'{_mark(r)}{r["bp"]:g}' for r in lst)
+                cx = X(dd); cy = sum(Y(r["bp"]) for r in lst) / len(lst)
+                tw = 6.6 * len(txt) + 4
+                done = False
+                for dy in (-16, 22, -32, 38, -48, 54):
+                    for ax in ("middle", "end", "start"):
+                        x0 = cx - tw / 2 if ax == "middle" else (cx - tw + 4 if ax == "end" else cx - 4)
+                        rect = _rect(x0, cy + dy, tw, 12)
+                        if rect[0] < PL - 2 or rect[2] > W - 2 or rect[1] < 2: continue
+                        if any(_hit(rect, q) for q in placed) or any(_hit(rect, q) for q in pts_rects): continue
+                        placed.append(rect); tx = (cx if ax == "middle" else (cx + 4 if ax == "end" else cx - 4))
+                        if abs(dy) > 24: g += f'<line x1="{cx:.1f}" y1="{cy + (-8 if dy < 0 else 8):.1f}" x2="{cx:.1f}" y2="{cy + dy + (3 if dy < 0 else -9):.1f}" stroke="#b9b2a6" stroke-width=".8"/>'
+                        g += f'<text x="{tx:.1f}" y="{cy + dy:.1f}" style="font-size:11px;fill:#3d372f;text-anchor:{ax}">{txt}</text>'
+                        done = True; break
+                    if done: break
+        key = ""
+        if with_bbb:
+            key = (f'<circle cx="{PL+10}" cy="{PT+8}" r="5" fill="#c0553a" stroke="#fff"/><text x="{PL+19}" y="{PT+12}" style="font-size:11px;fill:#3d372f">实心＝原文给了确切数字</text>'
+                   f'<circle cx="{PL+160}" cy="{PT+8}" r="5" fill="#fff" stroke="#c0553a" stroke-width="2"/><text x="{PL+169}" y="{PT+12}" style="font-size:11px;fill:#3d372f">空心＝原文只给「超过」或「接近」</text>')
+        g += key
+        return f'<div class="sgr-title" style="margin-top:8px">{title}</div><svg viewBox="0 0 {W} {H}" class="sgr-chart aic-svg" style="height:{H-30}px" preserveAspectRatio="xMidYMid meet">{g}{hit}</svg>'
+    def _lab_oracle(rs):
+        return sorted([r for r in rs if r["name"] == "Oracle"], key=lambda r: (r["asof"], r["bp"]))
+    chart = _chart(lambda r: r["name"] == "Oracle", "甲骨文 5 年期 CDS · 近 3 年（有报道的读数；灰线为 BBB 全行业背景）", hi_cap=None, with_bbb=True, lab_last=_lab_oracle, h=300)
+    others = [r for r in rows if r["name"] != "Oracle"]
+    chart2 = (_chart(lambda r: r["name"] != "Oracle", "其他 AI 债务标的（读数很少，纵轴单独缩放）", lab_last=lambda rs: [by[n][-1] for n in by if n != "Oracle"], h=240, hi_cap=1200) if others else "")
+    chart = chart + chart2
     leg = "".join(f'<span><i style="display:inline-block;width:10px;height:10px;border-radius:50%;background:{colors.get(k, "#888")};margin-right:5px"></i>{_h.escape(zh.get(k, k))}</span>' for k in order)
     return f"""
 <div class="sgr-wrap">
   <div class="aic-row">{cards}</div>
   <div class="sgz-st" style="margin-top:8px">{leg}</div>
-  <svg viewBox="0 0 {W} {H}" class="sgr-chart aic-svg" style="height:230px" preserveAspectRatio="xMidYMid meet">{g}{hit}</svg>
-  <div style="font-size:12px;color:#3d372f;margin:2px 0 4px">每个圆点＝一个报道里的读数，点与点之间<b>不连线、不插值</b>；空白＝当天没有报道；<b>空心圆＝原文只给了「超过」或「接近」</b>（下限或近似值），实心圆＝原文给了确切数字。</div>
+  {chart}
+  <div style="font-size:12px;color:#3d372f;margin:2px 0 4px">每个圆点＝一个报道里的读数；<b>甲骨文的虚线只是把相邻两次报道连起来（相隔超过 120 天不连）</b>，两点之间<b>不是日更行情、也没有插值</b>，中间的涨跌图上看不到；<b>空心圆＝原文只给了「超过」或「接近」</b>（下限或近似值），实心圆＝原文给了确切数字。<b>灰色实线是 BBB 档全行业利差（FRED 日度，换算成 bp），是行业背景，不是甲骨文自己的。</b>2025-11 之前新闻里没有甲骨文 CDS 的报道，所以三年里前约 2 年多是空白，不是没数据被我藏起来。</div>
   <div class="sgr-title" style="margin-top:10px">全部读数</div>
   <div style="overflow-x:auto"><table class="aic-tab"><thead><tr><th>日期</th><th>标的</th><th style="text-align:right">bp</th><th>来源</th><th>口径</th><th>备注</th></tr></thead><tbody>{trs}</tbody></table></div>
   <div class="sgr-foot"><b>5 年期单名 CDS 利差（bp）</b>：每年为对冲 100 万美元债务付的保费 ≈ 利差 × 100 美元（288 bp ≈ 2.88 万美元）。
@@ -3251,7 +3343,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, cn_hk_hold=None, gs_tech=None, ur_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, spx_gold_long=None, ust_trio=None, jpy_carry=None, ai_cds=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, cn_hk_hold=None, gs_tech=None, ur_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, spx_gold_long=None, ust_trio=None, jpy_carry=None, ai_cds=None, bbb_3y=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -3495,7 +3587,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         ust_yld_html=_ust_trio_html(ust_trio, 'yld'),
         ust_tpm_html=_ust_trio_html(ust_trio, 'tpm'),
         ust_agg_html=_ust_trio_html(ust_trio, 'agg'),
-        ai_cds_html=_ai_cds_html(ai_cds),
+        ai_cds_html=_ai_cds_html(ai_cds, bbb_3y),
         jpy_facts_html=_jpy_carry_html(jpy_carry, 'facts'),
         jpy_cftc_html=_jpy_carry_html(jpy_carry, 'cftc'),
         jpy_spread_html=_jpy_carry_html(jpy_carry, 'spread'),

@@ -691,6 +691,12 @@ def main():
     except Exception as e:
         print(f"[dashboard] WRS衰退信号 跳过: {e}")
 
+    bbb_3y = {}
+    try:
+        bbb_3y = ed.fetch_bbb_oas_3y() or {}
+        print(f"[dashboard] BBB OAS 3年背景线: {len(bbb_3y.get('series') or [])} 周点 末={bbb_3y.get('last')} status={bbb_3y.get('status')} warn={bbb_3y.get('warnings')}")
+    except Exception as ex:
+        print(f"[dashboard] BBB OAS 3年背景线 跳过: {ex}")
     # ── AI 债务 CDS 快照: 读 data/ai_cds_snapshots.json(新闻转引, 入库走 tools/ai_cds_ingest.py 硬门禁) ──
     ai_cds = {}
     try:
@@ -1060,6 +1066,7 @@ def main():
         ust_trio=ust_trio,
         jpy_carry=jpy_carry,
         ai_cds=ai_cds,
+        bbb_3y=bbb_3y,
         tfp_sentiment=tfp_sentiment,
         llm_token=llm_token,
         ai_capex=ai_capex,
