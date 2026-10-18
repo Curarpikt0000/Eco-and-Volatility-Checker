@@ -691,6 +691,12 @@ def main():
     except Exception as e:
         print(f"[dashboard] WRS衰退信号 跳过: {e}")
 
+    hf_ust = {}
+    try:
+        hf_ust = ed.fetch_hf_domiciles_ust() or {}
+        print(f"[dashboard] 对冲基金注册地持美债(TIC): status={hf_ust.get('status')} as_of={hf_ust.get('as_of')} 月数={len(hf_ust.get('rows') or [])} warn={hf_ust.get('warnings')}")
+    except Exception as ex:
+        print(f"[dashboard] 对冲基金注册地持美债 跳过: {ex}")
     h8_deposits = {}
     try:
         h8_deposits = ed.fetch_h8_deposits() or {}
@@ -1082,6 +1088,7 @@ def main():
         bbb_3y=bbb_3y,
         mm_ratio=mm_ratio,
         h8_deposits=h8_deposits,
+        hf_ust=hf_ust,
         tfp_sentiment=tfp_sentiment,
         llm_token=llm_token,
         ai_capex=ai_capex,

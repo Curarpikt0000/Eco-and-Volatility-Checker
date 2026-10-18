@@ -9815,3 +9815,35 @@ def fetch_h8_deposits(cache_path=None, weeks_back=110):
     try: _j.dump(out, open(cache_path, "w"), ensure_ascii=False)
     except Exception: pass
     return out
+
+
+def fetch_hf_domiciles_ust(cache_path=None):
+    """TIC SLT Table 3: 英国/开曼群岛/巴哈马 持有美国国债(百万美元, 月度, 2020-01 起)。
+    ★口径: 按托管/登记地统计, 不是『对冲基金持有』; 三地合计≠全体对冲基金。只用 Holdings, 不用 n.a. 的净买卖。失败回退缓存, 绝不编。"""
+    import json as _j, os as _os, re as _re, requests as _rq
+    root = _os.path.join(_os.path.dirname(__file__), "..")
+    cache_path = cache_path or _os.path.join(root, "data", "hf_domiciles_ust_cache.json")
+    names = {"United Kingdom": "uk", "Cayman Islands": "cy", "Bahamas": "bs"}
+    warns = []
+    try:
+        r = _rq.get(TIC_SLT_T3_URL, headers={"User-Agent": "Mozilla/5.0"}, timeout=60)
+        if r.status_code != 200: raise RuntimeError("HTTP %s" % r.status_code)
+        D = {"uk": {}, "cy": {}, "bs": {}}
+        for l in r.text.splitlines():
+            c = [x.strip() for x in l.split("\t")]
+            if len(c) > 3 and c[0] in names and _re.match(r"\d{4}-\d{2}$", c[2]):
+                try: D[names[c[0]]][c[2]] = int(c[3])
+                except Exception: pass
+        months = sorted(set(D["uk"]) & set(D["cy"]) & set(D["bs"]))
+        months = [m for m in months if m >= "2020-01"]
+        if len(months) < 24: raise RuntimeError("三国共有月份仅 %d" % len(months))
+        rows = [{"m": m, "uk": D["uk"][m], "cy": D["cy"][m], "bs": D["bs"][m], "tot": D["uk"][m] + D["cy"][m] + D["bs"][m]} for m in months]
+        out = {"status": "ok", "as_of": months[-1], "warnings": warns, "rows": rows, "unit": "百万美元"}
+        try: _j.dump(out, open(cache_path, "w"), ensure_ascii=False)
+        except Exception: pass
+        return out
+    except Exception as ex:
+        try:
+            c = _j.load(open(cache_path)); c["status"] = "ok(cache)"; c.setdefault("warnings", []).append("本次抓取失败(%s), 显示缓存" % type(ex).__name__); return c
+        except Exception:
+            return {"status": "error", "warnings": ["TIC Table 3 取数失败且无缓存: %s" % ex], "rows": []}
