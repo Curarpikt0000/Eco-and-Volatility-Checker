@@ -1,51 +1,7 @@
 {
  "table": "HDB_MONEY_SUPPLY",
- "count": 3,
+ "count": 2,
  "rows": [
-  {
-   "uid": "ms|2026-08|US",
-   "props": {
-    "记录": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-08｜US"
-       }
-      }
-     ]
-    },
-    "国家": {
-     "select": {
-      "name": "US"
-     }
-    },
-    "M0": {
-     "number": 5411.6
-    },
-    "M1": {
-     "number": 19991.1
-    },
-    "M2": {
-     "number": 23342.8
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "FRED (M1SL/M2SL/BOGMBASE), 月度"
-       }
-      }
-     ]
-    },
-    "月份": {
-     "date": {
-      "start": "2026-08-01"
-     }
-    }
-   }
-  },
   {
    "uid": "ms|2026-08|JP",
    "props": {
@@ -65,13 +21,13 @@
      }
     },
     "M0": {
-     "number": 3436.7
+     "number": 543.0
     },
     "M1": {
-     "number": 6882.9
+     "number": 1087.5
     },
     "M2": {
-     "number": 8205.1
+     "number": 1296.4
     },
     "数据源": {
      "rich_text": [
@@ -109,13 +65,13 @@
      }
     },
     "M0": {
-     "number": 2218.0
+     "number": 14.83
     },
     "M1": {
-     "number": 17315.0
+     "number": 115.77
     },
     "M2": {
-     "number": 53365.9
+     "number": 356.81
     },
     "数据源": {
      "rich_text": [

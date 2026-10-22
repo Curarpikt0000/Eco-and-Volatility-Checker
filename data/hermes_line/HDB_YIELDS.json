@@ -1,47 +1,7 @@
 {
  "table": "HDB_YIELDS",
- "count": 260,
+ "count": 243,
  "rows": [
-  {
-   "uid": "y|2025-10-20",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2025-10-20"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "data/us_jp_yields.json .points"
-       }
-      }
-     ]
-    },
-    "US10Y": {
-     "number": 4.0
-    },
-    "US30Y": {
-     "number": 4.58
-    },
-    "JP10Y": {
-     "number": 1.676
-    },
-    "JP30Y": {
-     "number": 3.129
-    },
-    "利差": {
-     "number": 2.324
-    }
-   }
-  },
   {
    "uid": "y|2025-10-21",
    "props": {
@@ -66,10 +26,10 @@
      ]
     },
     "US10Y": {
-     "number": 3.98
+     "number": null
     },
     "US30Y": {
-     "number": 4.55
+     "number": null
     },
     "JP10Y": {
      "number": 1.667
@@ -78,7 +38,7 @@
      "number": 3.138
     },
     "利差": {
-     "number": 2.313
+     "number": null
     }
    }
   },
@@ -106,10 +66,10 @@
      ]
     },
     "US10Y": {
-     "number": 3.97
+     "number": null
     },
     "US30Y": {
-     "number": 4.54
+     "number": null
     },
     "JP10Y": {
      "number": 1.663
@@ -118,7 +78,7 @@
      "number": 3.13
     },
     "利差": {
-     "number": 2.307
+     "number": null
     }
    }
   },
@@ -146,10 +106,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.01
+     "number": null
     },
     "US30Y": {
-     "number": 4.58
+     "number": null
     },
     "JP10Y": {
      "number": 1.667
@@ -158,7 +118,7 @@
      "number": 3.101
     },
     "利差": {
-     "number": 2.343
+     "number": null
     }
    }
   },
@@ -186,10 +146,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.02
+     "number": null
     },
     "US30Y": {
-     "number": 4.59
+     "number": null
     },
     "JP10Y": {
      "number": 1.667
@@ -198,7 +158,7 @@
      "number": 3.081
     },
     "利差": {
-     "number": 2.353
+     "number": null
     }
    }
   },
@@ -226,10 +186,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.01
+     "number": null
     },
     "US30Y": {
-     "number": 4.57
+     "number": null
     },
     "JP10Y": {
      "number": 1.683
@@ -238,7 +198,7 @@
      "number": 3.097
     },
     "利差": {
-     "number": 2.327
+     "number": null
     }
    }
   },
@@ -266,10 +226,10 @@
      ]
     },
     "US10Y": {
-     "number": 3.99
+     "number": null
     },
     "US30Y": {
-     "number": 4.55
+     "number": null
     },
     "JP10Y": {
      "number": 1.654
@@ -278,7 +238,7 @@
      "number": 3.083
     },
     "利差": {
-     "number": 2.336
+     "number": null
     }
    }
   },
@@ -306,10 +266,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.08
+     "number": null
     },
     "US30Y": {
-     "number": 4.61
+     "number": null
     },
     "JP10Y": {
      "number": 1.664
@@ -318,7 +278,7 @@
      "number": 3.072
     },
     "利差": {
-     "number": 2.416
+     "number": null
     }
    }
   },
@@ -346,10 +306,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.11
+     "number": null
     },
     "US30Y": {
-     "number": 4.65
+     "number": null
     },
     "JP10Y": {
      "number": 1.66
@@ -358,7 +318,7 @@
      "number": 3.063
     },
     "利差": {
-     "number": 2.45
+     "number": null
     }
    }
   },
@@ -386,56 +346,16 @@
      ]
     },
     "US10Y": {
-     "number": 4.11
+     "number": null
     },
     "US30Y": {
-     "number": 4.67
+     "number": null
     },
     "JP10Y": {
      "number": 1.67
     },
     "JP30Y": {
      "number": 3.068
-    },
-    "利差": {
-     "number": 2.44
-    }
-   }
-  },
-  {
-   "uid": "y|2025-11-03",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2025-11-03"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "data/us_jp_yields.json .points"
-       }
-      }
-     ]
-    },
-    "US10Y": {
-     "number": 4.13
-    },
-    "US30Y": {
-     "number": 4.69
-    },
-    "JP10Y": {
-     "number": null
-    },
-    "JP30Y": {
-     "number": null
     },
     "利差": {
      "number": null
@@ -466,10 +386,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.1
+     "number": null
     },
     "US30Y": {
-     "number": 4.67
+     "number": null
     },
     "JP10Y": {
      "number": 1.684
@@ -478,7 +398,7 @@
      "number": 3.105
     },
     "利差": {
-     "number": 2.416
+     "number": null
     }
    }
   },
@@ -506,10 +426,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.17
+     "number": null
     },
     "US30Y": {
-     "number": 4.74
+     "number": null
     },
     "JP10Y": {
      "number": 1.676
@@ -518,7 +438,7 @@
      "number": 3.101
     },
     "利差": {
-     "number": 2.494
+     "number": null
     }
    }
   },
@@ -546,10 +466,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.11
+     "number": null
     },
     "US30Y": {
-     "number": 4.69
+     "number": null
     },
     "JP10Y": {
      "number": 1.694
@@ -558,7 +478,7 @@
      "number": 3.105
     },
     "利差": {
-     "number": 2.416
+     "number": null
     }
    }
   },
@@ -586,10 +506,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.11
+     "number": null
     },
     "US30Y": {
-     "number": 4.7
+     "number": null
     },
     "JP10Y": {
      "number": 1.688
@@ -598,7 +518,7 @@
      "number": 3.117
     },
     "利差": {
-     "number": 2.422
+     "number": null
     }
    }
   },
@@ -626,10 +546,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.13
+     "number": null
     },
     "US30Y": {
-     "number": 4.71
+     "number": null
     },
     "JP10Y": {
      "number": 1.712
@@ -638,7 +558,7 @@
      "number": 3.141
     },
     "利差": {
-     "number": 2.418
+     "number": null
     }
    }
   },
@@ -706,10 +626,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.08
+     "number": null
     },
     "US30Y": {
-     "number": 4.67
+     "number": null
     },
     "JP10Y": {
      "number": 1.7
@@ -718,7 +638,7 @@
      "number": 3.189
     },
     "利差": {
-     "number": 2.38
+     "number": null
     }
    }
   },
@@ -746,10 +666,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.11
+     "number": null
     },
     "US30Y": {
-     "number": 4.7
+     "number": null
     },
     "JP10Y": {
      "number": 1.705
@@ -758,7 +678,7 @@
      "number": 3.188
     },
     "利差": {
-     "number": 2.405
+     "number": null
     }
    }
   },
@@ -786,10 +706,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.14
+     "number": null
     },
     "US30Y": {
-     "number": 4.74
+     "number": null
     },
     "JP10Y": {
      "number": 1.714
@@ -798,7 +718,7 @@
      "number": 3.205
     },
     "利差": {
-     "number": 2.426
+     "number": null
     }
    }
   },
@@ -826,10 +746,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.13
+     "number": null
     },
     "US30Y": {
-     "number": 4.73
+     "number": null
     },
     "JP10Y": {
      "number": 1.745
@@ -838,7 +758,7 @@
      "number": 3.241
     },
     "利差": {
-     "number": 2.385
+     "number": null
     }
    }
   },
@@ -866,10 +786,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.12
+     "number": null
     },
     "US30Y": {
-     "number": 4.74
+     "number": null
     },
     "JP10Y": {
      "number": 1.759
@@ -878,7 +798,7 @@
      "number": 3.285
     },
     "利差": {
-     "number": 2.361
+     "number": null
     }
    }
   },
@@ -906,10 +826,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.13
+     "number": null
     },
     "US30Y": {
-     "number": 4.75
+     "number": null
     },
     "JP10Y": {
      "number": 1.779
@@ -918,7 +838,7 @@
      "number": 3.308
     },
     "利差": {
-     "number": 2.351
+     "number": null
     }
    }
   },
@@ -946,10 +866,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.1
+     "number": null
     },
     "US30Y": {
-     "number": 4.73
+     "number": null
     },
     "JP10Y": {
      "number": 1.824
@@ -958,7 +878,7 @@
      "number": 3.334
     },
     "利差": {
-     "number": 2.276
+     "number": null
     }
    }
   },
@@ -986,56 +906,16 @@
      ]
     },
     "US10Y": {
-     "number": 4.06
+     "number": null
     },
     "US30Y": {
-     "number": 4.71
+     "number": null
     },
     "JP10Y": {
      "number": 1.792
     },
     "JP30Y": {
      "number": 3.291
-    },
-    "利差": {
-     "number": 2.268
-    }
-   }
-  },
-  {
-   "uid": "y|2025-11-24",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2025-11-24"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "data/us_jp_yields.json .points"
-       }
-      }
-     ]
-    },
-    "US10Y": {
-     "number": 4.04
-    },
-    "US30Y": {
-     "number": 4.68
-    },
-    "JP10Y": {
-     "number": null
-    },
-    "JP30Y": {
-     "number": null
     },
     "利差": {
      "number": null
@@ -1066,10 +946,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.01
+     "number": null
     },
     "US30Y": {
-     "number": 4.67
+     "number": null
     },
     "JP10Y": {
      "number": 1.811
@@ -1078,7 +958,7 @@
      "number": 3.302
     },
     "利差": {
-     "number": 2.199
+     "number": null
     }
    }
   },
@@ -1106,10 +986,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.0
+     "number": null
     },
     "US30Y": {
-     "number": 4.64
+     "number": null
     },
     "JP10Y": {
      "number": 1.825
@@ -1118,7 +998,7 @@
      "number": 3.294
     },
     "利差": {
-     "number": 2.175
+     "number": null
     }
    }
   },
@@ -1186,10 +1066,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.02
+     "number": null
     },
     "US30Y": {
-     "number": 4.67
+     "number": null
     },
     "JP10Y": {
      "number": 1.812
@@ -1198,7 +1078,7 @@
      "number": 3.3
     },
     "利差": {
-     "number": 2.208
+     "number": null
     }
    }
   },
@@ -1226,10 +1106,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.09
+     "number": null
     },
     "US30Y": {
-     "number": 4.74
+     "number": null
     },
     "JP10Y": {
      "number": 1.881
@@ -1238,7 +1118,7 @@
      "number": 3.343
     },
     "利差": {
-     "number": 2.209
+     "number": null
     }
    }
   },
@@ -1266,10 +1146,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.09
+     "number": null
     },
     "US30Y": {
-     "number": 4.74
+     "number": null
     },
     "JP10Y": {
      "number": 1.864
@@ -1278,7 +1158,7 @@
      "number": 3.331
     },
     "利差": {
-     "number": 2.226
+     "number": null
     }
    }
   },
@@ -1306,10 +1186,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.06
+     "number": null
     },
     "US30Y": {
-     "number": 4.73
+     "number": null
     },
     "JP10Y": {
      "number": 1.897
@@ -1318,7 +1198,7 @@
      "number": 3.367
     },
     "利差": {
-     "number": 2.163
+     "number": null
     }
    }
   },
@@ -1346,10 +1226,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.11
+     "number": null
     },
     "US30Y": {
-     "number": 4.76
+     "number": null
     },
     "JP10Y": {
      "number": 1.939
@@ -1358,7 +1238,7 @@
      "number": 3.343
     },
     "利差": {
-     "number": 2.171
+     "number": null
     }
    }
   },
@@ -1386,10 +1266,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.14
+     "number": null
     },
     "US30Y": {
-     "number": 4.79
+     "number": null
     },
     "JP10Y": {
      "number": 1.951
@@ -1398,7 +1278,7 @@
      "number": 3.315
     },
     "利差": {
-     "number": 2.189
+     "number": null
     }
    }
   },
@@ -1426,10 +1306,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.17
+     "number": null
     },
     "US30Y": {
-     "number": 4.81
+     "number": null
     },
     "JP10Y": {
      "number": 1.966
@@ -1438,7 +1318,7 @@
      "number": 3.338
     },
     "利差": {
-     "number": 2.204
+     "number": null
     }
    }
   },
@@ -1466,10 +1346,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.18
+     "number": null
     },
     "US30Y": {
-     "number": 4.8
+     "number": null
     },
     "JP10Y": {
      "number": 1.962
@@ -1478,7 +1358,7 @@
      "number": 3.334
     },
     "利差": {
-     "number": 2.218
+     "number": null
     }
    }
   },
@@ -1506,10 +1386,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.13
+     "number": null
     },
     "US30Y": {
-     "number": 4.78
+     "number": null
     },
     "JP10Y": {
      "number": 1.958
@@ -1518,7 +1398,7 @@
      "number": 3.346
     },
     "利差": {
-     "number": 2.172
+     "number": null
     }
    }
   },
@@ -1546,10 +1426,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.14
+     "number": null
     },
     "US30Y": {
-     "number": 4.79
+     "number": null
     },
     "JP10Y": {
      "number": 1.933
@@ -1558,7 +1438,7 @@
      "number": 3.334
     },
     "利差": {
-     "number": 2.207
+     "number": null
     }
    }
   },
@@ -1586,10 +1466,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.19
+     "number": null
     },
     "US30Y": {
-     "number": 4.85
+     "number": null
     },
     "JP10Y": {
      "number": 1.956
@@ -1598,7 +1478,7 @@
      "number": 3.309
     },
     "利差": {
-     "number": 2.234
+     "number": null
     }
    }
   },
@@ -1626,10 +1506,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.18
+     "number": null
     },
     "US30Y": {
-     "number": 4.84
+     "number": null
     },
     "JP10Y": {
      "number": 1.961
@@ -1638,7 +1518,7 @@
      "number": 3.32
     },
     "利差": {
-     "number": 2.219
+     "number": null
     }
    }
   },
@@ -1666,10 +1546,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.15
+     "number": null
     },
     "US30Y": {
-     "number": 4.82
+     "number": null
     },
     "JP10Y": {
      "number": 1.957
@@ -1678,7 +1558,7 @@
      "number": 3.307
     },
     "利差": {
-     "number": 2.193
+     "number": null
     }
    }
   },
@@ -1706,10 +1586,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.16
+     "number": null
     },
     "US30Y": {
-     "number": 4.83
+     "number": null
     },
     "JP10Y": {
      "number": 1.98
@@ -1718,7 +1598,7 @@
      "number": 3.311
     },
     "利差": {
-     "number": 2.18
+     "number": null
     }
    }
   },
@@ -1746,10 +1626,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.12
+     "number": null
     },
     "US30Y": {
-     "number": 4.8
+     "number": null
     },
     "JP10Y": {
      "number": 1.972
@@ -1758,7 +1638,7 @@
      "number": 3.33
     },
     "利差": {
-     "number": 2.148
+     "number": null
     }
    }
   },
@@ -1786,10 +1666,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.16
+     "number": null
     },
     "US30Y": {
-     "number": 4.82
+     "number": null
     },
     "JP10Y": {
      "number": 2.021
@@ -1798,7 +1678,7 @@
      "number": 3.362
     },
     "利差": {
-     "number": 2.139
+     "number": null
     }
    }
   },
@@ -1826,10 +1706,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.17
+     "number": null
     },
     "US30Y": {
-     "number": 4.84
+     "number": null
     },
     "JP10Y": {
      "number": 2.073
@@ -1838,7 +1718,7 @@
      "number": 3.374
     },
     "利差": {
-     "number": 2.097
+     "number": null
     }
    }
   },
@@ -1866,10 +1746,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.18
+     "number": null
     },
     "US30Y": {
-     "number": 4.83
+     "number": null
     },
     "JP10Y": {
      "number": 2.039
@@ -1878,7 +1758,7 @@
      "number": 3.371
     },
     "利差": {
-     "number": 2.141
+     "number": null
     }
    }
   },
@@ -1906,10 +1786,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.15
+     "number": null
     },
     "US30Y": {
-     "number": 4.79
+     "number": null
     },
     "JP10Y": {
      "number": 2.044
@@ -1918,7 +1798,7 @@
      "number": 3.371
     },
     "利差": {
-     "number": 2.106
+     "number": null
     }
    }
   },
@@ -1986,10 +1866,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.14
+     "number": null
     },
     "US30Y": {
-     "number": 4.81
+     "number": null
     },
     "JP10Y": {
      "number": 2.039
@@ -1998,7 +1878,7 @@
      "number": 3.335
     },
     "利差": {
-     "number": 2.101
+     "number": null
     }
    }
   },
@@ -2026,10 +1906,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.12
+     "number": null
     },
     "US30Y": {
-     "number": 4.8
+     "number": null
     },
     "JP10Y": {
      "number": 2.052
@@ -2038,7 +1918,7 @@
      "number": 3.371
     },
     "利差": {
-     "number": 2.068
+     "number": null
     }
    }
   },
@@ -2066,96 +1946,16 @@
      ]
     },
     "US10Y": {
-     "number": 4.14
+     "number": null
     },
     "US30Y": {
-     "number": 4.81
+     "number": null
     },
     "JP10Y": {
      "number": 2.066
     },
     "JP30Y": {
      "number": 3.354
-    },
-    "利差": {
-     "number": 2.074
-    }
-   }
-  },
-  {
-   "uid": "y|2025-12-31",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2025-12-31"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "data/us_jp_yields.json .points"
-       }
-      }
-     ]
-    },
-    "US10Y": {
-     "number": 4.18
-    },
-    "US30Y": {
-     "number": 4.84
-    },
-    "JP10Y": {
-     "number": null
-    },
-    "JP30Y": {
-     "number": null
-    },
-    "利差": {
-     "number": null
-    }
-   }
-  },
-  {
-   "uid": "y|2026-01-02",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-01-02"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "data/us_jp_yields.json .points"
-       }
-      }
-     ]
-    },
-    "US10Y": {
-     "number": 4.19
-    },
-    "US30Y": {
-     "number": 4.86
-    },
-    "JP10Y": {
-     "number": null
-    },
-    "JP30Y": {
-     "number": null
     },
     "利差": {
      "number": null
@@ -2186,10 +1986,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.17
+     "number": null
     },
     "US30Y": {
-     "number": 4.85
+     "number": null
     },
     "JP10Y": {
      "number": 2.111
@@ -2198,7 +1998,7 @@
      "number": 3.393
     },
     "利差": {
-     "number": 2.059
+     "number": null
     }
    }
   },
@@ -2226,10 +2026,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.18
+     "number": null
     },
     "US30Y": {
-     "number": 4.86
+     "number": null
     },
     "JP10Y": {
      "number": 2.123
@@ -2238,7 +2038,7 @@
      "number": 3.42
     },
     "利差": {
-     "number": 2.057
+     "number": null
     }
    }
   },
@@ -2266,10 +2066,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.15
+     "number": null
     },
     "US30Y": {
-     "number": 4.82
+     "number": null
     },
     "JP10Y": {
      "number": 2.124
@@ -2278,7 +2078,7 @@
      "number": 3.428
     },
     "利差": {
-     "number": 2.026
+     "number": null
     }
    }
   },
@@ -2306,10 +2106,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.19
+     "number": null
     },
     "US30Y": {
-     "number": 4.85
+     "number": null
     },
     "JP10Y": {
      "number": 2.083
@@ -2318,7 +2118,7 @@
      "number": 3.435
     },
     "利差": {
-     "number": 2.107
+     "number": null
     }
    }
   },
@@ -2346,56 +2146,16 @@
      ]
     },
     "US10Y": {
-     "number": 4.18
+     "number": null
     },
     "US30Y": {
-     "number": 4.82
+     "number": null
     },
     "JP10Y": {
      "number": 2.096
     },
     "JP30Y": {
      "number": 3.399
-    },
-    "利差": {
-     "number": 2.084
-    }
-   }
-  },
-  {
-   "uid": "y|2026-01-12",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-01-12"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "data/us_jp_yields.json .points"
-       }
-      }
-     ]
-    },
-    "US10Y": {
-     "number": 4.19
-    },
-    "US30Y": {
-     "number": 4.83
-    },
-    "JP10Y": {
-     "number": null
-    },
-    "JP30Y": {
-     "number": null
     },
     "利差": {
      "number": null
@@ -2426,10 +2186,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.18
+     "number": null
     },
     "US30Y": {
-     "number": 4.83
+     "number": null
     },
     "JP10Y": {
      "number": 2.163
@@ -2438,7 +2198,7 @@
      "number": 3.462
     },
     "利差": {
-     "number": 2.017
+     "number": null
     }
    }
   },
@@ -2466,10 +2226,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.15
+     "number": null
     },
     "US30Y": {
-     "number": 4.79
+     "number": null
     },
     "JP10Y": {
      "number": 2.182
@@ -2478,7 +2238,7 @@
      "number": 3.486
     },
     "利差": {
-     "number": 1.968
+     "number": null
     }
    }
   },
@@ -2506,10 +2266,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.17
+     "number": null
     },
     "US30Y": {
-     "number": 4.79
+     "number": null
     },
     "JP10Y": {
      "number": 2.164
@@ -2518,7 +2278,7 @@
      "number": 3.454
     },
     "利差": {
-     "number": 2.006
+     "number": null
     }
    }
   },
@@ -2546,10 +2306,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.24
+     "number": null
     },
     "US30Y": {
-     "number": 4.83
+     "number": null
     },
     "JP10Y": {
      "number": 2.182
@@ -2558,7 +2318,7 @@
      "number": 3.462
     },
     "利差": {
-     "number": 2.058
+     "number": null
     }
    }
   },
@@ -2626,10 +2386,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.3
+     "number": null
     },
     "US30Y": {
-     "number": 4.91
+     "number": null
     },
     "JP10Y": {
      "number": 2.33
@@ -2638,7 +2398,7 @@
      "number": 3.765
     },
     "利差": {
-     "number": 1.97
+     "number": null
     }
    }
   },
@@ -2666,10 +2426,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.26
+     "number": null
     },
     "US30Y": {
-     "number": 4.87
+     "number": null
     },
     "JP10Y": {
      "number": 2.28
@@ -2678,7 +2438,7 @@
      "number": 3.647
     },
     "利差": {
-     "number": 1.98
+     "number": null
     }
    }
   },
@@ -2706,10 +2466,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.26
+     "number": null
     },
     "US30Y": {
-     "number": 4.84
+     "number": null
     },
     "JP10Y": {
      "number": 2.239
@@ -2718,7 +2478,7 @@
      "number": 3.604
     },
     "利差": {
-     "number": 2.021
+     "number": null
     }
    }
   },
@@ -2746,10 +2506,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.24
+     "number": null
     },
     "US30Y": {
-     "number": 4.82
+     "number": null
     },
     "JP10Y": {
      "number": 2.253
@@ -2758,7 +2518,7 @@
      "number": 3.585
     },
     "利差": {
-     "number": 1.987
+     "number": null
     }
    }
   },
@@ -2786,10 +2546,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.22
+     "number": null
     },
     "US30Y": {
-     "number": 4.8
+     "number": null
     },
     "JP10Y": {
      "number": 2.236
@@ -2798,7 +2558,7 @@
      "number": 3.568
     },
     "利差": {
-     "number": 1.984
+     "number": null
     }
    }
   },
@@ -2826,10 +2586,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.24
+     "number": null
     },
     "US30Y": {
-     "number": 4.83
+     "number": null
     },
     "JP10Y": {
      "number": 2.281
@@ -2838,7 +2598,7 @@
      "number": 3.599
     },
     "利差": {
-     "number": 1.959
+     "number": null
     }
    }
   },
@@ -2866,10 +2626,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.26
+     "number": null
     },
     "US30Y": {
-     "number": 4.85
+     "number": null
     },
     "JP10Y": {
      "number": 2.237
@@ -2878,7 +2638,7 @@
      "number": 3.579
     },
     "利差": {
-     "number": 2.023
+     "number": null
     }
    }
   },
@@ -2906,10 +2666,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.24
+     "number": null
     },
     "US30Y": {
-     "number": 4.85
+     "number": null
     },
     "JP10Y": {
      "number": 2.252
@@ -2918,7 +2678,7 @@
      "number": 3.566
     },
     "利差": {
-     "number": 1.988
+     "number": null
     }
    }
   },
@@ -2946,10 +2706,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.26
+     "number": null
     },
     "US30Y": {
-     "number": 4.87
+     "number": null
     },
     "JP10Y": {
      "number": 2.247
@@ -2958,7 +2718,7 @@
      "number": 3.577
     },
     "利差": {
-     "number": 2.013
+     "number": null
     }
    }
   },
@@ -2986,10 +2746,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.29
+     "number": null
     },
     "US30Y": {
-     "number": 4.9
+     "number": null
     },
     "JP10Y": {
      "number": 2.235
@@ -2998,7 +2758,7 @@
      "number": 3.583
     },
     "利差": {
-     "number": 2.055
+     "number": null
     }
    }
   },
@@ -3026,10 +2786,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.28
+     "number": null
     },
     "US30Y": {
-     "number": 4.9
+     "number": null
     },
     "JP10Y": {
      "number": 2.258
@@ -3038,7 +2798,7 @@
      "number": 3.58
     },
     "利差": {
-     "number": 2.022
+     "number": null
     }
    }
   },
@@ -3066,10 +2826,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.29
+     "number": null
     },
     "US30Y": {
-     "number": 4.91
+     "number": null
     },
     "JP10Y": {
      "number": 2.249
@@ -3078,7 +2838,7 @@
      "number": 3.579
     },
     "利差": {
-     "number": 2.041
+     "number": null
     }
    }
   },
@@ -3106,10 +2866,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.21
+     "number": null
     },
     "US30Y": {
-     "number": 4.85
+     "number": null
     },
     "JP10Y": {
      "number": 2.231
@@ -3118,7 +2878,7 @@
      "number": 3.525
     },
     "利差": {
-     "number": 1.979
+     "number": null
     }
    }
   },
@@ -3146,10 +2906,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.22
+     "number": null
     },
     "US30Y": {
-     "number": 4.85
+     "number": null
     },
     "JP10Y": {
      "number": 2.236
@@ -3158,7 +2918,7 @@
      "number": 3.513
     },
     "利差": {
-     "number": 1.984
+     "number": null
     }
    }
   },
@@ -3186,10 +2946,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.22
+     "number": null
     },
     "US30Y": {
-     "number": 4.85
+     "number": null
     },
     "JP10Y": {
      "number": 2.289
@@ -3198,7 +2958,7 @@
      "number": 3.52
     },
     "利差": {
-     "number": 1.931
+     "number": null
     }
    }
   },
@@ -3226,56 +2986,16 @@
      ]
     },
     "US10Y": {
-     "number": 4.16
+     "number": null
     },
     "US30Y": {
-     "number": 4.78
+     "number": null
     },
     "JP10Y": {
      "number": 2.241
     },
     "JP30Y": {
      "number": 3.468
-    },
-    "利差": {
-     "number": 1.919
-    }
-   }
-  },
-  {
-   "uid": "y|2026-02-11",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-02-11"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "data/us_jp_yields.json .points"
-       }
-      }
-     ]
-    },
-    "US10Y": {
-     "number": 4.18
-    },
-    "US30Y": {
-     "number": 4.82
-    },
-    "JP10Y": {
-     "number": null
-    },
-    "JP30Y": {
-     "number": null
     },
     "利差": {
      "number": null
@@ -3306,10 +3026,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.09
+     "number": null
     },
     "US30Y": {
-     "number": 4.72
+     "number": null
     },
     "JP10Y": {
      "number": 2.238
@@ -3318,7 +3038,7 @@
      "number": 3.413
     },
     "利差": {
-     "number": 1.852
+     "number": null
     }
    }
   },
@@ -3346,10 +3066,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.04
+     "number": null
     },
     "US30Y": {
-     "number": 4.69
+     "number": null
     },
     "JP10Y": {
      "number": 2.218
@@ -3358,7 +3078,7 @@
      "number": 3.422
     },
     "利差": {
-     "number": 1.822
+     "number": null
     }
    }
   },
@@ -3426,10 +3146,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.05
+     "number": null
     },
     "US30Y": {
-     "number": 4.68
+     "number": null
     },
     "JP10Y": {
      "number": 2.143
@@ -3438,7 +3158,7 @@
      "number": 3.382
     },
     "利差": {
-     "number": 1.907
+     "number": null
     }
    }
   },
@@ -3466,10 +3186,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.09
+     "number": null
     },
     "US30Y": {
-     "number": 4.71
+     "number": null
     },
     "JP10Y": {
      "number": 2.152
@@ -3478,7 +3198,7 @@
      "number": 3.371
     },
     "利差": {
-     "number": 1.938
+     "number": null
     }
    }
   },
@@ -3506,10 +3226,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.08
+     "number": null
     },
     "US30Y": {
-     "number": 4.7
+     "number": null
     },
     "JP10Y": {
      "number": 2.157
@@ -3518,7 +3238,7 @@
      "number": 3.34
     },
     "利差": {
-     "number": 1.923
+     "number": null
     }
    }
   },
@@ -3546,56 +3266,16 @@
      ]
     },
     "US10Y": {
-     "number": 4.08
+     "number": null
     },
     "US30Y": {
-     "number": 4.72
+     "number": null
     },
     "JP10Y": {
      "number": 2.125
     },
     "JP30Y": {
      "number": 3.323
-    },
-    "利差": {
-     "number": 1.955
-    }
-   }
-  },
-  {
-   "uid": "y|2026-02-23",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-02-23"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "data/us_jp_yields.json .points"
-       }
-      }
-     ]
-    },
-    "US10Y": {
-     "number": 4.03
-    },
-    "US30Y": {
-     "number": 4.7
-    },
-    "JP10Y": {
-     "number": null
-    },
-    "JP30Y": {
-     "number": null
     },
     "利差": {
      "number": null
@@ -3626,10 +3306,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.04
+     "number": null
     },
     "US30Y": {
-     "number": 4.7
+     "number": null
     },
     "JP10Y": {
      "number": 2.119
@@ -3638,7 +3318,7 @@
      "number": 3.295
     },
     "利差": {
-     "number": 1.921
+     "number": null
     }
    }
   },
@@ -3666,10 +3346,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.05
+     "number": null
     },
     "US30Y": {
-     "number": 4.7
+     "number": null
     },
     "JP10Y": {
      "number": 2.154
@@ -3678,7 +3358,7 @@
      "number": 3.38
     },
     "利差": {
-     "number": 1.896
+     "number": null
     }
    }
   },
@@ -3706,10 +3386,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.02
+     "number": null
     },
     "US30Y": {
-     "number": 4.67
+     "number": null
     },
     "JP10Y": {
      "number": 2.168
@@ -3718,7 +3398,7 @@
      "number": 3.366
     },
     "利差": {
-     "number": 1.852
+     "number": null
     }
    }
   },
@@ -3746,10 +3426,10 @@
      ]
     },
     "US10Y": {
-     "number": 3.97
+     "number": null
     },
     "US30Y": {
-     "number": 4.64
+     "number": null
     },
     "JP10Y": {
      "number": 2.132
@@ -3758,7 +3438,7 @@
      "number": 3.342
     },
     "利差": {
-     "number": 1.838
+     "number": null
     }
    }
   },
@@ -3786,10 +3466,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.05
+     "number": null
     },
     "US30Y": {
-     "number": 4.7
+     "number": null
     },
     "JP10Y": {
      "number": 2.087
@@ -3798,7 +3478,7 @@
      "number": 3.293
     },
     "利差": {
-     "number": 1.963
+     "number": null
     }
    }
   },
@@ -3826,10 +3506,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.06
+     "number": null
     },
     "US30Y": {
-     "number": 4.7
+     "number": null
     },
     "JP10Y": {
      "number": 2.148
@@ -3838,7 +3518,7 @@
      "number": 3.337
     },
     "利差": {
-     "number": 1.912
+     "number": null
     }
    }
   },
@@ -3866,10 +3546,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.09
+     "number": null
     },
     "US30Y": {
-     "number": 4.72
+     "number": null
     },
     "JP10Y": {
      "number": 2.134
@@ -3878,7 +3558,7 @@
      "number": 3.353
     },
     "利差": {
-     "number": 1.956
+     "number": null
     }
    }
   },
@@ -3906,10 +3586,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.13
+     "number": null
     },
     "US30Y": {
-     "number": 4.74
+     "number": null
     },
     "JP10Y": {
      "number": 2.175
@@ -3918,7 +3598,7 @@
      "number": 3.374
     },
     "利差": {
-     "number": 1.955
+     "number": null
     }
    }
   },
@@ -3946,10 +3626,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.15
+     "number": null
     },
     "US30Y": {
-     "number": 4.77
+     "number": null
     },
     "JP10Y": {
      "number": 2.18
@@ -3958,7 +3638,7 @@
      "number": 3.384
     },
     "利差": {
-     "number": 1.97
+     "number": null
     }
    }
   },
@@ -3986,10 +3666,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.12
+     "number": null
     },
     "US30Y": {
-     "number": 4.72
+     "number": null
     },
     "JP10Y": {
      "number": 2.205
@@ -3998,7 +3678,7 @@
      "number": 3.44
     },
     "利差": {
-     "number": 1.915
+     "number": null
     }
    }
   },
@@ -4026,10 +3706,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.15
+     "number": null
     },
     "US30Y": {
-     "number": 4.78
+     "number": null
     },
     "JP10Y": {
      "number": 2.199
@@ -4038,7 +3718,7 @@
      "number": 3.412
     },
     "利差": {
-     "number": 1.951
+     "number": null
     }
    }
   },
@@ -4066,10 +3746,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.21
+     "number": null
     },
     "US30Y": {
-     "number": 4.86
+     "number": null
     },
     "JP10Y": {
      "number": 2.178
@@ -4078,7 +3758,7 @@
      "number": 3.421
     },
     "利差": {
-     "number": 2.032
+     "number": null
     }
    }
   },
@@ -4106,10 +3786,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.27
+     "number": null
     },
     "US30Y": {
-     "number": 4.88
+     "number": null
     },
     "JP10Y": {
      "number": 2.201
@@ -4118,7 +3798,7 @@
      "number": 3.451
     },
     "利差": {
-     "number": 2.069
+     "number": null
     }
    }
   },
@@ -4146,10 +3826,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.28
+     "number": null
     },
     "US30Y": {
-     "number": 4.9
+     "number": null
     },
     "JP10Y": {
      "number": 2.255
@@ -4158,7 +3838,7 @@
      "number": 3.479
     },
     "利差": {
-     "number": 2.025
+     "number": null
     }
    }
   },
@@ -4186,10 +3866,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.23
+     "number": null
     },
     "US30Y": {
-     "number": 4.86
+     "number": null
     },
     "JP10Y": {
      "number": 2.288
@@ -4198,7 +3878,7 @@
      "number": 3.515
     },
     "利差": {
-     "number": 1.942
+     "number": null
     }
    }
   },
@@ -4226,10 +3906,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.2
+     "number": null
     },
     "US30Y": {
-     "number": 4.85
+     "number": null
     },
     "JP10Y": {
      "number": 2.279
@@ -4238,7 +3918,7 @@
      "number": 3.514
     },
     "利差": {
-     "number": 1.921
+     "number": null
     }
    }
   },
@@ -4266,10 +3946,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.26
+     "number": null
     },
     "US30Y": {
-     "number": 4.88
+     "number": null
     },
     "JP10Y": {
      "number": 2.231
@@ -4278,7 +3958,7 @@
      "number": 3.462
     },
     "利差": {
-     "number": 2.029
+     "number": null
     }
    }
   },
@@ -4306,56 +3986,16 @@
      ]
     },
     "US10Y": {
-     "number": 4.25
+     "number": null
     },
     "US30Y": {
-     "number": 4.83
+     "number": null
     },
     "JP10Y": {
      "number": 2.273
     },
     "JP30Y": {
      "number": 3.491
-    },
-    "利差": {
-     "number": 1.977
-    }
-   }
-  },
-  {
-   "uid": "y|2026-03-20",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-03-20"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "data/us_jp_yields.json .points"
-       }
-      }
-     ]
-    },
-    "US10Y": {
-     "number": 4.39
-    },
-    "US30Y": {
-     "number": 4.96
-    },
-    "JP10Y": {
-     "number": null
-    },
-    "JP30Y": {
-     "number": null
     },
     "利差": {
      "number": null
@@ -4386,10 +4026,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.34
+     "number": null
     },
     "US30Y": {
-     "number": 4.91
+     "number": null
     },
     "JP10Y": {
      "number": 2.322
@@ -4398,7 +4038,7 @@
      "number": 3.522
     },
     "利差": {
-     "number": 2.018
+     "number": null
     }
    }
   },
@@ -4426,10 +4066,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.39
+     "number": null
     },
     "US30Y": {
-     "number": 4.94
+     "number": null
     },
     "JP10Y": {
      "number": 2.282
@@ -4438,7 +4078,7 @@
      "number": 3.509
     },
     "利差": {
-     "number": 2.108
+     "number": null
     }
    }
   },
@@ -4466,10 +4106,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.33
+     "number": null
     },
     "US30Y": {
-     "number": 4.89
+     "number": null
     },
     "JP10Y": {
      "number": 2.267
@@ -4478,7 +4118,7 @@
      "number": 3.479
     },
     "利差": {
-     "number": 2.063
+     "number": null
     }
    }
   },
@@ -4506,10 +4146,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.42
+     "number": null
     },
     "US30Y": {
-     "number": 4.93
+     "number": null
     },
     "JP10Y": {
      "number": 2.286
@@ -4518,7 +4158,7 @@
      "number": 3.489
     },
     "利差": {
-     "number": 2.134
+     "number": null
     }
    }
   },
@@ -4546,10 +4186,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.44
+     "number": null
     },
     "US30Y": {
-     "number": 4.98
+     "number": null
     },
     "JP10Y": {
      "number": 2.38
@@ -4558,7 +4198,7 @@
      "number": 3.629
     },
     "利差": {
-     "number": 2.06
+     "number": null
     }
    }
   },
@@ -4586,10 +4226,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.35
+     "number": null
     },
     "US30Y": {
-     "number": 4.91
+     "number": null
     },
     "JP10Y": {
      "number": 2.368
@@ -4598,7 +4238,7 @@
      "number": 3.698
     },
     "利差": {
-     "number": 1.982
+     "number": null
     }
    }
   },
@@ -4626,10 +4266,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.3
+     "number": null
     },
     "US30Y": {
-     "number": 4.88
+     "number": null
     },
     "JP10Y": {
      "number": 2.366
@@ -4638,7 +4278,7 @@
      "number": 3.64
     },
     "利差": {
-     "number": 1.934
+     "number": null
     }
    }
   },
@@ -4666,10 +4306,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.33
+     "number": null
     },
     "US30Y": {
-     "number": 4.91
+     "number": null
     },
     "JP10Y": {
      "number": 2.315
@@ -4678,7 +4318,7 @@
      "number": 3.564
     },
     "利差": {
-     "number": 2.015
+     "number": null
     }
    }
   },
@@ -4706,10 +4346,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.31
+     "number": null
     },
     "US30Y": {
-     "number": 4.88
+     "number": null
     },
     "JP10Y": {
      "number": 2.395
@@ -4718,7 +4358,7 @@
      "number": 3.614
     },
     "利差": {
-     "number": 1.915
+     "number": null
     }
    }
   },
@@ -4746,10 +4386,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.35
+     "number": null
     },
     "US30Y": {
-     "number": 4.91
+     "number": null
     },
     "JP10Y": {
      "number": 2.386
@@ -4758,7 +4398,7 @@
      "number": 3.611
     },
     "利差": {
-     "number": 1.964
+     "number": null
     }
    }
   },
@@ -4786,10 +4426,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.34
+     "number": null
     },
     "US30Y": {
-     "number": 4.89
+     "number": null
     },
     "JP10Y": {
      "number": 2.429
@@ -4798,7 +4438,7 @@
      "number": 3.672
     },
     "利差": {
-     "number": 1.911
+     "number": null
     }
    }
   },
@@ -4826,10 +4466,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.33
+     "number": null
     },
     "US30Y": {
-     "number": 4.9
+     "number": null
     },
     "JP10Y": {
      "number": 2.411
@@ -4838,7 +4478,7 @@
      "number": 3.667
     },
     "利差": {
-     "number": 1.919
+     "number": null
     }
    }
   },
@@ -4866,10 +4506,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.29
+     "number": null
     },
     "US30Y": {
-     "number": 4.89
+     "number": null
     },
     "JP10Y": {
      "number": 2.374
@@ -4878,7 +4518,7 @@
      "number": 3.615
     },
     "利差": {
-     "number": 1.916
+     "number": null
     }
    }
   },
@@ -4906,10 +4546,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.29
+     "number": null
     },
     "US30Y": {
-     "number": 4.9
+     "number": null
     },
     "JP10Y": {
      "number": 2.397
@@ -4918,7 +4558,7 @@
      "number": 3.619
     },
     "利差": {
-     "number": 1.893
+     "number": null
     }
    }
   },
@@ -4946,10 +4586,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.31
+     "number": null
     },
     "US30Y": {
-     "number": 4.91
+     "number": null
     },
     "JP10Y": {
      "number": 2.439
@@ -4958,7 +4598,7 @@
      "number": 3.638
     },
     "利差": {
-     "number": 1.871
+     "number": null
     }
    }
   },
@@ -4986,10 +4626,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.3
+     "number": null
     },
     "US30Y": {
-     "number": 4.9
+     "number": null
     },
     "JP10Y": {
      "number": 2.467
@@ -4998,7 +4638,7 @@
      "number": 3.698
     },
     "利差": {
-     "number": 1.833
+     "number": null
     }
    }
   },
@@ -5026,10 +4666,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.26
+     "number": null
     },
     "US30Y": {
-     "number": 4.87
+     "number": null
     },
     "JP10Y": {
      "number": 2.423
@@ -5038,7 +4678,7 @@
      "number": 3.633
     },
     "利差": {
-     "number": 1.837
+     "number": null
     }
    }
   },
@@ -5066,10 +4706,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.29
+     "number": null
     },
     "US30Y": {
-     "number": 4.89
+     "number": null
     },
     "JP10Y": {
      "number": 2.414
@@ -5078,7 +4718,7 @@
      "number": 3.606
     },
     "利差": {
-     "number": 1.876
+     "number": null
     }
    }
   },
@@ -5106,10 +4746,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.32
+     "number": null
     },
     "US30Y": {
-     "number": 4.93
+     "number": null
     },
     "JP10Y": {
      "number": 2.409
@@ -5118,7 +4758,7 @@
      "number": 3.623
     },
     "利差": {
-     "number": 1.911
+     "number": null
     }
    }
   },
@@ -5146,10 +4786,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.26
+     "number": null
     },
     "US30Y": {
-     "number": 4.88
+     "number": null
     },
     "JP10Y": {
      "number": 2.428
@@ -5158,7 +4798,7 @@
      "number": 3.622
     },
     "利差": {
-     "number": 1.832
+     "number": null
     }
    }
   },
@@ -5186,10 +4826,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.26
+     "number": null
     },
     "US30Y": {
-     "number": 4.88
+     "number": null
     },
     "JP10Y": {
      "number": 2.405
@@ -5198,7 +4838,7 @@
      "number": 3.586
     },
     "利差": {
-     "number": 1.855
+     "number": null
     }
    }
   },
@@ -5226,10 +4866,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.3
+     "number": null
     },
     "US30Y": {
-     "number": 4.89
+     "number": null
     },
     "JP10Y": {
      "number": 2.392
@@ -5238,7 +4878,7 @@
      "number": 3.581
     },
     "利差": {
-     "number": 1.908
+     "number": null
     }
    }
   },
@@ -5266,10 +4906,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.3
+     "number": null
     },
     "US30Y": {
-     "number": 4.9
+     "number": null
     },
     "JP10Y": {
      "number": 2.406
@@ -5278,7 +4918,7 @@
      "number": 3.597
     },
     "利差": {
-     "number": 1.894
+     "number": null
     }
    }
   },
@@ -5306,10 +4946,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.34
+     "number": null
     },
     "US30Y": {
-     "number": 4.92
+     "number": null
     },
     "JP10Y": {
      "number": 2.429
@@ -5318,7 +4958,7 @@
      "number": 3.63
     },
     "利差": {
-     "number": 1.911
+     "number": null
     }
    }
   },
@@ -5346,10 +4986,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.31
+     "number": null
     },
     "US30Y": {
-     "number": 4.91
+     "number": null
     },
     "JP10Y": {
      "number": 2.443
@@ -5358,7 +4998,7 @@
      "number": 3.66
     },
     "利差": {
-     "number": 1.867
+     "number": null
     }
    }
   },
@@ -5386,10 +5026,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.35
+     "number": null
     },
     "US30Y": {
-     "number": 4.94
+     "number": null
     },
     "JP10Y": {
      "number": 2.477
@@ -5398,7 +5038,7 @@
      "number": 3.675
     },
     "利差": {
-     "number": 1.873
+     "number": null
     }
    }
   },
@@ -5426,56 +5066,16 @@
      ]
     },
     "US10Y": {
-     "number": 4.36
+     "number": null
     },
     "US30Y": {
-     "number": 4.94
+     "number": null
     },
     "JP10Y": {
      "number": 2.468
     },
     "JP30Y": {
      "number": 3.647
-    },
-    "利差": {
-     "number": 1.892
-    }
-   }
-  },
-  {
-   "uid": "y|2026-04-29",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-04-29"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "data/us_jp_yields.json .points"
-       }
-      }
-     ]
-    },
-    "US10Y": {
-     "number": 4.42
-    },
-    "US30Y": {
-     "number": 4.98
-    },
-    "JP10Y": {
-     "number": null
-    },
-    "JP30Y": {
-     "number": null
     },
     "利差": {
      "number": null
@@ -5506,10 +5106,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.4
+     "number": null
     },
     "US30Y": {
-     "number": 4.98
+     "number": null
     },
     "JP10Y": {
      "number": 2.52
@@ -5518,7 +5118,7 @@
      "number": 3.721
     },
     "利差": {
-     "number": 1.88
+     "number": null
     }
    }
   },
@@ -5546,136 +5146,16 @@
      ]
     },
     "US10Y": {
-     "number": 4.39
+     "number": null
     },
     "US30Y": {
-     "number": 4.97
+     "number": null
     },
     "JP10Y": {
      "number": 2.507
     },
     "JP30Y": {
      "number": 3.706
-    },
-    "利差": {
-     "number": 1.883
-    }
-   }
-  },
-  {
-   "uid": "y|2026-05-04",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-05-04"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "data/us_jp_yields.json .points"
-       }
-      }
-     ]
-    },
-    "US10Y": {
-     "number": 4.45
-    },
-    "US30Y": {
-     "number": 5.02
-    },
-    "JP10Y": {
-     "number": null
-    },
-    "JP30Y": {
-     "number": null
-    },
-    "利差": {
-     "number": null
-    }
-   }
-  },
-  {
-   "uid": "y|2026-05-05",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-05-05"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "data/us_jp_yields.json .points"
-       }
-      }
-     ]
-    },
-    "US10Y": {
-     "number": 4.43
-    },
-    "US30Y": {
-     "number": 4.98
-    },
-    "JP10Y": {
-     "number": null
-    },
-    "JP30Y": {
-     "number": null
-    },
-    "利差": {
-     "number": null
-    }
-   }
-  },
-  {
-   "uid": "y|2026-05-06",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-05-06"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "data/us_jp_yields.json .points"
-       }
-      }
-     ]
-    },
-    "US10Y": {
-     "number": 4.36
-    },
-    "US30Y": {
-     "number": 4.94
-    },
-    "JP10Y": {
-     "number": null
-    },
-    "JP30Y": {
-     "number": null
     },
     "利差": {
      "number": null
@@ -5706,10 +5186,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.41
+     "number": null
     },
     "US30Y": {
-     "number": 4.97
+     "number": null
     },
     "JP10Y": {
      "number": 2.485
@@ -5718,7 +5198,7 @@
      "number": 3.714
     },
     "利差": {
-     "number": 1.925
+     "number": null
     }
    }
   },
@@ -5746,10 +5226,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.38
+     "number": null
     },
     "US30Y": {
-     "number": 4.95
+     "number": null
     },
     "JP10Y": {
      "number": 2.485
@@ -5758,7 +5238,7 @@
      "number": 3.706
     },
     "利差": {
-     "number": 1.895
+     "number": null
     }
    }
   },
@@ -5786,10 +5266,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.42
+     "number": null
     },
     "US30Y": {
-     "number": 4.98
+     "number": null
     },
     "JP10Y": {
      "number": 2.527
@@ -5798,7 +5278,7 @@
      "number": 3.741
     },
     "利差": {
-     "number": 1.893
+     "number": null
     }
    }
   },
@@ -5826,10 +5306,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.46
+     "number": null
     },
     "US30Y": {
-     "number": 5.03
+     "number": null
     },
     "JP10Y": {
      "number": 2.546
@@ -5838,7 +5318,7 @@
      "number": 3.78
     },
     "利差": {
-     "number": 1.914
+     "number": null
     }
    }
   },
@@ -5866,10 +5346,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.46
+     "number": null
     },
     "US30Y": {
-     "number": 5.03
+     "number": null
     },
     "JP10Y": {
      "number": 2.587
@@ -5878,7 +5358,7 @@
      "number": 3.783
     },
     "利差": {
-     "number": 1.873
+     "number": null
     }
    }
   },
@@ -5906,10 +5386,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.47
+     "number": null
     },
     "US30Y": {
-     "number": 5.02
+     "number": null
     },
     "JP10Y": {
      "number": 2.628
@@ -5918,7 +5398,7 @@
      "number": 3.852
     },
     "利差": {
-     "number": 1.842
+     "number": null
     }
    }
   },
@@ -5946,10 +5426,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.59
+     "number": null
     },
     "US30Y": {
-     "number": 5.12
+     "number": null
     },
     "JP10Y": {
      "number": 2.691
@@ -5958,7 +5438,7 @@
      "number": 3.922
     },
     "利差": {
-     "number": 1.899
+     "number": null
     }
    }
   },
@@ -5986,10 +5466,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.61
+     "number": null
     },
     "US30Y": {
-     "number": 5.14
+     "number": null
     },
     "JP10Y": {
      "number": 2.729
@@ -5998,7 +5478,7 @@
      "number": 4.0
     },
     "利差": {
-     "number": 1.881
+     "number": null
     }
    }
   },
@@ -6026,10 +5506,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.67
+     "number": null
     },
     "US30Y": {
-     "number": 5.18
+     "number": null
     },
     "JP10Y": {
      "number": 2.783
@@ -6038,7 +5518,7 @@
      "number": 4.043
     },
     "利差": {
-     "number": 1.887
+     "number": null
     }
    }
   },
@@ -6066,10 +5546,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.57
+     "number": null
     },
     "US30Y": {
-     "number": 5.11
+     "number": null
     },
     "JP10Y": {
      "number": 2.77
@@ -6078,7 +5558,7 @@
      "number": 4.0
     },
     "利差": {
-     "number": 1.8
+     "number": null
     }
    }
   },
@@ -6106,10 +5586,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.57
+     "number": null
     },
     "US30Y": {
-     "number": 5.1
+     "number": null
     },
     "JP10Y": {
      "number": 2.748
@@ -6118,7 +5598,7 @@
      "number": 3.939
     },
     "利差": {
-     "number": 1.822
+     "number": null
     }
    }
   },
@@ -6146,10 +5626,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.56
+     "number": null
     },
     "US30Y": {
-     "number": 5.07
+     "number": null
     },
     "JP10Y": {
      "number": 2.749
@@ -6158,7 +5638,7 @@
      "number": 3.931
     },
     "利差": {
-     "number": 1.811
+     "number": null
     }
    }
   },
@@ -6226,10 +5706,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.5
+     "number": null
     },
     "US30Y": {
-     "number": 5.03
+     "number": null
     },
     "JP10Y": {
      "number": 2.713
@@ -6238,7 +5718,7 @@
      "number": 3.866
     },
     "利差": {
-     "number": 1.787
+     "number": null
     }
    }
   },
@@ -6266,10 +5746,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.48
+     "number": null
     },
     "US30Y": {
-     "number": 5.01
+     "number": null
     },
     "JP10Y": {
      "number": 2.687
@@ -6278,7 +5758,7 @@
      "number": 3.856
     },
     "利差": {
-     "number": 1.793
+     "number": null
     }
    }
   },
@@ -6306,10 +5786,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.45
+     "number": null
     },
     "US30Y": {
-     "number": 4.98
+     "number": null
     },
     "JP10Y": {
      "number": 2.692
@@ -6318,7 +5798,7 @@
      "number": 3.896
     },
     "利差": {
-     "number": 1.758
+     "number": null
     }
    }
   },
@@ -6346,10 +5826,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.45
+     "number": null
     },
     "US30Y": {
-     "number": 4.99
+     "number": null
     },
     "JP10Y": {
      "number": 2.657
@@ -6358,7 +5838,7 @@
      "number": 3.859
     },
     "利差": {
-     "number": 1.793
+     "number": null
     }
    }
   },
@@ -6386,10 +5866,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.47
+     "number": null
     },
     "US30Y": {
-     "number": 4.99
+     "number": null
     },
     "JP10Y": {
      "number": 2.682
@@ -6398,7 +5878,7 @@
      "number": 3.863
     },
     "利差": {
-     "number": 1.788
+     "number": null
     }
    }
   },
@@ -6426,10 +5906,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.46
+     "number": null
     },
     "US30Y": {
-     "number": 4.97
+     "number": null
     },
     "JP10Y": {
      "number": 2.577
@@ -6438,7 +5918,7 @@
      "number": 3.81
     },
     "利差": {
-     "number": 1.883
+     "number": null
     }
    }
   },
@@ -6466,10 +5946,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.49
+     "number": null
     },
     "US30Y": {
-     "number": 4.99
+     "number": null
     },
     "JP10Y": {
      "number": 2.645
@@ -6478,7 +5958,7 @@
      "number": 3.817
     },
     "利差": {
-     "number": 1.845
+     "number": null
     }
    }
   },
@@ -6506,10 +5986,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.47
+     "number": null
     },
     "US30Y": {
-     "number": 4.97
+     "number": null
     },
     "JP10Y": {
      "number": 2.671
@@ -6518,7 +5998,7 @@
      "number": 3.833
     },
     "利差": {
-     "number": 1.799
+     "number": null
     }
    }
   },
@@ -6546,10 +6026,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.55
+     "number": null
     },
     "US30Y": {
-     "number": 5.01
+     "number": null
     },
     "JP10Y": {
      "number": 2.669
@@ -6558,7 +6038,7 @@
      "number": 3.841
     },
     "利差": {
-     "number": 1.881
+     "number": null
     }
    }
   },
@@ -6586,10 +6066,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.56
+     "number": null
     },
     "US30Y": {
-     "number": 5.03
+     "number": null
     },
     "JP10Y": {
      "number": 2.715
@@ -6598,7 +6078,7 @@
      "number": 3.876
     },
     "利差": {
-     "number": 1.845
+     "number": null
     }
    }
   },
@@ -6626,10 +6106,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.53
+     "number": null
     },
     "US30Y": {
-     "number": 5.01
+     "number": null
     },
     "JP10Y": {
      "number": 2.669
@@ -6638,7 +6118,7 @@
      "number": 3.823
     },
     "利差": {
-     "number": 1.861
+     "number": null
     }
    }
   },
@@ -6666,10 +6146,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.55
+     "number": null
     },
     "US30Y": {
-     "number": 5.03
+     "number": null
     },
     "JP10Y": {
      "number": 2.681
@@ -6678,7 +6158,7 @@
      "number": 3.811
     },
     "利差": {
-     "number": 1.869
+     "number": null
     }
    }
   },
@@ -6706,10 +6186,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.45
+     "number": null
     },
     "US30Y": {
-     "number": 4.95
+     "number": null
     },
     "JP10Y": {
      "number": 2.682
@@ -6718,7 +6198,7 @@
      "number": 3.823
     },
     "利差": {
-     "number": 1.768
+     "number": null
     }
    }
   },
@@ -6746,10 +6226,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.48
+     "number": null
     },
     "US30Y": {
-     "number": 4.97
+     "number": null
     },
     "JP10Y": {
      "number": 2.643
@@ -6758,7 +6238,7 @@
      "number": 3.767
     },
     "利差": {
-     "number": 1.837
+     "number": null
     }
    }
   },
@@ -6786,10 +6266,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.47
+     "number": null
     },
     "US30Y": {
-     "number": 4.97
+     "number": null
     },
     "JP10Y": {
      "number": 2.589
@@ -6798,7 +6278,7 @@
      "number": 3.725
     },
     "利差": {
-     "number": 1.881
+     "number": null
     }
    }
   },
@@ -6826,10 +6306,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.43
+     "number": null
     },
     "US30Y": {
-     "number": 4.93
+     "number": null
     },
     "JP10Y": {
      "number": 2.655
@@ -6838,7 +6318,7 @@
      "number": 3.747
     },
     "利差": {
-     "number": 1.775
+     "number": null
     }
    }
   },
@@ -6866,10 +6346,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.49
+     "number": null
     },
     "US30Y": {
-     "number": 4.93
+     "number": null
     },
     "JP10Y": {
      "number": 2.613
@@ -6878,7 +6358,7 @@
      "number": 3.709
     },
     "利差": {
-     "number": 1.877
+     "number": null
     }
    }
   },
@@ -6906,10 +6386,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.46
+     "number": null
     },
     "US30Y": {
-     "number": 4.9
+     "number": null
     },
     "JP10Y": {
      "number": 2.628
@@ -6918,7 +6398,7 @@
      "number": 3.737
     },
     "利差": {
-     "number": 1.832
+     "number": null
     }
    }
   },
@@ -6986,10 +6466,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.51
+     "number": null
     },
     "US30Y": {
-     "number": 4.95
+     "number": null
     },
     "JP10Y": {
      "number": 2.677
@@ -6998,7 +6478,7 @@
      "number": 3.797
     },
     "利差": {
-     "number": 1.833
+     "number": null
     }
    }
   },
@@ -7026,10 +6506,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.5
+     "number": null
     },
     "US30Y": {
-     "number": 4.94
+     "number": null
     },
     "JP10Y": {
      "number": 2.683
@@ -7038,7 +6518,7 @@
      "number": 3.79
     },
     "利差": {
-     "number": 1.817
+     "number": null
     }
    }
   },
@@ -7066,10 +6546,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.41
+     "number": null
     },
     "US30Y": {
-     "number": 4.86
+     "number": null
     },
     "JP10Y": {
      "number": 2.674
@@ -7078,7 +6558,7 @@
      "number": 3.808
     },
     "利差": {
-     "number": 1.736
+     "number": null
     }
    }
   },
@@ -7106,10 +6586,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.4
+     "number": null
     },
     "US30Y": {
-     "number": 4.86
+     "number": null
     },
     "JP10Y": {
      "number": 2.637
@@ -7118,7 +6598,7 @@
      "number": 3.781
     },
     "利差": {
-     "number": 1.763
+     "number": null
     }
    }
   },
@@ -7146,10 +6626,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.38
+     "number": null
     },
     "US30Y": {
-     "number": 4.87
+     "number": null
     },
     "JP10Y": {
      "number": 2.611
@@ -7158,7 +6638,7 @@
      "number": 3.759
     },
     "利差": {
-     "number": 1.769
+     "number": null
     }
    }
   },
@@ -7186,10 +6666,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.38
+     "number": null
     },
     "US30Y": {
-     "number": 4.86
+     "number": null
     },
     "JP10Y": {
      "number": 2.644
@@ -7198,7 +6678,7 @@
      "number": 3.785
     },
     "利差": {
-     "number": 1.736
+     "number": null
     }
    }
   },
@@ -7226,10 +6706,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.44
+     "number": null
     },
     "US30Y": {
-     "number": 4.91
+     "number": null
     },
     "JP10Y": {
      "number": 2.69
@@ -7238,7 +6718,7 @@
      "number": 3.873
     },
     "利差": {
-     "number": 1.75
+     "number": null
     }
    }
   },
@@ -7266,10 +6746,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.48
+     "number": null
     },
     "US30Y": {
-     "number": 4.97
+     "number": null
     },
     "JP10Y": {
      "number": 2.711
@@ -7278,7 +6758,7 @@
      "number": 3.883
     },
     "利差": {
-     "number": 1.769
+     "number": null
     }
    }
   },
@@ -7306,10 +6786,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.49
+     "number": null
     },
     "US30Y": {
-     "number": 4.98
+     "number": null
     },
     "JP10Y": {
      "number": 2.778
@@ -7318,7 +6798,7 @@
      "number": 3.937
     },
     "利差": {
-     "number": 1.712
+     "number": null
     }
    }
   },
@@ -7386,10 +6866,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.48
+     "number": null
     },
     "US30Y": {
-     "number": 4.99
+     "number": null
     },
     "JP10Y": {
      "number": 2.823
@@ -7398,7 +6878,7 @@
      "number": 3.976
     },
     "利差": {
-     "number": 1.657
+     "number": null
     }
    }
   },
@@ -7426,10 +6906,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.55
+     "number": null
     },
     "US30Y": {
-     "number": 5.05
+     "number": null
     },
     "JP10Y": {
      "number": 2.834
@@ -7438,7 +6918,7 @@
      "number": 3.951
     },
     "利差": {
-     "number": 1.716
+     "number": null
     }
    }
   },
@@ -7466,10 +6946,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.56
+     "number": null
     },
     "US30Y": {
-     "number": 5.06
+     "number": null
     },
     "JP10Y": {
      "number": 2.856
@@ -7478,7 +6958,7 @@
      "number": 3.998
     },
     "利差": {
-     "number": 1.704
+     "number": null
     }
    }
   },
@@ -7506,10 +6986,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.54
+     "number": null
     },
     "US30Y": {
-     "number": 5.05
+     "number": null
     },
     "JP10Y": {
      "number": 2.866
@@ -7518,7 +6998,7 @@
      "number": 4.013
     },
     "利差": {
-     "number": 1.674
+     "number": null
     }
    }
   },
@@ -7546,10 +7026,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.56
+     "number": null
     },
     "US30Y": {
-     "number": 5.06
+     "number": null
     },
     "JP10Y": {
      "number": 2.761
@@ -7558,7 +7038,7 @@
      "number": 3.938
     },
     "利差": {
-     "number": 1.799
+     "number": null
     }
    }
   },
@@ -7586,10 +7066,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.62
+     "number": null
     },
     "US30Y": {
-     "number": 5.1
+     "number": null
     },
     "JP10Y": {
      "number": 2.786
@@ -7598,7 +7078,7 @@
      "number": 3.922
     },
     "利差": {
-     "number": 1.834
+     "number": null
     }
    }
   },
@@ -7626,10 +7106,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.58
+     "number": null
     },
     "US30Y": {
-     "number": 5.08
+     "number": null
     },
     "JP10Y": {
      "number": 2.713
@@ -7638,7 +7118,7 @@
      "number": 3.787
     },
     "利差": {
-     "number": 1.867
+     "number": null
     }
    }
   },
@@ -7666,10 +7146,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.55
+     "number": null
     },
     "US30Y": {
-     "number": 5.08
+     "number": null
     },
     "JP10Y": {
      "number": 2.697
@@ -7678,7 +7158,7 @@
      "number": 3.802
     },
     "利差": {
-     "number": 1.853
+     "number": null
     }
    }
   },
@@ -7706,10 +7186,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.57
+     "number": null
     },
     "US30Y": {
-     "number": 5.09
+     "number": null
     },
     "JP10Y": {
      "number": 2.719
@@ -7718,7 +7198,7 @@
      "number": 3.862
     },
     "利差": {
-     "number": 1.851
+     "number": null
     }
    }
   },
@@ -7746,56 +7226,16 @@
      ]
     },
     "US10Y": {
-     "number": 4.55
+     "number": null
     },
     "US30Y": {
-     "number": 5.06
+     "number": null
     },
     "JP10Y": {
      "number": 2.715
     },
     "JP30Y": {
      "number": 3.894
-    },
-    "利差": {
-     "number": 1.835
-    }
-   }
-  },
-  {
-   "uid": "y|2026-07-20",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-07-20"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "data/us_jp_yields.json .points"
-       }
-      }
-     ]
-    },
-    "US10Y": {
-     "number": 4.6
-    },
-    "US30Y": {
-     "number": 5.11
-    },
-    "JP10Y": {
-     "number": null
-    },
-    "JP30Y": {
-     "number": null
     },
     "利差": {
      "number": null
@@ -7826,10 +7266,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.63
+     "number": null
     },
     "US30Y": {
-     "number": 5.13
+     "number": null
     },
     "JP10Y": {
      "number": 2.731
@@ -7838,7 +7278,7 @@
      "number": 3.905
     },
     "利差": {
-     "number": 1.899
+     "number": null
     }
    }
   },
@@ -7866,10 +7306,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.67
+     "number": null
     },
     "US30Y": {
-     "number": 5.15
+     "number": null
     },
     "JP10Y": {
      "number": 2.745
@@ -7878,7 +7318,7 @@
      "number": 3.901
     },
     "利差": {
-     "number": 1.925
+     "number": null
     }
    }
   },
@@ -7906,10 +7346,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.71
+     "number": null
     },
     "US30Y": {
-     "number": 5.17
+     "number": null
     },
     "JP10Y": {
      "number": 2.776
@@ -7918,7 +7358,7 @@
      "number": 3.929
     },
     "利差": {
-     "number": 1.934
+     "number": null
     }
    }
   },
@@ -7946,10 +7386,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.69
+     "number": null
     },
     "US30Y": {
-     "number": 5.16
+     "number": null
     },
     "JP10Y": {
      "number": 2.815
@@ -7958,7 +7398,7 @@
      "number": 3.98
     },
     "利差": {
-     "number": 1.875
+     "number": null
     }
    }
   },
@@ -7986,10 +7426,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.65
+     "number": null
     },
     "US30Y": {
-     "number": 5.12
+     "number": null
     },
     "JP10Y": {
      "number": 2.778
@@ -7998,7 +7438,7 @@
      "number": 3.969
     },
     "利差": {
-     "number": 1.872
+     "number": null
     }
    }
   },
@@ -8026,10 +7466,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.61
+     "number": null
     },
     "US30Y": {
-     "number": 5.09
+     "number": null
     },
     "JP10Y": {
      "number": 2.783
@@ -8038,7 +7478,7 @@
      "number": 3.98
     },
     "利差": {
-     "number": 1.827
+     "number": null
     }
    }
   },
@@ -8066,10 +7506,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.67
+     "number": null
     },
     "US30Y": {
-     "number": 5.2
+     "number": null
     },
     "JP10Y": {
      "number": 2.757
@@ -8078,7 +7518,7 @@
      "number": 3.941
     },
     "利差": {
-     "number": 1.913
+     "number": null
     }
    }
   },
@@ -8106,10 +7546,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.68
+     "number": null
     },
     "US30Y": {
-     "number": 5.21
+     "number": null
     },
     "JP10Y": {
      "number": 2.801
@@ -8118,7 +7558,7 @@
      "number": 3.971
     },
     "利差": {
-     "number": 1.879
+     "number": null
     }
    }
   },
@@ -8146,10 +7586,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.75
+     "number": null
     },
     "US30Y": {
-     "number": 5.27
+     "number": null
     },
     "JP10Y": {
      "number": 2.801
@@ -8158,7 +7598,7 @@
      "number": 3.982
     },
     "利差": {
-     "number": 1.949
+     "number": null
     }
    }
   },
@@ -8186,10 +7626,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.7
+     "number": null
     },
     "US30Y": {
-     "number": 5.23
+     "number": null
     },
     "JP10Y": {
      "number": 2.824
@@ -8198,7 +7638,7 @@
      "number": 3.982
     },
     "利差": {
-     "number": 1.876
+     "number": null
     }
    }
   },
@@ -8226,10 +7666,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.63
+     "number": null
     },
     "US30Y": {
-     "number": 5.18
+     "number": null
     },
     "JP10Y": {
      "number": 2.848
@@ -8238,7 +7678,7 @@
      "number": 3.99
     },
     "利差": {
-     "number": 1.782
+     "number": null
     }
    }
   },
@@ -8266,10 +7706,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.63
+     "number": null
     },
     "US30Y": {
-     "number": 5.17
+     "number": null
     },
     "JP10Y": {
      "number": 2.813
@@ -8278,7 +7718,7 @@
      "number": 3.966
     },
     "利差": {
-     "number": 1.817
+     "number": null
     }
    }
   },
@@ -8306,10 +7746,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.69
+     "number": null
     },
     "US30Y": {
-     "number": 5.22
+     "number": null
     },
     "JP10Y": {
      "number": 2.773
@@ -8318,7 +7758,7 @@
      "number": 3.919
     },
     "利差": {
-     "number": 1.917
+     "number": null
     }
    }
   },
@@ -8346,10 +7786,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.65
+     "number": null
     },
     "US30Y": {
-     "number": 5.19
+     "number": null
     },
     "JP10Y": {
      "number": 2.804
@@ -8358,7 +7798,7 @@
      "number": 3.925
     },
     "利差": {
-     "number": 1.846
+     "number": null
     }
    }
   },
@@ -8386,56 +7826,16 @@
      ]
     },
     "US10Y": {
-     "number": 4.72
+     "number": null
     },
     "US30Y": {
-     "number": 5.25
+     "number": null
     },
     "JP10Y": {
      "number": 2.815
     },
     "JP30Y": {
      "number": 3.957
-    },
-    "利差": {
-     "number": 1.905
-    }
-   }
-  },
-  {
-   "uid": "y|2026-08-11",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-08-11"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "data/us_jp_yields.json .points"
-       }
-      }
-     ]
-    },
-    "US10Y": {
-     "number": 4.7
-    },
-    "US30Y": {
-     "number": 5.24
-    },
-    "JP10Y": {
-     "number": null
-    },
-    "JP30Y": {
-     "number": null
     },
     "利差": {
      "number": null
@@ -8466,10 +7866,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.68
+     "number": null
     },
     "US30Y": {
-     "number": 5.24
+     "number": null
     },
     "JP10Y": {
      "number": 2.856
@@ -8478,7 +7878,7 @@
      "number": 3.989
     },
     "利差": {
-     "number": 1.824
+     "number": null
     }
    }
   },
@@ -8506,10 +7906,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.63
+     "number": null
     },
     "US30Y": {
-     "number": 5.21
+     "number": null
     },
     "JP10Y": {
      "number": 2.873
@@ -8518,7 +7918,7 @@
      "number": 4.002
     },
     "利差": {
-     "number": 1.757
+     "number": null
     }
    }
   },
@@ -8546,10 +7946,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.68
+     "number": null
     },
     "US30Y": {
-     "number": 5.25
+     "number": null
     },
     "JP10Y": {
      "number": 2.878
@@ -8558,7 +7958,7 @@
      "number": 4.002
     },
     "利差": {
-     "number": 1.802
+     "number": null
     }
    }
   },
@@ -8586,10 +7986,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.72
+     "number": null
     },
     "US30Y": {
-     "number": 5.31
+     "number": null
     },
     "JP10Y": {
      "number": 2.919
@@ -8598,7 +7998,7 @@
      "number": 4.05
     },
     "利差": {
-     "number": 1.801
+     "number": null
     }
    }
   },
@@ -8626,10 +8026,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.71
+     "number": null
     },
     "US30Y": {
-     "number": 5.28
+     "number": null
     },
     "JP10Y": {
      "number": 2.934
@@ -8638,7 +8038,7 @@
      "number": 4.096
     },
     "利差": {
-     "number": 1.776
+     "number": null
     }
    }
   },
@@ -8666,10 +8066,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.65
+     "number": null
     },
     "US30Y": {
-     "number": 5.19
+     "number": null
     },
     "JP10Y": {
      "number": 2.894
@@ -8678,7 +8078,7 @@
      "number": 4.054
     },
     "利差": {
-     "number": 1.756
+     "number": null
     }
    }
   },
@@ -8706,10 +8106,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.69
+     "number": null
     },
     "US30Y": {
-     "number": 5.23
+     "number": null
     },
     "JP10Y": {
      "number": 2.854
@@ -8718,7 +8118,7 @@
      "number": 3.995
     },
     "利差": {
-     "number": 1.836
+     "number": null
     }
    }
   },
@@ -8746,10 +8146,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.74
+     "number": null
     },
     "US30Y": {
-     "number": 5.27
+     "number": null
     },
     "JP10Y": {
      "number": 2.882
@@ -8758,7 +8158,7 @@
      "number": 4.042
     },
     "利差": {
-     "number": 1.858
+     "number": null
     }
    }
   },
@@ -8786,10 +8186,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.7
+     "number": null
     },
     "US30Y": {
-     "number": 5.23
+     "number": null
     },
     "JP10Y": {
      "number": 2.887
@@ -8798,7 +8198,7 @@
      "number": 4.036
     },
     "利差": {
-     "number": 1.813
+     "number": null
     }
    }
   },
@@ -8826,10 +8226,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.64
+     "number": null
     },
     "US30Y": {
-     "number": 5.17
+     "number": null
     },
     "JP10Y": {
      "number": 2.897
@@ -8838,7 +8238,7 @@
      "number": 4.04
     },
     "利差": {
-     "number": 1.743
+     "number": null
     }
    }
   },
@@ -8866,10 +8266,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.66
+     "number": null
     },
     "US30Y": {
-     "number": 5.18
+     "number": null
     },
     "JP10Y": {
      "number": 2.892
@@ -8878,7 +8278,7 @@
      "number": 4.039
     },
     "利差": {
-     "number": 1.768
+     "number": null
     }
    }
   },
@@ -8906,10 +8306,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.67
+     "number": null
     },
     "US30Y": {
-     "number": 5.19
+     "number": null
     },
     "JP10Y": {
      "number": 2.897
@@ -8918,7 +8318,7 @@
      "number": 4.038
     },
     "利差": {
-     "number": 1.773
+     "number": null
     }
    }
   },
@@ -8946,10 +8346,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.73
+     "number": null
     },
     "US30Y": {
-     "number": 5.22
+     "number": null
     },
     "JP10Y": {
      "number": 2.93
@@ -8958,7 +8358,7 @@
      "number": 4.084
     },
     "利差": {
-     "number": 1.8
+     "number": null
     }
    }
   },
@@ -8986,10 +8386,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.75
+     "number": null
     },
     "US30Y": {
-     "number": 5.25
+     "number": null
     },
     "JP10Y": {
      "number": 2.943
@@ -8998,7 +8398,7 @@
      "number": 4.092
     },
     "利差": {
-     "number": 1.807
+     "number": null
     }
    }
   },
@@ -9026,10 +8426,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.79
+     "number": null
     },
     "US30Y": {
-     "number": 5.27
+     "number": null
     },
     "JP10Y": {
      "number": 2.987
@@ -9038,7 +8438,7 @@
      "number": 4.131
     },
     "利差": {
-     "number": 1.803
+     "number": null
     }
    }
   },
@@ -9066,10 +8466,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.79
+     "number": null
     },
     "US30Y": {
-     "number": 5.27
+     "number": null
     },
     "JP10Y": {
      "number": 3.006
@@ -9078,7 +8478,7 @@
      "number": 4.122
     },
     "利差": {
-     "number": 1.784
+     "number": null
     }
    }
   },
@@ -9106,10 +8506,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.77
+     "number": null
     },
     "US30Y": {
-     "number": 5.25
+     "number": null
     },
     "JP10Y": {
      "number": 2.966
@@ -9118,7 +8518,7 @@
      "number": 4.052
     },
     "利差": {
-     "number": 1.804
+     "number": null
     }
    }
   },
@@ -9146,10 +8546,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.78
+     "number": null
     },
     "US30Y": {
-     "number": 5.24
+     "number": null
     },
     "JP10Y": {
      "number": 2.91
@@ -9158,7 +8558,7 @@
      "number": 3.965
     },
     "利差": {
-     "number": 1.87
+     "number": null
     }
    }
   },
@@ -9226,10 +8626,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.8
+     "number": null
     },
     "US30Y": {
-     "number": 5.25
+     "number": null
     },
     "JP10Y": {
      "number": 2.896
@@ -9238,7 +8638,7 @@
      "number": 3.961
     },
     "利差": {
-     "number": 1.904
+     "number": null
     }
    }
   },
@@ -9266,10 +8666,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.83
+     "number": null
     },
     "US30Y": {
-     "number": 5.28
+     "number": null
     },
     "JP10Y": {
      "number": 2.891
@@ -9278,7 +8678,7 @@
      "number": 3.956
     },
     "利差": {
-     "number": 1.939
+     "number": null
     }
    }
   },
@@ -9306,10 +8706,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.95
+     "number": null
     },
     "US30Y": {
-     "number": 5.37
+     "number": null
     },
     "JP10Y": {
      "number": 2.92
@@ -9318,7 +8718,7 @@
      "number": 3.995
     },
     "利差": {
-     "number": 2.03
+     "number": null
     }
    }
   },
@@ -9346,10 +8746,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.96
+     "number": null
     },
     "US30Y": {
-     "number": 5.35
+     "number": null
     },
     "JP10Y": {
      "number": 2.987
@@ -9358,7 +8758,7 @@
      "number": 4.024
     },
     "利差": {
-     "number": 1.973
+     "number": null
     }
    }
   },
@@ -9386,10 +8786,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.97
+     "number": null
     },
     "US30Y": {
-     "number": 5.34
+     "number": null
     },
     "JP10Y": {
      "number": 2.988
@@ -9398,7 +8798,7 @@
      "number": 4.04
     },
     "利差": {
-     "number": 1.982
+     "number": null
     }
    }
   },
@@ -9426,10 +8826,10 @@
      ]
     },
     "US10Y": {
-     "number": 5.0
+     "number": null
     },
     "US30Y": {
-     "number": 5.36
+     "number": null
     },
     "JP10Y": {
      "number": 3.028
@@ -9438,7 +8838,7 @@
      "number": 4.106
     },
     "利差": {
-     "number": 1.972
+     "number": null
     }
    }
   },
@@ -9466,10 +8866,10 @@
      ]
     },
     "US10Y": {
-     "number": 5.01
+     "number": null
     },
     "US30Y": {
-     "number": 5.35
+     "number": null
     },
     "JP10Y": {
      "number": 2.998
@@ -9478,7 +8878,7 @@
      "number": 4.075
     },
     "利差": {
-     "number": 2.012
+     "number": null
     }
    }
   },
@@ -9506,10 +8906,10 @@
      ]
     },
     "US10Y": {
-     "number": 4.94
+     "number": null
     },
     "US30Y": {
-     "number": 5.29
+     "number": null
     },
     "JP10Y": {
      "number": 2.993
@@ -9518,7 +8918,7 @@
      "number": 4.047
     },
     "利差": {
-     "number": 1.947
+     "number": null
     }
    }
   },
@@ -9546,136 +8946,16 @@
      ]
     },
     "US10Y": {
-     "number": 5.01
+     "number": null
     },
     "US30Y": {
-     "number": 5.34
+     "number": null
     },
     "JP10Y": {
      "number": 2.981
     },
     "JP30Y": {
      "number": 4.044
-    },
-    "利差": {
-     "number": 2.029
-    }
-   }
-  },
-  {
-   "uid": "y|2026-09-21",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-09-21"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "data/us_jp_yields.json .points"
-       }
-      }
-     ]
-    },
-    "US10Y": {
-     "number": 4.96
-    },
-    "US30Y": {
-     "number": 5.29
-    },
-    "JP10Y": {
-     "number": null
-    },
-    "JP30Y": {
-     "number": null
-    },
-    "利差": {
-     "number": null
-    }
-   }
-  },
-  {
-   "uid": "y|2026-09-22",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-09-22"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "data/us_jp_yields.json .points"
-       }
-      }
-     ]
-    },
-    "US10Y": {
-     "number": 4.96
-    },
-    "US30Y": {
-     "number": 5.29
-    },
-    "JP10Y": {
-     "number": null
-    },
-    "JP30Y": {
-     "number": null
-    },
-    "利差": {
-     "number": null
-    }
-   }
-  },
-  {
-   "uid": "y|2026-09-23",
-   "props": {
-    "日期": {
-     "title": [
-      {
-       "type": "text",
-       "text": {
-        "content": "2026-09-23"
-       }
-      }
-     ]
-    },
-    "数据源": {
-     "rich_text": [
-      {
-       "type": "text",
-       "text": {
-        "content": "data/us_jp_yields.json .points"
-       }
-      }
-     ]
-    },
-    "US10Y": {
-     "number": 5.11
-    },
-    "US30Y": {
-     "number": 5.4
-    },
-    "JP10Y": {
-     "number": null
-    },
-    "JP30Y": {
-     "number": null
     },
     "利差": {
      "number": null
@@ -9706,10 +8986,10 @@
      ]
     },
     "US10Y": {
-     "number": 5.18
+     "number": null
     },
     "US30Y": {
-     "number": 5.47
+     "number": null
     },
     "JP10Y": {
      "number": 3.073
@@ -9718,7 +8998,7 @@
      "number": 4.115
     },
     "利差": {
-     "number": 2.107
+     "number": null
     }
    }
   },
@@ -9746,10 +9026,10 @@
      ]
     },
     "US10Y": {
-     "number": 5.17
+     "number": null
     },
     "US30Y": {
-     "number": 5.49
+     "number": null
     },
     "JP10Y": {
      "number": 3.071
@@ -9758,7 +9038,7 @@
      "number": 4.112
     },
     "利差": {
-     "number": 2.099
+     "number": null
     }
    }
   },
@@ -9786,10 +9066,10 @@
      ]
     },
     "US10Y": {
-     "number": 5.24
+     "number": null
     },
     "US30Y": {
-     "number": 5.56
+     "number": null
     },
     "JP10Y": {
      "number": 3.082
@@ -9798,7 +9078,7 @@
      "number": 4.122
     },
     "利差": {
-     "number": 2.158
+     "number": null
     }
    }
   },
@@ -9826,10 +9106,10 @@
      ]
     },
     "US10Y": {
-     "number": 5.26
+     "number": null
     },
     "US30Y": {
-     "number": 5.59
+     "number": null
     },
     "JP10Y": {
      "number": 3.082
@@ -9838,7 +9118,7 @@
      "number": 4.126
     },
     "利差": {
-     "number": 2.178
+     "number": null
     }
    }
   },
@@ -9866,10 +9146,10 @@
      ]
     },
     "US10Y": {
-     "number": 5.29
+     "number": null
     },
     "US30Y": {
-     "number": 5.64
+     "number": null
     },
     "JP10Y": {
      "number": 3.057
@@ -9878,7 +9158,7 @@
      "number": 4.098
     },
     "利差": {
-     "number": 2.233
+     "number": null
     }
    }
   },
@@ -9906,10 +9186,10 @@
      ]
     },
     "US10Y": {
-     "number": 5.24
+     "number": null
     },
     "US30Y": {
-     "number": 5.61
+     "number": null
     },
     "JP10Y": {
      "number": 3.092
@@ -9918,7 +9198,7 @@
      "number": 4.122
     },
     "利差": {
-     "number": 2.148
+     "number": null
     }
    }
   },
@@ -9946,10 +9226,10 @@
      ]
     },
     "US10Y": {
-     "number": 5.28
+     "number": null
     },
     "US30Y": {
-     "number": 5.63
+     "number": null
     },
     "JP10Y": {
      "number": 3.097
@@ -9958,7 +9238,7 @@
      "number": 4.148
     },
     "利差": {
-     "number": 2.183
+     "number": null
     }
    }
   },
@@ -9986,10 +9266,10 @@
      ]
     },
     "US10Y": {
-     "number": 5.31
+     "number": null
     },
     "US30Y": {
-     "number": 5.66
+     "number": null
     },
     "JP10Y": {
      "number": 3.085
@@ -9998,7 +9278,7 @@
      "number": 4.166
     },
     "利差": {
-     "number": 2.225
+     "number": null
     }
    }
   },
@@ -10026,10 +9306,10 @@
      ]
     },
     "US10Y": {
-     "number": 5.27
+     "number": null
     },
     "US30Y": {
-     "number": 5.64
+     "number": null
     },
     "JP10Y": {
      "number": 3.103
@@ -10038,7 +9318,7 @@
      "number": 4.168
     },
     "利差": {
-     "number": 2.167
+     "number": null
     }
    }
   },
@@ -10066,10 +9346,10 @@
      ]
     },
     "US10Y": {
-     "number": 5.28
+     "number": null
     },
     "US30Y": {
-     "number": 5.67
+     "number": null
     },
     "JP10Y": {
      "number": 3.111
@@ -10078,7 +9358,7 @@
      "number": 4.148
     },
     "利差": {
-     "number": 2.169
+     "number": null
     }
    }
   },
@@ -10106,10 +9386,10 @@
      ]
     },
     "US10Y": {
-     "number": 5.22
+     "number": null
     },
     "US30Y": {
-     "number": 5.6
+     "number": null
     },
     "JP10Y": {
      "number": 3.089
@@ -10118,7 +9398,7 @@
      "number": 4.136
     },
     "利差": {
-     "number": 2.131
+     "number": null
     }
    }
   },
@@ -10146,10 +9426,10 @@
      ]
     },
     "US10Y": {
-     "number": 5.24
+     "number": null
     },
     "US30Y": {
-     "number": 5.6
+     "number": null
     },
     "JP10Y": {
      "number": 3.027
@@ -10158,7 +9438,7 @@
      "number": 4.085
     },
     "利差": {
-     "number": 2.213
+     "number": null
     }
    }
   },
@@ -10186,10 +9466,10 @@
      ]
     },
     "US10Y": {
-     "number": 5.21
+     "number": null
     },
     "US30Y": {
-     "number": 5.56
+     "number": null
     },
     "JP10Y": {
      "number": 3.019
@@ -10198,7 +9478,7 @@
      "number": 4.064
     },
     "利差": {
-     "number": 2.191
+     "number": null
     }
    }
   },
@@ -10226,10 +9506,10 @@
      ]
     },
     "US10Y": {
-     "number": 5.19
+     "number": null
     },
     "US30Y": {
-     "number": 5.52
+     "number": null
     },
     "JP10Y": {
      "number": 3.015
@@ -10238,7 +9518,7 @@
      "number": 4.072
     },
     "利差": {
-     "number": 2.175
+     "number": null
     }
    }
   },
@@ -10266,10 +9546,10 @@
      ]
     },
     "US10Y": {
-     "number": 5.1
+     "number": null
     },
     "US30Y": {
-     "number": 5.43
+     "number": null
     },
     "JP10Y": {
      "number": 2.948
@@ -10278,7 +9558,7 @@
      "number": 4.024
     },
     "利差": {
-     "number": 2.152
+     "number": null
     }
    }
   },
@@ -10306,10 +9586,10 @@
      ]
     },
     "US10Y": {
-     "number": 5.09
+     "number": null
     },
     "US30Y": {
-     "number": 5.43
+     "number": null
     },
     "JP10Y": {
      "number": 2.958
@@ -10318,7 +9598,7 @@
      "number": 4.04
     },
     "利差": {
-     "number": 2.132
+     "number": null
     }
    }
   },
@@ -10346,10 +9626,10 @@
      ]
     },
     "US10Y": {
-     "number": 5.15
+     "number": null
     },
     "US30Y": {
-     "number": 5.48
+     "number": null
     },
     "JP10Y": {
      "number": 2.935
@@ -10358,7 +9638,7 @@
      "number": 4.028
     },
     "利差": {
-     "number": 2.215
+     "number": null
     }
    }
   },
@@ -10396,6 +9676,46 @@
     },
     "JP30Y": {
      "number": 3.992
+    },
+    "利差": {
+     "number": null
+    }
+   }
+  },
+  {
+   "uid": "y|2026-10-21",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-21"
+       }
+      }
+     ]
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "data/us_jp_yields.json .points"
+       }
+      }
+     ]
+    },
+    "US10Y": {
+     "number": null
+    },
+    "US30Y": {
+     "number": null
+    },
+    "JP10Y": {
+     "number": 2.923
+    },
+    "JP30Y": {
+     "number": 3.98
     },
     "利差": {
      "number": null
