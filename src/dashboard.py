@@ -2411,6 +2411,9 @@ def _gold_vol_html(o):
     SH, ST, SB = 120, 8, 18
     for idx, (key, vals, title, dec) in enumerate(panels):
         vv = [v for v in vals if v is not None]
+        if not vv:
+            out.append(f'<div class="gv-box"><div class="gv-ttl">{title}　<span class="gv-sub">数据未就绪（源暂不可用）</span></div></div>')
+            continue
         lo, hi = 0 if key in ("GVZ", "ATR") else min(vv) * 0.9, max(vv) * 1.08
         Y = (lambda lo, hi: (lambda v: ST + (SH - ST - SB) * (1 - (v - lo) / (hi - lo))))(lo, hi)
         g = yticks(lo, hi, Y, (lambda v: f"{v:,.0f}") if dec == 0 else (lambda v: f"{v:.0f}"), 4) + xticks(ST, SH - SB) + lines(vals, Y, "#1c1c1c", 1.3)
@@ -3406,6 +3409,8 @@ def _global_money_html(gm):
 
     # ── 图① 分国堆叠面积 ──
     tmax = max(r["total"] for r in ser)
+    if not tmax or tmax <= 0:
+        return '<p class="empty">全球货币供应：数据源暂不可用（FRED 维护），今日未就绪。</p>'
     def Y1(v): return PT + ih * (1 - v / (tmax * 1.06))
     layers, base = "", [0.0] * n
     for cc in ORDER:

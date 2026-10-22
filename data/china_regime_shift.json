@@ -15,7 +15,7 @@
    "name": "基建投资",
    "engine": "old",
    "perkins_ref": "+6.4%",
-   "value": -4.0,
+   "value": -4.2,
    "unit": "%",
    "basis": "累计同比",
    "src": "fai"
@@ -25,7 +25,7 @@
    "name": "制造业投资",
    "engine": "new",
    "perkins_ref": null,
-   "value": -2.3,
+   "value": -2.1,
    "unit": "%",
    "basis": "累计同比",
    "src": "fai"
@@ -35,7 +35,7 @@
    "name": "民间投资",
    "engine": "old",
    "perkins_ref": null,
-   "value": -10.1,
+   "value": -10.4,
    "unit": "%",
    "basis": "累计同比",
    "src": "fai"
@@ -45,7 +45,7 @@
    "name": "知识产权产品投资",
    "engine": "new",
    "perkins_ref": "28% 高技术占比",
-   "value": 9.2,
+   "value": 9.3,
    "unit": "%",
    "basis": "累计同比",
    "src": "fai"
@@ -55,7 +55,7 @@
    "name": "东北地区投资",
    "engine": "social",
    "perkins_ref": null,
-   "value": -25.5,
+   "value": -26.0,
    "unit": "%",
    "basis": "累计同比",
    "src": "fai"
@@ -65,7 +65,7 @@
    "name": "房地产开发投资",
    "engine": "old",
    "perkins_ref": "-2.1%",
-   "value": -19.9,
+   "value": -20.6,
    "unit": "%",
    "basis": "累计同比",
    "src": "estate"
@@ -75,22 +75,22 @@
    "name": "房屋新开工面积",
    "engine": "old",
    "perkins_ref": null,
-   "value": -24.8,
+   "value": -24.9,
    "unit": "%",
    "basis": "累计同比",
    "src": "estate"
   }
  ],
- "period": "2026 年 1-August",
+ "period": "2026 年 1-September",
  "sources": {
   "fai": {
-   "title": "11.Investment in Fixed Assets from January to August 2026",
-   "url": "https://www.stats.gov.cn/english/PressRelease/202609/t20260916_1965343.html"
+   "title": "3.Investment in Fixed Assets from January to September 2026",
+   "url": "https://www.stats.gov.cn/english/PressRelease/202610/t20261020_1965664.html"
   },
   "estate": {
-   "title": "12.Investment in Real Estate Development from January to August 2026",
-   "url": "https://www.stats.gov.cn/english/PressRelease/202609/t20260916_1965342.html"
+   "title": "4.Investment in Real Estate Development from January to September 2026",
+   "url": "https://www.stats.gov.cn/english/PressRelease/202610/t20261020_1965663.html"
   }
  },
- "saved_at": "2026-10-21T11:26:21.736615"
+ "saved_at": "2026-10-22T11:48:32.751153"
 }
