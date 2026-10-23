@@ -1,0 +1,331 @@
+{
+  "date": "2026-10-23",
+  "results": {
+    "vix": {
+      "key": "vix",
+      "value": 16.68,
+      "as_of": "2026-10-21",
+      "status": "ok"
+    },
+    "fear_greed": {
+      "value": 19.8,
+      "as_of": "2026-10-22",
+      "status": "ok",
+      "extra": {
+        "rating": "extreme fear"
+      },
+      "key": "fear_greed"
+    },
+    "aaii_bull_bear": {
+      "value": -8.9,
+      "as_of": "2026-10-21",
+      "status": "ok",
+      "note": "AAII 10/21周: 多36.9%/空45.8%/中17.3%, spread -8.9 (AAII官网sentimentsurvey页取得; 上周10/14 38.7/41.6=-2.9)",
+      "key": "aaii_bull_bear"
+    },
+    "put_call": {
+      "value": 0.69,
+      "as_of": "2026-10-22",
+      "status": "ok",
+      "freshness": "dated",
+      "source": "CBOE official (via ScraperAPI)",
+      "key": "put_call"
+    },
+    "bofa_fms_cash": {
+      "value": 3.9,
+      "as_of": "2026-10",
+      "status": "ok",
+      "note": "BofA FMS 10月(10/2-8调查, 10/13发布)现金3.9%持平9月, 仍<=4.0%卖出线; 来源Investing.com/TradingView",
+      "key": "bofa_fms_cash"
+    },
+    "sofr_iorb": {
+      "key": "sofr_iorb",
+      "value": 0.0,
+      "as_of": "2026-10-21",
+      "status": "ok",
+      "extra": {
+        "sofr": 3.88,
+        "effr": 3.88,
+        "sofr_as_of": "2026-10-21",
+        "effr_as_of": "2026-10-21",
+        "basis": "SOFR-EFFR"
+      }
+    },
+    "margin_cost": {
+      "key": "margin_cost",
+      "value": 7.0,
+      "as_of": "2026-10-21",
+      "status": "ok"
+    },
+    "bank_funding_stress": {
+      "key": "bank_funding_stress",
+      "value": 1.0,
+      "as_of": "2026-10-21",
+      "status": "ok",
+      "extra": {
+        "cp3m": 4.08,
+        "tbill3m": 4.07,
+        "sofr": 3.88,
+        "spread_bps": 1.0
+      }
+    },
+    "margin_debt": {
+      "value": 1480.054,
+      "as_of": "2026-09-30",
+      "status": "ok",
+      "key": "margin_debt"
+    },
+    "margin_gdp": {
+      "key": "margin_gdp",
+      "value": 4.55,
+      "as_of": "2026-04-01",
+      "status": "ok",
+      "freshness": "dated",
+      "extra": {
+        "basis": "取输入(margin_debt月度/GDP季度)中较旧的as_of",
+        "margin_debt_as_of": "2026-09-30",
+        "gdp_as_of": "2026-04-01"
+      }
+    },
+    "ipo_count": {
+      "value": 260.0,
+      "as_of": "2026-10-22",
+      "status": "ok",
+      "freshness": "dated",
+      "extra": {
+        "source": "stockanalysis",
+        "year": 2026,
+        "basis": "YTD累计宗数, as_of=最近一次IPO上市日"
+      },
+      "key": "ipo_count"
+    },
+    "insider": {
+      "value": 0.062,
+      "as_of": "2026-10-22",
+      "status": "ok",
+      "freshness": "dated",
+      "extra": {
+        "source": "openinsider",
+        "note": "近期榜前100笔口径,趋势用"
+      },
+      "key": "insider"
+    },
+    "bofa_bull_bear": {
+      "value": 7.4,
+      "as_of": "2026-10-15",
+      "status": "ok",
+      "note": "BofA Bull&Bear 7.4 (Flow Show 2026-10-15, 自8.1回落, 跌破8.0卖出线, 结束5/26起的卖出信号; 来源TechFlow转引Trend Research)",
+      "key": "bofa_bull_bear"
+    },
+    "hy_oas": {
+      "key": "hy_oas",
+      "value": 3.27,
+      "as_of": "2026-10-21",
+      "status": "ok"
+    },
+    "ad_line": {
+      "key": "ad_line",
+      "value": false,
+      "as_of": "2026-10-01",
+      "status": "ok",
+      "extra": {
+        "source": "NYSE A/D 腾落线(SP500 全成分股, Economic-Dashboard cron 真数据)",
+        "cumulative": 915,
+        "advance_pct": 59.05,
+        "ad_net": 93,
+        "cum_recent_high": 2031,
+        "cum_lookback_high": 2031,
+        "cum_made_new_high": true,
+        "recent_advance_pct_avg": 45.6,
+        "breadth_confirmed": true,
+        "tickers": 503
+      }
+    },
+    "buffett": {
+      "value": 255.0,
+      "as_of": "2026-04-01",
+      "status": "ok",
+      "extra": {
+        "source": "FRED Z.1"
+      },
+      "key": "buffett"
+    },
+    "cape": {
+      "value": 40.58,
+      "as_of": "2026-10-22",
+      "status": "ok",
+      "key": "cape"
+    },
+    "yield_curve": {
+      "key": "yield_curve",
+      "value": 0.31,
+      "as_of": "2026-10-22",
+      "status": "ok"
+    },
+    "lei": {
+      "value": 0.57,
+      "as_of": "2026-09-01",
+      "status": "ok",
+      "extra": {
+        "cli_index": 101.0,
+        "source": "FRED OECD CLI",
+        "note": "OECD综合领先指标6月变化(替Conference Board付费LEI)"
+      },
+      "key": "lei"
+    },
+    "aaii_alloc": {
+      "value": 71.79,
+      "as_of": "2026-09",
+      "status": "ok",
+      "freshness": "dated",
+      "key": "aaii_alloc"
+    }
+  },
+  "cot": {
+    "gold": {
+      "as_of": "2026-10-13",
+      "open_interest": 396345,
+      "comm_long": 54419,
+      "comm_short": 296950,
+      "comm_net": -242531,
+      "noncomm_long": 245300,
+      "noncomm_short": 37421,
+      "noncomm_net": 207879,
+      "metal": "gold",
+      "comm_net_wow": 1996,
+      "comm_long_wow": -1383,
+      "comm_short_wow": -3379,
+      "comm_surge": false
+    },
+    "silver": {
+      "as_of": "2026-10-13",
+      "open_interest": 108433,
+      "comm_long": 33394,
+      "comm_short": 72836,
+      "comm_net": -39442,
+      "noncomm_long": 34394,
+      "noncomm_short": 11763,
+      "noncomm_net": 22631,
+      "metal": "silver",
+      "comm_net_wow": 2150,
+      "comm_long_wow": 1649,
+      "comm_short_wow": -501,
+      "comm_surge": false
+    }
+  },
+  "hit": 1,
+  "group_stats": {
+    "short": [
+      6,
+      8
+    ],
+    "mid": [
+      1,
+      7
+    ],
+    "long": [
+      2,
+      5
+    ]
+  },
+  "checks": [
+    [
+      "VIX 突破并站稳 > 25",
+      "> 25",
+      "16.68",
+      "❌"
+    ],
+    [
+      "Margin Debt 连续 3 个月下降",
+      "连续3月",
+      "数据不足",
+      "❌"
+    ],
+    [
+      "HY Spread 扩张 > 4.5%",
+      "> 4.5%",
+      "3.27%",
+      "❌"
+    ],
+    [
+      "Fear&Greed 从>75回落<50",
+      ">75→<50",
+      "19.8",
+      "❌"
+    ],
+    [
+      "A/D Line 顶背离",
+      "背离",
+      "广度确认(无背离)｜NYSE A/D 腾落线(SP500 全成分股, Economic-Dashboard cron 真数据)",
+      "❌"
+    ],
+    [
+      "BofA Bull&Bear > 8.0",
+      "> 8.0",
+      "7.4",
+      "⚠️"
+    ],
+    [
+      "Insider Buy/Sell < 0.17",
+      "< 0.17",
+      "0.062",
+      "✅"
+    ]
+  ],
+  "ai": {
+    "reads": {
+      "vix": "VIX 16.68(10/21)，低位平静。",
+      "fear_greed": "CNN 恐惧贪婪 19.8(10/22，extreme fear)，较前值 31.4 大幅下探。",
+      "aaii_bull_bear": "AAII 多空差 -8.9(10/21周，多36.9%/空45.8%)，较上周 -2.9 转弱，散户转悲观。",
+      "put_call": "CBOE 权益 P/C 0.69(10/22)，较前值 0.52 上升，避险需求回升。",
+      "bofa_fms_cash": "BofA FMS 10月现金 3.9% 持平，仍 ≤4.0% 卖出线。",
+      "sofr_iorb": "SOFR-IORB 利差 0.0(10/21)，资金面无压力。",
+      "margin_cost": "融资成本 7.0%(10/21)，黄灯。",
+      "bank_funding_stress": "银行融资压力 1.0(10/21)，绿灯。",
+      "margin_debt": "FINRA 融资余额 9 月 $1,480.1B，较 8 月 +1.8%。",
+      "margin_gdp": "融资余额/GDP 4.55%，红灯。",
+      "ipo_count": "IPO 数 260(10/22)，中性无灯。",
+      "insider": "GuruFocus 内部人买卖比 0.062，红灯（页面标题口径显示 0.33，两口径待核）。",
+      "bofa_bull_bear": "BofA B&B 7.4(10/15)，自 8.1 回落并跌破 8.0 卖出线，结束 5/26 起的卖出信号。",
+      "hy_oas": "HY OAS 3.27%(10/21)，信用利差仍低。",
+      "ad_line": "NYSE A/D 顶背离仍成立(9月多源口径，10/1 as_of)，广度未修复。",
+      "buffett": "巴菲特指标 255%(2026-04口径)，红灯。",
+      "cape": "CAPE 40.58，红灯极端估值。",
+      "yield_curve": "10Y-2Y 利差 +0.31(10/22)，正斜率。",
+      "lei": "LEI 六个月变化 +0.57%(9/1)，较上期转正。",
+      "aaii_alloc": "AAII 股票配置 71.79%(9月)，红灯。"
+    },
+    "notes": {
+      "vix": "VIX 16.68 低位",
+      "fear_greed": "恐贪19.8 极度恐惧",
+      "aaii_bull_bear": "AAII多空差-8.9",
+      "put_call": "P/C 0.69",
+      "bofa_fms_cash": "FMS现金3.9%",
+      "sofr_iorb": "SOFR-IORB 0.0",
+      "margin_cost": "融资成本7.0%",
+      "bank_funding_stress": "融资压力1.0",
+      "margin_debt": "融资余额$1,480B",
+      "margin_gdp": "融资/GDP 4.55%",
+      "ipo_count": "IPO 260",
+      "insider": "内部人0.062",
+      "bofa_bull_bear": "B&B 7.4 破卖出线",
+      "hy_oas": "HY OAS 3.27",
+      "ad_line": "A/D 顶背离",
+      "buffett": "巴菲特255%",
+      "cape": "CAPE 40.58",
+      "yield_curve": "曲线+0.31",
+      "lei": "LEI +0.57%",
+      "aaii_alloc": "AAII配置71.8%"
+    },
+    "conclusions": {
+      "short": "短期（警戒，卖出触发 1/7）：恐贪 19.8 极度恐惧+AAII 空头占优+P/C 回升，情绪走弱；VIX 16.68 仍低、HY OAS 3.27 未恶化，属情绪先行而非信用压力。动作：不加仓、维持防御；10/27-28 FOMC 前不抄底，观察 VIX 是否放量上破 20。",
+      "mid": "中期（偏谨慎）：CAPE 40.58/巴菲特 255%/AAII 配置 71.8% 估值全红，FMS 现金 3.9% 低于 4% 线，融资余额 9 月 $1,480B；BofA B&B 降至 7.4 释放部分过热。动作：逐步降低美股 beta，提高现金与贵金属比重。",
+      "long": "长期（结构性风险高）：极端估值压缩长期回报，美债 10Y 约 5.2-5.3% 处高位，日债 10Y 3.06%。动作：维持黄金/白银战略配置，降低长久期美债与高估值成长股敞口。"
+    },
+    "focus": "BofA B&B 由 8.1 回落至 7.4 终结卖出信号，但恐贪降至 19.8 极度恐惧、AAII 转悲观——卖出触发降至 1/7，情绪退潮与估值全红并存，FOMC 前是关键。",
+    "sector_analysis": "【波动率与情绪】VIX 16.68(10/21)；CNN 恐贪 19.8(10/22，前值 31.4，extreme fear)；CBOE P/C 0.69(前 0.52)；AAII 多空差 -8.9(上周 -2.9)，情绪明显转弱。\n【杠杆与信用】HY OAS 3.27%、SOFR-IORB 0.0、银行融资压力 1.0 均绿；FINRA 融资余额 9 月 $1,480.1B(+1.8%)。\n【估值与周期】CAPE 40.58、巴菲特 255%、AAII 配置 71.8% 红；LEI 六个月变化转正 +0.57%。\n【贵金属 COT】截至 10/13：黄金 commercial 净 -242,531(周 +1,996)，白银净 -39,442(周 +2,150)，无突增。\n【KOL 情绪】名册 212 人，今日刷新 199/212，大类转向 57 条(含多日累积)；新发言：Howard Marks 称 AI 尚未构成真泡沫但处观察状态，Neil Howe 看空风险资产，Craig Hemke 看 11-1 月贵金属季节性反弹。\n【央行流动性与资产负债表】Fed 准备金 $2.948T(周 +$17.9B)，ON RRP $11.5B，TGA $948.7B(-$28.4B)；Fed 总资产 $6,743B(周 -$4.7B)；BoJ $4,059B(-0.46%)；PBoC 8月 $7,236B(环比 0，疑未更新)。\n【机构持仓】13F 19 机构行写入 Notion，无新披露要点核对；政要披露四源已刷新。"
+  },
+  "liquidity": "Fed 准备金 $2.948T(周 +$17.9B，首次回升仍 <$3T)；ON RRP $11.5B；TGA $948.7B(周 -$28.4B)\n风控灯：总分 危险(日债/美债风险红，基差套利绿，Fed 流动性黄)\n10Y 5.29% / 2Y 4.88% / 30Y 5.64%(Economic Dashboard A1 口径)",
+  "cb_balance": "Fed 总资产 $6,743B(周 -$4.7B，-0.07%)，MBS -$12.3B，准备金 +$17.9B\nBoJ 总资产 $4,059B(较上期 -0.46%)，经常项目存款 -0.58%\nPBoC 总资产 $7,236B(2026-08，环比 0，疑数据未更新)\nEurosystem 2026-W42：黄金 $1,444.6B / 证券 APP+PEPP $3,718.5B(-$6.0B)",
+  "holdings": "13F：19 机构行写入 Notion，无新增披露核对\n政要披露四源已刷新（详见 data/politician_disclosure.json）"
+}
