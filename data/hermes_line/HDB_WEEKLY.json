@@ -1,6 +1,6 @@
 {
  "table": "HDB_WEEKLY",
- "count": 10,
+ "count": 11,
  "rows": [
   {
    "uid": "wk|2026-W33",
@@ -246,6 +246,31 @@
        "type": "text",
        "text": {
         "content": "# Eco & Volatility 周报 2026-W42 (2026-10-12 ~ 2026-10-16)\n\n- 综合信号: 🟡 警戒(可得日全周一致,卖出触发 1/7)\n- 周内红灯: bofa_fms_cash(3.9%)、margin_gdp(4.46%)、bofa_bull_bear(8.1)、buffett(255%)、cape(41.0~41.9)、aaii_alloc(71.8%)、insider(10/12 红0.065→10/16 绿0.38)\n\n## 本周状态变化\n1) 综合信号 🟡警戒(10/14、10/16 可得;10/12、10/13 日报文件缺综合字段,10/15 仅存触发数1),卖出触发恒为 1/7(BofA Bull&Bear 8.1>8.0),无升降级。\n2) 指标灯:insider 内部人买卖比 10/12🔴(0.065)→10/16🟢(0.38) 唯一转绿;其余灯一周内无变化(put_call 10/12→10/16 0.56→0.62 灯色按快照重算有切换)。红灯固定 6 项:BofA FMS现金3.9%、Margin/GDP 4.46%、BofA B&B 8.1、巴菲特指标255%、CAPE 41.0~41.9、AAII股票配置71.8%。\n3) 数值首末(10/12→10/16快照):VIX 15.41→16.87,CNN F&G 45→31.5(转恐惧),AAII牛熊差 -11.8→+1.3,HY OAS 3.15→3.25,10Y-2Y 0.44→0.33,CAPE 41.87→41.01,银行融资压力 2→-2bp,SOFR-EFFR -1→0bp。\n4) 流动性:Fed准备金 2.948T(9/30周,+17.9B,仍<3T),TGA 948.7B(-28.4B);10Y 5.29%/2Y 4.88%/30Y 5.64%;央行风控灯🔴危险(美债🔴/日债🔴/Fed流动性🟡)。\n5) 央行BS:Fed总资产(9/30周)-4.7B(-0.07%),BoJ(9/20旬)-18.9B(-0.46%,QT),PBoC(8月)月度无新数据;本周无扩缩表方向转折。外国官方托管美债 2.551T(10/14周),WoW -14.6B(-0.57%)。\n6) 机构:本周无新13F披露(最新 8/14 申报,6/30季度)。\n7) KOL:10/9快照 vs 10/16快照,看多114→94/中性45→39/看空35→35/未找到7→15;多空两端互换含措辞/抓取口径噪声,'未找到'增加 8 人,不宜当单向转折解读。\n\n## KOL 转向\n10/9→10/16 方向变动(仅列纯三分类间转换,剔除未找到):\n看空→中性(7):Magerman、Kedrosky、Larry C. Johnson、Howard Marks、Prechter/EWI、Mervyn King、Jeff Snider\n中性→看空(8):Niall Ferguson、Avi Gilburt、Karen Dynan、Raghuram Rajan、Hamilton-Parker、Icahn、Acemoglu、Kyle Bass\n看多→中性(9):Michael Bloch、Trisha Curtis、Bruce Flatt、Glenn Neely、Tom McClellan、Jim Rogers、Ken Griffin、Bob Haberkorn 等\n看多→看空(6):David Sacks、Michael Power、Francis Hunt、Neil Howe、Jeffrey Gundlach 等\n中性→看多(5):David Friedberg、Ricardo Evangelista、Craig Hemke、Jay Martin 等\n看空→看多(3):Art Berman、Rupal Bhansali、Charles Nenner\n另约 25 人由单一方向变为带限定语的复合表述(如 Hartnett 看多→看空(风险资产)转逢高买债、Stockman 看多→看空(财政/债务危机)、Ted Oakley 看多→看空(股市/退休储蓄))。\n\n## KOL 本周言论\n本周有新发言 37 人 / 46 条(名册 212 人快照);出"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "wk|2026-W43",
+   "props": {
+    "周": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-W43"
+       }
+      }
+     ]
+    },
+    "综合研判": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "# Eco & Volatility 周报 2026-W43 (2026-10-19 ~ 2026-10-23)\n\n- 综合信号: 警戒(黄)(卖出触发全周 1/7;10/22 因 FRED 维护数据缺失)\n- 周内最高触发数: 1/7\n- 周内红灯: bofa_fms_cash(3.9%)、margin_gdp(4.55%)、bofa_bull_bear(8.1,10/23 降 7.4 黄)、buffett(255%)、cape(40.5~41.1)、aaii_alloc(71.8%)、insider(10/23 转红 0.062)\n\n## 本周状态变化\n1) 综合信号:10/19、10/20 警戒(黄);10/21、10/22 日报文件缺综合字段(10/22 因 FRED 站点维护,VIX/HY/收益率曲线/SOFR 等当日未取到,未沿用旧值);10/23 触发 1/7。全周卖出触发恒为 1/7,无升降级。\n2) 指标灯变化(按快照重算):insider 内部人买卖比 周一至周四绿(1.4~2.1)→10/23 红(0.062,卖出线 0.17);BofA Bull&Bear 8.1红→7.4黄(10/23,跌破 8.0 卖出线,卖出触发项降为观察,总计数仍 1);put_call 周内绿/黄来回(0.52~0.69);其余红灯(BofA FMS 现金 3.9%/融资占GDP 4.55%/巴菲特 255%/CAPE 40.6/AAII 配置 71.8%)全周固定红。\n3) 情绪:CNN 恐贪 17.9→23.1→27.2→31.4→19.8(10/22),周四反弹后急跌回极度恐惧;AAII 多空差 +1.3→-8.9(10/21 周,多36.9%/空45.8%),散户转悲观;P/C 0.65→0.69;VIX 16.5~20.0(周二 19.99 最高),周五 16.68。\n4) 央行 BS:Fed 总资产 -$4.7B,BoJ -0.46%,PBoC 数据疑未更新。\n5) KOL 转向:10/16→10/23 两个快照比较,名册 212 人,明确方向发生切换 38 人。\n\n## KOL 周内转向\n名册 212 人(10/16→10/23 快照对比,仅计前后均为明确方向者)共 38 人切换:中性→看多 11、看多→看空 7、看多→中性 7、看空→中性 6、中性→看空 5、看空→看多 2。方向分布 10/16:看多94/中性39/看空35 → 10/23:看多102/中性47/看空44(未找到 16)。\n看多→看空(可识别):Chamath Palihapitiya、Louis-Vincent Gave、Gerald Celente、Rupal Bhansali、Ray Dalio 等。\n中性→看空:David Magerman、Brad Setser、Larry C. Johnson、Jeff Snider、Robert Prechter/EWI 等。\n中性→看多:Michael Bloch、Lobo Tiggre、Shaun Rein、James Gutman、Jim Rogers、Dan Loeb 等。\n看多→中性:Martin Armstrong、Marc Chandler、Bart Melek 等。\n注:部分为出处/检索口径更新导致的标签变化(不少条目公开信息有限),作情绪温度参考,不当交易信号。\n\n## KOL 本周言论\nKOL 新言论（出处日期 2026-10-19 ~ 2026-10-24）：31 人 / 37 条\n\n【宏观货币与金融体系】\n- Marc Chandler（10-22，中性）欧元未站稳美元之上、日元因收益率回落走强,日度多货币技术评论无单一方向押注 [出处](https://www.marctomarket.com/2026/10/risk-appetites-wane-ai-jitters-returns.html)\n  　原话要点：▸ 核心论点:10月22日评论指出市场情绪脆弱,风险偏好转弱,日元、瑞士法郎领涨避险货币;欧元仍未能证明自己能持续走强,利差角度上做多美元仍是被动获偿的交易,但尚未兑现。 ▸ 关键依据:欧元在过去5个交易日内第三次被1.1260-1.1270一线逼回,20日均线约1.1"
        }
       }
      ]

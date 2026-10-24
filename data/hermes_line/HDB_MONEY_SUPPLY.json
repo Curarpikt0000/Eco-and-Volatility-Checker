@@ -47,14 +47,14 @@
    }
   },
   {
-   "uid": "ms|2026-08|JP",
+   "uid": "ms|2026-09|JP",
    "props": {
     "记录": {
      "title": [
       {
        "type": "text",
        "text": {
-        "content": "2026-08｜JP"
+        "content": "2026-09｜JP"
        }
       }
      ]
@@ -65,27 +65,27 @@
      }
     },
     "M0": {
-     "number": 3436.7
+     "number": 3372.2
     },
     "M1": {
-     "number": 6882.9
+     "number": 6847.5
     },
     "M2": {
-     "number": 8205.1
+     "number": 8200.0
     },
     "数据源": {
      "rich_text": [
       {
        "type": "text",
        "text": {
-        "content": "BOJ 官方 Time-Series CSV (Money Stock md02 2026-08 速报; Monetary Base md01 2026-08); M2同比+2.0%/M1同比-0.1%/M3同比+1.2%/基础货币同比-15.7%(QT持续)"
+        "content": "BOJ 官方 Time-Series CSV (Money Stock md02 2026-09 速报; Monetary Base md01 2026-09 平均残高); M2同比+2.0%/M3同比+1.2%/M1同比-0.2%/基础货币同比-15.2%(QT持续)"
        }
       }
      ]
     },
     "月份": {
      "date": {
-      "start": "2026-08-01"
+      "start": "2026-09-01"
      }
     }
    }
