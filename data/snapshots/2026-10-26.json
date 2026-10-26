@@ -1,0 +1,217 @@
+{
+  "date": "2026-10-26",
+  "results": {
+    "vix": {
+      "key": "vix",
+      "value": 19.03,
+      "as_of": "2026-10-22",
+      "status": "ok"
+    },
+    "fear_greed": {
+      "value": 21.0,
+      "as_of": "2026-10-23",
+      "status": "ok",
+      "extra": {
+        "rating": "extreme fear"
+      },
+      "key": "fear_greed"
+    },
+    "aaii_bull_bear": {
+      "value": -8.9,
+      "as_of": "2026-10-21",
+      "status": "ok",
+      "note": "AAII 10/21周: 多36.9%/空45.8%/中17.3%, spread -8.9 (AAII官网sentimentsurvey页取得; 上周10/14 38.7/41.6=-2.9)",
+      "key": "aaii_bull_bear"
+    },
+    "put_call": {
+      "value": 0.67,
+      "as_of": "2026-10-23",
+      "status": "ok",
+      "freshness": "dated",
+      "source": "CBOE official (via ScraperAPI)",
+      "key": "put_call"
+    },
+    "bofa_fms_cash": {
+      "value": 3.9,
+      "as_of": "2026-10",
+      "status": "ok",
+      "note": "BofA FMS 10月(10/2-8调查, 10/13发布)现金3.9%持平9月, 仍<=4.0%卖出线; 来源Investing.com/TradingView",
+      "key": "bofa_fms_cash"
+    },
+    "sofr_iorb": {
+      "key": "sofr_iorb",
+      "value": 2.0,
+      "as_of": "2026-10-22",
+      "status": "ok",
+      "extra": {
+        "sofr": 3.9,
+        "effr": 3.88,
+        "sofr_as_of": "2026-10-22",
+        "effr_as_of": "2026-10-22",
+        "basis": "SOFR-EFFR"
+      }
+    },
+    "margin_cost": {
+      "key": "margin_cost",
+      "value": 7.0,
+      "as_of": "2026-10-21",
+      "status": "ok"
+    },
+    "bank_funding_stress": {
+      "key": "bank_funding_stress",
+      "value": 4.0,
+      "as_of": "2026-10-22",
+      "status": "ok",
+      "extra": {
+        "cp3m": 4.08,
+        "tbill3m": 4.04,
+        "sofr": 3.9,
+        "spread_bps": 4.0
+      }
+    },
+    "margin_debt": {
+      "value": 1480.054,
+      "as_of": "2026-09-30",
+      "status": "ok",
+      "key": "margin_debt"
+    },
+    "margin_gdp": {
+      "key": "margin_gdp",
+      "value": 4.55,
+      "as_of": "2026-04-01",
+      "status": "ok",
+      "freshness": "dated",
+      "extra": {
+        "basis": "取输入(margin_debt月度/GDP季度)中较旧的as_of",
+        "margin_debt_as_of": "2026-09-30",
+        "gdp_as_of": "2026-04-01"
+      }
+    },
+    "ipo_count": {
+      "value": 260.0,
+      "as_of": "2026-10-23",
+      "status": "ok",
+      "freshness": "dated",
+      "extra": {
+        "source": "stockanalysis",
+        "year": 2026,
+        "basis": "YTD累计宗数, as_of=最近一次IPO上市日"
+      },
+      "key": "ipo_count"
+    },
+    "insider": {
+      "value": 0.041,
+      "as_of": "2026-10-23",
+      "status": "ok",
+      "freshness": "dated",
+      "extra": {
+        "source": "openinsider",
+        "note": "近期榜前100笔口径,趋势用"
+      },
+      "key": "insider"
+    },
+    "bofa_bull_bear": {
+      "value": 7.4,
+      "as_of": "2026-10-15",
+      "status": "ok",
+      "note": "BofA Bull&Bear 7.4 (Flow Show 2026-10-15, 自8.1回落, 跌破8.0卖出线, 结束5/26起的卖出信号; 来源TechFlow转引Trend Research)",
+      "key": "bofa_bull_bear"
+    },
+    "hy_oas": {
+      "key": "hy_oas",
+      "value": 3.4,
+      "as_of": "2026-10-22",
+      "status": "ok"
+    },
+    "ad_line": {
+      "key": "ad_line",
+      "value": false,
+      "as_of": "2026-10-01",
+      "status": "ok",
+      "extra": {
+        "source": "NYSE A/D 腾落线(SP500 全成分股, Economic-Dashboard cron 真数据)",
+        "cumulative": 915,
+        "advance_pct": 59.05,
+        "ad_net": 93,
+        "cum_recent_high": 2031,
+        "cum_lookback_high": 2031,
+        "cum_made_new_high": true,
+        "recent_advance_pct_avg": 45.6,
+        "breadth_confirmed": true,
+        "tickers": 503
+      }
+    },
+    "buffett": {
+      "value": 255.0,
+      "as_of": "2026-04-01",
+      "status": "ok",
+      "extra": {
+        "source": "FRED Z.1"
+      },
+      "key": "buffett"
+    },
+    "cape": {
+      "value": 40.36,
+      "as_of": "2026-10-23",
+      "status": "ok",
+      "key": "cape"
+    },
+    "yield_curve": {
+      "key": "yield_curve",
+      "value": 0.31,
+      "as_of": "2026-10-23",
+      "status": "ok"
+    },
+    "lei": {
+      "value": 0.57,
+      "as_of": "2026-09-01",
+      "status": "ok",
+      "extra": {
+        "cli_index": 101.0,
+        "source": "FRED OECD CLI",
+        "note": "OECD综合领先指标6月变化(替Conference Board付费LEI)"
+      },
+      "key": "lei"
+    },
+    "aaii_alloc": {
+      "value": 71.79,
+      "as_of": "2026-09",
+      "status": "ok",
+      "freshness": "dated",
+      "key": "aaii_alloc"
+    }
+  },
+  "cot": {
+    "gold": {
+      "as_of": "2026-10-20",
+      "open_interest": 402279,
+      "comm_long": 59531,
+      "comm_short": 295113,
+      "comm_net": -235582,
+      "noncomm_long": 237142,
+      "noncomm_short": 37277,
+      "noncomm_net": 199865,
+      "metal": "gold",
+      "comm_net_wow": 6949,
+      "comm_long_wow": 5112,
+      "comm_short_wow": -1837,
+      "comm_surge": false
+    },
+    "silver": {
+      "as_of": "2026-10-20",
+      "open_interest": 113992,
+      "comm_long": 35323,
+      "comm_short": 72499,
+      "comm_net": -37176,
+      "noncomm_long": 34575,
+      "noncomm_short": 14780,
+      "noncomm_net": 19795,
+      "metal": "silver",
+      "comm_net_wow": 2266,
+      "comm_long_wow": 1929,
+      "comm_short_wow": -337,
+      "comm_surge": false
+    }
+  },
+  "generated_at": "2026-10-26T02:01:17.576118"
+}

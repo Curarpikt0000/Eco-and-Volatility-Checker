@@ -1449,7 +1449,7 @@ def _jpy_carry_html(o, which):
 </div>"""
 
 
-def _ai_cds_html(o, bbb=None):
+def _ai_cds_html(o, bbb=None, dtcc=None):
     """AI 债务 CDS 快照: 读 data/ai_cds_snapshots.json 的 rows。新闻转引, 非连续序列, 离散点不连线。"""
     import json as _json, html as _h
     rows = (o or {}).get("rows") or []
@@ -1492,12 +1492,13 @@ def _ai_cds_html(o, bbb=None):
         rs = [r for r in rows if sel(r)]
         if not rs: return ""
         W, H, PL, PR, PT, PB = 900, h, 54, (96 if with_bbb else 22), 14, 26
-        d0 = min([r["asof"] for r in rs] + ([bser[0][0]] if (with_bbb and bser) else []))
+        _dp0 = ((((dtcc or {}).get("issuers") or {}).get("Oracle") or {}).get("points") or [])
+        d0 = min([r["asof"] for r in rs] + ([bser[0][0]] if (with_bbb and bser) else []) + ([_dp0[0][0]] if (with_bbb and _dp0) else []))
         d1 = max([r["asof"] for r in rs] + ([bser[-1][0]] if (with_bbb and bser) else []))
         span = max((_dt.date.fromisoformat(d1) - _dt.date.fromisoformat(d0)).days, 1)
         _pad = 0.08 if span <= 200 else 0.0
         X = lambda dd: PL + (W - PL - PR) * (_pad + (1 - 2 * _pad) * ((_dt.date.fromisoformat(dd) - _dt.date.fromisoformat(d0)).days / span))
-        vals = [r["bp"] for r in rs] + ([p[1] for p in bser] if (with_bbb and bser) else [])
+        vals = [r["bp"] for r in rs] + ([p[1] for p in bser] if (with_bbb and bser) else []) + ([p[1] for p in ((((dtcc or {}).get("issuers") or {}).get("Oracle") or {}).get("points") or [])] if with_bbb else [])
         hi = (hi_cap or max(vals)) * 1.12; lo = 0
         Y = lambda v: PT + (H - PT - PB) * (1 - (v - lo) / (hi - lo))
         g = ""; step = 50 if hi <= 400 else (100 if hi <= 800 else 200); v = 0
@@ -1514,7 +1515,21 @@ def _ai_cds_html(o, bbb=None):
             for dd in sorted({r["asof"] for r in rs}): g += f'<text x="{X(dd):.1f}" y="{H-8}" class="sgr-xt">{dd[5:]}</text>'
         if with_bbb and bser:
             g += '<polyline points="' + " ".join(f"{X(p[0]):.1f},{Y(p[1]):.1f}" for p in bser) + '" fill="none" stroke="#b9b2a6" stroke-width="1.8"/>'
-            g += f'<text x="{PL+6}" y="{Y(bser[0][1])-8:.1f}" style="font-size:11px;fill:#6b645a">灰线：BBB 档全行业利差（行业背景，不是甲骨文）</text>'
+            g += f'<text x="{PL+6}" y="{Y(bser[0][1])-8:.1f}" style="font-size:11px;fill:#6b645a">灰线：BBB 档全行业利差（行业背景，不是甲骨文）</text><text x="{PL+6}" y="{Y(bser[0][1])+6:.1f}" style="font-size:11px;fill:#5d6b7a">蓝灰细线：DTCC 逐日成交点位（经 Gloom；与圆点读数口径不同）</text>'
+        # DTCC 逐日点位(经 Gloom): 仅 Oracle 图; 超过 6 天无成交则断开, 不插值
+        _dpts = (((dtcc or {}).get("issuers") or {}).get("Oracle") or {}).get("points") or []
+        _dhit = ""
+        if with_bbb and _dpts:
+            _seg = []; _segs = []
+            for _p in _dpts:
+                if _seg and (_dt.date.fromisoformat(_p[0]) - _dt.date.fromisoformat(_seg[-1][0])).days > 6: _segs.append(_seg); _seg = []
+                _seg.append(_p)
+            _segs.append(_seg)
+            for _sg in _segs:
+                if len(_sg) > 1: g += '<polyline points="' + " ".join(f"{X(q[0]):.1f},{Y(q[1]):.1f}" for q in _sg) + '" fill="none" stroke="#7d8a99" stroke-width="1.3" opacity=".85"/>'
+            for _p in _dpts:
+                _tp = f'{_p[0]}||DTCC 成交点位 {_p[1]:g} bp（{_p[2]} 笔成交）<br>口径：当日 5Y 点位，非收盘价'
+                _dhit += f'<circle cx="{X(_p[0]):.1f}" cy="{Y(_p[1]):.1f}" r="4" fill="transparent" data-tip="{_tp}" class="tip-hit"/>'
         # Oracle 相邻读数虚线(>120天断开)
         byname = {}
         for r in rs: byname.setdefault(r["name"], []).append(r)
@@ -1530,7 +1545,7 @@ def _ai_cds_html(o, bbb=None):
             for sg in segs:
                 if len(sg) > 1: g += '<polyline points="' + " ".join(f"{X(a):.1f},{Y(b):.1f}" for a, b in sg) + f'" fill="none" stroke="{colors[nm]}" stroke-width="1.5" stroke-dasharray="4 3" opacity=".7"/>'
         # 点: 同日多读数横向错开
-        hit = ""; same = {}
+        hit = _dhit; same = {}
         for r in rs: same.setdefault((r["name"], r["asof"]), []).append(r)
         for (nm, dd), lst in same.items():
             lst.sort(key=lambda r: r["bp"])
@@ -1614,6 +1629,7 @@ def _ai_cds_html(o, bbb=None):
   <div class="sgr-foot"><b>5 年期单名 CDS 利差（bp）</b>：每年为对冲 100 万美元债务付的保费 ≈ 利差 × 100 美元（288 bp ≈ 2.88 万美元）。
   <b>数据来自 Reuters 等新闻转引（S&amp;P Global Market Intelligence / LSEG 口径），不是可日更的付费序列</b>：每个读数一个圆点、<b>不连线</b>，点与点之间的空白＝当天没有报道，不是没变化；
   「≥」「近」沿用原文措辞（盘中近似或下限），不当收盘精确值。与上方的 BBB OAS 是<b>两个口径</b>（BBB OAS 是全行业评级档利差，这里是单名 CDS）。
+  <b>蓝灰细线（DTCC 成交点位）</b>：来自美国存管信托与结算公司（DTCC）公开的 CDS 成交报告，经开源终端 Gloom 的云接口按日汇总为当日 5 年期点位；<b>它是「当天有成交才有点」，不是收盘报价</b>，所以与圆点（Reuters 转引 S&amp;P Global 收盘）会差几到二十个 bp（实测 2026-07-29 圆点约 200、蓝灰线 219；2026-10-14 圆点 288、蓝灰线 279.5），<b>两条线口径不同，不互相校正，也没有谁对谁错的结论</b>。无成交的日子断开不连线；该线起点 2024-12-18，更早没有。
   更新方式：每个工作日由日报任务检索当日新闻，有来源链接且通过入库校验才写入，查不到就写「当日无新读数」。</div>
 </div>"""
 
@@ -3560,7 +3576,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
              basis_trade=None, comex_inventory=None, debt_gdp=None,
              corp_credit=None, cips=None, ai_fcf=None, ai_credit=None,
              cn_liq=None,
-             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, cn_hk_hold=None, gs_tech=None, ur_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, spx_gold_long=None, ust_trio=None, jpy_carry=None, ai_cds=None, bbb_3y=None, mm_ratio=None, h8_deposits=None, hf_ust=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
+             liquidity_crisis=None, analog_corr=None, gold_vol=None, fed_gold_oil=None, cn_capital=None, cn_hk_hold=None, gs_tech=None, ur_tech=None, cot_mm=None, china_regime=None, wrs=None, stock_gold=None, spx_gold_long=None, ust_trio=None, jpy_carry=None, ai_cds=None, bbb_3y=None, dtcc_cds=None, mm_ratio=None, h8_deposits=None, hf_ust=None, tfp_sentiment=None, llm_token=None, ai_capex=None, gold_oil=None, btc_gold=None, silver_curve=None, report_leads=None, us_freight=None, ust_micro=None, dxy_gold=None, gold_etf_flows=None, pm_optvol=None, comex_optpos=None,
     global_money=None,
              kol_history=None):
     """snap: run.py 的快照; checks/hit/gstats/overall: signals 结果。
@@ -3807,7 +3823,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         ust_yld_html=_ust_trio_html(ust_trio, 'yld'),
         ust_tpm_html=_ust_trio_html(ust_trio, 'tpm'),
         ust_agg_html=_ust_trio_html(ust_trio, 'agg'),
-        ai_cds_html=_ai_cds_html(ai_cds, bbb_3y),
+        ai_cds_html=_ai_cds_html(ai_cds, bbb_3y, dtcc_cds),
         jpy_facts_html=_jpy_carry_html(jpy_carry, 'facts'),
         jpy_cftc_html=_jpy_carry_html(jpy_carry, 'cftc'),
         jpy_spread_html=_jpy_carry_html(jpy_carry, 'spread'),

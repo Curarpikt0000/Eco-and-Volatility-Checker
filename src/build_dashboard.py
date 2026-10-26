@@ -727,6 +727,17 @@ def main():
     except Exception as e:
         print(f"[dashboard] AI债务CDS快照 跳过: {e}")
 
+    # ── DTCC 逐日 CDS(经 Gloom): 只读缓存 data/dtcc_cds_daily_cache.json, 由 tools/gloom_cds_fetch.py 手动刷新, 构建不联网 ──
+    dtcc_cds = {}
+    try:
+        import json as _jd
+        _fd = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "dtcc_cds_daily_cache.json")
+        dtcc_cds = _jd.load(open(_fd, encoding="utf-8")) if os.path.exists(_fd) else {}
+        _o = (dtcc_cds.get("issuers") or {}).get("Oracle") or {}
+        print(f"[dashboard] DTCC逐日CDS(缓存): Oracle {len(_o.get('points') or [])} 点 {_o.get('first')}→{_o.get('last')} status={dtcc_cds.get('status')} 抓取于 {dtcc_cds.get('fetched_at')}")
+    except Exception as e:
+        print(f"[dashboard] DTCC逐日CDS 跳过: {e}")
+
     # ── 日元套息: CFTC 日元净头寸 · 美日利差 vs USDJPY · 周K+已实现波动率 + 规则型每日事实(Chao 2026-10-18) ──
     jpy_carry = {}
     try:
@@ -1086,6 +1097,7 @@ def main():
         jpy_carry=jpy_carry,
         ai_cds=ai_cds,
         bbb_3y=bbb_3y,
+        dtcc_cds=dtcc_cds,
         mm_ratio=mm_ratio,
         h8_deposits=h8_deposits,
         hf_ust=hf_ust,
