@@ -1,6 +1,6 @@
 {
  "table": "HDB_COT",
- "count": 40,
+ "count": 42,
  "rows": [
   {
    "uid": "cot|gold|2026-06-02",
@@ -1669,6 +1669,90 @@
     },
     "周变化": {
      "number": 2150.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "CFTC COT via data/snapshots/"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "cot|gold|2026-10-20",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-20"
+       }
+      }
+     ]
+    },
+    "品种": {
+     "select": {
+      "name": "gold"
+     }
+    },
+    "商业净持仓": {
+     "number": -235582.0
+    },
+    "大户净持仓": {
+     "number": 199865.0
+    },
+    "未平仓合约": {
+     "number": 402279.0
+    },
+    "周变化": {
+     "number": 6949.0
+    },
+    "数据源": {
+     "rich_text": [
+      {
+       "type": "text",
+       "text": {
+        "content": "CFTC COT via data/snapshots/"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "uid": "cot|silver|2026-10-20",
+   "props": {
+    "日期": {
+     "title": [
+      {
+       "type": "text",
+       "text": {
+        "content": "2026-10-20"
+       }
+      }
+     ]
+    },
+    "品种": {
+     "select": {
+      "name": "silver"
+     }
+    },
+    "商业净持仓": {
+     "number": -37176.0
+    },
+    "大户净持仓": {
+     "number": 19795.0
+    },
+    "未平仓合约": {
+     "number": 113992.0
+    },
+    "周变化": {
+     "number": 2266.0
     },
     "数据源": {
      "rich_text": [
