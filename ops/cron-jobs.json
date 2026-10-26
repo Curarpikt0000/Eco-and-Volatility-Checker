@@ -1,6 +1,6 @@
 {
  "_note": "由 ~/.hermes/cron/jobs.json 自动导出（scripts/handover_refresh.py 每日更新）。<PROJECT_ROOT>=接手方自己的 clone 路径；<HERMES_SCRIPTS>=脚本目录(默认 ~/.hermes/scripts)；deliver=origin 表示发回创建该 job 的 Telegram 话题，接手方须改成自己的投递目标。公网版不含 eco-vol-codex-delivery-watch（同步到作者公司内部仓库用）。",
- "exported": "2026-10-19",
+ "exported": "2026-10-26",
  "jobs": [
   {
    "name": "eco-vol-01-daily-scan-report",
