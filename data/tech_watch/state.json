@@ -123,10 +123,15 @@
   "https://www.kitco.com/news/article/2026-10-23/gold-price-trades-near-4000oz-after-final-consumer-sentiment-holds-steady",
   "https://www.kitco.com/news/article/2026-10-23/gold-silver-extend-weekly-losses-hormuz-tensions-push-crude-above-116-kitco",
   "https://www.kitco.com/news/article/2026-10-23/gold-struggles-sp-pmi-shows-health-activity-manufacturing-services-sectors",
+  "https://www.kitco.com/news/article/2026-10-26/gold-holds-above-4000-hormuz-diplomacy-cools-crude-ahead-fed-decision-kitco",
   "https://www.kitco.com/news/article/2026-10-26/gold-prices-are-oversold-below-4000-potential-rally-could-still-be-out",
   "https://www.kitco.com/news/article/2026-10-26/gold-prices-squeezed-between-rising-oil-and-falling-yields-fresnillo-silver",
   "https://www.kitco.com/news/article/2026-10-26/gold-rebounds-above-4000-lower-oil-prices-ease-fed-tightening-concerns",
   "https://www.kitco.com/news/article/2026-10-26/iran-war-needs-end-gold-have-chance-rally-ubwms-haworth",
+  "https://www.kitco.com/news/article/2026-10-27/downside-risks-are-building-gold-prices-still-have-path-5000-state-streets",
+  "https://www.kitco.com/news/article/2026-10-27/gold-price-needs-build-floor-here-or-face-deeper-correction-standard",
+  "https://www.kitco.com/news/article/2026-10-27/gold-price-shoots-session-high-4048oz-after-consumer-confidence-rises-917",
+  "https://www.kitco.com/news/article/2026-10-27/gold-prices-holding-above-4000-us-new-home-sales-fall",
   "https://www.kitco.com/opinion/2026-09-22/extreme-greed-meets-bitcoin-breakout",
   "https://www.kitco.com/opinion/2026-09-22/gold-and-silver-alert-more-downside-another-rally",
   "https://www.kitco.com/opinion/2026-09-22/golden-mindset-key",
@@ -208,7 +213,11 @@
   "https://www.kitco.com/opinion/2026-10-23/bitcoin-falls-back-cloud-altcoin-reversal-warnings-stack",
   "https://www.kitco.com/opinion/2026-10-23/gold-and-silver-alert-recession-risks-and-what-comes-next",
   "https://www.kitco.com/opinion/2026-10-23/what-turns-gold-around-watch-feds-breaking-point-not-headlines",
-  "https://www.kitco.com/opinion/2026-10-23/window-start-stacking-bitcoin-midterms-closing"
+  "https://www.kitco.com/opinion/2026-10-23/window-start-stacking-bitcoin-midterms-closing",
+  "https://www.kitco.com/opinion/2026-10-26/big-tech-earnings-and-fed-rate-decision-land-same-day-week-heres-how-im-trading",
+  "https://www.kitco.com/opinion/2026-10-26/cpm-trade-signal-october-26-2026",
+  "https://www.kitco.com/opinion/2026-10-26/crypto-swot-us-spot-bitcoin-etfs-recorded-108-billion-net-inflows-over-three",
+  "https://www.kitco.com/opinion/2026-10-26/gold-swot-northern-star-open-improved-gold-fields-takeover-offer"
  ],
  "items": [
   {
@@ -1347,6 +1356,88 @@
    "date": "2026-10-26",
    "title": "Gold Stocks: A Final Low?",
    "url": "https://www.gold-eagle.com/article/gold-stocks-final-low",
+   "body_read": false,
+   "prices_in_text": [
+    "2026"
+   ]
+  },
+  {
+   "kind": "article",
+   "channel": "inst",
+   "who": "Kitco/news",
+   "date": "2026-10-27",
+   "title": "Downside risks are building in gold, but prices still have a path to $5,000 - State Street’s Doshi",
+   "url": "https://www.kitco.com/news/article/2026-10-27/downside-risks-are-building-gold-prices-still-have-path-5000-state-streets",
+   "body_read": true,
+   "fcst_sentences": [
+    "In its latest Monthly Gold Monitor, State Street Investment Management maintained its forecast for gold prices to trade between $4,750 and $5,500 an ounce by the end of the first quarter of 2027.",
+    "At the time, Doshi identified $4,000 as a potential floor for the precious metal and maintained that gold could reach $5,000 by June 2027.",
+    "Meanwhile, the firm's technical outlook reinforces the importance of the $4,000 level.",
+    "The firm also identified initial technical support around $4,121, followed by the psychologically important $4,000 level."
+   ],
+   "prices_in_text": [
+    "$11.7",
+    "$4,000",
+    "$4,121",
+    "$4,231",
+    "$4,322",
+    "$4,539",
+    "$4,750",
+    "$5,000",
+    "$5,500",
+    "2027"
+   ]
+  },
+  {
+   "kind": "article",
+   "channel": "tech",
+   "who": "Kitco/news",
+   "date": "2026-10-27",
+   "title": "Gold price needs to build a floor here or face a deeper correction - Standard Chartered’s Cooper",
+   "url": "https://www.kitco.com/news/article/2026-10-27/gold-price-needs-build-floor-here-or-face-deeper-correction-standard",
+   "body_read": true,
+   "prices_in_text": [
+    "$3,886",
+    "$4,000",
+    "$4,650",
+    "$4,850",
+    "1,286",
+    "2020",
+    "2023",
+    "2027"
+   ]
+  },
+  {
+   "kind": "article",
+   "channel": "tech",
+   "who": "GoldSeek",
+   "date": "2026-10-27",
+   "title": "Gold Stocks: A Final Low?",
+   "url": "https://goldseek.com/article/gold-stocks-final-low",
+   "body_read": false,
+   "prices_in_text": [
+    "2026"
+   ]
+  },
+  {
+   "kind": "article",
+   "channel": "tech",
+   "who": "GoldSeek",
+   "date": "2026-10-27",
+   "title": "Russian Gold Reserves Down 62 Tonnes This Year as They Support the Wartime Economy",
+   "url": "https://goldseek.com/article/russian-gold-reserves-down-62-tonnes-year-they-support-wartime-economy",
+   "body_read": true,
+   "prices_in_text": [
+    "2026"
+   ]
+  },
+  {
+   "kind": "article",
+   "channel": "tech",
+   "who": "Gold-Eagle",
+   "date": "2026-10-27",
+   "title": "Russian Gold Reserves Down 62 Tons This Year as They Support the Wartime Economy",
+   "url": "https://www.gold-eagle.com/article/russian-gold-reserves-down-62-tons-year-they-support-wartime-economy",
    "body_read": false,
    "prices_in_text": [
     "2026"

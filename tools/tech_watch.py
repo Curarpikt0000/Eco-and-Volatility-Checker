@@ -91,20 +91,53 @@ def jd(p, o):
     os.replace(p + '.tmp', p)
 
 
+def _yt_rss(cid):
+    """主通道: RSS(带发布日)。2026-10 起对这批频道返回 404, 失败则返回 (None, 原因)。"""
+    try:
+        return re.findall(r'<entry>(.*?)</entry>', get(f'https://www.youtube.com/feeds/videos.xml?channel_id={cid}'), re.S), ''
+    except urllib.error.HTTPError as ex:
+        return None, f'rss HTTP {ex.code}'
+    except Exception as ex:  # noqa: BLE001
+        return None, f'rss {type(ex).__name__}: {str(ex)[:60]}'
+
+
+def _yt_flat(cid, n=8):
+    """备用通道: yt-dlp --flat-playlist 列 /videos(无需 cookie; 只给 id+标题, 没有发布日)。"""
+    import subprocess
+    try:
+        p = subprocess.run(['yt-dlp', '--no-update', '--no-warnings', '--flat-playlist', '--playlist-end', str(n),
+                            '--print', '%(id)s|%(title)s', f'https://www.youtube.com/channel/{cid}/videos'],
+                           capture_output=True, text=True, timeout=150)
+        rows = [l.split('|', 1) for l in p.stdout.splitlines() if '|' in l]
+        if rows:
+            return rows, ''
+        return None, f'ytdlp rc={p.returncode} {(p.stderr or "").strip()[-80:]}'
+    except Exception as ex:  # noqa: BLE001
+        return None, f'ytdlp {type(ex).__name__}: {str(ex)[:60]}'
+
+
 def src_yt(since, h):
     out = []
     for n, cid in YT.items():
-        h['yt'][n] = {'fetched': 0, 'err': ''}
-        try:
-            ents = re.findall(r'<entry>(.*?)</entry>', get(f'https://www.youtube.com/feeds/videos.xml?channel_id={cid}'), re.S)
-            h['yt'][n]['fetched'] = len(ents)
+        h['yt'][n] = {'fetched': 0, 'err': '', 'via': ''}
+        ents, why = _yt_rss(cid)
+        if ents is not None:
+            h['yt'][n].update(via='rss', fetched=len(ents))
             for e in ents:
                 d = re.search(r'<published>(.*?)</published>', e).group(1)[:10]
                 if d >= since:
                     out.append(dict(kind='video', channel='tech', who=n, date=d, title=html.unescape(re.search(r'<title>(.*?)</title>', e).group(1)),
                                     url='https://youtu.be/' + re.search(r'<yt:videoId>(.*?)</yt:videoId>', e).group(1), body_read=False))
-        except Exception as ex:  # noqa: BLE001
-            h['yt'][n]['err'] = type(ex).__name__
+            continue
+        rows, why2 = _yt_flat(cid)
+        if rows is None:
+            h['yt'][n]['err'] = f'{why} | {why2}'
+            continue
+        # 备用通道没有发布日: date 留空并标 date_unknown, 以 seen 去重(新 id 才算新); 不拿抓取日冒充发表日
+        h['yt'][n].update(via='yt-dlp-flat', fetched=len(rows), err=f'{why}(已切备用通道, 无发布日)')
+        for vid, title in rows:
+            out.append(dict(kind='video', channel='tech', who=n, date='', date_unknown=True, title=html.unescape(title),
+                            url='https://youtu.be/' + vid, body_read=False))
     return out
 
 

@@ -1,0 +1,53 @@
+{
+  "reads": {
+    "vix": "VIX 18.39(10/26)，较前值 19.45 回落，低于 20。",
+    "fear_greed": "CNN 恐贪 33.6(10/27)，由 27.1 回升，仍在恐惧区。",
+    "aaii_bull_bear": "AAII 多空差 -8.9(10/21 周)，本周数据未更新，空头 45.8% 占优。",
+    "put_call": "CBOE equity P/C 0.59(10/27)，较前值 0.60 微降。",
+    "bofa_fms_cash": "BofA FMS 10 月现金 3.9%，持平，仍 ≤4.0%。",
+    "sofr_iorb": "SOFR 3.93 − EFFR 3.88 = 5bp(10/26)，无压力。",
+    "margin_cost": "融资成本 7.0%(10/26)，黄灯。",
+    "bank_funding_stress": "CP3M−T-bill 7bp(10/26)，绿灯。",
+    "margin_debt": "FINRA 融资余额 9 月 $1,480.1B，较 8 月 +1.8%。",
+    "margin_gdp": "融资余额/GDP 4.55%，红灯(GDP 口径 2026-04)。",
+    "ipo_count": "今年 IPO 累计 260 宗(最近一次 10/23)，中性无灯。",
+    "insider": "Insider Buy/Sell(openinsider 前100笔口径) 1.015(10/27)，较前值 0.43 再升；该口径波动大，仅看趋势。",
+    "bofa_bull_bear": "BofA B&B 7.4(10/15)，低于 8.0 卖出线，本期无更新。",
+    "hy_oas": "HY OAS 3.30%(10/26)，较前值 3.38 收窄，远低于 4.5% 触发线。",
+    "ad_line": "NYSE A/D 顶背离未触发(10/1 as_of，Economic Dashboard 口径)；数据停在 10/1。",
+    "buffett": "巴菲特指标 255%(2026-04 口径)，红灯。",
+    "cape": "CAPE 40.89(10/27)，仍处历史极高区。",
+    "yield_curve": "10Y-2Y 利差 +0.29(10/27)，前值 +0.32，略收窄。",
+    "lei": "OECD CLI 口径六个月变化 +0.57%(9/1)，无更新。",
+    "aaii_alloc": "AAII 股票配置 71.79%(9 月)，红灯，月度无更新。"
+  },
+  "notes": {
+    "vix": "18.39，降1.1",
+    "fear_greed": "33.6 恐惧(升)",
+    "aaii_bull_bear": "AAII多空差-8.9",
+    "put_call": "0.59，微降",
+    "bofa_fms_cash": "FMS现金3.9%",
+    "sofr_iorb": "SOFR-EFFR 5bp",
+    "margin_cost": "融资成本7.0%",
+    "bank_funding_stress": "融资压力7bp",
+    "margin_debt": "融资余额$1,480B",
+    "margin_gdp": "融资/GDP 4.55%",
+    "ipo_count": "IPO 260",
+    "insider": "1.015(openinsider)",
+    "bofa_bull_bear": "B&B 7.4",
+    "hy_oas": "3.30%，收窄",
+    "ad_line": "A/D 未触发",
+    "buffett": "巴菲特255%",
+    "cape": "40.89",
+    "yield_curve": "曲线+0.29",
+    "lei": "LEI +0.57%",
+    "aaii_alloc": "AAII配置71.8%"
+  },
+  "conclusions": {
+    "short": "短期（偏平静，卖出触发 0/7）：VIX 18.39<20、恐贪回升至 33.6、P/C 0.59、HY OAS 3.30 收窄，无恶化信号。动作：不加仓、维持防御；FOMC 议息前不追高也不抄底，观察 VIX 是否上破 20。",
+    "mid": "中期（偏谨慎）：CAPE 40.89/巴菲特 255%/AAII 配置 71.8% 估值全红，FMS 现金 3.9% ≤4% 线，融资余额 9 月 $1,480B(+1.8%)；BofA B&B 7.4 距 8.0 线 0.6。动作：逐步降低美股 beta，提高现金与贵金属比重，不因情绪回升加杠杆。",
+    "long": "长期（结构性风险高）：极端估值压缩长期回报；Economic Dashboard 风控灯美债/日债红灯但数据停在 10/1(偏旧，不能当今日读数)。动作：维持黄金/白银战略配置，降低长久期美债与高估值成长股敞口。"
+  },
+  "focus": "触发 0/7，BofA B&B 7.4 距 8.0 线 0.6；情绪回暖(恐贪 27→33.6、VIX 19.45→18.39)而估值全红，FOMC 议息前方向待定。",
+  "sector_analysis": "【波动率与情绪】VIX 18.39(10/26，前 19.45)；CNN 恐贪 33.6(10/27，前 27.1)；CBOE P/C 0.59(前 0.60)；AAII 多空差 -8.9(10/21 周，无更新)。情绪继续边际回暖但仍在恐惧区。\n【杠杆与信用】HY OAS 3.30%(前 3.38)、SOFR-EFFR 5bp、银行融资压力 7bp 均绿；FINRA 融资余额 9 月 $1,480.1B(+1.8%)；Insider 比率 1.015(前 0.43，openinsider 前100笔口径，波动大)。\n【估值与周期】CAPE 40.89、巴菲特 255%、AAII 配置 71.8% 红灯；LEI(OECD CLI 口径) +0.57%。\n【贵金属COT】COT(10/20)：黄金 commercial 净 -235,582(周 +6,949)，白银 -37,176(周 +2,266)，均无突增。\n【KOL情绪】名册 212 人，今日抓到 191，大类转向 38；今日新言论 7 条：Celente 把金价目标由 6000 下调至 4500 仍看多，Keen 警示私人债务。\n【央行流动性】Economic Dashboard 口径 Fed 准备金 $2.948T(+$17.9B)、TGA $948.7B，数据停在 9/30–10/1，BoJ 停 9/20、PBoC 停 8 月，非今日读数。\n【机构持仓】13F 19 机构行已写 Notion，本期无新披露可评；政要：OGE/参议员源今日抓取报错，未就绪。"
+}
