@@ -1,0 +1,652 @@
+{
+  "date": "2026-10-29",
+  "snapshot": {
+    "date": "2026-10-29",
+    "results": {
+      "vix": {
+        "key": "vix",
+        "value": 17.52,
+        "as_of": "2026-10-27",
+        "status": "ok"
+      },
+      "fear_greed": {
+        "value": 35.9,
+        "as_of": "2026-10-28",
+        "status": "ok",
+        "extra": {
+          "rating": "fear"
+        },
+        "key": "fear_greed"
+      },
+      "aaii_bull_bear": {
+        "value": -8.9,
+        "as_of": "2026-10-21",
+        "status": "ok",
+        "note": "AAII 10/21周: 多36.9%/空45.8%/中17.3%, spread -8.9 (AAII官网sentimentsurvey页取得; 上周10/14 38.7/41.6=-2.9)",
+        "key": "aaii_bull_bear"
+      },
+      "put_call": {
+        "value": 0.54,
+        "as_of": "2026-10-28",
+        "status": "ok",
+        "freshness": "dated",
+        "source": "CBOE official (via ScraperAPI)",
+        "key": "put_call"
+      },
+      "bofa_fms_cash": {
+        "value": 3.9,
+        "as_of": "2026-10",
+        "status": "ok",
+        "note": "BofA FMS 10月(10/2-8调查, 10/13发布)现金3.9%持平9月, 仍<=4.0%卖出线; 来源Investing.com/TradingView",
+        "key": "bofa_fms_cash"
+      },
+      "sofr_iorb": {
+        "key": "sofr_iorb",
+        "value": 7.0,
+        "as_of": "2026-10-27",
+        "status": "ok",
+        "extra": {
+          "sofr": 3.95,
+          "effr": 3.88,
+          "sofr_as_of": "2026-10-27",
+          "effr_as_of": "2026-10-27",
+          "basis": "SOFR-EFFR"
+        }
+      },
+      "margin_cost": {
+        "key": "margin_cost",
+        "value": 7.0,
+        "as_of": "2026-10-27",
+        "status": "ok"
+      },
+      "bank_funding_stress": {
+        "key": "bank_funding_stress",
+        "value": 7.0,
+        "as_of": "2026-10-27",
+        "status": "ok",
+        "extra": {
+          "cp3m": 4.12,
+          "tbill3m": 4.05,
+          "sofr": 3.95,
+          "spread_bps": 7.0
+        }
+      },
+      "margin_debt": {
+        "value": 1480.054,
+        "as_of": "2026-09-30",
+        "status": "ok",
+        "key": "margin_debt"
+      },
+      "margin_gdp": {
+        "key": "margin_gdp",
+        "value": 4.55,
+        "as_of": "2026-04-01",
+        "status": "ok",
+        "freshness": "dated",
+        "extra": {
+          "basis": "取输入(margin_debt月度/GDP季度)中较旧的as_of",
+          "margin_debt_as_of": "2026-09-30",
+          "gdp_as_of": "2026-04-01"
+        }
+      },
+      "ipo_count": {
+        "value": 260.0,
+        "as_of": "2026-10-23",
+        "status": "ok",
+        "freshness": "dated",
+        "extra": {
+          "source": "stockanalysis",
+          "year": 2026,
+          "basis": "YTD累计宗数, as_of=最近一次IPO上市日"
+        },
+        "key": "ipo_count"
+      },
+      "insider": {
+        "value": 0.893,
+        "as_of": "2026-10-28",
+        "status": "ok",
+        "freshness": "dated",
+        "extra": {
+          "source": "openinsider",
+          "note": "近期榜前100笔口径,趋势用"
+        },
+        "key": "insider"
+      },
+      "bofa_bull_bear": {
+        "value": 7.4,
+        "as_of": "2026-10-15",
+        "status": "ok",
+        "note": "BofA Bull&Bear 7.4 (Flow Show 2026-10-15, 自8.1回落, 跌破8.0卖出线, 结束5/26起的卖出信号; 来源TechFlow转引Trend Research)",
+        "key": "bofa_bull_bear"
+      },
+      "hy_oas": {
+        "key": "hy_oas",
+        "value": 3.18,
+        "as_of": "2026-10-27",
+        "status": "ok"
+      },
+      "ad_line": {
+        "key": "ad_line",
+        "value": false,
+        "as_of": "2026-10-01",
+        "status": "ok",
+        "extra": {
+          "source": "NYSE A/D 腾落线(SP500 全成分股, Economic-Dashboard cron 真数据)",
+          "cumulative": 915,
+          "advance_pct": 59.05,
+          "ad_net": 93,
+          "cum_recent_high": 2031,
+          "cum_lookback_high": 2031,
+          "cum_made_new_high": true,
+          "recent_advance_pct_avg": 45.6,
+          "breadth_confirmed": true,
+          "tickers": 503
+        }
+      },
+      "buffett": {
+        "value": 255.0,
+        "as_of": "2026-04-01",
+        "status": "ok",
+        "extra": {
+          "source": "FRED Z.1"
+        },
+        "key": "buffett"
+      },
+      "cape": {
+        "value": 41.04,
+        "as_of": "2026-10-28",
+        "status": "ok",
+        "key": "cape"
+      },
+      "yield_curve": {
+        "key": "yield_curve",
+        "value": 0.38,
+        "as_of": "2026-10-28",
+        "status": "ok"
+      },
+      "lei": {
+        "value": 0.57,
+        "as_of": "2026-09-01",
+        "status": "ok",
+        "extra": {
+          "cli_index": 101.0,
+          "source": "FRED OECD CLI",
+          "note": "OECD综合领先指标6月变化(替Conference Board付费LEI)"
+        },
+        "key": "lei"
+      },
+      "aaii_alloc": {
+        "value": 71.79,
+        "as_of": "2026-09",
+        "status": "ok",
+        "freshness": "dated",
+        "key": "aaii_alloc"
+      }
+    },
+    "cot": {
+      "gold": {
+        "as_of": "2026-10-20",
+        "open_interest": 402279,
+        "comm_long": 59531,
+        "comm_short": 295113,
+        "comm_net": -235582,
+        "noncomm_long": 237142,
+        "noncomm_short": 37277,
+        "noncomm_net": 199865,
+        "metal": "gold",
+        "comm_net_wow": 6949,
+        "comm_long_wow": 5112,
+        "comm_short_wow": -1837,
+        "comm_surge": false
+      },
+      "silver": {
+        "as_of": "2026-10-20",
+        "open_interest": 113992,
+        "comm_long": 35323,
+        "comm_short": 72499,
+        "comm_net": -37176,
+        "noncomm_long": 34575,
+        "noncomm_short": 14780,
+        "noncomm_net": 19795,
+        "metal": "silver",
+        "comm_net_wow": 2266,
+        "comm_long_wow": 1929,
+        "comm_short_wow": -337,
+        "comm_surge": false
+      }
+    },
+    "generated_at": "2026-10-29T02:01:44.732441"
+  },
+  "cb_balance": {
+    "US": {
+      "name": "美联储 Fed",
+      "flag": "🇺🇸",
+      "unit": "$B",
+      "period": "WoW",
+      "date": "2026-09-30",
+      "assets": [
+        {
+          "name": "美国国债 Treasuries",
+          "value": 4564.161,
+          "delta": 5.829,
+          "pct": 0.13,
+          "sub": false
+        },
+        {
+          "name": "短期国债 Bills（RMP 储备管理购买）",
+          "value": 560.211,
+          "delta": 5.838,
+          "pct": 1.05,
+          "sub": true
+        },
+        {
+          "name": "MBS 抵押债",
+          "value": 1898.089,
+          "delta": -12.32,
+          "pct": -0.64,
+          "sub": false
+        },
+        {
+          "name": "FIMA 回购便利（Fed 借美元给外国央行）",
+          "value": 0,
+          "delta": 0,
+          "pct": null,
+          "sub": false
+        },
+        {
+          "name": "SRF 常备回购",
+          "value": 1.2,
+          "delta": 1.199,
+          "pct": 119900.0,
+          "sub": false
+        },
+        {
+          "name": "其他 Other（差额）",
+          "value": 279.6,
+          "delta": null,
+          "pct": null,
+          "sub": false
+        }
+      ],
+      "liabilities": [
+        {
+          "name": "准备金 Reserves",
+          "value": 2948.09,
+          "delta": 17.897,
+          "pct": 0.61,
+          "sub": false
+        },
+        {
+          "name": "隔夜逆回购 ON RRP",
+          "value": 11.539,
+          "delta": 11.078,
+          "pct": 2403.04,
+          "sub": false
+        },
+        {
+          "name": "外国官方及国际账户逆回购（外国央行存放）",
+          "value": 350.344,
+          "delta": 30.08,
+          "pct": 9.39,
+          "sub": false
+        },
+        {
+          "name": "财政部账户 TGA",
+          "value": 948.674,
+          "delta": -28.41,
+          "pct": -2.91,
+          "sub": false
+        },
+        {
+          "name": "流通货币 Currency",
+          "value": 2482.015,
+          "delta": -0.185,
+          "pct": -0.01,
+          "sub": false
+        }
+      ],
+      "total_assets": {
+        "name": "总资产",
+        "value": 6743.031,
+        "delta": -4.673,
+        "pct": -0.07,
+        "sub": false
+      },
+      "total_liab": null
+    },
+    "JP": {
+      "name": "日本央行 BoJ",
+      "flag": "🇯🇵",
+      "unit": "$B",
+      "period": "较上期",
+      "date": "2026-09-20",
+      "assets": [
+        {
+          "name": "日本国债 JGB",
+          "value": 3316.8,
+          "delta": 4.3,
+          "pct": 0.13,
+          "sub": false
+        },
+        {
+          "name": "公司债",
+          "value": 7.2,
+          "delta": -0.9,
+          "pct": -11.44,
+          "sub": false
+        },
+        {
+          "name": "ETF",
+          "value": 235.6,
+          "delta": -0.1,
+          "pct": -0.03,
+          "sub": false
+        },
+        {
+          "name": "J-REIT",
+          "value": 4.1,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": false
+        },
+        {
+          "name": "其他 Other（差额）",
+          "value": 524.3,
+          "delta": null,
+          "pct": null,
+          "sub": false
+        }
+      ],
+      "liabilities": [
+        {
+          "name": "银行券 Banknotes",
+          "value": 731.7,
+          "delta": 1.9,
+          "pct": 0.26,
+          "sub": false
+        },
+        {
+          "name": "经常项目存款",
+          "value": 2615.2,
+          "delta": -15.3,
+          "pct": -0.58,
+          "sub": false
+        },
+        {
+          "name": "政府存款",
+          "value": 105.4,
+          "delta": -14.5,
+          "pct": -12.08,
+          "sub": false
+        }
+      ],
+      "total_assets": {
+        "name": "总资产",
+        "value": 4088.0,
+        "delta": -19.1,
+        "pct": -0.46,
+        "sub": false
+      },
+      "total_liab": null,
+      "orig_unit": "兆¥"
+    },
+    "CN": {
+      "name": "中国央行 PBoC",
+      "flag": "🇨🇳",
+      "unit": "$B",
+      "period": "MoM",
+      "date": "2026-08",
+      "assets": [
+        {
+          "name": "外汇占款",
+          "value": 3242.9,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": false
+        },
+        {
+          "name": "对政府债权",
+          "value": 335.0,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": false
+        },
+        {
+          "name": "对其他存款性公司债权",
+          "value": 3047.4,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": false
+        },
+        {
+          "name": "其他 Other（差额）",
+          "value": 628.0,
+          "delta": null,
+          "pct": null,
+          "sub": false
+        }
+      ],
+      "liabilities": [
+        {
+          "name": "储备货币",
+          "value": 5865.2,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": false
+        },
+        {
+          "name": "货币发行",
+          "value": 2270.6,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": true
+        },
+        {
+          "name": "政府存款",
+          "value": 901.9,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": false
+        },
+        {
+          "name": "其他 Other（差额）",
+          "value": 486.2,
+          "delta": null,
+          "pct": null,
+          "sub": false
+        }
+      ],
+      "total_assets": {
+        "name": "总资产",
+        "value": 7253.3,
+        "delta": 0.0,
+        "pct": 0.0,
+        "sub": false
+      },
+      "total_liab": {
+        "name": "总负债",
+        "value": 7253.3,
+        "delta": 0.0,
+        "pct": 0.0,
+        "sub": false
+      },
+      "orig_unit": "亿¥"
+    },
+    "_fx": {
+      "USDJPY": 156.87,
+      "USDCNY": 6.6702,
+      "USDEUR": 1.1199
+    },
+    "ECB": {
+      "name": "欧元体系 Eurosystem",
+      "flag": "🇪🇺",
+      "unit": "$B",
+      "orig_unit": "十亿€",
+      "period": "周度",
+      "date": "2026-W43",
+      "assets": [
+        {
+          "name": "黄金及黄金债权 Gold",
+          "value": 1440.5,
+          "delta": 0.0,
+          "pct": 0.0,
+          "sub": false
+        },
+        {
+          "name": "外币资产 FX Assets",
+          "value": 586.5,
+          "delta": -0.7,
+          "pct": -0.12,
+          "sub": false
+        },
+        {
+          "name": "货币政策证券 Securities(APP+PEPP)",
+          "value": 3696.2,
+          "delta": -11.7,
+          "pct": -0.32,
+          "sub": false
+        },
+        {
+          "name": "对信贷机构贷款 Lending to CIs",
+          "value": 39.8,
+          "delta": 0.9,
+          "pct": 2.33,
+          "sub": false
+        },
+        {
+          "name": "其他资产 Other Assets",
+          "value": 324.2,
+          "delta": 3.7,
+          "pct": 1.16,
+          "sub": false
+        },
+        {
+          "name": "其他 Other（差额）",
+          "value": 559.4,
+          "delta": null,
+          "pct": null,
+          "sub": false
+        }
+      ],
+      "liabilities": [
+        {
+          "name": "流通银行券 Banknotes",
+          "value": 1826.6,
+          "delta": -1.6,
+          "pct": -0.09,
+          "sub": false
+        },
+        {
+          "name": "对信贷机构负债 Liab. to CIs",
+          "value": 2542.4,
+          "delta": -23.3,
+          "pct": -0.91,
+          "sub": false
+        },
+        {
+          "name": "存款便利 Deposit Facility",
+          "value": 2176.1,
+          "delta": -21.4,
+          "pct": -0.97,
+          "sub": true
+        },
+        {
+          "name": "对其他居民负债 Liab. to Others",
+          "value": 207.4,
+          "delta": -3.4,
+          "pct": -1.61,
+          "sub": false
+        },
+        {
+          "name": "重估账户 Revaluation",
+          "value": 1412.9,
+          "delta": -0.0,
+          "pct": -0.0,
+          "sub": false
+        },
+        {
+          "name": "资本与储备 Capital&Reserves",
+          "value": 31.6,
+          "delta": 0.0,
+          "pct": 0.08,
+          "sub": false
+        },
+        {
+          "name": "其他负债 Other Liab.",
+          "value": 198.5,
+          "delta": 4.2,
+          "pct": 2.15,
+          "sub": false
+        }
+      ],
+      "total_assets": {
+        "name": "总资产",
+        "value": 6646.6,
+        "delta": -0.4,
+        "pct": -0.01,
+        "sub": false
+      },
+      "total_liab": null,
+      "rates": {
+        "mro": 2.65,
+        "dfr": 2.5,
+        "mlf": 2.9
+      },
+      "usd_per_eur": 1.1199,
+      "source": "ECB Data Portal ILM (Eurosystem 周度财务报表)"
+    }
+  },
+  "ai": {
+    "reads": {
+      "vix": "VIX 17.52(10/27)，较前值 18.39 回落，低于 20。",
+      "fear_greed": "CNN 恐贪 35.9(10/28)，由 33.6 回升，仍在恐惧区。",
+      "aaii_bull_bear": "AAII 多空差 -8.9(10/21 周)，本周数据未更新，空头 45.8% 占优。",
+      "put_call": "CBOE equity P/C 0.54(10/28)，前值 0.59，黄灯。",
+      "bofa_fms_cash": "BofA FMS 10 月现金 3.9%，持平，仍在 4.0% 以下红灯。",
+      "sofr_iorb": "SOFR 3.95 减 EFFR 3.88 = 7bp(10/27)，黄灯。",
+      "margin_cost": "融资成本 7.0%(10/27)，黄灯。",
+      "bank_funding_stress": "CP3M 减 T-bill 7bp(10/27)，绿灯。",
+      "margin_debt": "FINRA 融资余额 9 月 $1,480.1B，较 8 月 +1.8%，无灯。",
+      "margin_gdp": "融资余额/GDP 4.55%，红灯(GDP 口径 2026-04)。",
+      "ipo_count": "今年 IPO 累计 260 宗(最近一次 10/23)，无灯。",
+      "insider": "Insider Buy/Sell(openinsider 前100笔) 0.893(10/28)，前值 1.015，口径波动大。",
+      "bofa_bull_bear": "BofA B&B 7.4(10/15)，低于 8.0 卖出线，本期无更新。",
+      "hy_oas": "HY OAS 3.18%(10/27)，前值 3.30 收窄，远低于 4.5% 触发线。",
+      "ad_line": "NYSE A/D 顶背离未触发(as_of 10/1，Economic Dashboard 口径)，数据停在 10/1。",
+      "buffett": "巴菲特指标 255%(2026-04 口径)，红灯。",
+      "cape": "CAPE 41.04(10/28)，历史极高区。",
+      "yield_curve": "10Y-2Y 利差 +0.38(10/28)，前值 +0.29，走陡。",
+      "lei": "OECD CLI 口径六个月变化 +0.57%(9/1)，无更新。",
+      "aaii_alloc": "AAII 股票配置 71.79%(9 月)，红灯，月度无更新。"
+    },
+    "notes": {
+      "vix": "17.52，降0.9",
+      "fear_greed": "35.9 恐惧(升)",
+      "aaii_bull_bear": "AAII多空差-8.9",
+      "put_call": "0.54，降",
+      "bofa_fms_cash": "FMS现金3.9%",
+      "sofr_iorb": "SOFR-EFFR 7bp",
+      "margin_cost": "融资成本7.0%",
+      "bank_funding_stress": "融资压力7bp",
+      "margin_debt": "融资余额$1,480B",
+      "margin_gdp": "融资/GDP 4.55%",
+      "ipo_count": "IPO 260",
+      "insider": "0.893(openinsider)",
+      "bofa_bull_bear": "B&B 7.4",
+      "hy_oas": "3.18%，收窄",
+      "ad_line": "未背离(停10/1)",
+      "buffett": "255%",
+      "cape": "41.04",
+      "yield_curve": "+0.38，走陡",
+      "lei": "+0.57%",
+      "aaii_alloc": "71.8%"
+    },
+    "conclusions": {
+      "short": "短期（偏平静，卖出触发 0/7）：VIX 17.52 低于 20、恐贪 35.9、P/C 0.54、HY OAS 3.18 收窄，无恶化信号。动作：不加仓、维持防御；FOMC 前不追高也不抄底，观察 VIX 是否上破 20。",
+      "mid": "中期（偏谨慎）：CAPE 41.04/巴菲特 255%/AAII 配置 71.8% 估值全红，FMS 现金 3.9% 在 4% 线下，融资余额 9 月 $1,480B(+1.8%)；BofA B&B 7.4 距 8.0 线 0.6。动作：逐步降低美股 beta，提高现金与贵金属比重，不因情绪回升加杠杆。",
+      "long": "长期（结构性风险高）：极端估值压缩长期回报；Economic Dashboard 风控灯美债/日债红灯但数据停在 10/1(偏旧，不能当今日读数)。动作：维持黄金/白银战略配置，降低长久期美债与高估值成长股敞口。"
+    },
+    "focus": "触发 0/7，BofA B&B 7.4 距 8.0 线 0.6；VIX 降至 17.52、HY OAS 收窄至 3.18，情绪回暖而估值全红(CAPE 41.04)，FOMC 议息前方向待定。",
+    "sector_analysis": "【波动率与情绪】VIX 17.52(前 18.39)；恐贪 35.9(前 33.6)；P/C 0.54(前 0.59)；AAII 多空差 -8.9(10/21 周，无更新)。情绪边际回暖但仍在恐惧区。\n【杠杆与信用】HY OAS 3.18%(前 3.30)收窄；银行融资压力 7bp 绿；SOFR-EFFR 7bp、融资成本 7.0 黄；FINRA 融资余额 9 月 $1,480.1B(+1.8%)；Insider 0.893(前 1.015)。\n【估值与周期】CAPE 41.04、巴菲特 255%、AAII 配置 71.8% 红灯；10Y-2Y +0.38(前 +0.29)。\n【贵金属COT】COT(10/20)：黄金 commercial 净 -235,582(周 +6,949)，无突增；CFTC 周五更新，本周无新数。\n【KOL情绪】名册 212 人，今日抓到 158、沿用旧条目 54，大类转向 31；Chamath 由中性转看空(AI 基建私募信贷债务泡沫)，Prechter 警示股市新高与消费者信心背离，Fritzell 看多韩国小盘股。\n【央行流动性】Fed 准备金 $2.948T(+$17.9B)、TGA $948.7B，数据停在 9/30；BoJ 停 9/20、PBoC 停 8 月；Eurosystem W43 总资产 $6,646.6B(-0.01%)，APP+PEPP -0.32%。\n【机构持仓】13F 19 机构行已写 Notion，本期无新披露；政要 OGE/参议员源抓取报错，未就绪，DJT Form 4 正常。"
+  }
+}
