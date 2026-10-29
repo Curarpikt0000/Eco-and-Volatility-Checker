@@ -64,8 +64,8 @@ then
 fi
 
 # 单批 runner(模型与交互 session 一致；模板里的旧模型名替换掉)
-# 2026-10-01: opus-5-5 -> sonnet-5. 6 并行批 x 50-145 轮在 opus 上 3h 烧掉 $500 Playground 月额度。
-KOL_MODEL="${KOL_MODEL:-claude-sonnet-5}"
+# 2026-10-01: opus-5-5 -> sonnet-5; 2026-10-29: sonnet-5 -> sonnet-5-5 (Chao 要求统一). 6 并行批 x 50-145 轮在 opus 上 3h 烧掉 $500 Playground 月额度。
+KOL_MODEL="${KOL_MODEL:-claude-sonnet-5-5}"
 sed -e "s/claude-opus-4-8/$KOL_MODEL/" "$TEMPLATE" > "$BASE/run_batch.sh"
 # 自测模式: 不调 LLM，批进程只 sleep，用来验证拉起/等待/合并/STATUS 这条链路
 if [ "${KOL_PREFETCH_DRY:-0}" = "1" ]; then printf '#!/bin/bash\nsleep 8\n' > "$BASE/run_batch.sh"; fi
