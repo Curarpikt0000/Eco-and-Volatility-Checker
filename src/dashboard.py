@@ -3858,6 +3858,12 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         auctions=_auctions_html(auctions),
         holdings=_holdings_html(holdings),
     )
+    # ★2026-10-30 Chao: 页面日期不可靠 → 每个频率徽章追加「源头最新日 + 滞后」(读哨兵落盘, 不编)
+    try:
+        import freshness_badge as _fb
+        html = _fb.annotate(html)
+    except Exception as _e:  # noqa: BLE001  徽章增强失败不影响出页
+        print(f"[dashboard] 新鲜度徽章跳过: {_e}")
     path = os.path.join(OUT_DIR, "index.html")
     open(path, "w", encoding="utf-8").write(html)
     # 也存一份带日期的历史
@@ -10704,6 +10710,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   .freq-monthly {{ background: rgba(224,169,46,0.16); color: #a9791a; border: 1px solid rgba(224,169,46,0.36); }}
   .freq-quarterly {{ background: rgba(150,120,175,0.16); color: #7a5a95; border: 1px solid rgba(150,120,175,0.34); }}
   .freq-event {{ background: rgba(138,133,120,0.14); color: #6d685c; border: 1px solid rgba(138,133,120,0.3); }}
+  .freq-stale {{ background: rgba(192,117,125,0.16) !important; color: #a8434d !important; border: 1px solid rgba(192,117,125,0.45) !important; }}
   /* 普通(非flex) part-title 用 flex 让徽章能靠右 */
   .part-title {{ display: flex; align-items: center; gap: 10px; }}
   /* 综合结论卡片 */

@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-19 10:32",
+ "updated": "2026-10-30 20:23",
  "method": "事件来源两类：calendar=FOMC 官方日历（federalreserve.gov 新闻稿）；anomaly=先用真实价格算出异动日（|日收益|≥1.8σ），再联网检索当天新闻。每条 URL 均由父 agent 用 web_extract 逐条实测可访问且标题对应，不采信子 agent 自报。",
  "events": [
   {
@@ -403,6 +403,17 @@
    "confidence": "high",
    "kind": "calendar",
    "url_alive": true
+  },
+  {
+   "date": "2026-09-28",
+   "event": "霍尔木兹风险溢价重燃推高油价与美债收益率，加息预期升温，黄金单日急跌",
+   "detail": "Kitco PM Report：美盘尾段现货金约4131美元，日内跌约3.8%，现货银约61.02美元、跌约5.0%。油价上行推高通胀担忧，10年期美债收益率升至约5.23%（2007年以来最高），交易员押注10月加息25bp的概率约70%；美元指数持稳于101.16附近。价格口径下COMEX期货日收益-3.54%（约-2.3σ），美元指数仅+0.23%——当日金价下跌主要由利率与油价渠道驱动，而非美元走强。",
+   "url": "https://www.kitco.com/news/article/2026-09-28/gold-silver-sink-oil-yields-keep-fed-pressure-focus-kitco-pm-report",
+   "source": "Kitco PM Report",
+   "confidence": "high",
+   "url_alive": true,
+   "url_title": "Gold, silver sink as oil, yields keep Fed pressure in focus - Kitco PM Report",
+   "kind": "anomaly"
   }
  ]
 }

@@ -75,6 +75,19 @@ def parse(pdf_bytes):
     return wk, rec
 
 
+def _get_pdf(u):
+    """★2026-10-30 修: AAR 站对部分 PDF 直链 301 跳转到 /data-center/ 网页(返回 HTML 而非 PDF),
+    旧代码把 HTML 当 PDF 解析 → 「第 1 页不是 U.S. Rail Traffic」, 10-21/10-28 两期静默缺失。
+    实测: 同一链接加 ?download=1 返回 200+application/pdf。先直链, 拿到的不是 %PDF 就用回退通道。"""
+    b = urllib.request.urlopen(urllib.request.Request(u, headers=UA), timeout=60).read()
+    if b[:5] == b"%PDF-":
+        return b
+    b2 = urllib.request.urlopen(urllib.request.Request(u + "?download=1", headers=UA), timeout=60).read()
+    if b2[:5] != b"%PDF-":
+        raise ValueError("直链与 ?download=1 均未返回 PDF(站点结构可能又变了)")
+    return b2
+
+
 def main():
     since = None
     if "--since" in sys.argv:
@@ -92,7 +105,7 @@ def main():
     ok = bad = 0
     for u, d in todo:
         try:
-            b = urllib.request.urlopen(urllib.request.Request(u, headers=UA), timeout=60).read()
+            b = _get_pdf(u)
             wk, rec = parse(b)
             store["weeks"][wk] = rec
             store.setdefault("src", {})[wk] = u

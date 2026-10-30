@@ -2465,10 +2465,23 @@ def fetch_treasury_auctions(history_days=420):
             "reopening": x.get("reopening"),
         }
 
+    def _norm_term(t):
+        """★2026-10-30 修: 官方 API 对「增发(reopening)」的期限写成 '9-Year 10-Month' /
+        '29-Year 10-Month' / '19-Year 10-Month'(剩余期限), 而不是 '10-Year'/'30-Year'/'20-Year'。
+        旧代码只认整数写法 → 10-07 的 10Y、10-08 的 30Y 增发全被过滤, 看板拍卖停在 10-06。
+        归一: 'N-Year M-Month' → 四舍五入到最近整数年; 只对「整数年+1~11个月」且归一后落在关键券种时生效。"""
+        import re as _re
+        m = _re.match(r"^(\d+)-Year(?:\s+(\d+)-Month)?$", str(t or "").strip())
+        if not m:
+            return t
+        yrs, mons = int(m.group(1)), int(m.group(2) or 0)
+        yrs += 1 if mons >= 6 else 0
+        return f"{yrs}-Year"
+
     done = defaultdict(list)     # term → 已完成(有中标结果)
     future = defaultdict(list)   # term → 未来(auction_date>=today 且未开标)
     for x in rows:
-        st, term, ad = x.get("security_type"), x.get("security_term"), x.get("auction_date")
+        st, term, ad = x.get("security_type"), _norm_term(x.get("security_term")), x.get("auction_date")
         # ★2026-09-07 修: 剔除 TIPS(通胀保值债券)。
         #   TIPS 的 security_type 同样是 Note/Bond、security_term 同样是 10-Year/30-Year,
         #   靠这两个字段过不掉。但它报的是<b>实际收益率</b>(扣通胀)且发行规模小得多,
@@ -2961,12 +2974,42 @@ def fetch_credit_impulse(years=8):
                 continue
         return []
 
+    def _bis_ratio(cc):
+        """★2026-10-30 新增: BIS 官方 API 直连 [(YYYY-MM-DD, float)] 升序。
+        根因: FRED 镜像的 BIS 信贷序列(Q*PAM770A)停在 2025-Q3(date 2025-10-01), 滞后 394 天,
+        而 BIS 官方 stats.bis.org 已有 2026-Q1。同一接口对照: US 总债务 N 口径取到 2026-Q1, 链路可信。
+        季度 'YYYY-Qn' → 该季首月 1 日(与 FRED 日期约定一致, 使两通道可合并比较)。"""
+        try:
+            r = requests.get(
+                f"https://stats.bis.org/api/v1/data/WS_TC/Q.{cc}.P.A.M.770.A?format=csv",
+                timeout=40, headers={"User-Agent": "Mozilla/5.0"})
+            if r.status_code != 200:
+                return []
+            import csv as _csv, io as _io
+            out = []
+            for row in _csv.DictReader(_io.StringIO(r.text)):
+                tp, v = row.get("TIME_PERIOD", ""), row.get("OBS_VALUE", "")
+                if len(tp) == 7 and tp[4:6] == "-Q" and v:
+                    out.append((f"{tp[:4]}-{(int(tp[6]) - 1) * 3 + 1:02d}-01", float(v)))
+            return sorted(out)
+        except Exception:
+            return []
+
+    _bis_cc = {"US": "US", "CN": "CN", "EA": "XM", "JP": "JP"}
+
+    def _merge_latest(fred_pts, bis_pts):
+        """两通道取并集(同日以 FRED 为准), 让序列延伸到更新的那个。"""
+        d = dict(bis_pts)
+        d.update(dict(fred_pts))
+        return sorted(d.items())
+
     out = {}
     for cc, (name, flag, sid) in spec.items():
-        ratio = _fred_ratio(sid)
+        _bp = _bis_ratio(_bis_cc[cc])
+        ratio = _merge_latest(_fred_ratio(sid), _bp)
         pts = _impulse(ratio) if len(ratio) >= 3 else []
         # 长历史(2008起)——粗颗粒度参考
-        ratio_long = _fred_ratio_long(sid)
+        ratio_long = _merge_latest(_fred_ratio_long(sid), _bp)
         pts_long_all = _impulse(ratio_long) if len(ratio_long) >= 3 else []
         pts_long = [p for p in pts_long_all if p["date"] >= "2008-01-01"]
         if pts:
@@ -9591,7 +9634,7 @@ def fetch_jpy_carry(cache_path=None):
         return out_rows
     try:
         leg = _cftc("6dca-aqww", ["noncomm_positions_long_all", "noncomm_positions_short_all"])
-        tff = _cftc("gpe5-46if", ["lev_money_positions_long", "lev_money_positions_short", "asset_mgr_positions_long", "asset_mgr_positions_short"])
+        tff = _cftc("gpe5-46if", ["lev_money_positions_long", "lev_money_positions_short", "asset_mgr_positions_long", "asset_mgr_positions_short", "open_interest_all"])
     except Exception as e:
         leg, tff = [], []; out["warnings"].append("CFTC 日元取数失败: %s" % type(e).__name__)
     nc = [[r[0], r[1] - r[2]] for r in leg]
@@ -9661,27 +9704,39 @@ def fetch_jpy_carry(cache_path=None):
     # ── facts: 规则型事实, 每条带口径与日期; 不预测不建议 ──
     F = []
     def add(tag, txt): F.append({"tag": tag, "txt": txt})
+    def _lag(d):
+        """数据日 d(YYYY-MM-DD) 距今日(JST)的日历天数文案。"""
+        try: n = (_dt.datetime.now(timezone(timedelta(hours=9))).date() - _dt.date.fromisoformat(str(d)[:10])).days
+        except Exception: return ""
+        return "滞后 %d 天" % n if n > 0 else "当日"
     if len(nc) >= 2:
         a, b = nc[-1], nc[-2]
         chg = (a[1] - b[1]) / abs(b[1]) * 100 if b[1] else None
-        add("CFTC", "日元非商业净头寸 %s：%+d 手（上周 %+d，周变动 %+d 手%s）" % (a[0], a[1], b[1], a[1] - b[1], ("，%+.0f%%" % chg) if chg is not None and abs(b[1]) >= 5000 else "，上周基数过小不算百分比"))
+        add("CFTC", "日元非商业净头寸（数据日 %s，%s）：%+d 手（上周 %+d，周变动 %+d 手%s）" % (a[0], _lag(a[0]), a[1], b[1], a[1] - b[1], ("，%+.0f%%" % chg) if chg is not None and abs(b[1]) >= 5000 else "，上周基数过小不算百分比"))
     if len(lv) >= 2:
-        add("CFTC", "杠杆基金（TFF）日元净头寸 %s：%+d 手（周变动 %+d）" % (lv[-1][0], lv[-1][1], lv[-1][1] - lv[-2][1]))
+        _t = [r for r in tff if len(r) >= 6]
+        if len(_t) >= 2:
+            _a, _b = _t[-2], _t[-1]; _oi = _b[5]
+            add("CFTC", "杠杆基金（TFF）日元（数据日 %s，%s）：多头 %d→%d（%+d），空头 %d→%d（%+d），净 %+d 手（周变动 %+d）；空头占全市场持仓量 %.1f%%（上周 %.1f%%）；空头变动占持仓量 %+.2f%%"
+                % (_b[0], _lag(_b[0]), _a[1], _b[1], _b[1] - _a[1], _a[2], _b[2], _b[2] - _a[2], lv[-1][1], lv[-1][1] - lv[-2][1],
+                   100 * _b[2] / _oi if _oi else 0, 100 * _a[2] / _a[5] if _a[5] else 0, 100 * (_b[2] - _a[2]) / _oi if _oi else 0))
+        else:
+            add("CFTC", "杠杆基金（TFF）日元净头寸（数据日 %s，%s）：%+d 手（周变动 %+d）" % (lv[-1][0], _lag(lv[-1][0]), lv[-1][1], lv[-1][1] - lv[-2][1]))
     if jp10:
         dk = sorted(jp10); v, p = jp10[dk[-1]], jp10[dk[-2]]
         hi = max(jp10[k] for k in dk[-30:])
-        add("日债", "日本 10 年国债收益率 %s：%.3f%%（前一交易日 %.3f%%；近 30 个交易日最高 %.3f%%）%s" % (dk[-1], v, p, hi, ("，当前" + ("高于" if v > 3 else "低于") + " 3%")))
+        add("日债", "日本 10 年国债收益率（数据日 %s，%s）：%.3f%%（前一交易日 %.3f%%；近 30 个交易日最高 %.3f%%）%s" % (dk[-1], _lag(dk[-1]), v, p, hi, ("，当前" + ("高于" if v > 3 else "低于") + " 3%")))
     if us10:
         dk = sorted(us10); v = us10[dk[-1]]
-        add("美债", "美国 10 年国债收益率 %s：%.2f%%，%s 5%%" % (dk[-1], v, "高于" if v > 5 else "低于"))
+        add("美债", "美国 10 年国债收益率（数据日 %s，%s）：%.2f%%，%s 5%%" % (dk[-1], _lag(dk[-1]), v, "高于" if v > 5 else "低于"))
     if spread:
         a = spread[-1]; b = spread[-6] if len(spread) > 6 else spread[0]
-        add("利差", "美日 10 年利差 %s：%.2f 个百分点（5 个交易日前 %.2f，%s）" % (a[0], a[1], b[1], "走阔" if a[1] > b[1] else "收窄"))
+        add("利差", "美日 10 年利差（数据日 %s，%s）：%.2f 个百分点（5 个交易日前 %.2f，%s）" % (a[0], _lag(a[0]), a[1], b[1], "走阔" if a[1] > b[1] else "收窄"))
     if fx:
         last = fx[-1][4]
-        add("汇率", "美元/日元 %s：%.2f（距 160 关口 %.2f 日元；近 1 年高点 %.2f）" % (fx[-1][0], last, 160 - last, max(x[2] for x in fx[-250:])))
+        add("汇率", "美元/日元（数据日 %s，%s）：%.2f（距 160 关口 %.2f 日元；近 1 年高点 %.2f）" % (fx[-1][0], _lag(fx[-1][0]), last, 160 - last, max(x[2] for x in fx[-250:])))
     if rv:
-        add("波动", "美元/日元 20 日已实现波动率 %s：%.1f%%（年化；近 1 年中位 %.1f%%）——是已实现波动率，不是隐含波动率" % (rv[-1][0], rv[-1][1], sorted(x[1] for x in rv[-250:])[len(rv[-250:]) // 2]))
+        add("波动", "美元/日元 20 日已实现波动率（数据日 %s，%s）：%.1f%%（年化；近 1 年中位 %.1f%%）——是已实现波动率，不是隐含波动率" % (rv[-1][0], _lag(rv[-1][0]), rv[-1][1], sorted(x[1] for x in rv[-250:])[len(rv[-250:]) // 2]))
     out["facts"] = F
     ok = len(nc) >= 100 and len(fx) >= 500 and bool(spread)
     if not ok:
