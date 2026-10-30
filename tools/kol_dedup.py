@@ -29,6 +29,7 @@ DATA = os.path.join(ROOT, "data")
 IDX = os.path.join(DATA, "kol", "seen_index.json")
 LEDGER = os.path.join(DATA, "kol", "dedup_savings.jsonl")
 FP_LEN = 60
+TAIL_LEN = 40
 # 单条「抽取+LLM 摘要」估算成本(美元), 仅用于账本估算, 非实测计费
 EST_COST_PER_ITEM = 0.04
 
@@ -70,6 +71,18 @@ def fingerprint(text):
     return hashlib.sha1(t.encode()).hexdigest()[:16] if len(t) >= 12 else ""
 
 
+def fingerprint_tail(text):
+    """★2026-10-31 第二指纹: 取归一化正文『末尾』TAIL_LEN 字。
+    实测(300 条抽样): 只用开头指纹时, 给原文前面加日期/『摘要』/『X 说』就漏掉 283/300 —— 同一内容换壳重来会再烧 AI 钱。
+    库里观点正文中位仅 78 字, 只有 13% 够 180 字, 『取中段』方案对 87% 的内容不生效, 故改取末尾:
+    加前缀对末尾完全无影响。要求归一化后 >= TAIL_LEN+20 字才出指纹(太短的句子末尾易与别条撞)。
+    取舍: 若对方只改动结尾(加『转自…』后缀)则漏; 由开头指纹/链接排重兜底。"""
+    t = re.sub(r"[\W_]+", "", (text or "").lower())
+    if len(t) < TAIL_LEN + 20:
+        return ""
+    return "t" + hashlib.sha1(t[-TAIL_LEN:].encode()).hexdigest()[:15]
+
+
 def urls_in(text):
     return {n for n in (norm_url(u) for u in _URL_RE.findall(text or "")) if n}
 
@@ -84,6 +97,9 @@ def _add(idx, kid, urls=(), texts=()):
         f = fingerprint(t)
         if f:
             e["fps"].add(f)
+        ft = fingerprint_tail(t)
+        if ft:
+            e["fps"].add(ft)
         e["urls"] |= urls_in(t)
 
 
@@ -139,8 +155,12 @@ def is_seen(idx, kid, url="", text="", extra_text=""):
     n = norm_url(url)
     if n and n in known:
         return True, "link"
+    fps = set(e["fps"])
     f = fingerprint(text)
-    if f and f in set(e["fps"]):
+    if f and f in fps:
+        return True, "content"
+    ft = fingerprint_tail(text)
+    if ft and ft in fps:
         return True, "content"
     cites = urls_in(text) | urls_in(extra_text)
     if cites and cites <= known:
