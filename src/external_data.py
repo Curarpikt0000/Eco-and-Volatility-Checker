@@ -5807,16 +5807,43 @@ def fetch_debt_to_gdp(years=15):
     out = {"countries": [], "status": "未找到", "as_of_year": None,
            "vintage": None,
            "source": "IMF World Economic Outlook (DataMapper API) · GGXWDG_NGDP"}
+    # ★2026-10-31: 旧 DataMapper(www.imf.org/external/datamapper) 对本机 IP 一律 403 Access Denied(连 /indicators、WEO 页都 403,
+    #   对照组同样 403 → 是 IP 层封, 不是接口改版)。而新 SDMX(api.imf.org, 代码里 IIP 早已在用)本机可通, 且同名指标 GGXWDG_NGDP 同在 WEO 流里。
+    #   改为: 主源 api.imf.org WEO; 失败再退旧 DataMapper。两路解析成同一 vals[iso][year] 结构, 下游逻辑不变。
+    vals, src_note = {}, ""
     try:
-        r = requests.get(f"{IMF_DM_API}/GGXWDG_NGDP", timeout=45,
-                         headers={"User-Agent": "Mozilla/5.0 (EcoVolChecker research)"})
-        if r.status_code != 200:
-            out["note"] = f"IMF API HTTP {r.status_code}"
-            return out
-        vals = (r.json().get("values") or {}).get("GGXWDG_NGDP") or {}
+        _isos = "+".join(i for i, _, _ in TOP10_ECONOMIES)
+        r = requests.get(
+            f"https://api.imf.org/external/sdmx/2.1/data/IMF.RES,WEO/{_isos}.GGXWDG_NGDP.A?startPeriod={_dt.date.today().year - years - 1}&endPeriod={_dt.date.today().year + 6}",
+            timeout=90, headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) Chrome/124", "Accept": "application/json"})
+        if r.status_code == 200:
+            j = r.json()
+            _sd = j["structure"]["dimensions"]["series"]
+            _tp = j["structure"]["dimensions"]["observation"][0]["values"]
+            _ct = next(x for x in _sd if x["id"] == "COUNTRY")["values"]
+            _ci = [x["id"] for x in _sd].index("COUNTRY")
+            for key, ser in j["dataSets"][0]["series"].items():
+                iso_ = _ct[int(key.split(":")[_ci])]["id"]
+                vals[iso_] = {_tp[int(t)]["id"]: float(v[0]) for t, v in ser["observations"].items()
+                              if v and v[0] not in (None, "")}
+            src_note = "api.imf.org SDMX WEO"
+        else:
+            src_note = f"api.imf.org HTTP {r.status_code}"
     except Exception as e:
-        out["note"] = f"IMF API 异常: {type(e).__name__}"
-        return out
+        src_note = f"api.imf.org 异常 {type(e).__name__}"
+    if not vals:
+        try:
+            r = requests.get(f"{IMF_DM_API}/GGXWDG_NGDP", timeout=45,
+                             headers={"User-Agent": "Mozilla/5.0 (EcoVolChecker research)"})
+            if r.status_code != 200:
+                out["note"] = f"IMF 新旧两路均失败: {src_note}; DataMapper HTTP {r.status_code}"
+                return out
+            vals = (r.json().get("values") or {}).get("GGXWDG_NGDP") or {}
+            src_note = "DataMapper(备用)"
+        except Exception as e:
+            out["note"] = f"IMF 新旧两路均异常: {src_note}; {type(e).__name__}"
+            return out
+    out["fetch_via"] = src_note
     if not vals:
         out["note"] = "IMF API 返回空"
         return out
