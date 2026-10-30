@@ -6,10 +6,10 @@
     "note": "AAII Stocks Total 71.79% (Sep 2026调查, 10/1发布; 股票基金38.35%+个股33.44%; 现金13.35%)"
   },
   "put_call": {
-    "value": 0.56,
-    "as_of": "2026-10-20",
+    "value": 0.58,
+    "as_of": "2026-10-29",
     "status": "ok",
-    "note": "CBOE官方EQUITY put/call=0.56 (jina取官方daily页最近交易日, 2026-10-21取得; 页面未标日期,按最近交易日记)"
+    "note": "CBOE官方EQUITY put/call=0.58 (jina取官方daily页最近交易日, 2026-10-30取得; 页面未标日期,按最近交易日记)"
   },
   "insider": {
     "value": 0.34,
@@ -36,10 +36,10 @@
     "note": "NYSE A/D顶背离持续确认(多源9月): 500最活跃股A/D line已落后29个session而SPY距高点仅0.8%=live divergence; 等权RSP弱于SPY; 新52周高占比偏低; McClellan震荡器仍弱; 广度恶化未修复"
   },
   "aaii_bull_bear": {
-    "value": -8.9,
-    "as_of": "2026-10-21",
+    "value": -3.6,
+    "as_of": "2026-10-28",
     "status": "ok",
-    "note": "AAII 10/21周: 多36.9%/空45.8%/中17.3%, spread -8.9 (AAII官网sentimentsurvey页取得; 上周10/14 38.7/41.6=-2.9)"
+    "note": "AAII 10/28周: 多37.8%/空41.4%/中20.7%, spread -3.6 (aaii.com/sentimentsurvey; 上周10/21 36.9/45.8=-8.9)"
   },
   "margin_debt": {
     "value": 1480.054,

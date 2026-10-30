@@ -133,11 +133,18 @@
   "https://www.kitco.com/news/article/2026-10-27/gold-price-needs-build-floor-here-or-face-deeper-correction-standard",
   "https://www.kitco.com/news/article/2026-10-27/gold-price-shoots-session-high-4048oz-after-consumer-confidence-rises-917",
   "https://www.kitco.com/news/article/2026-10-27/gold-prices-holding-above-4000-us-new-home-sales-fall",
+  "https://www.kitco.com/news/article/2026-10-28/agnico-eagle-beats-earnings-expectations-higher-gold-prices-offset-rising",
   "https://www.kitco.com/news/article/2026-10-28/gold-price-cad5684oz-after-bank-canada-raises-25-bps-sees-growth-slowing-q4",
   "https://www.kitco.com/news/article/2026-10-28/gold-price-drops-4035oz-fed-votes-10-2-favor-rate-hold",
   "https://www.kitco.com/news/article/2026-10-28/gold-prices-could-fall-3900-silver-50-fed-tightening-pressures-precious",
   "https://www.kitco.com/news/article/2026-10-28/gold-recovery-stalls-saudi-refinery-attack-claims-lift-crude-silver",
   "https://www.kitco.com/news/article/2026-10-28/gold-steadies-silver-falls-fed-holds-rates-two-officials-favor-hike-kitco",
+  "https://www.kitco.com/news/article/2026-10-29/gold-falls-toward-4000-core-pce-rises-us-growth-accelerates-kitco-am-report",
+  "https://www.kitco.com/news/article/2026-10-29/gold-its-lows-ecb-leaves-rates-unchanged-even-inflation-remains-elevated",
+  "https://www.kitco.com/news/article/2026-10-29/gold-prices-feel-pressure-weekly-jobless-claims-remain-below-200k-sixth",
+  "https://www.kitco.com/news/article/2026-10-29/gold-remains-stuck-fed-takes-hawkish-pause-tds-melek",
+  "https://www.kitco.com/news/article/2026-10-29/silver-could-see-further-losses-against-gold-physical-market-weakens-metals",
+  "https://www.kitco.com/news/article/2026-10-29/spot-gold-4025oz-us-gdp-growth-rises-34-q3-core-pce-rises-25",
   "https://www.kitco.com/opinion/2026-09-22/extreme-greed-meets-bitcoin-breakout",
   "https://www.kitco.com/opinion/2026-09-22/gold-and-silver-alert-more-downside-another-rally",
   "https://www.kitco.com/opinion/2026-09-22/golden-mindset-key",
@@ -232,7 +239,10 @@
   "https://www.kitco.com/opinion/2026-10-27/silvers-cot-positioning-reaches-137-report-extreme-patience-may-be-real-signal",
   "https://www.kitco.com/opinion/2026-10-27/summary-t-bonds-stocks-and-precious-metals",
   "https://www.kitco.com/opinion/2026-10-27/what-could-send-gold-higher-if-not-middle-east-peace",
-  "https://www.kitco.com/opinion/2026-10-27/why-gold-miners-fall-even-after-record-profits"
+  "https://www.kitco.com/opinion/2026-10-27/why-gold-miners-fall-even-after-record-profits",
+  "https://www.kitco.com/opinion/2026-10-28/bitcoin-holds-its-bullish-outlook-ethereum-support-jumps",
+  "https://www.kitco.com/opinion/2026-10-28/fed-day-playbook-traders-guide-gold-price-action",
+  "https://www.kitco.com/opinion/2026-10-28/picture-silver-cot"
  ],
  "items": [
   {
@@ -1697,6 +1707,47 @@
    "date": "2026-10-28",
    "title": "Precious Metals Market Currently a Battleground",
    "url": "https://www.gold-eagle.com/article/precious-metals-market-currently-battleground",
+   "body_read": false,
+   "prices_in_text": [
+    "2026"
+   ]
+  },
+  {
+   "kind": "video",
+   "channel": "tech",
+   "who": "Chris Vermeulen",
+   "date": "",
+   "date_unknown": true,
+   "title": "Why Good Poker Players Make Good Traders",
+   "url": "https://youtu.be/HFfRGsCQ05E",
+   "body_read": false
+  },
+  {
+   "kind": "article",
+   "channel": "inst",
+   "who": "Kitco/news",
+   "date": "2026-10-29",
+   "title": "Gold remains stuck as the Fed takes a hawkish pause - TDS’ Melek",
+   "url": "https://www.kitco.com/news/article/2026-10-29/gold-remains-stuck-fed-takes-hawkish-pause-tds-melek",
+   "body_read": true,
+   "fcst_sentences": [
+    "“Carry will be higher, and so will the opportunity cost of holding gold, as long yields remain elevated, suggesting that a material rebound is unlikely for now.” Along with gold , Melek said that he expects silver will remain stuck between $50 and $55."
+   ],
+   "prices_in_text": [
+    "$3,900",
+    "$4,000",
+    "$4,250",
+    "$50",
+    "$55"
+   ]
+  },
+  {
+   "kind": "article",
+   "channel": "tech",
+   "who": "Gold-Eagle",
+   "date": "2026-10-29",
+   "title": "The Target Was Only the Beginning: Copper vs. Palladium",
+   "url": "https://www.gold-eagle.com/article/target-was-only-beginning-copper-vs-palladium",
    "body_read": false,
    "prices_in_text": [
     "2026"

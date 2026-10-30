@@ -13,6 +13,7 @@
   "https://kingworldnews.com/gold-holds-4000-silver-sees-successful-test-of-55-july-low/",
   "https://kingworldnews.com/gold-look-at-who-just-said-the-worst-is-behind-us-plus-a-look-at-silver-and-oil/",
   "https://kingworldnews.com/hansen-did-we-just-witness-the-gold-washout/",
+  "https://kingworldnews.com/here-is-a-shocking-look-at-silver-and-crude-oil/",
   "https://kingworldnews.com/hickey-historic-bottom-in-gold-market-martis-oil-will-hit-150/",
   "https://kingworldnews.com/historic-contrarian-indicator-bullish-sentiment-for-gold-has-collapsed/",
   "https://kingworldnews.com/investors-are-seeing-a-historic-golden-opportunity-in-two-markets/",
@@ -150,12 +151,20 @@
   "https://www.kitco.com/news/article/2026-10-27/gold-price-shoots-session-high-4048oz-after-consumer-confidence-rises-917",
   "https://www.kitco.com/news/article/2026-10-27/gold-prices-holding-above-4000-us-new-home-sales-fall",
   "https://www.kitco.com/news/article/2026-10-27/precious-metals-weaken-hormuz-uncertainty-keeps-oil-elevated-ahead-fed",
+  "https://www.kitco.com/news/article/2026-10-28/agnico-eagle-beats-earnings-expectations-higher-gold-prices-offset-rising",
   "https://www.kitco.com/news/article/2026-10-28/gold-price-cad5684oz-after-bank-canada-raises-25-bps-sees-growth-slowing-q4",
   "https://www.kitco.com/news/article/2026-10-28/gold-price-drops-4035oz-fed-votes-10-2-favor-rate-hold",
   "https://www.kitco.com/news/article/2026-10-28/gold-prices-could-fall-3900-silver-50-fed-tightening-pressures-precious",
   "https://www.kitco.com/news/article/2026-10-28/gold-recovery-stalls-saudi-refinery-attack-claims-lift-crude-silver",
   "https://www.kitco.com/news/article/2026-10-28/gold-steadies-silver-falls-fed-holds-rates-two-officials-favor-hike-kitco",
   "https://www.kitco.com/news/article/2026-10-28/us-copper-stockpiling-squeezing-china-christopher-ecclestone",
+  "https://www.kitco.com/news/article/2026-10-29/fed-will-hike-once-more-december-slowing-growth-and-falling-energy-ease",
+  "https://www.kitco.com/news/article/2026-10-29/gold-falls-toward-4000-core-pce-rises-us-growth-accelerates-kitco-am-report",
+  "https://www.kitco.com/news/article/2026-10-29/gold-its-lows-ecb-leaves-rates-unchanged-even-inflation-remains-elevated",
+  "https://www.kitco.com/news/article/2026-10-29/gold-prices-feel-pressure-weekly-jobless-claims-remain-below-200k-sixth",
+  "https://www.kitco.com/news/article/2026-10-29/gold-remains-stuck-fed-takes-hawkish-pause-tds-melek",
+  "https://www.kitco.com/news/article/2026-10-29/silver-could-see-further-losses-against-gold-physical-market-weakens-metals",
+  "https://www.kitco.com/news/article/2026-10-29/spot-gold-4025oz-us-gdp-growth-rises-34-q3-core-pce-rises-25",
   "https://www.kitco.com/news/video/2026-10-05/china-hoards-gold-because-it-s-hard-money-the-state-can-still-control-says-cory-klippsten",
   "https://www.kitco.com/news/video/2026-10-05/gold-m-a-stays-disciplined-even-as-mining-heats-up-neil-adshead",
   "https://www.kitco.com/news/video/2026-10-05/kinross-raises-shareholder-returns-as-cash-flow-builds-paul-rollinson",
@@ -205,6 +214,8 @@
   "https://www.kitco.com/news/video/2026-10-28/scotia-metals-targets-first-lithium-drilling-in-2027-rodrigo-roso",
   "https://www.kitco.com/news/video/2026-10-28/sinda-targets-20m-oz-annual-silver-production-by-2031-daniel-mu-iz-quintanilla",
   "https://www.kitco.com/news/video/2026-10-28/tiger-gold-targets-250-000-oz-annual-production-at-quinch-a-robert-vallis",
+  "https://www.kitco.com/news/video/2026-10-29/b2gold-targets-300-000-oz-at-goose-as-ramp-up-advances-mike-cinnamond",
+  "https://www.kitco.com/news/video/2026-10-29/gold-and-silver-miners-have-more-room-to-run-don-durrett-john-feneck",
   "https://www.kitco.com/opinion/2026-10-05/crypto-swot-petrobras-brazils-state-controlled-energy-company-testing-cardano",
   "https://www.kitco.com/opinion/2026-10-05/gold-swot-kone-project-owned-montage-gold-achieved-first-gold-pour-budget",
   "https://www.kitco.com/opinion/2026-10-06/bitcoin-stays-bullish-altcoin-warning-builds",
@@ -268,7 +279,10 @@
   "https://www.kitco.com/opinion/2026-10-27/silvers-cot-positioning-reaches-137-report-extreme-patience-may-be-real-signal",
   "https://www.kitco.com/opinion/2026-10-27/summary-t-bonds-stocks-and-precious-metals",
   "https://www.kitco.com/opinion/2026-10-27/what-could-send-gold-higher-if-not-middle-east-peace",
-  "https://www.kitco.com/opinion/2026-10-27/why-gold-miners-fall-even-after-record-profits"
+  "https://www.kitco.com/opinion/2026-10-27/why-gold-miners-fall-even-after-record-profits",
+  "https://www.kitco.com/opinion/2026-10-28/bitcoin-holds-its-bullish-outlook-ethereum-support-jumps",
+  "https://www.kitco.com/opinion/2026-10-28/fed-day-playbook-traders-guide-gold-price-action",
+  "https://www.kitco.com/opinion/2026-10-28/picture-silver-cot"
  ],
  "runs": [
   {
@@ -443,6 +457,14 @@
    "kitco_news": 7,
    "kitco": 12,
    "new": 21,
+   "hits": 1
+  },
+  {
+   "date": "2026-10-30",
+   "kwn": 1,
+   "kitco_news": 8,
+   "kitco": 5,
+   "new": 14,
    "hits": 1
   }
  ]
