@@ -91,7 +91,7 @@ EOF
     return
   fi
   local PROMPT="你是 KOL 一年期观点回填子agent。工作目录 $ROOT。
-先完整阅读规格 $D/INSTRUCTIONS.md（铁律必须遵守），再读名单 $D/batches/$B.json（每项含 id/name/display/sector/search_terms/have_months/missing_months）。**只找 missing_months 里的月份**，每个缺失月份尽量 1-2 条。
+先完整阅读规格 $D/INSTRUCTIONS.md（铁律必须遵守），再读名单 $D/batches/$B.json（每项含 id/name/display/sector/search_terms/have_months/missing_months）。**只找 missing_months 里的月份**。★排重(省钱): 每项带 known_urls(该人已收录链接)；搜到的链接若在其中(忽略 utm/www/末尾斜杠, YouTube 按 video id)就是旧料，不要 web_extract、不要写进输出，每个缺失月份尽量 1-2 条。
 display 字段里有机构/头衔，用来排除同名的人。
 对名单里每个人按规格检索，**每做完一个人立即用 write_file 落盘** $D/out/<id>.json（裸 JSON 数组），不要攒到最后。
 每条的 source 必须是你亲自 web_extract 打开过、页面里确有此人此观点的 URL；日期只认原文发布日。找不到就少写，写 [] 也可以。
@@ -108,7 +108,12 @@ for ((s=0; s<${#IDS[@]}; s+=PER)); do
   .venv/bin/python - "$D" "$BN" "${IDS[@]:$s:$PER}" <<'EOF'
 import json, sys
 D, BN, ids = sys.argv[1], sys.argv[2], set(sys.argv[3:])
-json.dump([x for x in json.load(open(f"{D}/todo.json")) if x["id"] in ids], open(f"{D}/batches/{BN}.json", "w"), ensure_ascii=False, indent=1)
+import os
+_ix = json.load(open("data/kol/seen_index.json")) if os.path.exists("data/kol/seen_index.json") else {}
+_b = [x for x in json.load(open(f"{D}/todo.json")) if x["id"] in ids]
+for _x in _b:
+    _x["known_urls"] = _ix.get(_x["id"], {}).get("urls", [])[-80:]
+json.dump(_b, open(f"{D}/batches/{BN}.json", "w"), ensure_ascii=False, indent=1)
 EOF
   run_batch "$BN" & pids+=($!)
   sleep 2
@@ -131,6 +136,7 @@ EOF
 
 # ── 5. 门禁入库 ──
 FETCH=""; [ "$DRY" = "1" ] && FETCH="--no-fetch"
+.venv/bin/python tools/kol_dedup.py build >/dev/null 2>&1 || true
 R=$(.venv/bin/python tools/kol_bf_ingest.py "$D" --apply $FETCH 2>&1 | tail -1)
 log "入库: $R"
 case "$R" in APPLY*) ;; *) echo "❌ 新KOL回填: 入库脚本失败: $R"; echo "FAIL $(date '+%F %T')" > "$D/STATUS"; exit 1;; esac

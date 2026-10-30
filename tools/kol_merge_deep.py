@@ -52,11 +52,17 @@ def main():
 
     shutil.copy(IND, os.path.join(BASE, "kol_independent.before.json"))
     prev = {x.get("kol"): x for x in json.load(open(IND, encoding="utf-8")).get("all", [])}
-    rows, ch, miss = [], [], []
+    rows, ch, miss, nonew = [], [], [], []
     for k in active:
         name = k["display_name"]
         sec = k.get("domain") or k.get("notion_domain") or ""
         r = fresh.get(k["id"])
+        if r and r.get("dedup") == "no_new":
+            nonew.append(name)
+            rows.append(prev.get(name) or {"kol": name, "sector": sec, "direction": "未找到",
+                                            "targets": "", "comments": "", "detail": "",
+                                            "detail_status": "none", "sources": [], "date": D})
+            continue
         if not r:
             miss.append(name)
             rows.append(prev.get(name) or {"kol": name, "sector": sec, "direction": "未找到",
@@ -88,7 +94,7 @@ def main():
     for r in rows:
         if r.get("date") == D:
             st[r.get("detail_status")] = st.get(r.get("detail_status"), 0) + 1
-    print(f"MERGE-OK {D} 名册 {len(active)} | 今日抓到 {len(hit)} | 沿用旧条目 {len(miss)} | "
+    print(f"MERGE-OK {D} 名册 {len(active)} | 今日抓到 {len(hit)} | 沿用旧条目 {len(miss)} | 排重无新料 {len(nonew)} | "
           f"大类转向 {len(ch)} | 质量 {st} | store {res}")
     if miss:
         print("  未刷新:", "、".join(m.split("（")[0] for m in miss))

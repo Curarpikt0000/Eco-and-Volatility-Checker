@@ -36,6 +36,9 @@ import urllib.request
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "src"))
 import kol_store  # noqa: E402
+sys.path.insert(0, os.path.join(ROOT, "tools"))
+import kol_dedup  # noqa: E402
+DEDUP_IDX = kol_dedup.build()   # 每次入库前按当前库重建(几秒), 保证排重基线最新
 
 WIN_START = (dt.date.today() - dt.timedelta(days=365)).isoformat()   # 滚动一年(原固定 2025-09-29; 自动回填每天跑需滚动)
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36"
@@ -166,7 +169,7 @@ def main():
     conn = kol_store.connect()
     report = {"dir": a.batch_dir, "people": {}, "totals": {}}
     T = dict(files=0, read=0, ok=0, unverifiable=0, reject_field=0, reject_window=0,
-             reject_dir=0, reject_url=0, dup=0, inserted=0, updated=0, skipped=0, bad_json=0, not_in_registry=0)
+             reject_dir=0, reject_url=0, dup=0, dup_seen=0, inserted=0, updated=0, skipped=0, bad_json=0, not_in_registry=0)
     jobs = []
     per = {}
     for p in sorted(glob.glob(os.path.join(a.batch_dir, "out", "*.json"))):
@@ -205,6 +208,12 @@ def main():
             if key in seen:
                 T["dup"] += 1; continue
             seen.add(key)
+            # ★三重排重(Chao 2026-10-30): 链接/内容/引用任一已在库 → 不核验不入库(省网络与后续翻译/总结)
+            sn, why = kol_dedup.is_seen(DEDUP_IDX, kid, url=src, text=cm, extra_text=r.get("detail") or "")
+            if sn:
+                T["dup_seen"] += 1
+                T["dup_seen_" + why] = T.get("dup_seen_" + why, 0) + 1
+                continue
             rr = dict(r); rr["direction"] = di; rr["source"] = src
             rr.setdefault("sources", [{"url": src, "date": d}])
             jobs.append((kid, rr, src, keys))
