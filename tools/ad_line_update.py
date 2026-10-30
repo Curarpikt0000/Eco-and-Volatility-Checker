@@ -85,7 +85,13 @@ def main():
     spy = yf.download("SPY", start=start.isoformat(), end=(end + dt.timedelta(days=1)).isoformat(),
                       progress=False, auto_adjust=False, threads=False)
     tdays = [d.strftime("%Y-%m-%d") for d in spy.index]
-    if tdays and tdays[-1] == end.isoformat() and dt.datetime.now().hour < 7:
+    # ★2026-10-30 修: 原护栏按「本机 JST 小时<7」判断, 在 JST 23:05(纽约盘中 10:05)放行了盘中半成品。
+    # 改为按纽约时间: 末日 == 纽约今天 且 纽约时间 < 16:15(收盘+15分钟缓冲) → 丢弃该日(只收已收盘交易日)。
+    from zoneinfo import ZoneInfo
+    _ny = dt.datetime.now(ZoneInfo("America/New_York"))
+    _ny_close = _ny.replace(hour=16, minute=15, second=0, microsecond=0)
+    if tdays and tdays[-1] == _ny.date().isoformat() and _ny < _ny_close:
+        print(f"丢弃 {tdays[-1]}: 纽约现在 {_ny:%H:%M}, 未收盘", file=sys.stderr)
         tdays = tdays[:-1]
     print(f"成分 {len(prices)}/{len(syms)} 只有数据; 交易日 {tdays[0]}~{tdays[-1]}", file=sys.stderr)
 
