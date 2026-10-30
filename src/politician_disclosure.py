@@ -190,6 +190,11 @@ def _trump_oge_card():
     note = ""
     if ann:
         note = f"另有 278 年度快照({ann['doc_date']})"
+    # ★2026-10-30: 解析覆盖率不足时必须在卡片上说明, 不能把读到一半的逐笔当成全部
+    if r.get("partial"):
+        _c = (r.get("parse_coverage") or [{}])[0]
+        note = (f"⚠️ 本份 278-T 为扫描件, 文字层错字多, 仅读出约 {_c.get('parsed')}/{_c.get('rows_in_pdf_at_least')} 笔"
+                f"(约 {int((_c.get('coverage') or 0)*100)}%), 以下为已读出部分, 非全部; 待 OCR 环境就绪后补全。") + (" " + note if note else "")
     return {
         "name": "Donald J Trump", "title": "总统 · OGE 278-T",
         "trades": trades, "n_filings": n_txn,

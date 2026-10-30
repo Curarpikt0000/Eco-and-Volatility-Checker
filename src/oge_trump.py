@@ -31,7 +31,10 @@ import urllib.error
 
 UA = "Mozilla/5.0 (EcoVolChecker research; contact research@example.com)"
 HDRS = {"User-Agent": UA, "Accept": "application/json"}
-OGE_API = "https://extapps2.oge.gov/201/Presiden.nsf/API.xsp/v2/rest?draw=1&start=0&length=20000"
+# ★2026-10-30: OGE 把接口升到 v3 (官方搜索页里写的就是 .../API.xsp/v3/rest)。v2 现在只回一个「用来允许访问 REST 服务」的 HTML 占位页,
+#   所以 10-03 起每天 JSON 解析报 'Expecting value'。v3 另外把每页上限锁死为 100 条(length=20000 也只回 100), 不能再一次拉全量,
+#   改为「search[value]=Trump + 分页」。参数名由实测得出: search[value] 生效; search/q/name 都被忽略(会回全库前 100 条)。
+OGE_API = "https://extapps2.oge.gov/201/Presiden.nsf/API.xsp/v3/rest"
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
 OUT_JSON = os.path.join(DATA_DIR, "oge_trump.json")
@@ -73,8 +76,19 @@ def _fetch(url, timeout=90, as_json=False, retries=3):
 
 def list_trump_docs():
     """拿 OGE 全量披露, 筛出川普(Trump, Donald J)的所有文档 → list[dict]。"""
-    d = _fetch(OGE_API, as_json=True)
-    data = d.get("data", [])
+    data, start, total = [], 0, None
+    while True:
+        d = _fetch(f"{OGE_API}?draw=1&start={start}&length=100&search%5Bvalue%5D=Trump", as_json=True)
+        page = d.get("data", [])
+        if total is None:
+            total = d.get("recordsFiltered", 0)
+        data += page
+        start += 100
+        if not page or start >= total:
+            break
+    # ★对照自检: 搜索参数被服务端忽略时会返回「全库前 100 条」(recordsFiltered≈16794)且几乎没有 Trump → 判失败, 不当成「没有披露」
+    if total is None or total > 500 or not any("trump" in (r.get("name") or "").lower() for r in data):
+        raise RuntimeError(f"OGE v3 搜索未生效或无 Trump 记录(recordsFiltered={total}, 取回 {len(data)} 行)")
     docs = []
     for r in data:
         name = (r.get("name") or "")
@@ -261,6 +275,20 @@ def fetch(save=True, max_278t=1):
         try:
             pdf = _fetch(doc["pdf_url"], timeout=120)
             txns = parse_278t(pdf)
+            # ★2026-10-30 覆盖率自检: 10-08 那份 278-T 文字层是低质 OCR 层(满是 lourchaso/8110/?026 之类错字),
+            #   parse_278t 只读出 165 笔, 而文字层里可认出序号 414 笔、最大序号 517 → 漏读约一半。
+            #   以「最大序号」当该份报告的总笔数下限, 算 parse_coverage; 不足 90% 就标 partial, 绝不把半份当全份。
+            try:
+                _nums = [int(t["n"]) for t in txns if str(t.get("n", "")).isdigit()]
+                _total_hint = _max_row_no(pdf)
+                _cov = round(len(_nums) / _total_hint, 3) if _total_hint else None
+                result.setdefault("parse_coverage", []).append({
+                    "pdf": doc["pdf_url"], "doc_date": doc["doc_date"], "parsed": len(txns),
+                    "rows_in_pdf_at_least": _total_hint, "coverage": _cov})
+                if _cov is not None and _cov < 0.9:
+                    result["partial"] = True
+            except Exception:  # noqa: BLE001
+                pass
             for t in txns:
                 t["filing_date"] = doc["doc_date"]
             all_txns += txns
@@ -286,12 +314,27 @@ def fetch(save=True, max_278t=1):
     if OCR_UNAVAILABLE_REASON:
         result["ocr_status"] = OCR_UNAVAILABLE_REASON
     if all_txns:
-        result["status"] = "ok"
+        result["status"] = "partial" if result.get("partial") else "ok"
     elif annual:
         result["status"] = "annual_only"
     if save:
         _save(result)
     return result
+
+
+def _max_row_no(pdf_bytes):
+    """文字层里「行首序号」的最大值(只统计后面几行出现买卖词的序号)。取不到返回 None。"""
+    import pymupdf
+    mx = 0
+    doc = pymupdf.open(stream=pdf_bytes, filetype="pdf")
+    for pg in doc:
+        ls = [l.strip() for l in pg.get_text().split("\n")]
+        for k, l in enumerate(ls):
+            if re.fullmatch(r"\d{1,3}", l):
+                nxt = " ".join(ls[k + 1:k + 5]).lower()
+                if re.search(r"purch|urchas|ourchas|sale|\bsell", nxt):
+                    mx = max(mx, int(l))
+    return mx or None
 
 
 def _save(result):

@@ -2446,6 +2446,52 @@ def fetch_treasury_auctions(history_days=420):
     except Exception as e:
         return {"terms": {}, "upcoming": [], "as_of": None, "status": f"错误:{e}"}
 
+    # ★2026-10-30(Opus 审计+实测): TreasuryDirect TA_WS 比 fiscaldata 早 1-2 周出结果, 且 fiscaldata 对「增发(reopening)」
+    #   会按 CUSIP 累计成原发行的总中标/间接占比(实测 10Y 增发 91282CRF0: FD 52.62B/61.0% 是 08-12 原发值, TD 的 10-07 增发才是 39.93B/77.8%)。
+    #   同日同券对账 13 条(收益率/倍数/规模/间接占比)完全一致 → 口径可互换。做法: TD 优先覆盖 fiscaldata 同 (cusip, 拍卖日) 的行,
+    #   TD 取不到则保持 fiscaldata 原样(失败不降级为空)。
+    td_note = td_over = 0
+    try:
+        _hd = {"User-Agent": "Mozilla/5.0"}
+        _days = max(60, min(history_days, 800))
+        _tdrows = []
+        for _ty in ("Note", "Bond"):
+            _rr = requests.get("https://www.treasurydirect.gov/TA_WS/securities/auctioned",
+                               params={"format": "json", "days": _days, "type": _ty}, headers=_hd, timeout=50)
+            if _rr.status_code == 200:
+                _tdrows += _rr.json()
+        _fdkey = {}
+        for _x in rows:
+            _fdkey[(_x.get("cusip"), str(_x.get("auction_date"))[:10])] = _x
+        _num = lambda v: (float(v) if v not in (None, "", "null") else None)
+        for _t in _tdrows:
+            _d = str(_t.get("competitiveAuctionCloseDate") or "")[:10]
+            _hy = _num(_t.get("highYield"))
+            if not _d or _hy is None:
+                continue
+            td_note += 1
+            _ga = _num(_t.get("grandTotalParAwarded"))
+            _ia = _num(_t.get("indirectBiddersCompetitiveParAwarded"))
+            _ian = _num(_t.get("indirectBiddersNoncompetitiveParAwarded")) or 0.0
+            _new = {
+                "auction_date": _d, "security_type": _t.get("securityType"),
+                "security_term": _t.get("securityTerm"), "cusip": _t.get("cusip"),
+                "offering_amt": _t.get("offeringAmount"), "bid_to_cover_ratio": _t.get("bidToCoverRatio"),
+                "high_yield": _t.get("highYield"), "issue_date": str(_t.get("issueDate") or "")[:10],
+                "reopening": _t.get("reopening"),
+                "inflation_index_security": "Yes" if str(_t.get("inflationProtected")).lower() == "yes" else "No",
+                "total_accepted": str(_ga) if _ga else "null",
+                "indirect_bidder_accepted": str(_ia + _ian) if (_ia is not None and _ga) else "null",
+            }
+            _k = (_new["cusip"], _d)
+            if _k in _fdkey:
+                _fdkey[_k].update({k: v for k, v in _new.items() if v not in (None, "", "null")})
+                td_over += 1
+            else:
+                rows.append(_new)
+    except Exception as _e:  # noqa: BLE001
+        print(f"[auctions] TreasuryDirect 取数失败(沿用 fiscaldata): {type(_e).__name__} {str(_e)[:80]}")
+
     def pack(x):
         offer = _auc_num(x.get("offering_amt"))
         acc = _auc_num(x.get("total_accepted"))
@@ -2522,7 +2568,8 @@ def fetch_treasury_auctions(history_days=420):
         "upcoming": upcoming,
         "as_of": latest_date,
         "status": "ok" if terms else "无拍卖数据",
-        "source": "US Treasury fiscaldata.treasury.gov auctions_query",
+        "source": "US Treasury TreasuryDirect TA_WS(优先)+fiscaldata auctions_query(备用)",
+        "td_rows": td_note, "td_overrode_fd": td_over,
     }
 
 
