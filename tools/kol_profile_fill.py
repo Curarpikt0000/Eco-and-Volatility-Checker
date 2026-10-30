@@ -169,7 +169,7 @@ def merge(items):
     if added:
         bak = PROF + ".bak." + datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         open(bak, "w", encoding="utf-8").write(open(PROF, encoding="utf-8").read())
-        json.dump(prof, open(PROF + ".tmp", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        json.dump(prof, open(PROF + ".tmp", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
         os.replace(PROF + ".tmp", PROF)
         # 写后读回: 新增的 id 必须都在
         back = {x["id"] for x in profiles()}
