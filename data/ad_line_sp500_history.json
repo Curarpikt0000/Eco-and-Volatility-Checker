@@ -1,6 +1,6 @@
 {
  "universe": "SP500",
- "generated": "2026-10-30 22:41:50 JST",
+ "generated": "2026-10-31 07:11:37 JST",
  "tickers": 503,
  "days": [
   {
@@ -1949,6 +1949,17 @@
    "ad_ratio": 4.186,
    "advance_pct": 80.72,
    "cumulative": 2319
+  },
+  {
+   "date": "2026-10-30",
+   "advance": 226,
+   "decline": 277,
+   "flat": 0,
+   "total": 503,
+   "ad_net": -51,
+   "ad_ratio": 0.816,
+   "advance_pct": 44.93,
+   "cumulative": 2268
   }
  ]
 }
