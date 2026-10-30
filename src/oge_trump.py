@@ -120,6 +120,10 @@ def _snap_band(lo, hi):
 
 def _parse_amount(s):
     """OCR 金额串 → (lo, hi) 整数。'$15 001 • $50,000' → (15001, 50000)。"""
+    # ★2026-10-31: RapidOCR 常把千分位逗号读成句点('$250.001-$500.000'), 且 S/s 会冒充 $ ('S100.001')。
+    #   先规范: 句点夹在数字之间→逗号; 孤立的 S/s 紧跟数字→$。否则 250.001 被读成 250, snap 到 $1-$1,000(实测 144 笔错标)。
+    s = re.sub(r"[Ss](?=\d{1,3}[,.]\d{3})", "$", s)
+    s = re.sub(r"(?<=\d)\.(?=\d{3}\b)", ",", s)
     nums = re.findall(r"\$\s*[\d][\d ,]*", s)
     vals = []
     for n in nums:
@@ -130,6 +134,10 @@ def _parse_amount(s):
         return None, None
     lo = vals[0]
     hi = vals[1] if len(vals) > 1 else None
+    if hi is None:
+        # 单个金额 = OCR 把 '$1,001-$15,000' 读丢了前半, 剩下的是上界。按「上界最接近」选档, 不按下界。
+        best = min(OGE_BANDS, key=lambda b: abs(b[1] - lo))
+        return best[0], best[1]
     return _snap_band(lo, hi)
 
 
@@ -181,6 +189,38 @@ def _ocr_pages(pdf_bytes, dpi=200):
     return lines
 
 
+def _ocr_pages_rapid(pdf_bytes, dpi=200):
+    """★2026-10-31: RapidOCR(onnx, 纯 pip)版 OCR, 不依赖 apt 装的 tesseract(devpod 重启会丢, 本机无 sudo)。
+    按 y 坐标把文本块聚成行, 行内按 x 排序。依赖缺失返回 [] 并写 OCR_UNAVAILABLE_REASON。"""
+    global OCR_UNAVAILABLE_REASON
+    try:
+        import numpy as np
+        import pymupdf
+        from rapidocr_onnxruntime import RapidOCR
+    except ImportError as e:
+        OCR_UNAVAILABLE_REASON = f"rapidocr 依赖缺失(pip install rapidocr-onnxruntime): {e}"
+        return []
+    eng = RapidOCR()
+    lines = []
+    doc = pymupdf.open(stream=pdf_bytes, filetype="pdf")
+    for pg in doc:
+        pix = pg.get_pixmap(dpi=dpi)
+        img = np.frombuffer(pix.samples, dtype=np.uint8).reshape(pix.h, pix.w, pix.n)[:, :, :3]
+        res, _ = eng(img)
+        if not res:
+            continue
+        items = sorted((r[0][0][1], r[0][0][0], r[1]) for r in res)
+        cur, last = [], None
+        for y, x, t in items:
+            if last is not None and abs(y - last) >= 14:
+                lines.append(" ".join(tt for _, tt in sorted(cur)))
+                cur = []
+            cur.append((x, t)); last = y
+        if cur:
+            lines.append(" ".join(tt for _, tt in sorted(cur)))
+    return [l.strip() for l in lines if l.strip()]
+
+
 def parse_278t(pdf_bytes):
     """解析 278-T 逐笔交易 PDF → [{n, asset, direction, dir_cn, txn_date, amount_range}]。"""
     import pdfplumber
@@ -198,11 +238,67 @@ def parse_278t(pdf_bytes):
         if ocr_lines:
             lines = ocr_lines
 
-    buy_re = re.compile(r"\b(purchas|urchas|ourchas|lourchas)", re.I)
-    sell_re = re.compile(r"\bsale\b", re.I)
+    buy_re = re.compile(r"\b(purchas|urchas|ourchas|lourchas|purcha[s5][eo]|purchase)", re.I)
+    # ★2026-10-31: RapidOCR 常把 sale 读成 salo/sa1e/sa le(实测一份 517 笔里 44 笔卖出因此被漏)。
+    #   放宽只限「s-a-(l|1|I)-(e|o|c|0)」形态 + 必须紧跟交易日期(见下 _rows_from_lines 的 date 紧随要求), 防误判描述里的词。
+    sell_re = re.compile(r"\bs[a4][l1I][eoc0](?=\s+\d{1,2}[/\\1l]\d)", re.I)
     date_re = re.compile(r"(\d{1,2}/\d{1,2}/\d{2,4})")
     row_re = re.compile(r"^(\d{1,3})\s+(.+)")
 
+    out = _rows_from_lines(lines, buy_re, sell_re, date_re, row_re)
+    # ★2026-10-31: 文字层是低质 OCR 层时(错字多), 解析会漏约一半。用 RapidOCR 重读, 取笔数更多者。
+    try:
+        _hint = _max_row_no(pdf_bytes)
+    except Exception:  # noqa: BLE001
+        _hint = None
+    if _hint and len(out) < 0.9 * _hint:
+        r_lines = _ocr_pages_rapid(pdf_bytes)
+        if r_lines:
+            out2 = _rows_from_lines(r_lines, buy_re, sell_re, date_re, row_re)
+            if len(out2) > len(out):
+                out = out2
+    return out
+
+
+def _merge_wrapped_rows(lines, dir_word):
+    """OCR 把长资产名折成两行: 名称在上一行, 下一行以『序号 purchase 日期…』开头。
+    把『序号 + 买卖词 + 日期』开头、且没有资产名的行, 与上一行(无序号前缀或以序号开头的名称行)拼回去。"""
+    out = []
+    for l in lines:
+        m = re.match(r"^(\d{1,3})\s+(" + dir_word + r")\s+\d", l, re.I)
+        if m and out:
+            prev = out.pop()
+            # 上一行是被折断的名称部分(其尾部带买卖词/金额的已是完整行, 不合并)
+            if not re.search(r"\$", prev):
+                out.append(f"{m.group(1)} {prev} {l[len(m.group(1)):].strip()}")
+                continue
+            out.append(prev)
+        out.append(l)
+    return out
+
+
+def _fix_row_numbers(rows):
+    """行首序号被 OCR 吞掉首位(106→06): 序号应随行顺序单调递增, 乱序点按『前后邻居之间』补回缺的首位。"""
+    seq = [int(r["n"]) for r in rows]
+    for i, r in enumerate(rows):
+        prev_n = seq[i - 1] if i else 0
+        next_n = seq[i + 1] if i + 1 < len(seq) else 10 ** 6
+        if not (prev_n < seq[i] < next_n):
+            for lead in range(1, 6):
+                cand = int(f"{lead}{seq[i]}") if r["n"].startswith("0") or len(r["n"]) < 3 else None
+                if cand and prev_n < cand < next_n:
+                    r["n"] = str(cand); seq[i] = cand
+                    break
+    return rows
+
+
+def _rows_from_lines(lines, buy_re, sell_re, date_re, row_re):
+    lines = _merge_wrapped_rows(lines, r"purchase|purchaso|salo|sale|sa1e|ourchase|lourchase")
+    out = _rows_from_lines_raw(lines, buy_re, sell_re, date_re, row_re)
+    return _fix_row_numbers(out)
+
+
+def _rows_from_lines_raw(lines, buy_re, sell_re, date_re, row_re):
     out = []
     for l in lines:
         m = row_re.match(l)
@@ -229,7 +325,9 @@ def parse_278t(pdf_bytes):
         #   (实测 635 条里 3 条, 如 '|' 或空串)。资产名少于 3 个字母数字即丢弃,
         #   宁可漏一条也不让垃圾行进入下游统计。
         if len([c for c in asset if c.isalnum()]) < 3:
-            continue
+            # ★2026-10-31: 行首有序号+买卖词+日期+金额, 只是资产名被 OCR 整个漏读: 笔数是真的, 保留并标明名称未读出;
+            #   纯噪声行(没有序号/日期/金额)在上面早已 continue 掉, 不会走到这里。
+            asset = "(名称 OCR 未读出)"
         amt = f"${lo:,} - ${hi:,}" if hi else f"${lo:,}"
         out.append({
             "n": m.group(1),
