@@ -2470,46 +2470,98 @@ def _analog_corr_html(o):
         err = "；".join((o or {}).get("warnings", [])[:2])
         return f'<p class="empty">类比路径同步中{((chr(0xff1a) + _esc(err)) if err else "")}。</p>'
     W, Hh, ML, MR, MT, MB = 560, 300, 46, 12, 14, 34
-    COL = {"2026": "#1c1c1c", "2006": "#b0493a", "2008": "#1f3a68", "2011": "#c0643c", "1973": "#7a8f5a", "1974": "#6aa8c8"}
+    # ★2026-10-30 Chao: 三条线颜色差别拉大(原 2026 黑 vs 2008 深蓝肉眼难分)。红=2026 实际(粗), 蓝/绿/橙=历史类比
+    # 色盲友好(Okabe-Ito 取三色): 2026 实际=黑底亮红?否——红绿/红橙色盲难分, 改为: 2026=近黑(最粗+白描边), 其余三色色相相隔最远
+    COL = {"2026": "#111111", "2006": "#0072b2", "2008": "#d55e00", "2011": "#009e73", "1973": "#7a8f5a", "1974": "#6aa8c8"}
+    def _fit(a_pts, base, pk0):
+        """★「最佳拟合」: 在高点对齐基础上再网格搜索平移 dx∈[-30,30] 天, 缩放 kk 取对数误差最小的闭式解(夹在 0.75~1.25)。
+        只在 2026 高点之后的区间评估。★样本内拟合: 参数是用 2026 自己的走势挑的, 不代表预测力。"""
+        import math as _mm
+        grid = {}
+        for (x0, v0), (x1, v1) in zip(base, base[1:]):
+            for x in range(int(_mm.ceil(x0)), int(_mm.floor(x1)) + 1):
+                grid[x] = v0 if x1 == x0 else v0 + (v1 - v0) * (x - x0) / (x1 - x0)
+        tgt = [(int(round(x)), v) for x, v in a_pts if x >= pk0]
+        def run(dx):
+            es = [(_mm.log(v / grid[x - dx])) for x, v in tgt if (x - dx) in grid and grid[x - dx] > 0]
+            if len(es) < 20:
+                return None
+            kk = min(1.25, max(0.75, _mm.exp(sum(es) / len(es))))
+            # ★误差口径统一为「应用缩放 kk 后的真实对数 RMSE」, 高点对齐(kk=1, 不拟合)也按同一口径算:
+            #   不得「先去均值再算」——那会把整体水平偏差抹掉, 让基线显得比实际好。
+            r = _mm.sqrt(sum((e - _mm.log(kk)) ** 2 for e in es) / len(es))
+            r0 = _mm.sqrt(sum(e * e for e in es) / len(es))        # 不拟合(kk=1)的真实误差
+            return r, kk, r0
+        base_r = run(0)
+        best = None
+        for dx in range(-30, 31):
+            r = run(dx)
+            if r and (best is None or r[0] < best[0]):
+                best = (r[0], dx, r[1])
+        return (base_r[2] if base_r else None), best
     def chart(metal, title, order, unit):
         ser = o[metal]
         def _pk(pts):
             w = [p for p in pts if p[0] <= 120]
             return max(w, key=lambda p: p[1])
         pk26 = _pk(ser["2026"]["pts"])
-        lines = {}
+        lines, lines_fit, fitinfo = {}, {}, {}
         for lab in order:
             if lab not in ser: continue
             if lab == "2026":
                 lines[lab] = [(d, v) for d, v in ser[lab]["pts"]]
+                lines_fit[lab] = lines[lab]
             else:
                 pk = _pk(ser[lab]["pts"]); k = pk26[1] / pk[1]
                 lines[lab] = [(d - pk[0] + pk26[0], v * k) for d, v in ser[lab]["pts"] if d >= pk[0]]
-        allv = [v for L in lines.values() for _, v in L]
+                base_r, best = _fit(ser["2026"]["pts"], lines[lab], pk26[0])
+                if best:
+                    _, dx, kk = best
+                    lines_fit[lab] = [(d + dx, v * kk) for d, v in lines[lab]]
+                    fitinfo[lab] = (base_r, best[0], dx, kk)
+                else:
+                    lines_fit[lab] = lines[lab]
+        allv = [v for L in list(lines.values()) + list(lines_fit.values()) for _, v in L]
         lo, hi = min(allv), max(allv); pad = (hi - lo) * 0.06; lo -= pad; hi += pad
-        xmax = max(d for L in lines.values() for d, _ in L)
+        xmax = max(d for L in list(lines.values()) + list(lines_fit.values()) for d, _ in L)
         X = lambda d: ML + (W - ML - MR) * d / xmax
         Y = lambda v: MT + (Hh - MT - MB) * (1 - (v - lo) / (hi - lo))
-        g = []
+        g = []; ylab = []
         import math as _m
         _raw = (hi - lo) / 6.0
         _mag = 10 ** _m.floor(_m.log10(_raw))
         step = min((c * _mag for c in (1, 2, 2.5, 5, 10)), key=lambda x: abs(x - _raw))   # 约 6 档的"好看"步长
         v0 = _m.floor(lo / step + 1) * step
         while v0 < hi:
-            g.append(f'<line x1="{ML}" x2="{W-MR}" y1="{Y(v0):.1f}" y2="{Y(v0):.1f}" stroke="#e6e1d6"/><text x="{ML-4}" y="{Y(v0)+3:.1f}" text-anchor="end" font-size="9" fill="#8a837a">{unit}{v0:,.0f}</text>')
+            g.append(f'<line x1="{ML}" x2="{W-MR}" y1="{Y(v0):.1f}" y2="{Y(v0):.1f}" stroke="#e6e1d6"/>')
+            ylab.append(f'<text x="{ML-4}" y="{Y(v0)+3:.1f}" text-anchor="end" font-size="9" fill="#6b655c" stroke="#ffffff" stroke-width="3" paint-order="stroke">{unit}{v0:,.0f}</text>')
             v0 += step
         for m in range(0, int(xmax) + 1, 60):
             g.append(f'<line x1="{X(m):.1f}" x2="{X(m):.1f}" y1="{MT}" y2="{Hh-MB}" stroke="#f0ece2"/><text x="{X(m):.1f}" y="{Hh-MB+13}" text-anchor="middle" font-size="9" fill="#8a837a">+{m}天</text>')
-        paths = []
-        for lab, L in lines.items():
+        def _paths(LS):
+            out = []
+            for lab, L in LS.items():
+                if lab == "2026": continue          # 2026 实际线最后画, 压在最上层
+                pts = " ".join(f"{X(d):.1f},{Y(v):.1f}" for d, v in L)
+                out.append(f'<polyline points="{pts}" fill="none" stroke="{COL[lab]}" stroke-width="2" stroke-linejoin="round" stroke-opacity="0.92"><title>{lab}（类比）</title></polyline>')
+            L = LS["2026"]
             pts = " ".join(f"{X(d):.1f},{Y(v):.1f}" for d, v in L)
-            paths.append(f'<polyline points="{pts}" fill="none" stroke="{COL[lab]}" stroke-width="{2.4 if lab == "2026" else 1.3}" stroke-linejoin="round"><title>{lab}</title></polyline>')
+            out.append(f'<polyline points="{pts}" fill="none" stroke="#ffffff" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>')
+            out.append(f'<polyline points="{pts}" fill="none" stroke="{COL["2026"]}" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"><title>2026（实际）</title></polyline>')
+            return "".join(out)
+        gid = f"ac-{metal}"
         leg = "".join(f'<span class="ac-lg"><i style="background:{COL[l]}"></i>{l}{"（实际）" if l == "2026" else "（类比·已缩放）"}</span>' for l in order if l in lines)
         last26 = ser["2026"]["last_date"]
-        return (f'<div class="ac-box"><div class="ac-ttl">{title}</div>'
-                f'<svg viewBox="0 0 {W} {Hh}" class="ac-svg" role="img" aria-label="{title}">{"".join(g)}{"".join(paths)}</svg>'
-                f'<div class="ac-leg">{leg}</div><div class="ac-sub">2026 线截至 {last26}；各线以「当年 1 月底起 120 天内的最高收盘」对齐 2026 年高点，横轴＝距 2026-01-28 的天数。</div></div>')
+        fi = "；".join(f'{l}：平移{dx:+d}天、缩放×{kk:.2f}，误差 {r*100:.1f}%（高点对齐 {b0*100:.1f}%）' for l, (b0, r, dx, kk) in fitinfo.items())
+        btn = (f'<span class="ac-tg"><button type="button" class="ac-b on" data-g="{gid}" data-m="fit">最佳拟合</button>'
+               f'<button type="button" class="ac-b" data-g="{gid}" data-m="peak">高点对齐</button></span>')
+        return (f'<div class="ac-box"><div class="ac-ttl">{title}{btn}</div>'
+                f'<svg viewBox="0 0 {W} {Hh}" class="ac-svg" role="img" aria-label="{title}">{"".join(g)}'
+                f'<defs><clipPath id="{gid}-clip"><rect x="{ML+1}" y="{MT-2}" width="{W-ML-MR-1}" height="{Hh-MT-MB+4}"/></clipPath></defs>'
+                f'<g clip-path="url(#{gid}-clip)"><g id="{gid}-fit">{_paths(lines_fit)}</g><g id="{gid}-peak" style="display:none">{_paths(lines)}</g></g>{"".join(ylab)}</svg>'
+                f'<div class="ac-leg">{leg}</div>'
+                f'<div class="ac-sub" id="{gid}-sub-fit">最佳拟合（对 2026 高点之后的走势做对数误差最小化）：{fi}。<b>样本内拟合，参数由 2026 自身走势挑出，不代表预测力。</b></div>'
+                f'<div class="ac-sub" id="{gid}-sub-peak" style="display:none">高点对齐（无自由参数）：各线以「当年 1 月底起 120 天内的最高收盘」对齐 2026 年高点；2026 线截至 {last26}，横轴＝距 2026-01-28 的天数。</div></div>')
     gold = chart("gold", "金：重大突破后的回调（2026 与 2006、2008 类比）", ["2006", "2008", "2026"], "$")
     silver = chart("silver", "银：回调（2026 与 2008、2011 类比）", ["2008", "2011", "2026"], "$")
     # GDX÷SPY
@@ -2545,7 +2597,9 @@ def _analog_corr_html(o):
 <style>.ac-grid{{display:grid;grid-template-columns:1fr 1fr;gap:14px}}.ac-box{{background:#fff;border:1px solid #e6e1d6;border-radius:8px;padding:10px 12px}}.ac-wide{{margin-top:14px}}
 .ac-ttl{{font-size:13px;font-weight:600;color:#2b2b2b;margin-bottom:4px}}.ac-svg{{width:100%;height:auto;display:block}}.ac-leg{{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:#5b564e;margin-top:4px}}
 .ac-lg i{{display:inline-block;width:14px;height:3px;margin-right:5px;vertical-align:middle}}.ac-sub{{font-size:11px;color:#8a837a;margin-top:4px}}.ac-note{{font-size:12px;color:#5b564e;margin:10px 0 0;line-height:1.7}}
+.ac-tg{{float:right}}.ac-b{{font-size:11px;padding:2px 9px;margin-left:4px;border:1px solid #cfc8b8;background:#fff;color:#5b564e;border-radius:10px;cursor:pointer}}.ac-b.on{{background:#d7263d;color:#fff;border-color:#d7263d}}
 @media(max-width:760px){{.ac-grid{{grid-template-columns:1fr}}}}</style>
+<script>(function(){{document.addEventListener('click',function(e){{var b=e.target.closest&&e.target.closest('.ac-b');if(!b)return;var g=b.getAttribute('data-g'),m=b.getAttribute('data-m');['fit','peak'].forEach(function(k){{var a=document.getElementById(g+'-'+k),c=document.getElementById(g+'-sub-'+k);if(a)a.style.display=(k===m)?'':'none';if(c)c.style.display=(k===m)?'':'none';}});b.parentNode.querySelectorAll('.ac-b').forEach(function(x){{x.classList.toggle('on',x===b);}});}});}})();</script>
 {warn}
 <div class="sfc-note"><b>口径说明：</b>价格取 Yahoo 的 COMEX 黄金（GC=F）、白银（SI=F）连续合约日收盘价，不是 LBMA 定盘价。历史年份路径的对齐方式：取该年 1 月底起 120 天内的<b>最高收盘价</b>作为高点，把高点<b>对齐到 2026 年高点日</b>，并<b>按比例缩放到 2026 年高点价</b>（金 {_gp:,.0f} 美元、银 {_sp:,.1f} 美元），所以历史线读的是<b>走势形状和回调幅度的类比，不是当年的真实价格</b>。
   这个对齐方式是我按原图里圈出的低点位置<b>反推</b>出来的，只用金 2008、银 2008 两条线粗略对过（低点出现的天数接近，价格有几个百分点差距），其余线未逐条核对；原图作者没有公开算法，图上低点位置也是估读。</div>
