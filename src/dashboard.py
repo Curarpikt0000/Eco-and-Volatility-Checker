@@ -1451,14 +1451,24 @@ def _jpy_carry_html(o, which):
                 "<b>杠杆基金</b>＝TFF 报告里的 Leveraged Funds 净头寸（对冲基金口径，与非商业<b>不是同一个口径</b>，二者并列只为对照）。"
                 "正值＝净做多日元期货（押日元升值），负值＝净做空。近 3 年。" + _pct_txt)
     elif which == "spread":
-        data = {"k": "spread", "spread": o["spread"]["spread"], "usdjpy": o["spread"]["usdjpy"], "last": o["spread"]["last"]}
-        foot = ("美日 10 年国债利差（美债 10Y 取 FRED，日债 10Y 取日本财务省官方日度数据，百分点，左轴）与美元/日元（Yahoo，周度，<b>右轴已反转：线向上＝日元走强</b>），近 2 年。"
+        # ★2026-10-31(Opus 审查 B-79): 利差(真实最后交易日)与 USDJPY(Yahoo 周 bar 日期, 可能是周日)日期错开,
+        #   原合并后 179 个横轴点只有 39 个共有 → 悬停一半显示「—」。按 ISO 周对齐(实测 109 周全部共有), 横轴日期用该周周一。
+        import datetime as _dtw
+        def _wk_monday(_d):
+            _x = _dtw.date.fromisoformat(_d); return (_x - _dtw.timedelta(days=_x.weekday())).isoformat()
+        def _by_week(_ser):
+            _m = {}
+            for _d, _v in _ser:
+                _m[_wk_monday(_d)] = [_wk_monday(_d), _v]   # 同周多点取最后一个
+            return [_m[k] for k in sorted(_m)]
+        data = {"k": "spread", "spread": _by_week(o["spread"]["spread"]), "usdjpy": _by_week(o["spread"]["usdjpy"]), "last": o["spread"]["last"]}
+        foot = ("美日 10 年国债利差（美债 10Y 取 FRED，日债 10Y 取日本财务省官方日度数据，百分点，左轴）与美元/日元（Yahoo，周度，<b>右轴已反转：线向上＝日元走强</b>），近 2 年。两条序列按 ISO 周对齐，横轴日期为该周周一（原始数据日期可能差几天）。"
                 "利差大＝套息有肉；日元走强是套息平仓的结果之一，但二者相关≠因果。")
     else:
         data = {"k": "kline", "kl": o["kline"]["k"], "rv": o["kline"]["rv"], "last_rv": o["kline"]["last_rv"], "last": o["spread"]["last"]}
         foot = ("美元/日元周 K 线（Yahoo，红涨绿跌的习惯在此用<b>涨＝日元贬值</b>色，下方有说明）与 MA5/10/20/30 周均线；副图为 <b>20 日已实现波动率</b>（日线对数收益率标准差×√252，年化 %）。"
                 "<b>这是已实现波动率，不是隐含波动率</b>：CBOE 日元波动率指数 JYVIX 已于 2022-11 停更，免费渠道没有日元隐含波动率，所以用已实现值代理。"
-                "MacroMicro 原图的「隐含波动率差值」是其专有构造，本页不复现。")
+                "MacroMicro 原图的「隐含波动率差值」是其专有构造，本页不复现。副图与主图共用同一时间轴（波动率自 2024-10 起，此前留白）；虚线为近 52 周中位数与 P10/P90。")
     js = _json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     return f"""
 <div class="sgr-wrap" id="jpy-{which}">
@@ -1896,6 +1906,7 @@ def _gold_oil_html(o):
         err = "；".join((o or {}).get("warnings", [])[:2])
         return f'<p class="empty">金油比同步中{("：" + _esc(err)) if err else ""}。</p>'
     st = o["stats"]; td = o.get("today") or {}
+    _mx_oil = next((r['oil'] for r in ser if r.get('m') == st.get('max_m')), float('nan'))
     W, H, PL, PR, PT, PB = 900, 300, 46, 16, 14, 26
     iw, ih = W - PL - PR, H - PT - PB
     n = len(ser)
@@ -1930,7 +1941,7 @@ def _gold_oil_html(o):
   <svg viewBox="0 0 {W} {H}" class="sgr-chart" preserveAspectRatio="xMidYMid meet">{g}
     <polyline points="{pts}" fill="none" stroke="#1f3a68" stroke-width="1.5"/>{xt}{band}</svg>
   <div class="sgr-foot">
-    金油比＝1 盎司黄金能换几桶 WTI 原油（对数纵轴）。最高 {st['max']:.0f}（{st['max_m']}，疫情期间油价跌到个位数）、最低 {st['min']:.1f}（{st['min_m']}，油价 $130+）。
+    金油比＝1 盎司黄金能换几桶 WTI 原油（对数纵轴）。最高 {st['max']:.0f}（{st['max_m']}，当月 WTI 月均价约 ${_mx_oil:.0f}，日内一度跌为负值）、最低 {st['min']:.1f}（{st['min_m']}，油价 $130+）。
     1973 年以前原油为管制标价，波动小。黄金：伦敦金月均价（datasets/gold-prices），当月用 COMEX 期货日收盘均值；
     原油：FRED WTISPLC 月均，当月用 FRED DCOILWTICO 日均。「今日」取两者都有报价的最近一天。随 dashboard 每日更新。
   </div>
@@ -2062,7 +2073,7 @@ all()})();</script>""".replace("__DATA__", data).replace("__IDS__", ids)
 .gst-st{{font-size:11px;color:#3a362f;margin-top:2px}}.gst-nt{{font-size:10px;color:#9a948a;margin-top:1px}}.gst-win{{display:flex;gap:6px;align-items:center;font-size:12px;margin:0 0 6px}}.gst-win button{{border:1px solid #d8d1c2;background:#fff;border-radius:4px;padding:2px 9px;cursor:pointer;font-size:12px}}.gst-win button.on{{background:#1f2a44;color:#fff;border-color:#1f2a44}}
 .gst-lg{{font-size:11px;color:#5a554c;margin:2px 0 4px}}.gst-lg i{{display:inline-block;width:14px;height:3px;margin:0 4px 0 10px;vertical-align:middle}}</style>
 {warn}
-<div class="sfc-note"><b>读图：</b>每张图上半部是<b>收盘价</b>与 <b>20/50/200 日均线</b>（简单平均），下半部是 <b>RSI(14)</b>（Wilder 口径，70/30 为超买/超卖参考线，不是买卖信号）。默认看近 90 个交易日，右上角可切换窗口；均线与 RSI 在全部历史上计算，窗口只是截取，所以左端不会缺线。
+<div class="sfc-note"><b>读图：</b>每张图上半部是<b>收盘价</b>与 <b>20/50/200 日均线</b>（简单平均），下半部是 <b>RSI(14)</b>（Wilder 口径，70/30 为超买/超卖参考线，不是买卖信号）。默认看近 90 个交易日，上方按钮可切换窗口；均线与 RSI 在全部历史上计算，窗口只是截取，所以左端不会缺线。
  <b>口径：</b>金银期货为 COMEX <b>连续合约</b>（换月时有价格跳点），不是现货价；GLD/SLV/GDX 等为美元 ETF；中国侧为 A 股与深交所 ETF（人民币）。<b>时间：</b>美股收盘在北京时间次日清晨，中国收盘在当日 15:00；11:00 日更任务读到的是<b>最近一个已收盘交易日</b>。<b>2026-10-09 GDXJ 的 RSI 与 StockCharts 截图核对一致（45.74）。</b></div>
 <div class="gst-win">窗口：<button data-w="45">45 日</button><button data-w="90" class="on">90 日</button><button data-w="130">130 日</button><button data-w="250">250 日</button>
 <span class="gst-lg"><i style="background:#1f2a44"></i>收盘<i style="background:#d08a2c"></i>MA20<i style="background:#3f7d5a"></i>MA50<i style="background:#7a5c8a"></i>MA200<i style="background:#b0493a"></i>RSI</span></div>
@@ -2134,13 +2145,62 @@ all()})();</script>""".replace("__DATA__", data).replace("__IDS__", ids)
 .urt-st{{font-size:11px;color:#3a362f;margin-top:2px}}.urt-nt{{font-size:10px;color:#9a948a;margin-top:1px}}.urt-win{{display:flex;gap:6px;align-items:center;font-size:12px;margin:0 0 6px}}.urt-win button{{border:1px solid #d8d1c2;background:#fff;border-radius:4px;padding:2px 9px;cursor:pointer;font-size:12px}}.urt-win button.on{{background:#1f2a44;color:#fff;border-color:#1f2a44}}
 .urt-lg{{font-size:11px;color:#5a554c;margin:2px 0 4px}}.urt-lg i{{display:inline-block;width:14px;height:3px;margin:0 4px 0 10px;vertical-align:middle}}</style>
 {warn}
-<div class="sfc-note"><b>读图：</b>每张图上半部是<b>收盘价</b>与 <b>20/50/200 日均线</b>（简单平均），下半部是 <b>RSI(14)</b>（Wilder 口径，70/30 为超买/超卖参考线，不是买卖信号）。默认看近 90 个交易日，右上角可切换窗口；均线与 RSI 在全部历史上计算，窗口只是截取，所以左端不会缺线。
+<div class="sfc-note"><b>读图：</b>每张图上半部是<b>收盘价</b>与 <b>20/50/200 日均线</b>（简单平均），下半部是 <b>RSI(14)</b>（Wilder 口径，70/30 为超买/超卖参考线，不是买卖信号）。默认看近 90 个交易日，上方按钮可切换窗口；均线与 RSI 在全部历史上计算，窗口只是截取，所以左端不会缺线。
  <b>口径：</b>铀<b>现货(U3O8)没有免费可靠的日线</b>，这里用两只<b>实物铀信托</b>（SPUT 美股 OTC 价、Yellow Cake 伦敦价）作代理，它们是二级市场价，与现货之间有溢价或折价，<b>不等于铀价</b>。URA/URNM/NLR 为美元 ETF；矿企按各自上市地计价（美元、澳元、港元，Kazatomprom 为伦敦 GDR 美元价）。<b>时间：</b>各市场收盘时刻不同，同一天的收盘不在同一时点。</div>
 <div class="urt-win">窗口：<button data-w="45">45 日</button><button data-w="90" class="on">90 日</button><button data-w="130">130 日</button><button data-w="250">250 日</button>
 <span class="urt-lg"><i style="background:#1f2a44"></i>收盘<i style="background:#d08a2c"></i>MA20<i style="background:#3f7d5a"></i>MA50<i style="background:#7a5c8a"></i>MA200<i style="background:#b0493a"></i>RSI</span></div>
 {cards}{js}
 <div class="sfc-foot">数据：Yahoo Finance 日线；指标由本看板自行计算。仅陈述价格与指标相对位置，不构成买卖建议。</div>
 """
+
+def _south_daily_bars(sd, n=60):
+    """★2026-10-31(Opus 审查 B-27): 3 年累计线(万亿级)看不出近 5/20 日的流出, 加近 n 个交易日日度净买入柱(亿港元)。
+    sd[date]=[净买入(百万港元), 恒指收盘]; 数据全来自现有 south_d, 不新增取数。20 日滚动和用「含窗口前数据」算, 不在窗口起点造 0。"""
+    ds = sorted(sd)
+    if len(ds) < n + 20:
+        return ""
+    win = ds[-n:]
+    val = {d: sd[d][0] / 100 for d in ds}                       # 百万港元 → 亿港元
+    roll = {}
+    for i, d in enumerate(ds):
+        if i >= 19:
+            roll[d] = sum(val[x] for x in ds[i - 19:i + 1])
+    W, H, ml, mr, mt, mb = 940, 200, 62, 14, 16, 30
+    pw, ph = W - ml - mr, H - mt - mb
+    vs = [val[d] for d in win]
+    top = max(max(vs), 1) * 1.1
+    bot = min(min(vs), -1) * 1.1
+    rv = [roll[d] for d in win if d in roll]
+    # 滚动和与日度柱量级不同: 画在同一轴会压扁日度柱, 所以只在悬停里给, 不画线
+    Y = lambda v: mt + ph * (top - v) / (top - bot)
+    step = pw / n
+    bw = step * 0.7
+    p = [f'<svg viewBox="0 0 {W} {H}" preserveAspectRatio="xMidYMid meet">']
+    import math as _m
+    t0 = _m.ceil(bot / 50) * 50
+    tv = t0
+    while tv <= top:
+        p.append(f'<line x1="{ml}" y1="{Y(tv):.1f}" x2="{ml+pw}" y2="{Y(tv):.1f}" stroke="#2a2f3a" stroke-dasharray="3 3"/>')
+        p.append(f'<text x="{ml-7}" y="{Y(tv)+3.5:.1f}" text-anchor="end" font-size="10" fill="#8b93a7">{tv:,.0f}</text>')
+        tv += 50
+    p.append(f'<line x1="{ml}" y1="{Y(0):.1f}" x2="{ml+pw}" y2="{Y(0):.1f}" stroke="#8b93a7" opacity=".7"/>')
+    bx, bt = [], []
+    for i, d in enumerate(win):
+        v = val[d]
+        cx = ml + step * (i + 0.5)
+        col = "#c0553a" if v >= 0 else "#2f8a6a"                  # 沿用本站红涨绿跌: 红=净买入, 绿=净卖出
+        y0, y1 = Y(0), Y(v)
+        p.append(f'<rect x="{cx-bw/2:.1f}" y="{min(y0,y1):.1f}" width="{bw:.1f}" height="{max(abs(y1-y0),0.6):.1f}" fill="{col}" opacity=".85"/>')
+        bx.append(cx)
+        hs = sd[d][1]
+        bt.append(f'{_esc(d)}||当日净买入 {v:+,.0f}亿港元' + (f'&lt;br&gt;近20日合计 {roll[d]:+,.0f}亿港元' if d in roll else '') + (f'&lt;br&gt;恒指 {hs:,.0f}' if hs else ''))
+        if i % 10 == 0 or i == n - 1:
+            p.append(f'<text x="{cx:.1f}" y="{mt+ph+16:.1f}" text-anchor="middle" font-size="9" fill="#7c8496">{_esc(d)}</text>')
+    p.append(_hover_bands(bx, bt, mt, ph, ml, ml + pw))
+    p.append(f'<text x="{ml-52}" y="{mt-2}" font-size="10" fill="#8b93a7">亿港元</text>')
+    p.append("</svg>")
+    return "".join(p)
+
 
 def _cn_cap_svg(series, w=940, h=250, unit="", colors=None, stacked=False, dec=0, ylab=""):
     """通用 A 股资金面折线/堆叠柱。series: [(名称, [(日期, 值), ...])]; 每点/每柱 悬停 data-tip。
@@ -2300,6 +2360,12 @@ def _cn_capital_html(o, cl, hk_hold=None):
         h.append(f'<p class="oil-meta"><b>方向要看清：南向是内地资金买港股，不是外资</b>（H 股一侧最完整的跨境资金数据）。'
                  f'截至 {ds[-1]}：近 5 日净买入 <b>{last5:,.0f} 亿港元</b>，近 20 日 <b>{last20:,.0f} 亿港元</b>，今年以来 <b>{yt:,.0f} 亿港元</b>。'
                  '下图为近 3 年累计（起点归零，单位万亿港元）及同期恒生指数；数据 2014-11-17 起日频完整。</p>')
+        _sb = _south_daily_bars(sd)
+        if _sb:
+            h.append('<p class="oil-meta" style="margin-top:8px"><b>近 60 个交易日 · 日度净买入</b>（亿港元；红=净买入、绿=净卖出；悬停同时给近 20 日合计与恒指）。'
+                     '下面的 3 年累计线是万亿级，压得住近期几十亿的进出，短线看这张。</p>')
+            h.append(_sb)
+        h.append('<p class="oil-meta" style="margin-top:8px">下面三张图（累计、恒指、持股市值）<b>各自按自身时间跨度铺满宽度</b>：累计与恒指为近 3 年，持股市值接口只存约两年，起点不同，读时间请看横轴日期，不要按位置对照。</p>')
         h.append(_cn_cap_svg([("南向近3年累计净买入", c3)], unit=" 万亿港元", dec=2, ylab="万亿港元", colors=["#6b8fb5"], h=220))
         h.append(_cn_cap_svg([("恒生指数收盘", hsi)], unit="", dec=0, ylab="恒指", colors=["#b58a6a"], h=190))
         hh = (hk_hold or {}).get("d") or {}
@@ -2830,7 +2896,7 @@ def _us_freight_html(o):
 </div>"""
 
 
-def _ust_micro_line(items, W=880, H=150, PL=58, PR=10, PT=10, PB=22, color="#6b7f8a", unit=""):
+def _ust_micro_line(items, W=880, H=150, PL=58, PR=10, PT=10, PB=22, color="#6b7f8a", unit="", ma=0, gap0=False):
     """通用小折线, items=[{d,v}]。"""
     if len(items) < 3:
         return ""
@@ -2840,7 +2906,26 @@ def _ust_micro_line(items, W=880, H=150, PL=58, PR=10, PT=10, PB=22, color="#6b7
     iw, ih = W - PL - PR, H - PT - PB
     def X(i): return PL + iw * i / max(len(items) - 1, 1)
     def Y(v): return PT + ih * (1 - (v - lo) / rng)
-    pts = " ".join(f"{X(i):.1f},{Y(p['v']):.1f}" for i, p in enumerate(items))
+    # ★2026-10-31(Opus 审查 B-40): gap0=True 时把 v==0 当缺失(Yahoo 节假日/陈旧报价的 high==low), 线在此处断开, 不插值
+    _segs, _cur = [], []
+    for i, p in enumerate(items):
+        if gap0 and p["v"] == 0:
+            if _cur: _segs.append(_cur); _cur = []
+            continue
+        _cur.append(f"{X(i):.1f},{Y(p['v']):.1f}")
+    if _cur: _segs.append(_cur)
+    pts = " ".join(_segs[-1]) if _segs else ""
+    _poly = "".join(f'<polyline points="{" ".join(sg)}" style="stroke:{color}" class="um-line"/>' for sg in _segs if len(sg) > 1)
+    # 滚动均值虚线(由现有序列计算, 窗口不足的前 ma-1 点不画)
+    _mapoly = ""
+    if ma and len(items) >= ma:
+        _mp = []
+        for i in range(ma - 1, len(items)):
+            w_ = [q["v"] for q in items[i - ma + 1:i + 1] if not (gap0 and q["v"] == 0)]
+            if w_: _mp.append(f"{X(i):.1f},{Y(sum(w_) / len(w_)):.1f}")
+        if len(_mp) > 1:
+            _mapoly = (f'<polyline points="{" ".join(_mp)}" fill="none" stroke="#8a8377" stroke-width="1.2" stroke-dasharray="4 3"/>'
+                       f'<text x="{W-PR-2}" y="{PT+9}" text-anchor="end" class="um-yt" style="fill:#8a8377">虚线=近{ma}期均值</text>')
     grid = ""
     for k in range(4):
         v = lo + rng * k / 3
@@ -2857,10 +2942,10 @@ def _ust_micro_line(items, W=880, H=150, PL=58, PR=10, PT=10, PB=22, color="#6b7
             xt += f'<text x="{X(i):.1f}" y="{H-6}" class="um-xt">{yr}</text>'
     _fv = (lambda v: f"{v:,.0f}" if abs(v) >= 1000 else f"{v:.2f}")
     hits = _hover_bands([X(i) for i in range(len(items))],
-                        [f'{_esc(p["d"])}||{_fv(p["v"])}{_esc(unit)}' for p in items],
+                        [f'{_esc(p["d"])}||' + ("无有效报价(视为缺失)" if (gap0 and p["v"] == 0) else f'{_fv(p["v"])}{_esc(unit)}') for p in items],
                         PT, ih, PL, W - PR)
     return (f'<svg viewBox="0 0 {W} {H}" class="um-chart" preserveAspectRatio="xMidYMid meet">'
-            f'{grid}<polyline points="{pts}" style="stroke:{color}" class="um-line"/>'
+            f'{grid}{_poly}{_mapoly}'
             f'<circle cx="{X(len(items)-1):.1f}" cy="{Y(vals[-1]):.1f}" r="3.6" '
             f'style="fill:{color}"/>{xt}{hits}</svg>')
 
@@ -2892,10 +2977,19 @@ def _ust_micro_html(m):
                     f'<td class="um-v">{tot["latest"]:,.0f}</td>'
                     f'<td class="um-v">{tot["avg_52w"]:,.0f}</td>'
                     f'<td class="um-v {c}">{tot["vs_avg"]:+.1f}%</td></tr>')
+        # ★2026-10-31(Opus 审查 B-40): 合计比 5 个期限桶之和多约 47%, 表里原先没说明差额。
+        #   「其他」= 合计 − 分项之和(最新值/52 周均值各自相减, 偏离%由相减结果算), 纯算术, 不引入新数据。
+        _o_l = tot["latest"] - sum(b["latest"] for b in bks)
+        _o_a = tot["avg_52w"] - sum(b["avg_52w"] for b in bks)
+        if _o_l > 0 and _o_a > 0:
+            _o_v = (_o_l / _o_a - 1) * 100
+            tot_line = (f'<tr class="um-oth"><td class="um-n">差额（合计 − 5 个期限桶之和；合计序列口径比 5 个分项更宽，具体构成未核实，仅作算术差）</td>'
+                        f'<td class="um-v">{_o_l:,.0f}</td><td class="um-v">{_o_a:,.0f}</td>'
+                        f'<td class="um-v {"pos" if _o_v > 0 else "neg"}">{_o_v:+.1f}%</td></tr>') + tot_line
 
     # 主图用 2Y 桶
     two = next((b for b in bks if b.get("tag")), bks[0] if bks else None)
-    chart2y = _ust_micro_line(two["series"], color="#6b7f8a", unit=" 百万美元") if two else ""
+    chart2y = _ust_micro_line(two["series"], color="#6b7f8a", unit=" 百万美元", ma=52) if two else ""
 
     # ── Exhibit 3: 交易成本(代理) ──
     cost_blocks = ""
@@ -2907,7 +3001,7 @@ def _ust_micro_html(m):
             f'<span class="um-pct">3年分位 {c["pct_rank"]}%</span></div>'
             f'<div class="um-cost-d">{c["desc"]}　·　{c["latest_date"]}　·　'
             f'区间 {c["min"]:.2f} ~ {c["max"]:.2f}</div>'
-            f'{_ust_micro_line(c["series"], H=130, color="#a08b6a", unit=c.get("unit", ""))}</div>')
+            f'{_ust_micro_line(c["series"], H=130, color="#a08b6a", unit=c.get("unit", ""), gap0=("日内波幅" in c["name"]))}</div>')
 
     return f"""
 <div class="um-wrap">
@@ -9280,7 +9374,17 @@ def _cn_liq_html(cl):
         h.append('<div class="part-title" style="font-size:14px;margin-top:12px">'
                  '② DR007 · 存款类机构质押式回购利率（短期资金<b>价格</b>）'
                  '<span class="freq-badge freq-daily">每日更新</span></div>')
-        h.append(_cn_line_svg(dr, "v", unit="%", color="#c17d6a", dec=4))
+        # ★2026-10-31(Opus 审查 B-19/C): 加 7 天逆回购利率(政策利率)阶梯虚线 + 利差悬停; X 轴带年份; Y 轴取整到 0.1。
+        #   政策利率取「7 天品种有量、且同一利率连续出现 >=5 个交易日」的段(实测剔除了 12 个单日异常值, 如 3.2/2.59 等, 那是别的操作/口径行)。
+        _pol_runs = []
+        for _r in omo:
+            if _r.get("d7") and _r.get("rate") is not None:
+                if _pol_runs and _pol_runs[-1][1] == _r["rate"]:
+                    _pol_runs[-1][2] += 1
+                else:
+                    _pol_runs.append([_r["date"], _r["rate"], 1])
+        _policy = [(d_, rt_) for d_, rt_, n_ in _pol_runs if n_ >= 5]
+        h.append(_cn_line_svg(dr, "v", unit="%", color="#c17d6a", dec=2, policy=_policy, policy_name="7天逆回购利率", yearx=True, tick=0.1))
         h.append(f'<p class="cips-note">口径：CFETS（中国货币网）FDR007，'
                  f'即<b>存款类机构</b>质押式回购加权利率。'
                  f'★注意与 FR007 区别：后者是<b>全市场</b>（含非银），'
@@ -9711,14 +9815,15 @@ def _cn_omo_svg(rows, w=940, h=250):
     return "".join(p)
 
 
-def _cn_line_svg(rows, key, unit="", color="#6b8fb5", w=940, h=210, dec=2):
+def _cn_line_svg(rows, key, unit="", color="#6b8fb5", w=940, h=210, dec=2, policy=None, policy_name="", yearx=False, tick=0):
     """通用日频折线。"""
     vs = [r[key] for r in rows if r.get(key) is not None]
     if not vs:
         return ""
     ml, mr, mt, mb = 62, 14, 16, 40
     pw, ph = w - ml - mr, h - mt - mb
-    lo, hi = min(vs), max(vs)
+    _pv = [v for _, v in (policy or [])]
+    lo, hi = min(vs + _pv), max(vs + _pv)
     pad = (hi - lo) * 0.15 or (abs(hi) * 0.02 or 0.01)
     lo, hi = lo - pad, hi + pad
     span = (hi - lo) or 1
@@ -9728,8 +9833,9 @@ def _cn_line_svg(rows, key, unit="", color="#6b8fb5", w=940, h=210, dec=2):
     def Y(v):
         return mt + ph - ph * (v - lo) / span
     p = [f'<svg viewBox="0 0 {w} {h}" preserveAspectRatio="xMidYMid meet">']
-    for k in range(5):
-        tv = lo + span * k / 4
+    import math as _m
+    _ticks = ([_m.ceil(lo / tick - 1e-9) * tick + j * tick for j in range(int((hi - _m.ceil(lo / tick - 1e-9) * tick) / tick + 1e-9) + 1)] if tick else [lo + span * k / 4 for k in range(5)])
+    for tv in _ticks:
         yy = Y(tv)
         p.append(f'<line x1="{ml}" y1="{yy:.1f}" x2="{ml+pw}" y2="{yy:.1f}" '
                  f'stroke="#2a2f3a" stroke-width="1" stroke-dasharray="3 3"/>')
@@ -9746,12 +9852,36 @@ def _cn_line_svg(rows, key, unit="", color="#6b8fb5", w=940, h=210, dec=2):
         # ★ 规范 knowledge/frontend/data-dashboard-publishing.md §3「全图 hover tooltip」：
         #   折线整条无法逐点 hover → 每点叠透明 tip-hit 圈 + data-tip，走全站事件委托。
         #   不要用 SVG 原生 <title>（需悬停 1-2 秒才弹系统提示，样式也不统一）。
-        p.append(f'<circle class="tip-hit" cx="{X(i):.1f}" cy="{Y(r[key]):.1f}" r="7" '
-                 f'fill="transparent" data-tip="{_esc(_tip)}"/>')
+        if policy is None:
+            p.append(f'<circle class="tip-hit" cx="{X(i):.1f}" cy="{Y(r[key]):.1f}" r="7" '
+                     f'fill="transparent" data-tip="{_esc(_tip)}"/>')
+    if policy:
+        # 阶梯: 每个日期取「该日及之前最近一次」政策利率; 窗口起点之前没有数据的日子不画
+        _pol = sorted(policy); _pi = -1; _spts = []; _pmap = {}
+        for i, r in enumerate(rows):
+            while _pi + 1 < len(_pol) and _pol[_pi + 1][0] <= r["date"]:
+                _pi += 1
+            if _pi >= 0:
+                _pmap[r["date"]] = _pol[_pi][1]
+                _spts.append(f'{X(i):.1f},{Y(_pol[_pi][1]):.1f}')
+        if len(_spts) > 1:
+            p.append(f'<polyline points="{" ".join(_spts)}" fill="none" stroke="#6a7a8a" stroke-width="1.3" stroke-dasharray="5 3"/>')
+            p.append(f'<text x="{ml+pw-2}" y="{Y(_pol[-1][1])-4:.1f}" text-anchor="end" font-size="9.5" fill="#6a7a8a">{_esc(policy_name)}</text>')
+        _bx = [X(i) for i, r in enumerate(rows) if r.get(key) is not None]
+        _bt = []
+        for r in rows:
+            if r.get(key) is None: continue
+            _pv2 = _pmap.get(r["date"])
+            _t = f'{r["date"]}||DR007 {r[key]:,.{dec}f}{unit}'
+            if _pv2 is not None:
+                _t += f'&lt;br&gt;{policy_name} {_pv2:.2f}{unit}&lt;br&gt;利差 {(r[key] - _pv2) * 100:+.0f}bp'
+            _bt.append(_t)
+        p.append(_hover_bands(_bx, _bt, mt, ph, ml, ml + pw))
     stepl = max(1, n // 8)
     for i in range(0, n, stepl):
+        _lab = rows[i]["date"] if yearx else rows[i]["date"][5:]
         p.append(f'<text x="{X(i):.1f}" y="{mt+ph+14:.1f}" text-anchor="middle" '
-                 f'font-size="9" fill="#7c8496">{_esc(rows[i]["date"][5:])}</text>')
+                 f'font-size="9" fill="#7c8496">{_esc(_lab)}</text>')
     p.append(f'<text x="{ml-52}" y="{mt-2}" font-size="10" '
              f'fill="#8b93a7">{_esc(unit)}</text>')
     p.append("</svg>")
@@ -13456,10 +13586,13 @@ mkRadar('rLong', RADAR.long);
     var RV = c[0].rv, rvmap = {{}}; RV.forEach(function(p) {{ rvmap[p[0]] = p[1]; }});
     var rv = RV.map(function(p) {{ return p[1]; }}), rlo = 0, rhi = Math.max.apply(null, rv) * 1.1, ih2 = H2 - 18, YV = function(v) {{ return 6 + ih2 * (1 - (v - rlo) / (rhi - rlo)); }}, g2 = '';
     nice(rlo, rhi, 3).forEach(function(v) {{ g2 += '<line x1="'+PL+'" y1="'+YV(v).toFixed(1)+'" x2="'+(W-PR)+'" y2="'+YV(v).toFixed(1)+'" class="sgr-grid"/><text x="'+(PL-6)+'" y="'+(YV(v)+3.5).toFixed(1)+'" class="sgr-yt">'+(+v.toFixed(0))+'</text>'; }});
-    var rn = RV.length, XR = function(i) {{ return PL + iw * i / (rn - 1); }}, pp = RV.map(function(p, i) {{ return XR(i).toFixed(1)+','+YV(p[1]).toFixed(1); }});
+    var kidx = {{}}; K.forEach(function(k, i) {{ kidx[k.d] = i; }});
+    var rn = RV.length, XR = function(i) {{ var j = kidx[RV[i][0]]; return X(j != null ? j : 0); }}, pp = RV.map(function(p, i) {{ return XR(i).toFixed(1)+','+YV(p[1]).toFixed(1); }});
+    var rlast = RV.slice(-52).map(function(p) {{ return p[1]; }}).sort(function(a, b) {{ return a - b; }}), q = function(f) {{ var t = (rlast.length - 1) * f, lo2 = Math.floor(t); return rlast[lo2] + (rlast[Math.min(lo2 + 1, rlast.length - 1)] - rlast[lo2]) * (t - lo2); }};
+    [[q(.5), '近1年中位 ', '#8a8377', '4 3'], [q(.1), 'P10 ', '#b8b2a5', '2 3'], [q(.9), 'P90 ', '#b8b2a5', '2 3']].forEach(function(r) {{ g2 += '<line x1="'+PL+'" y1="'+YV(r[0]).toFixed(1)+'" x2="'+(W-PR)+'" y2="'+YV(r[0]).toFixed(1)+'" stroke="'+r[2]+'" stroke-width="1" stroke-dasharray="'+r[3]+'"/><text x="'+(W-PR-2)+'" y="'+(YV(r[0])-3).toFixed(1)+'" text-anchor="end" class="sgr-yt" style="fill:'+r[2]+'">'+r[1]+(+r[0].toFixed(1))+'%</text>'; }});
     var lq2 = ''; RV.forEach(function(p, i) {{ var m = p[0].slice(5,7), q = p[0].slice(0,4)+m; if ((m === '01' || m === '04' || m === '07' || m === '10') && q !== lq2) {{ lq2 = q; g2 += '<text x="'+XR(i).toFixed(1)+'" y="'+(H2+8)+'" class="sgr-xt">'+p[0].slice(2,7)+'</text>'; }} }});
     g2 += '<polyline points="'+pp.join(' ')+'" fill="none" stroke="#1f7a7a" stroke-width="1.8"/>';
-    var b2 = ''; RV.forEach(function(p, i) {{ var l = i ? (XR(i-1)+XR(i))/2 : PL, r = i < rn-1 ? (XR(i)+XR(i+1))/2 : W-PR; b2 += '<rect x="'+l.toFixed(1)+'" y="6" width="'+Math.max(r-l,.6).toFixed(2)+'" height="'+ih2+'" fill="transparent" data-tip="'+p[0]+'||20日已实现波动率 '+p[1]+'%（年化）"/>'; }});
+    var b2 = ''; RV.forEach(function(p, i) {{ var l = XR(i) - iw / n / 2, r = XR(i) + iw / n / 2; b2 += '<rect x="'+l.toFixed(1)+'" y="6" width="'+Math.max(r-l,.6).toFixed(2)+'" height="'+ih2+'" fill="transparent" data-tip="'+p[0]+'||20日已实现波动率 '+p[1]+'%（年化）"/>'; }});
     var L = c[0].last, lk = K[K.length-1];
     var lg = legend([{{col:'#c0553a',name:'美元/日元 收',val:lk.c,d:lk.d}},{{col:'#6a4c93',name:'MA5',val:lk.ma5,d:''}},{{col:'#2f6f9f',name:'MA10',val:lk.ma10,d:''}},{{col:'#e0a030',name:'MA20',val:lk.ma20,d:''}},{{col:'#555',name:'MA30',val:lk.ma30,d:''}},{{col:'#1f7a7a',name:'20日已实现波动率(年化)',val:(c[0].last_rv||{{}}).v+'%',d:(c[0].last_rv||{{}}).d}}]);
     box.innerHTML = '<div class="sgz-p" style="height:auto"><div class="sgr-title">美元/日元周 K 线 + MA5/10/20/30 周 + 20 日已实现波动率（近 2.5 年）</div>'+lg+'<svg viewBox="0 0 '+W+' '+(H1+16)+'" class="sgr-chart" style="height:'+(H1-10)+'px" preserveAspectRatio="xMidYMid meet">'+g+xt+bands+'</svg>'
