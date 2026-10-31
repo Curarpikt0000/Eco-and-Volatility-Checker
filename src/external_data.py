@@ -5278,7 +5278,11 @@ def fetch_basis_trade_monitor(cache_path=None, years=2):
     for p in (panel_funding, panel_carry, panel_trigger):
         for s in p["series"]:
             if s.get("points"):
-                all_last.append(s["points"][-1]["date"])
+                # ★2026-10-31: FRED 的 IORB 是 Fed 预先公布的政策利率, 序列带未来日期(周末/下个交易日也有值)。
+                #   取 max 会得到「未来」asof → 页面徽章显示『滞后 -1 天』, 掩盖真实数据日。只认 <= 今天 的点。
+                _past = [pt["date"] for pt in s["points"] if pt["date"] <= today.isoformat()]
+                if _past:
+                    all_last.append(_past[-1])
     asof = max(all_last) if all_last else today.isoformat()
     missing = [f'{p["id"]}' for p in (panel_funding, panel_carry, panel_trigger) if not p["series"]]
     status = "ok" if not missing else ("部分缺失: " + ", ".join(missing))
