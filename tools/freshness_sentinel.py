@@ -90,6 +90,9 @@ def main():
                     ds = [fa.parse_date(v["series"][-1][0]) for v in d.values()
                           if isinstance(v, dict) and v.get("series")]
                     extra = max([x for x in ds if x], default=None)
+                elif name == "cn_holders_q":            # 国家队持股: holders_q 的最大季末键(只增不改旧期)
+                    ks = [fa.parse_date(k) for k in (d.get("holders_q") or {})]
+                    extra = max([x for x in ks if x], default=None)
                 elif name == "fiscal_budget":           # 年度预算: as_of='FY2026' → 当年 9 月 30 日(美财年末)
                     import re as _re
                     m = _re.search(r"FY(\d{4})", str(d.get("as_of", "")))
@@ -117,7 +120,11 @@ def main():
                     extra = fa.parse_date(lc) if lc else extra
                 except Exception:  # noqa: BLE001
                     pass
-            asof = max([x for x in (decl, deep, clip_future(qa), extra) if x], default=None)
+            # ★cn_holders_q: 文件顶层 as_of=抓取时间(今天), deep 扫到的也是抓取日; 季度数据真实末点只能取 holders_q 的最大季末键, 不取 max
+            if name == "cn_holders_q":
+                asof = extra
+            else:
+                asof = max([x for x in (decl, deep, clip_future(qa), extra) if x], default=None)
             if asof:
                 lag = (TODAY - asof).days
                 rec.update(as_of=asof.isoformat(), lag_days=lag, lag_bizdays=biz(asof, TODAY))

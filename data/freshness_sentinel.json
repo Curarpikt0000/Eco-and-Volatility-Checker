@@ -1,6 +1,6 @@
 {
- "run_at": "2026-10-30T20:18:13",
- "today": "2026-10-30",
+ "run_at": "2026-10-31T09:00:06",
+ "today": "2026-10-31",
  "results": [
   {
    "name": "comex_inventory",
@@ -9,7 +9,7 @@
    "tol_days": 5,
    "status": "ok",
    "as_of": "2026-10-29",
-   "lag_days": 1,
+   "lag_days": 2,
    "lag_bizdays": 1,
    "verdict": "OK"
   },
@@ -20,9 +20,9 @@
    "tol_days": 7,
    "status": "ok",
    "as_of": "2026-10-26",
-   "lag_days": 4,
+   "lag_days": 5,
    "lag_bizdays": 4,
-   "verdict": "OK"
+   "verdict": "WATCH"
   },
   {
    "name": "comex_issue_stop_firms",
@@ -31,7 +31,7 @@
    "tol_days": 7,
    "status": "ok",
    "as_of": "2026-10-29",
-   "lag_days": 1,
+   "lag_days": 2,
    "lag_bizdays": 1,
    "verdict": "OK"
   },
@@ -42,7 +42,7 @@
    "tol_days": 9999,
    "status": "ok",
    "as_of": "2026-04-15",
-   "lag_days": 198,
+   "lag_days": 199,
    "lag_bizdays": 142,
    "verdict": "STATIC"
   },
@@ -53,7 +53,7 @@
    "tol_days": 6,
    "status": null,
    "as_of": "2026-10-28",
-   "lag_days": 2,
+   "lag_days": 3,
    "lag_bizdays": 2,
    "verdict": "OK"
   },
@@ -63,9 +63,9 @@
    "freq": "weekly",
    "tol_days": 45,
    "status": null,
-   "as_of": "2026-10-20",
-   "lag_days": 10,
-   "lag_bizdays": 8,
+   "as_of": "2026-10-28",
+   "lag_days": 3,
+   "lag_bizdays": 2,
    "verdict": "OK"
   },
   {
@@ -75,7 +75,7 @@
    "tol_days": 14,
    "status": "ok",
    "as_of": "2026-10-29",
-   "lag_days": 1,
+   "lag_days": 2,
    "lag_bizdays": 1,
    "verdict": "OK"
   },
@@ -86,7 +86,7 @@
    "tol_days": 6,
    "status": "ok",
    "as_of": "2026-10-30",
-   "lag_days": 0,
+   "lag_days": 1,
    "lag_bizdays": 0,
    "verdict": "OK"
   },
@@ -96,9 +96,9 @@
    "freq": "daily",
    "tol_days": 6,
    "status": "ok",
-   "as_of": "2026-10-29",
+   "as_of": "2026-10-30",
    "lag_days": 1,
-   "lag_bizdays": 1,
+   "lag_bizdays": 0,
    "verdict": "OK"
   },
   {
@@ -107,9 +107,9 @@
    "freq": "daily",
    "tol_days": 8,
    "status": "ok",
-   "as_of": "2026-10-27",
+   "as_of": "2026-10-28",
    "lag_days": 3,
-   "lag_bizdays": 3,
+   "lag_bizdays": 2,
    "verdict": "OK"
   },
   {
@@ -119,7 +119,7 @@
    "tol_days": 6,
    "status": "ok",
    "as_of": "2026-10-29",
-   "lag_days": 1,
+   "lag_days": 2,
    "lag_bizdays": 1,
    "verdict": "OK"
   },
@@ -129,9 +129,9 @@
    "freq": "daily",
    "tol_days": 6,
    "status": "ok",
-   "as_of": "2026-10-29",
+   "as_of": "2026-10-30",
    "lag_days": 1,
-   "lag_bizdays": 1,
+   "lag_bizdays": 0,
    "verdict": "OK"
   },
   {
@@ -141,7 +141,7 @@
    "tol_days": 21,
    "status": "ok",
    "as_of": "2026-10-23",
-   "lag_days": 7,
+   "lag_days": 8,
    "lag_bizdays": 5,
    "verdict": "OK"
   },
@@ -152,7 +152,7 @@
    "tol_days": 14,
    "status": "ok",
    "as_of": "2026-10-28",
-   "lag_days": 2,
+   "lag_days": 3,
    "lag_bizdays": 2,
    "verdict": "OK"
   },
@@ -163,7 +163,7 @@
    "tol_days": 14,
    "status": "ok",
    "as_of": "2026-10-28",
-   "lag_days": 2,
+   "lag_days": 3,
    "lag_bizdays": 2,
    "verdict": "OK"
   },
@@ -173,9 +173,9 @@
    "freq": "event",
    "tol_days": 35,
    "status": "ok",
-   "as_of": "2026-10-15",
-   "lag_days": 15,
-   "lag_bizdays": 11,
+   "as_of": "2026-10-29",
+   "lag_days": 2,
+   "lag_bizdays": 1,
    "verdict": "OK"
   },
   {
@@ -185,7 +185,7 @@
    "tol_days": 45,
    "status": "ok",
    "as_of": "2026-09-30",
-   "lag_days": 30,
+   "lag_days": 31,
    "lag_bizdays": 22,
    "verdict": "OK"
   },
@@ -196,7 +196,7 @@
    "tol_days": 75,
    "status": null,
    "as_of": "2026-08-31",
-   "lag_days": 60,
+   "lag_days": 61,
    "lag_bizdays": 44,
    "verdict": "WATCH"
   },
@@ -207,7 +207,7 @@
    "tol_days": 60,
    "status": null,
    "as_of": "2026-09-30",
-   "lag_days": 30,
+   "lag_days": 31,
    "lag_bizdays": 22,
    "verdict": "OK"
   },
@@ -218,7 +218,7 @@
    "tol_days": 60,
    "status": null,
    "as_of": "2026-09-30",
-   "lag_days": 30,
+   "lag_days": 31,
    "lag_bizdays": 22,
    "verdict": "OK"
   },
@@ -228,10 +228,10 @@
    "freq": "quarterly",
    "tol_days": 220,
    "status": null,
-   "as_of": "2026-01-01",
-   "lag_days": 302,
-   "lag_bizdays": 216,
-   "verdict": "STALE"
+   "as_of": "2026-03-31",
+   "lag_days": 214,
+   "lag_bizdays": 153,
+   "verdict": "WATCH"
   },
   {
    "name": "iip_four_countries",
@@ -240,7 +240,7 @@
    "tol_days": 150,
    "status": "ok",
    "as_of": "2026-06-30",
-   "lag_days": 122,
+   "lag_days": 123,
    "lag_bizdays": 88,
    "verdict": "WATCH"
   },
@@ -251,7 +251,7 @@
    "tol_days": 150,
    "status": "ok",
    "as_of": "2026-06-30",
-   "lag_days": 122,
+   "lag_days": 123,
    "lag_bizdays": 88,
    "verdict": "WATCH"
   },
@@ -262,7 +262,7 @@
    "tol_days": 120,
    "status": "ok",
    "as_of": "2026-09-10",
-   "lag_days": 50,
+   "lag_days": 51,
    "lag_bizdays": 36,
    "verdict": "OK"
   },
@@ -273,7 +273,7 @@
    "tol_days": 120,
    "status": "ok",
    "as_of": "2026-07-31",
-   "lag_days": 91,
+   "lag_days": 92,
    "lag_bizdays": 65,
    "verdict": "WATCH"
   },
@@ -284,9 +284,9 @@
    "tol_days": 10,
    "status": "ok",
    "as_of": "2026-10-23",
-   "lag_days": 7,
+   "lag_days": 8,
    "lag_bizdays": 5,
-   "verdict": "OK"
+   "verdict": "WATCH"
   },
   {
    "name": "gold_exports",
@@ -295,7 +295,7 @@
    "tol_days": 220,
    "status": "ok",
    "as_of": "2026-04-01",
-   "lag_days": 212,
+   "lag_days": 213,
    "lag_bizdays": 152,
    "verdict": "WATCH"
   },
@@ -306,7 +306,7 @@
    "tol_days": 60,
    "status": "ok",
    "as_of": "2026-10-30",
-   "lag_days": 0,
+   "lag_days": 1,
    "lag_bizdays": 0,
    "verdict": "OK"
   },
@@ -317,7 +317,7 @@
    "tol_days": 60,
    "status": "ok",
    "as_of": "2026-09-30",
-   "lag_days": 30,
+   "lag_days": 31,
    "lag_bizdays": 22,
    "verdict": "OK"
   },
@@ -327,10 +327,10 @@
    "freq": "daily",
    "tol_days": 14,
    "status": "ok",
-   "as_of": "2026-10-05",
-   "lag_days": 25,
-   "lag_bizdays": 19,
-   "verdict": "STALE"
+   "as_of": "2026-10-30",
+   "lag_days": 1,
+   "lag_bizdays": 0,
+   "verdict": "OK"
   },
   {
    "name": "market_breadth",
@@ -339,7 +339,7 @@
    "tol_days": 6,
    "status": "ok",
    "as_of": "2026-10-29",
-   "lag_days": 1,
+   "lag_days": 2,
    "lag_bizdays": 1,
    "verdict": "OK"
   },
@@ -349,9 +349,9 @@
    "freq": "daily",
    "tol_days": 6,
    "status": "ok",
-   "as_of": "2026-10-29",
+   "as_of": "2026-10-30",
    "lag_days": 1,
-   "lag_bizdays": 1,
+   "lag_bizdays": 0,
    "verdict": "OK"
   },
   {
@@ -360,7 +360,7 @@
    "freq": "weekly",
    "tol_days": 14,
    "status": "ok",
-   "as_of": "2026-10-30",
+   "as_of": "2026-10-31",
    "lag_days": 0,
    "lag_bizdays": 0,
    "verdict": "OK"
@@ -371,21 +371,32 @@
    "freq": "daily",
    "tol_days": 6,
    "status": "ok",
-   "as_of": "2026-10-30",
-   "lag_days": 0,
+   "as_of": "2026-11-01",
+   "lag_days": -1,
    "lag_bizdays": 0,
    "verdict": "OK"
   },
   {
+   "name": "cn_holders_q",
+   "label": "国家队持股(东财十大流通股东, 季末; 只读落盘文件)",
+   "freq": "quarterly",
+   "tol_days": 140,
+   "status": "ok",
+   "as_of": "2026-09-30",
+   "lag_days": 31,
+   "lag_bizdays": 22,
+   "verdict": "OK"
+  },
+  {
    "name": "debt_to_gdp",
-   "label": "IMF债务/GDP",
+   "label": "IMF债务/GDP(年度实绩, 新值随10月WEO发布)",
    "freq": "biannual",
-   "tol_days": 250,
+   "tol_days": 420,
    "status": "ok",
    "as_of": "2025-12-31",
-   "lag_days": 303,
+   "lag_days": 304,
    "lag_bizdays": 217,
-   "verdict": "STALE"
+   "verdict": "WATCH"
   },
   {
    "name": "corporate_credit",
@@ -393,9 +404,9 @@
    "freq": "daily",
    "tol_days": 8,
    "status": "ok",
-   "as_of": "2026-10-28",
+   "as_of": "2026-10-29",
    "lag_days": 2,
-   "lag_bizdays": 2,
+   "lag_bizdays": 1,
    "verdict": "OK"
   },
   {
@@ -405,7 +416,7 @@
    "tol_days": 75,
    "status": "ok",
    "as_of": "2026-09-30",
-   "lag_days": 30,
+   "lag_days": 31,
    "lag_bizdays": 22,
    "verdict": "OK"
   },
@@ -416,7 +427,7 @@
    "tol_days": 150,
    "status": "ok",
    "as_of": "2026-09-03",
-   "lag_days": 57,
+   "lag_days": 58,
    "lag_bizdays": 41,
    "verdict": "OK"
   },
@@ -427,7 +438,7 @@
    "tol_days": 150,
    "status": "ok",
    "as_of": "2026-09-03",
-   "lag_days": 57,
+   "lag_days": 58,
    "lag_bizdays": 41,
    "verdict": "OK"
   },
@@ -438,7 +449,7 @@
    "tol_days": 60,
    "status": "ok",
    "as_of": "2026-09-01",
-   "lag_days": 59,
+   "lag_days": 60,
    "lag_bizdays": 43,
    "verdict": "WATCH"
   }

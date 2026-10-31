@@ -132,6 +132,7 @@ SPECS = [
     ('ad_line_real',           lambda: ed.fetch_ad_line_real(),           'daily',    6,  'A/D腾落线'),
     ('oil_inventory',          lambda: ed.fetch_oil_inventory(),          'weekly',   14, '原油库存'),
     ('basis_trade_monitor',    lambda: ed.fetch_basis_trade_monitor(),    'daily',    6,  '基差套利预警'),
+    ('cn_holders_q',           lambda: __import__('json').load(open(__import__('os').path.join(__import__('os').path.dirname(__import__('os').path.dirname(__import__('os').path.abspath(__file__))),'data','cn_capital.json'),encoding='utf-8')), 'quarterly', 140, '国家队持股(东财十大流通股东, 季末; 只读落盘文件)'),
     ('debt_to_gdp',            lambda: ed.fetch_debt_to_gdp(),            'biannual', 420, 'IMF债务/GDP(年度实绩, 新值随10月WEO发布)'),
     ('corporate_credit',       lambda: ed.fetch_corporate_credit(),       'daily',    8,  '公司债'),
     ('cips',                   lambda: ed.fetch_cips(),                   'monthly',  75, 'CIPS'),
