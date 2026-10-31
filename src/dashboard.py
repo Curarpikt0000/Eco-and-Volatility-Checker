@@ -1340,6 +1340,84 @@ def _stock_gold_html(o):
 
 
 
+def _gold_peak_overlay_html(sgl):
+    """★2026-10-31(Chao: 把「历次金价高点叠加」做进看板): 各轮金价高点后的路径叠在一起(高点月=100), 看本轮现在走到哪。
+    规则: 月均金价在前后 36 个月内最高、且其后 5 年内最大回撤>=20% 才算「见顶」(规则选取, 不手挑——手挑的 2008-03 其实是 2008-2011 牛市中途, 已被规则剔除)。
+    当前轮: 最近 36 个月内月均最高点(其后已有数据即可, 不要求已回撤 20%)。样本只有几次, 仅供对照, 不是预测。
+    数据来自 spx_gold_long['rows'](月均金价), 随该数据每日更新。"""
+    import gold_peak_overlay as G
+    rows = (sgl or {}).get("rows") or []
+    if len(rows) < 120:
+        return '<p class="oil-meta">数据不足，暂不绘制。</p>'
+    o = G.overlay(rows)
+    past, cur = o["past"], o["cur"]
+    if not past:
+        return '<p class="oil-meta">按规则未找到历史高点，暂不绘制。</p>'
+    W, H, ml, mr, mt, mb = 940, 330, 52, 120, 16, 34
+    pw, ph = W - ml - mr, H - mt - mb
+    lo_off, hi_off = -G.BEFORE, G.AFTER
+    allv = [v for p in past for v in p["path"].values()] + ([v for v in cur["path"].values()] if cur else [])
+    ylo, yhi = min(allv), max(allv)
+    ylo = max(0, int(ylo // 10) * 10 - 10); yhi = int(yhi // 10) * 10 + 10
+    X = lambda off: ml + pw * (off - lo_off) / (hi_off - lo_off)
+    Y = lambda v: mt + ph * (yhi - v) / (yhi - ylo)
+    pal = ["#9aa7b4", "#a9b49a", "#b4a99a", "#9a9ab4", "#b49a9a"]
+    sv = ['<svg viewBox="0 0 %d %d" preserveAspectRatio="xMidYMid meet" class="gpo-svg">' % (W, H)]
+    for tv in range(ylo, yhi + 1, 10):
+        sv.append(f'<line x1="{ml}" y1="{Y(tv):.1f}" x2="{ml+pw}" y2="{Y(tv):.1f}" stroke="#ece6da" stroke-dasharray="3 3"/>')
+        sv.append(f'<text x="{ml-6}" y="{Y(tv)+3.5:.1f}" text-anchor="end" font-size="10" fill="#8b93a7">{tv}</text>')
+    for off in range(lo_off, hi_off + 1, 6):
+        lab = "高点" if off == 0 else (f"+{off}月" if off > 0 else f"{off}月")
+        sv.append(f'<text x="{X(off):.1f}" y="{mt+ph+16}" text-anchor="middle" font-size="9.5" fill="#7c8496">{lab}</text>')
+    sv.append(f'<line x1="{X(0):.1f}" y1="{mt}" x2="{X(0):.1f}" y2="{mt+ph}" stroke="#8b93a7" stroke-dasharray="4 3"/>')
+    sv.append(f'<line x1="{ml}" y1="{Y(100):.1f}" x2="{ml+pw}" y2="{Y(100):.1f}" stroke="#8b93a7" opacity=".6"/>')
+    for k, p in enumerate(past):
+        pts = " ".join(f"{X(off):.1f},{Y(v):.1f}" for off, v in sorted(p["path"].items()))
+        sv.append(f'<polyline points="{pts}" fill="none" stroke="{pal[k % len(pal)]}" stroke-width="1.5" opacity=".95"/>')
+        last_off = max(p["path"])
+        sv.append(f'<text x="{X(last_off)+5:.1f}" y="{Y(p["path"][last_off])+3.5:.1f}" font-size="10" fill="#6b7280">{p["peak_m"]}</text>')
+    if cur:
+        pts = " ".join(f"{X(off):.1f},{Y(v):.1f}" for off, v in sorted(cur["path"].items()))
+        sv.append(f'<polyline points="{pts}" fill="none" stroke="#c0553a" stroke-width="2.8"/>')
+        lo = cur["last_off"]
+        sv.append(f'<circle cx="{X(lo):.1f}" cy="{Y(cur["path"][lo]):.1f}" r="4" fill="#c0553a"/>')
+        sv.append(f'<text x="{X(lo)+7:.1f}" y="{Y(cur["path"][lo])+3.5:.1f}" font-size="10.5" font-weight="600" fill="#c0553a">{cur["peak_m"]}（本轮）</text>')
+    # 悬停: 每个月龄一条竖带, 同时给各轮数值(缺失的轮不列)
+    xs, tips = [], []
+    for off in range(lo_off, hi_off + 1):
+        lines = []
+        if cur and off in cur["path"]:
+            lines.append(f'{cur["peak_m"]}（本轮）：{cur["path"][off]-100:+.1f}%')
+        for p in past:
+            if off in p["path"]:
+                lines.append(f'{p["peak_m"]}：{p["path"][off]-100:+.1f}%')
+        if not lines:
+            continue
+        head = "高点月" if off == 0 else (f"高点后 {off} 个月" if off > 0 else f"高点前 {-off} 个月")
+        xs.append(X(off)); tips.append(f'{head}||' + "&lt;br&gt;".join(_esc(x) for x in lines))
+    sv.append(_hover_bands(xs, tips, mt, ph, ml, ml + pw))
+    sv.append("</svg>")
+    # 底部小表: 每轮高点价、5 年内最大回撤、峰后 12/36 个月
+    tr = []
+    for p in past:
+        g = lambda o_: (f'{p["path"][o_]-100:+.1f}%' if o_ in p["path"] else "—")
+        tr.append(f'<tr><td>{p["peak_m"]}</td><td>${p["peak"]:,.0f}</td><td>{g(12)}</td><td>{g(36)}</td><td>{p["dd5y"]:.1f}%</td><td>峰后 {p["trough_off"]} 个月</td></tr>')
+    cur_line = ""
+    if cur:
+        cur_line = (f'<p class="oil-meta"><b>本轮</b>：{cur["peak_m"]} 月均 ${cur["peak"]:,.0f}，至 {cur["last_m"]}（峰后 {cur["last_off"]} 个月）为 '
+                    f'<b>{cur["last_pct"]:+.1f}%</b>。')
+        same = [p for p in past if cur["last_off"] in p["path"]]
+        if same:
+            vs = sorted(p["path"][cur["last_off"]] - 100 for p in same)
+            cur_line += f'历史 {len(same)} 轮在同一月龄的跌幅从 {vs[0]:+.1f}% 到 {vs[-1]:+.1f}%（中位 {vs[len(vs)//2]:+.1f}%）。'
+        cur_line += '</p>'
+    note = ('<p class="oil-meta" style="margin-top:6px">月均价（非日收盘）；高点由规则选取：前后 36 个月内最高且其后 5 年内最大回撤≥20%。'
+            f'只有 {len(past)} 轮样本，每轮背景不同（1980 年滞胀、2011 年欧债与美元走强等），<b>是对照而非预测</b>。'
+            '本轮高点不要求已回撤 20%，取最近 36 个月内最高的月份。</p>')
+    table = ('<table class="um-tbl" style="margin-top:8px"><tr><th>高点月</th><th>月均价</th><th>峰后 12 月</th><th>峰后 36 月</th>'
+             '<th>5 年内最大回撤</th><th>谷底出现</th></tr>' + "".join(tr) + '</table>')
+    return cur_line + "".join(sv) + table + note
+
 def _sgl_html(o):
     """标普500÷黄金 1929 起长历史(对数) + MA40/MA78 月 + 自动「跌破两均线」标记 + 三段回撤。页内 JS 绘制, 悬停每月一点。"""
     import json as _json
@@ -4022,6 +4100,7 @@ def generate(snap, checks, hit, gstats, overall, ai_reads=None, ai_conclusions=N
         wrs_html=_wrs_html(wrs),
         stock_gold_html=_stock_gold_html(stock_gold),
         spx_gold_long_html=_sgl_html(spx_gold_long),
+        gold_peak_overlay_html=_gold_peak_overlay_html(spx_gold_long),
         ust_yld_html=_ust_trio_html(ust_trio, 'yld'),
         ust_tpm_html=_ust_trio_html(ust_trio, 'tpm'),
         ust_agg_html=_ust_trio_html(ust_trio, 'agg'),
@@ -12608,6 +12687,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title"><span class="part-num">＋</span>股指 ÷ 黄金 · 50 年比值 (道指÷金价 · 标普500÷金价 · 月度对数坐标 · 1976 年至今)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{stock_gold_html}</div>
   <div class="card"><div class="sgr-title" style="margin:0 0 4px">延长到 1929 年 · 标普÷黄金 · 均线与回撤（自制复现 StockCharts 公开图）</div>{spx_gold_long_html}</div>
+  <div class="card"><div class="sgr-title" style="margin:0 0 4px">历次金价高点之后 · 路径叠加（高点月 = 100）</div>{gold_peak_overlay_html}</div>
   <!-- ━━━ 美元指数 vs 黄金 + 年初至今大事件标注 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>美元指数 vs 黄金 · 年初至今大事件标注 (双轴叠加 · 事件由价格异动反查并逐条核实出处)<span class="freq-badge freq-daily">价格每日 · 事件每周</span></div>
   <div class="card">{dxy_gold_html}</div>
@@ -12936,8 +13016,56 @@ mkRadar('rLong', RADAR.long);
     tip.id = 'chart-tip';
     document.body.appendChild(tip);
   }}
+  // ★2026-10-31(Opus 审查 C 类): 多线图悬停合并。悬停带 tip-hit 圆点的某条线时, 到同一张 svg 里找「X 坐标最接近(<=1.5px)」的其它线的圆点,
+  //   把各线数值并成一个悬停(去掉各自重复的日期)。单线图(同 svg 里只有 1 条线的点)走原逻辑不变; 圆点 cx 取自属性, 不依赖像素。
+  function mergeTip(el) {{
+    var raw = el.getAttribute('data-tip') || '';
+    if (el.tagName !== 'circle') return raw;
+    var svg = el.ownerSVGElement; if (!svg) return raw;
+    var cx = parseFloat(el.getAttribute('cx')); if (isNaN(cx)) return raw;
+    // 把各种 tip 格式统一拆成 {{day, label, val}}:
+    //   A「日期||值」  B「标签 · 日期||值」  C「标签 · 日期｜值」  D「标签 日期: 值」  E「国家 年: 值」  F「标签 期限 12M||值」(日期=期限, 同组共享)
+    var DATE = /([0-9]{{4}}(?:-[0-9]{{2}}(?:-[0-9]{{2}})?)?)/;
+    function parse(t) {{
+      var m, left, val;
+      if (t.indexOf('||') >= 0) {{ var a = t.split('||'); left = a[0]; val = a.slice(1).join('||'); }}
+      else if (t.indexOf('｜') >= 0) {{ var b = t.split('｜'); left = b[0]; val = b.slice(1).join('｜'); }}
+      else {{
+        var ci = t.search(/[:：]/); if (ci < 0) return null;
+        left = t.slice(0, ci); val = t.slice(ci + 1).trim();
+      }}
+      // 「标签 · 期限 12M」: 日期位是期限(同组共享), 标签是 · 前面的部分
+      var tm = left.match(/^(.*?)\\s*[·]\\s*(期限\\s*[0-9]+M)\\s*$/);
+      if (tm) return {{day: tm[2], label: tm[1].trim(), val: val}};
+      var dm = left.match(DATE); if (!dm) return {{day: left.trim(), label: '', val: val}};
+      var label = left.replace(dm[1], ' ').replace(/[\\s·:：]+$/g, '').replace(/^[\\s·:：]+/g, '').replace(/\\s+/g, ' ').trim();
+      return {{day: dm[1], label: label, val: val}};
+    }}
+    var me = parse(raw); if (!me) return raw;
+    if (!svg._tipIdx) {{
+      var idx = {{}}, all = svg.querySelectorAll('circle[data-tip]');
+      for (var i = 0; i < all.length; i++) {{
+        var c = all[i], x = Math.round(parseFloat(c.getAttribute('cx')) * 2) / 2;
+        (idx[x] = idx[x] || []).push(c);
+      }}
+      svg._tipIdx = idx;
+    }}
+    var key = Math.round(cx * 2) / 2, group = [];
+    [key - 0.5, key, key + 0.5].forEach(function(k) {{ (svg._tipIdx[k] || []).forEach(function(c) {{ if (group.indexOf(c) < 0) group.push(c); }}); }});
+    if (group.length < 2) return raw;
+    group.sort(function(a, b) {{ return parseFloat(a.getAttribute('cy')) - parseFloat(b.getAttribute('cy')); }});
+    var vals = [], seen = {{}};
+    for (var j = 0; j < group.length; j++) {{
+      var pj = parse(group[j].getAttribute('data-tip') || ''); if (!pj) continue;
+      if (pj.day !== me.day) continue;                       // 只合并同一时刻
+      var line = (pj.label ? pj.label + '：' : '') + pj.val;
+      if (!seen[line]) {{ seen[line] = 1; vals.push(line); }}
+    }}
+    if (vals.length < 2) return raw;
+    return me.day + '||' + vals.join('<br>');
+  }}
   function show(el, ev) {{
-    var raw = el.getAttribute('data-tip');
+    var raw = mergeTip(el);
     if (!raw) return;
     // 格式: "日期||数值"  (|| 分隔横纵坐标)
     var parts = raw.split('||');
