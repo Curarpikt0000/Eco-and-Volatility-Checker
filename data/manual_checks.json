@@ -1,0 +1,33 @@
+{
+  "_note": "手工/静态板块的『最后人工核对日』登记表。只写真正核对过的日期; null=从未登记核对。更新方式: 核对后改对应 checked 并写 how。页面徽章读本文件, 不读页面日期。",
+  "money_supply": {
+    "checked": null,
+    "how": "总口径 US 自动; JP/CN 手工覆盖。分国见下",
+    "detail": {
+      "CN": {
+        "checked": "2026-10-30",
+        "how": "东方财富 datacenter 接口 + web_search 两处印证 9 月 M2=359.63 万亿"
+      },
+      "JP": {
+        "checked": null,
+        "how": "尚未登记核对 BOJ 速报"
+      }
+    }
+  },
+  "fiscal_news": {
+    "checked": "2026-10-30",
+    "how": "web_search 检索美日财政事件; last_checked 另存于 data/fiscal_news.json"
+  },
+  "bis_gold_swaps": {
+    "checked": "2026-10-30",
+    "how": "仅核对『BIS 是否出了新月报』(tools/bis_gold_swaps_watch.py 每日跑); 吨数无法从 PDF 独立还原, 来自 GATA 转述"
+  },
+  "japan_budget": {
+    "checked": null,
+    "how": "external_data.py JP_GENERAL_BUDGET 硬编码; FY2026=122.3兆(首相官邸), 代码注释已写, 但无登记的核对日"
+  },
+  "comex_silver_static": {
+    "checked": null,
+    "how": "data/comex_silver_issues_ref.json 手抄 Michael Lynch 图, 源头 as_of 2026-04-15, 无登记的核对日"
+  }
+}
