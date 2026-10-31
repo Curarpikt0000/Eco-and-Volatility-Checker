@@ -1204,6 +1204,51 @@ def _china_regime_html(cn):
 
 
 
+def _pct_of(vals, q):
+    """q∈[0,1] 的线性插值分位数(纯 Python, 不依赖 numpy)。"""
+    v = sorted(x for x in vals if x is not None)
+    if not v:
+        return None
+    k = (len(v) - 1) * q
+    f = int(k); c = min(f + 1, len(v) - 1)
+    return v[f] + (v[c] - v[f]) * (k - f)
+
+
+def _ma_pts(vals, n):
+    """n 点简单移动均线; 前 n-1 点为 None(不画, 不用假值补)。"""
+    out = []; run = 0.0; buf = []
+    for x in vals:
+        buf.append(x); run += x
+        if len(buf) > n:
+            run -= buf.pop(0)
+        out.append(run / n if len(buf) == n else None)
+    return out
+
+
+def _ref_svg(X, Y, PL, W, PR, refs):
+    """水平参照线: refs=[(值, 标签, 颜色, dash)]。右端标注标签+数值。"""
+    g = ""
+    for v, lab, col, dash in refs:
+        if v is None:
+            continue
+        g += (f'<line x1="{PL}" y1="{Y(v):.1f}" x2="{W-PR}" y2="{Y(v):.1f}" stroke="{col}" stroke-width="1" stroke-dasharray="{dash}"/>'
+              f'<text x="{PL+4}" y="{Y(v)-3:.1f}" text-anchor="start" font-size="9.5" fill="{col}" stroke="#faf8f3" stroke-width="3" paint-order="stroke">{lab} {v:.3f}</text>')
+    return g
+
+
+def _ma_svg(X, Y, ma, col, dash=""):
+    """均线折线: None 处断开。"""
+    segs = []; cur = []
+    for i, v in enumerate(ma):
+        if v is None:
+            if cur: segs.append(cur); cur = []
+        else:
+            cur.append(f"{X(i):.1f},{Y(v):.1f}")
+    if cur: segs.append(cur)
+    d = f' stroke-dasharray="{dash}"' if dash else ""
+    return "".join(f'<polyline points="{" ".join(c)}" fill="none" stroke="{col}" stroke-width="1.2"{d}/>' for c in segs if len(c) > 1)
+
+
 def _wrs_html(w):
     """WRS · Walmart 衰退信号(分母用 ETF 代理, 甲方案: 图上明确标注)。"""
     if not w or not str(w.get("status", "")).startswith("ok"):
@@ -1241,12 +1286,21 @@ def _wrs_html(w):
     # x 轴年份
     xt = ""
     seen = set()
+    _xt = []     # [(x, yr)]; 与上一个标签太近时, 丢掉『前一个』(首年只有几个交易日)而保留后一个, 避免叠压又不吞年份
     for i, p in enumerate(ser):
         yr = p["d"][:4]
         if yr not in seen and (i == 0 or i > 8):
             seen.add(yr)
-            xt += f'<text x="{X(i):.1f}" y="{H-8}" class="wrs-xtick">{yr}</text>'
+            if _xt and X(i) - _xt[-1][0] < 30:
+                _xt.pop()
+            _xt.append((X(i), yr))
+    xt = "".join(f'<text x="{x:.1f}" y="{H-8}" class="wrs-xtick">{yr}</text>' for x, yr in _xt)
 
+    # ★2026-10-31 Opus F 类: 徽章写「分位 98.6%」但图上没有分位线/均线 → 加全历史 P50/P90 虚线 + 50/200 日均线(均线前 n-1 点不画)
+    _p50, _p90 = _pct_of(vals, 0.5), _pct_of(vals, 0.9)
+    _refs = _ref_svg(X, Y, PL, W, PR, [(_p50, "P50", "#8a8377", "4 3"), (_p90, "P90", "#b0493a", "4 3")])
+    _ma50 = _ma_svg(X, Y, _ma_pts(vals, 50), "#7a8f5a")
+    _ma200 = _ma_svg(X, Y, _ma_pts(vals, 200), "#1f3a68")
     lvl = w.get("level", "green")
     cur, pct = w["latest"], w["pct_rank"]
     newhigh = w.get("is_new_high")
@@ -1284,6 +1338,7 @@ def _wrs_html(w):
 
   <svg viewBox="0 0 {W} {H}" class="wrs-chart" preserveAspectRatio="xMidYMid meet">
     {ticks}
+    {_refs}{_ma50}{_ma200}
     <polyline points="{pts}" class="wrs-line"/>
     <circle cx="{X(pk_i):.1f}" cy="{Y(pk['v']):.1f}" r="3.4" class="wrs-peak"/>
     <circle cx="{X(len(ser)-1):.1f}" cy="{Y(vals[-1]):.1f}" r="4" class="wrs-now"/>
@@ -1293,7 +1348,7 @@ def _wrs_html(w):
 
   <div class="wrs-foot">
     区间 {lo:.4f} ~ {hi:.4f}　·　{hi_txt}　·　
-    实心点＝当前值，空心点＝历史峰值。数据源 Yahoo Finance 日线，随 dashboard 每日更新。
+    实心点＝当前值，空心点＝历史峰值。虚线＝全历史 P50（灰）与 P90（红）；<span style=\"color:#7a8f5a\">绿线</span>＝50 日均线，<span style=\"color:#1f3a68\">蓝线</span>＝200 日均线（点数不足时不画）。数据源 Yahoo Finance 日线，随 dashboard 每日更新。
   </div>
 </div>"""
 
@@ -1998,6 +2053,15 @@ def _gold_oil_html(o):
     for v, lab, dash in ((st["mean"], f"1971 年以来均值 {st['mean']:.1f}", "5,4"), (st["median"], f"中位数 {st['median']:.1f}", "2,3")):
         g += (f'<line x1="{PL}" y1="{Y(v):.1f}" x2="{W-PR}" y2="{Y(v):.1f}" stroke="#b07a5a" stroke-width="1" stroke-dasharray="{dash}"/>'
               f'<text x="{W-PR-4}" y="{Y(v)-4:.1f}" class="sgr-yt" text-anchor="end" fill="#b07a5a">{lab}</text>')
+    # ★2026-10-31 Opus F 类(板块 48): 顶部写「历史分位 95%」但图上只有均值/中位 → 加 P5/P25/P75/P95 水平线(对数轴, 全样本) + 12 个月均线
+    _rs = [x["r"] for x in ser if x.get("r") is not None]
+    for _q, _ql in ((0.05, "P5"), (0.25, "P25"), (0.75, "P75"), (0.95, "P95")):
+        _qv = _pct_of(_rs, _q)
+        if _qv and _qv >= 5:
+            g += (f'<line x1="{PL}" y1="{Y(_qv):.1f}" x2="{W-PR}" y2="{Y(_qv):.1f}" stroke="#9aa4b2" stroke-width="0.9" stroke-dasharray="1,3"/>'
+                  f'<text x="{PL+4}" y="{Y(_qv)-3:.1f}" class="sgr-yt" fill="#7c8496" stroke="#faf8f3" stroke-width="3" paint-order="stroke">{_ql} {_qv:.1f}</text>')
+    _ma12 = _ma_pts([max(x["r"], 5.01) for x in ser], 12)
+    _ma12_svg = _ma_svg(X, lambda v: Y(max(v, 5.01)), _ma12, "#c0643c", "")
     xt = "".join(f'<text x="{X(i):.1f}" y="{H-8}" class="sgr-xt">{x["m"][:4]}</text>'
                  for i, x in enumerate(ser) if x["m"].endswith("-01") and int(x["m"][:4]) % 5 == 0)
     pts = " ".join(f"{X(i):.1f},{Y(max(x['r'],5.01)):.1f}" for i, x in enumerate(ser))
@@ -2017,9 +2081,9 @@ def _gold_oil_html(o):
     <span>回到均值需 <b>WTI ${oil_at_mean:.0f}</b><i>金价不变时；或金价 ${cur and (td.get('oil') or ser[-1]['oil'])*st['mean']:,.0f}（油价不变）</i></span>
   </div>
   <svg viewBox="0 0 {W} {H}" class="sgr-chart" preserveAspectRatio="xMidYMid meet">{g}
-    <polyline points="{pts}" fill="none" stroke="#1f3a68" stroke-width="1.5"/>{xt}{band}</svg>
+    <polyline points="{pts}" fill="none" stroke="#1f3a68" stroke-width="1.5"/>{_ma12_svg}{xt}{band}</svg>
   <div class="sgr-foot">
-    金油比＝1 盎司黄金能换几桶 WTI 原油（对数纵轴）。最高 {st['max']:.0f}（{st['max_m']}，当月 WTI 月均价约 ${_mx_oil:.0f}，日内一度跌为负值）、最低 {st['min']:.1f}（{st['min_m']}，油价 $130+）。
+    金油比＝1 盎司黄金能换几桶 WTI 原油（对数纵轴）。橙线＝12 个月均线；细点线＝全样本 P5 / P25 / P75 / P95。最高 {st['max']:.0f}（{st['max_m']}，当月 WTI 月均价约 ${_mx_oil:.0f}，日内一度跌为负值）、最低 {st['min']:.1f}（{st['min_m']}，油价 $130+）。
     1973 年以前原油为管制标价，波动小。黄金：伦敦金月均价（datasets/gold-prices），当月用 COMEX 期货日收盘均值；
     原油：FRED WTISPLC 月均，当月用 FRED DCOILWTICO 日均。「今日」取两者都有报价的最近一天。随 dashboard 每日更新。
   </div>
@@ -5321,7 +5385,16 @@ def _country_ust_long_svg(series_by_country, w=920, h=250):
     return "".join(parts)
 
 
-def _yield_curves_svg(series, w=920, h=280, yunit="%"):
+def _q_refs(line_pts, qs=((0.5, "中位", "#8a8377", "4 3"), (0.25, "P25", "#b8b2a5", "2 3"), (0.75, "P75", "#b8b2a5", "2 3")), extra=None):
+    """从 [(date, v), ...] 算全样本分位参照线 -> _yield_curves_svg(refs=...) 格式。数据 < 8 点返回 None(不画, 不编)。"""
+    vs = [v for _, v in (line_pts or []) if v is not None]
+    if len(vs) < 8:
+        return None
+    out = [(_pct_of(vs, q), lab, col, dash) for q, lab, col, dash in qs]
+    return out + list(extra or [])
+
+
+def _yield_curves_svg(series, w=920, h=280, yunit="%", refs=None, pct_stat=None):
     """美日 10Y/30Y 收益率四线图(过去一年,日频,共%轴)。
     series: {key:{name,color,dash('none'/'dash'),points:[(date,%)],latest}}。美实线/日虚线。
     yunit: Y轴与图例单位后缀(默认'%'; 复用于万亿图时传 'T' 等)。"""
@@ -5331,6 +5404,10 @@ def _yield_curves_svg(series, w=920, h=280, yunit="%"):
     all_dates = sorted({dd for d in active.values() for dd, _ in d["points"]})
     all_vals = [v for d in active.values() for _, v in d["points"]]
     lo, hi = min(all_vals), max(all_vals)
+    if refs:   # ★2026-10-31 Opus F 类: 可选水平参照线(值落在数据范围外时扩 Y 轴以容纳)
+        _rv = [r[0] for r in refs if r and r[0] is not None]
+        if _rv:
+            lo, hi = min(lo, min(_rv)), max(hi, max(_rv))
     pad = (hi - lo) * 0.08 or 0.2
     lo -= pad; hi += pad
     rng = (hi - lo) or 1.0
@@ -5373,6 +5450,12 @@ def _yield_curves_svg(series, w=920, h=280, yunit="%"):
         _prev_lbl = lbl
         anchor = "start" if i == 0 else ("end" if i >= n - 2 else "middle")
         parts.append(f'<text x="{X(i):.1f}" y="{h-9}" font-size="9" fill="#8a8578" text-anchor="{anchor}">{lbl}</text>')
+    for _rv, _rl, _rc, _rd in (refs or []):
+        if _rv is None:
+            continue
+        parts.append(f'<line x1="{ml}" y1="{Y(_rv):.1f}" x2="{w-mr}" y2="{Y(_rv):.1f}" stroke="{_rc}" stroke-width="1" stroke-dasharray="{_rd}"/>')
+        _fmt = f"{_rv:,.0f}" if abs(_rv) >= 100 else f"{_rv:.2f}"
+        parts.append(f'<text x="{ml+4}" y="{Y(_rv)-3:.1f}" font-size="9.5" fill="{_rc}" stroke="#faf8f3" stroke-width="3" paint-order="stroke">{_esc(_rl)} {_fmt}</text>')
     # 四条线 + 图例
     legend_y = mt + 6
     order = ["us_10y", "us_30y", "jp_10y", "jp_30y"]
@@ -5422,7 +5505,15 @@ def _yield_curves_html(yc):
     if not yc or yc.get("status") != "ok":
         return '<p class="empty">美日国债收益率数据未就绪。</p>'
     ser = yc.get("series", {})
-    chart = _yield_curves_svg(ser)
+    # ★2026-10-31 Opus F 类(板块 76): 美/日 10Y 各加本图窗口(近 1 年)内 P10/P50/P90 太乱 -> 只给美 10Y 与日 10Y 的『窗口中位数』虚线(不同色),
+    #   并在标签里写清是「美10Y/日10Y 窗口中位」; 其余不加, 避免 4 线图再叠 6 条线。
+    _refs76 = []
+    for _k, _lab, _col in (("us_10y", "美10Y 中位", "#2f4f77"), ("jp_10y", "日10Y 中位", "#a9473f")):
+        _pts = (ser.get(_k) or {}).get("points") or []
+        _v = _pct_of([v for _, v in _pts], 0.5) if len(_pts) >= 8 else None
+        if _v is not None:
+            _refs76.append((_v, _lab, _col, "4 3"))
+    chart = _yield_curves_svg(ser, refs=_refs76 or None)
     # 各线区间统计(过去一年变动)
     rows = []
     for key in ("us_10y", "us_30y", "jp_10y", "jp_30y"):
@@ -6200,7 +6291,7 @@ def _bis_gold_swaps_html(bg):
     svg = _yield_curves_svg({
         "swaps": {"status": "ok", "name": "BIS 自营黄金掉期(吨)", "color": "#c9a94e",
                   "dash": "none", "points": line_pts, "latest": bg.get("latest_t")},
-    }, yunit="t")
+    }, yunit="t", refs=_q_refs(line_pts))
     latest_t = bg.get("latest_t"); latest_d = bg.get("latest_date", "")
     peak_t = bg.get("peak_t"); peak_d = bg.get("peak_date", "")
     # 最近两个月度推算点(若有)做近况
@@ -6439,7 +6530,7 @@ def _gold_exports_html(ge):
     svg = _yield_curves_svg({
         "gexp": {"status": "ok", "name": "非货币黄金出口(百万美元)", "color": "#c9a94e",
                  "dash": "none", "points": line_pts, "latest": ge.get("latest")},
-    }, yunit="M$")
+    }, yunit="M$", refs=_q_refs(line_pts, qs=((0.5, "全期中位", "#8a8377", "4 3"),), extra=([(ge.get("base_2024_avg"), "2024 季均", "#b0493a", "5 3")] if ge.get("base_2024_avg") else None)))
     latest = ge.get("latest"); latest_d = ge.get("latest_date", "")
     peak = ge.get("peak"); peak_d = ge.get("peak_date", "")
     base = ge.get("base_2024_avg"); surge = ge.get("surge_x")
