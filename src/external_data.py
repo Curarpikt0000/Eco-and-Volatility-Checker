@@ -2215,7 +2215,15 @@ def _parse_tic_country(raw, country_key):
         # 月份行: 至少含 6 个月份缩写
         monpos = {i: _TIC_MON[c] for i, c in enumerate(cells) if c in _TIC_MON}
         if len(monpos) >= 6:
-            cur_months, cur_years = monpos, None
+            # ★2026-10-31 修(Opus 审查 B-82 核实): TIC 历史表 2002~2011 每年 6 月有【两列 Jun】(新旧两套调查口径 Series XI/XII),
+            #   原来两列都映射到同一个 "YYYY-06" 并对欧元区成员逐列累加 → 每年 6 月合计翻倍(如 2011-06 727 vs 前后 ~300~420)。
+            #   现规则: 同一月份重复出现时只保留【最左一列】(= 较新口径, 表头从新到旧排列), 丢弃后面的旧口径列。
+            _seen_m, _dedup = set(), {}
+            for _i in sorted(monpos):
+                if monpos[_i] in _seen_m:
+                    continue
+                _seen_m.add(monpos[_i]); _dedup[_i] = monpos[_i]
+            cur_months, cur_years = _dedup, None
             continue
         # 年份行: 第0列 == 'Country', 其余为4位年份
         if cells and cells[0] == "Country":

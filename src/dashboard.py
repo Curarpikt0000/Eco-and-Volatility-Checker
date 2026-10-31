@@ -1435,9 +1435,21 @@ def _jpy_carry_html(o, which):
                 '本页不含主权 CDS（付费数据）与谈判/油价等事件判断。随 dashboard 每日更新（CFTC 每周五美东 15:30 发布，其余日频）。</div></div>')
     if which == "cftc":
         data = {"k": "cftc", "noncomm": o["cftc"]["noncomm"], "lev": o["cftc"]["lev"], "last": o["cftc"]["last"]}
+        # ★2026-10-31(Opus 审查 B-78): 补「近 1 年 / 近 3 年分位」, 用图中现有周序列自算(与 COT 板块「近3年 P」同写法), 不新增数据
+        def _pct(ser, n=None):
+            vs = [v for _, v in ser][-n:] if n else [v for _, v in ser]
+            if len(vs) < 20:
+                return None
+            cur = vs[-1]
+            return round(sum(1 for v in vs if v <= cur) / len(vs) * 100)
+        _pn1, _pn3 = _pct(o["cftc"]["noncomm"], 52), _pct(o["cftc"]["noncomm"])
+        _pl1, _pl3 = _pct(o["cftc"]["lev"], 52), _pct(o["cftc"]["lev"])
+        _pct_txt = (f'<br><b>当前读数的历史位置</b>（用本图 {len(o["cftc"]["noncomm"])} 周序列自算）：'
+                    f'非商业净头寸 近1年 P{_pn1} · 近3年 P{_pn3}；杠杆基金 近1年 P{_pl1} · 近3年 P{_pl3}。'
+                    f'P 越高＝越接近近期最净多（押日元升值）的一端，P 越低＝越接近最净空的一端。')
         foot = ("CME 日元期货持仓（CFTC 官方，每周二数据、周五发布）：<b>非商业净头寸</b>＝非商业多头 − 空头（传统报告口径）；"
                 "<b>杠杆基金</b>＝TFF 报告里的 Leveraged Funds 净头寸（对冲基金口径，与非商业<b>不是同一个口径</b>，二者并列只为对照）。"
-                "正值＝净做多日元期货（押日元升值），负值＝净做空。近 3 年。")
+                "正值＝净做多日元期货（押日元升值），负值＝净做空。近 3 年。" + _pct_txt)
     elif which == "spread":
         data = {"k": "spread", "spread": o["spread"]["spread"], "usdjpy": o["spread"]["usdjpy"], "last": o["spread"]["last"]}
         foot = ("美日 10 年国债利差（美债 10Y 取 FRED，日债 10Y 取日本财务省官方日度数据，百分点，左轴）与美元/日元（Yahoo，周度，<b>右轴已反转：线向上＝日元走强</b>），近 2 年。"
@@ -3030,6 +3042,20 @@ def _dxy_gold_html(dg):
 
     g0, g1 = ser[0]["g"], ser[-1]["g"]
     x0, x1 = ser[0]["x"], ser[-1]["x"]
+    # ★2026-10-31(Opus 审查 C-52): 悬停补「当天事件」(来自已核实的 dxy_gold_events, 不在图上加标注, 只追加到 tip 末行)。
+    #   事件挂到「事件日当天或其后第一个数据点」, 避免事件落在非交易日而悬停不到。
+    _ev_at = {}
+    _dates = [p["d"] for p in ser]
+    for _e in evs:
+        _k = next((q for q in _dates if q >= _e["date"]), None)
+        if _k is not None:
+            _ev_at.setdefault(_k, []).append(_e)
+    _dg_tips = []
+    for p in ser:
+        _t = f"{_esc(p['d'])}||黄金 ${p['g']:,.2f}&lt;br&gt;美元指数 {p['x']:.2f}"
+        for _e in _ev_at.get(p["d"], []):
+            _t += f"&lt;br&gt;事件 {_esc(_e['date'])}：{_esc(_e['event'])}"
+        _dg_tips.append(_t)
     return f"""
 <div class="dxg-wrap">
   <div class="dxg-stat">
@@ -3054,7 +3080,7 @@ def _dxy_gold_html(dg):
     <polyline points="{gold_pts}" class="dxg-gold"/>
     <polyline points="{dxy_pts}" class="dxg-dxy"/>
     {marks}{labels}{xt}
-    {_hover_bands([X(i) for i in range(len(ser))], [f"{_esc(p['d'])}||黄金 ${p['g']:,.2f}&lt;br&gt;美元指数 {p['x']:.2f}" for p in ser], PT, ih, PL, W - PR)}
+    {_hover_bands([X(i) for i in range(len(ser))], _dg_tips, PT, ih, PL, W - PR)}
   </svg>
 
   <div class="dxg-method">{dg.get("method_note","")}<br>{dg.get("cadence_note","")}</div>
@@ -3466,6 +3492,13 @@ def _global_money_html(gm):
     ser = gm.get("series") or []
     if len(ser) < 24:
         return '<p class="empty">全球货币供应：样本不足。</p>'
+    # ★2026-10-31(Opus 审查 B-72): 1996~2007 覆盖国数从 2 → 3 → 4 → 5 逐步增加, 总量图出现「台阶」会被误读成货币突增。
+    #   只画五国全覆盖(n_cty==5)的区间, 不改任何数值、不插值; 起点写在标题与说明里。
+    _full = [r for r in ser if r.get("n_cty") == 5]
+    _cut_note = ""
+    if len(_full) >= 24 and len(_full) < len(ser):
+        _cut_note = f"（图从 {_full[0]['m']} 起：此前覆盖国数不足 5 个，总量台阶不是货币突增，故不画）"
+        ser = _full
 
     COL = {"US": "#b08a3e", "EZ": "#7d94a8", "CN": "#a3705f",
            "JP": "#8d9c86", "GB": "#9a8ba8"}
@@ -3609,7 +3642,7 @@ def _global_money_html(gm):
   {tail}
 
   <div class="gms-block">
-    <div class="gms-t">① 五大经济体货币存量（折万亿美元，堆叠）</div>
+    <div class="gms-t">① 五大经济体货币存量（折万亿美元，堆叠）{_cut_note}</div>
     <svg viewBox="0 0 {W} {H}" class="gms-chart" preserveAspectRatio="xMidYMid meet">
       {g1}{xticks()}{layers}{hits1}
     </svg>
@@ -4918,8 +4951,7 @@ def _custody_accel_html(acc):
         if len(seg) >= 2:
             poly = " ".join(f"{x:.1f},{y:.1f}" for x, y, _, _ in seg)
             parts.append(f'<polyline points="{poly}" fill="none" stroke="{color}" stroke-width="2.1" stroke-linejoin="round" stroke-linecap="round"/>')
-            for _sx, _sy, _sd, _sv in seg:
-                parts.append(f'<circle class="tip-hit" cx="{_sx:.1f}" cy="{_sy:.1f}" r="6" data-tip="{_esc(lbl)} · {_esc(_sd[:7])}||{_sv:+.3f}"/>')
+            pass   # ★2026-10-31(Opus 审查 C-74): 原来每线一组圆点且日期被 [:7] 截到月(周度数据看不出哪一周)。改为下方按周合并的竖带。
             # 最新点标记
             lx, ly = seg[-1][0], seg[-1][1]
             parts.append(f'<circle cx="{lx:.1f}" cy="{ly:.1f}" r="3.2" fill="{color}"/>')
@@ -4927,6 +4959,12 @@ def _custody_accel_html(acc):
         parts.append(f'<line x1="{w-mr+8}" y1="{legend_y}" x2="{w-mr+26}" y2="{legend_y}" stroke="{color}" stroke-width="2.6"/>')
         parts.append(f'<text x="{w-mr+30}" y="{legend_y+4}" class="ca-leg" fill="{color}">{lbl}</text>')
         legend_y += 20
+    _hx = [X(i) for i in range(n)]
+    _ht = []
+    for i, p in enumerate(pts):
+        rows = [f"{_esc(lbl)} {p[key]:+.3f}" for key, lbl, _ in lines if p.get(key) is not None]
+        _ht.append(f"{_esc(p['date'])}||" + "&lt;br&gt;".join(rows))
+    parts.append(_hover_bands(_hx, _ht, mt, ph, ml, w - mr))
     parts.append('</svg>')
     chart = "".join(parts)
     # ── 最新读数三窗口 ──
@@ -5087,14 +5125,19 @@ def _country_ust_long_svg(series_by_country, w=920, h=250):
         if len(pts) >= 2:
             parts.append(f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" '
                          f'stroke-width="2" stroke-linejoin="round" opacity="0.9"/>')
-            for m, v in d["points"]:
-                if m in didx:
-                    parts.append(f'<circle class="tip-hit" cx="{X(didx[m]):.1f}" cy="{Y(v):.1f}" r="6" data-tip="{_esc(k)} · {_esc(m[:7])}||{v:,.0f} $B"/>')
             lm, lv = d["points"][-1]
             parts.append(f'<circle cx="{X(didx[lm]):.1f}" cy="{Y(lv):.1f}" r="3.5" fill="{color}"/>')
         parts.append(f'<line x1="{w-mr+8}" y1="{legend_y}" x2="{w-mr+24}" y2="{legend_y}" stroke="{color}" stroke-width="2.6"/>')
         parts.append(f'<text x="{w-mr+28}" y="{legend_y+4}" class="ci-leg" fill="{color}">{d["flag"]}{_esc(d["name"])}</text>')
         legend_y += 18
+    # ★2026-10-31(Opus 审查 C-82): 每月一条竖带, 同次悬停列出日/中/欧三者(原来每国一组圆点, 一次只看到一国)
+    _bm = {}
+    for k, d in active.items():
+        for m, v in d["points"]:
+            if m in didx:
+                _bm.setdefault(m, []).append(f"{_esc(d.get('name') or k)} {v:,.0f} $B")
+    _ms = [m for m in all_dates if m in _bm]
+    parts.append(_hover_bands([X(didx[m]) for m in _ms], [f"{_esc(m[:7])}||" + "&lt;br&gt;".join(_bm[m]) for m in _ms], mt, ph, ml, w - mr))
     parts.append('</svg>')
     return "".join(parts)
 
@@ -5167,10 +5210,7 @@ def _yield_curves_svg(series, w=920, h=280, yunit="%"):
                 if dd in didx:
                     # ★tooltip 单位必须跟随序列自身单位(优先 series.unit, 回退 yunit),
                     #   绝不硬编码 '%' —— 本函数被复用于 吨/千oz/百万美元/万亿/合约数 等多种量纲。
-                    _tu = d.get("unit", yunit)
-                    _vs = (f"{v:,.0f}" if abs(v) >= 1000 else f"{v:.2f}")
-                    _tip_val = f"{_vs} {_tu}".strip()
-                    parts.append(f'<circle class="tip-hit" cx="{X(didx[dd]):.1f}" cy="{Y(v):.1f}" r="6" data-tip="{_esc(str(d.get("name") or key))} · {_esc(dd)}||{_esc(_tip_val)}"/>')
+                    pass   # ★2026-10-31(Opus 审查 C): 悬停改为下方「按日期合并所有线」的竖带, 一次悬停看到该日全部序列
             ld, lv = d["points"][-1]
             parts.append(f'<circle cx="{X(didx[ld]):.1f}" cy="{Y(lv):.1f}" r="3.2" fill="{color}"/>')
         # 图例(右侧): 线样 + 名称 + 最新值
@@ -5181,6 +5221,19 @@ def _yield_curves_svg(series, w=920, h=280, yunit="%"):
         _lvs = (f"{_lv:.2f}{_unit}" if isinstance(_lv, (int, float)) else str(_lv))
         parts.append(f'<text x="{lx2+4}" y="{legend_y+4}" font-size="10.5" fill="{color}" font-weight="600">{_esc(d["name"])} {_lvs}</text>')
         legend_y += 19
+    # ── 按日期合并的悬停竖带(每个日期一条全高竖带; 同次悬停列出所有有该日数据的序列, 每条线标自己的单位) ──
+    _by_date = {}
+    for key in ordered_keys:
+        d = active[key]
+        _tu = d.get("unit", yunit)
+        for dd, v in d["points"]:
+            if dd in didx:
+                _vs = f"{v:,.0f}" if abs(v) >= 1000 else f"{v:.2f}"
+                _by_date.setdefault(dd, []).append(f"{_esc(str(d.get('name') or key))} {_esc((_vs + ' ' + _tu).strip())}")
+    _ds = [dd for dd in all_dates if dd in _by_date]
+    parts.append(_hover_bands([X(didx[dd]) for dd in _ds],
+                              [f"{_esc(dd)}||" + "&lt;br&gt;".join(_by_date[dd]) for dd in _ds],
+                              mt, ph, ml, w - mr))
     parts.append('</svg>')
     return "".join(parts)
 
@@ -5289,8 +5342,22 @@ def _nikkei_flow_svg(nk, ff, w=920, h=300):
         line = [f"{XD(d):.1f},{NY(v):.1f}" for d, v in nk["points"]]
         parts.append(f'<polyline points="{" ".join(line)}" fill="none" stroke="#3a5a7d" stroke-width="2.3" stroke-linejoin="round"/>')
         # hover 点(日频, 抽稀避免过密: 每根都放但 r 小)
+        # ★2026-10-31(Opus 审查 C-88): 原来日经与外资各自悬停, 看不到同一时点的对照。改为每个日经交易日一条竖带,
+        #   同次悬停显示日经 + 该日所属周(最近一个不晚于该日的周)的外资净买入, 并写明是哪一周; 无外资数据(滞后期)则明示。
+        import bisect as _bs
+        _fd = [d for d, _ in (ff["points"] if ff_ok else [])]
+        _fmap = dict(ff["points"]) if ff_ok else {}
+        _hx, _ht = [], []
         for d, v in nk["points"]:
-            parts.append(f'<circle class="tip-hit" cx="{XD(d):.1f}" cy="{NY(v):.1f}" r="5" data-tip="日经225 · {_esc(d)}||{v:,.0f}"/>')
+            t = f"{_esc(d)}||日经225 {v:,.0f}"
+            if _fd:
+                k = _bs.bisect_right(_fd, d) - 1
+                if k >= 0 and (__import__("datetime").date.fromisoformat(d) - __import__("datetime").date.fromisoformat(_fd[k])).days <= 6:
+                    t += f"&lt;br&gt;外资净买入（{_esc(_fd[k])} 当周）{_fmap[_fd[k]]:+.2f} ¥T"
+                elif k >= 0 and d > _fd[-1]:
+                    t += f"&lt;br&gt;外资净买入：最新披露截至 {_esc(_fd[-1])}，此后尚未发布"
+            _hx.append(XD(d)); _ht.append(t)
+        parts.append(_hover_bands(_hx, _ht, mt, ph, ml, w - mr))
         ld, lv = nk["points"][-1]
         parts.append(f'<circle cx="{XD(ld):.1f}" cy="{NY(lv):.1f}" r="3.5" fill="#3a5a7d"/>')
         parts.append(f'<text x="{XD(ld)-4:.1f}" y="{NY(lv)-6:.1f}" font-size="8.5" fill="#3a5a7d" text-anchor="end">最新 {lv:,.0f}</text>')
@@ -5556,14 +5623,15 @@ def _market_breadth_html(mb):
     # SP500 线(蓝)
     sp_line = [f"{X(i):.1f},{Ys(v):.1f}" for i, (_, v) in enumerate(spy_pts)]
     parts.append(f'<polyline points="{" ".join(sp_line)}" fill="none" stroke="#6b8fb5" stroke-width="2.2" stroke-linejoin="round"/>')
-    for i, (dd, v) in enumerate(spy_pts):
-        parts.append(f'<circle class="tip-hit" cx="{X(i):.1f}" cy="{Ys(v):.1f}" r="6" data-tip="S&amp;P500 · {_esc(dd)}||{v:,.2f}"/>')
     # 广度比线(琥珀)
     rt_line = [f"{X(didx[d]):.1f},{Yr(rt_map[d]):.1f}" for d in dates if d in rt_map and d in didx]
     parts.append(f'<polyline points="{" ".join(rt_line)}" fill="none" stroke="#c9a94e" stroke-width="2.2" stroke-linejoin="round"/>')
-    for d in dates:
-        if d in rt_map and d in didx:
-            parts.append(f'<circle class="tip-hit" cx="{X(didx[d]):.1f}" cy="{Yr(rt_map[d]):.1f}" r="6" data-tip="广度比 · {_esc(d)}||{rt_map[d]:.1f}%"/>')
+    # ★2026-10-31(Opus 审查 C-7): 原来两条线各一组圆点, 一次只能悬停到一条; 且广度比是「首日=100 的指数」, 不是百分比, 单位 % 是错的。
+    #   改为每个日期一条全高竖带, 同一次悬停同时显示 S&P500 与广度比(带日期), 单位去掉 %。
+    _hx = [X(i) for i in range(n)]
+    _ht = [f"{_esc(d)}||S&amp;P500 {spy_v[i]:,.2f}" + (f"&lt;br&gt;广度比 RSP/SPY {rt_map[d]:.1f}（首日=100 的指数）" if d in rt_map else "")
+           for i, d in enumerate(dates)]
+    parts.append(_hover_bands(_hx, _ht, mt, ph, ml, w - mr))
     # 末点圈
     parts.append(f'<circle cx="{X(n-1):.1f}" cy="{Ys(spy_v[-1]):.1f}" r="3.4" fill="#6b8fb5"/>')
     parts.append(f'<circle cx="{X(n-1):.1f}" cy="{Yr(rt_v[-1]):.1f}" r="3.4" fill="#c9a94e"/>')
@@ -5677,15 +5745,28 @@ def _ad_line_html(ad):
     # 累计腾落线(蓝, 主线)
     cum_line = [f"{X(i):.1f},{Yc(v):.1f}" for i, (_, v) in enumerate(cum_pts)]
     parts.append(f'<polyline points="{" ".join(cum_line)}" fill="none" stroke="#6b8fb5" stroke-width="2.4" stroke-linejoin="round"/>')
-    for i, (dd, v) in enumerate(cum_pts):
-        parts.append(f'<circle class="tip-hit" cx="{X(i):.1f}" cy="{Yc(v):.1f}" r="6" data-tip="累计腾落 · {_esc(dd)}||{v:+,.0f}"/>')
     # 参与率(琥珀, 细线)
     didx = {d: i for i, d in enumerate(dates)}
     pct_line = [f"{X(didx[d]):.1f},{Yp(pct_map[d]):.1f}" for d in dates if d in pct_map]
     parts.append(f'<polyline points="{" ".join(pct_line)}" fill="none" stroke="#c9a94e" stroke-width="1.6" stroke-linejoin="round" opacity="0.85"/>')
-    for d in dates:
-        if d in pct_map:
-            parts.append(f'<circle class="tip-hit" cx="{X(didx[d]):.1f}" cy="{Yp(pct_map[d]):.1f}" r="6" data-tip="参与率 · {_esc(d)}||{pct_map[d]:.1f}%"/>')
+    # ★2026-10-31(Opus 审查 C-1): 原来累计腾落与参与率各一组圆点, 一次只能悬停一条。改为每日一条竖带,
+    #   同次悬停显示 累计腾落 + 参与率 + 参与率 20 日均值(判定实际用的是 20 日均值, 日度锯齿 15~84% 会掩盖它; 均值由现有序列自算, 窗口不足不显示)
+    _pv = [pct_map[d] for d in dates if d in pct_map]
+    def _ma20(d):
+        i0 = didx[d]
+        win = [pct_map[x] for x in dates[max(0, i0 - 19):i0 + 1] if x in pct_map]
+        return sum(win) / len(win) if len(win) >= 20 else None
+    _hx = [X(i) for i in range(n)]
+    _ht = []
+    for i, (dd, v) in enumerate(cum_pts):
+        t = f"{_esc(dd)}||累计腾落 {v:+,.0f}"
+        if dd in pct_map:
+            t += f"&lt;br&gt;参与率 {pct_map[dd]:.1f}%"
+            m20 = _ma20(dd)
+            if m20 is not None:
+                t += f"&lt;br&gt;参与率 20 日均值 {m20:.1f}%"
+        _ht.append(t)
+    parts.append(_hover_bands(_hx, _ht, mt, ph, ml, w - mr))
     # 末点圈
     parts.append(f'<circle cx="{X(n-1):.1f}" cy="{Yc(cum_v[-1]):.1f}" r="3.6" fill="#6b8fb5"/>')
     if pct_v:
@@ -6577,7 +6658,7 @@ def _comex_issue_stop_html(cs):
                              f'data-tip="{_esc(r["week"])}||无 House/Customer 区分，不进图（该周 {r.get("days", "?")} 个交割日的席位记录没有 C/H 标记）"/>')
                 continue
             y = BY(v)
-            col = "#d64545" if v > 0 else ("#2e9e5b" if v < 0 else "#8a8578")
+            col = "#d55e00" if v > 0 else ("#0072b2" if v < 0 else "#8a8578")
             top = min(y, zero_y); ht = abs(y - zero_y)
             # ★2026-10-06 (Chao: 少了几天内容): 每周实际采到的交割日数写进悬停; 不足 5 天(且该周已过完)标「不完整」, 柱子加虚线描边。
             _nd = r.get("h_days") if r.get("h_days") is not None else r.get("days")
@@ -6669,8 +6750,8 @@ def _comex_issue_stop_html(cs):
         + f'</div>'
         f'</div>'
         f'<div class="cust-how"><b>口径：</b>只统计 <b>House（自营）</b>席位；Customer（代客）不进图。<br><b>如何看：</b>每根柱=<b>该周大行(bullion banks)House 净 issue/stop</b>＝Σ发货−Σ接货：'
-        f'<b style="color:#d64545">红柱(正)=净发货</b>（做市商向市场交货，对应 Issued，压价/看跌）；'
-        f'<b style="color:#2e9e5b">绿柱(负)=净接货</b>（做市商从市场接货囤积，对应 Stopped，逼空/看涨）。<br>'
+        f'<b style="color:#d55e00">橙柱(正)=净发货</b>（做市商向市场交货，对应 Issued，压价/看跌）；'
+        f'<b style="color:#0072b2">蓝柱(负)=净接货</b>（做市商从市场接货囤积，对应 Stopped，逼空/看涨）。<br>'
         f'<b>两口径</b>：上图=<b>核心做市商(10家传统 LBMA 金银做市大行)</b>；下图=<b>全投行(17家)</b>对照。'
         f'<b>为何值得看</b>：做市商是 COMEX 实物交割主力，其每周净方向是判断<b>价格压制 vs 逼空、实物紧张度</b>的一手结构信号，'
         f'与白银 COT commercial 净持仓、BIS 黄金掉期互相印证。<br>'
@@ -7245,6 +7326,18 @@ def _fiscal_budget_html(fb):
     if jp_latest:
         summ += f'日本 FY{jp_latest["fy"]}：<b>{jp_latest["value_oku"]:.1f} 兆円</b>（当初予算）'
 
+    # ★2026-10-31(Opus 审查 B-87): 由现有序列自算同比(已确定财年之间), 不新增数据; partial(进行中)财年不参与
+    def _yoy_line(rows, key, name, unit_fmt):
+        conf = [r for r in rows if r.get("status") != "partial" and r.get(key)]
+        conf = sorted(conf, key=lambda r: r["fy"])[-6:]
+        if len(conf) < 2:
+            return ""
+        bits = []
+        for a, b in zip(conf, conf[1:]):
+            bits.append(f'FY{b["fy"]} {(b[key] / a[key] - 1) * 100:+.1f}%')
+        return f'<b>{name}同比</b>（已确定财年）：' + " · ".join(bits)
+    _fb_yoy_txt = "　".join(x for x in (_yoy_line(fb.get("us", []), "value_t", "美国", ""),
+                                      _yoy_line(fb.get("jp", []), "value_oku", "日本", "")) if x) or "同比：样本不足。"
     return (
         f'<div class="cust-wrap">'
         f'<div class="cust-chart-col cust-chart-full">'
@@ -7253,7 +7346,9 @@ def _fiscal_budget_html(fb):
         f'{svg}'
         f'<div class="oil-meta">{summ}<br>'
         f'美国=联邦政府总支出(Total Outlays, 财年 10/1 起, 财年末累计=全年实际)；'
-        f'日本=一般会计当初予算总额(财年 4/1 起, 补正前已确定盘子)。</div>'
+        f'日本=一般会计当初予算总额(财年 4/1 起, 补正前已确定盘子)。'
+        f'<br><b>注意：</b>双轴让两国柱高看起来相近，但<b>两个轴的量纲和起点不同，柱高不能直接比大小</b>；比增速请看下面的同比。</div>'
+        f'<div class="oil-meta">{_fb_yoy_txt}</div>'
         f'<div class="oil-src">数据源：{_esc(fb.get("source",""))}</div>'
         f'</div>'
         f'</div>'
@@ -7783,6 +7878,10 @@ def _country_ust_html(cu, official_private=None):
         f'<b>中国</b>近10年持续系统性减持，是去美元化／中美博弈的结构性信号；'
         f'<b>欧元区合计</b>为 9 国加总（TIC 无欧盟合计行），'
         f'已在上方按<b>托管中心／真实需求国</b>拆开——两者信号含义相反，不可混看。'
+        f'<br><b>读长历史图请注意（2026-10-31 已核对 TIC 原表）：</b>TIC 原表脚注说明，长期国债持仓是「把月度净交易额加到最近一次年度外国持有调查（Survey of Foreign Holdings）的持仓上」估算的，'
+        f'每次新调查出来会整体重新校准，所以长历史里欧元区（尤其比利时、卢森堡、爱尔兰这几个托管中心）会出现<b>台阶式跳变</b>（例如 2011-06 托管中心 132→264 后一直保持），'
+        f'这是统计基准更新，<b>不是一个月内真实资金涌入，也不是本看板的解析错误</b>。'
+        f'原表 2002~2011 年在 6 月并列了两列（脚注称 2011 年有 Series XI/XII、Series 16/17 的过渡期），本看板只取较新一列；此前把两列累加，造成这些年份 6 月合计被翻倍，已修正。'
         f'数据源：{_linkify_sources(src)}。</div>'
         f'{long_block}'
         f'{prov_block}'
@@ -12249,7 +12348,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
 
   <!-- ═══ 附三·十二C：美股市场广度(RSP/SPY, A/D 腾落线代理补充) ═══ -->
   <div class="part-title" id="sec-market-breadth"><span class="part-num">＋</span>美股市场广度 · RSP/SPY 等权比 (广度代理·补充顶背离判定)<span class="freq-badge freq-daily">每日更新</span></div>
-  <div class="card">{market_breadth}</div>
+  <div class="card"><div class="oil-meta" style="margin-bottom:6px"><b>和上方「NYSE A/D 腾落线」的区别：</b>本图是<b>市值视角</b>（RSP 等权 ÷ SPY 市值加权，看大盘股是否独自拉升）；A/D 是<b>家数视角</b>（涨的股票数减跌的股票数）。两者结论可以不同，不矛盾：前者说「权重股在带指数」，后者说「多数股票是否跟上」。</div>{market_breadth}</div>
 
   <!-- ═══ 附一·零：本周 KOL 观点全景(按模块+多空, Eco 独立每日快照) ═══ -->
   <div class="part-title part-title-flex"><span><span class="part-num">＋</span>本周 KOL 观点全景 · 按模块 (多空方向卡片)</span><span class="freq-badge freq-daily" style="margin-left:0">每日更新</span><a class="kol-dash-btn" href="https://chao-kol-dashboard.pages.dev/" target="_blank" rel="noopener">打开 KOL Dashboard →</a></div>
@@ -12435,7 +12534,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title"><span class="part-num">＋</span>AI 算力价格 · LLM Token 支出指数 (Silicon Data SDLLMTK · 美元/百万 token · 全市场/闭源/开源)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{llm_token_html}</div>
   <!-- ━━━ 全球货币供应(五大经济体聚合) + 加速度 ━━━ -->
-  <div class="part-title"><span class="part-num">＋</span>全球货币供应与放水加速度 (美/欧/日/英/中 · 30 年)<span class="freq-badge freq-monthly">月度更新</span></div>
+  <div class="part-title"><span class="part-num">＋</span>全球货币供应与放水加速度 (美/欧/日/英/中 · 2008 起五国齐全)<span class="freq-badge freq-monthly">月度更新</span></div>
   <div class="card">{global_money_html}</div>
   <div class="card">{h8_deposits_html}</div>
   <div class="card">{hf_ust_html}</div>
