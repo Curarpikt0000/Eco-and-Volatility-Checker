@@ -76,6 +76,13 @@ def deep_max_date(obj, depth=0):
         for k, v in obj.items():
             if k in ('fetched_at', 'generated', 'source_url', 'note', 'source'):
                 continue
+            # ★2026-10-31(Opus 审查): data_range 形如 "起 → 止", 真实末日在「止」; 周起始日(week)会比真末日早最多 6 天,
+            #   使哨兵把「至 10-29」读成「10-26 滞后 5 天」。有 data_range 就以其末端为准。
+            if k == 'data_range' and isinstance(v, str) and '→' in v:
+                c = parse_date(v.split('→')[-1].strip())
+                if c and (best is None or c > best):
+                    best = c
+                continue
             if k in ('date', 'week', 'd', 'as_of', 'asof', 'day', 'month'):
                 c = parse_date(v)
                 if c and (best is None or c > best):

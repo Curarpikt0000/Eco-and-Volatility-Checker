@@ -1131,6 +1131,9 @@ def _china_regime_html(cn):
             f'<div class="crs-card"><div class="crs-card-n">{m["name"]}</div>'
             f'<div class="crs-card-v">{m["value"]:.2f}<span class="crs-u">{m["unit"]}</span></div>'
             f'<div class="crs-card-m">{m["ym"]} · {m["basis"]} {arrow}</div>'
+            + ('<div class="crs-card-r" style="color:#8a6d3b">以 100 为荣枯线（不是同比）；该指数 2024 年起长期在 107~110，'
+               '与地产投资同比为负并不矛盾（定义不同），不要直接对读。数据已核对东财接口原始值。</div>' if m.get("key") == "boom" else "")
+            +
             f'<div class="crs-card-r">近12月 {m["yr_min"]:.1f} ~ {m["yr_max"]:.1f}（均 {m["yr_avg"]}）</div>'
             f'</div>')
 
@@ -1216,7 +1219,11 @@ def _wrs_html(w):
     W, H, PL, PR, PT, PB = 900, 260, 52, 14, 14, 26
     iw, ih = W - PL - PR, H - PT - PB
 
-    def X(i): return PL + iw * i / max(len(ser) - 1, 1)
+    # ★2026-10-31: 保峰抽样后点间日期不等距, X 改按真实日期线性映射(原按序号等距会扭曲时间轴)
+    import datetime as _dtw
+    _ord = [_dtw.date.fromisoformat(p["d"][:10]).toordinal() for p in ser]
+    _o0, _o1 = _ord[0], max(_ord[-1], _ord[0] + 1)
+    def X(i): return PL + iw * (_ord[i] - _o0) / (_o1 - _o0)
     def Y(v): return PT + ih * (1 - (v - lo) / rng)
 
     pts = " ".join(f"{X(i):.1f},{Y(p['v']):.1f}" for i, p in enumerate(ser))
@@ -1401,7 +1408,8 @@ def _ust_trio_html(o, which):
                 "px": {"agg": _la, "bnd": _lb}, "d0": _d0}
         foot = ("<b>这不是彭博美国综合债券指数本身（专有、需订阅），而是跟踪该指数的 ETF 价格代理：</b>iShares 核心美国综合债券 ETF（AGG）与先锋整体债券市场 ETF（BND）。"
                 "两只 ETF 价格量级不同（AGG 约 95 美元、BND 约 71 美元），所以图中<b>都折算成起点（取两者共同起始日）=100 的相对值</b>画在同一纵轴上，看它们的走势是否一致；最新实际价格见图例括号。纵轴不是指数点位，与彭博终端上的 1 万点量级数值不可对比；"
-                "ETF 含管理费与跟踪误差，且分红时价格会下跌一次。数据：Yahoo Finance 日线，近 2 年。随 dashboard 每日更新。")
+                "ETF 含管理费与跟踪误差，且分红时价格会下跌一次。<b>图里是纯价格走势，不含派息：近两年纯价格约 −2%，而含派息的总回报约 +6%（2026-10-31 实测 Yahoo 复权价，AGG/BND 均如此），"
+                "别把本图读成债券两年亏钱。</b>数据：Yahoo Finance 日线，近 2 年。随 dashboard 每日更新。")
     js = _json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     return f"""
 <div class="sgr-wrap" id="ust-{which}">
@@ -2239,11 +2247,13 @@ def _cn_capital_html(o, cl, hk_hold=None):
                 row.append((q, sum(sh.values()) / 1e8, sum(1 for v in sh.values() if v > 0)))
             if len(row) >= 2:
                 cells = "；".join(f"{q} {t:,.0f} 亿股（{n}/{len(basket)} 只有记录）" for q, t, n in row)
+                _cn_cnt_txt = ("最新一期「有记录只数」较上期下降（可能掉出前十，也可能真减持）；" if row[-1][2] < row[-2][2]
+                               else ("最新一期「有记录只数」与上期持平；" if row[-1][2] == row[-2][2] else "最新一期「有记录只数」较上期回升；"))
                 h.append('<p class="oil-meta" style="border-left:3px solid #c9a961;padding-left:9px">'
                          '<b>读图提示：证金/汇金资管的「只数」逐季骤降，不能读成撤退。</b>'
                          f'这是十大流通股东披露——掉出前十名就不再出现。以 {base} 时证金+汇金资管在列的 {len(basket)} 只股票为固定篮子，'
                          f'合并两家股数（持股会在两家之间转移）：{cells}。'
-                         '最新一期「有记录只数」下降，可能是掉出前十、也可能是真减持，<b>这份数据区分不了，所以不据此下撤退结论</b>。'
+                         f'{_cn_cnt_txt}<b>这份数据区分不了「掉出前十」与「真减持」，所以不据此下撤退结论</b>。'
                          '另：汇金通过 ETF 的持仓不在本数据内（ETF 持有人仅半年报/年报披露前十大）。</p>')
     # ② 北向
     nq = o.get("north_q") or {}
@@ -2311,7 +2321,8 @@ def _cn_capital_html(o, cl, hk_hold=None):
                  '（沪深300ETF 2025-12-31 888.30 亿份 → 2026-08-10 248.61 亿份），不是数据故障。'
                  '⑤ 两融余额：沪深两融合计余额，单位万亿元；纵轴出现负数刻度只是画图留白，余额本身不会为负。</p>')
         if etf:
-            h.append(_etf_share_svg(etf, (cl.get("etf") or {}).get("names") or {}))
+            # ★2026-10-31(Opus 审查 B-23/28): 同一份 ETF 份额数据在「中国央行流动性」板块已有完整图+表, 这里不重复渲染, 改锚点
+            h.append('<p class="oil-meta">④ 宽基 ETF 份额的图与表见 <a href="#sec-cn-liq" style="color:#7a5c2e">「中国央行流动性」板块的 ⑥ 宽基 ETF 份额</a>（同一份数据，不重复画）。</p>')
         if mgr:
             h.append(f'<p class="oil-meta">⑤ 两融余额（万亿元）· {mgr[0]["date"]} ~ {mgr[-1]["date"]} · 日频</p>')
             h.append(_cn_line_svg(mgr, "v", unit="", color="#c9a961", dec=3))
@@ -3270,6 +3281,8 @@ def _pm_optvol_html(pv):
         term = {x["t"]: x.get("atm") for x in (v.get("term") or [])}
         skew = {x["t"]: x.get("skew") for x in (v.get("skew") or [])}
         sh = v.get("shape") or "—"
+        _tl = [x.get("t") for x in (v.get("term") or []) if x.get("atm")]
+        _shape_note = (f"按 {_tl[0]} vs {_tl[-1]}" if len(_tl) >= 2 else "按最近 vs 最远期限")   # ★2026-10-31: 判定两端期限写明(原卡片只列 1M/12M, IAU 看起来自相矛盾)
         shc = "inv" if sh == "倒挂" else "nor"
         s12 = skew.get("12M")
         bias = ("偏多" if s12 is not None and s12 < 0 else
@@ -3283,7 +3296,7 @@ def _pm_optvol_html(pv):
                   f'<b>{term.get("1M","—")}%</b></div>'
                   f'<div class="pv-row"><span>12M ATM IV</span>'
                   f'<b>{term.get("12M","—")}%</b></div>'
-                  f'<div class="pv-row"><span>期限结构</span>'
+                  f'<div class="pv-row"><span title="形态按最近期限与最远期限的 ATM IV 比较判定；卡片只列 1M 与 12M">期限结构（{_shape_note}）</span>'
                   f'<b class="{shc}">{sh}</b></div>'
                   f'<div class="pv-row"><span>12M 25D 偏斜</span>'
                   f'<b class="{bc}">{s12 if s12 is not None else "—"}　{bias}</b></div>'
@@ -3427,6 +3440,8 @@ def _comex_optpos_html(cx):
                   f'<b class="{dcls}">{L["net_opt"]:,} 张　{v["dir"]}</b></div>'
                   f'<div class="cxo-row"><span>近两年分位</span>'
                   f'<b>{v["pct"]}%</b></div>'
+                  f'<div class="cxo-row"><span>近 1 年分位</span>'
+                  f'<b>{v.get("pct_1y", "—")}%</b></div>'
                   f'<div class="cxo-sub">样本 {v["n"]} 周 · 期权 OI 差为负 '
                   f'{v["neg_weeks"]} 周{"（口径成立）" if not v["neg_weeks"] else ""}</div>'
                   f'{warn}</div>')
@@ -4279,7 +4294,7 @@ def _kol_changes_html(kol_changes, period="week"):
             return '<span class="kol-arrow kol-up">▲ 转多</span>'
         if nr < pr:
             return '<span class="kol-arrow kol-down">▼ 转空</span>'
-        return '<span class="kol-arrow kol-flat">→ 微调</span>'
+        return '<span class="kol-arrow kol-flat" title="微调 = 多空方向没变, 只是措辞或强度变了">→ 微调</span>'
 
     # 顶部总览
     since = kol_changes.get("since", "")
@@ -4525,14 +4540,23 @@ def _cb_delta_span(line, unit_period):
     pct = line.get("pct")
     if d is None:
         return f'<span class="bs-wow bs-flat">{unit_period} n/a</span>'
-    if abs(d) < 1e-9:
+    # ★2026-10-31: 箭头按【显示值】判定。绝对值与百分比都四舍五入到 2 位后为 0 才用「→」;
+    #   绝对值显示 0.00 但百分比非零(如 SRF 量级极小而占比有变)时, 箭头跟百分比方向, 且绝对值不带 +/−(避免「▲ +0.00」)。
+    _d0 = abs(round(d, 2)) < 1e-9
+    _p0 = (pct is None) or abs(round(pct, 2)) < 1e-9
+    if _d0 and _p0:
         arrow, cls = "→", "bs-flat"
+        d = 0.0
+    elif _d0 and not _p0:
+        arrow, cls = ("▲", "bs-up") if pct > 0 else ("▼", "bs-down")
+        d = 0.0
     elif d > 0:
         arrow, cls = "▲", "bs-up"
     else:
         arrow, cls = "▼", "bs-down"
     pcs = f" ({pct:+.2f}%)" if pct is not None else ""
-    return f'<span class="bs-wow {cls}">{arrow} {d:+,.2f}{pcs}</span>'
+    dtxt = f"{abs(d):,.2f}" if _d0 else f"{d:+,.2f}"
+    return f'<span class="bs-wow {cls}">{arrow} {dtxt}{pcs}</span>'
 
 
 def _cb_one_view(d, fx=None):
@@ -5837,15 +5861,18 @@ def _silver_imports_html(si):
     n = len(pts)
     vals = [p["tonnes"] for p in pts]
     # 12月滚动均线
+    # ★2026-10-31(Opus 审查): 窗口不足 12 期的前 11 个点原来用「已有的几期」算均值, 起点处会造出假尖峰 → 改为不画(None)
     ma = []
     for i in range(n):
-        window = vals[max(0, i - 11):i + 1]
-        ma.append(sum(window) / len(window))
+        if i < 11:
+            ma.append(None)
+        else:
+            ma.append(sum(vals[i - 11:i + 1]) / 12)
 
     w, h = 920, 280
     ml, mr, mt, mb_ = 46, 30, 20, 42
     pw, ph = w - ml - mr, h - mt - mb_
-    vmax = max(max(vals), max(ma)) * 1.08
+    vmax = max(max(vals), max([m for m in ma if m is not None] or [0])) * 1.08
     bw = pw / n * 0.66
     def X(i): return ml + (i + 0.5) * pw / n
     def Y(v): return mt + (vmax - v) / (vmax or 1) * ph
@@ -5871,7 +5898,7 @@ def _silver_imports_html(si):
             anchor = "start" if i == 0 else ("end" if i >= n - 2 else "middle")
             parts.append(f'<text x="{X(i):.1f}" y="{h-12}" font-size="8.5" fill="#8a8578" text-anchor="{anchor}">{_esc(p["date"])}</text>')
     # 12月滚动均线(深棕)
-    ml_line = [f"{X(i):.1f},{Y(ma[i]):.1f}" for i in range(n)]
+    ml_line = [f"{X(i):.1f},{Y(ma[i]):.1f}" for i in range(n) if ma[i] is not None]
     parts.append(f'<polyline points="{" ".join(ml_line)}" fill="none" stroke="#8a5a2e" stroke-width="2.2" stroke-linejoin="round"/>')
     # 末柱标值
     parts.append(f'<text x="{X(n-1):.1f}" y="{Y(vals[-1])-4:.1f}" font-size="9" fill="#6b6459" text-anchor="middle">{vals[-1]:.0f}</text>')
@@ -6174,13 +6201,13 @@ def _gold_exports_html(ge):
         f'<div class="oil-meta">最新（{_esc(latest_d)}）：<b style="color:#c9a94e">{latest:,.0f} 百万美元</b>{_srcslow_badge(latest_d, "季度", "2026-10-07", "FRED IEAXGG 官方 API 实测: 全序列最新观测=2026-04-01, FRED 最近一次更新 2026-09-24; 抓取链路完好")}'
         f'（≈ <b>{latest_b:,.0f} 亿美元</b>，按金价约 $3,200/盎司折算约 <b>{_t_latest} 吨</b>量级；峰值季约 {_t_peak} 吨） · '
         f'历史峰值 <b>{peak:,.0f}</b>（{_esc(peak_d)}） · '
-        f'较 2024 均值（{base:,.0f}）<b style="color:#d64545">暴涨 {surge}×</b></div>'
+        f'较 2024 季均（{base:,.0f}）：<b style="color:#d64545">最新季 {surge}× · 峰值季 {round(peak / base, 1) if base else 0}×</b></div>'
         f'<div class="oil-src">数据源：{_esc(ge.get("source",""))} · '
         f'<a class="src-lnk" href="{_esc(ge.get("source_url","#"))}" target="_blank" rel="noopener">FRED IEAXGG ↗</a></div>'
         f'</div>'
         f'<div class="cust-how"><b>如何看：</b>这是<b>美国实物黄金流出规模</b>——「各国把黄金运回家」的直接量化信号。'
-        f'2025-26 年美国非货币黄金出口<b>从 2024 的约 95 亿美元/年 暴涨到 2026Q1 单季 472 亿美元</b>（约 460 吨量级），'
-        f'为 1999 有记录以来最高。<br>'
+        f'2025-26 年美国非货币黄金出口<b>从 2024 年季均约 95 亿美元，升到 2026Q1 单季 472 亿美元（峰值季，约 460 吨量级，为 1999 有记录以来最高）</b>；'
+        f'最新一季（{_esc(latest_d)}）回落到 {latest_b:,.0f} 亿美元。<br>'
         f'<b>为何值得看</b>：黄金实物大规模<b>离开美国金库、运往海外</b>，通常对应：①各国央行/主权基金<b>去美元化、增持并回运实物黄金</b>；'
         f'②COMEX/伦敦市场<b>实物交割紧张、套利驱动金条跨境流动</b>；③对美元信用与美债安全性的<b>结构性担忧</b>。'
         f'与本页 BIS 黄金掉期、白银做市商头寸、央行购金主题互相印证——都是<b>贵金属回流 / 去美元化</b>的实物侧证据。<br>'
@@ -6266,7 +6293,8 @@ def _comex_firms_top10_html(cf):
             tag = "" if r.get("is_bank") else '<span class="tf-nb">非银</span>'
             # ★2026-08-22(Chao): 主显<b>吨</b>便于直接口算, 手数放小字括号保留可追溯性
             t = r.get("tonnes")
-            t_txt = f'{t:,.2f}' if isinstance(t, (int, float)) else "—"
+            # ★2026-10-31(Opus 审查): 1 手铂金 ≈ 0.0016 吨, 按 .2f 显示成「0.00 吨」像没有持仓 → <0.01 时明示
+            t_txt = ((f'{t:,.2f}' if t >= 0.005 else ('<0.01' if t > 0 else '0')) if isinstance(t, (int, float)) else "—")
             # ★账户类型徽章 C(客户盘)/H(自营盘)/U(未知) —— 按占比标注主导类型
             lots = r.get("lots") or 0
             c, hh, u = r.get("c", 0), r.get("h", 0), r.get("u", 0)
@@ -6289,7 +6317,7 @@ def _comex_firms_top10_html(cf):
                 f'<span class="tf-rk">{n}</span>'
                 f'<span class="tf-nm">{_esc(r["firm"])}{tag}{org_html}</span>'
                 f'<span class="tf-bar"><i style="width:{w:.1f}%;background:{col}"></i></span>'
-                f'<span class="tf-lot">{t_txt}<span class="tf-lots">({r["lots"]:,}手)</span></span>'
+                f'<span class="tf-lot" style="white-space:nowrap">{t_txt}<span class="tf-lots" style="white-space:nowrap">({r["lots"]:,}手)</span></span>'
                 f'<span class="tf-sh">{r["share"]:.1f}%</span>'
                 f'</div>')
         return "".join(out)
@@ -6741,6 +6769,9 @@ def _hf_leverage_html(hf):
             f'</div>'
         )
     body = "".join(parts)
+    _hf_items = sorted([("Repo 回购", bo.get("latest_repo")), ("Prime brokerage 主经纪", bo.get("latest_prime")), ("Other secured", bo.get("latest_other"))],
+                       key=lambda x: -(x[1] or 0))
+    _hf_rank_txt = " > ".join(f"{n} ${v}T" for n, v in _hf_items if v is not None) or "暂无"
     return (
         f'<div class="cust-wrap">'
         f'{body}'
@@ -6750,8 +6781,8 @@ def _hf_leverage_html(hf):
         f'<div class="cust-how"><b>如何看：</b>这两张图刻画<b>对冲基金对美国国债的杠杆敞口</b>——'
         f'核心是<b>国债基差套利(basis trade)</b>：对冲基金买现券、卖国债期货套微小价差，'
         f'靠<b>回购(repo)高杠杆</b>放大收益（常 20–50 倍）。<br>'
-        f'<b>图A</b>：对冲基金持有美债的总名义敞口已达 GDP 的 <b>~12.6%</b>（2015 年仅 6%），杠杆持续累积；'
-        f'<b>图B</b>：其中<b>回购借款升破 $3.2 万亿</b>是加杠杆主渠道。<br>'
+        f'<b>图A</b>：对冲基金持有美债的总名义敞口已达 GDP 的 <b>{ex["latest_pct"]}%</b>（{_esc(ex.get("latest_q") or "")}；2015 年约 6%）；'
+        f'<b>图B</b>：三类借款规模（{_esc(bo.get("latest_q") or "")}）：{_hf_rank_txt}。<br>'
         f'<b>为何是风险信号</b>：这类杠杆在<b>回购利率跳升 / 保证金追缴</b>时会被迫平仓，'
         f'2020 年 3 月「dash for cash」国债闪崩即源于此。敞口越高，一旦货币市场承压（见本页 SOFR−EFFR、'
         f'银行融资利差），去杠杆引发的<b>国债流动性踩踏</b>风险越大。<br>'
@@ -6784,6 +6815,24 @@ def _cb_swaps_html(d):
         return f"{v/1e8:,.2f}"
 
     # 周度柱状(近 52 周)
+    # ★2026-10-31(Opus 审查): 原始 weekly 只含「有互换操作的周」, 中间缺的周(如 2025-W52、2026-W01)被跳过 →
+    #   取 [-52:] 实际跨 54 周, 柱与日期错位。补零周(没有操作 = 真实的 0 美元, 不是插值), 再取最近 52 个日历周。
+    def _wk_monday(_w):
+        import datetime as _dd
+        _y, _n = str(_w).split("-W")
+        return _dd.date.fromisocalendar(int(_y), int(_n), 1)
+    if wk:
+        import datetime as _dd2
+        _have = {w["week"]: w for w in wk}
+        _m0, _m1 = _wk_monday(wk[0]["week"]), _wk_monday(wk[-1]["week"])
+        _full = []
+        _m = _m0
+        while _m <= _m1:
+            _iy, _iw, _ = _m.isocalendar()
+            _key = f"{_iy}-W{_iw:02d}"
+            _full.append(_have.get(_key) or {"week": _key, "usd": 0.0})
+            _m += _dd2.timedelta(days=7)
+        wk = _full
     show = wk[-52:]
     mx = max([w["usd"] for w in show] or [1.0]) or 1.0
     bars = "".join(
@@ -7384,9 +7433,12 @@ def _eia_next_release(as_of_date):
         return ""
     # EIA period 是周五。下一份周报覆盖再下一个周五, 发布日=其后的周三。
     # 简化: 从数据日期起找下一个周三(weekday()==2)且在数据日期之后≥5天
+    # ★2026-10-31 修(Opus 审查): 数据期(周五) +5 天的周三【就是这一期自己的发布日】(官网 10-21 发布 ↔ 数据期 10-16, 差 5 天)。
+    #   原逻辑 d+5 起找周三, 返回的是「本期已发布日」。下一期 = 本期发布日 + 7 天。
     nd = d + _dt.timedelta(days=5)
     while nd.weekday() != 2:
         nd += _dt.timedelta(days=1)
+    nd += _dt.timedelta(days=7)
     return nd.isoformat()
 
 
@@ -7995,6 +8047,21 @@ def _stress_panel_svg(panel, w=1000, h=300):
         zy = YL(0.0)
         parts.append(f'<line x1="{ml}" y1="{zy:.1f}" x2="{w-mr}" y2="{zy:.1f}" class="sp-zero"/>')
         parts.append(f'<text x="{ml+4}" y="{zy-4:.1f}" class="sp-zlab">0 = 历史正常</text>')
+    elif (not single) and panel.get("zero_line") and l_lo <= 0 <= l_hi:
+        # ★2026-10-31(Opus 审查): 曲线利差(10Y−2Y)以 0 为倒挂分界, 原图没画零线
+        zy = YL(0.0)
+        parts.append(f'<line x1="{ml}" y1="{zy:.1f}" x2="{w-mr}" y2="{zy:.1f}" class="sp-zero"/>')
+        parts.append(f'<text x="{ml+4}" y="{zy-4:.1f}" class="sp-zlab">0 = 倒挂分界</text>')
+    # 阈值虚线(panel["ref_lines"]=[{axis,v,label,color}]; 值由数据层从 config 读取, 这里不硬编码)
+    for _rl in (panel.get("ref_lines") or []):
+        _ax = _rl.get("axis", "right")
+        _lo_, _hi_ = (r_lo, r_hi) if _ax == "right" else (l_lo, l_hi)
+        if not (_lo_ <= _rl["v"] <= _hi_):
+            continue
+        _ry = (YR if _ax == "right" else YL)(_rl["v"])
+        _rc = _rl.get("color", "#c0392b")
+        parts.append(f'<line x1="{ml}" y1="{_ry:.1f}" x2="{w-mr}" y2="{_ry:.1f}" stroke="{_rc}" stroke-width="1.2" stroke-dasharray="6 4" opacity=".85"/>')
+        parts.append(f'<text x="{ml+4}" y="{_ry-4:.1f}" font-size="10" fill="{_rc}">{_esc(_rl.get("label", ""))}</text>')
     # x 轴年月标签(每约6个月)
     step = max(1, n // 6)
     for i in range(0, n, step):
@@ -9178,11 +9245,25 @@ def _cn_liq_html(cl):
         #   否则读图的人第一反应是"抓错了"。已用公开报道逐点交叉验证：
         #   我们的 2025-12-31=888.30 / 2026-01-21=719.78 / 2026-01-27=575.33 /
         #   2026-08-10=248.61，与媒体披露数字<b>完全一致</b>。
+        _e300 = (ser.get("510300") or [])
+        try:
+            _lastv = float(_e300[-1]["v"]); _lastd = str(_e300[-1]["date"])
+            _ago = None
+            import datetime as _d2
+            _ld = _d2.date.fromisoformat(_lastd[:4] + "-" + _lastd[4:6] + "-" + _lastd[6:8]) if "-" not in _lastd else _d2.date.fromisoformat(_lastd[:10])
+            for x in reversed(_e300):
+                _xd = str(x["date"]); _xd = _d2.date.fromisoformat(_xd[:4] + "-" + _xd[4:6] + "-" + _xd[6:8]) if "-" not in _xd else _d2.date.fromisoformat(_xd[:10])
+                if (_ld - _xd).days >= 30:
+                    _ago = float(x["v"]); break
+            _chg = f"，较约 1 个月前 {(_lastv / _ago - 1) * 100:+.0f}%" if _ago else ""
+            _etf_now_txt = f"最新（{_lastd}）{_lastv:,.1f} 亿份{_chg}"
+        except Exception:
+            _etf_now_txt = "最新值见下图"
         h.append('<p class="oil-meta" style="border-left:3px solid #c9a961;'
                  'padding-left:9px;color:#c9a961">'
                  '<b>读图提示：2026 年的断崖是真实事件，不是数据故障。</b>'
                  '沪深300ETF 份额自 2026-01-15 起连续单边下滑，'
-                 '由 2025 年末的 888 亿份降至当前约 238 亿份（−73%）。'
+                 f'由 2025 年末的 888 亿份降至 2026-08-10 低点 248.61 亿份（−72%），{_etf_now_txt}。'
                  '公开报道确认为<b>「国家队」（中央汇金系）大额赎回</b>：'
                  '一季度单该基金即赎回约 500 亿份，同期易方达、华夏等头部宽基同步缩水。'
                  '数值已与公开披露逐点交叉核对一致（2025-12-31 = 888.30 亿份、'
@@ -9339,7 +9420,7 @@ def _cn_delta_table(dl, sf):
     if any((m30, m90, m180)):
         cur = (m30 or m90 or m180)["cur"]
         rows.append(("MLF 月度操作", f'{cur:,.0f}亿', "操作量对比",
-                     _fmt_delta(m30, "亿", dec=0), _fmt_delta(m90, "亿", dec=0),
+                     _fmt_delta(None), _fmt_delta(m30, "亿", dec=0),
                      _fmt_delta(m180, "亿", dec=0)))
     # ★ MLF 净投放（Chao 2026-08-25 要求）：投放量看不出真实流动性影响，
     #   投放 5000 亿而到期 6000 亿实为净回笼。到期量 = 12 个月前操作量（MLF 全为 1 年期）。
@@ -9352,7 +9433,7 @@ def _cn_delta_table(dl, sf):
         rows.append(("MLF <b>净投放</b>（投放−到期）",
                      f'<span style="color:{col}">{cur:+,.0f}亿（{lab}）</span>',
                      "净额对比",
-                     _fmt_delta(n30, "亿", dec=0), _fmt_delta(n90, "亿", dec=0),
+                     _fmt_delta(None), _fmt_delta(n30, "亿", dec=0),
                      _fmt_delta(n180, "亿", dec=0)))
     # ★ A股两融余额（Chao 2026-08-25 指定）：SFISF 停发独立公告后的<b>日频</b>杠杆资金代理。
     #   存量指标 → 比点位差，不做区间求和。数据一直在 B2，此前从未渲染。
@@ -9728,6 +9809,11 @@ def _cips_html(cp):
                     f'该源不含工作日数，故这些月份<b>不画日均线</b>（标 n/a），'
                     f'绝不用插值伪造。')
 
+    if not third_n:
+        # ★2026-10-31(Opus 审查 B-33, 我已核对): 第三方 chinadata.live 目前只返回 2026 年的 8~9 个月(与官方当年表重叠), 没有往年,
+        #   所以回补月 = 0, 无法算「同比」。此前脚注写「往年月度已回补」与事实不符。如实写明。
+        src_note = (f'图中 {off_n} 个月均为 CIPS 官方当年月度表。<b>往年月度表官方已下架，第三方回补源目前也只有 2026 年数据</b>，'
+                    f'因此<b>暂无同比</b>（显示 n/a 是缺去年同月，不是计算错误）。日均 = 官方给的月总额 ÷ 官方给的当月工作日数（22/23/21 等整数，非固定值）。')
     return (
         f'<div class="cips-wrap">'
         f'<div class="cips-head">🇨🇳 中国 CIPS · 跨境人民币支付系统使用量'
@@ -9985,7 +10071,7 @@ def _corp_credit_html(cc):
         items = "".join(
             f'<span class="cc-pchip"><b>{_esc(lb)}</b> {p:.0f}%'
             f'<i data-tip="{_esc(lb)} 当前 OAS {cur:.2f}%，'
-            f'处于可得区间 [{lo:.2f}%, {hi:.2f}%] 的第 {p:.0f} 百分位">ⓘ</i></span>'
+            f'处于可得区间 [{lo:.2f}%, {hi:.2f}%] 的第 {p:.0f} 百分位' + (f'（区间仅 {hi - lo:.2f} 个百分点宽，高分位≠绝对高位）' if (hi - lo) < 0.5 else '') + '">ⓘ</i></span>'
             for lb, p, cur, lo, hi in pct_bits)
         note = ""
         if ccc_pct is not None and ig_pcts:
@@ -10418,9 +10504,9 @@ def _m2_history_html(m2h):
         '<div class="ms-intro">'
         '<div class="ms-intro-l"><b>怎么读：</b>三国 M2 广义货币<b>十年月度走势</b>，'
         f'已按<u>当天最新汇率</u>{_esc(fx_txt)}把整条历史序列统一折成 $B(十亿美元)横向可比——'
-        '<b>剥离了汇率波动</b>，曲线纯粹反映各国本币 M2 的真实增长(放水力度)。</div>'
-        '<div class="ms-intro-l ms-cav"><b>看点：</b>用同一汇率折算后，日本 M2 本币十年真实增长清晰可见(不再被日元贬值掩盖)；'
-        '中国 M2 绝对规模已是全球最大且增速最猛。斜率越陡=印钞越猛。</div>'
+        '<b>全段用同一个汇率</b>，所以曲线的涨跌只来自各国本币 M2 自身的<b>名义</b>增减(未扣通胀)，不含历史汇率变动。</div>'
+        '<div class="ms-intro-l ms-cav"><b>看点：</b>汇率固定后，日本 M2 本币十年名义增长不再被日元贬值掩盖；'
+        '中国 M2 绝对规模已是三国最大。注意：绝对美元量级差异大，比较「增速」请看指数化图，别只看斜率。</div>'
         '</div>'
     )
     cards = ""
@@ -10480,7 +10566,7 @@ def _holdings_one(r):
     tv = r.get("total_value", 0) / 1e9
     lines = ""
     for h in r.get("top_holdings", [])[:10]:
-        pct = f' <span class="h-pct">{h["pct"]:+.0f}%</span>' if h.get("pct") is not None else ""
+        pct = (f' <span class="h-pct">{("<1%" if abs(h["pct"]) < 1 else format(h["pct"], "+.0f") + "%")}</span>') if h.get("pct") is not None else ""
         val = f'${h["value"]/1e6:,.0f}M' if h.get("value") else "—"
         # issuer 展示: 有 ticker 就加后缀 (TICKER)
         tk = h.get("ticker", "")
@@ -10663,8 +10749,26 @@ def _focus_text(checks, results, cot):
     # 最接近触发 / 变化最剧烈
     near = [(cond, desc) for cond, thr, desc, st in checks if st in ("✅", "⚠️")]
     parts = []
+    # ★2026-10-31(Opus 审查 B-6): 原先只列「值」, 滞后 16 天的月度/周度指标也被当成「今日」信号, 读者不知道它早就不新了。
+    #   做法: 按触发条件对应的指标键取 as_of, 追加「（数据日 X · 滞后 N 天）」; 不改触发判定、不丢信号。
+    import datetime as _dtf
+    _COND_KEY = {"VIX": "vix", "Margin": "margin_debt", "HY Spread": "hy_oas", "Fear&Greed": "fear_greed",
+                 "A/D Line": "ad_line", "BofA": "bofa_bull_bear", "Insider": "insider"}
+    def _lag_txt(cond):
+        for pre, k in _COND_KEY.items():
+            if cond.startswith(pre):
+                ao = (results.get(k) or {}).get("as_of")
+                if not ao:
+                    return ""
+                try:
+                    ds = str(ao)[:10] if len(str(ao)) >= 10 else str(ao)[:7] + "-01"
+                    lag = (_dtf.date.today() - _dtf.date.fromisoformat(ds)).days
+                    return f"（数据日 {_esc(str(ao))} · 滞后 {max(lag, 0)} 天）"
+                except Exception:
+                    return f"（数据日 {_esc(str(ao))}）"
+        return ""
     for cond, desc in near:
-        parts.append(f"<b>{cond}</b>：{desc}")
+        parts.append(f"<b>{cond}</b>：{desc}{_lag_txt(cond)}")
     # COT 突增
     for metal in ("gold", "silver"):
         r = cot.get(metal)
@@ -12148,11 +12252,11 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="card">{market_breadth}</div>
 
   <!-- ═══ 附一·零：本周 KOL 观点全景(按模块+多空, Eco 独立每日快照) ═══ -->
-  <div class="part-title part-title-flex"><span><span class="part-num">＋</span>本周 KOL 观点全景 · 按模块 (多空方向卡片)</span><span class="freq-badge freq-daily" style="margin-left:0">每日更新</span><a class="kol-dash-btn" href="https://chao-kol-dashboard.pages.dev/" target="_blank" rel="noopener">📊 打开 KOL Dashboard →</a></div>
+  <div class="part-title part-title-flex"><span><span class="part-num">＋</span>本周 KOL 观点全景 · 按模块 (多空方向卡片)</span><span class="freq-badge freq-daily" style="margin-left:0">每日更新</span><a class="kol-dash-btn" href="https://chao-kol-dashboard.pages.dev/" target="_blank" rel="noopener">打开 KOL Dashboard →</a></div>
   <div class="card">{kol_views}</div>
 
   <!-- ═══ 附一：本周 KOL 状态变化(模块化, Eco 独立每日快照周对比) ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>本周 KOL 状态变化 · 按模块 (态度转向 call-out)<span class="freq-badge freq-weekly">每周更新</span></div>
+  <div class="part-title"><span class="part-num">＋</span>本周 KOL 状态变化 · 按模块 (态度转向 call-out)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{kol_changes}</div>
 
   <!-- ═══ 附一·二：周期与术数预测派 —— 2026-08-22 Chao 决定停用 ═══
@@ -12179,7 +12283,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="bs-grid">{cb_balance}</div>
 
   <!-- ═══ 附三·一半：BIS 国际清算银行报告 (央行的央行 · 摘要+独立页) ═══ -->
-  <div class="part-title part-title-flex"><span><span class="part-num">＋</span>BIS 国际清算银行报告 · 最新要点 (Quarterly Review 季度综述)</span><span class="freq-badge freq-quarterly" style="margin-left:0">每季度更新</span><a class="kol-dash-btn" href="https://eco-volatility-checker.pages.dev/bis/" target="_blank" rel="noopener">📄 查看 BIS 报告全库 →</a></div>
+  <div class="part-title part-title-flex"><span><span class="part-num">＋</span>BIS 国际清算银行报告 · 最新要点 (Quarterly Review 季度综述)</span><span class="freq-badge freq-quarterly" style="margin-left:0">每季度更新</span><a class="kol-dash-btn" href="https://eco-volatility-checker.pages.dev/bis/" target="_blank" rel="noopener">查看 BIS 报告全库 →</a></div>
   {bis_section}
 
   <!-- ═══ 附三·二：三国货币供应量 M0/M1/M2 (央行资负表的延伸: 从"央行造多少底钱"到"社会流通多少钱") ═══ -->
@@ -12234,9 +12338,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <!-- ━━━ 国债微观结构: MS Exhibit 3/4 对口 ━━━ -->
   <div class="part-title"><span class="part-num">＋</span>国债市场微观结构 · 成交量与交易成本 (对齐 Morgan Stanley Exhibit 3/4 · 成交量为 NY Fed 官方真数据 · 价差为代理)<span class="freq-badge freq-weekly">每周更新</span></div>
   <div class="card">{ust_micro_html}</div>
-  <!-- ═══ 附三·二B：基差套利去杠杆预警 ═══ -->
-  <div class="part-title"><span class="part-num">＋</span>基差套利去杠杆预警 · 美债/日债 (SOFR 倒挂 + 持券 Carry + 波动触发 · 强平潮尾部风险 · 每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
-  <!-- ━━━ 每日流动性危机监测(SOFR−EFFR + BBB/HY OAS + 闪崩标注) ━━━ -->
+  <!-- ═══ 附三·二B：每日流动性危机监测(标题由 _liquidity_crisis_html 自带) ═══ -->
   {liquidity_crisis_html}
   <!-- ━━━ AI 债务 CDS 快照 (Chao 2026-10-18): Oracle/CoreWeave/SoftBank 单名 CDS, 新闻转引, 离散点不连线 ━━━ -->
   <div class="part-title" id="sec-ai-cds"><span class="part-num">＋</span>AI 债务 CDS 快照 · 甲骨文 / CoreWeave / 软银 (5 年期单名 · 新闻转引)<span class="freq-badge freq-daily">有报道才记</span></div>
@@ -12305,7 +12407,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="part-title" id="sec-bis-gold-swaps"><span class="part-num">＋</span>BIS 自营黄金掉期 · 央行黄金市场隐秘干预信号 (吨 · 2010→今)<span class="freq-badge freq-quarterly">年度确认+月度推算</span></div>
   <div class="card">{bis_gold_swaps}</div>
   <!-- ═══ 附三·十二B2：美国黄金出口(FRED IEAXGG, 去美元化/回流实物金) ═══ -->
-  <div class="part-title" id="sec-gold-exports"><span class="part-num">＋</span>美国黄金出口 · Nonmonetary Gold Exports (各国黄金运回家·去美元化实物信号·2026Q1暴涨4.9×)<span class="freq-badge freq-quarterly">每季更新</span></div>
+  <div class="part-title" id="sec-gold-exports"><span class="part-num">＋</span>美国黄金出口 · Nonmonetary Gold Exports (各国黄金运回家·去美元化实物信号)<span class="freq-badge freq-quarterly">每季更新</span></div>
   <div class="card">{gold_exports}</div>
   <!-- ═══ 附三·十二B1：印度/中国黄金 domestic premium (WGC goldhub) ═══ -->
   <div class="part-title" id="sec-gold-premium"><span class="part-num">＋</span>印度 &amp; 中国黄金 Domestic Premium/Discount (亚洲实物黄金需求风向标·WGC 真数据)<span class="freq-badge freq-weekly">周更/月更</span></div>
@@ -12337,6 +12439,7 @@ _TEMPLATE = r"""<!DOCTYPE html>
   <div class="card">{global_money_html}</div>
   <div class="card">{h8_deposits_html}</div>
   <div class="card">{hf_ust_html}</div>
+  <div class="part-title" id="sec-basis-trade"><span class="part-num">＋</span>基差套利去杠杆预警 · 美债/日债 (SOFR 倒挂 + 持券 Carry + 波动触发 · 强平潮尾部风险 · 每日更新)<span class="freq-badge freq-daily">每日更新</span></div>
   <div class="card">{basis_trade}</div>
   <!-- ═══ 附三·三：美国国债拍卖 timeline ═══ -->
   <div class="part-title"><span class="part-num">＋</span>美国国债拍卖 · 财政部 (最新+过去3次 · 规模/中标率/收益率/间接投标 · 下次日程)<span class="freq-badge freq-event">每次拍卖</span></div>
@@ -12458,7 +12561,7 @@ mkRadar('rLong', RADAR.long);
     // 一个是 Fed 与外国央行的美元互换额度。均归入本组。
     {{ name: '流动性与央行', match: ['对冲基金常用注册地','美国银行存款','A 股资金面','流动性要点','央行资产负债表','国际清算银行','三国货币供应','全球货币供应','M2 十年','Credit Impulse','信贷脉冲','中国央行流动性','央行货币互换','美元流动性互换'] }},
     {{ name: '债务与信用', match: ['政府债务','世界前十大经济体','公司债','OAS 利差','AI 债务 CDS','CIPS','跨境人民币','AI 产业链','自由现金流','信用维度'] }},
-    {{ name: '国债流动性观测', match: ['WRS','国债市场收益率','日元套息','日元期货 CFTC','美日 10年利差','美元/日元周K线','美债 2年/10年/30年','美债期限溢价','美国综合债券指数','国债市场微观结构','中国模式断代监控','市场压力','基差套利去杠杆预警','SOFR 倒挂','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
+    {{ name: '国债流动性观测', match: ['WRS','国债市场收益率','日元套息','日元期货 CFTC','美日 10年利差','美元/日元周K线','美债 2年/10年/30年','美债期限溢价','美国综合债券指数','国债市场微观结构','中国模式断代监控','市场压力','基差套利去杠杆预警','流动性危机监测','SOFR 倒挂','国债拍卖','托管美债','再融资墙','1年内到期','持有美债','分国别','10年/30年国债收益率','美日 10','国际投资头寸','IIP','净头寸','对冲基金美债杠杆','回购借款','百年周期'] }},
     {{ name: '能源与大宗', match: ['石油库存','能源安全','Cushing','SPR','Brent','COMEX & 上海','贵金属库存','ETF 资金流','白银做市商','COMEX 白银','投行累计','做市商每周净','issue/stop','COMEX 交割前十名','交货方','自营黄金掉期','黄金出口','Nonmonetary','黄金 Domestic Premium','Premium/Discount','白银月度进口','Silver Bullion'] }},
     {{ name: '实体、AI 与研报', match: ['机构研究报告','消费者信心','美国货运','中美 AI 投资','AI 算力价格'] }},
     {{ name: '财政政策', match: ['美日财政政策事件','债务上限','补正预算','国债发行','年度财政花费','财政花费','政府总支出'] }},
@@ -13191,7 +13294,7 @@ mkRadar('rLong', RADAR.long);
     dates.forEach(function(d, i) {{ var l = i ? (X(i-1)+X(i))/2 : PL, r = i < n-1 ? (X(i)+X(i+1))/2 : W-PR;
       var tip = d + '||' + spec.series.map(function(s, k) {{ var v = mapS[k][d]; if (v == null) {{ var best = null; Object.keys(mapS[k]).forEach(function(dd) {{ if (dd <= d && (best == null || dd > best)) best = dd; }}); return s.name + ' ' + (best ? (+mapS[k][best].toFixed(s.d)) + '（' + best + '）' : '—'); }} return s.name + ' ' + (+v.toFixed(s.d)) + (s.unit || ''); }}).join('<br>');
       bands += '<rect x="'+l.toFixed(1)+'" y="'+PT+'" width="'+Math.max(r-l,.6).toFixed(2)+'" height="'+ih+'" fill="transparent" data-tip="'+tip+'"/>'; }});
-    var leg = '<div class="sgz-st">' + spec.series.map(function(s) {{ var L = D.last && D.last[s.lk], PX = D.px && D.px[s.lk]; return '<span><i style="display:inline-block;width:14px;height:3px;background:'+s.col+';margin-right:5px;vertical-align:middle"></i>'+s.name+' <b>'+(L ? (+L.v.toFixed(s.d)) + (s.unit || '') : '—')+'</b><i>'+(L ? L.d : '')+(PX ? '（实际价格 $'+PX.v+'）' : '')+'</i></span>'; }}).join('') + (D.d0 ? '<span><i style="font-style:normal">起点日 '+D.d0+'</i></span>' : '') + '</div>';
+    var leg = '<div class="sgz-st">' + spec.series.map(function(s) {{ var L = D.last && D.last[s.lk], PX = D.px && D.px[s.lk]; return '<span><i style="display:inline-block;width:14px;height:0;border-top:3px '+(s.dash ? 'dashed' : 'solid')+' '+s.col+';margin-right:5px;vertical-align:middle"></i>'+s.name+' <b>'+(L ? (+L.v.toFixed(s.d)) + (s.unit || '') : '—')+'</b><i>'+(L ? L.d : '')+(PX ? '（实际价格 $'+PX.v+'）' : '')+'</i></span>'; }}).join('') + (D.d0 ? '<span><i style="font-style:normal">起点日 '+D.d0+'</i></span>' : '') + '</div>';
     box.innerHTML = '<div class="sgz-p" style="height:auto"><div class="sgr-title">'+spec.title+'</div>'+leg+'<svg viewBox="0 0 '+W+' '+H+'" class="sgr-chart" style="height:270px" preserveAspectRatio="xMidYMid meet">'+g+xt+bands+'</svg></div>';
   }}
   build('yld', {{title: '美国 2 年 / 10 年 / 30 年国债收益率（2019 年至今 · 周度）', ul: '收益率 %', dl: 1, zero: true, bands: [['2020-02-14', '2020-04-30', '2020 衰退']],
@@ -13206,7 +13309,7 @@ mkRadar('rLong', RADAR.long);
   function get(w) {{ var e = document.getElementById('jpy-' + w + '-data'); return e ? [JSON.parse(e.textContent), document.getElementById('jpy-' + w + '-box')] : null; }}
   function nice(lo, hi, k) {{ var step = (hi - lo) / k, p = Math.pow(10, Math.floor(Math.log10(step))), f = step / p, st = (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * p, a = []; for (var v = Math.ceil(lo / st) * st; v <= hi + 1e-9; v += st) a.push(v); return a; }}
   function xticks(dates, X, H) {{ var t = '', last = ''; dates.forEach(function(d, i) {{ var m = d.slice(5,7), q = d.slice(0,4) + m; if ((m === '01' || m === '04' || m === '07' || m === '10') && q !== last) {{ last = q; t += '<text x="'+X(i).toFixed(1)+'" y="'+(H-8)+'" class="sgr-xt">'+d.slice(2,7)+'</text>'; }} }}); return t; }}
-  function legend(items) {{ return '<div class="sgz-st">' + items.map(function(s) {{ return '<span><i style="display:inline-block;width:14px;height:3px;background:'+s.col+';margin-right:5px;vertical-align:middle"></i>'+s.name+' <b>'+s.val+'</b><i>'+s.d+'</i></span>'; }}).join('') + '</div>'; }}
+  function legend(items) {{ return '<div class="sgz-st">' + items.map(function(s) {{ return '<span><i style="display:inline-block;width:14px;height:0;border-top:3px '+(s.dash ? 'dashed' : 'solid')+' '+s.col+';margin-right:5px;vertical-align:middle"></i>'+s.name+' <b>'+s.val+'</b><i>'+s.d+'</i></span>'; }}).join('') + '</div>'; }}
   /* 通用折线/柱 */
   function line(box, title, spec) {{
     var D = spec.D, W = 900, H = spec.h || 300, PL = 54, PR = spec.right ? 54 : 16, PT = 14, PB = 26, iw = W - PL - PR, ih = H - PT - PB;

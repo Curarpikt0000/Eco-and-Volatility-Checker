@@ -3325,6 +3325,9 @@ def fetch_treasury_stress_panels(years=3):
                 "<b>怎么用</b>：HY OAS 突破关键位(如>4.5%)是本系统的硬性卖出触发之一；它领先或同步于股市大跌。<br>"
                 "<b>HY OAS 骤升 + 曲线快速变动 = 风险传导、市场剧烈调仓</b>（对应 MS 原图「成交量激增/风险交易」的主题）。",
         "unit_left": "10Y-2Y 利差 %", "unit_right": "HY OAS %",
+        "zero_line": True,
+        "ref_lines": [{"axis": "right", "v": float(next((i["trigger"] for i in __import__("config").INDICATORS if i["key"] == "hy_oas"), 4.5)),
+                       "label": "HY OAS 卖出触发线 " + str(next((i["trigger"] for i in __import__("config").INDICATORS if i["key"] == "hy_oas"), 4.5)) + "%", "color": "#c0392b"}],
         "series": [
             {"name": "10Y-2Y 曲线利差", "color": "#6b8fb5", "axis": "left",
              "points": _mk(t10y2y, agg="last")},
@@ -7026,6 +7029,18 @@ def _wrs_yahoo(sym, rng="10y"):
     return out, (rr.get("meta") or {}).get("currency", "?")
 
 
+def _wrs_peak_keep(ser, step=5):
+    """保峰降采样: 每 step 个点保留窗口末值, 同时保留窗口内最高点和最低点(用它们的真实日期), 全序列峰/谷必在其中。
+    Chao 铁律: 降采样不得削尖峰。返回按日期升序、去重的 [{d, v}]。"""
+    keep = {}
+    for i in range(0, len(ser), step):
+        w = ser[i:i + step]
+        for p in (w[-1], max(w, key=lambda x: x["v"]), min(w, key=lambda x: x["v"])):
+            keep[p["d"]] = p
+    keep[ser[-1]["d"]] = ser[-1]
+    return [keep[d] for d in sorted(keep)]
+
+
 def fetch_wrs_recession_signal():
     """WRS · Walmart 衰退信号 = WMT / 奢侈品指数代理。"""
     from datetime import timezone, timedelta
@@ -7069,7 +7084,7 @@ def fetch_wrs_recession_signal():
             "chg_3m": round((cur / m3 - 1) * 100, 2) if m3 else None,
             "chg_1y": round((cur / y1 - 1) * 100, 2) if y1 else None,
             "n": len(ser), "start": ser[0]["d"],
-            "series": ser[::5],          # 5 日抽样, 控体积
+            "series": _wrs_peak_keep(ser, 5),   # ★2026-10-31: 保峰抽样(原 ser[::5] 削掉真峰值 0.6012@2026-05-19, 图上只到 0.5784)
         })
         # 信号灯: 分位越高 = 衰退压力越大
         if pct >= 90:   out["level"], out["level_txt"] = "red", "高位"
@@ -7759,7 +7774,7 @@ def fetch_comex_option_positions(weeks=104):
                            "Yahoo 期货期权链 401、CBOE 不覆盖期货期权），"
                            "故不以 ETF 期权 IV 冒充。"),
            "method_note": ("期权部分 = CFTC Disaggregated（期货+期权）− （仅期货），"
-                           "两者同口径同字段。已在 170 周（3 年+）样本验证："
+                           "两者同口径同字段。图与分位用近 104 周；口径另在 170 周（3 年+）历史样本上验证过："
                            "金银期权 OI 差均 0 次为负，口径成立。"),
            "source": "CFTC 官方 Socrata（publicreporting.cftc.gov）"}
 
@@ -7798,6 +7813,7 @@ def fetch_comex_option_positions(weeks=104):
             "dir": "净多" if last["net_opt"] > 0 else ("净空" if last["net_opt"] < 0 else "中性"),
             "opt_min": min(opts), "opt_max": max(opts),
             "pct": round(sum(1 for v in opts if v < last["net_opt"]) / len(opts) * 100, 1),
+            "pct_1y": round(sum(1 for v in opts[-52:] if v < last["net_opt"]) / len(opts[-52:]) * 100, 1),
             "caveat": (f"期权 OI 差有 {neg} 周为负，口径可能不匹配" if neg else ""),
         }
 
