@@ -3053,6 +3053,12 @@ def _dxy_gold_html(dg):
     iw, ih = W - PL - PR, H - PT - PB
     gs = [p["g"] for p in ser]; xs = [p["x"] for p in ser]
     glo, ghi = min(gs), max(gs); xlo, xhi = min(xs), max(xs)
+    # ★2026-10-31(Opus 审查 B-52): 原刻度 3,885/4,243 等非整数。轴范围外扩到整 100(金价)/整 2(美元指数), 5 等分后刻度为整数。
+    import math as _m52
+    glo = _m52.floor(glo / 100) * 100; ghi = _m52.ceil(ghi / 100) * 100
+    while ((ghi - glo) / 100) % 4: ghi += 100
+    xlo = _m52.floor(xlo / 2) * 2; xhi = _m52.ceil(xhi / 2) * 2
+    while ((xhi - xlo) / 2) % 4: xhi += 2
     gr = (ghi - glo) or 1.0; xr = (xhi - xlo) or 1.0
     idx = {p["d"]: i for i, p in enumerate(ser)}
 
@@ -3078,7 +3084,7 @@ def _dxy_gold_html(dg):
         m = p["d"][:7]
         if m not in seen:
             seen.add(m)
-            xt += f'<text x="{X(i):.1f}" y="{H-10}" class="dxg-xt">{p["d"][5:7]}月</text>'
+            xt += f'<text x="{X(i):.1f}" y="{H-10}" class="dxg-xt">{(p["d"][:4] + "年") if (len(seen) == 1 or p["d"][5:7] == "01") else ""}{p["d"][5:7]}月</text>'
 
     # ── 事件标记: 交替上下两层, 避免重叠 ──
     marks = ""; labels = ""
@@ -13425,14 +13431,15 @@ mkRadar('rLong', RADAR.long);
   var LAST = R[R.length-1][0], FIRST = R[0][0];
   Array.prototype.forEach.call(document.querySelectorAll('.sgz-r'), function(b) {{ b.addEventListener('click', function() {{
     Array.prototype.forEach.call(document.querySelectorAll('.sgz-r'), function(x) {{ x.classList.remove('on'); }}); b.classList.add('on');
-    var y = +b.getAttribute('data-y'); setRange(y ? (mAdd(LAST, -12*y) < FIRST ? FIRST : mAdd(LAST, -12*y)) : FIRST, LAST);
-    document.getElementById('sgz-from').value = ''; document.getElementById('sgz-to').value = ''; }}); }});
+    var y = +b.getAttribute('data-y'); var _f = y ? (mAdd(LAST, -12*y) < FIRST ? FIRST : mAdd(LAST, -12*y)) : FIRST; setRange(_f, LAST);
+    document.getElementById('sgz-from').value = _f; document.getElementById('sgz-to').value = LAST; }}); }});
   document.getElementById('sgz-go').addEventListener('click', function() {{
     var f = document.getElementById('sgz-from').value || FIRST, t = document.getElementById('sgz-to').value || LAST;
     if (f > t) {{ var x = f; f = t; t = x; }} if (f < FIRST) f = FIRST; if (t > LAST) t = LAST;
     Array.prototype.forEach.call(document.querySelectorAll('.sgz-r'), function(x) {{ x.classList.remove('on'); }}); setRange(f, t); }});
   Array.prototype.forEach.call(document.querySelectorAll('.sgz-chk input'), function(c) {{ c.addEventListener('change', function() {{
     var k = c.getAttribute('data-s'); st.show[k] = c.checked ? 1 : 0; if (!st.show.dg && !st.show.sg) {{ st.show[k] = 1; c.checked = true; }} render(); }}); }});
+  document.getElementById('sgz-from').value = FIRST; document.getElementById('sgz-to').value = LAST;
   render();
 }})();
 /* ── 标普÷黄金 1929 起长历史: 均线 + 跌破标记 + 回撤 (独立 IIFE, 前缀 sgl-) ── */
@@ -13681,13 +13688,14 @@ mkRadar('rLong', RADAR.long);
   function setRange(from, to) {{ st.from = from; st.to = to; pinned = null; render(); }}
   Array.prototype.forEach.call(document.querySelectorAll('.btcg-r'), function(b) {{ b.addEventListener('click', function() {{
     Array.prototype.forEach.call(document.querySelectorAll('.btcg-r'), function(x) {{ x.classList.remove('on'); }}); b.classList.add('on');
-    var y = +b.getAttribute('data-y'), last = MONTHS[MONTHS.length-1]; setRange(y ? mAdd(last, -12*y) : MONTHS[0], last);
-    document.getElementById('btcg-from').value = ''; document.getElementById('btcg-to').value = ''; }}); }});
+    var y = +b.getAttribute('data-y'), last = MONTHS[MONTHS.length-1]; var _f = y ? mAdd(last, -12*y) : MONTHS[0]; setRange(_f, last);
+    document.getElementById('btcg-from').value = _f; document.getElementById('btcg-to').value = last; }}); }});
   document.getElementById('btcg-go').addEventListener('click', function() {{
     var f = document.getElementById('btcg-from').value || MONTHS[0], t = document.getElementById('btcg-to').value || MONTHS[MONTHS.length-1];
     if (f > t) {{ var x = f; f = t; t = x; }} if (f < MONTHS[0]) f = MONTHS[0]; if (t > MONTHS[MONTHS.length-1]) t = MONTHS[MONTHS.length-1];
     Array.prototype.forEach.call(document.querySelectorAll('.btcg-r'), function(x) {{ x.classList.remove('on'); }}); setRange(f, t); }});
   Array.prototype.forEach.call(document.querySelectorAll('.btcg-chk input'), function(c) {{ c.addEventListener('change', function() {{ st.show[c.getAttribute('data-s')] = c.checked ? 1 : 0; render(); }}); }});
+  document.getElementById('btcg-from').value = MONTHS[0]; document.getElementById('btcg-to').value = MONTHS[MONTHS.length-1];
   render();
 }})();
 </script>
